@@ -14,17 +14,16 @@ func _ready() -> void:
 
 
 func _load_hotels() -> void:
-	status_label.text = "Lade Hotels..."
+	status_label.text = GameState.T("hotel_select.status.loading")
 	select_button.disabled = true
 	Api.get_json("/api/hotels", _on_hotels_loaded)
 
 
 func _on_hotels_loaded(success: bool, data: Dictionary) -> void:
 	if not success:
-		status_label.text = "Fehler: " + data.get("error", "Hotels konnten nicht geladen werden.")
+		status_label.text = GameState.T("api.error.network")
 		return
 
-	# Erwartet: {"hotels": [...]} oder direkt ein Array in data["data"]
 	var hotels_raw: Variant = data.get("hotels", data.get("data", []))
 	if hotels_raw is Array:
 		_hotels = hotels_raw
@@ -32,14 +31,14 @@ func _on_hotels_loaded(success: bool, data: Dictionary) -> void:
 		_hotels = []
 
 	if _hotels.is_empty():
-		status_label.text = "Keine Hotels gefunden."
+		status_label.text = GameState.T("hotel_select.status.empty")
 		return
 
 	status_label.text = ""
 	hotel_list.clear()
 	for hotel in _hotels:
-		var name: String = hotel.get("name", "Unbekanntes Hotel")
-		hotel_list.add_item(name)
+		var hotel_name: String = hotel.get("name", "Unbekanntes Hotel")
+		hotel_list.add_item(hotel_name)
 
 
 func _on_item_selected(_index: int) -> void:

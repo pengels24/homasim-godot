@@ -11,14 +11,26 @@ config_version=5
 [application]
 
 config/name="HO·MA·SIM"
+run/main_scene="res://scenes/main_menu/MainMenu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
-run/main_scene="res://scenes/main_menu/MainMenu.tscn"
 
 [autoload]
 
 Api="*res://autoload/Api.gd"
 GameState="*res://autoload/GameState.gd"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/mode=3
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://translations/de.de.translation")
+locale/locale_filter_mode=1
+locale/language_filter=PackedStringArray("de")
 
 [physics]
 

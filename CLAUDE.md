@@ -1,0 +1,60 @@
+# HO·MA·SIM Godot – Claude Direktiven
+
+## Projekt
+Hotel-Management-Simulationsspiel. Godot 4.6 GDScript Desktop-Client.
+PHP-Backend unter `localhost:8848` bleibt API-Quelle (wird nicht angefasst).
+Linear-Projekt: **Angelus2010 / ANG-** für alle Issues.
+
+## Kommunikation
+- **Du**-Form, entspannt aber zielorientiert
+- Kleine Dinge direkt umsetzen, große Dinge zuerst besprechen
+- Kein Corporate-Sprech
+- Peter liest langsamer – nicht zu viel auf einmal
+
+## Godot-Direktiven
+- **Immer Godot 4 API** – kein Godot 3 Syntax. Bei Unsicherheit Docs lesen, nicht halluzinieren.
+- **Alle Texte via `GameState.T("key")`** – nie Strings hardcoden (außer als TODO-Platzhalter)
+- **Feste Auflösung 1920×1080** – kein Scaling, `layout_mode=0` für manuelle Positionierung
+- **Kein `tr()` in static func** – stattdessen `TranslationServer.translate(key)`
+
+## Code-Direktiven
+- **Keine God-Files** – jede Datei hat eine einzige Verantwortlichkeit
+- **KISS** – kein Over-Engineering, kein spekulatives Abstrahieren
+- **DRY** – wiederverwendbare Logik in eigene Autoloads/Klassen
+- Kommentare erklären das *Warum*, nicht das *Was*
+- Keine Fehlerbehandlung für unmögliche Szenarien
+- Keine ungenutzten Parameter ohne `_`-Prefix
+
+## Projektstruktur
+```
+res://
+├── autoload/       # Singletons: Api, GameState (SessionManager kommt noch)
+├── scenes/         # Feature-basiert: main_menu/, login/, dashboard/, ingame/
+├── assets/         # fonts/, images/
+├── translations/   # de.csv + kompilierte .translation Dateien
+└── _dev/           # Arbeitsdateien, Docs, nicht im Build
+```
+
+## Autoloads
+- **`Api`** – alle HTTP-Requests, Cookie-Persistenz (`user://session.cfg`)
+- **`GameState`** – User/Hotel-State, `T()` Translation-Helper, `check_session()`
+
+## API-Konventionen
+- Login: `POST /api/auth/login` (Form-Data)
+- Session-Check: `GET /api/auth/me`
+- Hotels: `GET /api/hotels`, `POST /api/hotels`, `POST /api/hotel/delete`
+- Auth via PHP-Session-Cookie
+
+## Design
+- **Farben**: Gold `#EAB308`, Dark Background `#0f172a`/`#141416`, Weiß `#fafafa`
+- **Fonts**: Outfit-Bold (Headlines/Buttons), Inter Regular (Fließtext)
+- **Buttons**: StyleBoxFlat gold/gold_hover/gold_disabled (6px Radius)
+- **Modals**: Dunkles Panel (0.95 Alpha), 12px Radius, Schlagschatten
+
+## Session-Abschluss
+`/update-doku` ausführen:
+1. Changelog in `/changelog/gd-x-x-x.md` schreiben
+2. Git commit + Tag
+3. Linear Issues aktualisieren
+4. Memory + CLAUDE.md updaten
+5. Version in `version.txt` erhöhen (letzte Ziffer)

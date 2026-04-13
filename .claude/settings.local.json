@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(gh --version)",
-      "Bash(git --version)"
+      "Bash(git --version)",
+      "Bash(gh repo:*)",
+      "Bash(\"/c/Program Files/GitHub CLI/gh.exe\" repo create pengels24/homasim-godot --public --description \"HO·MA·SIM – Hotel Management Simulation in Godot 4\")",
+      "mcp__claude_ai_Linear__save_issue",
+      "mcp__claude_ai_Linear__list_issue_statuses"
     ]
   }
 }

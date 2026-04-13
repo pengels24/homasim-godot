@@ -1,3 +1,24 @@
-# Godot 4+ specific ignores
+# Godot
 .godot/
 /android/
+*.translation
+
+# Arbeitsdateien (lokal, nicht ins Repo)
+_dev/
+
+# Kompilierte Import-Dateien (werden lokal regeneriert)
+*.import
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Logs
+*.log

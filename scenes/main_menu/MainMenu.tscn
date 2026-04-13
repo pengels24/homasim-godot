@@ -1,32 +1,287 @@
-[gd_scene load_steps=2 format=3 uid="uid://b3x1qmainmenu"]
+[gd_scene load_steps=11 format=3 uid="uid://b3x1qmainmenu"]
 
 [ext_resource type="Script" path="res://scenes/main_menu/MainMenu.gd" id="1_mainmenu"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gold"]
+bg_color = Color(0.918, 0.702, 0.031, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gold_hover"]
+bg_color = Color(0.97, 0.80, 0.15, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gold_disabled"]
+bg_color = Color(0.918, 0.702, 0.031, 0.35)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_bg"]
+bg_color = Color(0.07, 0.07, 0.09, 0.95)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_left = 12
+corner_radius_bottom_right = 12
+content_margin_left = 48.0
+content_margin_right = 48.0
+content_margin_top = 48.0
+content_margin_bottom = 48.0
+shadow_color = Color(0, 0, 0, 0.6)
+shadow_size = 24
+shadow_offset = Vector2(0, 8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input"]
+bg_color = Color(0.13, 0.13, 0.16, 1)
+border_color = Color(0.35, 0.35, 0.35, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 16.0
+content_margin_right = 16.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_focus"]
+bg_color = Color(0.13, 0.13, 0.16, 1)
+border_color = Color(0.918, 0.702, 0.031, 0.8)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 16.0
+content_margin_right = 16.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_link"]
+
 [node name="MainMenu" type="Control"]
-layout_mode = 3
-anchor_right = 1.0
-anchor_bottom = 1.0
+layout_mode = 0
+position = Vector2(0, 0)
+size = Vector2(1920, 1080)
 script = ExtResource("1_mainmenu")
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
-layout_mode = 1
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="BgSlideshow" type="Control" parent="."]
+layout_mode = 0
+position = Vector2(0, 0)
+size = Vector2(1920, 1080)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
-layout_mode = 2
-theme_override_constants/separation = 16
-custom_minimum_size = Vector2(300, 0)
+[node name="Bg1" type="TextureRect" parent="BgSlideshow"]
+layout_mode = 0
+position = Vector2(0, 0)
+size = Vector2(1920, 1080)
+expand_mode = 1
+stretch_mode = 6
 
-[node name="Title" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="Bg2" type="TextureRect" parent="BgSlideshow"]
+layout_mode = 0
+position = Vector2(0, 0)
+size = Vector2(1920, 1080)
+expand_mode = 1
+stretch_mode = 6
+modulate = Color(1, 1, 1, 0)
+
+[node name="Bg3" type="TextureRect" parent="BgSlideshow"]
+layout_mode = 0
+position = Vector2(0, 0)
+size = Vector2(1920, 1080)
+expand_mode = 1
+stretch_mode = 6
+modulate = Color(1, 1, 1, 0)
+
+[node name="Overlay" type="ColorRect" parent="."]
+layout_mode = 0
+position = Vector2(0, 0)
+size = Vector2(1920, 1080)
+color = Color(0, 0, 0, 0.35)
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 0
+position = Vector2(560, 80)
+size = Vector2(800, 0)
+theme_override_constants/separation = 40
+
+[node name="Logo" type="TextureRect" parent="Content"]
 layout_mode = 2
-text = "HO·MA·SIM"
+custom_minimum_size = Vector2(800, 100)
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Title" type="Label" parent="Content"]
+layout_mode = 2
+custom_minimum_size = Vector2(800, 0)
+text = "Deine Hotel-Legende\nbeginnt hier"
+theme_override_font_sizes/font_size = 80
+theme_override_colors/font_color = Color(0.98, 0.98, 0.98, 1)
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Subtitle" type="Label" parent="Content"]
+layout_mode = 2
+custom_minimum_size = Vector2(800, 0)
+text = "Erlebe die ultimative Hotel-Management-Simulation im charmanten\nPixel-Art-Stil. Plane, baue und verwalte dein Imperium – von der ersten Fliese bis zum Luxus-Resort."
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Buttons" type="GridContainer" parent="Content"]
+layout_mode = 2
+columns = 2
+theme_override_constants/h_separation = 24
+theme_override_constants/v_separation = 16
+
+[node name="BtnPlay" type="Button" parent="Content/Buttons"]
+layout_mode = 2
+custom_minimum_size = Vector2(380, 56)
+text = "Spiel starten"
+disabled = true
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_gold_disabled")
+
+[node name="BtnSettings" type="Button" parent="Content/Buttons"]
+layout_mode = 2
+custom_minimum_size = Vector2(380, 56)
+text = "Einstellungen"
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
+
+[node name="BtnLogin" type="Button" parent="Content/Buttons"]
+layout_mode = 2
+custom_minimum_size = Vector2(380, 56)
+text = "Login / Register"
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_gold_disabled")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+
+[node name="BtnQuit" type="Button" parent="Content/Buttons"]
+layout_mode = 2
+custom_minimum_size = Vector2(380, 56)
+text = "Beenden"
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+
+[node name="LoginModal" type="ColorRect" parent="."]
+layout_mode = 0
+position = Vector2(0, 0)
+size = Vector2(1920, 1080)
+color = Color(0, 0, 0, 0.65)
+visible = false
+mouse_filter = 0
+
+[node name="Center" type="CenterContainer" parent="LoginModal"]
+layout_mode = 0
+position = Vector2(0, 0)
+size = Vector2(1920, 1080)
+
+[node name="Card" type="PanelContainer" parent="LoginModal/Center"]
+layout_mode = 2
+custom_minimum_size = Vector2(500, 0)
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_bg")
+
+[node name="VBox" type="VBoxContainer" parent="LoginModal/Center/Card"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="LoginModal/Center/Card/VBox"]
+layout_mode = 2
+text = "Anmelden"
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
 horizontal_alignment = 1
 
-[node name="PlayButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="UsernameField" type="LineEdit" parent="LoginModal/Center/Card/VBox"]
 layout_mode = 2
-text = "Spielen / Login"
+custom_minimum_size = Vector2(0, 52)
+placeholder_text = "Benutzername"
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
+theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
 
-[node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="PasswordField" type="LineEdit" parent="LoginModal/Center/Card/VBox"]
 layout_mode = 2
-text = "Beenden"
+custom_minimum_size = Vector2(0, 52)
+placeholder_text = "Passwort"
+secret = true
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
+theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
+
+[node name="LoginButton" type="Button" parent="LoginModal/Center/Card/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 52)
+text = "Anmelden"
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_gold_disabled")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+
+[node name="ErrorLabel" type="Label" parent="LoginModal/Center/Card/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 20)
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="BtnClose" type="Button" parent="LoginModal/Center/Card/VBox"]
+layout_mode = 2
+text = "Abbrechen"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_link")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_link")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_link")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_link")

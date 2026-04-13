@@ -4,11 +4,19 @@ extends Node
 ## Speichert den Session-Cookie nach Login und sendet ihn bei jedem Request mit.
 
 const BASE_URL := "http://localhost:8848"
+const _SAVE_PATH := "user://session.cfg"
 
-var session_cookie := ""
+var session_cookie := "":
+	set(value):
+		session_cookie = value
+		_save_session()
 
 # Interne Queue, damit parallele Requests sich nicht überschreiben
 var _active_requests: Array[HTTPRequest] = []
+
+
+func _ready() -> void:
+	_load_session()
 
 
 ## Sendet einen POST-Request mit Form-Data (application/x-www-form-urlencoded).
@@ -42,6 +50,36 @@ func post_form(endpoint: String, params: Dictionary, callback: Callable) -> void
 		callback.call(false, {"error": "Request konnte nicht gesendet werden (Code %d)" % error})
 
 
+## Sendet einen POST-Request mit JSON-Body.
+## callback: func(success: bool, data: Dictionary)
+func post_json(endpoint: String, data: Dictionary, callback: Callable) -> void:
+	var http := HTTPRequest.new()
+	add_child(http)
+	_active_requests.append(http)
+
+	http.request_completed.connect(
+		func(result, response_code, headers, body):
+			_active_requests.erase(http)
+			http.queue_free()
+			_handle_response(result, response_code, headers, body, callback, false)
+	)
+
+	var request_headers := PackedStringArray([
+		"Content-Type: application/json",
+	])
+	if session_cookie != "":
+		request_headers.append("Cookie: " + session_cookie)
+
+	var error := http.request(
+		BASE_URL + endpoint,
+		request_headers,
+		HTTPClient.METHOD_POST,
+		JSON.stringify(data)
+	)
+	if error != OK:
+		callback.call(false, {"error": "Request konnte nicht gesendet werden (Code %d)" % error})
+
+
 ## Sendet einen authentifizierten GET-Request mit Cookie.
 ## callback: func(success: bool, data: Dictionary)
 func get_json(endpoint: String, callback: Callable) -> void:
@@ -63,6 +101,13 @@ func get_json(endpoint: String, callback: Callable) -> void:
 	var error := http.request(BASE_URL + endpoint, request_headers, HTTPClient.METHOD_GET)
 	if error != OK:
 		callback.call(false, {"error": "Request konnte nicht gesendet werden (Code %d)" % error})
+
+
+## Löscht Cookie + gespeicherte Session (beim Logout).
+func clear_session() -> void:
+	session_cookie = ""
+	var cfg := ConfigFile.new()
+	cfg.save(_SAVE_PATH)
 
 
 func _handle_response(
@@ -113,3 +158,15 @@ func _encode_form_data(params: Dictionary) -> String:
 	for key in params:
 		parts.append(str(key).uri_encode() + "=" + str(params[key]).uri_encode())
 	return "&".join(parts)
+
+
+func _save_session() -> void:
+	var cfg := ConfigFile.new()
+	cfg.set_value("session", "cookie", session_cookie)
+	cfg.save(_SAVE_PATH)
+
+
+func _load_session() -> void:
+	var cfg := ConfigFile.new()
+	if cfg.load(_SAVE_PATH) == OK:
+		session_cookie = cfg.get_value("session", "cookie", "")

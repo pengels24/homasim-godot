@@ -1,0 +1,267 @@
+[gd_scene load_steps=9 format=3 uid="uid://b3x1dashboard"]
+
+[ext_resource type="Script" path="res://scenes/dashboard/Dashboard.gd" id="1_dashboard"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gold"]
+bg_color = Color(0.918, 0.702, 0.031, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gold_hover"]
+bg_color = Color(0.97, 0.80, 0.15, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gold_disabled"]
+bg_color = Color(0.918, 0.702, 0.031, 0.35)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_topbar"]
+bg_color = Color(0.05, 0.05, 0.05, 0.85)
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.1, 0.1, 0.1, 0.95)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_left = 10
+corner_radius_bottom_right = 10
+content_margin_left = 32.0
+content_margin_right = 32.0
+content_margin_top = 32.0
+content_margin_bottom = 32.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input"]
+bg_color = Color(0.15, 0.15, 0.15, 1)
+border_color = Color(0.4, 0.4, 0.4, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_left = 4
+corner_radius_bottom_right = 4
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+
+[node name="Dashboard" type="Control"]
+layout_mode = 0
+position = Vector2(0, 0)
+size = Vector2(1920, 1080)
+script = ExtResource("1_dashboard")
+
+[node name="Bg" type="ColorRect" parent="."]
+layout_mode = 0
+position = Vector2(0, 0)
+size = Vector2(1920, 1080)
+color = Color(0.08, 0.08, 0.10, 1)
+
+[node name="TopBar" type="PanelContainer" parent="."]
+layout_mode = 0
+position = Vector2(0, 0)
+size = Vector2(1920, 64)
+theme_override_styles/panel = SubResource("StyleBoxFlat_topbar")
+
+[node name="HBox" type="HBoxContainer" parent="TopBar"]
+layout_mode = 2
+theme_override_constants/separation = 16
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="AvatarRect" type="ColorRect" parent="TopBar/HBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(40, 40)
+color = Color(0.918, 0.702, 0.031, 0.6)
+
+[node name="UsernameLabel" type="Label" parent="TopBar/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+
+[node name="BtnLogout" type="Button" parent="TopBar/HBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(140, 40)
+text = "Abmelden"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+
+[node name="Content" type="VBoxContainer" parent="."]
+layout_mode = 0
+position = Vector2(560, 100)
+size = Vector2(800, 0)
+theme_override_constants/separation = 24
+
+[node name="TitleLabel" type="Label" parent="Content"]
+layout_mode = 2
+custom_minimum_size = Vector2(800, 0)
+text = "Deine Hotels"
+theme_override_font_sizes/font_size = 48
+theme_override_colors/font_color = Color(0.98, 0.98, 0.98, 1)
+horizontal_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="Content"]
+layout_mode = 2
+custom_minimum_size = Vector2(800, 0)
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="HotelList" type="ItemList" parent="Content"]
+layout_mode = 2
+custom_minimum_size = Vector2(800, 400)
+theme_override_font_sizes/font_size = 20
+
+[node name="ActionButtons" type="GridContainer" parent="Content"]
+layout_mode = 2
+columns = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 16
+
+[node name="BtnNewHotel" type="Button" parent="Content/ActionButtons"]
+layout_mode = 2
+custom_minimum_size = Vector2(390, 52)
+text = "Neues Hotel"
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+
+[node name="BtnTutorial" type="Button" parent="Content/ActionButtons"]
+layout_mode = 2
+custom_minimum_size = Vector2(390, 52)
+text = "Tutorial"
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+
+[node name="BtnPlayHotel" type="Button" parent="Content/ActionButtons"]
+layout_mode = 2
+custom_minimum_size = Vector2(390, 52)
+text = "Spielen"
+disabled = true
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_gold_disabled")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+
+[node name="BtnDeleteHotel" type="Button" parent="Content/ActionButtons"]
+layout_mode = 2
+custom_minimum_size = Vector2(390, 52)
+text = "Löschen"
+disabled = true
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_gold_disabled")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+
+[node name="NewHotelOverlay" type="ColorRect" parent="."]
+layout_mode = 0
+position = Vector2(0, 0)
+size = Vector2(1920, 1080)
+color = Color(0, 0, 0, 0.6)
+visible = false
+
+[node name="NewHotelPanel" type="PanelContainer" parent="NewHotelOverlay"]
+layout_mode = 0
+position = Vector2(660, 340)
+size = Vector2(600, 0)
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="NewHotelOverlay/NewHotelPanel"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="DialogTitle" type="Label" parent="NewHotelOverlay/NewHotelPanel/VBox"]
+layout_mode = 2
+text = "Neues Hotel anlegen"
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(0.98, 0.98, 0.98, 1)
+horizontal_alignment = 1
+
+[node name="HotelNameField" type="LineEdit" parent="NewHotelOverlay/NewHotelPanel/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 48)
+placeholder_text = "Hotelname"
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
+theme_override_styles/focus = SubResource("StyleBoxFlat_input")
+
+[node name="DialogError" type="Label" parent="NewHotelOverlay/NewHotelPanel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="DialogButtons" type="HBoxContainer" parent="NewHotelOverlay/NewHotelPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BtnCreate" type="Button" parent="NewHotelOverlay/NewHotelPanel/VBox/DialogButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 48)
+text = "Anlegen"
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+
+[node name="BtnCancel" type="Button" parent="NewHotelOverlay/NewHotelPanel/VBox/DialogButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 48)
+text = "Abbrechen"
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_panel")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_panel")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")

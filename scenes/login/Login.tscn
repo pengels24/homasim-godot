@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3x1qloginsc"]
+
+[ext_resource type="Script" path="res://scenes/login/Login.gd" id="1_loginscr"]
+
+[node name="Login" type="Control"]
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_loginscr")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+custom_minimum_size = Vector2(320, 0)
+
+[node name="Title" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Login"
+horizontal_alignment = 1
+
+[node name="UsernameField" type="LineEdit" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Benutzername"
+
+[node name="PasswordField" type="LineEdit" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Passwort"
+secret = true
+
+[node name="LoginButton" type="Button" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "Anmelden"
+
+[node name="ErrorLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = ""
+modulate = Color(1, 0.3, 0.3, 1)
+autowrap_mode = 3
+
+[node name="HttpRequest" type="HTTPRequest" parent="."]

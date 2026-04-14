@@ -7,7 +7,6 @@ const BG_IMAGES := [
 ]
 const SLIDE_INTERVAL := 5.0
 const FADE_DURATION  := 1.2
-const _SAVE_PATH     := "user://session.cfg"
 
 @onready var bg_nodes: Array[TextureRect] = [
 	$BgSlideshow/Bg1,
@@ -28,7 +27,8 @@ const _SAVE_PATH     := "user://session.cfg"
 @onready var password_field:  LineEdit  = $LoginModal/Center/Card/VBox/PasswordField
 @onready var login_button:    Button    = $LoginModal/Center/Card/VBox/LoginButton
 @onready var error_label:     Label     = $LoginModal/Center/Card/VBox/ErrorLabel
-@onready var btn_close_modal: Button    = $LoginModal/Center/Card/VBox/BtnClose
+@onready var btn_close_modal:    Button    = $LoginModal/Center/Card/VBox/BtnClose
+@onready var btn_to_register:   Button    = $LoginModal/Center/Card/VBox/BtnToRegister
 
 var _current_bg := 0
 var _slide_timer := 0.0
@@ -37,7 +37,7 @@ var _slide_timer := 0.0
 func _ready() -> void:
 	_load_assets()
 	_setup_modal()
-	GameState.check_session(func(_logged_in: bool):
+	SessionManager.check_session(func(_logged_in: bool):
 		_update_login_state()
 	)
 	btn_login.pressed.connect(_on_login_pressed)
@@ -83,11 +83,10 @@ func _load_assets() -> void:
 func _setup_modal() -> void:
 	login_button.pressed.connect(_on_modal_login_pressed)
 	btn_close_modal.pressed.connect(_close_modal)
+	btn_to_register.pressed.connect(_on_to_register_pressed)
 	username_field.text_submitted.connect(func(_t): _on_modal_login_pressed())
 	password_field.text_submitted.connect(func(_t): _on_modal_login_pressed())
-	var cfg := ConfigFile.new()
-	if cfg.load(_SAVE_PATH) == OK:
-		username_field.text = cfg.get_value("session", "username", "")
+	username_field.text = SessionManager.saved_username
 
 
 func _update_login_state() -> void:
@@ -146,11 +145,7 @@ func _on_login_response(success: bool, data: Dictionary) -> void:
 		error_label.text = data.get("message", GameState.T("login.error.data_invalid"))
 		return
 
-	var cfg := ConfigFile.new()
-	cfg.load(_SAVE_PATH)
-	cfg.set_value("session", "username", username_field.text.strip_edges())
-	cfg.save(_SAVE_PATH)
-
+	SessionManager.save_username(username_field.text.strip_edges())
 	_close_modal()
 	GameState.login(data)
 	get_tree().change_scene_to_file("res://scenes/dashboard/Dashboard.tscn")
@@ -162,3 +157,7 @@ func _on_play_pressed() -> void:
 
 func _on_settings_pressed() -> void:
 	pass # TODO: Settings-Szene
+
+
+func _on_to_register_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/register/Register.tscn")

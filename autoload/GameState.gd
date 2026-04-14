@@ -31,25 +31,10 @@ func T(key: String, val1: Variant = null, val2: Variant = null) -> String:
 	return text
 
 
-## Prüft ob die gespeicherte Session noch gültig ist.
-## callback: func(logged_in: bool)
-func check_session(callback: Callable) -> void:
-	if Api.session_cookie == "":
-		callback.call(false)
-		return
-	Api.get_json("/api/auth/me", func(success: bool, data: Dictionary):
-		if success and data.get("success", false):
-			current_user = data
-			callback.call(true)
-		else:
-			callback.call(false)
-	)
-
-
 func logout() -> void:
 	current_user = {}
 	selected_hotel = {}
-	Api.clear_session()
+	SessionManager.clear()
 	user_logged_out.emit()
 
 

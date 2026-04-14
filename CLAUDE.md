@@ -51,6 +51,10 @@ res://
 - **Buttons**: StyleBoxFlat gold/gold_hover/gold_disabled (6px Radius)
 - **Modals**: Dunkles Panel (0.95 Alpha), 12px Radius, Schlagschatten
 
+## Workflow
+- **Issues vor der Umsetzung anlegen** – Linear-Issue (ANG-xxx) anlegen bevor mit der Implementierung begonnen wird
+- ANG-xxx Referenz im Code (Kommentare), Commits und Changelog verwenden
+
 ## Session-Abschluss
 `/update-doku` ausführen:
 1. Changelog in `/changelog/gd-x-x-x.md` schreiben

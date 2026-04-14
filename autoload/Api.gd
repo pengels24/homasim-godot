@@ -1,22 +1,13 @@
 extends Node
 
 ## HTTP-Singleton für alle API-Requests zum PHP-Backend.
-## Speichert den Session-Cookie nach Login und sendet ihn bei jedem Request mit.
+## Cookie-Persistenz liegt in SessionManager.
 
 const BASE_URL := "http://localhost:8848"
-const _SAVE_PATH := "user://session.cfg"
 
-var session_cookie := "":
-	set(value):
-		session_cookie = value
-		_save_session()
+var session_cookie := ""
 
-# Interne Queue, damit parallele Requests sich nicht überschreiben
 var _active_requests: Array[HTTPRequest] = []
-
-
-func _ready() -> void:
-	_load_session()
 
 
 ## Sendet einen POST-Request mit Form-Data (application/x-www-form-urlencoded).
@@ -30,7 +21,7 @@ func post_form(endpoint: String, params: Dictionary, callback: Callable) -> void
 		func(result, response_code, headers, body):
 			_active_requests.erase(http)
 			http.queue_free()
-			_handle_response(result, response_code, headers, body, callback, true)
+			_handle_response(result, response_code, headers, body, callback)
 	)
 
 	var body_string := _encode_form_data(params)
@@ -61,7 +52,7 @@ func post_json(endpoint: String, data: Dictionary, callback: Callable) -> void:
 		func(result, response_code, headers, body):
 			_active_requests.erase(http)
 			http.queue_free()
-			_handle_response(result, response_code, headers, body, callback, false)
+			_handle_response(result, response_code, headers, body, callback)
 	)
 
 	var request_headers := PackedStringArray([
@@ -91,7 +82,7 @@ func get_json(endpoint: String, callback: Callable) -> void:
 		func(result, response_code, headers, body):
 			_active_requests.erase(http)
 			http.queue_free()
-			_handle_response(result, response_code, headers, body, callback, false)
+			_handle_response(result, response_code, headers, body, callback)
 	)
 
 	var request_headers := PackedStringArray()
@@ -103,29 +94,21 @@ func get_json(endpoint: String, callback: Callable) -> void:
 		callback.call(false, {"error": "Request konnte nicht gesendet werden (Code %d)" % error})
 
 
-## Löscht Cookie + gespeicherte Session (beim Logout).
-func clear_session() -> void:
-	session_cookie = ""
-	var cfg := ConfigFile.new()
-	cfg.save(_SAVE_PATH)
-
-
 func _handle_response(
 	result: int,
 	response_code: int,
 	headers: PackedStringArray,
 	body: PackedByteArray,
-	callback: Callable,
-	extract_cookie: bool
+	callback: Callable
 ) -> void:
 	if result != HTTPRequest.RESULT_SUCCESS:
 		callback.call(false, {"error": "Netzwerkfehler (Result %d)" % result})
 		return
 
-	if extract_cookie:
-		var cookie := _extract_cookie(headers)
-		if cookie != "":
-			session_cookie = cookie
+	var cookie := _extract_cookie(headers)
+	if cookie != "":
+		session_cookie = cookie
+		SessionManager.save_cookie(cookie)
 
 	var json_string := body.get_string_from_utf8()
 	var json := JSON.new()
@@ -158,15 +141,3 @@ func _encode_form_data(params: Dictionary) -> String:
 	for key in params:
 		parts.append(str(key).uri_encode() + "=" + str(params[key]).uri_encode())
 	return "&".join(parts)
-
-
-func _save_session() -> void:
-	var cfg := ConfigFile.new()
-	cfg.set_value("session", "cookie", session_cookie)
-	cfg.save(_SAVE_PATH)
-
-
-func _load_session() -> void:
-	var cfg := ConfigFile.new()
-	if cfg.load(_SAVE_PATH) == OK:
-		session_cookie = cfg.get_value("session", "cookie", "")

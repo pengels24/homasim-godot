@@ -465,3 +465,5 @@ keys,de,en
 "register.character.outfit.casual","Casual",""
 "register.character.outfit.uniform","Uniform",""
 "register.character.btn.submit","Manager erstellen",""
+"character.edit.title","Charakter bearbeiten",""
+"character.edit.btn.save","Änderungen speichern",""

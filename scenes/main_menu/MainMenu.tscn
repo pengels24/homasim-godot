@@ -198,6 +198,29 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_gold_disabled")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
+[node name="BtnCharacter" type="Button" parent="Content/Buttons"]
+layout_mode = 2
+custom_minimum_size = Vector2(380, 56)
+text = "[DEBUG] Charakter"
+visible = false
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+
+[node name="BtnTutorial" type="Button" parent="Content/Buttons"]
+layout_mode = 2
+custom_minimum_size = Vector2(380, 56)
+text = "Tutorial"
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+
 [node name="BtnQuit" type="Button" parent="Content/Buttons"]
 layout_mode = 2
 custom_minimum_size = Vector2(380, 56)
@@ -255,6 +278,12 @@ theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_input")
 theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
+
+[node name="RememberCheck" type="CheckBox" parent="LoginModal/Center/Card/VBox"]
+layout_mode = 2
+text = "Benutzername merken"
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
 
 [node name="LoginButton" type="Button" parent="LoginModal/Center/Card/VBox"]
 layout_mode = 2

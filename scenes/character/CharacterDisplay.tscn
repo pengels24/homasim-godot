@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3x1chardisplay"]
+
+[ext_resource type="Script" path="res://scenes/character/CharacterDisplay.gd" id="1_chardisplay"]
+
+[node name="CharacterDisplay" type="Control"]
+layout_mode = 0
+custom_minimum_size = Vector2(180, 240)
+script = ExtResource("1_chardisplay")

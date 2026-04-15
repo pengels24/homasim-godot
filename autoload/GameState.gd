@@ -8,6 +8,7 @@ signal user_logged_in(user_data: Dictionary)
 signal user_logged_out()
 
 var current_user: Dictionary = {}
+var current_manager: Dictionary = {}
 var selected_hotel: Dictionary = {}
 
 
@@ -15,8 +16,14 @@ func is_logged_in() -> bool:
 	return not current_user.is_empty()
 
 
+func has_manager() -> bool:
+	return not current_manager.is_empty()
+
+
 func login(user_data: Dictionary) -> void:
 	current_user = user_data
+	var manager = user_data.get("manager", null)
+	current_manager = manager if manager is Dictionary else {}
 	user_logged_in.emit(user_data)
 
 
@@ -33,6 +40,7 @@ func T(key: String, val1: Variant = null, val2: Variant = null) -> String:
 
 func logout() -> void:
 	current_user = {}
+	current_manager = {}
 	selected_hotel = {}
 	SessionManager.clear()
 	user_logged_out.emit()

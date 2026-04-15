@@ -56,6 +56,8 @@ func check_session(callback: Callable) -> void:
 	Api.get_json("/api/auth/me", func(success: bool, data: Dictionary):
 		if success and data.get("success", false):
 			GameState.current_user = data
+			var manager = data.get("manager", null)
+			GameState.current_manager = manager if manager is Dictionary else {}
 			callback.call(true)
 		else:
 			callback.call(false)

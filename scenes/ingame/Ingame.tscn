@@ -1,0 +1,329 @@
+[gd_scene load_steps=6 format=3 uid="uid://ingame001"]
+
+[ext_resource type="Script" path="res://scenes/ingame/Ingame.gd" id="1_ingame"]
+[ext_resource type="Texture2D" path="res://assets/images/logo-transparent-50.png" id="2_logo"]
+
+[sub_resource type="StyleBoxFlat" id="SB_topbar"]
+bg_color = Color(0.04, 0.06, 0.10, 0.96)
+border_width_bottom = 1
+border_color = Color(0.918, 0.702, 0.031, 0.30)
+content_margin_left = 14.0
+content_margin_right = 14.0
+content_margin_top = 9.0
+content_margin_bottom = 9.0
+
+[sub_resource type="StyleBoxFlat" id="SB_bottombar"]
+bg_color = Color(0.04, 0.06, 0.10, 0.92)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_left = 14
+corner_radius_bottom_right = 14
+border_width_top = 1
+border_color = Color(0.918, 0.702, 0.031, 0.25)
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="SB_progressbar"]
+bg_color = Color(0.12, 0.16, 0.22, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_left = 3
+corner_radius_bottom_right = 3
+
+[node name="Ingame" type="Node2D"]
+script = ExtResource("1_ingame")
+
+[node name="WorldRoot" type="Node2D" parent="."]
+scale = Vector2(2, 2)
+
+[node name="FloorLayer" type="TileMapLayer" parent="WorldRoot"]
+
+[node name="WallLayer" type="TileMapLayer" parent="WorldRoot"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(1.0, 1.0)
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="TopBar" type="PanelContainer" parent="HUD"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 68
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("SB_topbar")
+
+[node name="HBox" type="HBoxContainer" parent="HUD/TopBar"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="LogoSection" type="HBoxContainer" parent="HUD/TopBar/HBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(200, 0)
+size_flags_vertical = 4
+theme_override_constants/separation = 8
+
+
+[node name="LogoImg" type="TextureRect" parent="HUD/TopBar/HBox/LogoSection"]
+layout_mode = 2
+texture = ExtResource("2_logo")
+size_flags_vertical = 4
+expand_mode = 0
+stretch_mode = 0
+
+[node name="Sep1" type="ColorRect" parent="HUD/TopBar/HBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(1, 0)
+size_flags_vertical = 3
+color = Color(0.918, 0.702, 0.031, 0.20)
+
+[node name="HotelSection" type="VBoxContainer" parent="HUD/TopBar/HBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 0)
+size_flags_vertical = 4
+theme_override_constants/separation = 2
+
+[node name="HotelName" type="Label" parent="HUD/TopBar/HBox/HotelSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+text = "Hotel"
+
+[node name="LevelLbl" type="Label" parent="HUD/TopBar/HBox/HotelSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
+text = "LVL 1"
+
+[node name="Sep2" type="ColorRect" parent="HUD/TopBar/HBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(1, 0)
+size_flags_vertical = 3
+color = Color(0.918, 0.702, 0.031, 0.20)
+
+[node name="StatsSection" type="HBoxContainer" parent="HUD/TopBar/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+theme_override_constants/separation = 36
+
+[node name="StatDay" type="VBoxContainer" parent="HUD/TopBar/HBox/StatsSection"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Key" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatDay"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
+text = "TAG"
+
+[node name="Value" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatDay"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.90, 0.90, 0.90, 1)
+text = "1"
+
+[node name="StatMoney" type="VBoxContainer" parent="HUD/TopBar/HBox/StatsSection"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Key" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatMoney"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
+text = "KAPITAL"
+
+[node name="Value" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatMoney"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
+text = "€ 0"
+
+[node name="StatGuests" type="VBoxContainer" parent="HUD/TopBar/HBox/StatsSection"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Key" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatGuests"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
+text = "GÄSTE"
+
+[node name="Value" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatGuests"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.90, 0.90, 0.90, 1)
+text = "0"
+
+[node name="StatAP" type="VBoxContainer" parent="HUD/TopBar/HBox/StatsSection"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Key" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatAP"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
+text = "AP"
+
+[node name="Value" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatAP"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.90, 0.90, 0.90, 1)
+text = "–"
+
+[node name="StatEXP" type="VBoxContainer" parent="HUD/TopBar/HBox/StatsSection"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 0)
+theme_override_constants/separation = 2
+
+[node name="Key" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatEXP"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
+text = "EXP"
+
+[node name="Bar" type="ProgressBar" parent="HUD/TopBar/HBox/StatsSection/StatEXP"]
+layout_mode = 2
+custom_minimum_size = Vector2(120, 8)
+size_flags_vertical = 4
+show_percentage = false
+theme_override_styles/background = SubResource("SB_progressbar")
+value = 45.0
+
+[node name="ValueLbl" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatEXP"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.55, 0.55, 0.55, 1)
+text = "–"
+
+[node name="StatRUF" type="VBoxContainer" parent="HUD/TopBar/HBox/StatsSection"]
+layout_mode = 2
+custom_minimum_size = Vector2(100, 0)
+theme_override_constants/separation = 2
+
+[node name="Key" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatRUF"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
+text = "RUF"
+
+[node name="Bar" type="ProgressBar" parent="HUD/TopBar/HBox/StatsSection/StatRUF"]
+layout_mode = 2
+custom_minimum_size = Vector2(100, 8)
+size_flags_vertical = 4
+show_percentage = false
+theme_override_styles/background = SubResource("SB_progressbar")
+value = 60.0
+
+[node name="StatFP" type="VBoxContainer" parent="HUD/TopBar/HBox/StatsSection"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Key" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatFP"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
+text = "FP"
+
+[node name="Value" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatFP"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.90, 0.90, 0.90, 1)
+text = "–"
+
+[node name="Sep3" type="ColorRect" parent="HUD/TopBar/HBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(1, 0)
+size_flags_vertical = 3
+color = Color(0.918, 0.702, 0.031, 0.20)
+
+[node name="TimeSection" type="HBoxContainer" parent="HUD/TopBar/HBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(260, 0)
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="TagBox" type="VBoxContainer" parent="HUD/TopBar/HBox/TimeSection"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 2
+
+[node name="Key" type="Label" parent="HUD/TopBar/HBox/TimeSection/TagBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
+text = "TAG"
+
+[node name="Value" type="Label" parent="HUD/TopBar/HBox/TimeSection/TagBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.90, 0.90, 0.90, 1)
+text = "1"
+
+[node name="TimeLbl" type="Label" parent="HUD/TopBar/HBox/TimeSection"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
+text = "10:00"
+
+[node name="GameControls" type="HBoxContainer" parent="HUD/TopBar/HBox/TimeSection"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 4
+
+[node name="BtnPause" type="Button" parent="HUD/TopBar/HBox/TimeSection/GameControls"]
+layout_mode = 2
+custom_minimum_size = Vector2(32, 32)
+theme_override_font_sizes/font_size = 14
+text = "⏸"
+
+[node name="BtnPlay" type="Button" parent="HUD/TopBar/HBox/TimeSection/GameControls"]
+layout_mode = 2
+custom_minimum_size = Vector2(32, 32)
+theme_override_font_sizes/font_size = 14
+text = "▶"
+
+[node name="BtnFF" type="Button" parent="HUD/TopBar/HBox/TimeSection/GameControls"]
+layout_mode = 2
+custom_minimum_size = Vector2(32, 32)
+theme_override_font_sizes/font_size = 14
+text = "⏩"
+
+[node name="BottomBarAnchor" type="Control" parent="HUD"]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -500
+offset_top = -96
+offset_right = 500
+offset_bottom = -8
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ContextBar" type="HBoxContainer" parent="HUD"]
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -90
+offset_right = 200
+offset_bottom = -8
+grow_vertical = 0
+visible = false
+theme_override_constants/separation = 8
+
+[node name="HintLabel" type="Label" parent="HUD"]
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 8
+offset_top = -22
+offset_right = 600
+offset_bottom = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.35, 0.35, 0.35, 0.8)
+text = "WASD: bewegen   Scroll/+−: zoom   RMB: ziehen"

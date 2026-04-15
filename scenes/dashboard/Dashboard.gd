@@ -373,7 +373,7 @@ func _start_hotel(index: int) -> void:
 	if index >= _hotels.size():
 		return
 	GameState.select_hotel(_hotels[index])
-	# TODO: get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
+	get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
 
 
 func _on_main_menu_pressed() -> void:

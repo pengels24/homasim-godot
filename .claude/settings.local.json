@@ -6,7 +6,17 @@
       "Bash(gh repo:*)",
       "Bash(\"/c/Program Files/GitHub CLI/gh.exe\" repo create pengels24/homasim-godot --public --description \"HO·MA·SIM – Hotel Management Simulation in Godot 4\")",
       "mcp__claude_ai_Linear__save_issue",
-      "mcp__claude_ai_Linear__list_issue_statuses"
+      "mcp__claude_ai_Linear__list_issue_statuses",
+      "Bash(gh issue:*)",
+      "mcp__claude_ai_Linear__list_issues",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(git tag:*)",
+      "Bash(git commit -m ' *)",
+      "mcp__claude_ai_Linear__list_teams",
+      "Bash(identify tile_0000.png)",
+      "WebFetch(domain:docs.godotengine.org)",
+      "Bash(python3 -c \"from PIL import Image; img = Image.open\\('d:/game-dev/homasim-godot/assets/images/logo.png'\\); print\\(img.size, img.mode\\)\")"
     ]
   }
 }

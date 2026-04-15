@@ -62,6 +62,13 @@ res://
 - Hover = aufgehellte Variante der Grundfarbe
 - Disabled = 35% Alpha
 
+## Assets
+- **Kenney – Roguelike Modern City** – `external-assets/roguelike-modern-city/` (gitignored)
+  - 1036 Einzel-PNGs in `Tiles/` (tile_0000.png … tile_1035.png), Topdown 2D, Public Domain
+  - **Primäre Grafik-Quelle für die Ingame-Szene** – Boden, Wände, Möbel, Straßen, Gebäude
+  - Verwendete Tiles nach `res://assets/tiles/` kopieren (nur was wirklich benutzt wird)
+  - Austauschbar durch eigene Grafiken – Kenney ist Platzhalter bis Custom-Art verfügbar
+
 ## Workflow
 - **Issues vor der Umsetzung anlegen** – Linear-Issue (ANG-xxx) anlegen bevor mit der Implementierung begonnen wird
 - ANG-xxx Referenz im Code (Kommentare), Commits und Changelog verwenden

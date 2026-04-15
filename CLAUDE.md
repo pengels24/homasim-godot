@@ -48,8 +48,19 @@ res://
 ## Design
 - **Farben**: Gold `#EAB308`, Dark Background `#0f172a`/`#141416`, Weiß `#fafafa`
 - **Fonts**: Outfit-Bold (Headlines/Buttons), Inter Regular (Fließtext)
-- **Buttons**: StyleBoxFlat gold/gold_hover/gold_disabled (6px Radius)
 - **Modals**: Dunkles Panel (0.95 Alpha), 12px Radius, Schlagschatten
+
+## Button-Farbkonzept (verbindlich)
+| Farbe | Bedeutung | Beispiele |
+|-------|-----------|-----------|
+| **Gold** `#EAB308` | Navigation / Menü | Hauptmenü, Spiel starten, Einstellungen |
+| **Grün** `#16a34a` | Bestätigen / Speichern / Anlegen | Anlegen, Speichern, OK |
+| **Rot** `#dc2626` | Abbrechen / Löschen / Zurück | Abbrechen, Löschen, Zurück |
+| **Blau** `#2563eb` | Info / Details | Tooltip-Aktionen, Detail-Ansichten |
+
+- Jeder Button-Typ hat normal/hover/disabled StyleBoxFlat (6px Radius)
+- Hover = aufgehellte Variante der Grundfarbe
+- Disabled = 35% Alpha
 
 ## Workflow
 - **Issues vor der Umsetzung anlegen** – Linear-Issue (ANG-xxx) anlegen bevor mit der Implementierung begonnen wird

@@ -13,13 +13,25 @@ extends Control
 @onready var status_label:      Label     = $MainArea/HotelSection/StatusLabel
 @onready var hotel_container:   VBoxContainer = $MainArea/HotelSection/Scroll/HotelContainer
 
-@onready var new_hotel_overlay: ColorRect = $NewHotelOverlay
-@onready var hotel_name_field:  LineEdit  = $NewHotelOverlay/NewHotelPanel/VBox/HotelNameField
-@onready var dialog_error:      Label     = $NewHotelOverlay/NewHotelPanel/VBox/DialogError
-@onready var btn_create:        Button    = $NewHotelOverlay/NewHotelPanel/VBox/DialogButtons/BtnCreate
-@onready var btn_cancel:        Button    = $NewHotelOverlay/NewHotelPanel/VBox/DialogButtons/BtnCancel
+@onready var new_hotel_overlay: ColorRect    = $NewHotelOverlay
+@onready var hotel_name_field:  LineEdit     = $NewHotelOverlay/NewHotelPanel/VBox/HotelNameField
+@onready var grid_holder:       GridContainer = $NewHotelOverlay/NewHotelPanel/VBox/GridWrapper/GridHolder
+@onready var dialog_error:      Label        = $NewHotelOverlay/NewHotelPanel/VBox/DialogError
+@onready var btn_create:        Button       = $NewHotelOverlay/NewHotelPanel/VBox/DialogButtons/BtnCreate
+@onready var btn_cancel:        Button       = $NewHotelOverlay/NewHotelPanel/VBox/DialogButtons/BtnCancel
 
 var _hotels: Array = []
+var _selected_plot_x: int = 2
+var _selected_plot_y: int = 0
+var _plot_buttons: Dictionary = {}
+
+const GRID_COLS  := 5
+const CELL_PX    := 44
+const C_STREET     := Color(0.20, 0.22, 0.25)
+const C_SELECTABLE := Color(0.14, 0.48, 0.20)
+const C_SEL_HOVER  := Color(0.24, 0.78, 0.34)
+const C_SELECTED   := Color(0.918, 0.702, 0.031)
+const C_LOCKED     := Color(0.09, 0.09, 0.12)
 
 const SKIN_COLORS := {
 	"hell":   Color(0.95, 0.82, 0.70),
@@ -43,7 +55,6 @@ const OUTFIT_COLORS := {
 
 
 func _ready() -> void:
-	_setup_manager_panel()
 	btn_main_menu.pressed.connect(_on_main_menu_pressed)
 	btn_new_hotel.pressed.connect(_on_new_hotel_pressed)
 	btn_create.pressed.connect(_on_create_confirmed)
@@ -52,6 +63,12 @@ func _ready() -> void:
 	title_label.text = GameState.T("dashboard.title")
 	btn_new_hotel.text = GameState.T("dashboard.btn.new_hotel")
 	btn_main_menu.text = GameState.T("menu.btn.main_menu")
+	# Manager-Daten sicherstellen bevor das Panel aufgebaut wird –
+	# beim Frischlogin enthält die Login-Response ggf. kein manager-Objekt.
+	if GameState.has_manager():
+		_setup_manager_panel()
+	else:
+		SessionManager.check_session(func(_ok: bool): _setup_manager_panel())
 	_load_hotels()
 
 
@@ -154,15 +171,15 @@ func _create_hotel_card(hotel: Dictionary, index: int) -> Control:
 	var btn_play := Button.new()
 	btn_play.text = GameState.T("dashboard.btn.play_hotel")
 	btn_play.custom_minimum_size = Vector2(0, 44)
-	btn_play.add_theme_color_override("font_color", Color(0.08, 0.06, 0))
-	_apply_gold_style(btn_play)
+	btn_play.add_theme_color_override("font_color", Color(0.96, 0.96, 0.96))
+	_apply_green_style(btn_play)
 	btn_play.pressed.connect(_start_hotel.bind(index))
 	btns.add_child(btn_play)
 
 	var btn_del := Button.new()
 	btn_del.text = GameState.T("dashboard.btn.delete_hotel")
 	btn_del.custom_minimum_size = Vector2(0, 44)
-	btn_del.add_theme_color_override("font_color", Color(0.9, 0.3, 0.3))
+	btn_del.add_theme_color_override("font_color", Color(0.96, 0.96, 0.96))
 	_apply_danger_style(btn_del)
 	btn_del.pressed.connect(_delete_hotel.bind(hotel.get("id", -1), btn_del))
 	btns.add_child(btn_del)
@@ -193,10 +210,10 @@ func _apply_gold_style(btn: Button) -> void:
 	s.corner_radius_top_right   = 6
 	s.corner_radius_bottom_left = 6
 	s.corner_radius_bottom_right = 6
-	s.content_margin_left   = 16.0
-	s.content_margin_right  = 16.0
-	s.content_margin_top    = 8.0
-	s.content_margin_bottom = 8.0
+	s.content_margin_left   = 20.0
+	s.content_margin_right  = 20.0
+	s.content_margin_top    = 10.0
+	s.content_margin_bottom = 10.0
 	btn.add_theme_stylebox_override("normal", s)
 	var h := s.duplicate() as StyleBoxFlat
 	h.bg_color = Color(0.97, 0.80, 0.15)
@@ -204,20 +221,38 @@ func _apply_gold_style(btn: Button) -> void:
 	btn.add_theme_stylebox_override("pressed", s)
 
 
-func _apply_danger_style(btn: Button) -> void:
+func _apply_green_style(btn: Button) -> void:
 	var s := StyleBoxFlat.new()
-	s.bg_color = Color(0.25, 0.08, 0.08)
+	s.bg_color = Color(0.086, 0.639, 0.290)
 	s.corner_radius_top_left    = 6
 	s.corner_radius_top_right   = 6
 	s.corner_radius_bottom_left = 6
 	s.corner_radius_bottom_right = 6
-	s.content_margin_left   = 16.0
-	s.content_margin_right  = 16.0
-	s.content_margin_top    = 8.0
-	s.content_margin_bottom = 8.0
+	s.content_margin_left   = 20.0
+	s.content_margin_right  = 20.0
+	s.content_margin_top    = 10.0
+	s.content_margin_bottom = 10.0
 	btn.add_theme_stylebox_override("normal", s)
 	var h := s.duplicate() as StyleBoxFlat
-	h.bg_color = Color(0.40, 0.10, 0.10)
+	h.bg_color = Color(0.15, 0.78, 0.38)
+	btn.add_theme_stylebox_override("hover", h)
+	btn.add_theme_stylebox_override("pressed", s)
+
+
+func _apply_danger_style(btn: Button) -> void:
+	var s := StyleBoxFlat.new()
+	s.bg_color = Color(0.863, 0.149, 0.149)
+	s.corner_radius_top_left    = 6
+	s.corner_radius_top_right   = 6
+	s.corner_radius_bottom_left = 6
+	s.corner_radius_bottom_right = 6
+	s.content_margin_left   = 20.0
+	s.content_margin_right  = 20.0
+	s.content_margin_top    = 10.0
+	s.content_margin_bottom = 10.0
+	btn.add_theme_stylebox_override("normal", s)
+	var h := s.duplicate() as StyleBoxFlat
+	h.bg_color = Color(0.980, 0.220, 0.220)
 	btn.add_theme_stylebox_override("hover", h)
 	btn.add_theme_stylebox_override("pressed", s)
 
@@ -225,8 +260,75 @@ func _apply_danger_style(btn: Button) -> void:
 func _on_new_hotel_pressed() -> void:
 	hotel_name_field.text = ""
 	dialog_error.text = ""
+	_selected_plot_x = 2
+	_selected_plot_y = 0
+	_build_parcel_grid()
 	new_hotel_overlay.visible = true
 	hotel_name_field.grab_focus()
+
+
+func _build_parcel_grid() -> void:
+	for child in grid_holder.get_children():
+		child.queue_free()
+	_plot_buttons.clear()
+
+	for py in GRID_COLS:
+		for px in GRID_COLS:
+			grid_holder.add_child(_create_plot_cell(px, py))
+
+	_refresh_plot_selection()
+
+
+func _create_plot_cell(px: int, py: int) -> Control:
+	var is_selectable := px == 0 or px == 4 or py == 0 or py == 4
+
+	var cell := ColorRect.new()
+	cell.custom_minimum_size = Vector2(CELL_PX, CELL_PX)
+
+	if is_selectable:
+		# Selectable parcels werden als Button gebaut
+		var btn := Button.new()
+		btn.custom_minimum_size = Vector2(CELL_PX, CELL_PX)
+		btn.set_meta("px", px)
+		btn.set_meta("py", py)
+		btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		btn.pressed.connect(_on_plot_selected.bind(px, py))
+		_plot_buttons[Vector2i(px, py)] = btn
+		return btn
+	else:
+		cell.color = C_LOCKED
+
+	return cell
+
+
+func _on_plot_selected(px: int, py: int) -> void:
+	_selected_plot_x = px
+	_selected_plot_y = py
+	_refresh_plot_selection()
+
+
+func _refresh_plot_selection() -> void:
+	for key: Vector2i in _plot_buttons:
+		var btn: Button = _plot_buttons[key]
+		var is_sel := key.x == _selected_plot_x and key.y == _selected_plot_y
+		var s := StyleBoxFlat.new()
+		s.corner_radius_top_left    = 4
+		s.corner_radius_top_right   = 4
+		s.corner_radius_bottom_left = 4
+		s.corner_radius_bottom_right = 4
+		if is_sel:
+			s.bg_color = C_SELECTED
+			s.border_width_left   = 2
+			s.border_width_top    = 2
+			s.border_width_right  = 2
+			s.border_width_bottom = 2
+			s.border_color = Color(1.0, 0.88, 0.20)
+		else:
+			s.bg_color = C_SELECTABLE
+		btn.add_theme_stylebox_override("normal", s)
+		var sh := s.duplicate() as StyleBoxFlat
+		sh.bg_color = C_SEL_HOVER if not is_sel else C_SELECTED
+		btn.add_theme_stylebox_override("hover", sh)
 
 
 func _close_new_hotel_dialog() -> void:
@@ -241,8 +343,8 @@ func _on_create_confirmed() -> void:
 	btn_create.disabled = true
 	Api.post_json("/api/hotels", {
 		"name": hotel_name,
-		"start_plot_x": 2,
-		"start_plot_y": 4
+		"start_plot_x": _selected_plot_x,
+		"start_plot_y": _selected_plot_y
 	}, _on_hotel_created)
 
 

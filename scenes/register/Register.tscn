@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b3x1register"]
+[gd_scene load_steps=17 format=3 uid="uid://b3x1register"]
 
 [ext_resource type="Script" path="res://scenes/register/Register.gd" id="1_register"]
 [ext_resource type="PackedScene" path="res://scenes/character/CharacterDisplay.tscn" id="2_chardisplay"]
@@ -106,6 +106,61 @@ content_margin_bottom = 12.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_link"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_green"]
+bg_color = Color(0.086, 0.639, 0.290, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_green_hover"]
+bg_color = Color(0.110, 0.780, 0.360, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_green_disabled"]
+bg_color = Color(0.086, 0.639, 0.290, 0.35)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red"]
+bg_color = Color(0.863, 0.149, 0.149, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red_hover"]
+bg_color = Color(0.980, 0.220, 0.220, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+
 [node name="Register" type="Control"]
 layout_mode = 0
 position = Vector2(0, 0)
@@ -156,11 +211,10 @@ layout_mode = 2
 custom_minimum_size = Vector2(36, 36)
 text = "✕"
 theme_override_font_sizes/font_size = 20
-theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
-theme_override_colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
-theme_override_styles/normal = SubResource("StyleBoxEmpty_link")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_link")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_link")
+theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_red")
+theme_override_styles/hover = SubResource("StyleBoxFlat_red_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_red")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_link")
 
 [node name="Spacer1" type="Control" parent="Center/Card/VBox"]
@@ -214,11 +268,11 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 52)
 text = "Account erstellen"
 theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
-theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_gold_disabled")
+theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_green")
+theme_override_styles/hover = SubResource("StyleBoxFlat_green_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_green")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_green_disabled")
 
 [node name="ErrorLabel" type="Label" parent="Center/Card/VBox/StepRegister"]
 layout_mode = 2
@@ -267,11 +321,11 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 52)
 text = "Code bestätigen"
 theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
-theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_gold_disabled")
+theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_green")
+theme_override_styles/hover = SubResource("StyleBoxFlat_green_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_green")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_green_disabled")
 
 [node name="ErrorLabel" type="Label" parent="Center/Card/VBox/StepVerify"]
 layout_mode = 2
@@ -594,10 +648,10 @@ layout_mode = 2
 custom_minimum_size = Vector2(0, 52)
 text = "Manager erstellen"
 theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
-theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_green")
+theme_override_styles/hover = SubResource("StyleBoxFlat_green_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_green")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_gold_disabled")
 
 [node name="ErrorLabel" type="Label" parent="Center/Card/VBox/StepCharacter"]

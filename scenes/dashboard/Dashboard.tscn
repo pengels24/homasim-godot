@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b3x1dashboard"]
+[gd_scene load_steps=15 format=3 uid="uid://b3x1dashboard"]
 
 [ext_resource type="Script" path="res://scenes/dashboard/Dashboard.gd" id="1_dashboard"]
 [ext_resource type="PackedScene" uid="uid://b3x1chardisplay" path="res://scenes/character/CharacterDisplay.tscn" id="2_chardisplay"]
@@ -83,6 +83,61 @@ content_margin_left = 16.0
 content_margin_right = 16.0
 content_margin_top = 10.0
 content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_green"]
+bg_color = Color(0.086, 0.639, 0.290, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_green_hover"]
+bg_color = Color(0.110, 0.780, 0.360, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red"]
+bg_color = Color(0.863, 0.149, 0.149, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red_hover"]
+bg_color = Color(0.980, 0.220, 0.220, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_street_bg"]
+bg_color = Color(0.20, 0.22, 0.25, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 20.0
+content_margin_bottom = 20.0
 
 [node name="Dashboard" type="Control"]
 layout_mode = 0
@@ -200,7 +255,7 @@ visible = false
 
 [node name="NewHotelPanel" type="PanelContainer" parent="NewHotelOverlay"]
 layout_mode = 0
-position = Vector2(660, 320)
+position = Vector2(660, 120)
 size = Vector2(600, 0)
 theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
 
@@ -224,6 +279,23 @@ theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_input")
 theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
 
+[node name="GridLabel" type="Label" parent="NewHotelOverlay/NewHotelPanel/VBox"]
+layout_mode = 2
+text = "Startparzelle (Eingang) wählen"
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.65, 0.65, 0.65, 1)
+
+[node name="GridWrapper" type="PanelContainer" parent="NewHotelOverlay/NewHotelPanel/VBox"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_street_bg")
+
+[node name="GridHolder" type="GridContainer" parent="NewHotelOverlay/NewHotelPanel/VBox/GridWrapper"]
+layout_mode = 2
+columns = 5
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+
 [node name="DialogError" type="Label" parent="NewHotelOverlay/NewHotelPanel/VBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(0, 20)
@@ -234,28 +306,27 @@ autowrap_mode = 3
 
 [node name="DialogButtons" type="HBoxContainer" parent="NewHotelOverlay/NewHotelPanel/VBox"]
 layout_mode = 2
-theme_override_constants/separation = 16
+alignment = 1
+theme_override_constants/separation = 12
 
 [node name="BtnCreate" type="Button" parent="NewHotelOverlay/NewHotelPanel/VBox/DialogButtons"]
 layout_mode = 2
-size_flags_horizontal = 3
-custom_minimum_size = Vector2(0, 48)
+custom_minimum_size = Vector2(160, 40)
 text = "Anlegen"
-theme_override_font_sizes/font_size = 20
-theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
-theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_green")
+theme_override_styles/hover = SubResource("StyleBoxFlat_green_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_green")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 
 [node name="BtnCancel" type="Button" parent="NewHotelOverlay/NewHotelPanel/VBox/DialogButtons"]
 layout_mode = 2
-size_flags_horizontal = 3
-custom_minimum_size = Vector2(0, 48)
+custom_minimum_size = Vector2(120, 40)
 text = "Abbrechen"
-theme_override_font_sizes/font_size = 20
-theme_override_colors/font_color = Color(0.65, 0.65, 0.65, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_dialog")
-theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_dialog")
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_red")
+theme_override_styles/hover = SubResource("StyleBoxFlat_red_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_red")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")

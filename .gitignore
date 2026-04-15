@@ -6,6 +6,9 @@
 # Arbeitsdateien (lokal, nicht ins Repo)
 _dev/
 
+# Externe Asset-Quellen (Kenney etc.) – nur verwendete Assets in assets/ committen
+external-assets/
+
 # Kompilierte Import-Dateien (werden lokal regeneriert)
 *.import
 

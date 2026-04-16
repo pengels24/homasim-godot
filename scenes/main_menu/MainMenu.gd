@@ -16,7 +16,7 @@ const FADE_DURATION  := 1.2
 @onready var btn_login:    Button   = $Content/Buttons/BtnLogin
 @onready var btn_settings: Button   = $Content/Buttons/BtnSettings
 @onready var btn_play:     Button   = $Content/Buttons/BtnPlay
-@onready var btn_quit:     Button   = $Content/Buttons/BtnQuit
+@onready var btn_quit:     Button   = $Content/BtnQuit
 @onready var logo:         TextureRect = $Content/Logo
 @onready var title_label:  Label    = $Content/Title
 @onready var subtitle:     Label    = $Content/Subtitle
@@ -77,7 +77,7 @@ func _load_assets() -> void:
 	var font_inter  := load("res://assets/fonts/Inter_18pt-Regular.ttf") as FontFile
 	if font_outfit:
 		title_label.add_theme_font_override("font", font_outfit)
-		for btn in [btn_login, btn_settings, btn_play, btn_quit, login_button]:
+		for btn in [btn_login, btn_settings, btn_play, btn_quit, btn_tutorial, btn_character, btn_credits, login_button]:
 			btn.add_theme_font_override("font", font_outfit)
 	if font_inter:
 		subtitle.add_theme_font_override("font", font_inter)

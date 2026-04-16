@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://b3x1qmainmenu"]
+[gd_scene load_steps=17 format=3 uid="uid://b3x1qmainmenu"]
 
 [ext_resource type="Script" path="res://scenes/main_menu/MainMenu.gd" id="1_mainmenu"]
 
@@ -142,6 +142,22 @@ content_margin_right = 24.0
 content_margin_top = 12.0
 content_margin_bottom = 12.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_subtitle_bg"]
+bg_color = Color(0, 0, 0, 0.45)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_left = 10
+corner_radius_bottom_right = 10
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.12)
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 16.0
+content_margin_bottom = 16.0
+
 [node name="MainMenu" type="Control"]
 layout_mode = 0
 position = Vector2(0, 0)
@@ -200,6 +216,9 @@ custom_minimum_size = Vector2(800, 0)
 text = "Deine Hotel-Legende\nbeginnt hier"
 theme_override_font_sizes/font_size = 80
 theme_override_colors/font_color = Color(0.98, 0.98, 0.98, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
+theme_override_constants/shadow_offset_x = 3
+theme_override_constants/shadow_offset_y = 4
 horizontal_alignment = 1
 autowrap_mode = 3
 
@@ -209,17 +228,20 @@ custom_minimum_size = Vector2(800, 0)
 text = "Erlebe die ultimative Hotel-Management-Simulation im charmanten\nPixel-Art-Stil. Plane, baue und verwalte dein Imperium – von der ersten Fliese bis zum Luxus-Resort."
 theme_override_font_sizes/font_size = 20
 theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_subtitle_bg")
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="Buttons" type="GridContainer" parent="Content"]
 layout_mode = 2
+size_flags_horizontal = 3
 columns = 2
 theme_override_constants/h_separation = 24
 theme_override_constants/v_separation = 16
 
 [node name="BtnPlay" type="Button" parent="Content/Buttons"]
 layout_mode = 2
+size_flags_horizontal = 3
 custom_minimum_size = Vector2(380, 56)
 text = "Spiel starten"
 disabled = true
@@ -232,6 +254,7 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_gold_disabled")
 
 [node name="BtnSettings" type="Button" parent="Content/Buttons"]
 layout_mode = 2
+size_flags_horizontal = 3
 custom_minimum_size = Vector2(380, 56)
 text = "Einstellungen"
 theme_override_font_sizes/font_size = 22
@@ -243,6 +266,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
 
 [node name="BtnLogin" type="Button" parent="Content/Buttons"]
 layout_mode = 2
+size_flags_horizontal = 3
 custom_minimum_size = Vector2(380, 56)
 text = "Login / Register"
 theme_override_font_sizes/font_size = 22
@@ -255,6 +279,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
 [node name="BtnCharacter" type="Button" parent="Content/Buttons"]
 layout_mode = 2
+size_flags_horizontal = 3
 custom_minimum_size = Vector2(380, 56)
 text = "[DEBUG] Charakter"
 visible = false
@@ -267,6 +292,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
 [node name="BtnTutorial" type="Button" parent="Content/Buttons"]
 layout_mode = 2
+size_flags_horizontal = 3
 custom_minimum_size = Vector2(380, 56)
 text = "Tutorial"
 theme_override_font_sizes/font_size = 22
@@ -278,8 +304,9 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
 [node name="BtnCredits" type="Button" parent="Content/Buttons"]
 layout_mode = 2
+size_flags_horizontal = 3
 custom_minimum_size = Vector2(380, 56)
-text = "Credits"
+text = "Info"
 theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
@@ -287,9 +314,10 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
-[node name="BtnQuit" type="Button" parent="Content/Buttons"]
+
+[node name="BtnQuit" type="Button" parent="Content"]
 layout_mode = 2
-custom_minimum_size = Vector2(380, 56)
+custom_minimum_size = Vector2(800, 56)
 text = "Beenden"
 theme_override_font_sizes/font_size = 22
 theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)

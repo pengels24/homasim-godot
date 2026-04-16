@@ -1,15 +1,18 @@
 ## Entwicklung
-= Peter Engels
+= Peter Engels (Angelus2010)
 Spieldesign · Programmierung · Art Direction
 © 2026 Peter Engels
 
 ## Engine & Tools
 = Godot Engine 4.6
-Copyright (c) 2007-2024 Juan Linietsky, Ariel Manzur.
+Copyright (c) 2007-2026 Juan Linietsky, Ariel Manzur, u. a.
 MIT License
 
 = Linear
 Projektmanagement
+
+= GitHub
+Versionierung
 
 ## Assets & Grafiken
 = Kenney – Roguelike Modern City
@@ -17,8 +20,12 @@ Copyright (c) Kenney.nl
 Creative Commons Zero (CC0) · kenney.nl
 
 = Lucide Icons
-Copyright (c) 2013-2024 Cole Bemis
+Copyright © 2026 Lucide Contributors
 ISC License · lucide.dev
+
+= Bootstrap Icons
+Copyright © 2011-2026 Bootstrap Authors
+MIT License · getbootstrap.com
 
 ## Schriften
 = Outfit Bold
@@ -28,6 +35,12 @@ SIL Open Font License, Version 1.1
 = Inter Regular
 Copyright 2020 The Inter Project Authors
 SIL Open Font License, Version 1.1
+
+## Musik
+= "Raving Energy" – Kevin MacLeod
+incompetech.com
+Creative Commons: By Attribution 4.0
+creativecommons.org/licenses/by/4.0
 
 ## Backend
 = Custom PHP API

@@ -9,8 +9,8 @@ border_width_bottom = 1
 border_color = Color(0.918, 0.702, 0.031, 0.30)
 content_margin_left = 14.0
 content_margin_right = 14.0
-content_margin_top = 9.0
-content_margin_bottom = 9.0
+content_margin_top = 15.0
+content_margin_bottom = 15.0
 
 [sub_resource type="StyleBoxFlat" id="SB_bottombar"]
 bg_color = Color(0.04, 0.06, 0.10, 0.92)
@@ -50,7 +50,7 @@ zoom = Vector2(1.0, 1.0)
 [node name="TopBar" type="PanelContainer" parent="HUD"]
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 68
+offset_bottom = 80
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("SB_topbar")
 
@@ -60,7 +60,7 @@ theme_override_constants/separation = 0
 
 [node name="LogoSection" type="HBoxContainer" parent="HUD/TopBar/HBox"]
 layout_mode = 2
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(270, 0)
 size_flags_vertical = 4
 theme_override_constants/separation = 8
 
@@ -72,35 +72,46 @@ size_flags_vertical = 4
 expand_mode = 0
 stretch_mode = 0
 
-[node name="Sep1" type="ColorRect" parent="HUD/TopBar/HBox"]
-layout_mode = 2
-custom_minimum_size = Vector2(1, 0)
-size_flags_vertical = 3
-color = Color(0.918, 0.702, 0.031, 0.20)
 
-[node name="HotelSection" type="VBoxContainer" parent="HUD/TopBar/HBox"]
+[node name="NameSection" type="VBoxContainer" parent="HUD/TopBar/HBox"]
 layout_mode = 2
-custom_minimum_size = Vector2(180, 0)
+custom_minimum_size = Vector2(150, 0)
+size_flags_horizontal = 3
 size_flags_vertical = 4
 theme_override_constants/separation = 2
 
-[node name="HotelName" type="Label" parent="HUD/TopBar/HBox/HotelSection"]
+[node name="Key" type="Label" parent="HUD/TopBar/HBox/NameSection"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
+text = "NAME"
+
+[node name="Value" type="Label" parent="HUD/TopBar/HBox/NameSection"]
+layout_mode = 2
+size_flags_horizontal = 3
+text_overrun_behavior = 3
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
 text = "Hotel"
 
-[node name="LevelLbl" type="Label" parent="HUD/TopBar/HBox/HotelSection"]
+[node name="LevelSection" type="VBoxContainer" parent="HUD/TopBar/HBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
-theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
-text = "LVL 1"
+custom_minimum_size = Vector2(90, 0)
+size_flags_vertical = 4
+theme_override_constants/separation = 2
 
-[node name="Sep2" type="ColorRect" parent="HUD/TopBar/HBox"]
+[node name="Key" type="Label" parent="HUD/TopBar/HBox/LevelSection"]
 layout_mode = 2
-custom_minimum_size = Vector2(1, 0)
-size_flags_vertical = 3
-color = Color(0.918, 0.702, 0.031, 0.20)
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
+text = "LEVEL"
+
+[node name="Value" type="Label" parent="HUD/TopBar/HBox/LevelSection"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.90, 0.90, 0.90, 1)
+text = "1"
+
 
 [node name="StatsSection" type="HBoxContainer" parent="HUD/TopBar/HBox"]
 layout_mode = 2
@@ -108,67 +119,85 @@ size_flags_horizontal = 3
 alignment = 1
 theme_override_constants/separation = 36
 
-[node name="StatDay" type="VBoxContainer" parent="HUD/TopBar/HBox/StatsSection"]
-layout_mode = 2
-theme_override_constants/separation = 2
-
-[node name="Key" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatDay"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 11
-theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
-text = "TAG"
-
-[node name="Value" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatDay"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.90, 0.90, 0.90, 1)
-text = "1"
 
 [node name="StatMoney" type="VBoxContainer" parent="HUD/TopBar/HBox/StatsSection"]
 layout_mode = 2
+custom_minimum_size = Vector2(150, 0)
 theme_override_constants/separation = 2
 
 [node name="Key" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatMoney"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
 text = "KAPITAL"
 
 [node name="Value" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatMoney"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+size_flags_horizontal = 3
+horizontal_alignment = 2
+theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
 text = "€ 0"
 
 [node name="StatGuests" type="VBoxContainer" parent="HUD/TopBar/HBox/StatsSection"]
 layout_mode = 2
+custom_minimum_size = Vector2(110, 0)
 theme_override_constants/separation = 2
 
 [node name="Key" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatGuests"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
 text = "GÄSTE"
 
-[node name="Value" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatGuests"]
+[node name="GuestsBox" type="HBoxContainer" parent="HUD/TopBar/HBox/StatsSection/StatGuests"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.90, 0.90, 0.90, 1)
+theme_override_constants/separation = 2
+
+[node name="WaitLbl" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatGuests/GuestsBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.20, 0.78, 0.35, 1)
+text = "0"
+
+[node name="Slash1" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatGuests/GuestsBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.30, 0.30, 0.30, 1)
+text = "/"
+
+[node name="ActiveLbl" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatGuests/GuestsBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
+text = "0"
+
+[node name="Slash2" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatGuests/GuestsBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.30, 0.30, 0.30, 1)
+text = "/"
+
+[node name="OutLbl" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatGuests/GuestsBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.85, 0.20, 0.20, 1)
 text = "0"
 
 [node name="StatAP" type="VBoxContainer" parent="HUD/TopBar/HBox/StatsSection"]
 layout_mode = 2
+custom_minimum_size = Vector2(90, 0)
 theme_override_constants/separation = 2
 
 [node name="Key" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatAP"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
 text = "AP"
 
 [node name="Value" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatAP"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0.90, 0.90, 0.90, 1)
 text = "–"
 
@@ -179,7 +208,7 @@ theme_override_constants/separation = 2
 
 [node name="Key" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatEXP"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
 text = "EXP"
 
@@ -193,50 +222,48 @@ value = 45.0
 
 [node name="ValueLbl" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatEXP"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.55, 0.55, 0.55, 1)
 text = "–"
 
 [node name="StatRUF" type="VBoxContainer" parent="HUD/TopBar/HBox/StatsSection"]
 layout_mode = 2
-custom_minimum_size = Vector2(100, 0)
+custom_minimum_size = Vector2(130, 0)
 theme_override_constants/separation = 2
 
 [node name="Key" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatRUF"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
 text = "RUF"
 
-[node name="Bar" type="ProgressBar" parent="HUD/TopBar/HBox/StatsSection/StatRUF"]
+[node name="RufBarRoot" type="Control" parent="HUD/TopBar/HBox/StatsSection/StatRUF"]
 layout_mode = 2
-custom_minimum_size = Vector2(100, 8)
-size_flags_vertical = 4
-show_percentage = false
-theme_override_styles/background = SubResource("SB_progressbar")
-value = 60.0
+custom_minimum_size = Vector2(130, 14)
+
+[node name="RufValueLbl" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatRUF"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.55, 0.55, 0.55, 1)
+text = "500 / 1000"
 
 [node name="StatFP" type="VBoxContainer" parent="HUD/TopBar/HBox/StatsSection"]
 layout_mode = 2
+custom_minimum_size = Vector2(70, 0)
 theme_override_constants/separation = 2
 
 [node name="Key" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatFP"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
 text = "FP"
 
 [node name="Value" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatFP"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0.90, 0.90, 0.90, 1)
 text = "–"
 
-[node name="Sep3" type="ColorRect" parent="HUD/TopBar/HBox"]
-layout_mode = 2
-custom_minimum_size = Vector2(1, 0)
-size_flags_vertical = 3
-color = Color(0.918, 0.702, 0.031, 0.20)
 
 [node name="TimeSection" type="HBoxContainer" parent="HUD/TopBar/HBox"]
 layout_mode = 2
@@ -246,25 +273,26 @@ theme_override_constants/separation = 12
 
 [node name="TagBox" type="VBoxContainer" parent="HUD/TopBar/HBox/TimeSection"]
 layout_mode = 2
+custom_minimum_size = Vector2(60, 0)
 size_flags_vertical = 4
 theme_override_constants/separation = 2
 
 [node name="Key" type="Label" parent="HUD/TopBar/HBox/TimeSection/TagBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.50, 0.50, 0.50, 1)
 text = "TAG"
 
 [node name="Value" type="Label" parent="HUD/TopBar/HBox/TimeSection/TagBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0.90, 0.90, 0.90, 1)
 text = "1"
 
 [node name="TimeLbl" type="Label" parent="HUD/TopBar/HBox/TimeSection"]
 layout_mode = 2
 size_flags_vertical = 4
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 30
 theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
 text = "10:00"
 
@@ -275,20 +303,20 @@ theme_override_constants/separation = 4
 
 [node name="BtnPause" type="Button" parent="HUD/TopBar/HBox/TimeSection/GameControls"]
 layout_mode = 2
-custom_minimum_size = Vector2(32, 32)
-theme_override_font_sizes/font_size = 14
+custom_minimum_size = Vector2(50, 50)
+theme_override_font_sizes/font_size = 20
 text = "⏸"
 
 [node name="BtnPlay" type="Button" parent="HUD/TopBar/HBox/TimeSection/GameControls"]
 layout_mode = 2
-custom_minimum_size = Vector2(32, 32)
-theme_override_font_sizes/font_size = 14
+custom_minimum_size = Vector2(50, 50)
+theme_override_font_sizes/font_size = 20
 text = "▶"
 
 [node name="BtnFF" type="Button" parent="HUD/TopBar/HBox/TimeSection/GameControls"]
 layout_mode = 2
-custom_minimum_size = Vector2(32, 32)
-theme_override_font_sizes/font_size = 14
+custom_minimum_size = Vector2(50, 50)
+theme_override_font_sizes/font_size = 20
 text = "⏩"
 
 [node name="BottomBarAnchor" type="Control" parent="HUD"]
@@ -324,6 +352,6 @@ offset_top = -22
 offset_right = 600
 offset_bottom = 0
 grow_vertical = 0
-theme_override_font_sizes/font_size = 11
+theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.35, 0.35, 0.35, 0.8)
 text = "WASD: bewegen   Scroll/+−: zoom   RMB: ziehen"

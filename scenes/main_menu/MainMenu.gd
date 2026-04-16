@@ -32,6 +32,7 @@ const FADE_DURATION  := 1.2
 @onready var btn_to_register:   Button    = $LoginModal/Center/Card/VBox/BtnToRegister
 @onready var btn_character:     Button    = $Content/Buttons/BtnCharacter
 @onready var btn_tutorial:      Button    = $Content/Buttons/BtnTutorial
+@onready var btn_credits:       Button    = $Content/Buttons/BtnCredits
 
 var _current_bg := 0
 var _slide_timer := 0.0
@@ -51,6 +52,7 @@ func _ready() -> void:
 	btn_settings.pressed.connect(_on_settings_pressed)
 	btn_character.pressed.connect(_on_character_pressed)
 	btn_tutorial.pressed.connect(_on_tutorial_pressed)
+	btn_credits.pressed.connect(_on_credits_pressed)
 	btn_quit.pressed.connect(get_tree().quit)
 
 
@@ -177,6 +179,10 @@ func _on_character_pressed() -> void:
 
 func _on_tutorial_pressed() -> void:
 	pass # TODO: Tutorial-Szene (ANG-xxx)
+
+
+func _on_credits_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/credits/Credits.tscn")
 
 
 func _on_to_register_pressed() -> void:

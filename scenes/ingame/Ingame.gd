@@ -29,24 +29,21 @@ extends Node2D
 @onready var bottom_anchor:  Control   = $HUD/BottomBarAnchor
 @onready var context_bar:    HBoxContainer = $HUD/ContextBar
 
-## Tile-Konstanten – Source-IDs entsprechen der Reihenfolge in _build_tileset()
-const TILE_STREET  := 0
-const TILE_GRASS   := 1
-const TILE_FLOOR   := 2
-const TILE_LOBBY   := 3
-const TILE_WALL    := 4
+## Tile-Konstanten – Source-IDs = Reihenfolge in _build_tileset()
+## Dateinamen sind semantisch fix; Grafik tauschen = andere PNG mit gleichem Namen ablegen.
+const TILE_BASE  := 0  # ground_base.png    – Parzellenbelag (ungebaut)
+const TILE_WALK  := 1  # ground_walking.png – Gehweg (3-Tile-Ring)
+const TILE_FLOOR := 2  # ground_floor.png   – Boden gekaufter Parzellen
+const TILE_BRICK := 3  # ground_brick.png   – Außenmauer
+const TILE_LOBBY := 4  # ground_lobby.png   – Lobby-Boden
+const TILE_DOOR  := 5  # main_door.png      – Türöffnung
 
 ## Grid-Konfiguration
-const PARCELS    := 5        # 5×5 Parzellen
-const PARCEL_SZ  := 16       # 16×16 Tiles pro Parzelle
-const STREET_W   := 3        # Straßenrand außerhalb des Parzellengrids (Tiles)
-const TILE_PX    := 16       # Physische Tile-Größe in Px
-const SCALE      := 2.0      # Anzeige-Skalierung → 32px/Tile sichtbar
-
-## Raum-Konfiguration (gilt für alle Raumtypen inkl. Lobby)
-## Jeder Raum = ROOM_FLOOR × ROOM_FLOOR Bodentiles + 1-Tile-Wandring
-const ROOM_FLOOR := 2        # Innenfläche pro Raum (2×2 Tiles)
-const ROOM_OUTER := 4        # Gesamtfußabdruck inkl. Wandring (ROOM_FLOOR + 2)
+const PARCELS   := 5    # 5×5 Parzellen
+const PARCEL_SZ := 16   # 16×16 Tiles pro Parzelle
+const WALK_W    := 3    # Gehweg-Breite außen (Tiles)
+const TILE_PX   := 16   # Physische Tile-Größe in Px
+const SCALE     := 2.0  # Anzeige-Skalierung → 32px/Tile sichtbar
 
 ## HUD-Fontgrößen – alle GDScript-gebauten Nodes nutzen diese Konstanten.
 ## Später: HUD-Scale (ANG-152) multipliziert diese Werte.
@@ -59,7 +56,7 @@ const HF_TIME := 22   # Spielzeit-Anzeige
 const HF_LOGO := 22   # (Logo ist jetzt ein Bild – Konstante bleibt für Fallback)
 
 ## Kamera-Steuerung
-const PAN_SPEED  := 100.0    # Tiles/s (×SCALE für globale Pixel)
+const PAN_SPEED  := 400.0    # Tiles/s (×SCALE für globale Pixel)
 const ZOOM_MIN   := 0.5
 const ZOOM_MAX   := 4.0
 const ZOOM_STEP  := 0.15
@@ -105,17 +102,19 @@ func _ready() -> void:
 	_connect_game_controls()
 
 
-## TileSet aus den Kenney-Einzeltiles aufbauen (programmatisch)
+## TileSet aus semantisch benannten Tiles aufbauen.
+## Grafik tauschen = andere PNG mit gleichem Namen in assets/tiles/ ablegen + Neustart.
 func _build_tileset() -> void:
 	_tile_set = TileSet.new()
 	_tile_set.tile_size = Vector2i(TILE_PX, TILE_PX)
 
 	var paths := [
-		"res://assets/tiles/outside_street.png",  # 0 TILE_STREET
-		"res://assets/tiles/outside_grass.png",   # 1 TILE_GRASS
-		"res://assets/tiles/floor_hotel.png",     # 2 TILE_FLOOR
-		"res://assets/tiles/floor_lobby.png",     # 3 TILE_LOBBY
-		"res://assets/tiles/wall_brick.png",      # 4 TILE_WALL
+		"res://assets/tiles/ground_base.png",    # 0 TILE_BASE
+		"res://assets/tiles/ground_walking.png", # 1 TILE_WALK
+		"res://assets/tiles/ground_floor.png",   # 2 TILE_FLOOR
+		"res://assets/tiles/ground_brick.png",   # 3 TILE_BRICK
+		"res://assets/tiles/ground_lobby.png",   # 4 TILE_LOBBY
+		"res://assets/tiles/main_door.png",      # 5 TILE_DOOR
 	]
 
 	for path in paths:
@@ -141,83 +140,129 @@ func _get_entry_plot() -> Vector2i:
 	return Vector2i(2, 0)
 
 
-## Karte aufbauen:
-## – Straßenrand (STREET_W Tiles) außerhalb des 5×5 Parzellengrids
-## – Parzellenflächen bleiben leer (dunkler Hintergrund = freies Land)
-## – Lobby-Raum als kleines Gebäude an der Straßenseite der Startparzelle
-func _build_map() -> void:
-	var entry   := _get_entry_plot()
-	var total_w := PARCELS * PARCEL_SZ + STREET_W * 2
-	var total_h := PARCELS * PARCEL_SZ + STREET_W * 2
-
-	# Straße + Parzellenbelag zeichnen
-	for ty in total_h:
-		for tx in total_w:
-			var in_street := (tx < STREET_W or tx >= total_w - STREET_W or
-							  ty < STREET_W or ty >= total_h - STREET_W)
-			if in_street:
-				floor_layer.set_cell(Vector2i(tx, ty), TILE_STREET, Vector2i(0, 0))
-			else:
-				# Parzellenfläche = neutraler dunkler Boden (bebaubar)
-				floor_layer.set_cell(Vector2i(tx, ty), TILE_FLOOR, Vector2i(0, 0))
-
-	# Lobby-Raum platzieren
-	var raw_dir: String = GameState.selected_hotel.get("entrance_direction", "")
-	var direction: String = raw_dir if raw_dir != "" else _derive_direction(entry.x, entry.y)
-	_place_room(entry.x, entry.y, direction, TILE_LOBBY)
+## Alle eigenen Parzellen als Array[[x,y],...] liefern.
+func _get_owned_plots() -> Array:
+	var raw: Variant = GameState.selected_hotel.get("unlocked_plots", null)
+	if raw is String and raw != "":
+		var parsed: Variant = JSON.parse_string(raw)
+		if parsed is Array:
+			return parsed
+	var entry := _get_entry_plot()
+	return [[entry.x, entry.y]]
 
 
 ## Türrichtung aus Parzellenposition ableiten (Fallback wenn API-Feld fehlt)
 func _derive_direction(px: int, py: int) -> String:
-	if py == 0:             return "top"
+	if py == 0:            return "top"
 	if py == PARCELS - 1:  return "bottom"
-	if px == 0:             return "left"
+	if px == 0:            return "left"
 	return "right"
 
 
-## Einen Raum in einer Parzelle platzieren – zentriert an der straßenseitigen Kante.
-## Gilt für alle Raumtypen (Lobby, Zimmer, Büro …).
-## entrance_dir bestimmt an welcher Parzellenecke der Raum liegt + wo die Tür ist.
-func _place_room(px: int, py: int, entrance_dir: String, floor_tile: int) -> void:
-	var ox := STREET_W + px * PARCEL_SZ
-	var oy := STREET_W + py * PARCEL_SZ
+## Prüft ob Parzelle (px,py) im Besitz ist.
+func _is_owned_plot(px: int, py: int, owned: Array) -> bool:
+	if px < 0 or px >= PARCELS or py < 0 or py >= PARCELS:
+		return false
+	for plot in owned:
+		if int(plot[0]) == px and int(plot[1]) == py:
+			return true
+	return false
 
-	# Raum zentriert an der Eingangsseite der Parzelle positionieren
-	var side_offset := (PARCEL_SZ - ROOM_OUTER) / 2  # Zentrierung auf der Nicht-Eingangs-Achse
-	var bx: int
-	var by: int
-	match entrance_dir:
+
+## Soll Tile (tx,ty) innerhalb Parzelle (px,py) eine Außenmauer sein?
+## Ja, wenn: Randtile UND in dieser Richtung keine eigene Parzelle angrenzt.
+func _is_outer_wall(tx: int, ty: int, px: int, py: int, owned: Array) -> bool:
+	if tx == 0             and not _is_owned_plot(px - 1, py,     owned): return true
+	if tx == PARCEL_SZ - 1 and not _is_owned_plot(px + 1, py,     owned): return true
+	if ty == 0             and not _is_owned_plot(px,     py - 1, owned): return true
+	if ty == PARCEL_SZ - 1 and not _is_owned_plot(px,     py + 1, owned): return true
+	return false
+
+
+## Karte aufbauen:
+## 1. Gesamte Fläche mit ground_base füllen
+## 2. 3-Tile-Gehweg außen (ground_walking)
+## 3. Eigene Parzellen: ground_floor + Mauerring (ground_brick) an äußeren Grenzen
+## 4. Lobby 2×2 mittig an der Eingangsseite + Tür (main_door)
+func _build_map() -> void:
+	RenderingServer.set_default_clear_color(Color("#292929"))
+
+	var entry     := _get_entry_plot()
+	var owned     := _get_owned_plots()
+	var raw_dir   : String = GameState.selected_hotel.get("entrance_direction", "")
+	var enter_dir : String = raw_dir if raw_dir != "" else _derive_direction(entry.x, entry.y)
+	var total_w   := WALK_W * 2 + PARCELS * PARCEL_SZ
+	var total_h   := WALK_W * 2 + PARCELS * PARCEL_SZ
+
+	# 1. Alle Tiles mit Basisbelag füllen
+	for ty in total_h:
+		for tx in total_w:
+			floor_layer.set_cell(Vector2i(tx, ty), TILE_BASE, Vector2i(0, 0))
+
+	# 2. Gehweg-Ring überschreiben
+	for ty in total_h:
+		for tx in total_w:
+			if tx < WALK_W or tx >= total_w - WALK_W or ty < WALK_W or ty >= total_h - WALK_W:
+				floor_layer.set_cell(Vector2i(tx, ty), TILE_WALK, Vector2i(0, 0))
+
+	# 3. Eigene Parzellen: Boden + Außenmauer
+	for plot in owned:
+		var px : int = int(plot[0])
+		var py : int = int(plot[1])
+		var ox := WALK_W + px * PARCEL_SZ
+		var oy := WALK_W + py * PARCEL_SZ
+
+		for ty in PARCEL_SZ:
+			for tx in PARCEL_SZ:
+				floor_layer.set_cell(Vector2i(ox + tx, oy + ty), TILE_FLOOR, Vector2i(0, 0))
+				if _is_outer_wall(tx, ty, px, py, owned):
+					wall_layer.set_cell(Vector2i(ox + tx, oy + ty), TILE_BRICK, Vector2i(0, 0))
+
+	# 4. Lobby + Eingangsöffnung
+	_place_lobby(entry, enter_dir)
+
+
+## Lobby 2×2 mittig an der Eingangsseite der Startparzelle platzieren.
+## Die 2 Wandtiles an der Eingangsstelle werden durch main_door ersetzt.
+func _place_lobby(entry: Vector2i, enter_dir: String) -> void:
+	var ox  := WALK_W + entry.x * PARCEL_SZ
+	var oy  := WALK_W + entry.y * PARCEL_SZ
+	var mid := PARCEL_SZ / 2 - 1  # = 7 → Tiles 7+8 = Mitte der 16er-Kante
+
+	match enter_dir:
 		"top":
-			bx = ox + side_offset
-			by = oy
+			# Tür in Wand (ty=0)
+			wall_layer.erase_cell(Vector2i(ox + mid,     oy))
+			wall_layer.erase_cell(Vector2i(ox + mid + 1, oy))
+			floor_layer.set_cell(Vector2i(ox + mid,     oy), TILE_DOOR, Vector2i(0, 0))
+			floor_layer.set_cell(Vector2i(ox + mid + 1, oy), TILE_DOOR, Vector2i(0, 0))
+			for ly in 2:
+				for lx in 2:
+					floor_layer.set_cell(Vector2i(ox + mid + lx, oy + 1 + ly), TILE_LOBBY, Vector2i(0, 0))
 		"bottom":
-			bx = ox + side_offset
-			by = oy + PARCEL_SZ - ROOM_OUTER
+			wall_layer.erase_cell(Vector2i(ox + mid,     oy + PARCEL_SZ - 1))
+			wall_layer.erase_cell(Vector2i(ox + mid + 1, oy + PARCEL_SZ - 1))
+			floor_layer.set_cell(Vector2i(ox + mid,     oy + PARCEL_SZ - 1), TILE_DOOR, Vector2i(0, 0))
+			floor_layer.set_cell(Vector2i(ox + mid + 1, oy + PARCEL_SZ - 1), TILE_DOOR, Vector2i(0, 0))
+			for ly in 2:
+				for lx in 2:
+					floor_layer.set_cell(Vector2i(ox + mid + lx, oy + PARCEL_SZ - 3 + ly), TILE_LOBBY, Vector2i(0, 0))
 		"left":
-			bx = ox
-			by = oy + side_offset
+			wall_layer.erase_cell(Vector2i(ox, oy + mid))
+			wall_layer.erase_cell(Vector2i(ox, oy + mid + 1))
+			floor_layer.set_cell(Vector2i(ox, oy + mid),     TILE_DOOR, Vector2i(0, 0))
+			floor_layer.set_cell(Vector2i(ox, oy + mid + 1), TILE_DOOR, Vector2i(0, 0))
+			for ly in 2:
+				for lx in 2:
+					floor_layer.set_cell(Vector2i(ox + 1 + lx, oy + mid + ly), TILE_LOBBY, Vector2i(0, 0))
 		_:  # "right"
-			bx = ox + PARCEL_SZ - ROOM_OUTER
-			by = oy + side_offset
-
-	# Bodentiles (ROOM_FLOOR × ROOM_FLOOR innerhalb des Wandrings)
-	for iy in ROOM_FLOOR:
-		for ix in ROOM_FLOOR:
-			floor_layer.set_cell(Vector2i(bx + 1 + ix, by + 1 + iy), floor_tile, Vector2i(0, 0))
-
-	# Wandring mit 2-Tile-Türöffnung (zentriert auf der Eingangsseite)
-	var door_a := ROOM_OUTER / 2 - 1   # erster Türtile-Index
-	var door_b := ROOM_OUTER / 2       # zweiter Türtile-Index
-	for i in ROOM_OUTER:
-		var is_door := (i == door_a or i == door_b)
-		if not (entrance_dir == "top"    and is_door):
-			wall_layer.set_cell(Vector2i(bx + i, by),                  TILE_WALL, Vector2i(0, 0))
-		if not (entrance_dir == "bottom" and is_door):
-			wall_layer.set_cell(Vector2i(bx + i, by + ROOM_OUTER - 1), TILE_WALL, Vector2i(0, 0))
-		if not (entrance_dir == "left"   and is_door):
-			wall_layer.set_cell(Vector2i(bx,              by + i),      TILE_WALL, Vector2i(0, 0))
-		if not (entrance_dir == "right"  and is_door):
-			wall_layer.set_cell(Vector2i(bx + ROOM_OUTER - 1, by + i), TILE_WALL, Vector2i(0, 0))
+			wall_layer.erase_cell(Vector2i(ox + PARCEL_SZ - 1, oy + mid))
+			wall_layer.erase_cell(Vector2i(ox + PARCEL_SZ - 1, oy + mid + 1))
+			floor_layer.set_cell(Vector2i(ox + PARCEL_SZ - 1, oy + mid),     TILE_DOOR, Vector2i(0, 0))
+			floor_layer.set_cell(Vector2i(ox + PARCEL_SZ - 1, oy + mid + 1), TILE_DOOR, Vector2i(0, 0))
+			for ly in 2:
+				for lx in 2:
+					floor_layer.set_cell(Vector2i(ox + PARCEL_SZ - 3 + lx, oy + mid + ly), TILE_LOBBY, Vector2i(0, 0))
 
 
 func _setup_hud() -> void:
@@ -605,7 +650,9 @@ func _show_tooltip(text: String, anchor_btn: Button) -> void:
 	_tooltip_panel.modulate = Color(1, 1, 1, 0)
 	_tooltip_panel.visible  = true
 	await get_tree().process_frame
-	if not _tooltip_panel.visible:
+	if not is_instance_valid(self) or not is_instance_valid(_tooltip_panel) or not _tooltip_panel.visible:
+		return
+	if not is_instance_valid(anchor_btn):
 		return
 	var pos := anchor_btn.global_position
 	_tooltip_panel.position = Vector2(
@@ -661,17 +708,21 @@ func _connect_game_controls() -> void:
 func _position_camera() -> void:
 	var entry := _get_entry_plot()
 	var center_tile := Vector2(
-		(STREET_W + entry.x * PARCEL_SZ + PARCEL_SZ / 2.0) * TILE_PX,
-		(STREET_W + entry.y * PARCEL_SZ + PARCEL_SZ / 2.0) * TILE_PX
+		(WALK_W + entry.x * PARCEL_SZ + PARCEL_SZ / 2.0) * TILE_PX,
+		(WALK_W + entry.y * PARCEL_SZ + PARCEL_SZ / 2.0) * TILE_PX
 	)
 	camera.position = center_tile * SCALE
 	camera.zoom = Vector2(1.0, 1.0)
 
-	var map_px: float = (PARCELS * PARCEL_SZ + STREET_W * 2) * TILE_PX * SCALE
-	camera.limit_left   = 0
-	camera.limit_top    = 0
-	camera.limit_right  = int(map_px)
-	camera.limit_bottom = int(map_px)
+	var map_px: float = (PARCELS * PARCEL_SZ + WALK_W * 2) * TILE_PX * SCALE
+	# Halbe Viewport-Größe als Puffer damit man bis zum äußersten Tile scrollen kann
+	var vp    := get_viewport_rect().size
+	var pad_x := int(vp.x / 2.0)
+	var pad_y := int(vp.y / 2.0)
+	camera.limit_left   = -pad_x
+	camera.limit_top    = -pad_y
+	camera.limit_right  = int(map_px) + pad_x
+	camera.limit_bottom = int(map_px) + pad_y
 
 
 func _process(delta: float) -> void:
@@ -740,12 +791,12 @@ func _on_day_end() -> void:
 
 ## Aktuelle Spielzeit an API schicken – POST /api/hotel/sync-time
 func _sync_time_to_api(game_time_min: int) -> void:
-	var hotel_id: Variant = GameState.selected_hotel.get("id", "")
-	if hotel_id == "":
+	var hotel_id: Variant = GameState.selected_hotel.get("id", null)
+	if hotel_id == null:
 		return
 	Api.post_form("/api/hotel/sync-time",
 		{"hotel_id": str(hotel_id), "game_time": str(game_time_min)},
-		func(_result: int, _code: int, _headers: PackedStringArray, _body: PackedByteArray): pass
+		func(_ok: bool, _data: Dictionary): pass
 	)
 
 
@@ -878,6 +929,11 @@ func _on_bottom_button(idx: int) -> void:
 	($HUD as CanvasLayer).add_child(panel)
 	panel.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
 	await get_tree().process_frame
+	if not is_instance_valid(self) or not is_instance_valid(panel):
+		return
+	if idx >= _bottom_buttons.size() or not is_instance_valid(_bottom_buttons[idx]):
+		panel.queue_free()
+		return
 	var btn_pos: Vector2 = _bottom_buttons[idx].global_position
 	panel.position = Vector2(btn_pos.x, btn_pos.y - panel.size.y - 8)
 	_active_submenu = panel

@@ -11,6 +11,13 @@ Linear-Projekt: **Angelus2010 / ANG-** für alle Issues.
 - Kein Corporate-Sprech
 - Peter liest langsamer – nicht zu viel auf einmal
 
+## Erklärbär-Modus (immer aktiv)
+- Bei jeder Umsetzung kurz erklären **was** gemacht wird und **warum** – nicht erst auf Nachfrage
+- Ziel: Peter soll den Code selbst verstehen und validieren können, nicht nur ausführen lassen
+- Erklärungen in einfacher Sprache, mit Analogien wenn hilfreich
+- Nicht überladen – ein kurzer Satz pro Konzept reicht oft
+- Wenn dein Sohn (Webentwickler, Godot-Erfahrung) Fragen stellt: gerne einbeziehen und aus Webentwickler-Perspektive erklären
+
 ## Godot-Direktiven
 - **Immer Godot 4 API** – kein Godot 3 Syntax. Bei Unsicherheit Docs lesen, nicht halluzinieren.
 - **Alle Texte via `GameState.T("key")`** – nie Strings hardcoden (außer als TODO-Platzhalter)

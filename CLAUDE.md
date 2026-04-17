@@ -28,6 +28,11 @@ Linear-Projekt: **Angelus2010 / ANG-** für alle Issues.
 - **Keine God-Files** – jede Datei hat eine einzige Verantwortlichkeit
 - **KISS** – kein Over-Engineering, kein spekulatives Abstrahieren
 - **DRY** – wiederverwendbare Logik in eigene Autoloads/Klassen
+- **Lesbarer, sauberer Weg** – nicht den schnellen Weg gehen; Code so schreiben wie ein erfahrener Senior Game Developer
+- Klare Abschnitt-Trennung mit `# ── Name ──` Headern in langen Dateien
+- Sprechende Funktionsnamen; lange Funktionen in benannte Sub-Funktionen aufteilen
+- Keine Magic Numbers – alle Werte in benannten Konstanten
+- **Godot 4 Best Practices**: statische Typisierung überall, Ressourcen in `.tscn` definieren (nicht im Code bauen), `_ready()` nur für Node-Setup
 - Kommentare erklären das *Warum*, nicht das *Was*
 - Keine Fehlerbehandlung für unmögliche Szenarien
 - Keine ungenutzten Parameter ohne `_`-Prefix

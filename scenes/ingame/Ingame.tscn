@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://ingame001"]
+[gd_scene load_steps=7 format=3 uid="uid://ingame001"]
 
 [ext_resource type="Script" path="res://scenes/ingame/Ingame.gd" id="1_ingame"]
 [ext_resource type="Texture2D" path="res://assets/images/logo-transparent-50.png" id="2_logo"]
+[ext_resource type="PackedScene" path="res://scenes/ingame/map/MapGrid.tscn" id="3_mapgrid"]
 
 [sub_resource type="StyleBoxFlat" id="SB_topbar"]
 bg_color = Color(0.04, 0.06, 0.10, 0.96)
@@ -35,15 +36,7 @@ corner_radius_bottom_right = 3
 [node name="Ingame" type="Node2D"]
 script = ExtResource("1_ingame")
 
-[node name="WorldRoot" type="Node2D" parent="."]
-scale = Vector2(2, 2)
-
-[node name="FloorLayer" type="TileMapLayer" parent="WorldRoot"]
-
-[node name="WallLayer" type="TileMapLayer" parent="WorldRoot"]
-
-[node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(1.0, 1.0)
+[node name="MapGrid" parent="." instance=ExtResource("3_mapgrid")]
 
 [node name="HUD" type="CanvasLayer" parent="."]
 

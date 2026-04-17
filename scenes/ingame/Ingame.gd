@@ -1,13 +1,11 @@
 extends Node2D
 
 ## ANG-148 – Ingame-Grundgerüst
-## Hotel-Grid (5×5 Parzellen, je 16×16 Tiles) mit Kenney-Tiles.
-## Kamera: WASD pan, Scrollrad/+− zoom, RMB drag.
 ## HUD: TopBar (glassmorphism) + BottomBar (schwebend) + ContextBar (R/T/Z, versteckt)
+## ANG-153 – Map-Grid und Kamera ausgelagert nach scenes/ingame/map/MapGrid.gd
 
-@onready var floor_layer: TileMapLayer = $WorldRoot/FloorLayer
-@onready var wall_layer:  TileMapLayer = $WorldRoot/WallLayer
-@onready var camera:      Camera2D     = $Camera2D
+# ── Nodes ─────────────────────────────────────────────────────────────────────
+@onready var map_grid: Node2D = $MapGrid
 
 @onready var hotel_name_lbl: Label        = $HUD/TopBar/HBox/NameSection/Value
 @onready var level_lbl:      Label        = $HUD/TopBar/HBox/LevelSection/Value
@@ -29,23 +27,8 @@ extends Node2D
 @onready var bottom_anchor:  Control   = $HUD/BottomBarAnchor
 @onready var context_bar:    HBoxContainer = $HUD/ContextBar
 
-## Tile-Konstanten – Source-IDs = Reihenfolge in _build_tileset()
-## Dateinamen sind semantisch fix; Grafik tauschen = andere PNG mit gleichem Namen ablegen.
-const TILE_BASE  := 0  # ground_base.png    – Parzellenbelag (ungebaut)
-const TILE_WALK  := 1  # ground_walking.png – Gehweg (3-Tile-Ring)
-const TILE_FLOOR := 2  # ground_floor.png   – Boden gekaufter Parzellen
-const TILE_BRICK := 3  # ground_brick.png   – Außenmauer
-const TILE_LOBBY := 4  # ground_lobby.png   – Lobby-Boden
-const TILE_DOOR  := 5  # main_door.png      – Türöffnung
-
-## Grid-Konfiguration
-const PARCELS   := 5    # 5×5 Parzellen
-const PARCEL_SZ := 16   # 16×16 Tiles pro Parzelle
-const WALK_W    := 3    # Gehweg-Breite außen (Tiles)
-const TILE_PX   := 16   # Physische Tile-Größe in Px
-const SCALE     := 2.0  # Anzeige-Skalierung → 32px/Tile sichtbar
-
-## HUD-Fontgrößen – alle GDScript-gebauten Nodes nutzen diese Konstanten.
+# ── HUD-Fontgrößen ────────────────────────────────────────────────────────────
+## Alle GDScript-gebauten Nodes nutzen diese Konstanten.
 ## Später: HUD-Scale (ANG-152) multipliziert diese Werte.
 const HF_XS   := 10   # Subtext
 const HF_SM   := 12   # Key-Labels (TAG, KAPITAL, AP …)
@@ -55,17 +38,7 @@ const HF_XL   := 18   # Hotel-Name
 const HF_TIME := 22   # Spielzeit-Anzeige
 const HF_LOGO := 22   # (Logo ist jetzt ein Bild – Konstante bleibt für Fallback)
 
-## Kamera-Steuerung
-const PAN_SPEED  := 400.0    # Tiles/s (×SCALE für globale Pixel)
-const ZOOM_MIN   := 0.5
-const ZOOM_MAX   := 4.0
-const ZOOM_STEP  := 0.15
-
-var _drag_active := false
-var _drag_origin := Vector2.ZERO
-var _cam_origin  := Vector2.ZERO
-
-var _tile_set: TileSet
+# ── Zustand ───────────────────────────────────────────────────────────────────
 var _ruf_indicator: ColorRect
 
 ## BottomBar-Referenzen – gebaut in _build_bottom_bar()
@@ -91,43 +64,23 @@ const SECONDS_PER_GAME_MINUTE := 2.0  # 1 Spielminute = 2 Sekunden Realzeit
 
 
 func _ready() -> void:
-	_build_tileset()
-	_setup_layers()
-	_build_map()
+	_start_map()
 	_build_ruf_bar()
 	_setup_hud()
 	_build_bottom_bar()
 	_build_context_bar()
-	_position_camera()
 	_connect_game_controls()
 
 
-## TileSet aus semantisch benannten Tiles aufbauen.
-## Grafik tauschen = andere PNG mit gleichem Namen in assets/tiles/ ablegen + Neustart.
-func _build_tileset() -> void:
-	_tile_set = TileSet.new()
-	_tile_set.tile_size = Vector2i(TILE_PX, TILE_PX)
+# ── Map-Start ─────────────────────────────────────────────────────────────────
 
-	var paths := [
-		"res://assets/tiles/ground_base.png",    # 0 TILE_BASE
-		"res://assets/tiles/ground_walking.png", # 1 TILE_WALK
-		"res://assets/tiles/ground_floor.png",   # 2 TILE_FLOOR
-		"res://assets/tiles/ground_brick.png",   # 3 TILE_BRICK
-		"res://assets/tiles/ground_lobby.png",   # 4 TILE_LOBBY
-		"res://assets/tiles/main_door.png",      # 5 TILE_DOOR
-	]
-
-	for path in paths:
-		var src := TileSetAtlasSource.new()
-		src.texture = load(path)
-		src.texture_region_size = Vector2i(TILE_PX, TILE_PX)
-		src.create_tile(Vector2i(0, 0))
-		_tile_set.add_source(src)
-
-
-func _setup_layers() -> void:
-	floor_layer.tile_set = _tile_set
-	wall_layer.tile_set  = _tile_set
+func _start_map() -> void:
+	var entry     := _get_entry_plot()
+	var owned     := _get_owned_plots()
+	var raw_dir   : String = GameState.selected_hotel.get("entrance_direction", "")
+	var enter_dir : String = raw_dir if raw_dir != "" else _derive_direction(entry.x, entry.y)
+	map_grid.build_map(entry, owned, enter_dir)
+	map_grid.center_on_entry(entry)
 
 
 ## Startparzelle aus hotel["unlocked_plots"] lesen (JSON-Array [[x,y], ...])
@@ -151,118 +104,13 @@ func _get_owned_plots() -> Array:
 	return [[entry.x, entry.y]]
 
 
-## Türrichtung aus Parzellenposition ableiten (Fallback wenn API-Feld fehlt)
+## Türrichtung aus Parzellenposition ableiten (Fallback wenn API-Feld fehlt).
+## Grenzwert 4 = PARCELS - 1; MapGrid.PARCELS nicht direkt referenzieren.
 func _derive_direction(px: int, py: int) -> String:
-	if py == 0:            return "top"
-	if py == PARCELS - 1:  return "bottom"
-	if px == 0:            return "left"
+	if py == 0: return "top"
+	if py == 4: return "bottom"
+	if px == 0: return "left"
 	return "right"
-
-
-## Prüft ob Parzelle (px,py) im Besitz ist.
-func _is_owned_plot(px: int, py: int, owned: Array) -> bool:
-	if px < 0 or px >= PARCELS or py < 0 or py >= PARCELS:
-		return false
-	for plot in owned:
-		if int(plot[0]) == px and int(plot[1]) == py:
-			return true
-	return false
-
-
-## Soll Tile (tx,ty) innerhalb Parzelle (px,py) eine Außenmauer sein?
-## Ja, wenn: Randtile UND in dieser Richtung keine eigene Parzelle angrenzt.
-func _is_outer_wall(tx: int, ty: int, px: int, py: int, owned: Array) -> bool:
-	if tx == 0             and not _is_owned_plot(px - 1, py,     owned): return true
-	if tx == PARCEL_SZ - 1 and not _is_owned_plot(px + 1, py,     owned): return true
-	if ty == 0             and not _is_owned_plot(px,     py - 1, owned): return true
-	if ty == PARCEL_SZ - 1 and not _is_owned_plot(px,     py + 1, owned): return true
-	return false
-
-
-## Karte aufbauen:
-## 1. Gesamte Fläche mit ground_base füllen
-## 2. 3-Tile-Gehweg außen (ground_walking)
-## 3. Eigene Parzellen: ground_floor + Mauerring (ground_brick) an äußeren Grenzen
-## 4. Lobby 2×2 mittig an der Eingangsseite + Tür (main_door)
-func _build_map() -> void:
-	RenderingServer.set_default_clear_color(Color("#292929"))
-
-	var entry     := _get_entry_plot()
-	var owned     := _get_owned_plots()
-	var raw_dir   : String = GameState.selected_hotel.get("entrance_direction", "")
-	var enter_dir : String = raw_dir if raw_dir != "" else _derive_direction(entry.x, entry.y)
-	var total_w   := WALK_W * 2 + PARCELS * PARCEL_SZ
-	var total_h   := WALK_W * 2 + PARCELS * PARCEL_SZ
-
-	# 1. Alle Tiles mit Basisbelag füllen
-	for ty in total_h:
-		for tx in total_w:
-			floor_layer.set_cell(Vector2i(tx, ty), TILE_BASE, Vector2i(0, 0))
-
-	# 2. Gehweg-Ring überschreiben
-	for ty in total_h:
-		for tx in total_w:
-			if tx < WALK_W or tx >= total_w - WALK_W or ty < WALK_W or ty >= total_h - WALK_W:
-				floor_layer.set_cell(Vector2i(tx, ty), TILE_WALK, Vector2i(0, 0))
-
-	# 3. Eigene Parzellen: Boden + Außenmauer
-	for plot in owned:
-		var px : int = int(plot[0])
-		var py : int = int(plot[1])
-		var ox := WALK_W + px * PARCEL_SZ
-		var oy := WALK_W + py * PARCEL_SZ
-
-		for ty in PARCEL_SZ:
-			for tx in PARCEL_SZ:
-				floor_layer.set_cell(Vector2i(ox + tx, oy + ty), TILE_FLOOR, Vector2i(0, 0))
-				if _is_outer_wall(tx, ty, px, py, owned):
-					wall_layer.set_cell(Vector2i(ox + tx, oy + ty), TILE_BRICK, Vector2i(0, 0))
-
-	# 4. Lobby + Eingangsöffnung
-	_place_lobby(entry, enter_dir)
-
-
-## Lobby 2×2 mittig an der Eingangsseite der Startparzelle platzieren.
-## Die 2 Wandtiles an der Eingangsstelle werden durch main_door ersetzt.
-func _place_lobby(entry: Vector2i, enter_dir: String) -> void:
-	var ox  := WALK_W + entry.x * PARCEL_SZ
-	var oy  := WALK_W + entry.y * PARCEL_SZ
-	var mid := PARCEL_SZ / 2 - 1  # = 7 → Tiles 7+8 = Mitte der 16er-Kante
-
-	match enter_dir:
-		"top":
-			# Tür in Wand (ty=0)
-			wall_layer.erase_cell(Vector2i(ox + mid,     oy))
-			wall_layer.erase_cell(Vector2i(ox + mid + 1, oy))
-			floor_layer.set_cell(Vector2i(ox + mid,     oy), TILE_DOOR, Vector2i(0, 0))
-			floor_layer.set_cell(Vector2i(ox + mid + 1, oy), TILE_DOOR, Vector2i(0, 0))
-			for ly in 2:
-				for lx in 2:
-					floor_layer.set_cell(Vector2i(ox + mid + lx, oy + 1 + ly), TILE_LOBBY, Vector2i(0, 0))
-		"bottom":
-			wall_layer.erase_cell(Vector2i(ox + mid,     oy + PARCEL_SZ - 1))
-			wall_layer.erase_cell(Vector2i(ox + mid + 1, oy + PARCEL_SZ - 1))
-			floor_layer.set_cell(Vector2i(ox + mid,     oy + PARCEL_SZ - 1), TILE_DOOR, Vector2i(0, 0))
-			floor_layer.set_cell(Vector2i(ox + mid + 1, oy + PARCEL_SZ - 1), TILE_DOOR, Vector2i(0, 0))
-			for ly in 2:
-				for lx in 2:
-					floor_layer.set_cell(Vector2i(ox + mid + lx, oy + PARCEL_SZ - 3 + ly), TILE_LOBBY, Vector2i(0, 0))
-		"left":
-			wall_layer.erase_cell(Vector2i(ox, oy + mid))
-			wall_layer.erase_cell(Vector2i(ox, oy + mid + 1))
-			floor_layer.set_cell(Vector2i(ox, oy + mid),     TILE_DOOR, Vector2i(0, 0))
-			floor_layer.set_cell(Vector2i(ox, oy + mid + 1), TILE_DOOR, Vector2i(0, 0))
-			for ly in 2:
-				for lx in 2:
-					floor_layer.set_cell(Vector2i(ox + 1 + lx, oy + mid + ly), TILE_LOBBY, Vector2i(0, 0))
-		_:  # "right"
-			wall_layer.erase_cell(Vector2i(ox + PARCEL_SZ - 1, oy + mid))
-			wall_layer.erase_cell(Vector2i(ox + PARCEL_SZ - 1, oy + mid + 1))
-			floor_layer.set_cell(Vector2i(ox + PARCEL_SZ - 1, oy + mid),     TILE_DOOR, Vector2i(0, 0))
-			floor_layer.set_cell(Vector2i(ox + PARCEL_SZ - 1, oy + mid + 1), TILE_DOOR, Vector2i(0, 0))
-			for ly in 2:
-				for lx in 2:
-					floor_layer.set_cell(Vector2i(ox + PARCEL_SZ - 3 + lx, oy + mid + ly), TILE_LOBBY, Vector2i(0, 0))
 
 
 func _setup_hud() -> void:
@@ -704,59 +552,8 @@ func _connect_game_controls() -> void:
 	_update_speed_buttons()
 
 
-## Kamera mittig über der Lobby-Parzelle starten + Clamp-Grenzen setzen
-func _position_camera() -> void:
-	var entry := _get_entry_plot()
-	var center_tile := Vector2(
-		(WALK_W + entry.x * PARCEL_SZ + PARCEL_SZ / 2.0) * TILE_PX,
-		(WALK_W + entry.y * PARCEL_SZ + PARCEL_SZ / 2.0) * TILE_PX
-	)
-	camera.position = center_tile * SCALE
-	camera.zoom = Vector2(1.0, 1.0)
-
-	var map_px: float = (PARCELS * PARCEL_SZ + WALK_W * 2) * TILE_PX * SCALE
-	# Halbe Viewport-Größe als Puffer damit man bis zum äußersten Tile scrollen kann
-	var vp    := get_viewport_rect().size
-	var pad_x := int(vp.x / 2.0)
-	var pad_y := int(vp.y / 2.0)
-	camera.limit_left   = -pad_x
-	camera.limit_top    = -pad_y
-	camera.limit_right  = int(map_px) + pad_x
-	camera.limit_bottom = int(map_px) + pad_y
-
-
 func _process(delta: float) -> void:
-	_handle_pan(delta)
-	_handle_zoom_keys(delta)
 	_tick_game_clock(delta)
-
-
-func _handle_pan(delta: float) -> void:
-	var dir := Vector2.ZERO
-	if Input.is_action_pressed("ui_right") or Input.is_key_pressed(KEY_D):
-		dir.x += 1.0
-	if Input.is_action_pressed("ui_left")  or Input.is_key_pressed(KEY_A):
-		dir.x -= 1.0
-	if Input.is_action_pressed("ui_down")  or Input.is_key_pressed(KEY_S):
-		dir.y += 1.0
-	if Input.is_action_pressed("ui_up")    or Input.is_key_pressed(KEY_W):
-		dir.y -= 1.0
-	if dir != Vector2.ZERO:
-		camera.position += dir.normalized() * PAN_SPEED * delta / camera.zoom.x
-
-
-## + / - / Numpad* für Tastatur-Zoom (gehalten = kontinuierlich)
-func _handle_zoom_keys(delta: float) -> void:
-	var zoom_dir := 0.0
-	if Input.is_key_pressed(KEY_EQUAL) or Input.is_key_pressed(KEY_KP_ADD):
-		zoom_dir = 1.0
-	elif Input.is_key_pressed(KEY_MINUS) or Input.is_key_pressed(KEY_KP_SUBTRACT):
-		zoom_dir = -1.0
-	elif Input.is_key_pressed(KEY_KP_MULTIPLY):
-		camera.zoom = Vector2(1.0, 1.0)
-		return
-	if zoom_dir != 0.0:
-		_zoom_camera(zoom_dir * ZOOM_STEP * delta * 10.0)
 
 
 ## Spielzeit vorrücken lassen (lokal, nicht API)
@@ -811,22 +608,6 @@ func _update_time_label() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		var mb := event as InputEventMouseButton
-		if mb.button_index == MOUSE_BUTTON_WHEEL_UP and mb.pressed:
-			_zoom_camera(ZOOM_STEP)
-		elif mb.button_index == MOUSE_BUTTON_WHEEL_DOWN and mb.pressed:
-			_zoom_camera(-ZOOM_STEP)
-		elif mb.button_index == MOUSE_BUTTON_RIGHT:
-			_drag_active = mb.pressed
-			if _drag_active:
-				_drag_origin = mb.position
-				_cam_origin  = camera.position
-
-	if event is InputEventMouseMotion and _drag_active:
-		var mm := event as InputEventMouseMotion
-		camera.position = _cam_origin - (mm.position - _drag_origin) / camera.zoom
-
 	if event is InputEventKey:
 		var ke := event as InputEventKey
 		if ke.pressed and not ke.echo:
@@ -846,11 +627,6 @@ func _handle_hotkey(keycode: int) -> void:
 		KEY_F5:     _on_bottom_button(4)  # unbelegt (gesperrt)
 		KEY_F6:     _on_bottom_button(5)  # Forschung (gesperrt)
 		KEY_F7:     _on_bottom_button(6)  # SIM-Browser
-
-
-func _zoom_camera(delta: float) -> void:
-	var new_zoom: float = clampf(camera.zoom.x + delta, ZOOM_MIN, ZOOM_MAX)
-	camera.zoom = Vector2(new_zoom, new_zoom)
 
 
 ## Spielsteuerung

@@ -39,6 +39,7 @@ const HF_TIME := 22   # Spielzeit-Anzeige
 const HF_LOGO := 22   # (Logo ist jetzt ein Bild – Konstante bleibt für Fallback)
 
 # ── Zustand ───────────────────────────────────────────────────────────────────
+var _hotel: Dictionary = {}   # aktives Hotel aus SaveManager
 var _ruf_indicator: ColorRect
 
 ## BottomBar-Referenzen – gebaut in _build_bottom_bar()
@@ -75,37 +76,26 @@ func _ready() -> void:
 # ── Map-Start ─────────────────────────────────────────────────────────────────
 
 func _start_map() -> void:
-	var entry     := _get_entry_plot()
-	var owned     := _get_owned_plots()
-	var raw_dir   : String = GameState.selected_hotel.get("entrance_direction", "")
-	var enter_dir : String = raw_dir if raw_dir != "" else _derive_direction(entry.x, entry.y)
-	map_grid.build_map(entry, owned, enter_dir)
-	map_grid.center_on_entry(entry)
+	_hotel = _load_hotel()
+	var built: Array = SaveManager.get_built_plots(_hotel.get("id", -1))
+	if built.is_empty():
+		built = [{ "x": 1, "y": 0, "is_built": true, "entrance_dir": "" }]
+	var entry     := Vector2i(built[0]["x"], built[0]["y"])
+	var enter_dir : String = built[0].get("entrance_dir", "")
+	if enter_dir == "":
+		enter_dir = _derive_direction(entry.x, entry.y)
+	map_grid.build_map(built, entry, enter_dir)
 
 
-## Startparzelle aus hotel["unlocked_plots"] lesen (JSON-Array [[x,y], ...])
-func _get_entry_plot() -> Vector2i:
-	var raw: Variant = GameState.selected_hotel.get("unlocked_plots", null)
-	if raw is String and raw != "":
-		var parsed: Variant = JSON.parse_string(raw)
-		if parsed is Array and not parsed.is_empty() and parsed[0] is Array:
-			return Vector2i(int(parsed[0][0]), int(parsed[0][1]))
-	return Vector2i(2, 0)
+func _load_hotel() -> Dictionary:
+	if GameState.active_hotel_id >= 0:
+		return SaveManager.get_hotel(GameState.active_hotel_id)
+	var hotels: Array = SaveManager.get_hotels(1)
+	if not hotels.is_empty():
+		return hotels[0]
+	return { "name": "Hotel", "day": 1, "money": 50000.0, "id": -1 }
 
 
-## Alle eigenen Parzellen als Array[[x,y],...] liefern.
-func _get_owned_plots() -> Array:
-	var raw: Variant = GameState.selected_hotel.get("unlocked_plots", null)
-	if raw is String and raw != "":
-		var parsed: Variant = JSON.parse_string(raw)
-		if parsed is Array:
-			return parsed
-	var entry := _get_entry_plot()
-	return [[entry.x, entry.y]]
-
-
-## Türrichtung aus Parzellenposition ableiten (Fallback wenn API-Feld fehlt).
-## Grenzwert 4 = PARCELS - 1; MapGrid.PARCELS nicht direkt referenzieren.
 func _derive_direction(px: int, py: int) -> String:
 	if py == 0: return "top"
 	if py == 4: return "bottom"
@@ -114,38 +104,23 @@ func _derive_direction(px: int, py: int) -> String:
 
 
 func _setup_hud() -> void:
-	var hotel := GameState.selected_hotel
-	hotel_name_lbl.text  = hotel.get("name", "Hotel")
-	level_lbl.text       = "LVL " + str(int(hotel.get("level", 1)))
-	stat_day_val.text    = str(int(hotel.get("day_counter", 1)))
-	stat_money_val.text  = "€ " + _format_money(int(hotel.get("money", 0)))
-	# Gäste – Aufschlüsselung wartend/aktiv/checkout (API-Felder folgen)
-	stat_guests_wait.text   = str(int(hotel.get("guests_waiting",  0)))
-	stat_guests_active.text = str(int(hotel.get("guests_active",   0)))
-	stat_guests_out.text    = str(int(hotel.get("guests_checkout", 0)))
-	stat_ap_val.text        = "%d / 100" % int(hotel.get("action_points", 0))
-
-	# EXP: xp + xp_needed kommen beide aus /api/hotels
-	var xp: int        = int(hotel.get("xp",        0))
-	var xp_max: int    = int(hotel.get("xp_needed", 100))
-	stat_exp_bar.max_value = xp_max
-	stat_exp_bar.value     = xp
-	stat_exp_lbl.text      = "%d / %d" % [xp, xp_max]
-
-	# Reputation: 0–1000, Default 500
-	var rep: int = int(hotel.get("reputation", 500))
-	_update_ruf_display(rep)
-
-	# Forschungspunkte
-	stat_fp_val.text = str(int(hotel.get("research_points", 0)))
-
-	# Spielzeit aus API-Feld initialisieren (Minuten seit Mitternacht, 600 = 10:00)
-	var game_time_min: int = int(hotel.get("game_time", 600))
+	hotel_name_lbl.text     = _hotel.get("name", "Hotel")
+	level_lbl.text          = "LVL 1"
+	stat_day_val.text       = str(int(_hotel.get("day", 1)))
+	stat_money_val.text     = "€ " + _format_money(int(_hotel.get("money", 0)))
+	stat_guests_wait.text   = "0"
+	stat_guests_active.text = "0"
+	stat_guests_out.text    = "0"
+	stat_ap_val.text        = "0 / 100"
+	stat_exp_bar.max_value  = 100
+	stat_exp_bar.value      = 0
+	stat_exp_lbl.text       = "0 / 100"
+	stat_fp_val.text        = "0"
+	var game_time_min: int = int(_hotel.get("game_time", 600))
 	_game_hour   = game_time_min / 60
 	_game_minute = game_time_min % 60
 	_update_time_label()
-
-	# Subtile Box-Styles auf Wertfelder anwenden
+	_update_ruf_display(500)
 	_apply_value_box(stat_money_val)
 	_apply_value_box(stat_ap_val)
 	_apply_value_box(stat_fp_val)
@@ -224,10 +199,8 @@ func _build_ruf_bar() -> void:
 	_ruf_indicator.position = Vector2(0, 0)
 	stat_ruf_root.add_child(_ruf_indicator)
 
-	# Initialposition setzen (nach einem Frame wenn Layout bekannt ist)
 	await get_tree().process_frame
-	var rep: int = int(GameState.selected_hotel.get("reputation", 500))
-	_update_ruf_display(rep)
+	_update_ruf_display(500)
 
 
 func _update_ruf_display(rep: int) -> void:
@@ -579,28 +552,26 @@ func _tick_game_clock(delta: float) -> void:
 
 
 func _on_day_end() -> void:
-	# Tag hochzählen (lokal im State – API bestätigt beim nächsten Login)
-	var day: int = int(GameState.selected_hotel.get("day_counter", 1))
-	GameState.selected_hotel["day_counter"] = day + 1
-	stat_day_val.text = str(day + 1)
-	_sync_time_to_api(0)  # neuer Tag beginnt bei 00:00
+	var day: int = int(_hotel.get("day", 1)) + 1
+	_hotel["day"] = day
+	stat_day_val.text = str(day)
+	_save_progress(360)
 
 
-## Aktuelle Spielzeit an API schicken – POST /api/hotel/sync-time
-func _sync_time_to_api(game_time_min: int) -> void:
-	var hotel_id: Variant = GameState.selected_hotel.get("id", null)
-	if hotel_id == null:
+func _save_progress(game_time_min: int) -> void:
+	var hotel_id: int = _hotel.get("id", -1)
+	if hotel_id < 0:
 		return
-	Api.post_form("/api/hotel/sync-time",
-		{"hotel_id": str(hotel_id), "game_time": str(game_time_min)},
-		func(_ok: bool, _data: Dictionary): pass
-	)
+	SaveManager.update_hotel(hotel_id, {
+		"day":       _hotel.get("day", 1),
+		"money":     _hotel.get("money", 0),
+		"game_time": game_time_min,
+	})
 
 
-## Spielzeit beim Verlassen der Szene speichern
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST or what == NOTIFICATION_PREDELETE:
-		_sync_time_to_api(_game_hour * 60 + _game_minute)
+		_save_progress(_game_hour * 60 + _game_minute)
 
 
 func _update_time_label() -> void:
@@ -722,7 +693,7 @@ func _on_exit_pressed() -> void:
 		_set_btn_active(-1)
 		_active_submenu_idx = -1
 		return
-	_sync_time_to_api(_game_hour * 60 + _game_minute)
+	_save_progress(_game_hour * 60 + _game_minute)
 	get_tree().change_scene_to_file("res://scenes/dashboard/Dashboard.tscn")
 
 

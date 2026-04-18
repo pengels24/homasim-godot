@@ -7,9 +7,10 @@ signal hotel_selected(hotel_data: Dictionary)
 signal user_logged_in(user_data: Dictionary)
 signal user_logged_out()
 
-var current_user: Dictionary = {}
-var current_manager: Dictionary = {}
-var selected_hotel: Dictionary = {}
+var current_user:     Dictionary = {}
+var current_manager:  Dictionary = {}
+var selected_hotel:   Dictionary = {}   # Legacy – PHP-API, wird schrittweise ersetzt
+var active_hotel_id:  int        = -1   # SaveManager-Hotel-ID; -1 = kein Hotel gewählt
 
 
 func is_logged_in() -> bool:

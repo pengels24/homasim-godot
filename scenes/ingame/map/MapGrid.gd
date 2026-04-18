@@ -1,27 +1,18 @@
 extends Node2D
-## ANG-153 – Map-Grid: Tile-Definitionen, Karte aufbauen, Kamera-Steuerung.
-## Verantwortlichkeit: TileMap-Rendering + Kamera-Input. Keine HUD-Logik.
+## Verantwortlichkeit: Spielfeld aufbauen, Parzellen-Sichtbarkeit steuern, Kamera-Input.
 
 # ── Nodes ─────────────────────────────────────────────────────────────────────
-@onready var floor_layer: TileMapLayer = $WorldRoot/FloorLayer
-@onready var wall_layer:  TileMapLayer = $WorldRoot/WallLayer
-@onready var camera:      Camera2D     = $Camera2D
-
-# ── Tile Source-IDs ───────────────────────────────────────────────────────────
-## Müssen mit der TileSet-Reihenfolge in MapGrid.tscn übereinstimmen.
-const TILE_BASE  := 0  # ground_base.png
-const TILE_WALK  := 1  # ground_walking.png
-const TILE_FLOOR := 2  # ground_floor.png
-const TILE_BRICK := 3  # ground_brick.png
-const TILE_LOBBY := 4  # ground_lobby.png
-const TILE_DOOR  := 5  # main_door.png
+@onready var camera: Camera2D = $Camera2D
 
 # ── Grid-Konfiguration ────────────────────────────────────────────────────────
-const PARCELS   := 5    # 5×5 Parzellen
-const PARCEL_SZ := 16   # 16×16 Tiles pro Parzelle
-const WALK_W    := 3    # Gehweg-Breite außen (Tiles)
+@export var grid_cols:  int = 5
+@export var grid_rows:  int = 5
+@export var start_plot: Vector2i = Vector2i(1, 0)
+
+const PARCEL_SZ := 16   # Tiles pro Parzelle
+const WALK_W    := 3    # Gehweg-Breite außen
 const TILE_PX   := 16   # Physische Tile-Größe in Px
-const SCALE     := 2.0  # WorldRoot.scale → 32px/Tile sichtbar
+const SCALE     := 2.0  # WorldRoot.scale
 
 # ── Kamera-Konfiguration ──────────────────────────────────────────────────────
 const PAN_SPEED := 400.0
@@ -29,116 +20,85 @@ const ZOOM_MIN  := 0.5
 const ZOOM_MAX  := 4.0
 const ZOOM_STEP := 0.15
 
-var _drag_active := false
-var _drag_origin := Vector2.ZERO
-var _cam_origin  := Vector2.ZERO
+# ── State ─────────────────────────────────────────────────────────────────────
+var _drag_active: bool    = false
+var _drag_origin: Vector2 = Vector2.ZERO
+var _cam_origin:  Vector2 = Vector2.ZERO
+
+# ── Statisches Grid – direkte Referenzen auf alle 25 Parzellen-Instanzen ──────
+# _grid[y][x] – in _ready() fest verdrahtet, immer verfügbar.
+var _grid: Array = []
+
+
+func _ready() -> void:
+	var p := $WorldRoot/ParcelsRoot
+	_grid = [
+		[p.get_node("P_0_0"), p.get_node("P_1_0"), p.get_node("P_2_0"), p.get_node("P_3_0"), p.get_node("P_4_0")],
+		[p.get_node("P_0_1"), p.get_node("P_1_1"), p.get_node("P_2_1"), p.get_node("P_3_1"), p.get_node("P_4_1")],
+		[p.get_node("P_0_2"), p.get_node("P_1_2"), p.get_node("P_2_2"), p.get_node("P_3_2"), p.get_node("P_4_2")],
+		[p.get_node("P_0_3"), p.get_node("P_1_3"), p.get_node("P_2_3"), p.get_node("P_3_3"), p.get_node("P_4_3")],
+		[p.get_node("P_0_4"), p.get_node("P_1_4"), p.get_node("P_2_4"), p.get_node("P_3_4"), p.get_node("P_4_4")],
+	]
+	for row: Array in _grid:
+		for parcel: Node2D in row:
+			parcel.visible = false
 
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
-## Karte aufbauen. Wird von Ingame.gd nach _ready() aufgerufen.
-## Basisraster (ground_base + ground_walking) ist statisch in MapGrid.tscn vorgebaut.
-func build_map(entry_plot: Vector2i, owned_plots: Array, enter_dir: String) -> void:
+func build_map(built_plots: Array, entry_plot: Vector2i, enter_dir: String) -> void:
 	RenderingServer.set_default_clear_color(Color("#292929"))
-	_fill_owned_plots(owned_plots)
-	_place_lobby(entry_plot, enter_dir)
+	_show_built_parcels(built_plots)
+	_configure_walls()
+	var start_p: Node2D = _grid[entry_plot.y][entry_plot.x]
+	start_p.set_entrance(enter_dir)
+	center_on_entry(entry_plot)
 
 
-## Kamera auf Eingangs-Parzelle zentrieren + Limits setzen.
 func center_on_entry(entry_plot: Vector2i) -> void:
-	var center_tile := Vector2(
-		(WALK_W + entry_plot.x * PARCEL_SZ + PARCEL_SZ / 2.0) * TILE_PX,
-		(WALK_W + entry_plot.y * PARCEL_SZ + PARCEL_SZ / 2.0) * TILE_PX
-	)
-	camera.position = center_tile * SCALE
-	camera.zoom     = Vector2(1.0, 1.0)
+	var parcel: Node2D = _grid[entry_plot.y][entry_plot.x]
+	var target := parcel.global_position + Vector2(PARCEL_SZ * TILE_PX, PARCEL_SZ * TILE_PX) * (SCALE / 2.0)
+	camera.global_position = target
+	camera.zoom = Vector2(1.0, 1.0)
 	_set_camera_limits()
 
 
-# ── Map-Aufbau (privat) ───────────────────────────────────────────────────────
-
-func _fill_owned_plots(owned: Array) -> void:
-	for plot in owned:
-		var px: int = int(plot[0])
-		var py: int = int(plot[1])
-		var ox := WALK_W + px * PARCEL_SZ
-		var oy := WALK_W + py * PARCEL_SZ
-		for ty in PARCEL_SZ:
-			for tx in PARCEL_SZ:
-				floor_layer.set_cell(Vector2i(ox + tx, oy + ty), TILE_FLOOR, Vector2i(0, 0))
-				if _is_outer_wall(tx, ty, px, py, owned):
-					wall_layer.set_cell(Vector2i(ox + tx, oy + ty), TILE_BRICK, Vector2i(0, 0))
+func _show_built_parcels(built_plots: Array) -> void:
+	for plot in built_plots:
+		var x: int = plot["x"]
+		var y: int = plot["y"]
+		_grid[y][x].visible = true
 
 
-func _is_outer_wall(tx: int, ty: int, px: int, py: int, owned: Array) -> bool:
-	if tx == 0             and not _is_owned_plot(px - 1, py,     owned): return true
-	if tx == PARCEL_SZ - 1 and not _is_owned_plot(px + 1, py,     owned): return true
-	if ty == 0             and not _is_owned_plot(px,     py - 1, owned): return true
-	if ty == PARCEL_SZ - 1 and not _is_owned_plot(px,     py + 1, owned): return true
-	return false
+func _configure_walls() -> void:
+	for y in grid_rows:
+		for x in grid_cols:
+			var parzelle: Node2D = _grid[y][x]
+			if not parzelle.visible:
+				continue
+			parzelle.configure({
+				"top":    _is_built(x, y - 1),
+				"bottom": _is_built(x, y + 1),
+				"left":   _is_built(x - 1, y),
+				"right":  _is_built(x + 1, y),
+			})
 
 
-func _is_owned_plot(px: int, py: int, owned: Array) -> bool:
-	if px < 0 or px >= PARCELS or py < 0 or py >= PARCELS:
+func _is_built(x: int, y: int) -> bool:
+	if x < 0 or x >= grid_cols or y < 0 or y >= grid_rows:
 		return false
-	for plot in owned:
-		if int(plot[0]) == px and int(plot[1]) == py:
-			return true
-	return false
-
-
-## Lobby 2×2 mittig an der Eingangsseite + Türöffnung platzieren.
-func _place_lobby(entry: Vector2i, enter_dir: String) -> void:
-	var ox  := WALK_W + entry.x * PARCEL_SZ
-	var oy  := WALK_W + entry.y * PARCEL_SZ
-	var mid := PARCEL_SZ / 2 - 1  # Tiles 7+8 = Mitte der 16er-Kante
-
-	match enter_dir:
-		"top":
-			wall_layer.erase_cell(Vector2i(ox + mid,     oy))
-			wall_layer.erase_cell(Vector2i(ox + mid + 1, oy))
-			floor_layer.set_cell(Vector2i(ox + mid,     oy), TILE_DOOR, Vector2i(0, 0))
-			floor_layer.set_cell(Vector2i(ox + mid + 1, oy), TILE_DOOR, Vector2i(0, 0))
-			for ly in 2:
-				for lx in 2:
-					floor_layer.set_cell(Vector2i(ox + mid + lx, oy + 1 + ly), TILE_LOBBY, Vector2i(0, 0))
-		"bottom":
-			wall_layer.erase_cell(Vector2i(ox + mid,     oy + PARCEL_SZ - 1))
-			wall_layer.erase_cell(Vector2i(ox + mid + 1, oy + PARCEL_SZ - 1))
-			floor_layer.set_cell(Vector2i(ox + mid,     oy + PARCEL_SZ - 1), TILE_DOOR, Vector2i(0, 0))
-			floor_layer.set_cell(Vector2i(ox + mid + 1, oy + PARCEL_SZ - 1), TILE_DOOR, Vector2i(0, 0))
-			for ly in 2:
-				for lx in 2:
-					floor_layer.set_cell(Vector2i(ox + mid + lx, oy + PARCEL_SZ - 3 + ly), TILE_LOBBY, Vector2i(0, 0))
-		"left":
-			wall_layer.erase_cell(Vector2i(ox, oy + mid))
-			wall_layer.erase_cell(Vector2i(ox, oy + mid + 1))
-			floor_layer.set_cell(Vector2i(ox, oy + mid),     TILE_DOOR, Vector2i(0, 0))
-			floor_layer.set_cell(Vector2i(ox, oy + mid + 1), TILE_DOOR, Vector2i(0, 0))
-			for ly in 2:
-				for lx in 2:
-					floor_layer.set_cell(Vector2i(ox + 1 + lx, oy + mid + ly), TILE_LOBBY, Vector2i(0, 0))
-		_:  # "right"
-			wall_layer.erase_cell(Vector2i(ox + PARCEL_SZ - 1, oy + mid))
-			wall_layer.erase_cell(Vector2i(ox + PARCEL_SZ - 1, oy + mid + 1))
-			floor_layer.set_cell(Vector2i(ox + PARCEL_SZ - 1, oy + mid),     TILE_DOOR, Vector2i(0, 0))
-			floor_layer.set_cell(Vector2i(ox + PARCEL_SZ - 1, oy + mid + 1), TILE_DOOR, Vector2i(0, 0))
-			for ly in 2:
-				for lx in 2:
-					floor_layer.set_cell(Vector2i(ox + PARCEL_SZ - 3 + lx, oy + mid + ly), TILE_LOBBY, Vector2i(0, 0))
+	return _grid[y][x].visible
 
 
 # ── Kamera ────────────────────────────────────────────────────────────────────
 
 func _set_camera_limits() -> void:
-	var map_px: float = (PARCELS * PARCEL_SZ + WALK_W * 2) * TILE_PX * SCALE
+	var map_px: float = (grid_cols * PARCEL_SZ + WALK_W * 2) * TILE_PX * SCALE
 	var vp    := get_viewport_rect().size
-	var pad_x := int(vp.x / 2.0)
-	var pad_y := int(vp.y / 2.0)
-	camera.limit_left   = -pad_x
-	camera.limit_top    = -pad_y
-	camera.limit_right  = int(map_px) + pad_x
-	camera.limit_bottom = int(map_px) + pad_y
+	camera.limit_left   = -int(vp.x / 2.0)
+	camera.limit_top    = -int(vp.y / 2.0)
+	camera.limit_right  = int(map_px) + int(vp.x / 2.0)
+	camera.limit_bottom = int(map_px) + int(vp.y / 2.0)
 
 
 func _process(delta: float) -> void:
@@ -161,8 +121,8 @@ func _handle_keyboard_zoom(delta: float) -> void:
 		camera.zoom = Vector2(1.0, 1.0)
 		return
 	var zoom_dir := 0.0
-	if   Input.is_key_pressed(KEY_EQUAL)        or Input.is_key_pressed(KEY_KP_ADD):      zoom_dir =  1.0
-	elif Input.is_key_pressed(KEY_MINUS)         or Input.is_key_pressed(KEY_KP_SUBTRACT): zoom_dir = -1.0
+	if   Input.is_key_pressed(KEY_EQUAL)   or Input.is_key_pressed(KEY_KP_ADD):      zoom_dir =  1.0
+	elif Input.is_key_pressed(KEY_MINUS)   or Input.is_key_pressed(KEY_KP_SUBTRACT): zoom_dir = -1.0
 	if zoom_dir != 0.0:
 		_apply_zoom(zoom_dir * ZOOM_STEP * delta * 10.0)
 

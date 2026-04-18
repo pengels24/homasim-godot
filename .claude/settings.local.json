@@ -16,7 +16,10 @@
       "mcp__claude_ai_Linear__list_teams",
       "Bash(identify tile_0000.png)",
       "WebFetch(domain:docs.godotengine.org)",
-      "Bash(python3 -c \"from PIL import Image; img = Image.open\\('d:/game-dev/homasim-godot/assets/images/logo.png'\\); print\\(img.size, img.mode\\)\")"
+      "Bash(python3 -c \"from PIL import Image; img = Image.open\\('d:/game-dev/homasim-godot/assets/images/logo.png'\\); print\\(img.size, img.mode\\)\")",
+      "Bash(git -C d:/game-dev/homasim-godot log --oneline -8)",
+      "Bash(git -C d:/game-dev/homasim-godot status)",
+      "WebFetch(domain:linear.app)"
     ]
   }
 }

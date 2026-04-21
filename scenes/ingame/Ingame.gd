@@ -38,12 +38,22 @@ const HF_XL   := 18   # Hotel-Name
 const HF_TIME := 22   # Spielzeit-Anzeige
 const HF_LOGO := 22   # (Logo ist jetzt ein Bild – Konstante bleibt für Fallback)
 
+# ── BottomBar Fächer-Konstanten ───────────────────────────────────────────────
+const BB_RING1_RADIUS := 108.0   # Radius innerer Knopfring
+const BB_RING2_RADIUS := 160.0   # Radius äußerer Knopfring
+const BB_RING1_COUNT  := 3       # Anzahl Buttons im inneren Ring
+const BB_BTN_SIZE     := 46.0    # Einheitsgröße aller Fan-Buttons
+const BB_FAN_SIZE     := 192.0   # Y-Position des Fächer-Ursprungs (= Höhe des Anchors)
+const BB_ANGLE_MIN    := 14.0    # Start-Winkel in Grad (Abstand vom Bodenrand)
+const BB_ANGLE_MAX    := 76.0    # End-Winkel in Grad (Abstand vom Seitenrand)
+
 # ── Zustand ───────────────────────────────────────────────────────────────────
 var _hotel: Dictionary = {}   # aktives Hotel aus SaveManager
 var _ruf_indicator: ColorRect
 
 ## BottomBar-Referenzen – gebaut in _build_bottom_bar()
-var _bottom_panel: PanelContainer
+var _bottom_panel:    PanelContainer  # ungenutzt im Fächer-Modus, bleibt für Kompatibilität
+var _fan_mode_btn:    Button          # Modus-Indikator in der Ecke
 var _bottom_buttons: Array[Button] = []
 var _active_btn_idx: int = -1
 var _active_submenu: PanelContainer = null
@@ -211,135 +221,106 @@ func _update_ruf_display(rep: int) -> void:
 	_ruf_indicator.position.x = clampf((rep / 1000.0) * bar_w - 1.0, 0.0, bar_w - 2.0)
 
 
-## BottomBar programmatisch aufbauen – Icon-Buttons (F1–F7, ALT+S, ESC)
-## Icons sind vorläufige Text-Platzhalter bis Lucide-SVGs verfügbar sind (ANG-153).
+## BottomBar als radialer Fächer aus der unteren linken Ecke.
+## Hintergrund: StyleBoxFlat mit großem corner_radius_top_right → Viertelkreis-Form.
+## Ring 1: BB_RING1_COUNT Buttons, Ring 2: verbleibende Buttons.
 func _build_bottom_bar() -> void:
-	# Geteilte StyleBoxes für Button-States (einmal anlegen, auf alle Buttons anwenden)
-	_bb_sb_normal = StyleBoxFlat.new()
-	_bb_sb_normal.bg_color                   = Color(0.08, 0.11, 0.17, 0.90)
-	_bb_sb_normal.corner_radius_top_left     = 8
-	_bb_sb_normal.corner_radius_top_right    = 8
-	_bb_sb_normal.corner_radius_bottom_left  = 8
-	_bb_sb_normal.corner_radius_bottom_right = 8
-	_bb_sb_normal.border_width_left          = 1
-	_bb_sb_normal.border_width_right         = 1
-	_bb_sb_normal.border_width_top           = 1
-	_bb_sb_normal.border_width_bottom        = 1
-	_bb_sb_normal.border_color               = Color(0.30, 0.32, 0.40, 0.40)
-	_bb_sb_normal.content_margin_left        = 8.0
-	_bb_sb_normal.content_margin_right       = 8.0
-	_bb_sb_normal.content_margin_top         = 6.0
-	_bb_sb_normal.content_margin_bottom      = 6.0
-
-	_bb_sb_hover = _bb_sb_normal.duplicate()
-	_bb_sb_hover.bg_color        = Color(0.12, 0.17, 0.26, 0.95)
-	_bb_sb_hover.border_width_left   = 1
-	_bb_sb_hover.border_width_right  = 1
-	_bb_sb_hover.border_width_top    = 1
-	_bb_sb_hover.border_width_bottom = 1
-	_bb_sb_hover.border_color        = Color(0.918, 0.702, 0.031, 0.75)
-
-	_bb_sb_active = _bb_sb_normal.duplicate()
-	_bb_sb_active.bg_color        = Color(0.28, 0.22, 0.04, 1.0)
-	_bb_sb_active.border_width_left   = 1
-	_bb_sb_active.border_width_right  = 1
-	_bb_sb_active.border_width_top    = 1
-	_bb_sb_active.border_width_bottom = 1
-	_bb_sb_active.border_color        = Color(0.918, 0.702, 0.031, 1.0)
-
-	# Äußerer Panel-Container (schwebend zentriert)
-	var sb_panel := StyleBoxFlat.new()
-	sb_panel.bg_color                    = Color(0.04, 0.06, 0.10, 0.92)
-	sb_panel.corner_radius_top_left      = 14
-	sb_panel.corner_radius_top_right     = 14
-	sb_panel.corner_radius_bottom_left   = 14
-	sb_panel.corner_radius_bottom_right  = 14
-	sb_panel.border_width_top            = 1
-	sb_panel.border_color                = Color(0.918, 0.702, 0.031, 0.25)
-	sb_panel.content_margin_left         = 14.0
-	sb_panel.content_margin_right        = 14.0
-	sb_panel.content_margin_top          = 10.0
-	sb_panel.content_margin_bottom       = 10.0
-
-	# CenterContainer sorgt dafür dass der Panel wirklich mittig sitzt
-	var center_wrap := CenterContainer.new()
-	center_wrap.set_anchors_preset(Control.PRESET_FULL_RECT)
-	bottom_anchor.add_child(center_wrap)
-
-	_bottom_panel = PanelContainer.new()
-	_bottom_panel.add_theme_stylebox_override("panel", sb_panel)
-	center_wrap.add_child(_bottom_panel)
-
-	var hbox := HBoxContainer.new()
-	hbox.add_theme_constant_override("separation", 8)
-	_bottom_panel.add_child(hbox)
-
-	# F1–F7 + ALT+S Buttons
-	# icon_path: SVG-Pfad in res://assets/icons/ (leer = Text-Fallback via "icon")
-	# dot_color: Color.TRANSPARENT = kein Dot; Farbe = Dot oben rechts sichtbar
+	# Ring 1 (idx 0–2): häufig genutzte Aktionen
+	# Ring 2 (idx 3–6): erweiterte/gesperrte Features
 	_bb_btn_defs = [
-		{"icon": "?",  "icon_path": "res://assets/icons/ic_help.svg",      "label": GameState.T("ingame.btn.help"),     "key": "F1",    "locked": false, "dot_color": Color.TRANSPARENT},
-		{"icon": "+",  "icon_path": "res://assets/icons/ic_buildmode.svg",  "label": GameState.T("ingame.btn.build"),    "key": "F2",    "locked": false, "dot_color": Color.TRANSPARENT},
-		{"icon": "R",  "icon_path": "res://assets/icons/ic_reception.svg",  "label": GameState.T("ingame.btn.reception"),"key": "F3",    "locked": false, "dot_color": Color(0.20, 0.78, 0.35, 1)},
-		{"icon": "P",  "icon_path": "res://assets/icons/ic_staff.svg",      "label": GameState.T("ingame.btn.staff"),    "key": "F4",    "locked": true,  "dot_color": Color.TRANSPARENT},
-		{"icon": "–",  "icon_path": "",                                      "label": GameState.T("ingame.btn.empty"),    "key": "F5",    "locked": true,  "dot_color": Color.TRANSPARENT},
-		{"icon": "★",  "icon_path": "res://assets/icons/ic_techtree.svg",   "label": GameState.T("ingame.btn.research"), "key": "F6",    "locked": true,  "dot_color": Color.TRANSPARENT},
-		{"icon": "★",  "icon_path": "res://assets/icons/ic_browser.svg",     "label": GameState.T("ingame.btn.simbrowser"), "key": "F7",  "locked": false, "dot_color": Color(0.20, 0.78, 0.35, 1)},
-		{"icon": "⚙",  "icon_path": "res://assets/icons/ic_settings.svg",   "label": GameState.T("ingame.btn.settings"), "key": "ALT+S", "locked": false, "dot_color": Color.TRANSPARENT},
+		{"icon": "+",  "icon_path": "res://assets/icons/ic_buildmode.svg",  "label": GameState.T("ingame.btn.build"),       "key": "F2",    "locked": false, "dot_color": Color.TRANSPARENT},
+		{"icon": "★",  "icon_path": "res://assets/icons/ic_browser.svg",    "label": GameState.T("ingame.btn.simbrowser"),  "key": "F7",    "locked": false, "dot_color": Color(0.20, 0.78, 0.35, 1)},
+		{"icon": "⚙",  "icon_path": "res://assets/icons/ic_settings.svg",   "label": GameState.T("ingame.btn.settings"),    "key": "ALT+S", "locked": false, "dot_color": Color.TRANSPARENT},
+		{"icon": "R",  "icon_path": "res://assets/icons/ic_reception.svg",  "label": GameState.T("ingame.btn.reception"),   "key": "F3",    "locked": false, "dot_color": Color(0.20, 0.78, 0.35, 1)},
+		{"icon": "P",  "icon_path": "res://assets/icons/ic_staff.svg",      "label": GameState.T("ingame.btn.staff"),       "key": "F4",    "locked": true,  "dot_color": Color.TRANSPARENT},
+		{"icon": "–",  "icon_path": "",                                       "label": GameState.T("ingame.btn.empty"),       "key": "F5",    "locked": true,  "dot_color": Color.TRANSPARENT},
+		{"icon": "★",  "icon_path": "res://assets/icons/ic_techtree.svg",   "label": GameState.T("ingame.btn.research"),    "key": "F6",    "locked": true,  "dot_color": Color.TRANSPARENT},
 	]
 
+	_bb_sb_normal = _make_fan_stylebox(Color(0.06, 0.10, 0.18, 0.90), Color(0.20, 0.24, 0.35, 0.55))
+	_bb_sb_hover  = _make_fan_stylebox(Color(0.10, 0.16, 0.26, 0.96), Color(0.918, 0.702, 0.031, 0.70))
+	_bb_sb_active = _make_fan_stylebox(Color(0.22, 0.16, 0.02, 1.0),  Color(0.918, 0.702, 0.031, 1.0))
+
+	# Fächer-Fläche: großer top-right Radius ergibt organische Viertelkreis-Form
+	var sb_bg := StyleBoxFlat.new()
+	sb_bg.bg_color                = Color(0.03, 0.06, 0.12, 0.93)
+	sb_bg.corner_radius_top_right = 192
+	sb_bg.border_width_top        = 1
+	sb_bg.border_width_right      = 1
+	sb_bg.border_color            = Color(0.918, 0.702, 0.031, 0.38)
+	var fan_bg := Panel.new()
+	fan_bg.add_theme_stylebox_override("panel", sb_bg)
+	fan_bg.mouse_filter  = Control.MOUSE_FILTER_IGNORE
+	fan_bg.layout_mode   = 1
+	fan_bg.anchor_right  = 1.0
+	fan_bg.anchor_bottom = 1.0
+	bottom_anchor.add_child(fan_bg)
+
+	# Gloss-Schicht: leicht hellerer innerer Bereich simuliert Tiefe/Glanz
+	var sb_gloss := StyleBoxFlat.new()
+	sb_gloss.bg_color                = Color(0.22, 0.38, 0.65, 0.045)
+	sb_gloss.corner_radius_top_right = 140
+	var gloss := Panel.new()
+	gloss.add_theme_stylebox_override("panel", sb_gloss)
+	gloss.mouse_filter  = Control.MOUSE_FILTER_IGNORE
+	gloss.layout_mode   = 1
+	gloss.anchor_right  = 1.0
+	gloss.anchor_bottom = 1.0
+	bottom_anchor.add_child(gloss)
+
+	# Trennringe – Panel-Trick: size=(R,R), pos=(0, BB_FAN_SIZE-R) → corner arc am fan origin
+	for sep_r: int in [75, int((BB_RING1_RADIUS + BB_RING2_RADIUS) * 0.5)]:
+		var sb_sep := StyleBoxFlat.new()
+		sb_sep.bg_color                = Color(0, 0, 0, 0)
+		sb_sep.corner_radius_top_right = sep_r
+		sb_sep.border_width_top        = 1
+		sb_sep.border_width_right      = 1
+		sb_sep.border_color            = Color(0.918, 0.702, 0.031, 0.22)
+		var ring_sep := Panel.new()
+		ring_sep.add_theme_stylebox_override("panel", sb_sep)
+		ring_sep.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ring_sep.layout_mode  = 0
+		ring_sep.size         = Vector2(sep_r, sep_r)
+		ring_sep.position     = Vector2(0.0, BB_FAN_SIZE - sep_r)
+		bottom_anchor.add_child(ring_sep)
+
+	# Buttons auf Kreisbögen – origin ist die untere linke Ecke des Anchors
+	var origin := Vector2(0.0, BB_FAN_SIZE)
 	for i in _bb_btn_defs.size():
-		var btn := _make_icon_btn(i)
-		hbox.add_child(btn)
+		var ring       := 0 if i < BB_RING1_COUNT else 1
+		var ring_idx   := i - (BB_RING1_COUNT if ring == 1 else 0)
+		var ring_total := BB_RING1_COUNT if ring == 0 else (_bb_btn_defs.size() - BB_RING1_COUNT)
+		var radius     := BB_RING1_RADIUS if ring == 0 else BB_RING2_RADIUS
+		var t          := float(ring_idx) / float(max(ring_total - 1, 1))
+		var angle_rad  := deg_to_rad(lerp(BB_ANGLE_MIN, BB_ANGLE_MAX, t))
+		var center     := origin + Vector2(cos(angle_rad) * radius, -sin(angle_rad) * radius)
+		var btn        := _make_fan_btn(i)
+		btn.layout_mode = 0
+		btn.position    = center - Vector2(BB_BTN_SIZE, BB_BTN_SIZE) * 0.5
+		bottom_anchor.add_child(btn)
 		_bottom_buttons.append(btn)
 
-	# Trennstrich vor Exit
-	var sep := ColorRect.new()
-	sep.custom_minimum_size = Vector2(1, 0)
-	sep.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	sep.color = Color(0.918, 0.702, 0.031, 0.20)
-	hbox.add_child(sep)
+	# Modus-Indikator: goldener Kreis in der Ecke zeigt aktiven Modus
+	_fan_mode_btn             = _make_mode_indicator()
+	_fan_mode_btn.layout_mode = 0
+	_fan_mode_btn.position    = Vector2(5.0, BB_FAN_SIZE - 52.0)
+	bottom_anchor.add_child(_fan_mode_btn)
 
-	# Exit-Button (eigene rote StyleBoxes)
-	var sb_exit_n := StyleBoxFlat.new()
-	sb_exit_n.bg_color                   = Color(0.14, 0.04, 0.04, 0.90)
-	sb_exit_n.corner_radius_top_left     = 8
-	sb_exit_n.corner_radius_top_right    = 8
-	sb_exit_n.corner_radius_bottom_left  = 8
-	sb_exit_n.corner_radius_bottom_right = 8
-	var sb_exit_h := sb_exit_n.duplicate()
-	sb_exit_h.bg_color        = Color(0.22, 0.06, 0.06, 1.0)
-	sb_exit_h.border_width_left   = 1
-	sb_exit_h.border_width_right  = 1
-	sb_exit_h.border_width_top    = 1
-	sb_exit_h.border_width_bottom = 1
-	sb_exit_h.border_color        = Color(0.863, 0.149, 0.149, 0.75)
-
-	var exit_def: Dictionary = {"icon": "✕", "icon_path": "res://assets/icons/ic_logout.svg", "label": GameState.T("menu.btn.main_menu"), "locked": false, "dot_color": Color.TRANSPARENT}
-	var btn_exit := _make_icon_btn(-1, exit_def)
-	btn_exit.add_theme_stylebox_override("normal",  sb_exit_n)
-	btn_exit.add_theme_stylebox_override("hover",   sb_exit_h)
-	btn_exit.add_theme_stylebox_override("pressed", sb_exit_h)
-	btn_exit.pressed.connect(_on_exit_pressed)
-	btn_exit.mouse_entered.connect(func(): _show_tooltip("ESC · " + GameState.T("menu.btn.main_menu"), btn_exit))
-	btn_exit.mouse_exited.connect(func():  _hide_tooltip())
-	hbox.add_child(btn_exit)
-
-	# Tooltip-Panel (geteilt, versteckt bis Hover)
+	# Geteiltes Tooltip-Panel
 	_tooltip_panel = PanelContainer.new()
 	_tooltip_panel.visible = false
 	var sb_tip := StyleBoxFlat.new()
-	sb_tip.bg_color                  = Color(0.04, 0.06, 0.10, 0.96)
-	sb_tip.corner_radius_top_left    = 6
-	sb_tip.corner_radius_top_right   = 6
-	sb_tip.corner_radius_bottom_left = 6
-	sb_tip.corner_radius_bottom_right= 6
-	sb_tip.border_width_top          = 1
-	sb_tip.border_color              = Color(0.918, 0.702, 0.031, 0.30)
-	sb_tip.content_margin_left       = 14.0
-	sb_tip.content_margin_right      = 14.0
-	sb_tip.content_margin_top        = 8.0
-	sb_tip.content_margin_bottom     = 8.0
+	sb_tip.bg_color                   = Color(0.04, 0.06, 0.10, 0.96)
+	sb_tip.corner_radius_top_left     = 6
+	sb_tip.corner_radius_top_right    = 6
+	sb_tip.corner_radius_bottom_left  = 6
+	sb_tip.corner_radius_bottom_right = 6
+	sb_tip.border_width_top           = 1
+	sb_tip.border_color               = Color(0.918, 0.702, 0.031, 0.30)
+	sb_tip.content_margin_left        = 14.0
+	sb_tip.content_margin_right       = 14.0
+	sb_tip.content_margin_top         = 8.0
+	sb_tip.content_margin_bottom      = 8.0
 	_tooltip_panel.add_theme_stylebox_override("panel", sb_tip)
 	_tooltip_lbl = Label.new()
 	_tooltip_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -349,62 +330,69 @@ func _build_bottom_bar() -> void:
 	($HUD as CanvasLayer).add_child(_tooltip_panel)
 
 
-## Icon-Button für die BottomBar erstellen.
-## idx = -1 → def wird direkt übergeben (Exit-Button), keine Pressed/Hover-Signals.
-func _make_icon_btn(idx: int, def: Dictionary = {}) -> Button:
-	var is_exit := idx < 0
-	if not is_exit:
-		def = _bb_btn_defs[idx]
+func _make_fan_stylebox(bg: Color, border: Color) -> StyleBoxFlat:
+	var sb := StyleBoxFlat.new()
+	sb.bg_color                   = bg
+	sb.corner_radius_top_left     = 23
+	sb.corner_radius_top_right    = 23
+	sb.corner_radius_bottom_left  = 23
+	sb.corner_radius_bottom_right = 23
+	sb.border_width_left          = 1
+	sb.border_width_right         = 1
+	sb.border_width_top           = 1
+	sb.border_width_bottom        = 1
+	sb.border_color               = border
+	sb.shadow_color               = Color(0.0, 0.0, 0.0, 0.55)
+	sb.shadow_size                = 4
+	sb.shadow_offset              = Vector2(0.0, 2.0)
+	return sb
+
+
+## Kompakter Fan-Button (nur Icon, kein Label – Label erscheint im Tooltip).
+func _make_fan_btn(idx: int) -> Button:
+	var def := _bb_btn_defs[idx]
 
 	var btn := Button.new()
-	btn.custom_minimum_size = Vector2(70, 70)
-	btn.text        = ""
-	btn.focus_mode  = Control.FOCUS_NONE
+	btn.custom_minimum_size = Vector2(BB_BTN_SIZE, BB_BTN_SIZE)
+	btn.focus_mode          = Control.FOCUS_NONE
 	btn.add_theme_stylebox_override("normal",   _bb_sb_normal)
 	btn.add_theme_stylebox_override("hover",    _bb_sb_hover)
 	btn.add_theme_stylebox_override("pressed",  _bb_sb_active)
 	btn.add_theme_stylebox_override("focus",    StyleBoxEmpty.new())
 	btn.add_theme_stylebox_override("disabled", _bb_sb_normal)
 
-	# VBox: Icon oben, Label unten (MOUSE_FILTER_IGNORE damit Klicks zum Button gehen)
-	var vbox := VBoxContainer.new()
-	vbox.layout_mode = 1  # anchors
-	vbox.anchor_right  = 1.0
-	vbox.anchor_bottom = 1.0
-	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	vbox.add_theme_constant_override("separation", 2)
-	vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	btn.add_child(vbox)
-
-	# Icon: SVG via TextureRect wenn icon_path vorhanden, sonst Text-Fallback
+	# Icon-Node (SVG oder Text-Fallback) – Referenz behalten zum Dimmen bei Lock
+	var icon_node: Control
+	# Icons fix zentriert positionieren (nicht auf volle Buttongröße skaliert)
+	const ICON_D := 22.0
+	const ICON_OFF := (BB_BTN_SIZE - ICON_D) * 0.5
 	var icon_path: String = def.get("icon_path", "")
 	if icon_path != "" and ResourceLoader.exists(icon_path):
-		var tex_rect := TextureRect.new()
-		tex_rect.texture             = load(icon_path)
-		tex_rect.custom_minimum_size = Vector2(30, 30)
-		tex_rect.expand_mode         = TextureRect.EXPAND_IGNORE_SIZE
-		tex_rect.stretch_mode        = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		tex_rect.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-		tex_rect.mouse_filter        = Control.MOUSE_FILTER_IGNORE
-		vbox.add_child(tex_rect)
+		var tex := TextureRect.new()
+		tex.texture             = load(icon_path)
+		tex.expand_mode         = TextureRect.EXPAND_IGNORE_SIZE
+		tex.stretch_mode        = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		tex.layout_mode         = 0
+		tex.size                = Vector2(ICON_D, ICON_D)
+		tex.position            = Vector2(ICON_OFF, ICON_OFF)
+		tex.mouse_filter        = Control.MOUSE_FILTER_IGNORE
+		btn.add_child(tex)
+		icon_node = tex
 	else:
-		var icon_lbl := Label.new()
-		icon_lbl.text = def.get("icon", "?")
-		icon_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		icon_lbl.add_theme_font_size_override("font_size", 22)
-		icon_lbl.add_theme_color_override("font_color", Color(0.85, 0.85, 0.85, 1))
-		icon_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		vbox.add_child(icon_lbl)
+		var lbl := Label.new()
+		lbl.text                 = def.get("icon", "?")
+		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
+		lbl.add_theme_font_size_override("font_size", 14)
+		lbl.add_theme_color_override("font_color", Color(0.85, 0.85, 0.85, 1))
+		lbl.layout_mode  = 0
+		lbl.size         = Vector2(BB_BTN_SIZE, BB_BTN_SIZE)
+		lbl.position     = Vector2(0, 0)
+		lbl.mouse_filter  = Control.MOUSE_FILTER_IGNORE
+		btn.add_child(lbl)
+		icon_node = lbl
 
-	var name_lbl := Label.new()
-	name_lbl.text = def.get("label", "")
-	name_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_lbl.add_theme_font_size_override("font_size", 13)
-	name_lbl.add_theme_color_override("font_color", Color(0.55, 0.55, 0.55, 1))
-	name_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	vbox.add_child(name_lbl)
-
-	# Runder Dot-Indikator oben rechts
+	# Dot-Indikator oben rechts
 	var dot_color: Color = def.get("dot_color", Color.TRANSPARENT)
 	if dot_color.a > 0.0:
 		var dot_sb := StyleBoxFlat.new()
@@ -419,8 +407,6 @@ func _make_icon_btn(idx: int, def: Dictionary = {}) -> Button:
 		dot.layout_mode  = 1
 		dot.anchor_left   = 1.0
 		dot.anchor_right  = 1.0
-		dot.anchor_top    = 0.0
-		dot.anchor_bottom = 0.0
 		dot.offset_left   = -12.0
 		dot.offset_right  = -4.0
 		dot.offset_top    = 4.0
@@ -428,26 +414,63 @@ func _make_icon_btn(idx: int, def: Dictionary = {}) -> Button:
 		dot.mouse_filter  = Control.MOUSE_FILTER_IGNORE
 		btn.add_child(dot)
 
-	# Gesperrte Features: Icon + Label dämpfen, großes Schloss zentriert drüber
+	# Gesperrt: nur Icon dimmen, Schloss-Emoji bleibt voll sichtbar
 	if def.get("locked", false):
-		btn.disabled  = true
-		vbox.modulate = Color(1, 1, 1, 0.38)  # Icon + Label transparent, kein dunkles Overlay
-
-		var lock_lbl := Label.new()
+		btn.disabled          = true
+		icon_node.modulate    = Color(1, 1, 1, 0.35)
+		var lock_lbl          := Label.new()
 		lock_lbl.text                = "🔒"
 		lock_lbl.layout_mode         = 1
 		lock_lbl.anchor_right        = 1.0
 		lock_lbl.anchor_bottom       = 1.0
 		lock_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		lock_lbl.vertical_alignment  = VERTICAL_ALIGNMENT_CENTER
-		lock_lbl.add_theme_font_size_override("font_size", 22)
+		lock_lbl.add_theme_font_size_override("font_size", 14)
 		lock_lbl.mouse_filter        = Control.MOUSE_FILTER_IGNORE
 		btn.add_child(lock_lbl)
 
-	if not is_exit:
-		btn.pressed.connect(func(): _on_bottom_button(idx))
-		btn.mouse_entered.connect(func(): _show_tooltip("%s · %s" % [_bb_btn_defs[idx]["key"], _bb_btn_defs[idx]["label"]], btn))
-		btn.mouse_exited.connect(func():  _hide_tooltip())
+	btn.pressed.connect(func(): _on_bottom_button(idx))
+	btn.mouse_entered.connect(func(): _show_tooltip("%s · %s" % [def["key"], def["label"]], btn))
+	btn.mouse_exited.connect(func():  _hide_tooltip())
+
+	return btn
+
+
+## Goldener Kreis-Button in der Ecke – zeigt den aktiven Modus an.
+func _make_mode_indicator() -> Button:
+	var btn := Button.new()
+	btn.custom_minimum_size = Vector2(46, 46)
+	btn.focus_mode          = Control.FOCUS_NONE
+	btn.disabled            = true
+
+	var sb := StyleBoxFlat.new()
+	sb.bg_color                   = Color(0.04, 0.07, 0.13, 0.96)
+	sb.corner_radius_top_left     = 23
+	sb.corner_radius_top_right    = 23
+	sb.corner_radius_bottom_left  = 23
+	sb.corner_radius_bottom_right = 23
+	sb.border_width_left          = 2
+	sb.border_width_right         = 2
+	sb.border_width_top           = 2
+	sb.border_width_bottom        = 2
+	sb.border_color               = Color(0.918, 0.702, 0.031, 0.85)
+	btn.add_theme_stylebox_override("normal",   sb)
+	btn.add_theme_stylebox_override("hover",    sb)
+	btn.add_theme_stylebox_override("pressed",  sb)
+	btn.add_theme_stylebox_override("focus",    StyleBoxEmpty.new())
+	btn.add_theme_stylebox_override("disabled", sb)
+
+	var lbl := Label.new()
+	lbl.text                 = "◆"
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
+	lbl.add_theme_font_size_override("font_size", 14)
+	lbl.add_theme_color_override("font_color", Color(0.918, 0.702, 0.031, 0.75))
+	lbl.layout_mode  = 1
+	lbl.anchor_right  = 1.0
+	lbl.anchor_bottom = 1.0
+	lbl.mouse_filter  = Control.MOUSE_FILTER_IGNORE
+	btn.add_child(lbl)
 
 	return btn
 
@@ -583,7 +606,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		var ke := event as InputEventKey
 		if ke.pressed and not ke.echo:
 			if ke.keycode == KEY_S and ke.alt_pressed:
-				_on_bottom_button(7)  # Einstellungen
+				_on_bottom_button(6)  # Einstellungen
 			else:
 				_handle_hotkey(ke.keycode)
 
@@ -591,13 +614,12 @@ func _unhandled_input(event: InputEvent) -> void:
 func _handle_hotkey(keycode: int) -> void:
 	match keycode:
 		KEY_ESCAPE: _on_exit_pressed()
-		KEY_F1:     _on_bottom_button(0)  # Hilfe
-		KEY_F2:     _on_bottom_button(1)  # Bauen
-		KEY_F3:     _on_bottom_button(2)  # Rezeption
-		KEY_F4:     _on_bottom_button(3)  # Personalverwaltung (gesperrt)
-		KEY_F5:     _on_bottom_button(4)  # unbelegt (gesperrt)
-		KEY_F6:     _on_bottom_button(5)  # Forschung (gesperrt)
-		KEY_F7:     _on_bottom_button(6)  # SIM-Browser
+		KEY_F2:     _on_bottom_button(0)  # Bauen
+		KEY_F3:     _on_bottom_button(1)  # Rezeption
+		KEY_F4:     _on_bottom_button(2)  # Personalverwaltung (gesperrt)
+		KEY_F5:     _on_bottom_button(3)  # unbelegt (gesperrt)
+		KEY_F6:     _on_bottom_button(4)  # Forschung (gesperrt)
+		KEY_F7:     _on_bottom_button(5)  # SIM-Browser
 
 
 ## Spielsteuerung
@@ -674,15 +696,17 @@ func _on_bottom_button(idx: int) -> void:
 	panel.add_child(lbl)
 
 	($HUD as CanvasLayer).add_child(panel)
-	panel.set_anchors_preset(Control.PRESET_BOTTOM_LEFT)
+	panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	await get_tree().process_frame
 	if not is_instance_valid(self) or not is_instance_valid(panel):
 		return
 	if idx >= _bottom_buttons.size() or not is_instance_valid(_bottom_buttons[idx]):
 		panel.queue_free()
 		return
-	var btn_pos: Vector2 = _bottom_buttons[idx].global_position
-	panel.position = Vector2(btn_pos.x, btn_pos.y - panel.size.y - 8)
+	# Submenü erscheint rechts neben dem Button (Fächer ist in der linken Ecke)
+	var btn_pos  := _bottom_buttons[idx].global_position
+	var btn_size := _bottom_buttons[idx].size
+	panel.position = Vector2(btn_pos.x + btn_size.x + 12.0, btn_pos.y)
 	_active_submenu = panel
 
 

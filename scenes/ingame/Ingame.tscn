@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://ingame001"]
 
 [ext_resource type="Script" uid="uid://vu3d3s8gdewa" path="res://scenes/ingame/Ingame.gd" id="1_ingame"]
-[ext_resource type="Texture2D" uid="uid://rkxhb8bwktsj" path="res://assets/images/logo-transparent-50.png" id="2_logo"]
 [ext_resource type="PackedScene" uid="uid://mapgrid001" path="res://scenes/ingame/map/MapGrid.tscn" id="3_mapgrid"]
 
 [sub_resource type="StyleBoxFlat" id="SB_topbar"]
@@ -36,18 +35,7 @@ theme_override_styles/panel = SubResource("SB_topbar")
 
 [node name="HBox" type="HBoxContainer" parent="HUD/TopBar" unique_id=1000134390]
 layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="LogoSection" type="HBoxContainer" parent="HUD/TopBar/HBox" unique_id=528222069]
-custom_minimum_size = Vector2(270, 0)
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_constants/separation = 8
-
-[node name="LogoImg" type="TextureRect" parent="HUD/TopBar/HBox/LogoSection" unique_id=1513625273]
-layout_mode = 2
-size_flags_vertical = 4
-texture = ExtResource("2_logo")
+theme_override_constants/separation = 20
 
 [node name="NameSection" type="VBoxContainer" parent="HUD/TopBar/HBox" unique_id=939500371]
 custom_minimum_size = Vector2(150, 0)
@@ -238,6 +226,10 @@ theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
 theme_override_font_sizes/font_size = 18
 text = "–"
 
+[node name="Spacer" type="Control" parent="HUD/TopBar/HBox" unique_id=777000001]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="TimeSection" type="HBoxContainer" parent="HUD/TopBar/HBox" unique_id=374245068]
 custom_minimum_size = Vector2(260, 0)
 layout_mode = 2
@@ -293,15 +285,15 @@ text = "⏩"
 
 [node name="BottomBarAnchor" type="Control" parent="HUD" unique_id=2131913845]
 layout_mode = 3
-anchor_left = 0.5
+anchor_left = 0.0
 anchor_top = 1.0
-anchor_right = 0.5
+anchor_right = 0.0
 anchor_bottom = 1.0
-offset_left = -500.0
-offset_top = -96.0
-offset_right = 500.0
-offset_bottom = -8.0
-grow_horizontal = 2
+offset_left = 0.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 0.0
+grow_horizontal = 1
 grow_vertical = 0
 
 [node name="ContextBar" type="HBoxContainer" parent="HUD" unique_id=519157890]
@@ -314,15 +306,3 @@ offset_right = 200.0
 offset_bottom = -8.0
 grow_vertical = 0
 theme_override_constants/separation = 8
-
-[node name="HintLabel" type="Label" parent="HUD" unique_id=1343565622]
-anchors_preset = -1
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = -22.0
-offset_right = 600.0
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.35, 0.35, 0.35, 0.8)
-theme_override_font_sizes/font_size = 13
-text = "WASD: bewegen   Scroll/+−: zoom   RMB: ziehen"

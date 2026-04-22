@@ -7,7 +7,7 @@ extends Node2D
 @onready var wall_e: Node2D = $WallE
 
 # ── Konstanten ────────────────────────────────────────────────────────────────
-const LOBBY_SCENE := preload("res://scenes/ingame/rooms/Lobby.tscn")
+const LOBBY_SCENE := preload("res://scenes/ingame/rooms/lobby/Lobby.tscn")
 
 # ── Zustand ───────────────────────────────────────────────────────────────────
 var is_built:     bool   = false

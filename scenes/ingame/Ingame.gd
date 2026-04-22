@@ -54,6 +54,10 @@ var _ruf_indicator: ColorRect
 ## BottomBar-Referenzen – gebaut in _build_bottom_bar()
 var _bottom_panel:    PanelContainer  # ungenutzt im Fächer-Modus, bleibt für Kompatibilität
 var _fan_mode_btn:    Button          # Modus-Indikator in der Ecke
+var _build_menu:           CanvasLayer  # ANG-168 – Kreismenü Baumodus
+var _last_build_category:  String = "" # zuletzt gewählte Kategorie – beim nächsten Öffnen direkt aktiv
+
+const BUILD_MENU_SCENE := preload("res://scenes/ingame/build/BuildMenu.tscn")
 var _bottom_buttons: Array[Button] = []
 var _active_btn_idx: int = -1
 var _active_submenu: PanelContainer = null
@@ -656,6 +660,11 @@ func _on_bottom_button(idx: int) -> void:
 	if idx < _bb_btn_defs.size() and _bb_btn_defs[idx].get("locked", false):
 		return
 
+	# F2 Bauen → Kreismenü öffnen/schließen
+	if idx == 0:
+		_toggle_build_menu()
+		return
+
 	# Bestehendes Submenü schliessen
 	if _active_submenu != null:
 		_active_submenu.queue_free()
@@ -710,7 +719,35 @@ func _on_bottom_button(idx: int) -> void:
 	_active_submenu = panel
 
 
+func _toggle_build_menu() -> void:
+	if is_instance_valid(_build_menu):
+		_build_menu.queue_free()
+		_build_menu = null
+		_set_btn_active(-1)
+		return
+	_set_btn_active(0)
+	_build_menu = BUILD_MENU_SCENE.instantiate()
+	_build_menu.initial_category = _last_build_category
+	_build_menu.room_selected.connect(_on_build_room_selected)
+	_build_menu.category_changed.connect(func(cat: String) -> void: _last_build_category = cat)
+	_build_menu.tree_exited.connect(func() -> void:
+		_build_menu = null
+		_set_btn_active(-1)
+	)
+	get_tree().get_root().add_child(_build_menu)
+
+
+func _on_build_room_selected(room_type_id: String) -> void:
+	# TODO ANG-161 – Bau-Cursor aktivieren mit gewähltem Raumtyp
+	push_warning("BuildMenu: %s gewählt – Bau-Cursor folgt in ANG-161" % room_type_id)
+
+
 func _on_exit_pressed() -> void:
+	if is_instance_valid(_build_menu):
+		_build_menu.queue_free()
+		_build_menu = null
+		_set_btn_active(-1)
+		return
 	if _active_submenu != null:
 		_active_submenu.queue_free()
 		_active_submenu = null

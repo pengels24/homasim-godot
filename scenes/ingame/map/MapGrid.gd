@@ -90,6 +90,54 @@ func _is_built(x: int, y: int) -> bool:
 	return _grid[y][x].visible
 
 
+func world_to_grid(world_pos: Vector2) -> Vector2i:
+	var local := ($WorldRoot as Node2D).to_local(world_pos)
+	var gx := int((local.x - WALK_W * TILE_PX) / (PARCEL_SZ * TILE_PX))
+	var gy := int((local.y - WALK_W * TILE_PX) / (PARCEL_SZ * TILE_PX))
+	return Vector2i(gx, gy)
+
+
+func is_buildable(x: int, y: int) -> bool:
+	if x < 0 or x >= grid_cols or y < 0 or y >= grid_rows:
+		return false
+	return not _grid[y][x].visible
+
+
+func place_room(parcel_x: int, parcel_y: int, room_scene: PackedScene, hotel_id: int,
+		door_rot: int, door_off: int, tile_x: int, tile_y: int) -> void:
+	var parcel: Node2D = _grid[parcel_y][parcel_x]
+	var is_new := not parcel.visible
+	parcel.visible = true
+	parcel.spawn_room(room_scene, door_rot, door_off, tile_x, tile_y)
+	if is_new:
+		SaveManager.set_plot_built(hotel_id, parcel_x, parcel_y)
+		_configure_walls()
+
+
+func is_parcel_owned(x: int, y: int) -> bool:
+	if x < 0 or x >= grid_cols or y < 0 or y >= grid_rows:
+		return false
+	return _grid[y][x].visible
+
+
+func is_tile_free(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int, w: int, h: int) -> bool:
+	if not is_parcel_owned(parcel_x, parcel_y):
+		return false
+	return _grid[parcel_y][parcel_x].is_area_free(tile_x, tile_y, w, h)
+
+
+func get_first_owned_parcel() -> Vector2i:
+	for y: int in grid_rows:
+		for x: int in grid_cols:
+			if _grid[y][x].visible:
+				return Vector2i(x, y)
+	return Vector2i(0, 0)
+
+
+func get_world_root() -> Node2D:
+	return $WorldRoot
+
+
 # ── Kamera ────────────────────────────────────────────────────────────────────
 
 func _set_camera_limits() -> void:

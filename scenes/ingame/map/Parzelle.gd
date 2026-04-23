@@ -7,12 +7,19 @@ extends Node2D
 @onready var wall_e: Node2D = $WallE
 
 # ── Konstanten ────────────────────────────────────────────────────────────────
-const LOBBY_SCENE := preload("res://scenes/ingame/rooms/lobby/Lobby.tscn")
+const LOBBY_SCENE  := preload("res://scenes/ingame/rooms/lobby/Lobby.tscn")
+const PARCEL_TILES := 16
+const LOBBY_TILES  := 4
+const TILE_PX      := 16
+const ROOM_TILES   := 2   # alle Räume sind aktuell 2×2 Tiles (16px × 2 = 32px)
 
 # ── Zustand ───────────────────────────────────────────────────────────────────
 var is_built:     bool   = false
 var has_entrance: bool   = false
 var entrance_dir: String = ""
+
+var _occupied:      Array[Rect2i] = []   # belegte Tile-Bereiche innerhalb der Parzelle
+var _walls_marked:  bool         = false  # Randtiles einmalig belegen
 
 
 # ── Public API ────────────────────────────────────────────────────────────────
@@ -27,27 +34,48 @@ func configure(neighbors: Dictionary) -> void:
 func set_entrance(dir: String) -> void:
 	has_entrance = true
 	entrance_dir = dir
+	_ensure_walls_marked()
 	_spawn_lobby()
 
 
 func buy(hotel_id: int) -> void:
 	is_built = true
 	visible  = true
-	# grid_pos wird von MapGrid gesetzt bevor buy() möglich ist
 	SaveManager.set_plot_built(hotel_id, _grid_x(), _grid_y())
 
 
-# ── Intern ────────────────────────────────────────────────────────────────────
+func spawn_room(room_scene: PackedScene, door_rot: int, door_off: int, tile_x: int, tile_y: int) -> void:
+	_ensure_walls_marked()
+	var room: Node2D = room_scene.instantiate()
+	add_child(room)
+	room.configure({"door_rotation": door_rot, "door_offset": door_off})
+	room.position = Vector2(tile_x * TILE_PX, tile_y * TILE_PX)
+	mark_occupied(tile_x, tile_y, ROOM_TILES, ROOM_TILES)
 
-const PARCEL_TILES := 16
-const LOBBY_TILES  := 4
-const TILE_PX      := 16
+
+## Prüft ob der Tile-Bereich (tile_x, tile_y, w×h) vollständig frei ist.
+func is_area_free(tile_x: int, tile_y: int, w: int, h: int) -> bool:
+	var test := Rect2i(tile_x, tile_y, w, h)
+	for r: Rect2i in _occupied:
+		if r.intersects(test):
+			return false
+	return true
+
+
+func mark_occupied(tile_x: int, tile_y: int, w: int, h: int) -> void:
+	_occupied.append(Rect2i(tile_x, tile_y, w, h))
+
+
+# ── Intern ────────────────────────────────────────────────────────────────────
 
 func _spawn_lobby() -> void:
 	var lobby: Node2D = LOBBY_SCENE.instantiate()
 	add_child(lobby)
 	lobby.position = _lobby_position()
 	lobby.configure({ "entrance_dir": entrance_dir })
+	# Lobby-Tiles als belegt markieren
+	var lp := _lobby_position()
+	mark_occupied(int(lp.x) / TILE_PX, int(lp.y) / TILE_PX, LOBBY_TILES, LOBBY_TILES)
 
 
 func _lobby_position() -> Vector2:
@@ -61,8 +89,17 @@ func _lobby_position() -> Vector2:
 	return Vector2(center_offset, center_offset)
 
 
+func _ensure_walls_marked() -> void:
+	if _walls_marked:
+		return
+	_walls_marked = true
+	mark_occupied(0,                  0,  PARCEL_TILES, 1)  # oben
+	mark_occupied(0,  PARCEL_TILES - 1,  PARCEL_TILES, 1)  # unten
+	mark_occupied(0,                  0,  1, PARCEL_TILES)  # links
+	mark_occupied(PARCEL_TILES - 1,   0,  1, PARCEL_TILES)  # rechts
+
+
 func _grid_x() -> int:
-	# Name ist "P_x_y" – x aus dem Namen lesen
 	return name.get_slice("_", 1).to_int()
 
 

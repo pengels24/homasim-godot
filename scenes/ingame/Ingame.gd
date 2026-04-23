@@ -56,6 +56,7 @@ var _bottom_panel:    PanelContainer  # ungenutzt im Fächer-Modus, bleibt für 
 var _fan_mode_btn:    Button          # Modus-Indikator in der Ecke
 var _build_menu:           CanvasLayer  # ANG-168 – Kreismenü Baumodus
 var _last_build_category:  String = "" # zuletzt gewählte Kategorie – beim nächsten Öffnen direkt aktiv
+var _build_cursor:         Node2D      # ANG-161 – Bau-Cursor
 
 const BUILD_MENU_SCENE := preload("res://scenes/ingame/build/BuildMenu.tscn")
 var _bottom_buttons: Array[Button] = []
@@ -738,8 +739,37 @@ func _toggle_build_menu() -> void:
 
 
 func _on_build_room_selected(room_type_id: String) -> void:
-	# TODO ANG-161 – Bau-Cursor aktivieren mit gewähltem Raumtyp
-	push_warning("BuildMenu: %s gewählt – Bau-Cursor folgt in ANG-161" % room_type_id)
+	if is_instance_valid(_build_cursor):
+		_build_cursor.queue_free()
+	var cursor := Node2D.new()
+	cursor.set_script(load("res://scenes/ingame/build/BuildCursor.gd"))
+	map_grid.get_world_root().add_child(cursor)
+	cursor.room_placed.connect(func(px: int, py: int, tx: int, ty: int, dr: int, doff: int) -> void:
+		_on_room_placed(room_type_id, px, py, tx, ty, dr, doff)
+	)
+	cursor.cancelled.connect(_on_build_cursor_done)
+	cursor.tree_exited.connect(func() -> void:
+		_build_cursor      = null
+		context_bar.visible = false
+	)
+	_build_cursor       = cursor
+	context_bar.visible = true
+	cursor.activate(map_grid, room_type_id)
+
+
+func _on_room_placed(room_type_id: String, px: int, py: int, tx: int, ty: int, dr: int, doff: int) -> void:
+	const SCENE_PATHS: Dictionary = {
+		"bed_standard": "res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn",
+	}
+	var path: String = SCENE_PATHS.get(room_type_id, "")
+	if path == "":
+		return
+	map_grid.place_room(px, py, load(path), _hotel.get("id", -1), dr, doff, tx, ty)
+
+
+func _on_build_cursor_done() -> void:
+	_build_cursor       = null
+	context_bar.visible = false
 
 
 func _on_exit_pressed() -> void:

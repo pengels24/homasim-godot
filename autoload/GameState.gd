@@ -11,6 +11,7 @@ var current_user:     Dictionary = {}
 var current_manager:  Dictionary = {}
 var selected_hotel:   Dictionary = {}   # Legacy – PHP-API, wird schrittweise ersetzt
 var active_hotel_id:  int        = -1   # SaveManager-Hotel-ID; -1 = kein Hotel gewählt
+var snap_to_grid:     bool       = true  # Tile-Snap im Baumodus (Settings-Toggle)
 
 
 func is_logged_in() -> bool:

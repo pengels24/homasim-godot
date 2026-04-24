@@ -33,6 +33,7 @@ Linear-Projekt: **Angelus2010 / ANG-** für alle Issues.
 - Sprechende Funktionsnamen; lange Funktionen in benannte Sub-Funktionen aufteilen
 - Keine Magic Numbers – alle Werte in benannten Konstanten
 - **Godot 4 Best Practices**: statische Typisierung überall, Ressourcen in `.tscn` definieren (nicht im Code bauen), `_ready()` nur für Node-Setup
+- **UI immer in .tscn** – keine `Node.new()`-UI-Bauten in Scripts; Scripts befüllen nur Daten und verbinden Signale. So bleibt die UI im Godot-Editor bearbeitbar.
 - Kommentare erklären das *Warum*, nicht das *Was*
 - Keine Fehlerbehandlung für unmögliche Szenarien
 - Keine ungenutzten Parameter ohne `_`-Prefix

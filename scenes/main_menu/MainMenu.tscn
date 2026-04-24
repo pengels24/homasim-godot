@@ -1,6 +1,7 @@
-[gd_scene load_steps=17 format=3 uid="uid://b3x1qmainmenu"]
+[gd_scene load_steps=18 format=3 uid="uid://b3x1qmainmenu"]
 
 [ext_resource type="Script" path="res://scenes/main_menu/MainMenu.gd" id="1_mainmenu"]
+[ext_resource type="PackedScene" uid="uid://c1managersel" path="res://scenes/manager_select/ManagerSelect.tscn" id="2_mgsel"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gold"]
 bg_color = Color(0.918, 0.702, 0.031, 1)
@@ -409,3 +410,5 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_link")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_link")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_link")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_link")
+
+[node name="ManagerModal" parent="." instance=ExtResource("2_mgsel")]

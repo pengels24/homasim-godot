@@ -33,6 +33,7 @@ const FADE_DURATION  := 1.2
 @onready var btn_manager:       Button    = $Content/Buttons/BtnManager
 @onready var btn_tutorial:      Button    = $Content/Buttons/BtnTutorial
 @onready var btn_credits:       Button    = $Content/Buttons/BtnCredits
+@onready var _manager_modal:    Control   = $ManagerModal
 
 var _current_bg := 0
 var _slide_timer := 0.0
@@ -47,6 +48,7 @@ func _ready() -> void:
 	btn_settings.pressed.connect(_on_settings_pressed)
 	btn_manager.pressed.connect(_on_manager_pressed)
 	btn_tutorial.pressed.connect(_on_tutorial_pressed)
+	_manager_modal.closed.connect(_on_manager_modal_closed)
 	btn_credits.pressed.connect(_on_credits_pressed)
 	btn_quit.pressed.connect(get_tree().quit)
 
@@ -79,10 +81,12 @@ func _load_assets() -> void:
 
 	title_label.text = GameState.T("home.hero.title")
 	subtitle.text    = GameState.T("home.hero.subtitle")
-	btn_settings.text = GameState.T("menu.btn.settings")
-	btn_play.text     = GameState.T("menu.btn.play")
-	btn_quit.text     = GameState.T("menu.btn.quit")
-	login_button.text = GameState.T("login.btn.submit")
+	btn_settings.text  = GameState.T("menu.btn.settings")
+	btn_play.text      = GameState.T("menu.btn.play")
+	btn_quit.text      = GameState.T("menu.btn.quit")
+	login_button.text  = GameState.T("login.btn.submit")
+	btn_login.text     = GameState.T("menu.btn.account_bind")
+	btn_login.disabled = true
 
 
 func _setup_modal() -> void:
@@ -114,7 +118,7 @@ func _next_slide() -> void:
 func _on_login_pressed() -> void:
 	if GameState.is_logged_in():
 		GameState.logout()
-		_update_login_state()
+		_update_manager_state()
 	else:
 		_open_modal()
 
@@ -165,7 +169,14 @@ func _on_settings_pressed() -> void:
 
 
 func _on_manager_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/manager_select/ManagerSelect.tscn")
+	btn_quit.visible = false
+	_manager_modal.open()
+
+
+func _on_manager_modal_closed() -> void:
+	_manager_modal.visible = false
+	btn_quit.visible = true
+	_update_manager_state()
 
 
 func _on_tutorial_pressed() -> void:

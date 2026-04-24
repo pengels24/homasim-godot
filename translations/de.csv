@@ -400,6 +400,7 @@ keys,de,en
 "log.reputation.checkin","Check-In",""
 "log.reputation.checkout","Check-Out",""
 "menu.btn.login_register","Login / Register",""
+"menu.btn.account_bind","Kontobindung",""
 "menu.btn.play","Spiel starten",""
 "menu.btn.quit","Beenden",""
 "menu.btn.settings","Einstellungen",""

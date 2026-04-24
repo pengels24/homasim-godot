@@ -216,7 +216,6 @@ func _make_social_btn(social: Dictionary, size: int) -> Button:
 	if icon_path != "" and ResourceLoader.exists(icon_path):
 		btn.text = ""
 		var cc := CenterContainer.new()
-		cc.layout_mode = 1
 		cc.set_anchor(SIDE_RIGHT, 1)
 		cc.set_anchor(SIDE_BOTTOM, 1)
 		cc.mouse_filter = Control.MOUSE_FILTER_IGNORE

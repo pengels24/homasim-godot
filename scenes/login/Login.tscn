@@ -81,26 +81,22 @@ content_margin_top = 12.0
 content_margin_bottom = 12.0
 
 [node name="Login" type="Control"]
-layout_mode = 0
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
 script = ExtResource("1_loginscr")
 
 [node name="Bg" type="TextureRect" parent="."]
-layout_mode = 0
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
 expand_mode = 1
 stretch_mode = 6
 
 [node name="Overlay" type="ColorRect" parent="."]
-layout_mode = 0
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
 color = Color(0, 0, 0, 0.55)
 
 [node name="Card" type="PanelContainer" parent="."]
-layout_mode = 0
 position = Vector2(710, 190)
 size = Vector2(500, 0)
 theme_override_styles/panel = SubResource("StyleBoxFlat_card")

@@ -140,19 +140,16 @@ content_margin_top = 20.0
 content_margin_bottom = 20.0
 
 [node name="Dashboard" type="Control"]
-layout_mode = 0
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
 script = ExtResource("1_dashboard")
 
 [node name="Bg" type="ColorRect" parent="."]
-layout_mode = 0
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
 color = Color(0.08, 0.08, 0.10, 1)
 
 [node name="MainArea" type="HBoxContainer" parent="."]
-layout_mode = 0
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
 
@@ -247,14 +244,12 @@ size_flags_horizontal = 3
 theme_override_constants/separation = 16
 
 [node name="NewHotelOverlay" type="ColorRect" parent="."]
-layout_mode = 0
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
 color = Color(0, 0, 0, 0.6)
 visible = false
 
 [node name="NewHotelPanel" type="PanelContainer" parent="NewHotelOverlay"]
-layout_mode = 0
 position = Vector2(660, 120)
 size = Vector2(600, 0)
 theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")

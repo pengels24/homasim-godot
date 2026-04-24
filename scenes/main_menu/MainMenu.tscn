@@ -159,25 +159,21 @@ content_margin_top = 16.0
 content_margin_bottom = 16.0
 
 [node name="MainMenu" type="Control"]
-layout_mode = 0
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
 script = ExtResource("1_mainmenu")
 
 [node name="BgSlideshow" type="Control" parent="."]
-layout_mode = 0
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
 
 [node name="Bg1" type="TextureRect" parent="BgSlideshow"]
-layout_mode = 0
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
 expand_mode = 1
 stretch_mode = 6
 
 [node name="Bg2" type="TextureRect" parent="BgSlideshow"]
-layout_mode = 0
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
 expand_mode = 1
@@ -185,7 +181,6 @@ stretch_mode = 6
 modulate = Color(1, 1, 1, 0)
 
 [node name="Bg3" type="TextureRect" parent="BgSlideshow"]
-layout_mode = 0
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
 expand_mode = 1
@@ -193,13 +188,11 @@ stretch_mode = 6
 modulate = Color(1, 1, 1, 0)
 
 [node name="Overlay" type="ColorRect" parent="."]
-layout_mode = 0
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
 color = Color(0, 0, 0, 0.35)
 
 [node name="Content" type="VBoxContainer" parent="."]
-layout_mode = 0
 position = Vector2(560, 80)
 size = Vector2(800, 0)
 theme_override_constants/separation = 40
@@ -326,7 +319,6 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
 
 [node name="LoginModal" type="ColorRect" parent="."]
-layout_mode = 0
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
 color = Color(0, 0, 0, 0.65)
@@ -334,7 +326,6 @@ visible = false
 mouse_filter = 0
 
 [node name="Center" type="CenterContainer" parent="LoginModal"]
-layout_mode = 0
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
 

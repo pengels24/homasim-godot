@@ -90,11 +90,11 @@ func _spawn_lobby() -> void:
 	lobby.configure({ "entrance_dir": entrance_dir })
 	# Lobby-Tiles als belegt markieren
 	var lp := _lobby_position()
-	mark_occupied(int(lp.x) / TILE_PX, int(lp.y) / TILE_PX, LOBBY_TILES, LOBBY_TILES)
+	mark_occupied(int(lp.x / TILE_PX), int(lp.y / TILE_PX), LOBBY_TILES, LOBBY_TILES)
 
 
 func _lobby_position() -> Vector2:
-	var center_offset: int = (PARCEL_TILES - LOBBY_TILES) / 2 * TILE_PX  # 96px
+	var center_offset: int = int((PARCEL_TILES - LOBBY_TILES) / 2.0) * TILE_PX  # 96px
 	var inset: int = TILE_PX  # 1 Tile Abstand zur Parzellen-Außenmauer
 	match entrance_dir:
 		"top":    return Vector2(center_offset, inset)

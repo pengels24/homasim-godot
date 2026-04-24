@@ -104,7 +104,6 @@ func _build_menu() -> void:
 	# Ring 2 wird dynamisch befüllt; Container schon jetzt anlegen
 	_ring2_container = Control.new()
 	_ring2_container.visible  = false
-	_ring2_container.layout_mode = 0
 	_ring2_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_root.add_child(_ring2_container)
 
@@ -135,7 +134,6 @@ func _add_background() -> void:
 		var panel := Panel.new()
 		panel.add_theme_stylebox_override("panel", sb)
 		panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		panel.layout_mode  = 0
 		panel.size         = Vector2(rad * 2.0, rad * 2.0)
 		panel.position     = Vector2(-rad, -rad)
 		_root.add_child(panel)
@@ -158,7 +156,6 @@ func _add_separator_rings() -> void:
 		var ring := Panel.new()
 		ring.add_theme_stylebox_override("panel", sb)
 		ring.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		ring.layout_mode  = 0
 		ring.size         = Vector2(sep_r * 2.0, sep_r * 2.0)
 		ring.position     = Vector2(-sep_r, -sep_r)
 		_root.add_child(ring)
@@ -186,7 +183,6 @@ func _add_center_button() -> void:
 	btn.custom_minimum_size = Vector2(CM_CENTER_SIZE, CM_CENTER_SIZE)
 	btn.focus_mode          = Control.FOCUS_NONE
 	btn.disabled            = true
-	btn.layout_mode         = 0
 	btn.position            = Vector2(-half, -half)
 	for state in ["normal", "hover", "pressed", "disabled"]:
 		btn.add_theme_stylebox_override(state, sb)
@@ -198,7 +194,6 @@ func _add_center_button() -> void:
 		tex.texture      = load(icon_path)
 		tex.expand_mode  = TextureRect.EXPAND_IGNORE_SIZE
 		tex.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		tex.layout_mode  = 0
 		tex.size         = Vector2(28, 28)
 		tex.position     = Vector2((CM_CENTER_SIZE - 28) * 0.5, (CM_CENTER_SIZE - 28) * 0.5)
 		tex.modulate     = Color(0.918, 0.702, 0.031, 1)
@@ -214,7 +209,6 @@ func _add_ring1_buttons() -> void:
 		var center    := Vector2(cos(angle_rad) * CM_RING1_R, sin(angle_rad) * CM_RING1_R)
 		var btn       := _make_icon_btn(cat["icon"], cat["label"], false)
 		btn.tooltip_text = cat["label"]
-		btn.layout_mode  = 0
 		btn.position     = center - Vector2(CM_BTN_SIZE, CM_BTN_SIZE) * 0.5
 		btn.pressed.connect(func() -> void: _on_category_pressed(cat["id"]))
 		_root.add_child(btn)
@@ -265,7 +259,6 @@ func _build_ring2(cat_id: String) -> void:
 		var angle_rad := deg_to_rad(-90.0 + i * angle_step)
 		var center    := Vector2(cos(angle_rad) * CM_RING2_R, sin(angle_rad) * CM_RING2_R)
 		var btn       := _make_item_btn(item)
-		btn.layout_mode = 0
 		btn.position    = center - Vector2(CM_BTN_SIZE, CM_BTN_SIZE) * 0.5
 		_ring2_container.add_child(btn)
 
@@ -306,7 +299,6 @@ func _make_icon_btn(icon_path: String, fallback_label: String, locked: bool) -> 
 		tex.texture      = load(icon_path)
 		tex.expand_mode  = TextureRect.EXPAND_IGNORE_SIZE
 		tex.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		tex.layout_mode  = 0
 		tex.size         = Vector2(ICON_D, ICON_D)
 		tex.position     = Vector2(ICON_OFF, ICON_OFF)
 		tex.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -317,7 +309,6 @@ func _make_icon_btn(icon_path: String, fallback_label: String, locked: bool) -> 
 		lbl.text                 = fallback_label
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
-		lbl.layout_mode          = 0
 		lbl.size                 = Vector2(CM_BTN_SIZE, CM_BTN_SIZE)
 		lbl.position             = Vector2.ZERO
 		lbl.add_theme_font_size_override("font_size", 11)
@@ -330,7 +321,6 @@ func _make_icon_btn(icon_path: String, fallback_label: String, locked: bool) -> 
 		icon_node.modulate = Color(1, 1, 1, 0.35)
 		var lock_lbl := Label.new()
 		lock_lbl.text                = "🔒"
-		lock_lbl.layout_mode         = 1
 		lock_lbl.anchor_right        = 1.0
 		lock_lbl.anchor_bottom       = 1.0
 		lock_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

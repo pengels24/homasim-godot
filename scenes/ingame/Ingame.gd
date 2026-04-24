@@ -52,7 +52,6 @@ var _hotel: Dictionary = {}   # aktives Hotel aus SaveManager
 var _ruf_indicator: ColorRect
 
 ## BottomBar-Referenzen – gebaut in _build_bottom_bar()
-var _bottom_panel:    PanelContainer  # ungenutzt im Fächer-Modus, bleibt für Kompatibilität
 var _fan_mode_btn:    Button          # Modus-Indikator in der Ecke
 var _build_menu:           CanvasLayer  # ANG-168 – Kreismenü Baumodus
 var _last_build_category:  String = "" # zuletzt gewählte Kategorie – beim nächsten Öffnen direkt aktiv
@@ -132,7 +131,7 @@ func _setup_hud() -> void:
 	stat_exp_lbl.text       = "0 / 100"
 	stat_fp_val.text        = "0"
 	var game_time_min: int = int(_hotel.get("game_time", 600))
-	_game_hour   = game_time_min / 60
+	_game_hour   = int(game_time_min / 60.0)
 	_game_minute = game_time_min % 60
 	_update_time_label()
 	_update_ruf_display(500)
@@ -256,7 +255,6 @@ func _build_bottom_bar() -> void:
 	var fan_bg := Panel.new()
 	fan_bg.add_theme_stylebox_override("panel", sb_bg)
 	fan_bg.mouse_filter  = Control.MOUSE_FILTER_IGNORE
-	fan_bg.layout_mode   = 1
 	fan_bg.anchor_right  = 1.0
 	fan_bg.anchor_bottom = 1.0
 	bottom_anchor.add_child(fan_bg)
@@ -268,7 +266,6 @@ func _build_bottom_bar() -> void:
 	var gloss := Panel.new()
 	gloss.add_theme_stylebox_override("panel", sb_gloss)
 	gloss.mouse_filter  = Control.MOUSE_FILTER_IGNORE
-	gloss.layout_mode   = 1
 	gloss.anchor_right  = 1.0
 	gloss.anchor_bottom = 1.0
 	bottom_anchor.add_child(gloss)
@@ -284,7 +281,6 @@ func _build_bottom_bar() -> void:
 		var ring_sep := Panel.new()
 		ring_sep.add_theme_stylebox_override("panel", sb_sep)
 		ring_sep.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		ring_sep.layout_mode  = 0
 		ring_sep.size         = Vector2(sep_r, sep_r)
 		ring_sep.position     = Vector2(0.0, BB_FAN_SIZE - sep_r)
 		bottom_anchor.add_child(ring_sep)
@@ -300,14 +296,12 @@ func _build_bottom_bar() -> void:
 		var angle_rad  := deg_to_rad(lerp(BB_ANGLE_MIN, BB_ANGLE_MAX, t))
 		var center     := origin + Vector2(cos(angle_rad) * radius, -sin(angle_rad) * radius)
 		var btn        := _make_fan_btn(i)
-		btn.layout_mode = 0
 		btn.position    = center - Vector2(BB_BTN_SIZE, BB_BTN_SIZE) * 0.5
 		bottom_anchor.add_child(btn)
 		_bottom_buttons.append(btn)
 
 	# Modus-Indikator: goldener Kreis in der Ecke zeigt aktiven Modus
 	_fan_mode_btn             = _make_mode_indicator()
-	_fan_mode_btn.layout_mode = 0
 	_fan_mode_btn.position    = Vector2(5.0, BB_FAN_SIZE - 52.0)
 	bottom_anchor.add_child(_fan_mode_btn)
 
@@ -377,7 +371,6 @@ func _make_fan_btn(idx: int) -> Button:
 		tex.texture             = load(icon_path)
 		tex.expand_mode         = TextureRect.EXPAND_IGNORE_SIZE
 		tex.stretch_mode        = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		tex.layout_mode         = 0
 		tex.size                = Vector2(ICON_D, ICON_D)
 		tex.position            = Vector2(ICON_OFF, ICON_OFF)
 		tex.mouse_filter        = Control.MOUSE_FILTER_IGNORE
@@ -390,7 +383,6 @@ func _make_fan_btn(idx: int) -> Button:
 		lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 		lbl.add_theme_font_size_override("font_size", 14)
 		lbl.add_theme_color_override("font_color", Color(0.85, 0.85, 0.85, 1))
-		lbl.layout_mode  = 0
 		lbl.size         = Vector2(BB_BTN_SIZE, BB_BTN_SIZE)
 		lbl.position     = Vector2(0, 0)
 		lbl.mouse_filter  = Control.MOUSE_FILTER_IGNORE
@@ -409,7 +401,6 @@ func _make_fan_btn(idx: int) -> Button:
 		var dot := Panel.new()
 		dot.add_theme_stylebox_override("panel", dot_sb)
 		dot.custom_minimum_size = Vector2(8, 8)
-		dot.layout_mode  = 1
 		dot.anchor_left   = 1.0
 		dot.anchor_right  = 1.0
 		dot.offset_left   = -12.0
@@ -425,7 +416,6 @@ func _make_fan_btn(idx: int) -> Button:
 		icon_node.modulate    = Color(1, 1, 1, 0.35)
 		var lock_lbl          := Label.new()
 		lock_lbl.text                = "🔒"
-		lock_lbl.layout_mode         = 1
 		lock_lbl.anchor_right        = 1.0
 		lock_lbl.anchor_bottom       = 1.0
 		lock_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -471,7 +461,6 @@ func _make_mode_indicator() -> Button:
 	lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
 	lbl.add_theme_font_size_override("font_size", 14)
 	lbl.add_theme_color_override("font_color", Color(0.918, 0.702, 0.031, 0.75))
-	lbl.layout_mode  = 1
 	lbl.anchor_right  = 1.0
 	lbl.anchor_bottom = 1.0
 	lbl.mouse_filter  = Control.MOUSE_FILTER_IGNORE
@@ -569,7 +558,7 @@ func _tick_game_clock(delta: float) -> void:
 	_time_accum -= minutes_passed * SECONDS_PER_GAME_MINUTE
 	_game_minute += minutes_passed
 	if _game_minute >= 60:
-		_game_hour  += _game_minute / 60
+		_game_hour  += int(_game_minute / 60.0)
 		_game_minute  = _game_minute % 60
 	# Tagesende bei Minute 1440 (= 24:00)
 	if _game_hour >= 24:

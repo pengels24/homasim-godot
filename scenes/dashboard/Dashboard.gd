@@ -63,61 +63,23 @@ func _ready() -> void:
 	title_label.text = GameState.T("dashboard.title")
 	btn_new_hotel.text = GameState.T("dashboard.btn.new_hotel")
 	btn_main_menu.text = GameState.T("menu.btn.main_menu")
-	# Manager-Daten sicherstellen bevor das Panel aufgebaut wird –
-	# beim Frischlogin enthält die Login-Response ggf. kein manager-Objekt.
-	if GameState.has_manager():
-		_setup_manager_panel()
-	else:
-		SessionManager.check_session(func(_ok: bool): _setup_manager_panel())
+	_setup_manager_panel()
 	_load_hotels()
 
 
 func _setup_manager_panel() -> void:
-	var m := GameState.current_manager
-	if m.is_empty():
-		return
-
-	var skin:   String = m.get("appearance_skin",   "hell")
-	var hair:   String = m.get("appearance_hair",   "braun")
-	var outfit: String = m.get("appearance_outfit", "anzug_schwarz")
-	var gender: String = m.get("gender", "m")
-	var name_text: String = m.get("name", "")
-
-	manager_name_lbl.text = name_text
+	manager_name_lbl.text = GameState.active_profile.get("name", "Manager")
 	manager_role_lbl.text = "MANAGER · LEVEL 1"
-
-	if is_instance_valid(character_display) and character_display.has_method("update_appearance"):
-		character_display.update_appearance(
-			gender,
-			SKIN_COLORS.get(skin,   Color(0.95, 0.82, 0.70)),
-			HAIR_COLORS.get(hair,   Color(0.45, 0.30, 0.15)),
-			OUTFIT_COLORS.get(outfit, Color(0.12, 0.12, 0.16))
-		)
 
 
 func _load_hotels() -> void:
-	status_label.text = GameState.T("hotel_select.status.loading")
 	for child in hotel_container.get_children():
 		child.queue_free()
-	Api.get_json("/api/hotels", _on_hotels_loaded)
-
-
-func _on_hotels_loaded(success: bool, data: Dictionary) -> void:
-	if not success:
-		status_label.text = GameState.T("api.error.network")
-		return
-
-	var hotels_raw: Variant = data.get("hotels", data.get("data", []))
-	_hotels = hotels_raw if hotels_raw is Array else []
+	_hotels = SaveManager.get_hotels(GameState.active_profile_id)
 	hotel_count_lbl.text = "%d Hotel%s" % [_hotels.size(), "s" if _hotels.size() != 1 else ""]
-
-	for child in hotel_container.get_children():
-		child.queue_free()
-
 	if _hotels.is_empty():
 		status_label.text = GameState.T("dashboard.status.no_hotels")
 		return
-
 	status_label.text = ""
 	for i in _hotels.size():
 		hotel_container.add_child(_create_hotel_card(_hotels[i], i))
@@ -340,39 +302,29 @@ func _on_create_confirmed() -> void:
 	if hotel_name.is_empty():
 		dialog_error.text = GameState.T("dashboard.new_hotel.error.name_empty")
 		return
-	btn_create.disabled = true
-	Api.post_json("/api/hotels", {
-		"name": hotel_name,
-		"start_plot_x": _selected_plot_x,
-		"start_plot_y": _selected_plot_y
-	}, _on_hotel_created)
-
-
-func _on_hotel_created(success: bool, data: Dictionary) -> void:
-	btn_create.disabled = false
-	if not success or not data.get("success", false):
-		dialog_error.text = data.get("message", GameState.T("api.error.network"))
-		return
+	var hotel_id: int   = SaveManager.create_hotel(GameState.active_profile_id, hotel_name)
+	var enter_dir: String = _derive_entrance_dir(_selected_plot_x, _selected_plot_y)
+	SaveManager.set_plot_built(hotel_id, _selected_plot_x, _selected_plot_y, enter_dir)
 	_close_new_hotel_dialog()
 	_load_hotels()
 
 
-func _delete_hotel(hotel_id: int, btn: Button) -> void:
-	btn.disabled = true
-	Api.post_json("/api/hotel/delete", {"hotel_id": hotel_id}, _on_hotel_deleted)
+func _derive_entrance_dir(px: int, py: int) -> String:
+	if py == 0: return "top"
+	if py == 4: return "bottom"
+	if px == 0: return "left"
+	return "right"
 
 
-func _on_hotel_deleted(success: bool, data: Dictionary) -> void:
-	if not success or not data.get("success", false):
-		status_label.text = data.get("message", GameState.T("api.error.network"))
-		return
+func _delete_hotel(hotel_id: int, _btn: Button) -> void:
+	SaveManager.delete_hotel(hotel_id)
 	_load_hotels()
 
 
 func _start_hotel(index: int) -> void:
 	if index >= _hotels.size():
 		return
-	GameState.select_hotel(_hotels[index])
+	GameState.active_hotel_id = _hotels[index].get("id", -1)
 	get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
 
 

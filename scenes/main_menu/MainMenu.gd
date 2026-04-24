@@ -30,7 +30,7 @@ const FADE_DURATION  := 1.2
 @onready var remember_checkbox:  CheckBox  = $LoginModal/Center/Card/VBox/RememberCheck
 @onready var btn_close_modal:    Button    = $LoginModal/Center/Card/VBox/BtnClose
 @onready var btn_to_register:   Button    = $LoginModal/Center/Card/VBox/BtnToRegister
-@onready var btn_character:     Button    = $Content/Buttons/BtnCharacter
+@onready var btn_manager:       Button    = $Content/Buttons/BtnManager
 @onready var btn_tutorial:      Button    = $Content/Buttons/BtnTutorial
 @onready var btn_credits:       Button    = $Content/Buttons/BtnCredits
 
@@ -41,16 +41,11 @@ var _slide_timer := 0.0
 func _ready() -> void:
 	_load_assets()
 	_setup_modal()
-	SessionManager.check_session(func(logged_in: bool):
-		if logged_in and not GameState.has_manager():
-			get_tree().change_scene_to_file("res://scenes/character/CharacterEdit.tscn")
-			return
-		_update_login_state()
-	)
+	_update_manager_state()
 	btn_login.pressed.connect(_on_login_pressed)
 	btn_play.pressed.connect(_on_play_pressed)
 	btn_settings.pressed.connect(_on_settings_pressed)
-	btn_character.pressed.connect(_on_character_pressed)
+	btn_manager.pressed.connect(_on_manager_pressed)
 	btn_tutorial.pressed.connect(_on_tutorial_pressed)
 	btn_credits.pressed.connect(_on_credits_pressed)
 	btn_quit.pressed.connect(get_tree().quit)
@@ -77,7 +72,7 @@ func _load_assets() -> void:
 	var font_inter  := load("res://assets/fonts/Inter_18pt-Regular.ttf") as FontFile
 	if font_outfit:
 		title_label.add_theme_font_override("font", font_outfit)
-		for btn in [btn_login, btn_settings, btn_play, btn_quit, btn_tutorial, btn_character, btn_credits, login_button]:
+		for btn in [btn_login, btn_settings, btn_play, btn_quit, btn_tutorial, btn_manager, btn_credits, login_button]:
 			btn.add_theme_font_override("font", font_outfit)
 	if font_inter:
 		subtitle.add_theme_font_override("font", font_inter)
@@ -100,15 +95,12 @@ func _setup_modal() -> void:
 	remember_checkbox.button_pressed = SessionManager.saved_username != ""
 
 
-func _update_login_state() -> void:
-	if GameState.is_logged_in():
-		btn_login.text = GameState.T("menu.btn.logout")
-		btn_play.disabled = false
-		btn_character.visible = true
+func _update_manager_state() -> void:
+	btn_play.disabled = GameState.active_profile_id < 0
+	if GameState.active_profile_id >= 0:
+		btn_manager.text = GameState.active_profile.get("name", GameState.T("menu.btn.manager"))
 	else:
-		btn_login.text = GameState.T("menu.btn.login_register")
-		btn_play.disabled = true
-		btn_character.visible = false
+		btn_manager.text = GameState.T("menu.btn.manager")
 
 
 func _next_slide() -> void:
@@ -162,7 +154,6 @@ func _on_login_response(success: bool, data: Dictionary) -> void:
 		SessionManager.save_username(username_field.text.strip_edges())
 	GameState.login(data)
 	_close_modal()
-	_update_login_state()
 
 
 func _on_play_pressed() -> void:
@@ -173,8 +164,8 @@ func _on_settings_pressed() -> void:
 	pass # TODO: Settings-Szene
 
 
-func _on_character_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/character/CharacterEdit.tscn")
+func _on_manager_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/manager_select/ManagerSelect.tscn")
 
 
 func _on_tutorial_pressed() -> void:

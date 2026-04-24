@@ -20,6 +20,9 @@ var _game_paused: bool  = true
 var _game_speed:  float = 1.0
 var _time_accum:  float = 0.0
 
+var _sb_normal: StyleBoxFlat
+var _sb_active: StyleBoxFlat
+
 
 func configure(hotel: Dictionary, time_lbl: Label,
 		btn_pause: Button, btn_play: Button, btn_ff: Button) -> void:
@@ -28,6 +31,10 @@ func configure(hotel: Dictionary, time_lbl: Label,
 	_btn_pause = btn_pause
 	_btn_play  = btn_play
 	_btn_ff    = btn_ff
+	_sb_normal = _make_ctrl_sb(Color(0.06, 0.10, 0.18, 0.90), Color(0.20, 0.24, 0.35, 0.55))
+	_sb_active = _make_ctrl_sb(Color(0.22, 0.16, 0.02, 1.0),  Color(0.918, 0.702, 0.031, 1.0))
+	for btn: Button in [btn_pause, btn_play, btn_ff]:
+		btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 	var game_time_min: int = int(hotel.get("game_time", 600))
 	_game_hour   = int(game_time_min / 60.0)
 	_game_minute = game_time_min % 60
@@ -63,8 +70,11 @@ func _tick_game_clock(delta: float) -> void:
 		_game_hour  += int(_game_minute / 60.0)
 		_game_minute  = _game_minute % 60
 	if _game_hour >= 24:
-		_game_hour   = 0
+		_game_hour   = 6
 		_game_minute = 0
+		_game_paused = true
+		_game_speed  = 1.0
+		_update_speed_buttons()
 		_on_day_end()
 	_update_time_label()
 
@@ -105,6 +115,34 @@ func _on_ff_pressed() -> void:
 func _update_speed_buttons() -> void:
 	var gold   := Color(0.918, 0.702, 0.031, 1)
 	var normal := Color(0.65,  0.65,  0.65,  1)
-	_btn_pause.add_theme_color_override("font_color", gold   if _game_paused                            else normal)
-	_btn_play.add_theme_color_override( "font_color", gold   if not _game_paused and _game_speed == 1.0 else normal)
-	_btn_ff.add_theme_color_override(   "font_color", gold   if _game_speed == 10.0                     else normal)
+	_apply_ctrl_btn(_btn_pause, _game_paused)
+	_apply_ctrl_btn(_btn_play,  not _game_paused and _game_speed == 1.0)
+	_apply_ctrl_btn(_btn_ff,    _game_speed == 10.0)
+	_btn_pause.add_theme_color_override("font_color", gold if _game_paused                           else normal)
+	_btn_play.add_theme_color_override( "font_color", gold if not _game_paused and _game_speed == 1.0 else normal)
+	_btn_ff.add_theme_color_override(   "font_color", gold if _game_speed == 10.0                     else normal)
+
+
+func _apply_ctrl_btn(btn: Button, active: bool) -> void:
+	var sb := _sb_active if active else _sb_normal
+	btn.add_theme_stylebox_override("normal",  sb)
+	btn.add_theme_stylebox_override("hover",   sb)
+	btn.add_theme_stylebox_override("pressed", _sb_active)
+
+
+func _make_ctrl_sb(bg: Color, border: Color) -> StyleBoxFlat:
+	var sb := StyleBoxFlat.new()
+	sb.bg_color                   = bg
+	sb.border_width_left          = 1
+	sb.border_width_right         = 1
+	sb.border_width_top           = 1
+	sb.border_width_bottom        = 1
+	sb.border_color               = border
+	sb.corner_radius_top_left     = 6
+	sb.corner_radius_top_right    = 6
+	sb.corner_radius_bottom_left  = 6
+	sb.corner_radius_bottom_right = 6
+	sb.shadow_color               = Color(0, 0, 0, 0.4)
+	sb.shadow_size                = 3
+	sb.shadow_offset              = Vector2(0, 1)
+	return sb

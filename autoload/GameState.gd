@@ -7,11 +7,13 @@ signal hotel_selected(hotel_data: Dictionary)
 signal user_logged_in(user_data: Dictionary)
 signal user_logged_out()
 
-var current_user:     Dictionary = {}
-var current_manager:  Dictionary = {}
-var selected_hotel:   Dictionary = {}   # Legacy – PHP-API, wird schrittweise ersetzt
-var active_hotel_id:  int        = -1   # SaveManager-Hotel-ID; -1 = kein Hotel gewählt
-var snap_to_grid:     bool       = true  # Tile-Snap im Baumodus (Settings-Toggle)
+var current_user:      Dictionary = {}
+var current_manager:   Dictionary = {}
+var selected_hotel:    Dictionary = {}   # Legacy – PHP-API, wird schrittweise ersetzt
+var active_hotel_id:   int        = -1   # SaveManager-Hotel-ID; -1 = kein Hotel gewählt
+var active_profile_id: int        = -1   # SaveManager-Profil-ID; -1 = kein Profil gewählt
+var active_profile:    Dictionary = {}   # Aktives Manager-Profil
+var snap_to_grid:      bool       = true  # Tile-Snap im Baumodus (Settings-Toggle)
 
 
 func is_logged_in() -> bool:
@@ -48,6 +50,12 @@ func logout() -> void:
 	user_logged_out.emit()
 
 
+func select_profile(profile: Dictionary) -> void:
+	active_profile    = profile
+	active_profile_id = profile.get("id", -1)
+
+
 func select_hotel(hotel_data: Dictionary) -> void:
-	selected_hotel = hotel_data
+	selected_hotel  = hotel_data
+	active_hotel_id = hotel_data.get("id", -1)
 	hotel_selected.emit(hotel_data)

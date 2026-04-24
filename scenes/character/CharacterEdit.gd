@@ -171,11 +171,16 @@ func _on_save_pressed() -> void:
 	if name_text.is_empty():
 		error_label.text = GameState.T("login.error.data_invalid")
 		return
-	btn_save.disabled = true
 	error_label.text = ""
 
-	var endpoint := "/api/manager/update" if _mode == "update" else "/api/manager/create"
-	Api.post_json(endpoint, {
+	if _mode == "create":
+		var profile_id: int = SaveManager.create_profile(name_text)
+		GameState.select_profile({ "id": profile_id, "name": name_text })
+		get_tree().change_scene_to_file("res://scenes/dashboard/Dashboard.tscn")
+		return
+
+	btn_save.disabled = true
+	Api.post_json("/api/manager/update", {
 		"name":              name_text,
 		"gender":            _gender,
 		"appearance_skin":   _skin,

@@ -4,6 +4,7 @@ class_name IngameHud
 ## Erhält alle nötigen Node-Referenzen via configure(). Keine @onready.
 
 signal bottom_button_pressed(idx: int)
+signal view_reset_requested()
 
 # ── HUD-Fontgrößen ────────────────────────────────────────────────────────────
 const HF_XS   := 10
@@ -44,9 +45,11 @@ var _bottom_anchor:      Control
 var _context_bar:        HBoxContainer
 
 # ── Zustand ───────────────────────────────────────────────────────────────────
-var _ruf_indicator:   ColorRect
-var _fan_mode_btn:    Button
-var _bottom_buttons:  Array[Button]     = []
+var _ruf_indicator:         ColorRect
+var _fan_mode_btn:          Button
+var _mode_icon_center:      Label
+var _mode_icon_back:        TextureRect
+var _bottom_buttons:        Array[Button]     = []
 var _active_btn_idx:  int               = -1
 var _bb_sb_normal:    StyleBoxFlat
 var _bb_sb_hover:     StyleBoxFlat
@@ -94,12 +97,17 @@ func set_btn_active(idx: int) -> void:
 	_active_btn_idx = idx
 
 
-func show_context_bar(show: bool) -> void:
-	_context_bar.visible = show
+func show_context_bar(shown: bool) -> void:
+	_context_bar.visible = shown
 
 
 func update_day(day: int) -> void:
 	_stat_day_val.text = str(day)
+
+
+func set_mode_btn_saved(saved: bool) -> void:
+	_mode_icon_center.visible = not saved
+	_mode_icon_back.visible   = saved
 
 
 func get_bottom_button(idx: int) -> Button:
@@ -211,6 +219,8 @@ func _build_ruf_bar() -> void:
 
 func _update_ruf_display(rep: int) -> void:
 	_stat_ruf_lbl.text = "%d / 1000" % rep
+	if not is_instance_valid(_ruf_indicator):
+		return
 	var bar_w := _stat_ruf_root.size.x
 	if bar_w == 0:
 		bar_w = 130.0
@@ -287,6 +297,9 @@ func _build_bottom_bar() -> void:
 
 	_fan_mode_btn          = _make_mode_indicator()
 	_fan_mode_btn.position = Vector2(5.0, BB_FAN_SIZE - 52.0)
+	_fan_mode_btn.pressed.connect(func(): view_reset_requested.emit())
+	_fan_mode_btn.mouse_entered.connect(func(): _show_tooltip(GameState.T("ingame.btn.reset_view")))
+	_fan_mode_btn.mouse_exited.connect(func():  _hide_tooltip())
 	_bottom_anchor.add_child(_fan_mode_btn)
 
 	_tooltip_panel = PanelContainer.new()
@@ -403,7 +416,7 @@ func _make_fan_btn(idx: int) -> Button:
 		btn.add_child(lock_lbl)
 
 	btn.pressed.connect(func(): _on_btn_pressed(idx))
-	btn.mouse_entered.connect(func(): _show_tooltip("%s · %s" % [def["key"], def["label"]], btn))
+	btn.mouse_entered.connect(func(): _show_tooltip("%s · %s" % [def["key"], def["label"]]))
 	btn.mouse_exited.connect(func():  _hide_tooltip())
 	return btn
 
@@ -412,7 +425,6 @@ func _make_mode_indicator() -> Button:
 	var btn := Button.new()
 	btn.custom_minimum_size = Vector2(46, 46)
 	btn.focus_mode          = Control.FOCUS_NONE
-	btn.disabled            = true
 
 	var sb := StyleBoxFlat.new()
 	sb.bg_color                   = Color(0.04, 0.07, 0.13, 0.96)
@@ -425,22 +437,37 @@ func _make_mode_indicator() -> Button:
 	sb.border_width_top           = 2
 	sb.border_width_bottom        = 2
 	sb.border_color               = Color(0.918, 0.702, 0.031, 0.85)
-	btn.add_theme_stylebox_override("normal",   sb)
-	btn.add_theme_stylebox_override("hover",    sb)
-	btn.add_theme_stylebox_override("pressed",  sb)
-	btn.add_theme_stylebox_override("focus",    StyleBoxEmpty.new())
-	btn.add_theme_stylebox_override("disabled", sb)
+	var sb_hover := sb.duplicate() as StyleBoxFlat
+	sb_hover.border_color = Color(0.918, 0.702, 0.031, 1.0)
+	sb_hover.bg_color     = Color(0.10, 0.13, 0.20, 0.96)
+	btn.add_theme_stylebox_override("normal",  sb)
+	btn.add_theme_stylebox_override("hover",   sb_hover)
+	btn.add_theme_stylebox_override("pressed", sb_hover)
+	btn.add_theme_stylebox_override("focus",   StyleBoxEmpty.new())
 
-	var lbl := Label.new()
-	lbl.text                 = "◆"
-	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
-	lbl.add_theme_font_size_override("font_size", 14)
-	lbl.add_theme_color_override("font_color", Color(0.918, 0.702, 0.031, 0.75))
-	lbl.anchor_right  = 1.0
-	lbl.anchor_bottom = 1.0
-	lbl.mouse_filter  = Control.MOUSE_FILTER_IGNORE
-	btn.add_child(lbl)
+	_mode_icon_center                      = Label.new()
+	_mode_icon_center.text                 = "◆"
+	_mode_icon_center.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_mode_icon_center.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
+	_mode_icon_center.add_theme_font_size_override("font_size", 14)
+	_mode_icon_center.add_theme_color_override("font_color", Color(0.918, 0.702, 0.031, 0.75))
+	_mode_icon_center.anchor_right         = 1.0
+	_mode_icon_center.anchor_bottom        = 1.0
+	_mode_icon_center.mouse_filter         = Control.MOUSE_FILTER_IGNORE
+	btn.add_child(_mode_icon_center)
+
+	const ICON_D   := 22.0
+	const ICON_OFF := (BB_BTN_SIZE - ICON_D) * 0.5
+	_mode_icon_back              = TextureRect.new()
+	_mode_icon_back.texture      = load("res://assets/icons/ic_rotate_ccw.svg")
+	_mode_icon_back.expand_mode  = TextureRect.EXPAND_IGNORE_SIZE
+	_mode_icon_back.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_mode_icon_back.size         = Vector2(ICON_D, ICON_D)
+	_mode_icon_back.position     = Vector2(ICON_OFF, ICON_OFF)
+	_mode_icon_back.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_mode_icon_back.visible      = false
+	btn.add_child(_mode_icon_back)
+
 	return btn
 
 
@@ -450,19 +477,17 @@ func _on_btn_pressed(idx: int) -> void:
 	bottom_button_pressed.emit(idx)
 
 
-func _show_tooltip(text: String, anchor_btn: Button) -> void:
+func _show_tooltip(text: String) -> void:
 	_tooltip_lbl.text       = text
 	_tooltip_panel.modulate = Color(1, 1, 1, 0)
 	_tooltip_panel.visible  = true
 	await get_tree().process_frame
 	if not is_instance_valid(self) or not is_instance_valid(_tooltip_panel) or not _tooltip_panel.visible:
 		return
-	if not is_instance_valid(anchor_btn):
-		return
-	var pos := anchor_btn.global_position
+	var vh := float(get_viewport().get_visible_rect().size.y)
 	_tooltip_panel.position = Vector2(
-		pos.x + anchor_btn.size.x * 0.5 - _tooltip_panel.size.x * 0.5,
-		pos.y - _tooltip_panel.size.y - 8.0
+		10.0,
+		vh - BB_FAN_SIZE - _tooltip_panel.size.y - 12.0
 	)
 	_tooltip_panel.modulate = Color(1, 1, 1, 1)
 

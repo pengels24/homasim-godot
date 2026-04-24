@@ -1,6 +1,8 @@
 extends Node2D
 ## Verantwortlichkeit: Spielfeld aufbauen, Parzellen-Sichtbarkeit steuern, Kamera-Input.
 
+signal view_saved_changed(has_saved: bool)
+
 # ── Nodes ─────────────────────────────────────────────────────────────────────
 @onready var camera: Camera2D = $Camera2D
 
@@ -21,9 +23,13 @@ const ZOOM_MAX  := 4.0
 const ZOOM_STEP := 0.15
 
 # ── State ─────────────────────────────────────────────────────────────────────
-var _drag_active: bool    = false
-var _drag_origin: Vector2 = Vector2.ZERO
-var _cam_origin:  Vector2 = Vector2.ZERO
+var _drag_active:    bool     = false
+var _drag_origin:    Vector2  = Vector2.ZERO
+var _cam_origin:     Vector2  = Vector2.ZERO
+var _entry_plot:     Vector2i = Vector2i(1, 0)
+var _saved_cam_pos:  Vector2  = Vector2.ZERO
+var _saved_cam_zoom: float    = 1.0
+var _has_saved_view: bool     = false
 
 # ── Statisches Grid – direkte Referenzen auf alle 25 Parzellen-Instanzen ──────
 # _grid[y][x] – in _ready() fest verdrahtet, immer verfügbar.
@@ -48,11 +54,25 @@ func _ready() -> void:
 
 func build_map(built_plots: Array, entry_plot: Vector2i, enter_dir: String) -> void:
 	RenderingServer.set_default_clear_color(Color("#292929"))
+	_entry_plot = entry_plot
 	_show_built_parcels(built_plots)
 	_configure_walls()
 	var start_p: Node2D = _grid[entry_plot.y][entry_plot.x]
 	start_p.set_entrance(enter_dir)
 	center_on_entry(entry_plot)
+
+
+func reset_view() -> void:
+	if _has_saved_view:
+		camera.global_position = _saved_cam_pos
+		camera.zoom            = Vector2(_saved_cam_zoom, _saved_cam_zoom)
+		_has_saved_view        = false
+	else:
+		_saved_cam_pos  = camera.global_position
+		_saved_cam_zoom = camera.zoom.x
+		_has_saved_view = true
+		center_on_entry(_entry_plot)
+	view_saved_changed.emit(_has_saved_view)
 
 
 func center_on_entry(entry_plot: Vector2i) -> void:
@@ -167,11 +187,13 @@ func _handle_wasd_pan(delta: float) -> void:
 	if Input.is_key_pressed(KEY_S): dir.y += 1.0
 	if Input.is_key_pressed(KEY_W): dir.y -= 1.0
 	if dir != Vector2.ZERO:
+		_clear_saved_view()
 		camera.position += dir.normalized() * PAN_SPEED * delta / camera.zoom.x
 
 
 func _handle_keyboard_zoom(delta: float) -> void:
 	if Input.is_key_pressed(KEY_KP_MULTIPLY):
+		_clear_saved_view()
 		camera.zoom = Vector2(1.0, 1.0)
 		return
 	var zoom_dir := 0.0
@@ -185,6 +207,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		_handle_mouse_button(event as InputEventMouseButton)
 	elif event is InputEventMouseMotion and _drag_active:
+		_clear_saved_view()
 		var mm := event as InputEventMouseMotion
 		camera.position = _cam_origin - (mm.position - _drag_origin) / camera.zoom
 
@@ -203,5 +226,13 @@ func _handle_mouse_button(mb: InputEventMouseButton) -> void:
 
 
 func _apply_zoom(delta: float) -> void:
+	_clear_saved_view()
 	var new_zoom: float = clampf(camera.zoom.x + delta, ZOOM_MIN, ZOOM_MAX)
 	camera.zoom = Vector2(new_zoom, new_zoom)
+
+
+func _clear_saved_view() -> void:
+	if not _has_saved_view:
+		return
+	_has_saved_view = false
+	view_saved_changed.emit(false)

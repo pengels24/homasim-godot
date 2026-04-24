@@ -73,8 +73,8 @@ func _refresh_ghost() -> void:
 func _update_modulate() -> void:
 	if not is_instance_valid(_ghost):
 		return
-	# Weiß = gültig, Rot = ungültig (Überlappung oder außerhalb)
-	_ghost.modulate = Color(0.95, 0.95, 0.95, 0.65) if _is_valid else Color(1.0, 0.35, 0.35, 0.65)
+	# Grün = gültig, Rot = ungültig (Überlappung oder außerhalb)
+	_ghost.modulate = Color(0.35, 1.0, 0.45, 0.70) if _is_valid else Color(1.0, 0.35, 0.35, 0.65)
 
 
 # ── Prozess – Ghost folgt Maus, bleibt in owned Parzellen ────────────────────
@@ -129,6 +129,10 @@ func _input(event: InputEvent) -> void:
 		var mb := event as InputEventMouseButton
 		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT:
 			_try_place()
+		elif mb.pressed and mb.button_index == MOUSE_BUTTON_RIGHT:
+			get_viewport().set_input_as_handled()
+			cancelled.emit()
+			queue_free()
 		return
 
 	if event is InputEventKey:
@@ -162,7 +166,7 @@ func _try_place() -> void:
 			and not _lobby_clearance_blocked(place_tile.x, place_tile.y):
 		get_viewport().set_input_as_handled()
 		room_placed.emit(_current_parcel.x, _current_parcel.y, place_tile.x, place_tile.y, _door_rotation, _door_offset)
-		queue_free()
+		_spawn_ghost()
 
 
 # ── Hilfsfunktionen ───────────────────────────────────────────────────────────

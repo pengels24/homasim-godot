@@ -85,6 +85,13 @@ func get_built_plots(hotel_id: int) -> Array:
 	)
 
 
+func delete_hotel(hotel_id: int) -> void:
+	_data["hotels"] = _data.get("hotels", []).filter(
+		func(h: Dictionary) -> bool: return h["id"] != hotel_id
+	)
+	_save()
+
+
 func set_plot_built(hotel_id: int, x: int, y: int, entrance_dir: String = "") -> void:
 	for p in get_plots(hotel_id):
 		if p["x"] == x and p["y"] == y:

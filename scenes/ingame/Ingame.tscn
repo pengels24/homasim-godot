@@ -269,7 +269,7 @@ theme_override_constants/separation = 4
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "⏸"
+text = "II"
 
 [node name="BtnPlay" type="Button" parent="HUD/TopBar/HBox/TimeSection/GameControls" unique_id=1423923170]
 custom_minimum_size = Vector2(50, 50)
@@ -281,7 +281,7 @@ text = "▶"
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "⏩"
+text = ">>"
 
 [node name="BottomBarAnchor" type="Control" parent="HUD" unique_id=2131913845]
 layout_mode = 3

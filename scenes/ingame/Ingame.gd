@@ -36,6 +36,9 @@ var _hotel: Dictionary = {}
 
 func _ready() -> void:
 	_hotel = _load_hotel()
+	var api_name: String = GameState.selected_hotel.get("name", "")
+	if api_name != "":
+		_hotel["name"] = api_name
 	_start_map()
 	_setup_subsystems()
 
@@ -55,7 +58,9 @@ func _start_map() -> void:
 
 func _load_hotel() -> Dictionary:
 	if GameState.active_hotel_id >= 0:
-		return SaveManager.get_hotel(GameState.active_hotel_id)
+		var h := SaveManager.get_hotel(GameState.active_hotel_id)
+		if not h.is_empty():
+			return h
 	var hotels: Array = SaveManager.get_hotels(1)
 	if not hotels.is_empty():
 		return hotels[0]
@@ -103,6 +108,8 @@ func _setup_subsystems() -> void:
 	_build.configure(_hotel, map_grid, _hud, hud_canvas)
 
 	_hud.bottom_button_pressed.connect(_build.on_button_pressed)
+	_hud.view_reset_requested.connect(map_grid.reset_view)
+	map_grid.view_saved_changed.connect(_hud.set_mode_btn_saved)
 	_clock.day_ended.connect(_on_day_ended)
 	_clock.save_requested.connect(_save_progress)
 

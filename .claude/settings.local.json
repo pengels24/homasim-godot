@@ -19,7 +19,12 @@
       "Bash(python3 -c \"from PIL import Image; img = Image.open\\('d:/game-dev/homasim-godot/assets/images/logo.png'\\); print\\(img.size, img.mode\\)\")",
       "Bash(git -C d:/game-dev/homasim-godot log --oneline -8)",
       "Bash(git -C d:/game-dev/homasim-godot status)",
-      "WebFetch(domain:linear.app)"
+      "WebFetch(domain:linear.app)",
+      "Bash(git -C d:/game-dev/homasim-godot log --oneline -10)",
+      "Bash(git -C d:/game-dev/homasim-godot diff HEAD --stat)",
+      "Bash(git -C d:/game-dev/homasim-godot diff HEAD -- scenes/ingame/rooms/Lobby.tscn)",
+      "Bash(find d:\\\\\\\\game-dev\\\\\\\\homasim-godot -type f -name \"*.gd\" -o -name \"*.tscn\")",
+      "mcp__claude_ai_Linear__get_issue"
     ]
   }
 }

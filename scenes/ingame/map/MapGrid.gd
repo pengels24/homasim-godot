@@ -126,6 +126,12 @@ func is_tile_free(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int, w: int
 	return _grid[parcel_y][parcel_x].is_area_free(tile_x, tile_y, w, h)
 
 
+func get_lobby_clearance_rect(parcel_x: int, parcel_y: int) -> Rect2i:
+	if not is_parcel_owned(parcel_x, parcel_y):
+		return Rect2i()
+	return _grid[parcel_y][parcel_x].get_lobby_clearance_rect()
+
+
 func get_first_owned_parcel() -> Vector2i:
 	for y: int in grid_rows:
 		for x: int in grid_cols:

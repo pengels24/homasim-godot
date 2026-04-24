@@ -53,6 +53,21 @@ func spawn_room(room_scene: PackedScene, door_rot: int, door_off: int, tile_x: i
 	mark_occupied(tile_x, tile_y, ROOM_TILES, ROOM_TILES)
 
 
+## 1-Tile-Streifen direkt vor der Lobby-Innentür – darf nicht verbaut werden.
+func get_lobby_clearance_rect() -> Rect2i:
+	if not has_entrance:
+		return Rect2i()
+	var lp := _lobby_position()
+	var lx: int = int(lp.x / TILE_PX)
+	var ly: int = int(lp.y / TILE_PX)
+	match entrance_dir:
+		"top":    return Rect2i(lx, ly + LOBBY_TILES, LOBBY_TILES, 1)
+		"bottom": return Rect2i(lx, ly - 1,           LOBBY_TILES, 1)
+		"left":   return Rect2i(lx + LOBBY_TILES, ly,  1, LOBBY_TILES)
+		"right":  return Rect2i(lx - 1, ly,            1, LOBBY_TILES)
+	return Rect2i()
+
+
 ## Prüft ob der Tile-Bereich (tile_x, tile_y, w×h) vollständig frei ist.
 func is_area_free(tile_x: int, tile_y: int, w: int, h: int) -> bool:
 	var test := Rect2i(tile_x, tile_y, w, h)

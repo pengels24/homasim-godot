@@ -14,9 +14,10 @@ const ROOM_SCENES: Dictionary = {
 const WALK_PX      := 48    # WALK_W(3) × TILE_PX(16)
 const TILE_PX      := 16
 const PARCEL_PX    := 256   # PARCEL_SZ(16) × TILE_PX(16)
+const PARCEL_TILES := PARCEL_PX / TILE_PX  # = 16
 const ROOM_TILE_PX := 32    # 2 Tiles × 16px – Raum-Ausdehnung in Pixeln (visual)
 const ROOM_TILES   := 2     # Tile-Seitenlänge des Raums
-const ROOM_HALF    := ROOM_TILE_PX / 2   # = 32 – halbe Raumbreite für Zentrierung unter Maus
+const ROOM_HALF    := ROOM_TILE_PX / 2   # = 16 – halbe Raumbreite für Zentrierung unter Maus
 
 var _map_grid:        Node2D
 var _ghost:           Node2D
@@ -62,6 +63,11 @@ func _refresh_ghost() -> void:
 	if not is_instance_valid(_ghost):
 		return
 	_ghost.configure({"door_rotation": _door_rotation, "door_offset": _door_offset})
+	_is_valid = _map_grid.is_tile_free(
+		_current_parcel.x, _current_parcel.y, _tile_pos.x, _tile_pos.y, ROOM_TILES, ROOM_TILES) \
+		and not _door_is_blocked(_tile_pos.x, _tile_pos.y) \
+		and not _lobby_clearance_blocked(_tile_pos.x, _tile_pos.y)
+	_update_modulate()
 
 
 func _update_modulate() -> void:
@@ -110,7 +116,9 @@ func _process(_delta: float) -> void:
 	if new_tile != _tile_pos:
 		_tile_pos = new_tile
 		_is_valid = _map_grid.is_tile_free(
-			_current_parcel.x, _current_parcel.y, _tile_pos.x, _tile_pos.y, ROOM_TILES, ROOM_TILES)
+			_current_parcel.x, _current_parcel.y, _tile_pos.x, _tile_pos.y, ROOM_TILES, ROOM_TILES) \
+			and not _door_is_blocked(_tile_pos.x, _tile_pos.y) \
+			and not _lobby_clearance_blocked(_tile_pos.x, _tile_pos.y)
 		_update_modulate()
 
 
@@ -145,11 +153,42 @@ func _try_place() -> void:
 	var mouse_local := (get_parent() as Node2D).to_local(get_global_mouse_position())
 	var min_x := float(WALK_PX + _current_parcel.x * PARCEL_PX)
 	var min_y := float(WALK_PX + _current_parcel.y * PARCEL_PX)
-	var snapped := Vector2(snappedf(mouse_local.x, float(TILE_PX)), snappedf(mouse_local.y, float(TILE_PX)))
-	var sx := clampf(snapped.x - float(ROOM_HALF), min_x, min_x + float(PARCEL_PX - ROOM_TILE_PX))
-	var sy := clampf(snapped.y - float(ROOM_HALF), min_y, min_y + float(PARCEL_PX - ROOM_TILE_PX))
+	var snap_pos := Vector2(snappedf(mouse_local.x, float(TILE_PX)), snappedf(mouse_local.y, float(TILE_PX)))
+	var sx := clampf(snap_pos.x - float(ROOM_HALF), min_x, min_x + float(PARCEL_PX - ROOM_TILE_PX))
+	var sy := clampf(snap_pos.y - float(ROOM_HALF), min_y, min_y + float(PARCEL_PX - ROOM_TILE_PX))
 	var place_tile := Vector2i(int((sx - min_x) / TILE_PX), int((sy - min_y) / TILE_PX))
-	if _map_grid.is_tile_free(_current_parcel.x, _current_parcel.y, place_tile.x, place_tile.y, ROOM_TILES, ROOM_TILES):
+	if _map_grid.is_tile_free(_current_parcel.x, _current_parcel.y, place_tile.x, place_tile.y, ROOM_TILES, ROOM_TILES) \
+			and not _door_is_blocked(place_tile.x, place_tile.y) \
+			and not _lobby_clearance_blocked(place_tile.x, place_tile.y):
 		get_viewport().set_input_as_handled()
 		room_placed.emit(_current_parcel.x, _current_parcel.y, place_tile.x, place_tile.y, _door_rotation, _door_offset)
 		queue_free()
+
+
+# ── Hilfsfunktionen ───────────────────────────────────────────────────────────
+
+func _door_is_blocked(tile_x: int, tile_y: int) -> bool:
+	# Außenwand-Schnellcheck + Belegtheits-Check der Tiles direkt vor der Tür
+	match _door_rotation:
+		0:  # Tür links
+			if tile_x <= 1: return true
+			return not _map_grid.is_tile_free(_current_parcel.x, _current_parcel.y,
+				tile_x - 1, tile_y, 1, ROOM_TILES)
+		1:  # Tür oben
+			if tile_y <= 1: return true
+			return not _map_grid.is_tile_free(_current_parcel.x, _current_parcel.y,
+				tile_x, tile_y - 1, ROOM_TILES, 1)
+		2:  # Tür rechts
+			if tile_x + ROOM_TILES >= PARCEL_TILES - 1: return true
+			return not _map_grid.is_tile_free(_current_parcel.x, _current_parcel.y,
+				tile_x + ROOM_TILES, tile_y, 1, ROOM_TILES)
+		3:  # Tür unten
+			if tile_y + ROOM_TILES >= PARCEL_TILES - 1: return true
+			return not _map_grid.is_tile_free(_current_parcel.x, _current_parcel.y,
+				tile_x, tile_y + ROOM_TILES, ROOM_TILES, 1)
+	return false
+
+
+func _lobby_clearance_blocked(tile_x: int, tile_y: int) -> bool:
+	var clearance: Rect2i = _map_grid.get_lobby_clearance_rect(_current_parcel.x, _current_parcel.y)
+	return clearance.has_area() and Rect2i(tile_x, tile_y, ROOM_TILES, ROOM_TILES).intersects(clearance)

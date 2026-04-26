@@ -44,13 +44,26 @@ func buy(hotel_id: int) -> void:
 	SaveManager.set_plot_built(hotel_id, _grid_x(), _grid_y())
 
 
-func spawn_room(room_scene: PackedScene, door_rot: int, door_off: int, tile_x: int, tile_y: int) -> void:
+func spawn_room(room_scene: PackedScene, door_rot: int, door_off: int, tile_x: int, tile_y: int) -> Node2D:
 	_ensure_walls_marked()
 	var room: Node2D = room_scene.instantiate()
 	add_child(room)
-	room.configure({"door_rotation": door_rot, "door_offset": door_off})
+	room.configure({"door_rotation": door_rot, "door_offset": door_off, "x_pos": tile_x, "y_pos": tile_y})
 	room.position = Vector2(tile_x * TILE_PX, tile_y * TILE_PX)
 	mark_occupied(tile_x, tile_y, ROOM_TILES, ROOM_TILES)
+	return room
+
+
+## Gespeicherten Raum aus Save-Daten wiederherstellen (kein save_room_to_plot nötig).
+func restore_room(room_data: Dictionary, room_scene: PackedScene) -> void:
+	_ensure_walls_marked()
+	var room: Node2D = room_scene.instantiate()
+	add_child(room)
+	room.configure(room_data)
+	var tx: int = room_data.get("x_pos", 0)
+	var ty: int = room_data.get("y_pos", 0)
+	room.position = Vector2(tx * TILE_PX, ty * TILE_PX)
+	mark_occupied(tx, ty, ROOM_TILES, ROOM_TILES)
 
 
 ## 1-Tile-Streifen direkt vor der Lobby-Innentür – darf nicht verbaut werden.

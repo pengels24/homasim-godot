@@ -21,6 +21,7 @@ Api="*res://autoload/Api.gd"
 SessionManager="*res://autoload/SessionManager.gd"
 GameState="*res://autoload/GameState.gd"
 SaveManager="*uid://dkykgbioo55ho"
+SettingsManager="*res://autoload/SettingsManager.gd"
 
 [display]
 

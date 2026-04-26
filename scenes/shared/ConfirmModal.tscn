@@ -1,0 +1,143 @@
+[gd_scene format=3 uid="uid://confirmmodal"]
+
+[ext_resource type="Script" path="res://scenes/shared/ConfirmModal.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+bg_color = Color(0.07, 0.07, 0.09, 0.97)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.918, 0.702, 0.031, 0.40)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_left = 12
+corner_radius_bottom_right = 12
+shadow_color = Color(0.918, 0.702, 0.031, 0.15)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_confirm"]
+bg_color = Color(0.863, 0.149, 0.149, 1.0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_confirm_hover"]
+bg_color = Color(0.9, 0.22, 0.22, 1.0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cancel"]
+bg_color = Color(0.12, 0.16, 0.26, 1.0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cancel_hover"]
+bg_color = Color(0.18, 0.24, 0.38, 1.0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 10.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+
+[node name="ConfirmModal" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+visible = false
+script = ExtResource("1_script")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.75)
+mouse_filter = 0
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Card" type="PanelContainer" parent="Center"]
+layout_mode = 2
+custom_minimum_size = Vector2(420, 0)
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="Margin" type="MarginContainer" parent="Center/Card"]
+layout_mode = 2
+theme_override_constants/margin_left = 36
+theme_override_constants/margin_top = 36
+theme_override_constants/margin_right = 36
+theme_override_constants/margin_bottom = 36
+
+[node name="VBox" type="VBoxContainer" parent="Center/Card/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="Center/Card/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
+horizontal_alignment = 1
+text = ""
+
+[node name="Message" type="Label" parent="Center/Card/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.78, 0.80, 0.86, 1)
+horizontal_alignment = 1
+autowrap_mode = 3
+text = ""
+
+[node name="Buttons" type="HBoxContainer" parent="Center/Card/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="BtnCancel" type="Button" parent="Center/Card/Margin/VBox/Buttons"]
+layout_mode = 2
+custom_minimum_size = Vector2(140, 48)
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_cancel")
+theme_override_styles/hover = SubResource("StyleBoxFlat_cancel_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_cancel")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+text = "Abbrechen"
+
+[node name="BtnConfirm" type="Button" parent="Center/Card/Margin/VBox/Buttons"]
+layout_mode = 2
+custom_minimum_size = Vector2(140, 48)
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_confirm")
+theme_override_styles/hover = SubResource("StyleBoxFlat_confirm_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_confirm")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+text = "Bestätigen"

@@ -108,19 +108,20 @@ func _on_play_pressed() -> void:
 
 func _on_ff_pressed() -> void:
 	_game_paused = false
-	_game_speed  = 10.0
+	_game_speed  = SettingsManager.ff_speed
 	_update_speed_buttons()
 
 
 func _update_speed_buttons() -> void:
 	var gold   := Color(0.918, 0.702, 0.031, 1)
 	var normal := Color(0.65,  0.65,  0.65,  1)
+	var is_ff := _game_speed == SettingsManager.ff_speed and not _game_paused
 	_apply_ctrl_btn(_btn_pause, _game_paused)
 	_apply_ctrl_btn(_btn_play,  not _game_paused and _game_speed == 1.0)
-	_apply_ctrl_btn(_btn_ff,    _game_speed == 10.0)
+	_apply_ctrl_btn(_btn_ff,    is_ff)
 	_btn_pause.add_theme_color_override("font_color", gold if _game_paused                           else normal)
 	_btn_play.add_theme_color_override( "font_color", gold if not _game_paused and _game_speed == 1.0 else normal)
-	_btn_ff.add_theme_color_override(   "font_color", gold if _game_speed == 10.0                     else normal)
+	_btn_ff.add_theme_color_override(   "font_color", gold if is_ff                                   else normal)
 
 
 func _apply_ctrl_btn(btn: Button, active: bool) -> void:

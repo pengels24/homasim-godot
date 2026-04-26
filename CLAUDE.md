@@ -34,6 +34,7 @@ Linear-Projekt: **Angelus2010 / ANG-** für alle Issues.
 - Keine Magic Numbers – alle Werte in benannten Konstanten
 - **Godot 4 Best Practices**: statische Typisierung überall, Ressourcen in `.tscn` definieren (nicht im Code bauen), `_ready()` nur für Node-Setup
 - **UI immer in .tscn** – keine `Node.new()`-UI-Bauten in Scripts; Scripts befüllen nur Daten und verbinden Signale. So bleibt die UI im Godot-Editor bearbeitbar.
+- **Geteilte UI-Komponenten in `scenes/shared/`** – Jedes UI-Element das an mehr als einer Stelle vorkommt (Modals, Dialoge, gemeinsame Panels) wird als eigene `.tscn` + `.gd` unter `scenes/shared/` angelegt und per `instance=ExtResource(...)` eingebunden. Nie inline duplizieren. Beispiele: `ConfirmModal.tscn`, zukünftige Toast-Notifications, Info-Popups.
 - Kommentare erklären das *Warum*, nicht das *Was*
 - Keine Fehlerbehandlung für unmögliche Szenarien
 - Keine ungenutzten Parameter ohne `_`-Prefix

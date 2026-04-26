@@ -9,16 +9,40 @@ const MAX_SLOTS     := 3
 const SLOT_PATH_TPL := "Center/Card/Margin/VBox/Slots/Slot%d/SlotMargin/SlotVBox"
 
 var _profiles: Array = []
+var _pending_delete_slot: int = -1
 
-@onready var _btn_back: Button = $Center/Card/Margin/VBox/BtnBack
+const SKIN_COLORS := {
+	"hell":   Color(0.95, 0.82, 0.70),
+	"mittel": Color(0.76, 0.57, 0.38),
+	"dunkel": Color(0.40, 0.26, 0.16),
+}
+const HAIR_COLORS := {
+	"blond":     Color(0.95, 0.85, 0.40),
+	"braun":     Color(0.45, 0.30, 0.15),
+	"schwarz":   Color(0.12, 0.10, 0.10),
+	"hellblond": Color(0.98, 0.95, 0.72),
+	"rot":       Color(0.72, 0.22, 0.10),
+	"grau":      Color(0.65, 0.65, 0.65),
+}
+const OUTFIT_COLORS := {
+	"anzug_schwarz": Color(0.12, 0.12, 0.16),
+	"anzug_grau":    Color(0.42, 0.42, 0.46),
+	"casual":        Color(0.22, 0.45, 0.72),
+	"uniform":       Color(0.10, 0.38, 0.22),
+}
+
+@onready var _btn_close:     Button      = $Center/Card/Margin/VBox/Header/BtnClose
+@onready var _confirm_modal: ConfirmModal = $ConfirmModal
 
 
 func _ready() -> void:
 	for i in MAX_SLOTS:
 		var base := SLOT_PATH_TPL % i
 		(get_node(base + "/Empty/BtnCreate") as Button).pressed.connect(_on_create_slot)
-		(get_node(base + "/Filled/BtnSelect") as Button).pressed.connect(_on_select_slot.bind(i))
-	_btn_back.pressed.connect(_on_back)
+		(get_node(base + "/Filled/ActionRow/BtnSelect") as Button).pressed.connect(_on_select_slot.bind(i))
+		(get_node(base + "/Filled/ActionRow/BtnDelete") as Button).pressed.connect(_on_delete_slot.bind(i))
+	_btn_close.pressed.connect(_on_back)
+	_confirm_modal.confirmed.connect(_on_delete_confirmed)
 
 
 # ── Öffentliche API ───────────────────────────────────────────────────────────
@@ -47,6 +71,13 @@ func _update_slot(i: int, profile: Dictionary) -> void:
 		(get_node(base + "/Filled/Hotels") as Label).text = (
 			"%d Hotel%s" % [hotel_count, "s" if hotel_count != 1 else ""]
 		)
+		var avatar := get_node(base + "/Filled/AvatarBox/AvatarDisplay") as CharacterDisplay
+		avatar.update_appearance(
+			profile.get("appearance_gender", "m"),
+			SKIN_COLORS.get(profile.get("appearance_skin", "hell"),   Color(0.95, 0.82, 0.70)),
+			HAIR_COLORS.get(profile.get("appearance_hair", "braun"),   Color(0.45, 0.30, 0.15)),
+			OUTFIT_COLORS.get(profile.get("appearance_outfit", "anzug_schwarz"), Color(0.12, 0.12, 0.16))
+		)
 
 
 # ── Handler ───────────────────────────────────────────────────────────────────
@@ -55,6 +86,22 @@ func _on_select_slot(i: int) -> void:
 	if i < _profiles.size():
 		GameState.select_profile(_profiles[i])
 	closed.emit()
+
+
+func _on_delete_slot(i: int) -> void:
+	_pending_delete_slot = i
+	_confirm_modal.ask(
+		"Manager löschen?",
+		"Alle Hotels dieses Managers werden\nebenfalls entfernt.",
+		"Löschen"
+	)
+
+
+func _on_delete_confirmed() -> void:
+	if _pending_delete_slot >= 0 and _pending_delete_slot < _profiles.size():
+		SaveManager.delete_profile(_profiles[_pending_delete_slot].get("id", -1))
+	_pending_delete_slot = -1
+	refresh()
 
 
 func _on_create_slot() -> void:

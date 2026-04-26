@@ -174,8 +174,14 @@ func _on_save_pressed() -> void:
 	error_label.text = ""
 
 	if _mode == "create":
-		var profile_id: int = SaveManager.create_profile(name_text)
-		GameState.select_profile({ "id": profile_id, "name": name_text })
+		var appearance := {
+			"gender":            _gender,
+			"appearance_skin":   _skin,
+			"appearance_hair":   _hair,
+			"appearance_outfit": _outfit,
+		}
+		var profile_id: int = SaveManager.create_profile(name_text, appearance)
+		GameState.select_profile(SaveManager.get_profile(profile_id))
 		get_tree().change_scene_to_file("res://scenes/dashboard/Dashboard.tscn")
 		return
 

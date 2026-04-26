@@ -19,6 +19,7 @@ extends Control
 @onready var dialog_error:      Label        = $NewHotelOverlay/NewHotelPanel/VBox/DialogError
 @onready var btn_create:        Button       = $NewHotelOverlay/NewHotelPanel/VBox/DialogButtons/BtnCreate
 @onready var btn_cancel:        Button       = $NewHotelOverlay/NewHotelPanel/VBox/DialogButtons/BtnCancel
+@onready var _load_screen:      LoadScreen   = $LoadScreen
 
 var _hotels: Array = []
 var _selected_plot_x: int = 2
@@ -60,6 +61,7 @@ func _ready() -> void:
 	btn_create.pressed.connect(_on_create_confirmed)
 	btn_cancel.pressed.connect(_close_new_hotel_dialog)
 	hotel_name_field.text_submitted.connect(func(_t): _on_create_confirmed())
+	_load_screen.save_loaded.connect(_on_save_loaded)
 	title_label.text = GameState.T("dashboard.title")
 	btn_new_hotel.text = GameState.T("dashboard.btn.new_hotel")
 	btn_main_menu.text = GameState.T("menu.btn.main_menu")
@@ -68,8 +70,15 @@ func _ready() -> void:
 
 
 func _setup_manager_panel() -> void:
-	manager_name_lbl.text = GameState.active_profile.get("name", "Manager")
+	var profile := GameState.active_profile
+	manager_name_lbl.text = profile.get("name", "Manager")
 	manager_role_lbl.text = "MANAGER · LEVEL 1"
+	character_display.update_appearance(
+		profile.get("gender", "m"),
+		SKIN_COLORS.get(profile.get("appearance_skin",   "hell"),          SKIN_COLORS["hell"]),
+		HAIR_COLORS.get(profile.get("appearance_hair",   "braun"),         HAIR_COLORS["braun"]),
+		OUTFIT_COLORS.get(profile.get("appearance_outfit", "anzug_schwarz"), OUTFIT_COLORS["anzug_schwarz"])
+	)
 
 
 func _load_hotels() -> void:
@@ -137,6 +146,14 @@ func _create_hotel_card(hotel: Dictionary, index: int) -> Control:
 	_apply_green_style(btn_play)
 	btn_play.pressed.connect(_start_hotel.bind(index))
 	btns.add_child(btn_play)
+
+	var btn_load := Button.new()
+	btn_load.text = GameState.T("dashboard.btn.load_hotel")
+	btn_load.custom_minimum_size = Vector2(0, 44)
+	btn_load.add_theme_color_override("font_color", Color(0.96, 0.96, 0.96))
+	_apply_gold_style(btn_load)
+	btn_load.pressed.connect(_open_load_screen.bind(hotel.get("id", -1)))
+	btns.add_child(btn_load)
 
 	var btn_del := Button.new()
 	btn_del.text = GameState.T("dashboard.btn.delete_hotel")
@@ -220,6 +237,10 @@ func _apply_danger_style(btn: Button) -> void:
 
 
 func _on_new_hotel_pressed() -> void:
+	if not SaveManager.can_create_hotel(GameState.active_profile_id):
+		dialog_error.text = GameState.T("dashboard.new_hotel.error.limit_reached")
+		new_hotel_overlay.visible = true
+		return
 	hotel_name_field.text = ""
 	dialog_error.text = ""
 	_selected_plot_x = 2
@@ -325,6 +346,15 @@ func _start_hotel(index: int) -> void:
 	if index >= _hotels.size():
 		return
 	GameState.active_hotel_id = _hotels[index].get("id", -1)
+	get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
+
+
+func _open_load_screen(hotel_id: int) -> void:
+	_load_screen.open(hotel_id)
+
+
+func _on_save_loaded(hotel_id: int) -> void:
+	GameState.active_hotel_id = hotel_id
 	get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
 
 

@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://b3x1dashboard"]
+[gd_scene load_steps=16 format=3 uid="uid://b3x1dashboard"]
 
 [ext_resource type="Script" path="res://scenes/dashboard/Dashboard.gd" id="1_dashboard"]
 [ext_resource type="PackedScene" uid="uid://b3x1chardisplay" path="res://scenes/character/CharacterDisplay.tscn" id="2_chardisplay"]
+[ext_resource type="PackedScene" uid="uid://loadscreen" path="res://scenes/shared/LoadScreen.tscn" id="3_loadscreen"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gold"]
 bg_color = Color(0.918, 0.702, 0.031, 1)
@@ -222,10 +223,10 @@ layout_mode = 2
 size_flags_vertical = 4
 custom_minimum_size = Vector2(200, 44)
 theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
-theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_green")
+theme_override_styles/hover = SubResource("StyleBoxFlat_green_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_green")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 
 [node name="StatusLabel" type="Label" parent="MainArea/HotelSection"]
@@ -325,3 +326,8 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_red")
 theme_override_styles/hover = SubResource("StyleBoxFlat_red_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_red")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+
+[node name="LoadScreen" parent="." instance=ExtResource("3_loadscreen")]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0

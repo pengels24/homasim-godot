@@ -27,9 +27,13 @@ extends Node2D
 @onready var context_bar:         HBoxContainer = $HUD/ContextBar
 
 # ── Subsysteme ────────────────────────────────────────────────────────────────
-var _hud:   IngameHud
-var _clock: IngameClock
-var _build: IngameBuild
+var _hud:            IngameHud
+var _clock:          IngameClock
+var _build:          IngameBuild
+var _autosave_timer: Timer
+var _settings_modal: SettingsModal
+
+const SETTINGS_SCENE := preload("res://scenes/shared/SettingsModal.tscn")
 
 var _hotel: Dictionary = {}
 
@@ -112,12 +116,14 @@ func _setup_subsystems() -> void:
 	map_grid.view_saved_changed.connect(_hud.set_mode_btn_saved)
 	_clock.day_ended.connect(_on_day_ended)
 	_clock.save_requested.connect(_save_progress)
+	_setup_autosave_timer()
 
 
 # ── Signal-Handler ────────────────────────────────────────────────────────────
 
 func _on_day_ended(new_day: int) -> void:
 	_hud.update_day(new_day)
+	SaveManager.save_auto(_hotel.get("id", -1))
 
 
 # ── Input ─────────────────────────────────────────────────────────────────────
@@ -127,7 +133,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		var ke := event as InputEventKey
 		if ke.pressed and not ke.echo:
 			if ke.keycode == KEY_S and ke.alt_pressed:
-				_hud.trigger_button(2)
+				_open_settings()
 			else:
 				_handle_hotkey(ke.keycode)
 
@@ -138,9 +144,10 @@ func _handle_hotkey(keycode: int) -> void:
 		KEY_F2:     _hud.trigger_button(0)
 		KEY_F3:     _hud.trigger_button(1)
 		KEY_F4:     _hud.trigger_button(2)
-		KEY_F5:     _hud.trigger_button(3)
+		KEY_F5:     _quick_save()
 		KEY_F6:     _hud.trigger_button(4)
 		KEY_F7:     _hud.trigger_button(5)
+		KEY_F9:     _quick_load()
 
 
 func _on_exit_pressed() -> void:
@@ -161,6 +168,48 @@ func _save_progress(game_time_min: int) -> void:
 		"money":     _hotel.get("money", 0),
 		"game_time": game_time_min,
 	})
+
+
+func _open_settings() -> void:
+	if not is_instance_valid(_settings_modal):
+		_settings_modal = SETTINGS_SCENE.instantiate() as SettingsModal
+		get_tree().get_root().add_child(_settings_modal)
+	_settings_modal.open()
+
+
+func _setup_autosave_timer() -> void:
+	if not SettingsManager.autosave_enabled:
+		return
+	_autosave_timer = Timer.new()
+	_autosave_timer.wait_time = SettingsManager.autosave_interval_minutes * 60.0
+	_autosave_timer.one_shot  = false
+	_autosave_timer.timeout.connect(_on_timed_autosave)
+	add_child(_autosave_timer)
+	_autosave_timer.start()
+
+
+func _on_timed_autosave() -> void:
+	var hotel_id: int = _hotel.get("id", -1)
+	if hotel_id < 0:
+		return
+	_save_progress(_clock.get_game_time())
+	SaveManager.save_auto(hotel_id)
+
+
+func _quick_save() -> void:
+	var hotel_id: int = _hotel.get("id", -1)
+	if hotel_id < 0:
+		return
+	_save_progress(_clock.get_game_time())
+	SaveManager.save_quick(hotel_id)
+
+
+func _quick_load() -> void:
+	var hotel_id: int = _hotel.get("id", -1)
+	if hotel_id < 0:
+		return
+	if SaveManager.load_quick(hotel_id):
+		get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
 
 
 func _notification(what: int) -> void:

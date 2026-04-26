@@ -15,6 +15,12 @@ const PARCEL_SZ := 16   # Tiles pro Parzelle
 const WALK_W    := 3    # Gehweg-Breite außen
 const TILE_PX   := 16   # Physische Tile-Größe in Px
 const SCALE     := 2.0  # WorldRoot.scale
+const ROOM_TILES := 2   # alle Räume sind aktuell 2×2 Tiles
+
+# Raum-Typ → Szenen-Pfad (ANG-175 – gleiche Registry wie IngameBuild.SCENE_PATHS)
+const SCENE_PATHS: Dictionary = {
+	"bed_standard": "res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn",
+}
 
 # ── Kamera-Konfiguration ──────────────────────────────────────────────────────
 const PAN_SPEED := 400.0
@@ -59,6 +65,7 @@ func build_map(built_plots: Array, entry_plot: Vector2i, enter_dir: String) -> v
 	_configure_walls()
 	var start_p: Node2D = _grid[entry_plot.y][entry_plot.x]
 	start_p.set_entrance(enter_dir)
+	_restore_rooms(built_plots)
 	center_on_entry(entry_plot)
 
 
@@ -104,6 +111,20 @@ func _configure_walls() -> void:
 			})
 
 
+func _restore_rooms(built_plots: Array) -> void:
+	for plot in built_plots:
+		var rooms: Array = plot.get("rooms", [])
+		if rooms.is_empty():
+			continue
+		var parcel: Node2D = _grid[plot["y"]][plot["x"]]
+		for room_data in rooms:
+			var type_id: String = room_data.get("room_type_id", "")
+			var path: String = SCENE_PATHS.get(type_id, "")
+			if path.is_empty():
+				continue
+			parcel.restore_room(room_data, load(path) as PackedScene)
+
+
 func _is_built(x: int, y: int) -> bool:
 	if x < 0 or x >= grid_cols or y < 0 or y >= grid_rows:
 		return false
@@ -128,7 +149,8 @@ func place_room(parcel_x: int, parcel_y: int, room_scene: PackedScene, hotel_id:
 	var parcel: Node2D = _grid[parcel_y][parcel_x]
 	var is_new := not parcel.visible
 	parcel.visible = true
-	parcel.spawn_room(room_scene, door_rot, door_off, tile_x, tile_y)
+	var room: Node2D = parcel.spawn_room(room_scene, door_rot, door_off, tile_x, tile_y)
+	SaveManager.save_room_to_plot(hotel_id, parcel_x, parcel_y, room.to_dict())
 	if is_new:
 		SaveManager.set_plot_built(hotel_id, parcel_x, parcel_y)
 		_configure_walls()

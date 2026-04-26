@@ -1,105 +1,87 @@
 extends Control
+class_name CharacterDisplay
+## ANG-148 – Spielfigur-Vorschau als wiederverwendbare Szene.
+## Struktur liegt in CharacterDisplay.tscn; dieses Script setzt nur Farben
+## und passt bei Geschlechtswechsel einige Node-Größen an.
 
-## ANG-148 – Spielfigur-Vorschau: geometrische Placeholder-Shapes
-## Außenschnittstelle bleibt gleich wenn später echte Sprites kommen.
+const CX           := 90.0
+const COLOR_GOLD   := Color(0.918, 0.702, 0.031, 1.0)
 
-var gender  := "m"
-var skin    := Color(0.95, 0.82, 0.70)
-var hair    := Color(0.45, 0.30, 0.15)
-var outfit  := Color(0.12, 0.12, 0.16)
+@onready var _hair_back:       ColorRect = $HairBack
+@onready var _ear_left:        ColorRect = $EarLeft
+@onready var _ear_right:       ColorRect = $EarRight
+@onready var _side_hair_left:  ColorRect = $SideHairLeft
+@onready var _side_hair_right: ColorRect = $SideHairRight
+@onready var _hair_pony:       ColorRect = $HairPony
+@onready var _strand_left:     ColorRect = $StrandLeft
+@onready var _strand_right:    ColorRect = $StrandRight
+@onready var _brow_left:       ColorRect = $BrowLeft
+@onready var _brow_right:      ColorRect = $BrowRight
+@onready var _head:            ColorRect = $Head
+@onready var _nose:            ColorRect = $Nose
+@onready var _mouth:           ColorRect = $Mouth
+@onready var _neck:            ColorRect = $Neck
+@onready var _shoulders:       ColorRect = $Shoulders
+@onready var _torso:           ColorRect = $Torso
+@onready var _belt:            ColorRect = $Belt
+@onready var _collar:          ColorRect = $Collar
+@onready var _hand_left:       ColorRect = $HandLeft
+@onready var _hand_right:      ColorRect = $HandRight
 
-# Feste Farben für Gesichts-Details
-const C_DARK    := Color(0.15, 0.10, 0.08)
-const C_WHITE   := Color(0.95, 0.95, 0.95)
-const C_SHADOW  := Color(0.0,  0.0,  0.0, 0.18)
 
+# ── Öffentliche API ───────────────────────────────────────────────────────────
 
 func update_appearance(p_gender: String, p_skin: Color, p_hair: Color, p_outfit: Color) -> void:
-	gender = p_gender
-	skin   = p_skin
-	hair   = p_hair
-	outfit = p_outfit
-	queue_redraw()
+	_hair_back.color       = p_hair
+	_ear_left.color        = p_skin
+	_ear_right.color       = p_skin
+	_side_hair_left.color  = p_hair
+	_side_hair_right.color = p_hair
+	_hair_pony.color       = p_hair
+	_strand_left.color     = p_hair
+	_strand_right.color    = p_hair
+	_brow_left.color       = p_hair.darkened(0.20)
+	_brow_right.color      = p_hair.darkened(0.20)
+	_head.color            = p_skin
+	_nose.color            = p_skin.darkened(0.18)
+	_mouth.color           = p_skin.darkened(0.30)
+	_neck.color            = p_skin
+	_shoulders.color       = p_outfit
+	_torso.color           = p_outfit
+	_belt.color            = p_outfit.darkened(0.40)
+	_collar.color          = p_outfit.lightened(0.25)
+	_hand_left.color       = p_skin
+	_hand_right.color      = p_skin
+	_apply_gender(p_gender)
 
 
-func _draw() -> void:
-	var cx := size.x / 2.0
-	var is_female := gender == "w"
+# ── Privat ────────────────────────────────────────────────────────────────────
 
-	# ── Haar (hinten) ────────────────────────────────────────────────────────
-	var is_diverse  := gender == "d"
-	var hair_w      := 74.0
-	var hair_top    := 18.0
-	var hair_back_h := 34.0 if is_female else (28.0 if is_diverse else 22.0)
+func _apply_gender(gender: String) -> void:
+	var is_female  := gender == "w"
+	var is_diverse := gender == "d"
 
-	draw_rect(Rect2(cx - hair_w / 2.0, hair_top, hair_w, hair_back_h), hair)
+	_hair_back.size.y = 34.0 if is_female else (28.0 if is_diverse else 22.0)
 
-	# Seitenhaar: lang bei Frauen, mittel bei Divers, kurz bei Männern
-	var side_hair_h := 42.0 if is_female else (26.0 if is_diverse else 0.0)
-	if side_hair_h > 0.0:
-		draw_rect(Rect2(cx - hair_w / 2.0, hair_top + hair_back_h, 10.0, side_hair_h), hair)
-		draw_rect(Rect2(cx + hair_w / 2.0 - 10.0, hair_top + hair_back_h, 10.0, side_hair_h), hair)
+	var side_h := 42.0 if is_female else (26.0 if is_diverse else 0.0)
+	_side_hair_left.visible  = side_h > 0.0
+	_side_hair_right.visible = side_h > 0.0
+	if side_h > 0.0:
+		_side_hair_left.size.y      = side_h
+		_side_hair_right.size.y     = side_h
+		_side_hair_left.position.y  = 18.0 + _hair_back.size.y
+		_side_hair_right.position.y = 18.0 + _hair_back.size.y
 
-	# ── Kopf ─────────────────────────────────────────────────────────────────
-	var head_w := 68.0
-	var head_h := 74.0
-	var head_x := cx - head_w / 2.0
-	var head_y := 28.0
+	_hair_pony.size.y = 12.0 if is_female else 8.0
 
-	draw_rect(Rect2(head_x, head_y, head_w, head_h), skin)
-
-	# Leichter Schatten auf Stirn
-	draw_rect(Rect2(head_x, head_y, head_w, 6.0), C_SHADOW)
-
-	# ── Haar (vorne / Pony) ───────────────────────────────────────────────────
-	var pony_h := 12.0 if is_female else 8.0
-	draw_rect(Rect2(head_x - 2.0, head_y, head_w + 4.0, pony_h), hair)
-
-	# Seitensträhnen (bedecken Kopfrand)
-	draw_rect(Rect2(head_x - 4.0, head_y + pony_h, 8.0, 28.0), hair)
-	draw_rect(Rect2(head_x + head_w - 4.0, head_y + pony_h, 8.0, 28.0), hair)
-
-	# ── Augen ─────────────────────────────────────────────────────────────────
-	var eye_y   := head_y + 30.0
-	var eye_w   := 12.0
-	var eye_h   := 10.0
-	var eye_gap := 16.0
-
-	# Augenweiß
-	draw_rect(Rect2(cx - eye_gap - eye_w, eye_y, eye_w, eye_h), C_WHITE)
-	draw_rect(Rect2(cx + eye_gap,         eye_y, eye_w, eye_h), C_WHITE)
-	# Iris
-	draw_rect(Rect2(cx - eye_gap - eye_w + 3.0, eye_y + 1.0, 6.0, 8.0), C_DARK)
-	draw_rect(Rect2(cx + eye_gap + 3.0,         eye_y + 1.0, 6.0, 8.0), C_DARK)
-
-	# ── Nase ──────────────────────────────────────────────────────────────────
-	var nose_color := skin.darkened(0.18)
-	draw_rect(Rect2(cx - 3.0, head_y + 48.0, 6.0, 8.0), nose_color)
-
-	# ── Mund ──────────────────────────────────────────────────────────────────
-	var mouth_color := skin.darkened(0.30)
-	draw_rect(Rect2(cx - 10.0, head_y + 60.0, 20.0, 5.0), mouth_color)
-
-	# ── Hals ──────────────────────────────────────────────────────────────────
-	var neck_w := 22.0
-	var neck_y := head_y + head_h
-	draw_rect(Rect2(cx - neck_w / 2.0, neck_y, neck_w, 18.0), skin)
-
-	# ── Schultern + Torso ─────────────────────────────────────────────────────
 	var shoulder_w := 140.0 if not is_female and not is_diverse else (118.0 if is_female else 128.0)
 	var torso_w    := 96.0  if not is_female and not is_diverse else (82.0  if is_female else 88.0)
-	var torso_y    := neck_y + 14.0
 
-	# Schulter-Balken
-	draw_rect(Rect2(cx - shoulder_w / 2.0, torso_y, shoulder_w, 22.0), outfit)
-	# Torso
-	draw_rect(Rect2(cx - torso_w / 2.0, torso_y + 18.0, torso_w, 72.0), outfit)
-
-	# Outfit-Detail: dünne Linie als Kragen
-	var collar_color := outfit.lightened(0.25)
-	draw_rect(Rect2(cx - 14.0, torso_y + 2.0, 28.0, 4.0), collar_color)
-
-	# Hände (Hautfarbe, unten an den Schultern)
-	var hand_y := torso_y + 22.0
-	draw_rect(Rect2(cx - shoulder_w / 2.0 - 2.0, hand_y, 14.0, 18.0), skin)
-	draw_rect(Rect2(cx + shoulder_w / 2.0 - 12.0, hand_y, 14.0, 18.0), skin)
+	_shoulders.size.x      = shoulder_w
+	_shoulders.position.x  = CX - shoulder_w / 2.0
+	_torso.size.x          = torso_w
+	_torso.position.x      = CX - torso_w / 2.0
+	_belt.size.x           = torso_w
+	_belt.position.x       = CX - torso_w / 2.0
+	_hand_left.position.x  = CX - shoulder_w / 2.0 - 2.0
+	_hand_right.position.x = CX + shoulder_w / 2.0 - 12.0

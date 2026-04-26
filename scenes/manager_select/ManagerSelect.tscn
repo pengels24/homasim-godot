@@ -1,6 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://c1managersel"]
+[gd_scene format=3 uid="uid://c1managersel"]
 
-[ext_resource type="Script" path="res://scenes/manager_select/ManagerSelect.gd" id="1_mgsel"]
+[ext_resource type="Script" uid="uid://c62pp6vo8r7ld" path="res://scenes/manager_select/ManagerSelect.gd" id="1_mgsel"]
+[ext_resource type="Texture2D" uid="uid://dq7o8pdrqma4" path="res://assets/icons/trash.svg" id="2_trash"]
+[ext_resource type="PackedScene" path="res://scenes/shared/ConfirmModal.tscn" id="3_confirmmodal"]
+[ext_resource type="PackedScene" uid="uid://b3x1chardisplay" path="res://scenes/character/CharacterDisplay.tscn" id="4_chardisplay"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
 bg_color = Color(0.07, 0.07, 0.09, 0.97)
@@ -8,457 +11,553 @@ border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.918, 0.702, 0.031, 0.40)
+border_color = Color(0.918, 0.702, 0.031, 0.4)
 corner_radius_top_left = 16
 corner_radius_top_right = 16
-corner_radius_bottom_left = 16
 corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 shadow_color = Color(0.918, 0.702, 0.031, 0.15)
 shadow_size = 12
-shadow_offset = Vector2(0, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slot"]
-bg_color = Color(0.06, 0.08, 0.13, 1.0)
+bg_color = Color(0.06, 0.08, 0.13, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.22, 0.26, 0.36, 0.70)
+border_color = Color(0.22, 0.26, 0.36, 0.7)
 corner_radius_top_left = 12
 corner_radius_top_right = 12
-corner_radius_bottom_left = 12
 corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_create"]
-bg_color = Color(0.12, 0.16, 0.26, 1.0)
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 20.0
+content_margin_bottom = 10.0
+bg_color = Color(0.12, 0.16, 0.26, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
-corner_radius_bottom_left = 6
 corner_radius_bottom_right = 6
-content_margin_left = 20.0
-content_margin_right = 20.0
-content_margin_top = 10.0
-content_margin_bottom = 10.0
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_create_hover"]
-bg_color = Color(0.18, 0.24, 0.38, 1.0)
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 20.0
+content_margin_bottom = 10.0
+bg_color = Color(0.18, 0.24, 0.38, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
-corner_radius_bottom_left = 6
 corner_radius_bottom_right = 6
-content_margin_left = 20.0
-content_margin_right = 20.0
-content_margin_top = 10.0
-content_margin_bottom = 10.0
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_select"]
-bg_color = Color(0.918, 0.702, 0.031, 1.0)
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 20.0
+content_margin_bottom = 10.0
+bg_color = Color(0.086, 0.639, 0.29, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
-corner_radius_bottom_left = 6
 corner_radius_bottom_right = 6
-content_margin_left = 20.0
-content_margin_right = 20.0
-content_margin_top = 10.0
-content_margin_bottom = 10.0
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_select_hover"]
-bg_color = Color(0.97, 0.80, 0.15, 1.0)
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 20.0
+content_margin_bottom = 10.0
+bg_color = Color(0.133, 0.745, 0.333, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
-corner_radius_bottom_left = 6
 corner_radius_bottom_right = 6
-content_margin_left = 20.0
-content_margin_right = 20.0
-content_margin_top = 10.0
-content_margin_bottom = 10.0
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_back"]
-bg_color = Color(0.55, 0.10, 0.10, 1.0)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_delete"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.863, 0.149, 0.149, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_delete_hover"]
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.9, 0.22, 0.22, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_close"]
+bg_color = Color(0.14, 0.14, 0.18, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_left = 6
 corner_radius_bottom_right = 6
-content_margin_left = 20.0
-content_margin_right = 20.0
-content_margin_top = 10.0
-content_margin_bottom = 10.0
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_back_hover"]
-bg_color = Color(0.75, 0.15, 0.15, 1.0)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_close_hover"]
+bg_color = Color(0.24, 0.24, 0.30, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_left = 6
 corner_radius_bottom_right = 6
-content_margin_left = 20.0
-content_margin_right = 20.0
-content_margin_top = 10.0
-content_margin_bottom = 10.0
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3"]
-
-[node name="ManagerSelectModal" type="Control"]
+[node name="ManagerSelectModal" type="Control" unique_id=2032322512]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-visible = false
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_mgsel")
 
-[node name="Dim" type="ColorRect" parent="."]
+[node name="Dim" type="ColorRect" parent="." unique_id=1901878528]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0, 0, 0, 0.75)
-mouse_filter = 0
 
-[node name="Center" type="CenterContainer" parent="."]
+[node name="Center" type="CenterContainer" parent="." unique_id=2137691843]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Card" type="PanelContainer" parent="Center"]
+[node name="Card" type="PanelContainer" parent="Center" unique_id=99347146]
+custom_minimum_size = Vector2(1000, 600)
 layout_mode = 2
-custom_minimum_size = Vector2(980, 0)
 theme_override_styles/panel = SubResource("StyleBoxFlat_card")
 
-[node name="Margin" type="MarginContainer" parent="Center/Card"]
+[node name="Margin" type="MarginContainer" parent="Center/Card" unique_id=1929645515]
 layout_mode = 2
 theme_override_constants/margin_left = 40
 theme_override_constants/margin_top = 40
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 40
 
-[node name="VBox" type="VBoxContainer" parent="Center/Card/Margin"]
+[node name="VBox" type="VBoxContainer" parent="Center/Card/Margin" unique_id=969711600]
 layout_mode = 2
 theme_override_constants/separation = 32
 
-[node name="Title" type="Label" parent="Center/Card/Margin/VBox"]
+[node name="Header" type="HBoxContainer" parent="Center/Card/Margin/VBox"]
 layout_mode = 2
-text = "Manager wählen"
-theme_override_font_sizes/font_size = 32
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Center/Card/Margin/VBox/Header" unique_id=469940153]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
+theme_override_font_sizes/font_size = 32
+text = "Manager wählen"
 horizontal_alignment = 1
 
-[node name="Slots" type="HBoxContainer" parent="Center/Card/Margin/VBox"]
+[node name="BtnClose" type="Button" parent="Center/Card/Margin/VBox/Header"]
 layout_mode = 2
-alignment = 1
+text = "✕"
+theme_override_styles/normal = SubResource("StyleBoxFlat_close")
+theme_override_styles/hover = SubResource("StyleBoxFlat_close_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_close")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+
+[node name="Slots" type="HBoxContainer" parent="Center/Card/Margin/VBox" unique_id=114644237]
+layout_mode = 2
 theme_override_constants/separation = 20
+alignment = 1
 
-[node name="Slot0" type="PanelContainer" parent="Center/Card/Margin/VBox/Slots"]
+[node name="Slot0" type="PanelContainer" parent="Center/Card/Margin/VBox/Slots" unique_id=250603051]
+custom_minimum_size = Vector2(280, 340)
 layout_mode = 2
-custom_minimum_size = Vector2(280, 300)
 theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
 
-[node name="SlotMargin" type="MarginContainer" parent="Center/Card/Margin/VBox/Slots/Slot0"]
+[node name="SlotMargin" type="MarginContainer" parent="Center/Card/Margin/VBox/Slots/Slot0" unique_id=1441932764]
 layout_mode = 2
 theme_override_constants/margin_left = 24
 theme_override_constants/margin_top = 24
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 24
 
-[node name="SlotVBox" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin"]
+[node name="SlotVBox" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin" unique_id=648351044]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Empty" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox"]
+[node name="Empty" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox" unique_id=1938540088]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 8
 
-[node name="Spacer1" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Empty"]
+[node name="Spacer1" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Empty" unique_id=1418291312]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Plus" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Empty"]
+[node name="Plus" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Empty" unique_id=1288741533]
 layout_mode = 2
-text = "+"
+theme_override_colors/font_color = Color(0.3, 0.36, 0.48, 1)
 theme_override_font_sizes/font_size = 52
-theme_override_colors/font_color = Color(0.30, 0.36, 0.48, 1)
-horizontal_alignment = 1
-
-[node name="Hint" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Empty"]
-layout_mode = 2
-text = "Freier Slot"
-theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.40, 0.46, 0.58, 1)
-horizontal_alignment = 1
-
-[node name="Spacer2" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Empty"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="BtnCreate" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Empty"]
-layout_mode = 2
-custom_minimum_size = Vector2(0, 48)
-text = "Neu erstellen"
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_create")
-theme_override_styles/hover = SubResource("StyleBoxFlat_create_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_create")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
-
-[node name="Filled" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 8
-visible = false
-
-[node name="Spacer1" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Name" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-text = "–"
-theme_override_font_sizes/font_size = 28
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-horizontal_alignment = 1
-
-[node name="Role" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-text = "MANAGER · LEVEL 1"
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 0.80)
-horizontal_alignment = 1
-
-[node name="Hotels" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-text = "0 Hotels"
-theme_override_font_sizes/font_size = 15
-theme_override_colors/font_color = Color(0.55, 0.60, 0.72, 1)
-horizontal_alignment = 1
-
-[node name="Spacer2" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="BtnSelect" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-custom_minimum_size = Vector2(0, 48)
-text = "Auswählen"
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.08, 0.06, 0.01, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_select")
-theme_override_styles/hover = SubResource("StyleBoxFlat_select_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_select")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
-
-[node name="Slot1" type="PanelContainer" parent="Center/Card/Margin/VBox/Slots"]
-layout_mode = 2
-custom_minimum_size = Vector2(280, 300)
-theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
-
-[node name="SlotMargin" type="MarginContainer" parent="Center/Card/Margin/VBox/Slots/Slot1"]
-layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
-
-[node name="SlotVBox" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Empty" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 8
-
-[node name="Spacer1" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Empty"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Plus" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Empty"]
-layout_mode = 2
 text = "+"
-theme_override_font_sizes/font_size = 52
-theme_override_colors/font_color = Color(0.30, 0.36, 0.48, 1)
 horizontal_alignment = 1
 
-[node name="Hint" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Empty"]
+[node name="Hint" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Empty" unique_id=1478716589]
 layout_mode = 2
-text = "Freier Slot"
+theme_override_colors/font_color = Color(0.4, 0.46, 0.58, 1)
 theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.40, 0.46, 0.58, 1)
-horizontal_alignment = 1
-
-[node name="Spacer2" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Empty"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="BtnCreate" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Empty"]
-layout_mode = 2
-custom_minimum_size = Vector2(0, 48)
-text = "Neu erstellen"
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_create")
-theme_override_styles/hover = SubResource("StyleBoxFlat_create_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_create")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
-
-[node name="Filled" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 8
-visible = false
-
-[node name="Spacer1" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Name" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-text = "–"
-theme_override_font_sizes/font_size = 28
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-horizontal_alignment = 1
-
-[node name="Role" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-text = "MANAGER · LEVEL 1"
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 0.80)
-horizontal_alignment = 1
-
-[node name="Hotels" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-text = "0 Hotels"
-theme_override_font_sizes/font_size = 15
-theme_override_colors/font_color = Color(0.55, 0.60, 0.72, 1)
-horizontal_alignment = 1
-
-[node name="Spacer2" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="BtnSelect" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-custom_minimum_size = Vector2(0, 48)
-text = "Auswählen"
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.08, 0.06, 0.01, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_select")
-theme_override_styles/hover = SubResource("StyleBoxFlat_select_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_select")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
-
-[node name="Slot2" type="PanelContainer" parent="Center/Card/Margin/VBox/Slots"]
-layout_mode = 2
-custom_minimum_size = Vector2(280, 300)
-theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
-
-[node name="SlotMargin" type="MarginContainer" parent="Center/Card/Margin/VBox/Slots/Slot2"]
-layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
-
-[node name="SlotVBox" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Empty" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 8
-
-[node name="Spacer1" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Empty"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Plus" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Empty"]
-layout_mode = 2
-text = "+"
-theme_override_font_sizes/font_size = 52
-theme_override_colors/font_color = Color(0.30, 0.36, 0.48, 1)
-horizontal_alignment = 1
-
-[node name="Hint" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Empty"]
-layout_mode = 2
 text = "Freier Slot"
-theme_override_font_sizes/font_size = 14
-theme_override_colors/font_color = Color(0.40, 0.46, 0.58, 1)
 horizontal_alignment = 1
 
-[node name="Spacer2" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Empty"]
+[node name="Spacer2" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Empty" unique_id=1668964507]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="BtnCreate" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Empty"]
-layout_mode = 2
+[node name="BtnCreate" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Empty" unique_id=1537882272]
 custom_minimum_size = Vector2(0, 48)
-text = "Neu erstellen"
-theme_override_font_sizes/font_size = 16
+layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
+theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_create")
-theme_override_styles/hover = SubResource("StyleBoxFlat_create_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_create")
+theme_override_styles/hover = SubResource("StyleBoxFlat_create_hover")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+text = "Neu erstellen"
 
-[node name="Filled" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox"]
+[node name="Filled" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox" unique_id=220596678]
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 8
-visible = false
 
-[node name="Spacer1" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled"]
+[node name="AvatarBox" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled"]
 layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Name" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-text = "–"
-theme_override_font_sizes/font_size = 28
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-horizontal_alignment = 1
-
-[node name="Role" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-text = "MANAGER · LEVEL 1"
-theme_override_font_sizes/font_size = 13
-theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 0.80)
-horizontal_alignment = 1
-
-[node name="Hotels" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-text = "0 Hotels"
-theme_override_font_sizes/font_size = 15
-theme_override_colors/font_color = Color(0.55, 0.60, 0.72, 1)
-horizontal_alignment = 1
-
-[node name="Spacer2" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="BtnSelect" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled"]
-layout_mode = 2
-custom_minimum_size = Vector2(0, 48)
-text = "Auswählen"
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.08, 0.06, 0.01, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_select")
-theme_override_styles/hover = SubResource("StyleBoxFlat_select_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_select")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
-
-[node name="BtnBack" type="Button" parent="Center/Card/Margin/VBox"]
-layout_mode = 2
+custom_minimum_size = Vector2(90, 120)
 size_flags_horizontal = 4
-custom_minimum_size = Vector2(240, 52)
-text = "Zurück"
-theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_back")
-theme_override_styles/hover = SubResource("StyleBoxFlat_back_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_back")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_3")
+clip_contents = true
+
+[node name="AvatarDisplay" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled/AvatarBox" instance=ExtResource("4_chardisplay")]
+layout_mode = 0
+offset_right = 180.0
+offset_bottom = 240.0
+scale = Vector2(0.5, 0.5)
+
+[node name="Name" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled" unique_id=519176093]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 28
+text = "–"
+horizontal_alignment = 1
+
+[node name="Role" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled" unique_id=1366944540]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 0.8)
+theme_override_font_sizes/font_size = 13
+text = "MANAGER · LEVEL 1"
+horizontal_alignment = 1
+
+[node name="Hotels" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled" unique_id=1405049285]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.6, 0.72, 1)
+theme_override_font_sizes/font_size = 15
+text = "0 Hotels"
+horizontal_alignment = 1
+
+[node name="Spacer2" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled" unique_id=1611382837]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ActionRow" type="HBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled" unique_id=27707989]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BtnSelect" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled/ActionRow" unique_id=1355200381]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_select")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_select")
+theme_override_styles/hover = SubResource("StyleBoxFlat_select_hover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
+text = "Auswählen"
+
+[node name="BtnDelete" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled/ActionRow" unique_id=1545295235]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_delete")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_delete")
+theme_override_styles/hover = SubResource("StyleBoxFlat_delete_hover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
+icon = ExtResource("2_trash")
+
+[node name="Slot1" type="PanelContainer" parent="Center/Card/Margin/VBox/Slots" unique_id=1865783860]
+custom_minimum_size = Vector2(280, 340)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="SlotMargin" type="MarginContainer" parent="Center/Card/Margin/VBox/Slots/Slot1" unique_id=2006837834]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="SlotVBox" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin" unique_id=1302007186]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Empty" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox" unique_id=430103281]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="Spacer1" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Empty" unique_id=371106947]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Plus" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Empty" unique_id=991545516]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.36, 0.48, 1)
+theme_override_font_sizes/font_size = 52
+text = "+"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Empty" unique_id=1110333006]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.46, 0.58, 1)
+theme_override_font_sizes/font_size = 14
+text = "Freier Slot"
+horizontal_alignment = 1
+
+[node name="Spacer2" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Empty" unique_id=1931566026]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BtnCreate" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Empty" unique_id=1933091313]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_create")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_create")
+theme_override_styles/hover = SubResource("StyleBoxFlat_create_hover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+text = "Neu erstellen"
+
+[node name="Filled" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox" unique_id=700813091]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="AvatarBox" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled"]
+layout_mode = 2
+custom_minimum_size = Vector2(90, 120)
+size_flags_horizontal = 4
+clip_contents = true
+
+[node name="AvatarDisplay" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled/AvatarBox" instance=ExtResource("4_chardisplay")]
+layout_mode = 0
+offset_right = 180.0
+offset_bottom = 240.0
+scale = Vector2(0.5, 0.5)
+
+[node name="Name" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled" unique_id=1453293828]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 28
+text = "–"
+horizontal_alignment = 1
+
+[node name="Role" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled" unique_id=1410469684]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 0.8)
+theme_override_font_sizes/font_size = 13
+text = "MANAGER · LEVEL 1"
+horizontal_alignment = 1
+
+[node name="Hotels" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled" unique_id=255581426]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.6, 0.72, 1)
+theme_override_font_sizes/font_size = 15
+text = "0 Hotels"
+horizontal_alignment = 1
+
+[node name="Spacer2" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled" unique_id=2040575718]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ActionRow" type="HBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled" unique_id=342796553]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BtnSelect" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled/ActionRow" unique_id=1392352907]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_select")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_select")
+theme_override_styles/hover = SubResource("StyleBoxFlat_select_hover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
+text = "Auswählen"
+
+[node name="BtnDelete" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled/ActionRow" unique_id=1058637223]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_delete")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_delete")
+theme_override_styles/hover = SubResource("StyleBoxFlat_delete_hover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
+icon = ExtResource("2_trash")
+
+[node name="Slot2" type="PanelContainer" parent="Center/Card/Margin/VBox/Slots" unique_id=1571314670]
+custom_minimum_size = Vector2(280, 340)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_slot")
+
+[node name="SlotMargin" type="MarginContainer" parent="Center/Card/Margin/VBox/Slots/Slot2" unique_id=2020697415]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="SlotVBox" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin" unique_id=12621294]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Empty" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox" unique_id=537643029]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="Spacer1" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Empty" unique_id=240310753]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Plus" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Empty" unique_id=1539470903]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 0.36, 0.48, 1)
+theme_override_font_sizes/font_size = 52
+text = "+"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Empty" unique_id=591495480]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.46, 0.58, 1)
+theme_override_font_sizes/font_size = 14
+text = "Freier Slot"
+horizontal_alignment = 1
+
+[node name="Spacer2" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Empty" unique_id=512214615]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BtnCreate" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Empty" unique_id=627943059]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_create")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_create")
+theme_override_styles/hover = SubResource("StyleBoxFlat_create_hover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+text = "Neu erstellen"
+
+[node name="Filled" type="VBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox" unique_id=416481342]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 8
+
+[node name="AvatarBox" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled"]
+layout_mode = 2
+custom_minimum_size = Vector2(90, 120)
+size_flags_horizontal = 4
+clip_contents = true
+
+[node name="AvatarDisplay" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled/AvatarBox" instance=ExtResource("4_chardisplay")]
+layout_mode = 0
+offset_right = 180.0
+offset_bottom = 240.0
+scale = Vector2(0.5, 0.5)
+
+[node name="Name" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled" unique_id=1853582338]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 28
+text = "–"
+horizontal_alignment = 1
+
+[node name="Role" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled" unique_id=1015985847]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 0.8)
+theme_override_font_sizes/font_size = 13
+text = "MANAGER · LEVEL 1"
+horizontal_alignment = 1
+
+[node name="Hotels" type="Label" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled" unique_id=911143731]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.6, 0.72, 1)
+theme_override_font_sizes/font_size = 15
+text = "0 Hotels"
+horizontal_alignment = 1
+
+[node name="Spacer2" type="Control" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled" unique_id=1412530849]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ActionRow" type="HBoxContainer" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BtnSelect" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled/ActionRow"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_select")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_select")
+theme_override_styles/hover = SubResource("StyleBoxFlat_select_hover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
+text = "Auswählen"
+
+[node name="BtnDelete" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled/ActionRow"]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_delete")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_delete")
+theme_override_styles/hover = SubResource("StyleBoxFlat_delete_hover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
+icon = ExtResource("2_trash")
+
+[node name="ConfirmModal" parent="." instance=ExtResource("3_confirmmodal")]
+

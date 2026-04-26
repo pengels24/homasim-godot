@@ -30,10 +30,11 @@ const FADE_DURATION  := 1.2
 @onready var remember_checkbox:  CheckBox  = $LoginModal/Center/Card/VBox/RememberCheck
 @onready var btn_close_modal:    Button    = $LoginModal/Center/Card/VBox/BtnClose
 @onready var btn_to_register:   Button    = $LoginModal/Center/Card/VBox/BtnToRegister
-@onready var btn_manager:       Button    = $Content/Buttons/BtnManager
-@onready var btn_tutorial:      Button    = $Content/Buttons/BtnTutorial
-@onready var btn_credits:       Button    = $Content/Buttons/BtnCredits
-@onready var _manager_modal:    Control   = $ManagerModal
+@onready var btn_manager:       Button       = $Content/Buttons/BtnManager
+@onready var btn_tutorial:      Button       = $Content/Buttons/BtnTutorial
+@onready var btn_credits:       Button       = $Content/Buttons/BtnCredits
+@onready var _manager_modal:    Control      = $ManagerModal
+@onready var _settings_modal:   SettingsModal = $SettingsModal
 
 var _current_bg := 0
 var _slide_timer := 0.0
@@ -46,6 +47,7 @@ func _ready() -> void:
 	btn_login.pressed.connect(_on_login_pressed)
 	btn_play.pressed.connect(_on_play_pressed)
 	btn_settings.pressed.connect(_on_settings_pressed)
+	_settings_modal.closed.connect(_on_settings_closed)
 	btn_manager.pressed.connect(_on_manager_pressed)
 	btn_tutorial.pressed.connect(_on_tutorial_pressed)
 	_manager_modal.closed.connect(_on_manager_modal_closed)
@@ -102,7 +104,7 @@ func _setup_modal() -> void:
 func _update_manager_state() -> void:
 	btn_play.disabled = GameState.active_profile_id < 0
 	if GameState.active_profile_id >= 0:
-		btn_manager.text = GameState.active_profile.get("name", GameState.T("menu.btn.manager"))
+		btn_manager.text = GameState.T("menu.btn.manager_change")
 	else:
 		btn_manager.text = GameState.T("menu.btn.manager")
 
@@ -164,8 +166,20 @@ func _on_play_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/dashboard/Dashboard.tscn")
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		var ke := event as InputEventKey
+		if ke.pressed and not ke.echo and ke.keycode == KEY_S and ke.alt_pressed:
+			_on_settings_pressed()
+
+
 func _on_settings_pressed() -> void:
-	pass # TODO: Settings-Szene
+	btn_quit.visible = false
+	_settings_modal.open()
+
+
+func _on_settings_closed() -> void:
+	btn_quit.visible = true
 
 
 func _on_manager_pressed() -> void:

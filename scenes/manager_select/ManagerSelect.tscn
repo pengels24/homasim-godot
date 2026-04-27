@@ -72,6 +72,11 @@ content_margin_top = 10.0
 content_margin_right = 20.0
 content_margin_bottom = 10.0
 bg_color = Color(0.133, 0.745, 0.333, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.918, 0.702, 0.031, 0.85)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
@@ -180,6 +185,7 @@ horizontal_alignment = 1
 
 [node name="BtnClose" type="Button" parent="Center/Card/Margin/VBox/Header"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "✕"
 theme_override_styles/normal = SubResource("StyleBoxFlat_close")
 theme_override_styles/hover = SubResource("StyleBoxFlat_close_hover")
@@ -239,6 +245,7 @@ size_flags_vertical = 3
 [node name="BtnCreate" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Empty" unique_id=1537882272]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_create")
@@ -297,9 +304,12 @@ theme_override_constants/separation = 8
 [node name="BtnSelect" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled/ActionRow" unique_id=1355200381]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.05, 0.20, 0.08, 1)
+theme_override_colors/font_hover_color = Color(0.05, 0.20, 0.08, 1)
+theme_override_colors/font_pressed_color = Color(0.05, 0.20, 0.08, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_select")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_select")
 theme_override_styles/hover = SubResource("StyleBoxFlat_select_hover")
@@ -309,6 +319,7 @@ text = "Auswählen"
 [node name="BtnDelete" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot0/SlotMargin/SlotVBox/Filled/ActionRow" unique_id=1545295235]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_delete")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_delete")
 theme_override_styles/hover = SubResource("StyleBoxFlat_delete_hover")
@@ -361,6 +372,7 @@ size_flags_vertical = 3
 [node name="BtnCreate" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Empty" unique_id=1933091313]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_create")
@@ -419,9 +431,12 @@ theme_override_constants/separation = 8
 [node name="BtnSelect" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled/ActionRow" unique_id=1392352907]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.05, 0.20, 0.08, 1)
+theme_override_colors/font_hover_color = Color(0.05, 0.20, 0.08, 1)
+theme_override_colors/font_pressed_color = Color(0.05, 0.20, 0.08, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_select")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_select")
 theme_override_styles/hover = SubResource("StyleBoxFlat_select_hover")
@@ -431,6 +446,7 @@ text = "Auswählen"
 [node name="BtnDelete" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot1/SlotMargin/SlotVBox/Filled/ActionRow" unique_id=1058637223]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_delete")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_delete")
 theme_override_styles/hover = SubResource("StyleBoxFlat_delete_hover")
@@ -483,6 +499,7 @@ size_flags_vertical = 3
 [node name="BtnCreate" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Empty" unique_id=627943059]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxFlat_create")
@@ -541,9 +558,12 @@ theme_override_constants/separation = 8
 [node name="BtnSelect" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled/ActionRow"]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.05, 0.20, 0.08, 1)
+theme_override_colors/font_hover_color = Color(0.05, 0.20, 0.08, 1)
+theme_override_colors/font_pressed_color = Color(0.05, 0.20, 0.08, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_select")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_select")
 theme_override_styles/hover = SubResource("StyleBoxFlat_select_hover")
@@ -553,6 +573,7 @@ text = "Auswählen"
 [node name="BtnDelete" type="Button" parent="Center/Card/Margin/VBox/Slots/Slot2/SlotMargin/SlotVBox/Filled/ActionRow"]
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_delete")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_delete")
 theme_override_styles/hover = SubResource("StyleBoxFlat_delete_hover")

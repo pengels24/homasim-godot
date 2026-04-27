@@ -28,6 +28,7 @@ custom_minimum_size = Vector2(0, 200)
 
 [node name="SelectButton" type="Button" parent="CenterContainer/VBoxContainer"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "Hotel auswählen"
 disabled = true
 

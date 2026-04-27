@@ -122,6 +122,7 @@ alignment = 1
 
 [node name="BtnCancel" type="Button" parent="Center/Card/Margin/VBox/Buttons"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 custom_minimum_size = Vector2(140, 48)
 theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
@@ -133,6 +134,7 @@ text = "Abbrechen"
 
 [node name="BtnConfirm" type="Button" parent="Center/Card/Margin/VBox/Buttons"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 custom_minimum_size = Vector2(140, 48)
 theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(1, 1, 1, 1)

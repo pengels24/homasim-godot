@@ -1,0 +1,264 @@
+[gd_scene format=3 uid="uid://bsouwnmtw2p0b"]
+
+[ext_resource type="Script" path="res://scenes/shared/NewHotelModal.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+bg_color = Color(0.07, 0.07, 0.09, 0.97)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.918, 0.702, 0.031, 0.4)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_left = 16
+corner_radius_bottom_right = 16
+shadow_color = Color(0.918, 0.702, 0.031, 0.15)
+shadow_size = 12
+content_margin_left = 40.0
+content_margin_right = 40.0
+content_margin_top = 40.0
+content_margin_bottom = 40.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_close"]
+bg_color = Color(0.14, 0.14, 0.18, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_close_hover"]
+bg_color = Color(0.24, 0.24, 0.30, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_normal"]
+bg_color = Color(0.10, 0.10, 0.14, 1.0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.35, 0.45, 1.0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_focus"]
+bg_color = Color(0.10, 0.10, 0.14, 1.0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.918, 0.702, 0.031, 0.8)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grid_bg"]
+bg_color = Color(0.20, 0.22, 0.25, 1.0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_create"]
+bg_color = Color(0.086, 0.639, 0.290, 1.0)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+content_margin_left = 40.0
+content_margin_right = 40.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_create_hover"]
+bg_color = Color(0.15, 0.78, 0.38, 1.0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.918, 0.702, 0.031, 0.85)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_left = 8
+corner_radius_bottom_right = 8
+content_margin_left = 40.0
+content_margin_right = 40.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+
+[node name="NewHotelModal" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+visible = false
+script = ExtResource("1_script")
+
+[node name="Overlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.75)
+mouse_filter = 0
+
+[node name="Center" type="CenterContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Card" type="PanelContainer" parent="Overlay/Center"]
+layout_mode = 2
+custom_minimum_size = Vector2(860, 0)
+theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+
+[node name="VBox" type="VBoxContainer" parent="Overlay/Center/Card"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Header" type="HBoxContainer" parent="Overlay/Center/Card/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLbl" type="Label" parent="Overlay/Center/Card/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
+horizontal_alignment = 1
+text = "Neues Hotel anlegen"
+
+[node name="BtnClose" type="Button" parent="Overlay/Center/Card/VBox/Header"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_close")
+theme_override_styles/hover = SubResource("StyleBoxFlat_close_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_close")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+mouse_default_cursor_shape = 2
+text = "✕"
+
+[node name="HeaderSpacer" type="Control" parent="Overlay/Center/Card/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 24)
+
+[node name="Content" type="HBoxContainer" parent="Overlay/Center/Card/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="Left" type="VBoxContainer" parent="Overlay/Center/Card/VBox/Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="NameLabel" type="Label" parent="Overlay/Center/Card/VBox/Content/Left"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.63, 0.63, 0.69, 1)
+text = "Hotelname"
+
+[node name="HotelNameField" type="LineEdit" parent="Overlay/Center/Card/VBox/Content/Left"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 48)
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.92, 0.92, 0.94, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_input_normal")
+theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
+placeholder_text = "Hotelname"
+
+[node name="EntranceLbl" type="Label" parent="Overlay/Center/Card/VBox/Content/Left"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.63, 0.63, 0.69, 1)
+text = "Eingangsseite: –"
+
+[node name="ErrorLbl" type="Label" parent="Overlay/Center/Card/VBox/Content/Left"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.937, 0.267, 0.267, 1)
+autowrap_mode = 3
+text = ""
+
+[node name="Right" type="VBoxContainer" parent="Overlay/Center/Card/VBox/Content"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/separation = 8
+
+[node name="GridLabel" type="Label" parent="Overlay/Center/Card/VBox/Content/Right"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.63, 0.63, 0.69, 1)
+text = "Startparzelle"
+
+[node name="GridWrapper" type="PanelContainer" parent="Overlay/Center/Card/VBox/Content/Right"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_grid_bg")
+
+[node name="GridMargin" type="MarginContainer" parent="Overlay/Center/Card/VBox/Content/Right/GridWrapper"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="GridHolder" type="GridContainer" parent="Overlay/Center/Card/VBox/Content/Right/GridWrapper/GridMargin"]
+layout_mode = 2
+theme_override_constants/h_separation = 4
+theme_override_constants/v_separation = 4
+columns = 5
+
+[node name="ContentSpacer" type="Control" parent="Overlay/Center/Card/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 24)
+
+[node name="BottomSep" type="HSeparator" parent="Overlay/Center/Card/VBox"]
+layout_mode = 2
+modulate = Color(1, 1, 1, 0.12)
+
+[node name="SaveSpacer" type="Control" parent="Overlay/Center/Card/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 16)
+
+[node name="BtnRow" type="CenterContainer" parent="Overlay/Center/Card/VBox"]
+layout_mode = 2
+
+[node name="BtnCreate" type="Button" parent="Overlay/Center/Card/VBox/BtnRow"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.05, 0.20, 0.08, 1)
+theme_override_colors/font_hover_color = Color(0.05, 0.20, 0.08, 1)
+theme_override_colors/font_pressed_color = Color(0.05, 0.20, 0.08, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_create")
+theme_override_styles/hover = SubResource("StyleBoxFlat_create_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_create")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+mouse_default_cursor_shape = 2
+text = "Anlegen"

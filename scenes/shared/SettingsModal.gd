@@ -54,6 +54,7 @@ func _setup_tab_buttons() -> void:
 	for i in labels.size():
 		var btn := _tab_bar.get_child(i) as Button
 		btn.text = labels[i]
+		btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		btn.pressed.connect(_switch_tab.bind(i))
 		_tab_buttons.append(btn)
 
@@ -210,6 +211,9 @@ func _build_oberflaeche_tab() -> void:
 		SettingsManager.ui_scale = SettingsManager.UI_SCALES[int(v)]
 	)
 
+	panel.add_child(_make_separator())
+	panel.add_child(_make_toast_position_row())
+
 
 # ── Steuerung-Tab (Platzhalter) ───────────────────────────────────────────────
 
@@ -333,6 +337,73 @@ func _make_toggle_row(label_text: String, current: bool) -> HBoxContainer:
 	return hbox
 
 
+## Button-Gruppe für Toast-Position (Oben / Mitte / Unten).
+func _make_toast_position_row() -> HBoxContainer:
+	var hbox := HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 20)
+
+	var lbl := Label.new()
+	lbl.text = GameState.T("settings.ui.toast_position")
+	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lbl.add_theme_font_size_override("font_size", 16)
+	lbl.add_theme_color_override("font_color", Color(0.85, 0.85, 0.85))
+	hbox.add_child(lbl)
+
+	var labels := [GameState.T("settings.ui.toast.top"), GameState.T("settings.ui.toast.middle"), GameState.T("settings.ui.toast.bottom")]
+	var values := ["top", "middle", "bottom"]
+
+	var btn_row := HBoxContainer.new()
+	btn_row.add_theme_constant_override("separation", 8)
+	hbox.add_child(btn_row)
+
+	var btns: Array[Button] = []
+	for i in labels.size():
+		var btn := Button.new()
+		btn.text = labels[i]
+		btn.custom_minimum_size = Vector2(110, 36)
+		btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+		btns.append(btn)
+
+		btn_row.add_child(btn)
+
+	var refresh := func() -> void:
+		for i in btns.size():
+			_style_pos_btn(btns[i], values[i] == SettingsManager.toast_position)
+
+	for i in values.size():
+		var val: String = values[i]
+		btns[i].pressed.connect(func() -> void:
+			SettingsManager.toast_position = val
+			refresh.call()
+		)
+
+	refresh.call()
+	return hbox
+
+
+func _style_pos_btn(btn: Button, active: bool) -> void:
+	var s := StyleBoxFlat.new()
+	s.bg_color            = Color(0.918, 0.702, 0.031, 0.12) if active else Color(0.15, 0.15, 0.20, 1.0)
+	s.border_width_left   = 1; s.border_width_top    = 1
+	s.border_width_right  = 1; s.border_width_bottom = 1
+	s.border_color        = Color(0.918, 0.702, 0.031, 0.8) if active else Color(0.35, 0.35, 0.45, 1.0)
+	s.corner_radius_top_left     = 4; s.corner_radius_top_right    = 4
+	s.corner_radius_bottom_left  = 4; s.corner_radius_bottom_right = 4
+	s.content_margin_left  = 16.0; s.content_margin_right = 16.0
+	s.content_margin_top   =  8.0; s.content_margin_bottom =  8.0
+	btn.add_theme_stylebox_override("normal",  s)
+	btn.add_theme_stylebox_override("pressed", s)
+	var sh := s.duplicate() as StyleBoxFlat
+	sh.bg_color = Color(0.918, 0.702, 0.031, 0.22) if active else Color(0.22, 0.22, 0.28, 1.0)
+	btn.add_theme_stylebox_override("hover", sh)
+	var col := Color(0.918, 0.702, 0.031) if active else Color(0.65, 0.65, 0.65)
+	btn.add_theme_color_override("font_color",         col)
+	btn.add_theme_color_override("font_hover_color",   col)
+	btn.add_theme_color_override("font_pressed_color", col)
+	btn.add_theme_font_size_override("font_size", 14)
+
+
 func _make_separator() -> HSeparator:
 	var sep := HSeparator.new()
 	sep.modulate = Color(1, 1, 1, 0.08)
@@ -395,6 +466,7 @@ func _take_snapshot() -> Dictionary:
 		"music_volume":              SettingsManager.music_volume,
 		"sound_volume":              SettingsManager.sound_volume,
 		"ui_scale":                  SettingsManager.ui_scale,
+		"toast_position":            SettingsManager.toast_position,
 	}
 
 

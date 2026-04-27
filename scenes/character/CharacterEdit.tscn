@@ -16,6 +16,11 @@ content_margin_bottom = 10.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gold_hover"]
 bg_color = Color(0.97, 0.80, 0.15, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.918, 0.702, 0.031, 0.85)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_left = 6
@@ -119,6 +124,11 @@ content_margin_bottom = 10.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_green_hover"]
 bg_color = Color(0.110, 0.780, 0.360, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.918, 0.702, 0.031, 0.85)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_left = 6
@@ -227,12 +237,14 @@ theme_override_constants/separation = 8
 
 [node name="BtnGenderM" type="Button" parent="Center/Card/VBox/HBox/Options/GenderRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Männlich"
 toggle_mode = true
 button_pressed = true
 theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_colors/font_hover_color = Color(0.08, 0.06, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_option")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
@@ -241,6 +253,7 @@ metadata/value = "m"
 
 [node name="BtnGenderW" type="Button" parent="Center/Card/VBox/HBox/Options/GenderRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Weiblich"
 toggle_mode = true
@@ -254,6 +267,7 @@ metadata/value = "w"
 
 [node name="BtnGenderD" type="Button" parent="Center/Card/VBox/HBox/Options/GenderRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Divers"
 toggle_mode = true
@@ -277,12 +291,14 @@ theme_override_constants/separation = 8
 
 [node name="BtnSkinHell" type="Button" parent="Center/Card/VBox/HBox/Options/SkinRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Hell"
 toggle_mode = true
 button_pressed = true
 theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_colors/font_hover_color = Color(0.08, 0.06, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_option")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
@@ -291,6 +307,7 @@ metadata/value = "hell"
 
 [node name="BtnSkinMittel" type="Button" parent="Center/Card/VBox/HBox/Options/SkinRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Mittel"
 toggle_mode = true
@@ -304,6 +321,7 @@ metadata/value = "mittel"
 
 [node name="BtnSkinDunkel" type="Button" parent="Center/Card/VBox/HBox/Options/SkinRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Dunkel"
 toggle_mode = true
@@ -327,6 +345,7 @@ theme_override_constants/separation = 6
 
 [node name="BtnHairBlond" type="Button" parent="Center/Card/VBox/HBox/Options/HairRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Blond"
 toggle_mode = true
@@ -340,12 +359,14 @@ metadata/value = "blond"
 
 [node name="BtnHairBraun" type="Button" parent="Center/Card/VBox/HBox/Options/HairRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Braun"
 toggle_mode = true
 button_pressed = true
 theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_colors/font_hover_color = Color(0.08, 0.06, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_option")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
@@ -354,6 +375,7 @@ metadata/value = "braun"
 
 [node name="BtnHairSchwarz" type="Button" parent="Center/Card/VBox/HBox/Options/HairRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Schwarz"
 toggle_mode = true
@@ -367,6 +389,7 @@ metadata/value = "schwarz"
 
 [node name="BtnHairHellblond" type="Button" parent="Center/Card/VBox/HBox/Options/HairRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Hellblond"
 toggle_mode = true
@@ -380,6 +403,7 @@ metadata/value = "hellblond"
 
 [node name="BtnHairRot" type="Button" parent="Center/Card/VBox/HBox/Options/HairRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Rot"
 toggle_mode = true
@@ -393,6 +417,7 @@ metadata/value = "rot"
 
 [node name="BtnHairGrau" type="Button" parent="Center/Card/VBox/HBox/Options/HairRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Grau"
 toggle_mode = true
@@ -416,12 +441,14 @@ theme_override_constants/separation = 6
 
 [node name="BtnOutfitAnzugSchwarz" type="Button" parent="Center/Card/VBox/HBox/Options/OutfitRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Anzug Schwarz"
 toggle_mode = true
 button_pressed = true
 theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_colors/font_hover_color = Color(0.08, 0.06, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_option")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
@@ -430,6 +457,7 @@ metadata/value = "anzug_schwarz"
 
 [node name="BtnOutfitAnzugGrau" type="Button" parent="Center/Card/VBox/HBox/Options/OutfitRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Anzug Grau"
 toggle_mode = true
@@ -443,6 +471,7 @@ metadata/value = "anzug_grau"
 
 [node name="BtnOutfitCasual" type="Button" parent="Center/Card/VBox/HBox/Options/OutfitRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Casual"
 toggle_mode = true
@@ -456,6 +485,7 @@ metadata/value = "casual"
 
 [node name="BtnOutfitUniform" type="Button" parent="Center/Card/VBox/HBox/Options/OutfitRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
 text = "Uniform"
 toggle_mode = true
@@ -502,10 +532,13 @@ horizontal_alignment = 1
 
 [node name="BtnSave" type="Button" parent="Center/Card/VBox"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 custom_minimum_size = Vector2(0, 52)
 text = "Manager erstellen"
 theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
+theme_override_colors/font_color = Color(0.05, 0.20, 0.08, 1)
+theme_override_colors/font_hover_color = Color(0.05, 0.20, 0.08, 1)
+theme_override_colors/font_pressed_color = Color(0.05, 0.20, 0.08, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_green")
 theme_override_styles/hover = SubResource("StyleBoxFlat_green_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_green")
@@ -521,6 +554,7 @@ autowrap_mode = 3
 
 [node name="BtnBack" type="Button" parent="Center/Card/VBox"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 custom_minimum_size = Vector2(0, 44)
 text = "Zurück"
 theme_override_font_sizes/font_size = 15

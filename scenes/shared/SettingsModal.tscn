@@ -45,7 +45,7 @@ content_margin_bottom = 6.0
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tab"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_save"]
-bg_color = Color(0.918, 0.702, 0.031, 1)
+bg_color = Color(0.086, 0.639, 0.290, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_left = 8
@@ -56,7 +56,12 @@ content_margin_top = 12.0
 content_margin_bottom = 12.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_save_hover"]
-bg_color = Color(0.97, 0.80, 0.15, 1)
+bg_color = Color(0.15, 0.78, 0.38, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.918, 0.702, 0.031, 0.85)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_left = 8
@@ -110,6 +115,7 @@ horizontal_alignment = 1
 
 [node name="BtnClose" type="Button" parent="Overlay/Center/Card/VBox/Header"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "✕"
 theme_override_styles/normal = SubResource("StyleBoxFlat_close")
 theme_override_styles/hover = SubResource("StyleBoxFlat_close_hover")
@@ -128,24 +134,28 @@ theme_override_constants/separation = 32
 
 [node name="BtnTabGameplay" type="Button" parent="Overlay/Center/Card/VBox/TabBar"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "GAMEPLAY"
 theme_override_styles/focus = SubResource("StyleBoxEmpty_tab")
 theme_override_font_sizes/font_size = 13
 
 [node name="BtnTabAudio" type="Button" parent="Overlay/Center/Card/VBox/TabBar"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "AUDIO"
 theme_override_styles/focus = SubResource("StyleBoxEmpty_tab")
 theme_override_font_sizes/font_size = 13
 
 [node name="BtnTabOberflaeche" type="Button" parent="Overlay/Center/Card/VBox/TabBar"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "OBERFLÄCHE"
 theme_override_styles/focus = SubResource("StyleBoxEmpty_tab")
 theme_override_font_sizes/font_size = 13
 
 [node name="BtnTabSteuerung" type="Button" parent="Overlay/Center/Card/VBox/TabBar"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "STEUERUNG"
 theme_override_styles/focus = SubResource("StyleBoxEmpty_tab")
 theme_override_font_sizes/font_size = 13
@@ -186,15 +196,22 @@ visible = false
 layout_mode = 2
 modulate = Color(1, 1, 1, 0.12)
 
+[node name="SaveSpacer" type="Control" parent="Overlay/Center/Card/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 16)
+
 [node name="SaveRow" type="CenterContainer" parent="Overlay/Center/Card/VBox"]
 layout_mode = 2
 
 [node name="BtnSave" type="Button" parent="Overlay/Center/Card/VBox/SaveRow"]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "Speichern"
 theme_override_styles/normal = SubResource("StyleBoxFlat_save")
 theme_override_styles/hover = SubResource("StyleBoxFlat_save_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_save")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_tab")
 theme_override_font_sizes/font_size = 15
-theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
+theme_override_colors/font_color = Color(0.05, 0.20, 0.08, 1)
+theme_override_colors/font_hover_color = Color(0.05, 0.20, 0.08, 1)
+theme_override_colors/font_pressed_color = Color(0.05, 0.20, 0.08, 1)

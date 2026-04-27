@@ -14,7 +14,8 @@ var music_volume:  float = 0.5  # 0.0 – 1.0
 var sound_volume:  float = 0.5  # 0.0 – 1.0
 
 # ── Oberfläche ────────────────────────────────────────────────────────────────
-var ui_scale: float = 1.0       # 0.75 / 1.0 / 1.25 / 1.5
+var ui_scale:       float  = 1.0       # 0.75 / 1.0 / 1.25 / 1.5
+var toast_position: String = "bottom"  # "top" / "middle" / "bottom"
 
 # ── Session ───────────────────────────────────────────────────────────────────
 var last_profile_id: int = -1   # Zuletzt gewählter Manager – für Auto-Restore
@@ -38,7 +39,8 @@ func save() -> void:
 	cfg.set_value("audio",    "master_volume",             master_volume)
 	cfg.set_value("audio",    "music_volume",              music_volume)
 	cfg.set_value("audio",    "sound_volume",              sound_volume)
-	cfg.set_value("ui",       "scale",                     ui_scale)
+	cfg.set_value("ui",       "scale",          ui_scale)
+	cfg.set_value("ui",       "toast_position", toast_position)
 	cfg.set_value("session",  "last_profile_id",           last_profile_id)
 	cfg.save(SETTINGS_PATH)
 	_apply_audio()
@@ -60,7 +62,8 @@ func _load() -> void:
 	master_volume             = cfg.get_value("audio",    "master_volume",             master_volume)
 	music_volume              = cfg.get_value("audio",    "music_volume",              music_volume)
 	sound_volume              = cfg.get_value("audio",    "sound_volume",              sound_volume)
-	ui_scale                  = cfg.get_value("ui",       "scale",                     ui_scale)
+	ui_scale                  = cfg.get_value("ui",       "scale",          ui_scale)
+	toast_position            = cfg.get_value("ui",       "toast_position", toast_position)
 	last_profile_id           = cfg.get_value("session",  "last_profile_id",           last_profile_id)
 
 

@@ -268,18 +268,21 @@ theme_override_constants/separation = 4
 [node name="BtnPause" type="Button" parent="HUD/TopBar/HBox/TimeSection/GameControls" unique_id=1587840301]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 20
 text = "II"
 
 [node name="BtnPlay" type="Button" parent="HUD/TopBar/HBox/TimeSection/GameControls" unique_id=1423923170]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 20
 text = "▶"
 
 [node name="BtnFF" type="Button" parent="HUD/TopBar/HBox/TimeSection/GameControls" unique_id=1707281714]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+mouse_default_cursor_shape = 2
 theme_override_font_sizes/font_size = 20
 text = ">>"
 

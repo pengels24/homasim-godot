@@ -103,6 +103,7 @@ func _setup_modal() -> void:
 
 func _update_manager_state() -> void:
 	btn_play.disabled = GameState.active_profile_id < 0
+	btn_play.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if GameState.active_profile_id >= 0 else Control.CURSOR_FORBIDDEN
 	if GameState.active_profile_id >= 0:
 		btn_manager.text = GameState.T("menu.btn.manager_change")
 	else:

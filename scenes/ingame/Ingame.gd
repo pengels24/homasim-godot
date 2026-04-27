@@ -65,7 +65,7 @@ func _load_hotel() -> Dictionary:
 		var h := SaveManager.get_hotel(GameState.active_hotel_id)
 		if not h.is_empty():
 			return h
-	var hotels: Array = SaveManager.get_hotels(1)
+	var hotels: Array = SaveManager.get_hotels(GameState.active_profile_id)
 	if not hotels.is_empty():
 		return hotels[0]
 	return { "name": "Hotel", "day": 1, "money": 50000.0, "id": -1 }

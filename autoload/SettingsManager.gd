@@ -9,8 +9,9 @@ var autosave_interval_minutes: int   = 10    # Echtzeit-Minuten
 var ff_speed:                  float = 10.0  # Schnellvorlauf-Faktor
 
 # ── Audio ─────────────────────────────────────────────────────────────────────
-var music_volume: float = 0.5   # 0.0 – 1.0
-var sound_volume: float = 0.5   # 0.0 – 1.0
+var master_volume: float = 1.0  # 0.0 – 1.0
+var music_volume:  float = 0.5  # 0.0 – 1.0
+var sound_volume:  float = 0.5  # 0.0 – 1.0
 
 # ── Oberfläche ────────────────────────────────────────────────────────────────
 var ui_scale: float = 1.0       # 0.75 / 1.0 / 1.25 / 1.5
@@ -23,6 +24,7 @@ const UI_SCALES:           Array[float] = [0.75, 1.0, 1.25, 1.5]
 
 func _ready() -> void:
 	_load()
+	_apply_audio()
 
 
 func save() -> void:
@@ -30,10 +32,12 @@ func save() -> void:
 	cfg.set_value("gameplay", "autosave_enabled",          autosave_enabled)
 	cfg.set_value("gameplay", "autosave_interval_minutes", autosave_interval_minutes)
 	cfg.set_value("gameplay", "ff_speed",                  ff_speed)
+	cfg.set_value("audio",    "master_volume",             master_volume)
 	cfg.set_value("audio",    "music_volume",              music_volume)
 	cfg.set_value("audio",    "sound_volume",              sound_volume)
 	cfg.set_value("ui",       "scale",                     ui_scale)
 	cfg.save(SETTINGS_PATH)
+	_apply_audio()
 
 
 func _load() -> void:
@@ -43,6 +47,24 @@ func _load() -> void:
 	autosave_enabled          = cfg.get_value("gameplay", "autosave_enabled",          autosave_enabled)
 	autosave_interval_minutes = cfg.get_value("gameplay", "autosave_interval_minutes", autosave_interval_minutes)
 	ff_speed                  = cfg.get_value("gameplay", "ff_speed",                  ff_speed)
+	master_volume             = cfg.get_value("audio",    "master_volume",             master_volume)
 	music_volume              = cfg.get_value("audio",    "music_volume",              music_volume)
 	sound_volume              = cfg.get_value("audio",    "sound_volume",              sound_volume)
 	ui_scale                  = cfg.get_value("ui",       "scale",                     ui_scale)
+
+
+func _apply_audio() -> void:
+	_ensure_bus("Music")
+	_ensure_bus("Sound")
+	AudioServer.set_bus_volume_db(0, linear_to_db(master_volume))
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), linear_to_db(music_volume))
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Sound"), linear_to_db(sound_volume))
+
+
+func _ensure_bus(bus_name: String) -> void:
+	if AudioServer.get_bus_index(bus_name) >= 0:
+		return
+	AudioServer.add_bus()
+	var idx := AudioServer.bus_count - 1
+	AudioServer.set_bus_name(idx, bus_name)
+	AudioServer.set_bus_send(idx, "Master")

@@ -65,38 +65,40 @@ anchor_bottom = 1.0
 script = ExtResource("1_loadscreen")
 visible = false
 
-[node name="Overlay" type="PanelContainer" parent="."]
+[node name="Overlay" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 add_theme_stylebox_override("panel", SubResource("StyleBoxFlat_overlay"))
 
-[node name="Center" type="CenterContainer" parent="Overlay"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Card" type="PanelContainer" parent="Overlay/Center"]
-layout_mode = 2
-custom_minimum_size = Vector2(860, 640)
+[node name="Card" type="PanelContainer" parent="Overlay"]
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -430.0
+offset_top = -320.0
+offset_right = 430.0
+offset_bottom = 320.0
 add_theme_stylebox_override("panel", SubResource("StyleBoxFlat_card"))
 
-[node name="VBox" type="VBoxContainer" parent="Overlay/Center/Card"]
+[node name="VBox" type="VBoxContainer" parent="Overlay/Card"]
 layout_mode = 2
 add_theme_constant_override("separation", 20)
 
-[node name="Header" type="HBoxContainer" parent="Overlay/Center/Card/VBox"]
+[node name="Header" type="HBoxContainer" parent="Overlay/Card/VBox"]
 layout_mode = 2
 
-[node name="TitleLbl" type="Label" parent="Overlay/Center/Card/VBox/Header"]
+[node name="TitleLbl" type="Label" parent="Overlay/Card/VBox/Header"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Spielstand laden"
 add_theme_font_size_override("font_size", 22)
 add_theme_color_override("font_color", Color(0.918, 0.702, 0.031, 1))
 
-[node name="BtnClose" type="Button" parent="Overlay/Center/Card/VBox/Header"]
+[node name="BtnClose" type="Button" parent="Overlay/Card/VBox/Header"]
 layout_mode = 2
 text = "✕"
 add_theme_stylebox_override("normal", SubResource("StyleBoxFlat_close"))
@@ -105,44 +107,44 @@ add_theme_stylebox_override("pressed", SubResource("StyleBoxFlat_close"))
 add_theme_color_override("font_color", Color(0.75, 0.75, 0.75, 1))
 add_theme_font_size_override("font_size", 16)
 
-[node name="Scroll" type="ScrollContainer" parent="Overlay/Center/Card/VBox"]
+[node name="Scroll" type="ScrollContainer" parent="Overlay/Card/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
 custom_minimum_size = Vector2(0, 460)
 
-[node name="Sections" type="VBoxContainer" parent="Overlay/Center/Card/VBox/Scroll"]
+[node name="Sections" type="VBoxContainer" parent="Overlay/Card/VBox/Scroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 add_theme_constant_override("separation", 16)
 
-[node name="QuickSection" type="VBoxContainer" parent="Overlay/Center/Card/VBox/Scroll/Sections"]
+[node name="QuickSection" type="VBoxContainer" parent="Overlay/Card/VBox/Scroll/Sections"]
 layout_mode = 2
 add_theme_constant_override("separation", 10)
 add_theme_stylebox_override("panel", SubResource("StyleBoxFlat_section"))
 
-[node name="SectionTitle" type="Label" parent="Overlay/Center/Card/VBox/Scroll/Sections/QuickSection"]
+[node name="SectionTitle" type="Label" parent="Overlay/Card/VBox/Scroll/Sections/QuickSection"]
 layout_mode = 2
 text = "Quicksave"
 add_theme_font_size_override("font_size", 13)
 add_theme_color_override("font_color", Color(0.55, 0.55, 0.55, 1))
 
-[node name="ManualSection" type="VBoxContainer" parent="Overlay/Center/Card/VBox/Scroll/Sections"]
+[node name="ManualSection" type="VBoxContainer" parent="Overlay/Card/VBox/Scroll/Sections"]
 layout_mode = 2
 add_theme_constant_override("separation", 10)
 add_theme_stylebox_override("panel", SubResource("StyleBoxFlat_section"))
 
-[node name="SectionTitle" type="Label" parent="Overlay/Center/Card/VBox/Scroll/Sections/ManualSection"]
+[node name="SectionTitle" type="Label" parent="Overlay/Card/VBox/Scroll/Sections/ManualSection"]
 layout_mode = 2
 text = "Manuell"
 add_theme_font_size_override("font_size", 13)
 add_theme_color_override("font_color", Color(0.55, 0.55, 0.55, 1))
 
-[node name="AutoSection" type="VBoxContainer" parent="Overlay/Center/Card/VBox/Scroll/Sections"]
+[node name="AutoSection" type="VBoxContainer" parent="Overlay/Card/VBox/Scroll/Sections"]
 layout_mode = 2
 add_theme_constant_override("separation", 10)
 add_theme_stylebox_override("panel", SubResource("StyleBoxFlat_section"))
 
-[node name="SectionTitle" type="Label" parent="Overlay/Center/Card/VBox/Scroll/Sections/AutoSection"]
+[node name="SectionTitle" type="Label" parent="Overlay/Card/VBox/Scroll/Sections/AutoSection"]
 layout_mode = 2
 text = "Autosaves"
 add_theme_font_size_override("font_size", 13)

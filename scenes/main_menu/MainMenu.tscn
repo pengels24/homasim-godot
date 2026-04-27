@@ -229,95 +229,135 @@ autowrap_mode = 3
 
 [node name="Buttons" type="GridContainer" parent="Content"]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
 columns = 2
 theme_override_constants/h_separation = 24
-theme_override_constants/v_separation = 16
+theme_override_constants/v_separation = 28
 
 [node name="BtnPlay" type="Button" parent="Content/Buttons"]
 layout_mode = 2
-size_flags_horizontal = 3
-custom_minimum_size = Vector2(380, 56)
+mouse_default_cursor_shape = 8
+size_flags_horizontal = 4
+custom_minimum_size = Vector2(0, 52)
 text = "Spiel starten"
 disabled = true
-theme_override_font_sizes/font_size = 22
-theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
-theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_gold_disabled")
+theme_override_font_sizes/font_size = 34
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
+theme_override_colors/font_pressed_color = Color(0.70, 0.53, 0.02, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_colors/font_disabled_color = Color(0.28, 0.28, 0.28, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
 [node name="BtnSettings" type="Button" parent="Content/Buttons"]
 layout_mode = 2
-size_flags_horizontal = 3
-custom_minimum_size = Vector2(380, 56)
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 4
+custom_minimum_size = Vector2(0, 52)
 text = "Einstellungen"
-theme_override_font_sizes/font_size = 22
-theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
-theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
+theme_override_font_sizes/font_size = 34
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
+theme_override_colors/font_pressed_color = Color(0.70, 0.53, 0.02, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
 [node name="BtnLogin" type="Button" parent="Content/Buttons"]
 layout_mode = 2
-size_flags_horizontal = 3
-custom_minimum_size = Vector2(380, 56)
+mouse_default_cursor_shape = 8
+size_flags_horizontal = 4
+custom_minimum_size = Vector2(0, 52)
 text = "Login / Register"
-theme_override_font_sizes/font_size = 22
-theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
-theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_gold_disabled")
+theme_override_font_sizes/font_size = 34
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
+theme_override_colors/font_pressed_color = Color(0.70, 0.53, 0.02, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_colors/font_disabled_color = Color(0.28, 0.28, 0.28, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
 [node name="BtnManager" type="Button" parent="Content/Buttons"]
 layout_mode = 2
-size_flags_horizontal = 3
-custom_minimum_size = Vector2(380, 56)
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 4
+custom_minimum_size = Vector2(0, 52)
 text = "Manager wählen"
-theme_override_font_sizes/font_size = 22
-theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
-theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_font_sizes/font_size = 34
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
+theme_override_colors/font_pressed_color = Color(0.70, 0.53, 0.02, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
 [node name="BtnTutorial" type="Button" parent="Content/Buttons"]
 layout_mode = 2
-size_flags_horizontal = 3
-custom_minimum_size = Vector2(380, 56)
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 4
+custom_minimum_size = Vector2(0, 52)
 text = "Tutorial"
-theme_override_font_sizes/font_size = 22
-theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
-theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_font_sizes/font_size = 34
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
+theme_override_colors/font_pressed_color = Color(0.70, 0.53, 0.02, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
 [node name="BtnCredits" type="Button" parent="Content/Buttons"]
 layout_mode = 2
-size_flags_horizontal = 3
-custom_minimum_size = Vector2(380, 56)
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 4
+custom_minimum_size = Vector2(0, 52)
 text = "Info"
-theme_override_font_sizes/font_size = 22
-theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
-theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_font_sizes/font_size = 34
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
+theme_override_colors/font_pressed_color = Color(0.70, 0.53, 0.02, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
 
 [node name="BtnQuit" type="Button" parent="Content"]
 layout_mode = 2
-custom_minimum_size = Vector2(800, 56)
+mouse_default_cursor_shape = 2
+size_flags_horizontal = 4
+custom_minimum_size = Vector2(0, 52)
 text = "Beenden"
-theme_override_font_sizes/font_size = 22
-theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_gold")
-theme_override_styles/hover = SubResource("StyleBoxFlat_gold_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_gold")
+theme_override_font_sizes/font_size = 34
+theme_override_colors/font_color = Color(0.55, 0.55, 0.55, 1)
+theme_override_colors/font_hover_color = Color(0.863, 0.149, 0.149, 1)
+theme_override_colors/font_pressed_color = Color(0.65, 0.10, 0.10, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
 [node name="LoginModal" type="ColorRect" parent="."]
 position = Vector2(0, 0)

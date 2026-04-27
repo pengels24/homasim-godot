@@ -236,7 +236,7 @@ func _build_bottom_bar() -> void:
 		{"icon": "⚙", "icon_path": "res://assets/icons/ic_settings.svg",   "label": GameState.T("ingame.btn.settings"),   "key": "ALT+S", "locked": false, "dot_color": Color.TRANSPARENT},
 		{"icon": "R", "icon_path": "res://assets/icons/ic_reception.svg",  "label": GameState.T("ingame.btn.reception"),  "key": "F3",    "locked": false, "dot_color": Color(0.20, 0.78, 0.35, 1)},
 		{"icon": "P", "icon_path": "res://assets/icons/ic_staff.svg",      "label": GameState.T("ingame.btn.staff"),      "key": "F4",    "locked": true,  "dot_color": Color.TRANSPARENT},
-		{"icon": "–", "icon_path": "",                                       "label": GameState.T("ingame.btn.empty"),      "key": "F5",    "locked": true,  "dot_color": Color.TRANSPARENT},
+		{"icon": "–", "icon_path": "",                                       "label": GameState.T("ingame.btn.empty"),      "key": "",      "locked": true,  "dot_color": Color.TRANSPARENT},
 		{"icon": "★", "icon_path": "res://assets/icons/ic_techtree.svg",   "label": GameState.T("ingame.btn.research"),   "key": "F6",    "locked": true,  "dot_color": Color.TRANSPARENT},
 	]
 
@@ -405,18 +405,9 @@ func _make_fan_btn(idx: int) -> Button:
 	if def.get("locked", false):
 		btn.disabled       = true
 		icon_node.modulate = Color(1, 1, 1, 0.35)
-		var lock_lbl                      := Label.new()
-		lock_lbl.text                      = "🔒"
-		lock_lbl.anchor_right              = 1.0
-		lock_lbl.anchor_bottom             = 1.0
-		lock_lbl.horizontal_alignment      = HORIZONTAL_ALIGNMENT_CENTER
-		lock_lbl.vertical_alignment        = VERTICAL_ALIGNMENT_CENTER
-		lock_lbl.add_theme_font_size_override("font_size", 14)
-		lock_lbl.mouse_filter              = Control.MOUSE_FILTER_IGNORE
-		btn.add_child(lock_lbl)
 
 	btn.pressed.connect(func(): _on_btn_pressed(idx))
-	btn.mouse_entered.connect(func(): _show_tooltip("%s · %s" % [def["key"], def["label"]]))
+	btn.mouse_entered.connect(func(): _show_tooltip(("%s · " % def["key"] if def["key"] != "" else "") + def["label"]))
 	btn.mouse_exited.connect(func():  _hide_tooltip())
 	return btn
 

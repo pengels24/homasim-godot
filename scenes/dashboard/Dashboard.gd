@@ -19,7 +19,8 @@ extends Control
 @onready var dialog_error:      Label        = $NewHotelOverlay/NewHotelPanel/VBox/DialogError
 @onready var btn_create:        Button       = $NewHotelOverlay/NewHotelPanel/VBox/DialogButtons/BtnCreate
 @onready var btn_cancel:        Button       = $NewHotelOverlay/NewHotelPanel/VBox/DialogButtons/BtnCancel
-@onready var _load_screen:      LoadScreen   = $LoadScreen
+const LOAD_SCREEN_SCENE := preload("res://scenes/shared/LoadScreen.tscn")
+var _load_screen: LoadScreen
 
 var _hotels: Array = []
 var _selected_plot_x: int = 2
@@ -61,7 +62,6 @@ func _ready() -> void:
 	btn_create.pressed.connect(_on_create_confirmed)
 	btn_cancel.pressed.connect(_close_new_hotel_dialog)
 	hotel_name_field.text_submitted.connect(func(_t): _on_create_confirmed())
-	_load_screen.save_loaded.connect(_on_save_loaded)
 	title_label.text = GameState.T("dashboard.title")
 	btn_new_hotel.text = GameState.T("dashboard.btn.new_hotel")
 	btn_main_menu.text = GameState.T("menu.btn.main_menu")
@@ -150,7 +150,6 @@ func _create_hotel_card(hotel: Dictionary, index: int) -> Control:
 	var btn_load := Button.new()
 	btn_load.text = GameState.T("dashboard.btn.load_hotel")
 	btn_load.custom_minimum_size = Vector2(0, 44)
-	btn_load.add_theme_color_override("font_color", Color(0.96, 0.96, 0.96))
 	_apply_gold_style(btn_load)
 	btn_load.pressed.connect(_open_load_screen.bind(hotel.get("id", -1)))
 	btns.add_child(btn_load)
@@ -198,6 +197,7 @@ func _apply_gold_style(btn: Button) -> void:
 	h.bg_color = Color(0.97, 0.80, 0.15)
 	btn.add_theme_stylebox_override("hover", h)
 	btn.add_theme_stylebox_override("pressed", s)
+	btn.add_theme_color_override("font_color", Color(0.08, 0.06, 0))
 
 
 func _apply_green_style(btn: Button) -> void:
@@ -350,6 +350,10 @@ func _start_hotel(index: int) -> void:
 
 
 func _open_load_screen(hotel_id: int) -> void:
+	if not is_instance_valid(_load_screen):
+		_load_screen = LOAD_SCREEN_SCENE.instantiate() as LoadScreen
+		get_tree().get_root().add_child(_load_screen)
+		_load_screen.save_loaded.connect(_on_save_loaded)
 	_load_screen.open(hotel_id)
 
 

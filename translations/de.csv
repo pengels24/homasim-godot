@@ -515,6 +515,7 @@ keys,de,en
 "settings.gameplay.autosave_interval","Autosave-Intervall",""
 "settings.gameplay.ff_speed","Schnellvorlauf",""
 "settings.unit.min","Min.",""
+"settings.audio.master","Gesamtlautstärke",""
 "settings.audio.music","Hintergrundmusik",""
 "settings.audio.sound","Sound",""
 "settings.ui.scale","UI-Skalierung",""

@@ -502,6 +502,7 @@ func _start_music() -> void:
 		if ResourceLoader.exists(path):
 			_music_player = AudioStreamPlayer.new()
 			_music_player.stream = load(path)
+			_music_player.bus = "Music"
 			_music_player.volume_db = -6.0
 			add_child(_music_player)
 			_music_player.play()

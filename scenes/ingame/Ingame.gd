@@ -34,8 +34,10 @@ var _autosave_timer: Timer
 var _settings_modal: SettingsModal
 
 const SETTINGS_SCENE := preload("res://scenes/shared/SettingsModal.tscn")
+const CONFIRM_SCENE  := preload("res://scenes/shared/ConfirmModal.tscn")
 
-var _hotel: Dictionary = {}
+var _hotel:        Dictionary = {}
+var _quit_confirm: ConfirmModal = null
 
 
 func _ready() -> void:
@@ -132,6 +134,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey:
 		var ke := event as InputEventKey
 		if ke.pressed and not ke.echo:
+			if is_instance_valid(_settings_modal) and _settings_modal.visible:
+				return
 			if ke.keycode == KEY_S and ke.alt_pressed:
 				_open_settings()
 			else:
@@ -153,6 +157,19 @@ func _handle_hotkey(keycode: int) -> void:
 func _on_exit_pressed() -> void:
 	if _build.close_all():
 		return
+	if not is_instance_valid(_quit_confirm):
+		_quit_confirm = CONFIRM_SCENE.instantiate() as ConfirmModal
+		$HUD.add_child(_quit_confirm)
+		_quit_confirm.confirmed.connect(_on_quit_confirmed)
+	_quit_confirm.ask(
+		GameState.T("ingame.quit.title"),
+		GameState.T("ingame.quit.message"),
+		GameState.T("ingame.quit.confirm"),
+		GameState.T("ingame.quit.cancel"),
+	)
+
+
+func _on_quit_confirmed() -> void:
 	_save_progress(_clock.get_game_time())
 	get_tree().change_scene_to_file("res://scenes/dashboard/Dashboard.tscn")
 
@@ -173,8 +190,14 @@ func _save_progress(game_time_min: int) -> void:
 func _open_settings() -> void:
 	if not is_instance_valid(_settings_modal):
 		_settings_modal = SETTINGS_SCENE.instantiate() as SettingsModal
-		get_tree().get_root().add_child(_settings_modal)
+		$HUD.add_child(_settings_modal)
+		_settings_modal.closed.connect(_on_settings_closed)
+	map_grid.process_mode = Node.PROCESS_MODE_DISABLED
 	_settings_modal.open()
+
+
+func _on_settings_closed() -> void:
+	map_grid.process_mode = Node.PROCESS_MODE_INHERIT
 
 
 func _setup_autosave_timer() -> void:
@@ -194,6 +217,7 @@ func _on_timed_autosave() -> void:
 		return
 	_save_progress(_clock.get_game_time())
 	SaveManager.save_auto(hotel_id)
+	Toast.show(GameState.T("toast.system.autosave"))
 
 
 func _quick_save() -> void:
@@ -202,6 +226,7 @@ func _quick_save() -> void:
 		return
 	_save_progress(_clock.get_game_time())
 	SaveManager.save_quick(hotel_id)
+	Toast.show(GameState.T("toast.quicksave"))
 
 
 func _quick_load() -> void:
@@ -209,7 +234,10 @@ func _quick_load() -> void:
 	if hotel_id < 0:
 		return
 	if SaveManager.load_quick(hotel_id):
+		Toast.show_after_scene_change(GameState.T("toast.quickload.ok"))
 		get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
+	else:
+		Toast.show(GameState.T("toast.quickload.empty"))
 
 
 func _notification(what: int) -> void:

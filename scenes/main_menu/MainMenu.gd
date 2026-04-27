@@ -43,6 +43,7 @@ var _slide_timer := 0.0
 func _ready() -> void:
 	_load_assets()
 	_setup_modal()
+	_try_restore_last_profile()
 	_update_manager_state()
 	btn_login.pressed.connect(_on_login_pressed)
 	btn_play.pressed.connect(_on_play_pressed)
@@ -99,6 +100,18 @@ func _setup_modal() -> void:
 	password_field.text_submitted.connect(func(_t): _on_modal_login_pressed())
 	username_field.text = SessionManager.saved_username
 	remember_checkbox.button_pressed = SessionManager.saved_username != ""
+
+
+func _try_restore_last_profile() -> void:
+	var last_id := SettingsManager.last_profile_id
+	if last_id < 0:
+		return
+	var profile := SaveManager.get_profile(last_id)
+	if profile.is_empty():
+		SettingsManager.last_profile_id = -1
+		SettingsManager.save()
+		return
+	GameState.select_profile(profile)
 
 
 func _update_manager_state() -> void:

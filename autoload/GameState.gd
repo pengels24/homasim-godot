@@ -53,6 +53,8 @@ func logout() -> void:
 func select_profile(profile: Dictionary) -> void:
 	active_profile    = profile
 	active_profile_id = profile.get("id", -1)
+	SettingsManager.last_profile_id = active_profile_id
+	SettingsManager.save()
 
 
 func select_hotel(hotel_data: Dictionary) -> void:

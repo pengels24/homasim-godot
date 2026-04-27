@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://c4toastnotif"]
+
+[ext_resource type="Script" path="res://scenes/shared/ToastNotification.gd" id="1_toastnoti"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.078, 0.078, 0.098, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.918, 0.702, 0.031, 0.45)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_left = 10
+corner_radius_bottom_right = 10
+shadow_color = Color(0, 0, 0, 0.55)
+shadow_size = 14
+shadow_offset = Vector2(0, 3)
+
+[node name="ToastNotification" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_toastnoti")
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 0
+offset_left = 660.0
+offset_top = 930.0
+offset_right = 1260.0
+offset_bottom = 1018.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="MessageLbl" type="Label" parent="Panel/Margin"]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)

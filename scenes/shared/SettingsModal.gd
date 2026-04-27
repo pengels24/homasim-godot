@@ -5,6 +5,8 @@ class_name SettingsModal
 
 signal closed
 
+const CONFIRM_SCENE := preload("res://scenes/shared/ConfirmModal.tscn")
+
 @onready var _title_lbl:     Label         = $Overlay/Center/Card/VBox/Header/TitleLbl
 @onready var _btn_close:     Button        = $Overlay/Center/Card/VBox/Header/BtnClose
 var _tab_buttons: Array[Button] = []
@@ -16,9 +18,12 @@ var _tab_buttons: Array[Button] = []
 @onready var _tab_bar:       HBoxContainer = $Overlay/Center/Card/VBox/TabBar
 
 var _active_tab: int = 0
+var _snapshot:   Dictionary = {}
+var _confirm:    ConfirmModal = null
 
 
 func open() -> void:
+	_snapshot = _take_snapshot()
 	visible = true
 	_switch_tab(0)
 
@@ -336,11 +341,73 @@ func _make_separator() -> HSeparator:
 
 # ── Speichern / Schließen ─────────────────────────────────────────────────────
 
+func _unhandled_input(event: InputEvent) -> void:
+	if visible and event.is_action_pressed("ui_cancel"):
+		accept_event()
+		_on_close()
+
+
 func _on_save() -> void:
 	SettingsManager.save()
-	_on_close()
+	_snapshot = _take_snapshot()
+	_close_clean()
 
 
 func _on_close() -> void:
+	if _has_unsaved_changes():
+		_ask_discard()
+	else:
+		_close_clean()
+
+
+func _close_clean() -> void:
 	visible = false
 	closed.emit()
+
+
+func _ask_discard() -> void:
+	if not is_instance_valid(_confirm):
+		_confirm = CONFIRM_SCENE.instantiate() as ConfirmModal
+		add_child(_confirm)
+		_confirm.confirmed.connect(_on_discard_confirmed)
+	_confirm.ask(
+		GameState.T("settings.discard.title"),
+		GameState.T("settings.discard.message"),
+		GameState.T("settings.discard.confirm"),
+		GameState.T("settings.discard.cancel"),
+	)
+
+
+func _on_discard_confirmed() -> void:
+	SettingsManager.reload()
+	_rebuild_all_tabs()
+	_close_clean()
+
+
+# ── Snapshot / Dirty-Erkennung ────────────────────────────────────────────────
+
+func _take_snapshot() -> Dictionary:
+	return {
+		"autosave_enabled":          SettingsManager.autosave_enabled,
+		"autosave_interval_minutes": SettingsManager.autosave_interval_minutes,
+		"ff_speed":                  SettingsManager.ff_speed,
+		"master_volume":             SettingsManager.master_volume,
+		"music_volume":              SettingsManager.music_volume,
+		"sound_volume":              SettingsManager.sound_volume,
+		"ui_scale":                  SettingsManager.ui_scale,
+	}
+
+
+func _has_unsaved_changes() -> bool:
+	return _take_snapshot() != _snapshot
+
+
+func _rebuild_all_tabs() -> void:
+	for child in _tab_gameplay.get_children():    child.free()
+	for child in _tab_audio.get_children():       child.free()
+	for child in _tab_oberflaeche.get_children(): child.free()
+	for child in _tab_steuerung.get_children():   child.free()
+	_build_gameplay_tab()
+	_build_audio_tab()
+	_build_oberflaeche_tab()
+	_build_steuerung_tab()

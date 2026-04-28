@@ -171,6 +171,7 @@ func _on_exit_pressed() -> void:
 
 func _on_quit_confirmed() -> void:
 	_save_progress(_clock.get_game_time())
+	SaveManager.save_auto(_hotel.get("id", -1))
 	get_tree().change_scene_to_file("res://scenes/dashboard/Dashboard.tscn")
 
 

@@ -12,6 +12,7 @@ extends Control
 @onready var btn_new_hotel:     Button    = $MainArea/HotelSection/Header/BtnNewHotel
 @onready var status_label:      Label     = $MainArea/HotelSection/StatusLabel
 @onready var hotel_container:   VBoxContainer = $MainArea/HotelSection/Scroll/HotelContainer
+@onready var _confirm_modal:    ConfirmModal  = $ConfirmModal
 
 const LOAD_SCREEN_SCENE  := preload("res://scenes/shared/LoadScreen.tscn")
 const NEW_HOTEL_SCENE    := preload("res://scenes/shared/NewHotelModal.tscn")
@@ -19,6 +20,7 @@ const NEW_HOTEL_SCENE    := preload("res://scenes/shared/NewHotelModal.tscn")
 var _load_screen:      LoadScreen     = null
 var _new_hotel_modal:  NewHotelModal  = null
 var _hotels:           Array          = []
+var _pending_delete_id: int           = -1
 
 const SKIN_COLORS := {
 	"hell":   Color(0.95, 0.82, 0.70),
@@ -44,6 +46,7 @@ const OUTFIT_COLORS := {
 func _ready() -> void:
 	btn_main_menu.pressed.connect(_on_main_menu_pressed)
 	btn_new_hotel.pressed.connect(_on_new_hotel_pressed)
+	_confirm_modal.confirmed.connect(_on_delete_confirmed)
 	title_label.text   = GameState.T("dashboard.title")
 	btn_new_hotel.text = GameState.T("dashboard.btn.new_hotel")
 	btn_main_menu.text = GameState.T("menu.btn.main_menu")
@@ -244,7 +247,20 @@ func _on_new_hotel_confirmed(_hotel_id: int) -> void:
 
 
 func _delete_hotel(hotel_id: int, _btn: Button) -> void:
-	SaveManager.delete_hotel(hotel_id)
+	_pending_delete_id = hotel_id
+	_confirm_modal.ask(
+		GameState.T("dashboard.delete_hotel.title"),
+		GameState.T("dashboard.delete_hotel.message"),
+		GameState.T("dashboard.delete_hotel.confirm"),
+		"Abbrechen",
+		GameState.T("dashboard.delete_hotel.ack"))
+
+
+func _on_delete_confirmed() -> void:
+	if _pending_delete_id == -1:
+		return
+	SaveManager.delete_hotel(_pending_delete_id)
+	_pending_delete_id = -1
 	_load_hotels()
 
 

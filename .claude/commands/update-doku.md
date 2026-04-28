@@ -1,5 +1,21 @@
 Führe den Session-Abschluss für das HO·MA·SIM Godot-Projekt durch. Gehe Schritt für Schritt vor und warte nicht auf Bestätigung – führe alles durch.
 
+## Parameter (aus `$ARGUMENTS`)
+
+Lese `$ARGUMENTS` und werte folgende Flags aus:
+
+| Flag | Bedeutung | Default |
+|------|-----------|---------|
+| `+v` | Version in `version.txt` erhöhen (Schritt 7 ausführen) | — |
+| `-v` | Version NICHT erhöhen (Schritt 7 überspringen) | ✅ ja |
+| `+p` | Nach Commit: `git push` + `git push --tags` | — |
+| `-p` | Kein Push (nur lokaler Commit) | ✅ ja |
+
+Wenn kein Flag angegeben → Defaults gelten (-v, -p).
+Flags können kombiniert werden, z.B. `/update-doku +v +p` oder `/update-doku +v`.
+
+---
+
 ## Schritt 1 – Version lesen
 Lies `version.txt` im Projektstamm. Format: `gd-x-x-x`. Das ist die aktuelle Version für diesen Changelog.
 
@@ -48,8 +64,17 @@ git tag gd-x-x-x
 - Prüfe ob neue Direktiven, Entscheidungen oder wichtige Patterns aus dieser Session in den Memory-Dateien fehlen
 - Falls eine `CLAUDE.md` im Projekt existiert: relevante Projektkonventionen ergänzen
 
-## Schritt 7 – Version erhöhen
-Erhöhe die letzte Ziffer in `version.txt` um 1 (z.B. `gd-0.1.0` → `gd-0.1.1`).
+## Schritt 7 – Version erhöhen (nur wenn `+v`)
+Wenn `+v` in `$ARGUMENTS` → Erhöhe die letzte Ziffer in `version.txt` um 1 (z.B. `gd-0.1.0` → `gd-0.1.1`).
+Sonst: diesen Schritt überspringen.
+
+## Schritt 8 – Push (nur wenn `+p`)
+Wenn `+p` in `$ARGUMENTS`:
+```bash
+git push
+git push --tags
+```
+Sonst: diesen Schritt überspringen.
 
 ## Abschluss
 Gib eine kurze Zusammenfassung aus:
@@ -57,4 +82,5 @@ Gib eine kurze Zusammenfassung aus:
 - Git-Commit: Hash + Message
 - Git-Tag: `gd-x-x-x`
 - Linear: welche Issues geschlossen/angelegt
-- Neue Version: `gd-x-x-x`
+- Push: durchgeführt / übersprungen
+- Neue Version: `gd-x-x-x` (oder „Version nicht erhöht" bei `-v`)

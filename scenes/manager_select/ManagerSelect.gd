@@ -93,7 +93,9 @@ func _on_delete_slot(i: int) -> void:
 	_confirm_modal.ask(
 		"Manager löschen?",
 		"Alle Hotels dieses Managers werden\nebenfalls entfernt.",
-		"Löschen"
+		"Löschen",
+		"Abbrechen",
+		GameState.T("manager_select.delete.ack")
 	)
 
 

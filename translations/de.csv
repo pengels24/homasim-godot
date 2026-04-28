@@ -542,3 +542,8 @@ keys,de,en
 "settings.ui.toast.middle","Mitte",""
 "settings.ui.toast.bottom","Unten",""
 "settings.controls.coming_soon","Tastenbelegung – kommt in einer der nächsten Versionen.",""
+"dashboard.delete_hotel.title","Hotel löschen?",""
+"dashboard.delete_hotel.message","Das Hotel und alle Spielstände werden unwiderruflich entfernt.",""
+"dashboard.delete_hotel.confirm","Löschen",""
+"dashboard.delete_hotel.ack","Wirklich löschen?",""
+"manager_select.delete.ack","Wirklich löschen?",""

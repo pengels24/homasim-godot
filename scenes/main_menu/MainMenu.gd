@@ -35,6 +35,8 @@ const FADE_DURATION  := 1.2
 @onready var btn_credits:       Button       = $Content/Buttons/BtnCredits
 @onready var _manager_modal:    Control      = $ManagerModal
 @onready var _settings_modal:   SettingsModal = $SettingsModal
+@onready var _version_lbl:      Label        = $Footer/VersionLbl
+@onready var _godot_icon:       TextureRect  = $Footer/GodotIcon
 
 var _current_bg := 0
 var _slide_timer := 0.0
@@ -90,6 +92,14 @@ func _load_assets() -> void:
 	login_button.text  = GameState.T("login.btn.submit")
 	btn_login.text     = GameState.T("menu.btn.account_bind")
 	btn_login.disabled = true
+
+	var vf := FileAccess.open("res://version.txt", FileAccess.READ)
+	if vf:
+		_version_lbl.text = "v" + vf.get_line().strip_edges().trim_prefix("gd-")
+		vf.close()
+	var godot_tex := load("res://icon.svg") as Texture2D
+	if godot_tex:
+		_godot_icon.texture = godot_tex
 
 
 func _setup_modal() -> void:

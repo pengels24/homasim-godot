@@ -369,6 +369,47 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
+[node name="Footer" type="HBoxContainer" parent="."]
+position = Vector2(10, 1042)
+size = Vector2(1900, 28)
+theme_override_constants/separation = 8
+
+[node name="VersionLbl" type="Label" parent="Footer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.75, 0.75, 0.80, 0.90)
+text = "v0.0.0"
+
+[node name="Spacer" type="Control" parent="Footer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GodotIcon" type="TextureRect" parent="Footer"]
+layout_mode = 2
+custom_minimum_size = Vector2(22, 22)
+size_flags_horizontal = 0
+size_flags_vertical = 4
+expand_mode = 1
+stretch_mode = 5
+modulate = Color(1.0, 1.0, 1.0, 0.80)
+
+[node name="MadeWithLbl" type="Label" parent="Footer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.75, 0.75, 0.80, 0.90)
+text = "Made with Godot 4"
+
+[node name="CopyrightLbl" type="Label" parent="."]
+position = Vector2(0, 1042)
+size = Vector2(1920, 28)
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.75, 0.75, 0.80, 0.90)
+text = "© 2026 – Angelus2010"
+
 [node name="LoginModal" type="ColorRect" parent="."]
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)

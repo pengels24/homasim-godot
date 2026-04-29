@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://cxi5q33hphmqv"]
 
-[ext_resource type="Texture2D" uid="uid://myivw2ucwujc" path="res://external-assets/roguelike-modern-city/Tiles-Rooms/tile_0649.png" id="1_0kbel"]
+[ext_resource type="Texture2D" uid="uid://myivw2ucwujc" path="res://assets/tiles/Rooms/tile_0649.png" id="1_0kbel"]
 [ext_resource type="Script" uid="uid://bdxmvxpxfwacn" path="res://scenes/ingame/rooms/bed_standard/BedStandard.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://8ngubspvwnea" path="res://external-assets/roguelike-modern-city/Tiles-Rooms/tile_0653.png" id="2_evq2g"]
-[ext_resource type="Texture2D" uid="uid://ceclvitaigygd" path="res://external-assets/roguelike-modern-city/Tiles-Rooms/tile_0723.png" id="3_cfvov"]
-[ext_resource type="Texture2D" uid="uid://cebvqrnkk03dj" path="res://external-assets/roguelike-modern-city/Tiles-Rooms/tile_0727.png" id="4_066q5"]
+[ext_resource type="Texture2D" uid="uid://8ngubspvwnea" path="res://assets/tiles/Rooms/tile_0653.png" id="2_evq2g"]
+[ext_resource type="Texture2D" uid="uid://ceclvitaigygd" path="res://assets/tiles/Rooms/tile_0723.png" id="3_cfvov"]
+[ext_resource type="Texture2D" uid="uid://cebvqrnkk03dj" path="res://assets/tiles/Rooms/tile_0727.png" id="4_066q5"]
 [ext_resource type="Texture2D" uid="uid://pm26loxwhfhk" path="res://assets/tiles/Rooms/room_standard_door_left_top.png" id="5_evq2g"]
 [ext_resource type="Texture2D" uid="uid://cwtq21gu4lr2o" path="res://assets/tiles/Rooms/room_standard_door_left_bottom.png" id="6_cfvov"]
 [ext_resource type="Texture2D" uid="uid://bgxibvw7m08mt" path="res://assets/tiles/Rooms/room_standard_door_top_left.png" id="7_066q5"]
@@ -98,6 +98,12 @@ script = ExtResource("1_script")
 [node name="Ground" type="TileMapLayer" parent="." unique_id=1188525681]
 tile_map_data = PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 3, 0, 0, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_okdqq")
+
+[node name="Floor" type="Polygon2D" parent="Ground" unique_id=770765792]
+position = Vector2(129, 49)
+color = Color(0.17254902, 0.49019608, 0.627451, 1)
+polygon = PackedVector2Array(-127, -47, -99, -47, -99, -19, -127, -19)
+uv = PackedVector2Array(-129.19998, -49.199997, 10.799988, -47.599995, 10.799988, 20.400002, -129.19998, 19.599998)
 
 [node name="Door" type="TileMapLayer" parent="." unique_id=2045324577]
 

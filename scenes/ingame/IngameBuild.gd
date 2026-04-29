@@ -7,6 +7,7 @@ const BUILD_MENU_SCENE := preload("res://scenes/ingame/build/BuildMenu.tscn")
 
 const SCENE_PATHS: Dictionary = {
 	"bed_standard": "res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn",
+	"bed_double":   "res://scenes/ingame/rooms/bed_double/Bed_Double.tscn",
 }
 
 var _hotel:              Dictionary
@@ -98,8 +99,8 @@ func _on_build_room_selected(room_type_id: String) -> void:
 	var cursor := Node2D.new()
 	cursor.set_script(load("res://scenes/ingame/build/BuildCursor.gd"))
 	_map_grid.get_world_root().add_child(cursor)
-	cursor.room_placed.connect(func(px: int, py: int, tx: int, ty: int, dr: int, doff: int) -> void:
-		_on_room_placed(room_type_id, px, py, tx, ty, dr, doff)
+	cursor.room_placed.connect(func(px: int, py: int, tx: int, ty: int, dr: int, doff: int, rflip: int) -> void:
+		_on_room_placed(room_type_id, px, py, tx, ty, dr, doff, rflip)
 	)
 	cursor.cancelled.connect(_on_build_cursor_done)
 	cursor.tree_exited.connect(func() -> void:
@@ -111,11 +112,11 @@ func _on_build_room_selected(room_type_id: String) -> void:
 	cursor.activate(_map_grid, room_type_id)
 
 
-func _on_room_placed(room_type_id: String, px: int, py: int, tx: int, ty: int, dr: int, doff: int) -> void:
+func _on_room_placed(room_type_id: String, px: int, py: int, tx: int, ty: int, dr: int, doff: int, rflip: int) -> void:
 	var path: String = SCENE_PATHS.get(room_type_id, "")
 	if path == "":
 		return
-	_map_grid.place_room(px, py, load(path), _hotel.get("id", -1), dr, doff, tx, ty)
+	_map_grid.place_room(px, py, load(path), _hotel.get("id", -1), dr, doff, tx, ty, rflip)
 
 
 func _on_build_cursor_done() -> void:

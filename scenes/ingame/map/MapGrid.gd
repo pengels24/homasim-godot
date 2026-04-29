@@ -20,6 +20,7 @@ const ROOM_TILES := 2   # alle Räume sind aktuell 2×2 Tiles
 # Raum-Typ → Szenen-Pfad (ANG-175 – gleiche Registry wie IngameBuild.SCENE_PATHS)
 const SCENE_PATHS: Dictionary = {
 	"bed_standard": "res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn",
+	"bed_double":   "res://scenes/ingame/rooms/bed_double/Bed_Double.tscn",
 }
 
 # ── Kamera-Konfiguration ──────────────────────────────────────────────────────
@@ -145,11 +146,11 @@ func is_buildable(x: int, y: int) -> bool:
 
 
 func place_room(parcel_x: int, parcel_y: int, room_scene: PackedScene, hotel_id: int,
-		door_rot: int, door_off: int, tile_x: int, tile_y: int) -> void:
+		door_rot: int, door_off: int, tile_x: int, tile_y: int, rflip: int = 0) -> void:
 	var parcel: Node2D = _grid[parcel_y][parcel_x]
 	var is_new := not parcel.visible
 	parcel.visible = true
-	var room: Node2D = parcel.spawn_room(room_scene, door_rot, door_off, tile_x, tile_y)
+	var room: Node2D = parcel.spawn_room(room_scene, door_rot, door_off, tile_x, tile_y, rflip)
 	SaveManager.save_room_to_plot(hotel_id, parcel_x, parcel_y, room.to_dict())
 	if is_new:
 		SaveManager.set_plot_built(hotel_id, parcel_x, parcel_y)
@@ -160,6 +161,12 @@ func is_parcel_owned(x: int, y: int) -> bool:
 	if x < 0 or x >= grid_cols or y < 0 or y >= grid_rows:
 		return false
 	return _grid[y][x].visible
+
+
+func would_block_door(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int, w: int, h: int) -> bool:
+	if not is_parcel_owned(parcel_x, parcel_y):
+		return false
+	return _grid[parcel_y][parcel_x].would_block_any_door(Rect2i(tile_x, tile_y, w, h))
 
 
 func is_tile_free(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int, w: int, h: int) -> bool:

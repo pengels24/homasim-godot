@@ -44,13 +44,14 @@ func buy(hotel_id: int) -> void:
 	SaveManager.set_plot_built(hotel_id, _grid_x(), _grid_y())
 
 
-func spawn_room(room_scene: PackedScene, door_rot: int, door_off: int, tile_x: int, tile_y: int) -> Node2D:
+func spawn_room(room_scene: PackedScene, door_rot: int, door_off: int, tile_x: int, tile_y: int, rflip: int = 0) -> Node2D:
 	_ensure_walls_marked()
 	var room: Node2D = room_scene.instantiate()
 	add_child(room)
-	room.configure({"door_rotation": door_rot, "door_offset": door_off, "x_pos": tile_x, "y_pos": tile_y})
+	room.configure({"door_rotation": door_rot, "door_offset": door_off, "room_flip": rflip, "x_pos": tile_x, "y_pos": tile_y})
 	room.position = Vector2(tile_x * TILE_PX, tile_y * TILE_PX)
-	mark_occupied(tile_x, tile_y, ROOM_TILES, ROOM_TILES)
+	var sz: Vector2i = room.get_tile_size()
+	mark_occupied(tile_x, tile_y, sz.x, sz.y)
 	return room
 
 
@@ -63,7 +64,8 @@ func restore_room(room_data: Dictionary, room_scene: PackedScene) -> void:
 	var tx: int = room_data.get("x_pos", 0)
 	var ty: int = room_data.get("y_pos", 0)
 	room.position = Vector2(tx * TILE_PX, ty * TILE_PX)
-	mark_occupied(tx, ty, ROOM_TILES, ROOM_TILES)
+	var sz: Vector2i = room.get_tile_size()
+	mark_occupied(tx, ty, sz.x, sz.y)
 
 
 ## 1-Tile-Streifen direkt vor der Lobby-Innentür – darf nicht verbaut werden.
@@ -79,6 +81,31 @@ func get_lobby_clearance_rect() -> Rect2i:
 		"left":   return Rect2i(lx + LOBBY_TILES, ly,  1, LOBBY_TILES)
 		"right":  return Rect2i(lx - 1, ly,            1, LOBBY_TILES)
 	return Rect2i()
+
+
+## Gibt true zurück wenn das Rect ein Türexit-Tile eines bereits platzierten Raums blockiert.
+func would_block_any_door(test_rect: Rect2i) -> bool:
+	for child in get_children():
+		if not child.has_method("get_tile_size"):
+			continue
+		var exit := _door_exit_tile(child)
+		if exit.x >= 0 and test_rect.has_point(exit):
+			return true
+	return false
+
+
+func _door_exit_tile(room: Node2D) -> Vector2i:
+	var rx: int = room.x_pos
+	var ry: int = room.y_pos
+	var sz: Vector2i = room.get_tile_size()
+	# door_offset * (dim - 1): 0 → erste Position, 1 → letzte Position der Wand.
+	# Funktioniert für alle Raumgrößen (2×2, 4×2, 2×4 …).
+	match room.door_rotation:
+		0: return Vector2i(rx - 1,                              ry + room.door_offset * (sz.y - 1))
+		1: return Vector2i(rx + room.door_offset * (sz.x - 1), ry - 1)
+		2: return Vector2i(rx + sz.x,                           ry + room.door_offset * (sz.y - 1))
+		3: return Vector2i(rx + room.door_offset * (sz.x - 1), ry + sz.y)
+	return Vector2i(-1, -1)
 
 
 ## Prüft ob der Tile-Bereich (tile_x, tile_y, w×h) vollständig frei ist.

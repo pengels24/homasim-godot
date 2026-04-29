@@ -14,10 +14,8 @@ extends Control
 @onready var hotel_container:   VBoxContainer = $MainArea/HotelSection/Scroll/HotelContainer
 @onready var _confirm_modal:    ConfirmModal  = $ConfirmModal
 
-const LOAD_SCREEN_SCENE  := preload("res://scenes/shared/LoadScreen.tscn")
 const NEW_HOTEL_SCENE    := preload("res://scenes/shared/NewHotelModal.tscn")
 
-var _load_screen:      LoadScreen     = null
 var _new_hotel_modal:  NewHotelModal  = null
 var _hotels:           Array          = []
 var _pending_delete_id: int           = -1
@@ -131,13 +129,6 @@ func _create_hotel_card(hotel: Dictionary, index: int) -> Control:
 	_apply_green_style(btn_play)
 	btn_play.pressed.connect(_start_hotel.bind(index))
 	btns.add_child(btn_play)
-
-	var btn_load := Button.new()
-	btn_load.text = GameState.T("dashboard.btn.load_hotel")
-	btn_load.custom_minimum_size = Vector2(0, 44)
-	_apply_gold_style(btn_load)
-	btn_load.pressed.connect(_open_load_screen.bind(hotel.get("id", -1)))
-	btns.add_child(btn_load)
 
 	var btn_del := Button.new()
 	btn_del.text = GameState.T("dashboard.btn.delete_hotel")
@@ -271,19 +262,6 @@ func _start_hotel(index: int) -> void:
 	get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
 
 
-func _open_load_screen(hotel_id: int) -> void:
-	if not is_instance_valid(_load_screen):
-		_load_screen = LOAD_SCREEN_SCENE.instantiate() as LoadScreen
-		get_tree().get_root().add_child(_load_screen)
-		_load_screen.save_loaded.connect(_on_save_loaded)
-	_load_screen.open(hotel_id)
-
-
-func _on_save_loaded(hotel_id: int) -> void:
-	GameState.active_hotel_id = hotel_id
-	get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
-
-
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey:
 		var ke := event as InputEventKey
@@ -291,8 +269,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			if is_instance_valid(_confirm_modal) and _confirm_modal.visible:
 				return
 			if is_instance_valid(_new_hotel_modal) and _new_hotel_modal.visible:
-				return
-			if is_instance_valid(_load_screen) and _load_screen.visible:
 				return
 			_on_main_menu_pressed()
 

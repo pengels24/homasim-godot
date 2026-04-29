@@ -15,10 +15,10 @@ var floor_num: int = 1
 var condition:  int = 100   # Verschleiß:  sinkt durch Nutzung, braucht Reparatur
 var cleanliness: int = 100  # Sauberkeit:  sinkt täglich, braucht Personal
 
-# ── Tür ───────────────────────────────────────────────────────────────────────
-var room_rotation: int = 0   # Raum-Rotation  0–3  (R-Taste)
-var door_rotation: int = 0   # Tür-Rotation   0–3  (T-Taste)
-var door_offset:   int = 0   # Tür-Flip            (Z-Taste)
+# ── Tür / Orientierung ────────────────────────────────────────────────────────
+var door_rotation: int = 0   # Welche Wand   0–3  (R-Taste: im Uhrzeigersinn)
+var door_offset:   int = 0   # Position auf Wand 0–1  (T-Taste)
+var room_flip:     int = 0   # Orientierung  0=landscape 1=portrait  (Z-Taste)
 
 
 # ── Public API ────────────────────────────────────────────────────────────────
@@ -32,9 +32,9 @@ func configure(data: Dictionary) -> void:
 	floor_num     = data.get("floor_num",     floor_num)
 	condition     = data.get("condition",     condition)
 	cleanliness   = data.get("cleanliness",   cleanliness)
-	room_rotation = data.get("room_rotation", room_rotation)
 	door_rotation = data.get("door_rotation", door_rotation)
 	door_offset   = data.get("door_offset",   door_offset)
+	room_flip     = data.get("room_flip",     room_flip)
 	_apply_visuals()
 
 
@@ -48,15 +48,10 @@ func to_dict() -> Dictionary:
 		"floor_num":     floor_num,
 		"condition":     condition,
 		"cleanliness":   cleanliness,
-		"room_rotation": room_rotation,
 		"door_rotation": door_rotation,
 		"door_offset":   door_offset,
+		"room_flip":     room_flip,
 	}
-
-
-func rotate_room() -> void:
-	room_rotation = (room_rotation + 1) % 4
-	_apply_visuals()
 
 
 func rotate_door() -> void:
@@ -64,8 +59,13 @@ func rotate_door() -> void:
 	_apply_visuals()
 
 
-func flip_door() -> void:
+func cycle_door_offset() -> void:
 	door_offset = 1 - door_offset
+	_apply_visuals()
+
+
+func flip_room() -> void:
+	room_flip = 1 - room_flip
 	_apply_visuals()
 
 
@@ -75,6 +75,10 @@ func upgrade() -> void:
 
 
 # ── Intern – von Unterklassen überschreiben ───────────────────────────────────
+
+func get_tile_size() -> Vector2i:
+	return Vector2i(2, 2)
+
 
 func _apply_visuals() -> void:
 	pass

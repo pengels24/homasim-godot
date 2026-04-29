@@ -12,12 +12,6 @@ bg_color = Color(0.04, 0.06, 0.1, 0.96)
 border_width_bottom = 1
 border_color = Color(0.918, 0.702, 0.031, 0.3)
 
-[sub_resource type="StyleBoxFlat" id="SB_progressbar"]
-bg_color = Color(0.12, 0.16, 0.22, 1)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
 
 [node name="Ingame" type="Node2D" unique_id=2079156629]
 script = ExtResource("1_ingame")
@@ -174,13 +168,9 @@ theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
 theme_override_font_sizes/font_size = 13
 text = "EXP"
 
-[node name="Bar" type="ProgressBar" parent="HUD/TopBar/HBox/StatsSection/StatEXP" unique_id=734509603]
-custom_minimum_size = Vector2(120, 8)
+[node name="Bar" type="Control" parent="HUD/TopBar/HBox/StatsSection/StatEXP" unique_id=734509603]
+custom_minimum_size = Vector2(120, 14)
 layout_mode = 2
-size_flags_vertical = 4
-theme_override_styles/background = SubResource("SB_progressbar")
-value = 45.0
-show_percentage = false
 
 [node name="ValueLbl" type="Label" parent="HUD/TopBar/HBox/StatsSection/StatEXP" unique_id=1233590826]
 layout_mode = 2

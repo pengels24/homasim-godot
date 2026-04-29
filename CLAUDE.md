@@ -62,19 +62,8 @@ res://
 ## Design
 - **Farben**: Gold `#EAB308`, Dark Background `#0f172a`/`#141416`, Weiß `#fafafa`
 - **Fonts**: Outfit-Bold (Headlines/Buttons), Inter Regular (Fließtext)
-- **Modals**: Dunkles Panel (0.95 Alpha), 12px Radius, Schlagschatten
-
-## Button-Farbkonzept (verbindlich)
-| Farbe | Bedeutung | Beispiele |
-|-------|-----------|-----------|
-| **Gold** `#EAB308` | Navigation / Menü | Hauptmenü, Spiel starten, Einstellungen |
-| **Grün** `#16a34a` | Bestätigen / Speichern / Anlegen | Anlegen, Speichern, OK |
-| **Rot** `#dc2626` | Abbrechen / Löschen / Zurück | Abbrechen, Löschen, Zurück |
-| **Blau** `#2563eb` | Info / Details | Tooltip-Aktionen, Detail-Ansichten |
-
-- Jeder Button-Typ hat normal/hover/disabled StyleBoxFlat (6px Radius)
-- Hover = aufgehellte Variante der Grundfarbe
-- Disabled = 35% Alpha
+- **Style-Guide**: `_dev/docs/ui-style-guide.md` – **verbindliche Referenz** für alle Modal-Panels, Buttons, Titel, Close-Button, Slot-Zeilen. Exakte Color-Werte und StyleBox-Definitionen dort nachschlagen, nicht aus dem Kopf schreiben.
+- **Style-Guide pflegen**: Jede neue reusable UI-Komponente die als `.tscn` gebaut wird → Muster sofort im Style-Guide dokumentieren. Nur so bleibt Konsistenz über alle Szenen.
 
 ## Assets
 - **Kenney – Roguelike Modern City** – `external-assets/roguelike-modern-city/` (gitignored)

@@ -49,6 +49,27 @@ func get_game_time() -> int:
 	return _game_hour * 60 + _game_minute
 
 
+func is_paused() -> bool:
+	return _game_paused
+
+
+func set_game_time(minutes: int) -> void:
+	_game_hour   = int(minutes / 60.0)
+	_game_minute = minutes % 60
+	_update_time_label()
+
+
+func pause() -> void:
+	_game_paused = true
+	_update_speed_buttons()
+
+
+func resume() -> void:
+	_game_paused = false
+	_game_speed  = 1.0
+	_update_speed_buttons()
+
+
 # ── Prozess ───────────────────────────────────────────────────────────────────
 
 func _process(delta: float) -> void:

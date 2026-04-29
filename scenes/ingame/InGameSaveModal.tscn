@@ -1,0 +1,273 @@
+[gd_scene format=3 uid="uid://c0hpcpll6jaqp"]
+
+[ext_resource type="Script" path="res://scenes/ingame/InGameSaveModal.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.08, 0.08, 0.10, 0.97)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.918, 0.702, 0.031, 0.40)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_left = 10
+corner_radius_bottom_right = 10
+shadow_color = Color(0.918, 0.702, 0.031, 0.15)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sep"]
+bg_color = Color(0.22, 0.22, 0.28, 0.60)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_close"]
+bg_color = Color(0.14, 0.14, 0.18, 1.0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_close_h"]
+bg_color = Color(0.24, 0.24, 0.30, 1.0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 12.0
+content_margin_right = 12.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_green_dis"]
+bg_color = Color(0.086, 0.639, 0.290, 0.18)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.086, 0.639, 0.290, 0.35)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_green"]
+bg_color = Color(0.086, 0.639, 0.290, 1.0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_green_h"]
+bg_color = Color(0.15, 0.78, 0.38, 1.0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_neutral"]
+bg_color = Color(0.16, 0.16, 0.20, 1.0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.35, 0.42, 0.70)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_neutral_h"]
+bg_color = Color(0.22, 0.22, 0.28, 1.0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.45, 0.45, 0.55, 0.80)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_left = 6
+corner_radius_bottom_right = 6
+content_margin_left = 24.0
+content_margin_right = 24.0
+content_margin_top = 12.0
+content_margin_bottom = 12.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input"]
+bg_color = Color(0.06, 0.06, 0.08, 1.0)
+border_width_bottom = 1
+border_color = Color(0.35, 0.35, 0.45, 0.60)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_left = 4
+corner_radius_bottom_right = 4
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_focus"]
+bg_color = Color(0.06, 0.06, 0.08, 1.0)
+border_width_bottom = 1
+border_color = Color(0.918, 0.702, 0.031, 0.80)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_left = 4
+corner_radius_bottom_right = 4
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 6.0
+content_margin_bottom = 6.0
+
+[node name="InGameSaveModal" type="CanvasLayer"]
+layer = 95
+visible = false
+script = ExtResource("1_script")
+
+[node name="Overlay" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.0, 0.0, 0.0, 0.65)
+
+[node name="Panel" type="PanelContainer" parent="Overlay"]
+layout_mode = 0
+offset_left = 600.0
+offset_top = 160.0
+offset_right = 1320.0
+offset_bottom = 920.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Margin" type="MarginContainer" parent="Overlay/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 22
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 22
+
+[node name="VBox" type="VBoxContainer" parent="Overlay/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="Overlay/Panel/Margin/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 38)
+theme_override_constants/separation = 0
+
+[node name="TitleLbl" type="Label" parent="Overlay/Panel/Margin/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+vertical_alignment = 1
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1.0)
+text = "SPIEL SPEICHERN"
+
+[node name="CloseBtn" type="Button" parent="Overlay/Panel/Margin/VBox/Header"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1.0)
+theme_override_styles/normal = SubResource("StyleBoxFlat_close")
+theme_override_styles/hover = SubResource("StyleBoxFlat_close_h")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_close")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+text = "✕"
+
+[node name="ManualLbl" type="Label" parent="Overlay/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.45, 0.45, 0.55, 1.0)
+text = "Manuelle Spielstände"
+
+[node name="SlotContainer" type="VBoxContainer" parent="Overlay/Panel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="AutoSep" type="Panel" parent="Overlay/Panel/Margin/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 1)
+mouse_filter = 2
+visible = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_sep")
+
+[node name="AutoLbl" type="Label" parent="Overlay/Panel/Margin/VBox"]
+layout_mode = 2
+visible = false
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.45, 0.45, 0.55, 1.0)
+text = "Autosaves"
+
+[node name="AutoSlotContainer" type="VBoxContainer" parent="Overlay/Panel/Margin/VBox"]
+layout_mode = 2
+visible = false
+theme_override_constants/separation = 4
+
+[node name="NameRow" type="HBoxContainer" parent="Overlay/Panel/Margin/VBox"]
+layout_mode = 2
+visible = false
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="NameLbl" type="Label" parent="Overlay/Panel/Margin/VBox/NameRow"]
+layout_mode = 2
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.70, 0.70, 0.75, 1.0)
+text = "Name:"
+
+[node name="NameInput" type="LineEdit" parent="Overlay/Panel/Margin/VBox/NameRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Spielstand benennen..."
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.90, 0.90, 0.90, 1.0)
+theme_override_colors/placeholder_color = Color(0.38, 0.38, 0.45, 0.70)
+theme_override_colors/caret_color = Color(0.918, 0.702, 0.031, 1.0)
+theme_override_colors/selection_color = Color(0.918, 0.702, 0.031, 0.35)
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
+theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
+
+[node name="BtnSpacer" type="Control" parent="Overlay/Panel/Margin/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 10)
+
+[node name="BtnRow" type="HBoxContainer" parent="Overlay/Panel/Margin/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="BtnAction" type="Button" parent="Overlay/Panel/Margin/VBox/BtnRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(160, 44)
+disabled = true
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.05, 0.20, 0.08, 1.0)
+theme_override_colors/font_hover_color = Color(0.05, 0.20, 0.08, 1.0)
+theme_override_colors/font_pressed_color = Color(0.05, 0.20, 0.08, 1.0)
+theme_override_colors/font_disabled_color = Color(0.086, 0.639, 0.290, 0.45)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_green")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_green_h")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_green")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_btn_green_dis")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+text = "Speichern"
+

@@ -284,6 +284,19 @@ func _on_save_loaded(hotel_id: int) -> void:
 	get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey:
+		var ke := event as InputEventKey
+		if ke.pressed and not ke.echo and ke.keycode == KEY_ESCAPE:
+			if is_instance_valid(_confirm_modal) and _confirm_modal.visible:
+				return
+			if is_instance_valid(_new_hotel_modal) and _new_hotel_modal.visible:
+				return
+			if is_instance_valid(_load_screen) and _load_screen.visible:
+				return
+			_on_main_menu_pressed()
+
+
 func _on_main_menu_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/main_menu/MainMenu.tscn")
 

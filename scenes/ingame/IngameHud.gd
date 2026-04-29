@@ -36,8 +36,9 @@ var _stat_guests_wait:   Label
 var _stat_guests_active: Label
 var _stat_guests_out:    Label
 var _stat_ap_val:        Label
-var _stat_exp_bar:       ProgressBar
+var _stat_exp_bar:       Control
 var _stat_exp_lbl:       Label
+var _exp_fill:           ColorRect
 var _stat_ruf_root:      Control
 var _stat_ruf_lbl:       Label
 var _stat_fp_val:        Label
@@ -78,6 +79,7 @@ func configure(hotel: Dictionary, refs: Dictionary, hud_canvas: CanvasLayer) -> 
 	_bottom_anchor      = refs["bottom_anchor"]
 	_context_bar        = refs["context_bar"]
 	_setup_hud()
+	_build_exp_bar(0, 100)
 	_build_ruf_bar()
 	_build_bottom_bar()
 	_build_context_bar()
@@ -103,6 +105,10 @@ func show_context_bar(shown: bool) -> void:
 
 func update_day(day: int) -> void:
 	_stat_day_val.text = str(day)
+
+
+func update_money(amount: float) -> void:
+	_stat_money_val.text = "€ " + _format_money(int(amount))
 
 
 func set_mode_btn_saved(saved: bool) -> void:
@@ -134,9 +140,8 @@ func _setup_hud() -> void:
 	_stat_guests_active.text = "0"
 	_stat_guests_out.text    = "0"
 	_stat_ap_val.text        = "0 / 100"
-	_stat_exp_bar.max_value  = 100
-	_stat_exp_bar.value      = 0
-	_stat_exp_lbl.text       = "0 / 100"
+	_stat_exp_lbl.text = "0 / 100"
+	_build_exp_bar(0, 100)
 	_stat_fp_val.text        = "0"
 	_update_ruf_display(500)
 	_apply_value_box(_stat_money_val)
@@ -215,6 +220,39 @@ func _build_ruf_bar() -> void:
 
 	await get_tree().process_frame
 	_update_ruf_display(500)
+
+
+# ── EXP-Bar ───────────────────────────────────────────────────────────────────
+
+func _build_exp_bar(value: int, max_val: int) -> void:
+	var bg := ColorRect.new()
+	bg.color = Color(0.12, 0.16, 0.22, 1)
+	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_stat_exp_bar.add_child(bg)
+
+	_exp_fill          = ColorRect.new()
+	_exp_fill.color    = Color(0.20, 0.48, 0.85, 1.0)
+	_exp_fill.position = Vector2.ZERO
+	_exp_fill.size     = Vector2.ZERO
+	_stat_exp_bar.add_child(_exp_fill)
+
+	await get_tree().process_frame
+	_update_exp_fill(value, max_val)
+
+
+func _update_exp_fill(value: int, max_val: int) -> void:
+	if not is_instance_valid(_exp_fill):
+		return
+	var bar_w := _stat_exp_bar.size.x
+	var bar_h := _stat_exp_bar.size.y
+	if bar_w == 0:
+		bar_w = 120.0
+	if bar_h == 0:
+		bar_h = 10.0
+	_exp_fill.size = Vector2(
+		clampf((float(value) / float(max(max_val, 1))) * bar_w, 0.0, bar_w),
+		bar_h
+	)
 
 
 func _update_ruf_display(rep: int) -> void:

@@ -2,6 +2,7 @@ extends Node2D
 
 ## ANG-148 – Ingame-Grundgerüst (Orchestrator)
 ## ANG-170 – God-File aufgeteilt: HUD → IngameHud, Uhr → IngameClock, Bau → IngameBuild
+## ANG-176 – PauseMenu + InGameSaveModal verdrahtet
 
 # ── Nodes ─────────────────────────────────────────────────────────────────────
 @onready var map_grid: Node2D = $MapGrid
@@ -14,7 +15,7 @@ extends Node2D
 @onready var stat_guests_active:  Label        = $HUD/TopBar/HBox/StatsSection/StatGuests/GuestsBox/ActiveLbl
 @onready var stat_guests_out:     Label        = $HUD/TopBar/HBox/StatsSection/StatGuests/GuestsBox/OutLbl
 @onready var stat_ap_val:         Label        = $HUD/TopBar/HBox/StatsSection/StatAP/Value
-@onready var stat_exp_bar:        ProgressBar  = $HUD/TopBar/HBox/StatsSection/StatEXP/Bar
+@onready var stat_exp_bar:        Control      = $HUD/TopBar/HBox/StatsSection/StatEXP/Bar
 @onready var stat_exp_lbl:        Label        = $HUD/TopBar/HBox/StatsSection/StatEXP/ValueLbl
 @onready var stat_ruf_root:       Control      = $HUD/TopBar/HBox/StatsSection/StatRUF/RufBarRoot
 @onready var stat_ruf_lbl:        Label        = $HUD/TopBar/HBox/StatsSection/StatRUF/RufValueLbl
@@ -32,12 +33,21 @@ var _clock:          IngameClock
 var _build:          IngameBuild
 var _autosave_timer: Timer
 var _settings_modal: SettingsModal
+var _dev_console:    DevConsole
+var _pause_menu:     PauseMenu
+var _save_modal:     InGameSaveModal
+var _quit_confirm:   ConfirmModal
 
-const SETTINGS_SCENE := preload("res://scenes/shared/SettingsModal.tscn")
-const CONFIRM_SCENE  := preload("res://scenes/shared/ConfirmModal.tscn")
+var _pause_was_running: bool = false
+var _came_from_pause:   bool = false
 
-var _hotel:        Dictionary = {}
-var _quit_confirm: ConfirmModal = null
+const SETTINGS_SCENE    := preload("res://scenes/shared/SettingsModal.tscn")
+const CONFIRM_SCENE     := preload("res://scenes/shared/ConfirmModal.tscn")
+const DEV_CONSOLE_SCENE := preload("res://scenes/ingame/DevConsole.tscn")
+const PAUSE_MENU_SCENE  := preload("res://scenes/ingame/PauseMenu.tscn")
+const SAVE_MODAL_SCENE  := preload("res://scenes/ingame/InGameSaveModal.tscn")
+
+var _hotel: Dictionary = {}
 
 
 func _ready() -> void:
@@ -120,6 +130,26 @@ func _setup_subsystems() -> void:
 	_clock.save_requested.connect(_save_progress)
 	_setup_autosave_timer()
 
+	_pause_menu = PAUSE_MENU_SCENE.instantiate() as PauseMenu
+	add_child(_pause_menu)
+	_pause_menu.resume_requested.connect(_on_pause_resume)
+	_pause_menu.save_requested.connect(_on_pause_save)
+	_pause_menu.load_requested.connect(_on_pause_load)
+	_pause_menu.settings_requested.connect(_on_pause_settings)
+	_pause_menu.quit_requested.connect(_on_pause_quit)
+
+	_save_modal = SAVE_MODAL_SCENE.instantiate() as InGameSaveModal
+	add_child(_save_modal)
+	_save_modal.save_completed.connect(_on_save_modal_completed)
+	_save_modal.load_completed.connect(_on_save_modal_loaded)
+	_save_modal.back_requested.connect(_on_save_modal_back)
+
+	if OS.is_debug_build():
+		_dev_console = DEV_CONSOLE_SCENE.instantiate() as DevConsole
+		add_child(_dev_console)
+		_dev_console.configure(_hotel, _hud, _clock)
+		_dev_console.visibility_changed.connect(_on_dev_console_visibility_changed)
+
 
 # ── Signal-Handler ────────────────────────────────────────────────────────────
 
@@ -135,6 +165,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		var ke := event as InputEventKey
 		if ke.pressed and not ke.echo:
 			if is_instance_valid(_settings_modal) and _settings_modal.visible:
+				return
+			if is_instance_valid(_pause_menu) and _pause_menu.visible:
+				return
+			if is_instance_valid(_save_modal) and _save_modal.visible:
 				return
 			if ke.keycode == KEY_S and ke.alt_pressed:
 				_open_settings()
@@ -152,15 +186,74 @@ func _handle_hotkey(keycode: int) -> void:
 		KEY_F6:     _hud.trigger_button(4)
 		KEY_F7:     _hud.trigger_button(5)
 		KEY_F9:     _quick_load()
+		KEY_F12:    if is_instance_valid(_dev_console): _dev_console.toggle()
 
 
 func _on_exit_pressed() -> void:
 	if _build.close_all():
 		return
+	_open_pause_menu()
+
+
+# ── Pause-Menü ────────────────────────────────────────────────────────────────
+
+func _open_pause_menu() -> void:
+	_pause_was_running = not _clock.is_paused()
+	_clock.pause()
+	_pause_menu.open()
+	_update_map_grid_mode()
+
+
+func _close_pause() -> void:
+	_pause_menu.close()
+	if _pause_was_running:
+		_clock.resume()
+	_update_map_grid_mode()
+
+
+func _update_map_grid_mode() -> void:
+	var blocked := (is_instance_valid(_dev_console)    and _dev_console.visible)    \
+			or (is_instance_valid(_pause_menu)     and _pause_menu.visible)     \
+			or (is_instance_valid(_save_modal)     and _save_modal.visible)     \
+			or (is_instance_valid(_settings_modal) and _settings_modal.visible)
+	map_grid.process_mode = Node.PROCESS_MODE_DISABLED if blocked else Node.PROCESS_MODE_INHERIT
+
+
+func _on_pause_resume() -> void:
+	_close_pause()
+
+
+func _on_pause_save() -> void:
+	var hotel_id: int = _hotel.get("id", -1)
+	if hotel_id < 0:
+		return
+	_pause_menu.close()
+	_save_modal.open(hotel_id, true)
+	_update_map_grid_mode()
+
+
+func _on_pause_load() -> void:
+	var hotel_id: int = _hotel.get("id", -1)
+	if hotel_id < 0:
+		return
+	_pause_menu.close()
+	_save_modal.open(hotel_id, false)
+	_update_map_grid_mode()
+
+
+func _on_pause_settings() -> void:
+	_came_from_pause = true
+	_pause_menu.close()
+	_open_settings()
+
+
+func _on_pause_quit() -> void:
+	_pause_menu.visible = false
 	if not is_instance_valid(_quit_confirm):
 		_quit_confirm = CONFIRM_SCENE.instantiate() as ConfirmModal
 		$HUD.add_child(_quit_confirm)
 		_quit_confirm.confirmed.connect(_on_quit_confirmed)
+		_quit_confirm.cancelled.connect(func(): _pause_menu.visible = true)
 	_quit_confirm.ask(
 		GameState.T("ingame.quit.title"),
 		GameState.T("ingame.quit.message"),
@@ -173,6 +266,24 @@ func _on_quit_confirmed() -> void:
 	_save_progress(_clock.get_game_time())
 	SaveManager.save_auto(_hotel.get("id", -1))
 	get_tree().change_scene_to_file("res://scenes/dashboard/Dashboard.tscn")
+
+
+# ── Save-Modal ────────────────────────────────────────────────────────────────
+
+func _on_save_modal_completed() -> void:
+	_save_modal.close()
+	_close_pause()
+
+
+func _on_save_modal_loaded(hotel_id_loaded: int) -> void:
+	GameState.active_hotel_id = hotel_id_loaded
+	get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
+
+
+func _on_save_modal_back() -> void:
+	_save_modal.close()
+	_pause_menu.open()
+	_update_map_grid_mode()
 
 
 # ── Persistenz ────────────────────────────────────────────────────────────────
@@ -193,12 +304,19 @@ func _open_settings() -> void:
 		_settings_modal = SETTINGS_SCENE.instantiate() as SettingsModal
 		$HUD.add_child(_settings_modal)
 		_settings_modal.closed.connect(_on_settings_closed)
-	map_grid.process_mode = Node.PROCESS_MODE_DISABLED
 	_settings_modal.open()
+	_update_map_grid_mode()
 
 
 func _on_settings_closed() -> void:
-	map_grid.process_mode = Node.PROCESS_MODE_INHERIT
+	if _came_from_pause:
+		_came_from_pause = false
+		_pause_menu.open()
+	_update_map_grid_mode()
+
+
+func _on_dev_console_visibility_changed() -> void:
+	_update_map_grid_mode()
 
 
 func _setup_autosave_timer() -> void:

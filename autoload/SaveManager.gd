@@ -7,9 +7,9 @@ extends Node
 const PROFILES_PATH := "user://profiles.cfg"
 const HOTELS_DIR    := "user://hotels/"
 const SAVES_DIR     := "user://saves/"
-const MAX_AUTOSAVES := 10
+const MAX_AUTOSAVES := 5
 const MAX_HOTELS    := 5
-const MANUAL_SLOTS  := 3
+const MANUAL_SLOTS  := 5
 
 # ── State ─────────────────────────────────────────────────────────────────────
 var _profiles:        Array = []
@@ -150,10 +150,10 @@ func get_save_slots(hotel_id: int) -> Dictionary:
 	var hotel  := get_hotel(hotel_id)
 	var result := _default_saves()
 	var qs     := _read_snapshot(_save_path_quick(hotel_id))
-	result["quick"] = qs if not qs.is_empty() else null
+	result["quick"] = qs if not qs.is_empty() else (null as Variant)
 	for i in MANUAL_SLOTS:
 		var ms := _read_snapshot(_save_path_manual(hotel_id, i))
-		result["manual"][i] = ms if not ms.is_empty() else null
+		result["manual"][i] = ms if not ms.is_empty() else (null as Variant)
 	var auto_count: int = hotel.get("auto_count", 0)
 	result["auto"].resize(auto_count)
 	for i in auto_count:

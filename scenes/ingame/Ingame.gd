@@ -325,6 +325,7 @@ func _save_progress(game_time_min: int) -> void:
 	SaveManager.update_hotel(hotel_id, {
 		"day":       _hotel.get("day", 1),
 		"money":     _hotel.get("money", 0),
+		"xp":        _hotel.get("xp", 0),
 		"game_time": game_time_min,
 	})
 

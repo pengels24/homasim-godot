@@ -4,7 +4,7 @@ extends Node2D
 ## Weiß = Tile-Bereich frei, Rot = Überlappung. R=Tür-Wand, T=Tür-Position, Z=Raum-Flip. ESC = abbrechen.
 ## ANG-186 – Validierung über MapGrid.is_placement_valid() statt Einzelchecks.
 
-signal room_placed(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int, door_rotation: int, door_offset: int, room_flip: int)
+signal room_placed(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int, door_rotation: int, door_offset: int, room_flip: int, world_center: Vector2)
 signal cancelled()
 
 const ROOM_SCENES: Dictionary = {
@@ -173,5 +173,6 @@ func _try_place() -> void:
 			place_tile.x, place_tile.y,
 			_room_w, _room_h, _door_rotation, _door_offset):
 		get_viewport().set_input_as_handled()
-		room_placed.emit(_current_parcel.x, _current_parcel.y, place_tile.x, place_tile.y, _door_rotation, _door_offset, _room_flip)
+		var ghost_center := _ghost.global_position + Vector2(_room_w, _room_h) * float(TILE_PX) * 0.5
+		room_placed.emit(_current_parcel.x, _current_parcel.y, place_tile.x, place_tile.y, _door_rotation, _door_offset, _room_flip, ghost_center)
 		_spawn_ghost()

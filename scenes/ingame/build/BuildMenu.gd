@@ -26,32 +26,17 @@ const CATEGORIES: Array[Dictionary] = [
 	{"id": "management", "icon": "res://assets/icons/laptop-minimal.svg", "label": "Management",   "angle": 180.0},
 ]
 
-# ── Raum-Definitionen je Kategorie (aus RoomDefinitions) ─────────────────────
-# "label" = Kurztext (Icon-Fallback), "name" = Langtext (Tooltip) – später via GameState.T()
-const ROOM_ITEMS: Dictionary = {
-	"zimmer": [
-		{"id": "bed_standard", "icon": "res://assets/icons/bed-single.svg", "label": "EZ",  "name": "Einzelzimmer",    "cost": 500,  "locked": false},
-		{"id": "bed_double",   "icon": "res://assets/icons/bed-double.svg", "label": "DZ",  "name": "Doppelzimmer",    "cost": 800,  "locked": false},
-		{"id": "bed_family",   "icon": "res://assets/icons/users.svg",      "label": "FZ",  "name": "Familienzimmer",  "cost": 1300, "locked": true},
-		{"id": "bed_superior", "icon": "res://assets/icons/star.svg",       "label": "Sup", "name": "Superior Zimmer", "cost": 1000, "locked": true},
-	],
-	"gastro": [
-		{"id": "kitchen",    "icon": "res://assets/icons/chef-hat.svg",  "label": "Küche", "name": "Küche",      "cost": 1500, "locked": true},
-		{"id": "restaurant", "icon": "res://assets/icons/utensils.svg",  "label": "Rest.", "name": "Restaurant", "cost": 2000, "locked": true},
-		{"id": "bar",        "icon": "res://assets/icons/wine.svg",      "label": "Bar",   "name": "Bar",        "cost": 1800, "locked": true},
-	],
-	"service": [
-		{"id": "bathroom",   "icon": "res://assets/icons/bath.svg",        "label": "Bad",  "name": "Badezimmer",    "cost": 400,  "locked": false},
-		{"id": "fitness",    "icon": "res://assets/icons/dumbbell.svg",    "label": "Fit",  "name": "Fitnessraum",   "cost": 2500, "locked": true},
-		{"id": "conference", "icon": "res://assets/icons/presentation.svg","label": "Konf", "name": "Konferenzraum", "cost": 3000, "locked": true},
-	],
-	"management": [
-		{"id": "hr_office", "icon": "res://assets/icons/users-round.svg", "label": "Pers", "name": "Personalbüro",  "cost": 800,  "locked": true},
-		{"id": "pl_office", "icon": "res://assets/icons/briefcase.svg",   "label": "Plan", "name": "Planungsbüro",  "cost": 1200, "locked": true},
-	],
-}
+# ── Raum-Registry ─────────────────────────────────────────────────────────────
+# Neuen Raum hinzufügen: einfach eine neue Zeile hier eintragen.
+# Alles andere (Kosten, Icon, Kategorie, XP) steht in der get_definition() der Raumklasse.
+const ROOM_REGISTRY: Array[GDScript] = [
+	preload("res://scenes/ingame/rooms/bed_standard/BedStandard.gd"),
+	preload("res://scenes/ingame/rooms/bed_double/BedDouble.gd"),
+	preload("res://scenes/ingame/rooms/lobby/Lobby.gd"),
+]
 
 # ── Zustand ───────────────────────────────────────────────────────────────────
+var _room_items:       Dictionary = {}   # category → Array[Dictionary], aus ROOM_REGISTRY
 var _selected_category: String = ""
 var _root:             Control
 var _ring2_container:  Control
@@ -64,14 +49,39 @@ var _sb_hover:  StyleBoxFlat
 var _sb_active: StyleBoxFlat
 
 
+## Sucht die Definition eines Raums in der Registry. Aufruf via BuildMenu.find_definition("bed_standard").
+static func find_definition(room_type_id: String) -> Dictionary:
+	for script: GDScript in ROOM_REGISTRY:
+		var def: Dictionary = script.get_definition()
+		if def.get("id", "") == room_type_id:
+			return def
+	return {}
+
+
 func _ready() -> void:
 	layer = 2
 	_sb_normal = _make_btn_sb(Color(0.06, 0.10, 0.18, 0.90), Color(0.20, 0.24, 0.35, 0.55))
 	_sb_hover  = _make_btn_sb(Color(0.10, 0.16, 0.26, 0.96), Color(0.918, 0.702, 0.031, 0.70))
 	_sb_active = _make_btn_sb(Color(0.22, 0.16, 0.02, 1.00),  Color(0.918, 0.702, 0.031, 1.00))
+	_build_room_items()
 	_build_menu()
 	if initial_category != "":
 		_on_category_pressed(initial_category)
+
+
+# ── Initialisierung ──────────────────────────────────────────────────────────
+
+func _build_room_items() -> void:
+	for script: GDScript in ROOM_REGISTRY:
+		var def: Dictionary = script.get_definition()
+		if not def.get("in_build_menu", false):
+			continue
+		var cat: String = def.get("category", "")
+		if cat == "":
+			continue
+		if not _room_items.has(cat):
+			_room_items[cat] = []
+		_room_items[cat].append(def)
 
 
 # ── Aufbau ───────────────────────────────────────────────────────────────────
@@ -247,7 +257,7 @@ func _build_ring2(cat_id: String) -> void:
 	for child in _ring2_container.get_children():
 		child.queue_free()
 
-	var items: Array = ROOM_ITEMS.get(cat_id, [])
+	var items: Array = _room_items.get(cat_id, [])
 	if items.is_empty():
 		return
 
@@ -336,7 +346,7 @@ func _make_item_btn(item: Dictionary) -> Button:
 	var locked: bool = item.get("locked", false)
 	var btn := _make_icon_btn(item.get("icon", ""), item.get("label", "?"), locked)
 	var name_text: String = item.get("name", item.get("label", "?"))
-	var cost:      int    = item.get("cost", 0)
+	var cost:      int    = item.get("build_cost", 0)
 	btn.tooltip_text     = "%s\n%d €" % [name_text, cost]
 	if not locked:
 		btn.pressed.connect(func() -> void: _on_room_pressed(item["id"]))

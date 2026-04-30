@@ -141,6 +141,7 @@
 "toast.unlockplot.buy.ok","Grundstück erfolgreich gekauft!",""
 "toast.unlockplot.buy.nok","Fehler! Grundstückskauf fehlgeschlagen.",""
 "toast.build.room_placed","### ausgewählt",""
+"toast.build.no_money","Nicht genug Kapital!",""
 "toast.system.autosave","Spielstand gespeichert",""
 "toast.system.autosave.error","Speichern fehlgeschlagen",""
 "toast.quicksave","Spielstand gespeichert",""

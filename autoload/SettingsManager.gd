@@ -7,6 +7,7 @@ const SETTINGS_PATH := "user://settings.cfg"
 var autosave_enabled:          bool  = true
 var autosave_interval_minutes: int   = 10    # Echtzeit-Minuten
 var ff_speed:                  float = 10.0  # Schnellvorlauf-Faktor
+var demolition_refund_rate:    float = 0.5   # Kapital-Rückgabe beim Abreißen (0.0–1.0)
 
 # ── Audio ─────────────────────────────────────────────────────────────────────
 var master_volume:     float = 1.0  # 0.0 – 1.0
@@ -37,6 +38,7 @@ func save() -> void:
 	cfg.set_value("gameplay", "autosave_enabled",          autosave_enabled)
 	cfg.set_value("gameplay", "autosave_interval_minutes", autosave_interval_minutes)
 	cfg.set_value("gameplay", "ff_speed",                  ff_speed)
+	cfg.set_value("gameplay", "demolition_refund_rate",    demolition_refund_rate)
 	cfg.set_value("audio",    "master_volume",             master_volume)
 	cfg.set_value("audio",    "music_volume",              music_volume)
 	cfg.set_value("audio",    "menu_music_volume",         menu_music_volume)
@@ -61,6 +63,7 @@ func _load() -> void:
 	autosave_enabled          = cfg.get_value("gameplay", "autosave_enabled",          autosave_enabled)
 	autosave_interval_minutes = cfg.get_value("gameplay", "autosave_interval_minutes", autosave_interval_minutes)
 	ff_speed                  = cfg.get_value("gameplay", "ff_speed",                  ff_speed)
+	demolition_refund_rate    = cfg.get_value("gameplay", "demolition_refund_rate",    demolition_refund_rate)
 	master_volume             = cfg.get_value("audio",    "master_volume",             master_volume)
 	music_volume              = cfg.get_value("audio",    "music_volume",              music_volume)
 	menu_music_volume         = cfg.get_value("audio",    "menu_music_volume",         menu_music_volume)

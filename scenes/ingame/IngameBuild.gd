@@ -3,7 +3,8 @@ class_name IngameBuild
 ## ANG-170 – BuildMenu + BuildCursor Koordination, BottomBar-Button-Handler.
 ## Erhält alle nötigen Node-Referenzen via configure(). Keine @onready.
 
-const BUILD_MENU_SCENE := preload("res://scenes/ingame/build/BuildMenu.tscn")
+const BUILD_MENU_SCENE   := preload("res://scenes/ingame/build/BuildMenu.tscn")
+const BUILD_MENU_SCRIPT  := preload("res://scenes/ingame/build/BuildMenu.gd")
 
 const SCENE_PATHS: Dictionary = {
 	"bed_standard": "res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn",
@@ -99,8 +100,8 @@ func _on_build_room_selected(room_type_id: String) -> void:
 	var cursor := Node2D.new()
 	cursor.set_script(load("res://scenes/ingame/build/BuildCursor.gd"))
 	_map_grid.get_world_root().add_child(cursor)
-	cursor.room_placed.connect(func(px: int, py: int, tx: int, ty: int, dr: int, doff: int, rflip: int) -> void:
-		_on_room_placed(room_type_id, px, py, tx, ty, dr, doff, rflip)
+	cursor.room_placed.connect(func(px: int, py: int, tx: int, ty: int, dr: int, doff: int, rflip: int, wc: Vector2) -> void:
+		_on_room_placed(room_type_id, px, py, tx, ty, dr, doff, rflip, wc)
 	)
 	cursor.cancelled.connect(_on_build_cursor_done)
 	cursor.tree_exited.connect(func() -> void:
@@ -112,11 +113,33 @@ func _on_build_room_selected(room_type_id: String) -> void:
 	cursor.activate(_map_grid, room_type_id)
 
 
-func _on_room_placed(room_type_id: String, px: int, py: int, tx: int, ty: int, dr: int, doff: int, rflip: int) -> void:
+func _on_room_placed(room_type_id: String, px: int, py: int, tx: int, ty: int, dr: int, doff: int, rflip: int, world_center: Vector2) -> void:
 	var path: String = SCENE_PATHS.get(room_type_id, "")
 	if path == "":
 		return
+
+	var def:  Dictionary = BUILD_MENU_SCRIPT.find_definition(room_type_id)
+	var cost: int        = def.get("build_cost", 0)
+
+	if float(cost) > _hotel.get("money", 0.0):
+		Toast.show(GameState.T("toast.build.no_money"))
+		return
+
 	_map_grid.place_room(px, py, load(path), _hotel.get("id", -1), dr, doff, tx, ty, rflip)
+	_apply_build_costs(def, cost, world_center)
+
+
+func _apply_build_costs(def: Dictionary, cost: int, world_center: Vector2) -> void:
+	if cost > 0:
+		_hotel["money"] = _hotel.get("money", 0.0) - float(cost)
+		_hud.update_money(_hotel["money"])
+		FloatingValues.spawn("-%d €" % cost, -1.0, world_center, _hud.get_stat_money_node(), Vector2(-48.0, 0.0))
+
+	var xp: int = def.get("xp_reward", 0)
+	if xp > 0:
+		_hotel["xp"] = _hotel.get("xp", 0) + xp
+		_hud.update_exp(_hotel["xp"])
+		FloatingValues.spawn("+%d XP" % xp, 1.0, world_center, _hud.get_stat_exp_node(), Vector2(48.0, 0.0))
 
 
 func _on_build_cursor_done() -> void:

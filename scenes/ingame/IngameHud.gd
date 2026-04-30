@@ -111,9 +111,25 @@ func update_money(amount: float) -> void:
 	_stat_money_val.text = "€ " + _format_money(int(amount))
 
 
+func update_exp(xp: int) -> void:
+	_stat_exp_lbl.text = "%d XP" % xp
+
+
 func set_mode_btn_saved(saved: bool) -> void:
 	_mode_icon_center.visible = not saved
 	_mode_icon_back.visible   = saved
+
+
+func get_stat_money_node() -> Control:
+	return _stat_money_val
+
+
+func get_stat_exp_node() -> Control:
+	return _stat_exp_lbl
+
+
+func get_stat_fp_node() -> Control:
+	return _stat_fp_val
 
 
 func get_bottom_button(idx: int) -> Button:
@@ -140,8 +156,9 @@ func _setup_hud() -> void:
 	_stat_guests_active.text = "0"
 	_stat_guests_out.text    = "0"
 	_stat_ap_val.text        = "0 / 100"
-	_stat_exp_lbl.text = "0 / 100"
-	_build_exp_bar(0, 100)
+	var initial_xp: int = _hotel.get("xp", 0)
+	_stat_exp_lbl.text = "%d XP" % initial_xp
+	_build_exp_bar(initial_xp, 100)
 	_stat_fp_val.text        = "0"
 	_update_ruf_display(500)
 	_apply_value_box(_stat_money_val)

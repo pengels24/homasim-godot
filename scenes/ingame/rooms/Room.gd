@@ -21,6 +21,25 @@ var door_offset:   int = 0   # Position auf Wand 0–1  (T-Taste)
 var room_flip:     int = 0   # Orientierung  0=landscape 1=portrait  (Z-Taste)
 
 
+# ── Definition (von Unterklassen überschreiben) ───────────────────────────────
+
+## Gibt alle statischen Metadaten des Raumtyps zurück.
+## Unterklassen überschreiben diese Funktion – kein zentrales Register nötig.
+static func get_definition() -> Dictionary:
+	return {
+		"id":            "",
+		"build_cost":    0,
+		"xp_reward":     0,
+		"prefix":        "Z",
+		"label":         "?",
+		"name":          "Unbekannter Raum",
+		"category":      "",
+		"icon":          "",
+		"locked":        false,
+		"in_build_menu": false,
+	}
+
+
 # ── Public API ────────────────────────────────────────────────────────────────
 
 func configure(data: Dictionary) -> void:

@@ -4,6 +4,21 @@ extends "res://scenes/ingame/rooms/Room.gd"
 ## door_offset:   0=erste Position 1=zweite Position  (T-Taste)
 ## room_flip:     0=landscape 1=portrait  (Z-Taste)
 
+static func get_definition() -> Dictionary:
+	return {
+		"id":            "bed_double",
+		"build_cost":    800,
+		"xp_reward":     80,
+		"prefix":        "Z",
+		"label":         "DZ",
+		"name":          "Doppelzimmer",
+		"category":      "zimmer",
+		"icon":          "res://assets/icons/bed-double.svg",
+		"locked":        false,
+		"in_build_menu": true,
+	}
+
+
 func _ready() -> void:
 	room_type_id = "bed_double"
 

@@ -4,6 +4,21 @@ extends "res://scenes/ingame/rooms/Room.gd"
 ## door_offset:   0=erste Position  1=zweite Position  (T-Taste)
 ## room_flip:     nicht genutzt (2×2 ist symmetrisch)
 
+static func get_definition() -> Dictionary:
+	return {
+		"id":            "bed_standard",
+		"build_cost":    500,
+		"xp_reward":     50,
+		"prefix":        "Z",
+		"label":         "EZ",
+		"name":          "Einzelzimmer",
+		"category":      "zimmer",
+		"icon":          "res://assets/icons/bed-single.svg",
+		"locked":        false,
+		"in_build_menu": true,
+	}
+
+
 func _ready() -> void:
 	room_type_id = "bed_standard"
 

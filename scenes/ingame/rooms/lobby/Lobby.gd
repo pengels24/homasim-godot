@@ -15,6 +15,21 @@ extends "res://scenes/ingame/rooms/Room.gd"
 var entrance_dir: String = "top"
 
 
+static func get_definition() -> Dictionary:
+	return {
+		"id":            "lobby",
+		"build_cost":    0,
+		"xp_reward":     0,
+		"prefix":        "R",
+		"label":         "Lobby",
+		"name":          "Lobby / Rezeption",
+		"category":      "management",
+		"icon":          "",
+		"locked":        false,
+		"in_build_menu": false,
+	}
+
+
 func _ready() -> void:
 	room_type_id = "lobby"
 

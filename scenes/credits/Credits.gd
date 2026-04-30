@@ -53,6 +53,7 @@ func _ready() -> void:
 	_add_scroll_fade(0.0, true)
 	_add_scroll_fade(SCREEN_H - 100.0, false)
 	_start_scroll.call_deferred()
+	MusicManager.stop()
 	_start_music()
 
 

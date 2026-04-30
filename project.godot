@@ -22,6 +22,7 @@ SessionManager="*res://autoload/SessionManager.gd"
 GameState="*res://autoload/GameState.gd"
 SaveManager="*uid://dkykgbioo55ho"
 SettingsManager="*res://autoload/SettingsManager.gd"
+MusicManager="*res://autoload/MusicManager.gd"
 Toast="*res://autoload/Toast.gd"
 
 [display]

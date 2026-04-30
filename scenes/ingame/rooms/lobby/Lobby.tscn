@@ -10,15 +10,13 @@
 [ext_resource type="Texture2D" uid="uid://c3spx7tf4sp0f" path="res://assets/tiles/floor_lobby_wall_right.png" id="8_jcwna"]
 [ext_resource type="Texture2D" uid="uid://cw0a3igyo4x16" path="res://assets/tiles/floor_lobby_wall_top-left.png" id="9_sxn03"]
 [ext_resource type="Texture2D" uid="uid://cl4kib77xjy7j" path="res://assets/tiles/floor_lobby_wall_top.png" id="10_3gdlt"]
-[ext_resource type="Texture2D" uid="uid://bl8w8v2v3rqw0" path="res://assets/tiles/tile_0687.png" id="11_1ktxp"]
-[ext_resource type="Texture2D" uid="uid://co0d2vd5oxcpm" path="res://assets/tiles/tile_0688.png" id="12_klxtq"]
 [ext_resource type="Texture2D" uid="uid://chvfjp13vv8l3" path="res://assets/tiles/ground_floor.png" id="13_jql36"]
-[ext_resource type="Texture2D" uid="uid://075li7pobmws" path="res://assets/tiles/tile_0652.png" id="14_01sfq"]
 [ext_resource type="Texture2D" uid="uid://bfricqock0kkl" path="res://assets/tiles/Rooms/room_standard_door_bottom_left.png" id="14_nv5dw"]
-[ext_resource type="Texture2D" uid="uid://fa8nc6jcx2oo" path="res://assets/tiles/tile_0726.png" id="15_8qq1w"]
 [ext_resource type="Texture2D" uid="uid://d0pyii8in7y6q" path="res://assets/tiles/Rooms/room_standard_door_bottom_right.png" id="15_og383"]
 [ext_resource type="Texture2D" uid="uid://chc84gabce8fu" path="res://assets/tiles/floor_lobby_door_top_left.png" id="16_47a3f"]
+[ext_resource type="Texture2D" uid="uid://delg3t2iq1efs" path="res://assets/tiles/Rooms/Walls/wall_horizontal_end_left-1.png" id="16_ulxpv"]
 [ext_resource type="Texture2D" uid="uid://dg6bbgqys7cj5" path="res://assets/tiles/floor_lobby_door_top_right.png" id="17_2jwos"]
+[ext_resource type="Texture2D" uid="uid://bmbw2jpoitdry" path="res://assets/tiles/Rooms/Walls/wall_horizontal_end_right-1.png" id="17_mpdv3"]
 [ext_resource type="Texture2D" uid="uid://cwtq21gu4lr2o" path="res://assets/tiles/Rooms/room_standard_door_left_bottom.png" id="17_wnmbo"]
 [ext_resource type="Texture2D" uid="uid://pm26loxwhfhk" path="res://assets/tiles/Rooms/room_standard_door_left_top.png" id="18_og383"]
 [ext_resource type="Texture2D" uid="uid://cabmhlfh4ryhv" path="res://assets/tiles/floor_lobby_door_left_top.png" id="18_xch0d"]
@@ -28,7 +26,9 @@
 [ext_resource type="Texture2D" uid="uid://2gh2ggah47xw" path="res://assets/tiles/Rooms/room_standard_door_right_bottom.png" id="20_sy3ba"]
 [ext_resource type="Texture2D" uid="uid://c00lfhkkt42a3" path="res://assets/tiles/floor_lobby_door_right_bottom.png" id="21_6jn4f"]
 [ext_resource type="Texture2D" uid="uid://ccrtptourytws" path="res://assets/tiles/Rooms/room_standard_door_right_top.png" id="21_et28e"]
+[ext_resource type="Texture2D" uid="uid://cgjdqc0hdw4on" path="res://assets/tiles/Rooms/Walls/wall_veertical_end_bottom-1.png" id="22_05bso"]
 [ext_resource type="Texture2D" uid="uid://30wniqet1hoa" path="res://assets/tiles/floor_lobby_door_bottom_left.png" id="22_ldigk"]
+[ext_resource type="Texture2D" uid="uid://dses7vg5pm3st" path="res://assets/tiles/Rooms/Walls/wall_veertical_end_top-1.png" id="23_dumg1"]
 [ext_resource type="Texture2D" uid="uid://5v1xfhwpoh37" path="res://assets/tiles/Rooms/room_standard_door_top_right.png" id="23_et28e"]
 [ext_resource type="Texture2D" uid="uid://df3o6fgygo3ug" path="res://assets/tiles/floor_lobby_door_bottom_right.png" id="23_kpxic"]
 
@@ -79,14 +79,6 @@ sources/8 = SubResource("TileSetAtlasSource_6nkpv")
 sources/9 = SubResource("TileSetAtlasSource_ql1ac")
 sources/10 = SubResource("TileSetAtlasSource_pf3hf")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_eumws"]
-texture = ExtResource("11_1ktxp")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1go1o"]
-texture = ExtResource("12_klxtq")
-0:0/0 = 0
-
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_32cv8"]
 texture = ExtResource("13_jql36")
 0:0/0 = 0
@@ -99,20 +91,20 @@ texture = ExtResource("14_nv5dw")
 texture = ExtResource("15_og383")
 0:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dumg1"]
+texture = ExtResource("16_ulxpv")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fymb3"]
+texture = ExtResource("17_mpdv3")
+0:0/0 = 0
+
 [sub_resource type="TileSet" id="TileSet_1px3f"]
-sources/0 = SubResource("TileSetAtlasSource_eumws")
-sources/1 = SubResource("TileSetAtlasSource_1go1o")
 sources/2 = SubResource("TileSetAtlasSource_32cv8")
 sources/3 = SubResource("TileSetAtlasSource_rqqn2")
 sources/4 = SubResource("TileSetAtlasSource_pu2tb")
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_plad0"]
-texture = ExtResource("14_01sfq")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_307uy"]
-texture = ExtResource("15_8qq1w")
-0:0/0 = 0
+sources/5 = SubResource("TileSetAtlasSource_dumg1")
+sources/6 = SubResource("TileSetAtlasSource_fymb3")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_dtg08"]
 texture = ExtResource("13_jql36")
@@ -126,20 +118,20 @@ texture = ExtResource("17_wnmbo")
 texture = ExtResource("18_og383")
 0:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_owk3n"]
+texture = ExtResource("22_05bso")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4sc62"]
+texture = ExtResource("23_dumg1")
+0:0/0 = 0
+
 [sub_resource type="TileSet" id="TileSet_bqggu"]
-sources/0 = SubResource("TileSetAtlasSource_plad0")
-sources/1 = SubResource("TileSetAtlasSource_307uy")
 sources/2 = SubResource("TileSetAtlasSource_dtg08")
 sources/3 = SubResource("TileSetAtlasSource_sy3ba")
 sources/4 = SubResource("TileSetAtlasSource_et28e")
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yxojv"]
-texture = ExtResource("14_01sfq")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1px3f"]
-texture = ExtResource("15_8qq1w")
-0:0/0 = 0
+sources/5 = SubResource("TileSetAtlasSource_owk3n")
+sources/6 = SubResource("TileSetAtlasSource_4sc62")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bqggu"]
 texture = ExtResource("13_jql36")
@@ -153,23 +145,23 @@ texture = ExtResource("20_sy3ba")
 texture = ExtResource("21_et28e")
 0:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_aylhj"]
+texture = ExtResource("22_05bso")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5ea8c"]
+texture = ExtResource("23_dumg1")
+0:0/0 = 0
+
 [sub_resource type="TileSet" id="TileSet_6bvg3"]
-sources/0 = SubResource("TileSetAtlasSource_yxojv")
-sources/1 = SubResource("TileSetAtlasSource_1px3f")
 sources/2 = SubResource("TileSetAtlasSource_bqggu")
 sources/3 = SubResource("TileSetAtlasSource_ulxpv")
 sources/4 = SubResource("TileSetAtlasSource_mpdv3")
+sources/5 = SubResource("TileSetAtlasSource_aylhj")
+sources/6 = SubResource("TileSetAtlasSource_5ea8c")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6bvg3"]
 texture = ExtResource("13_jql36")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ut43r"]
-texture = ExtResource("11_1ktxp")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_p7kmm"]
-texture = ExtResource("12_klxtq")
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_og383"]
@@ -180,12 +172,20 @@ texture = ExtResource("19_wnmbo")
 texture = ExtResource("23_et28e")
 0:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_25uoa"]
+texture = ExtResource("16_ulxpv")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xe8cw"]
+texture = ExtResource("17_mpdv3")
+0:0/0 = 0
+
 [sub_resource type="TileSet" id="TileSet_a45ue"]
 sources/0 = SubResource("TileSetAtlasSource_6bvg3")
-sources/1 = SubResource("TileSetAtlasSource_ut43r")
-sources/2 = SubResource("TileSetAtlasSource_p7kmm")
 sources/3 = SubResource("TileSetAtlasSource_og383")
 sources/4 = SubResource("TileSetAtlasSource_05bso")
+sources/5 = SubResource("TileSetAtlasSource_25uoa")
+sources/6 = SubResource("TileSetAtlasSource_xe8cw")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ogb25"]
 texture = ExtResource("16_47a3f")
@@ -243,19 +243,19 @@ tile_map_data = PackedByteArray("AAAAAAAACAAAAAAAAAADAAAACgAAAAAAAAABAAAACQAAAAA
 tile_set = SubResource("TileSet_eumws")
 
 [node name="Top" type="TileMapLayer" parent="Ground" unique_id=786875660]
-tile_map_data = PackedByteArray("AAADAP//AAAAAAAAAAAAAP//AQAAAAAAAAABAP//AgAAAAAAAAACAP//AgAAAAAAAAABAAMAAwAAAAAAAAACAAMABAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAABAP//AgAAAAAAAAACAP//AgAAAAAAAAABAAMAAwAAAAAAAAACAAMABAAAAAAAAAAAAP//BQAAAAAAAAADAP//BgAAAAAAAAA=")
 tile_set = SubResource("TileSet_1px3f")
 
 [node name="Right" type="TileMapLayer" parent="Ground" unique_id=1156738095]
-tile_map_data = PackedByteArray("AAAEAAEAAgAAAAAAAAAEAAIAAgAAAAAAAAAEAAMAAAAAAAAAAAAEAAAAAQAAAAAAAAAAAAEABAAAAAAAAAAAAAIAAwAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAAEAAEAAgAAAAAAAAAEAAIAAgAAAAAAAAAAAAEABAAAAAAAAAAAAAIAAwAAAAAAAAAEAAMABQAAAAAAAAAEAAAABgAAAAAAAAA=")
 tile_set = SubResource("TileSet_bqggu")
 
 [node name="Left" type="TileMapLayer" parent="Ground" unique_id=1592733289]
-tile_map_data = PackedByteArray("AAD//wEAAgAAAAAAAAD//wIAAgAAAAAAAAD//wAAAQAAAAAAAAD//wMAAAAAAAAAAAADAAIAAwAAAAAAAAADAAEABAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAD//wEAAgAAAAAAAAD//wIAAgAAAAAAAAADAAIAAwAAAAAAAAADAAEABAAAAAAAAAD//wMABQAAAAAAAAD//wAABgAAAAAAAAA=")
 tile_set = SubResource("TileSet_6bvg3")
 
 [node name="Bottom" type="TileMapLayer" parent="Ground" unique_id=1598116080]
-tile_map_data = PackedByteArray("AAABAAQAAAAAAAAAAAACAAQAAAAAAAAAAAADAAQAAQAAAAAAAAAAAAQAAgAAAAAAAAABAAAAAwAAAAAAAAACAAAABAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAABAAQAAAAAAAAAAAACAAQAAAAAAAAAAAABAAAAAwAAAAAAAAACAAAABAAAAAAAAAAAAAQABQAAAAAAAAADAAQABgAAAAAAAAA=")
 tile_set = SubResource("TileSet_a45ue")
 
 [node name="Door" type="Node2D" parent="." unique_id=145803355]

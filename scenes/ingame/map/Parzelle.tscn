@@ -2,9 +2,12 @@
 
 [ext_resource type="Script" uid="uid://jjtfrjsmf8ay" path="res://scenes/ingame/map/Parzelle.gd" id="1_taint"]
 [ext_resource type="Texture2D" uid="uid://chvfjp13vv8l3" path="res://assets/tiles/ground_floor.png" id="2_a7gpy"]
-[ext_resource type="Texture2D" uid="uid://e6rqd4ixmis4" path="res://assets/tiles/tile_0763.png" id="3_4ibdi"]
-[ext_resource type="Texture2D" uid="uid://byka1reqgdop2" path="res://assets/tiles/tile_0762.png" id="4_poa1e"]
-[ext_resource type="Texture2D" uid="uid://bl22lysfw4sfk" path="res://assets/tiles/tile_0689.png" id="5_mvbhr"]
+[ext_resource type="Texture2D" uid="uid://x1o1twip43bv" path="res://assets/tiles/Rooms/Walls/wall_horizontal-1.png" id="4_ej3jb"]
+[ext_resource type="Texture2D" uid="uid://bel77hen1u2cx" path="res://assets/tiles/Rooms/Walls/wall_vertical-1.png" id="4_tmwvs"]
+[ext_resource type="Texture2D" uid="uid://d0n24y4muord2" path="res://assets/tiles/Rooms/Walls/wall_top_left-1.png" id="5_ej3jb"]
+[ext_resource type="Texture2D" uid="uid://bo88darlxmplh" path="res://assets/tiles/Rooms/Walls/wall_top_right-1.png" id="6_genr2"]
+[ext_resource type="Texture2D" uid="uid://7u4ec46ghkpo" path="res://assets/tiles/Rooms/Walls/wall_bottom_left-1.png" id="7_jl65n"]
+[ext_resource type="Texture2D" uid="uid://10lfaggg37u8" path="res://assets/tiles/Rooms/Walls/wall_bottom_right-1.png" id="8_jcsh2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_com81"]
 texture = ExtResource("2_a7gpy")
@@ -13,61 +16,61 @@ texture = ExtResource("2_a7gpy")
 [sub_resource type="TileSet" id="TileSet_dxvr4"]
 sources/0 = SubResource("TileSetAtlasSource_com81")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_poa1e"]
-texture = ExtResource("3_4ibdi")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_genr2"]
+texture = ExtResource("4_ej3jb")
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_mvbhr"]
-sources/0 = SubResource("TileSetAtlasSource_poa1e")
+sources/1 = SubResource("TileSetAtlasSource_genr2")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4ibdi"]
-texture = ExtResource("3_4ibdi")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jcsh2"]
+texture = ExtResource("4_ej3jb")
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_poa1e"]
-sources/0 = SubResource("TileSetAtlasSource_4ibdi")
+sources/1 = SubResource("TileSetAtlasSource_jcsh2")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mvbhr"]
-texture = ExtResource("4_poa1e")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1gvhg"]
+texture = ExtResource("4_tmwvs")
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_ej3jb"]
-sources/0 = SubResource("TileSetAtlasSource_mvbhr")
+sources/1 = SubResource("TileSetAtlasSource_1gvhg")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ej3jb"]
-texture = ExtResource("4_poa1e")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mvbhr"]
+texture = ExtResource("4_tmwvs")
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_tmwvs"]
-sources/0 = SubResource("TileSetAtlasSource_ej3jb")
+sources/1 = SubResource("TileSetAtlasSource_mvbhr")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tmwvs"]
-texture = ExtResource("5_mvbhr")
+texture = ExtResource("5_ej3jb")
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_genr2"]
-sources/0 = SubResource("TileSetAtlasSource_tmwvs")
+sources/1 = SubResource("TileSetAtlasSource_tmwvs")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jl65n"]
-texture = ExtResource("5_mvbhr")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yduow"]
+texture = ExtResource("6_genr2")
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_jcsh2"]
-sources/0 = SubResource("TileSetAtlasSource_jl65n")
+sources/1 = SubResource("TileSetAtlasSource_yduow")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yduow"]
-texture = ExtResource("5_mvbhr")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mryd1"]
+texture = ExtResource("7_jl65n")
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_1gvhg"]
-sources/0 = SubResource("TileSetAtlasSource_yduow")
+sources/1 = SubResource("TileSetAtlasSource_mryd1")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mryd1"]
-texture = ExtResource("5_mvbhr")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_s0dct"]
+texture = ExtResource("8_jcsh2")
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_s0dct"]
-sources/0 = SubResource("TileSetAtlasSource_mryd1")
+sources/1 = SubResource("TileSetAtlasSource_s0dct")
 
 [node name="Parzelle" type="Node2D" unique_id=1349778643]
 script = ExtResource("1_taint")
@@ -79,47 +82,51 @@ tile_set = SubResource("TileSet_dxvr4")
 [node name="WallN" type="Node2D" parent="." unique_id=1328256661]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="WallN" unique_id=655657068]
-tile_map_data = PackedByteArray("AAABAAAAAAAAAAAAAAACAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAFAAAAAAAAAAAAAAAGAAAAAAAAAAAAAAAHAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAJAAAAAAAAAAAAAAAKAAAAAAAAAAAAAAALAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAANAAAAAAAAAAAAAAAOAAAAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAABAAAAAQAAAAAAAAACAAAAAQAAAAAAAAADAAAAAQAAAAAAAAAEAAAAAQAAAAAAAAAFAAAAAQAAAAAAAAAGAAAAAQAAAAAAAAAHAAAAAQAAAAAAAAAIAAAAAQAAAAAAAAAJAAAAAQAAAAAAAAAKAAAAAQAAAAAAAAALAAAAAQAAAAAAAAAMAAAAAQAAAAAAAAANAAAAAQAAAAAAAAAOAAAAAQAAAAAAAAA=")
+tile_set = SubResource("TileSet_mvbhr")
+
+[node name="TileMapLayer2" type="TileMapLayer" parent="WallN" unique_id=600073611]
+tile_map_data = PackedByteArray("AAABAAAAAQAAAAAAAAACAAAAAQAAAAAAAAADAAAAAQAAAAAAAAAEAAAAAQAAAAAAAAAFAAAAAQAAAAAAAAAGAAAAAQAAAAAAAAAHAAAAAQAAAAAAAAAIAAAAAQAAAAAAAAAJAAAAAQAAAAAAAAAKAAAAAQAAAAAAAAALAAAAAQAAAAAAAAAMAAAAAQAAAAAAAAANAAAAAQAAAAAAAAAOAAAAAQAAAAAAAAA=")
 tile_set = SubResource("TileSet_mvbhr")
 
 [node name="WallS" type="Node2D" parent="." unique_id=1834102115]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="WallS" unique_id=424460702]
-tile_map_data = PackedByteArray("AAABAA8AAAAAAAAAAAACAA8AAAAAAAAAAAADAA8AAAAAAAAAAAAEAA8AAAAAAAAAAAAFAA8AAAAAAAAAAAAGAA8AAAAAAAAAAAAHAA8AAAAAAAAAAAAIAA8AAAAAAAAAAAAJAA8AAAAAAAAAAAAKAA8AAAAAAAAAAAALAA8AAAAAAAAAAAAMAA8AAAAAAAAAAAANAA8AAAAAAAAAAAAOAA8AAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAABAA8AAQAAAAAAAAACAA8AAQAAAAAAAAADAA8AAQAAAAAAAAAEAA8AAQAAAAAAAAAFAA8AAQAAAAAAAAAGAA8AAQAAAAAAAAAHAA8AAQAAAAAAAAAIAA8AAQAAAAAAAAAJAA8AAQAAAAAAAAAKAA8AAQAAAAAAAAALAA8AAQAAAAAAAAAMAA8AAQAAAAAAAAANAA8AAQAAAAAAAAAOAA8AAQAAAAAAAAA=")
 tile_set = SubResource("TileSet_poa1e")
 
 [node name="WallW" type="Node2D" parent="." unique_id=22406376]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="WallW" unique_id=1374602860]
-tile_map_data = PackedByteArray("AAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA4AAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAAAAAEAAQAAAAAAAAAAAAIAAQAAAAAAAAAAAAMAAQAAAAAAAAAAAAQAAQAAAAAAAAAAAAUAAQAAAAAAAAAAAAYAAQAAAAAAAAAAAAcAAQAAAAAAAAAAAAgAAQAAAAAAAAAAAAkAAQAAAAAAAAAAAAoAAQAAAAAAAAAAAAsAAQAAAAAAAAAAAAwAAQAAAAAAAAAAAA0AAQAAAAAAAAAAAA4AAQAAAAAAAAA=")
 tile_set = SubResource("TileSet_ej3jb")
 
 [node name="WallE" type="Node2D" parent="." unique_id=1808761678]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="WallE" unique_id=1251837274]
-tile_map_data = PackedByteArray("AAAPAA4AAAAAAAAAAAAPAA0AAAAAAAAAAAAPAAwAAAAAAAAAAAAPAAsAAAAAAAAAAAAPAAoAAAAAAAAAAAAPAAEAAAAAAAAAAAAPAAIAAAAAAAAAAAAPAAMAAAAAAAAAAAAPAAQAAAAAAAAAAAAPAAUAAAAAAAAAAAAPAAYAAAAAAAAAAAAPAAcAAAAAAAAAAAAPAAgAAAAAAAAAAAAPAAkAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAAPAAEAAQAAAAAAAAAPAAIAAQAAAAAAAAAPAAMAAQAAAAAAAAAPAAQAAQAAAAAAAAAPAAUAAQAAAAAAAAAPAAYAAQAAAAAAAAAPAAcAAQAAAAAAAAAPAAgAAQAAAAAAAAAPAAkAAQAAAAAAAAAPAAoAAQAAAAAAAAAPAAsAAQAAAAAAAAAPAAwAAQAAAAAAAAAPAA0AAQAAAAAAAAAPAA4AAQAAAAAAAAA=")
 tile_set = SubResource("TileSet_tmwvs")
 
 [node name="CornerNW" type="Node2D" parent="." unique_id=1053407784]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="CornerNW" unique_id=494622451]
-tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAAAAAAAAQAAAAAAAAA=")
 tile_set = SubResource("TileSet_genr2")
 
 [node name="CornerNE" type="Node2D" parent="." unique_id=589604685]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="CornerNE" unique_id=584648937]
-tile_map_data = PackedByteArray("AAAPAAAAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAAPAAAAAQAAAAAAAAA=")
 tile_set = SubResource("TileSet_jcsh2")
 
 [node name="CornerSW" type="Node2D" parent="." unique_id=1115662889]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="CornerSW" unique_id=19741976]
-tile_map_data = PackedByteArray("AAAAAA8AAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAAAAA8AAQAAAAAAAAA=")
 tile_set = SubResource("TileSet_1gvhg")
 
 [node name="CornerSE" type="Node2D" parent="." unique_id=1092904820]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="CornerSE" unique_id=2025658106]
-tile_map_data = PackedByteArray("AAAPAA8AAAAAAAAAAAA=")
+tile_map_data = PackedByteArray("AAAPAA8AAQAAAAAAAAA=")
 tile_set = SubResource("TileSet_s0dct")

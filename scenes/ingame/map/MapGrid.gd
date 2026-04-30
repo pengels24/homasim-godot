@@ -1,5 +1,6 @@
 extends Node2D
 ## Verantwortlichkeit: Spielfeld aufbauen, Parzellen-Sichtbarkeit steuern, Kamera-Input.
+## ANG-186 – Occupancy Grid: globales Bool-Grid ersetzt per-Parzelle Rect2i-Array.
 
 signal view_saved_changed(has_saved: bool)
 
@@ -11,13 +12,12 @@ signal view_saved_changed(has_saved: bool)
 @export var grid_rows:  int = 5
 @export var start_plot: Vector2i = Vector2i(1, 0)
 
-const PARCEL_SZ := 16   # Tiles pro Parzelle
-const WALK_W    := 3    # Gehweg-Breite außen
-const TILE_PX   := 16   # Physische Tile-Größe in Px
-const SCALE     := 2.0  # WorldRoot.scale
-const ROOM_TILES := 2   # alle Räume sind aktuell 2×2 Tiles
+const PARCEL_SZ := 16
+const WALK_W    := 3
+const TILE_PX   := 16
+const SCALE     := 2.0
 
-# Raum-Typ → Szenen-Pfad (ANG-175 – gleiche Registry wie IngameBuild.SCENE_PATHS)
+# Raum-Typ → Szenen-Pfad
 const SCENE_PATHS: Dictionary = {
 	"bed_standard": "res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn",
 	"bed_double":   "res://scenes/ingame/rooms/bed_double/Bed_Double.tscn",
@@ -38,9 +38,15 @@ var _saved_cam_pos:  Vector2  = Vector2.ZERO
 var _saved_cam_zoom: float    = 1.0
 var _has_saved_view: bool     = false
 
-# ── Statisches Grid – direkte Referenzen auf alle 25 Parzellen-Instanzen ──────
-# _grid[y][x] – in _ready() fest verdrahtet, immer verfügbar.
 var _grid: Array = []
+
+# ── Occupancy Grid ────────────────────────────────────────────────────────────
+# Flaches PackedByteArray: 1 = belegt, 0 = frei.
+# Adressierung: idx = gy * _occ_w + gx, wobei gx/gy globale Tile-Koordinaten sind.
+# Globale Tile = parcel_x * PARCEL_SZ + local_tile_x (analog für y).
+var _occ:   PackedByteArray
+var _occ_w: int
+var _occ_h: int
 
 
 func _ready() -> void:
@@ -64,8 +70,12 @@ func build_map(built_plots: Array, entry_plot: Vector2i, enter_dir: String) -> v
 	_entry_plot = entry_plot
 	_show_built_parcels(built_plots)
 	_configure_walls()
+	_occ_init()
+	for plot in built_plots:
+		_mark_parcel_walls(plot["x"], plot["y"])
 	var start_p: Node2D = _grid[entry_plot.y][entry_plot.x]
 	start_p.set_entrance(enter_dir)
+	_mark_lobby_on_parcel(entry_plot.x, entry_plot.y)
 	_restore_rooms(built_plots)
 	center_on_entry(entry_plot)
 
@@ -91,11 +101,94 @@ func center_on_entry(entry_plot: Vector2i) -> void:
 	_set_camera_limits()
 
 
+## Prüft ob Raum-Body + Tür-Exit-Tile vollständig frei sind.
+## Ersetzt: is_tile_free + would_block_door + _door_is_blocked + _lobby_clearance_blocked.
+func is_placement_valid(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
+		room_w: int, room_h: int, door_rot: int, door_off: int) -> bool:
+	# Raum muss innerhalb der Parzelleninnenfläche liegen (Wand = Tile 0 und PARCEL_SZ-1 ausschließen)
+	if tile_x < 1 or tile_y < 1 or tile_x + room_w > PARCEL_SZ - 1 or tile_y + room_h > PARCEL_SZ - 1:
+		return false
+	var gx := parcel_x * PARCEL_SZ + tile_x
+	var gy := parcel_y * PARCEL_SZ + tile_y
+	if not _occ_is_free(gx, gy, room_w, room_h):
+		return false
+	var exit := _exit_global(parcel_x, parcel_y, tile_x, tile_y, room_w, room_h, door_rot, door_off)
+	return _occ_exit_free(exit.x, exit.y)
+
+
+## Markiert Room-Body (Wert 1) + Exit-Tile (Wert 2) im Grid.
+## Wert 2 = Exit: darf von anderen Exit-Tiles überlappt werden (Tür-zu-Tür OK).
+func mark_placement(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
+		room_w: int, room_h: int, door_rot: int, door_off: int) -> void:
+	var gx := parcel_x * PARCEL_SZ + tile_x
+	var gy := parcel_y * PARCEL_SZ + tile_y
+	_occ_mark(gx, gy, room_w, room_h)
+	var exit := _exit_global(parcel_x, parcel_y, tile_x, tile_y, room_w, room_h, door_rot, door_off)
+	_occ_mark_exit(exit.x, exit.y)
+
+
+## Gibt Body + Exit-Tile wieder frei – Grundlage für Abrissmodus (ANG-188).
+func unmark_placement(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
+		room_w: int, room_h: int, door_rot: int, door_off: int) -> void:
+	var gx := parcel_x * PARCEL_SZ + tile_x
+	var gy := parcel_y * PARCEL_SZ + tile_y
+	_occ_clear(gx, gy, room_w, room_h)
+	var exit := _exit_global(parcel_x, parcel_y, tile_x, tile_y, room_w, room_h, door_rot, door_off)
+	_occ_clear(exit.x, exit.y, 1, 1)
+
+
+func place_room(parcel_x: int, parcel_y: int, room_scene: PackedScene, hotel_id: int,
+		door_rot: int, door_off: int, tile_x: int, tile_y: int, rflip: int = 0) -> void:
+	var parcel: Node2D = _grid[parcel_y][parcel_x]
+	var is_new := not parcel.visible
+	parcel.visible = true
+	if is_new:
+		_mark_parcel_walls(parcel_x, parcel_y)
+	var room: Node2D = parcel.spawn_room(room_scene, door_rot, door_off, tile_x, tile_y, rflip)
+	var sz: Vector2i = room.get_tile_size()
+	mark_placement(parcel_x, parcel_y, tile_x, tile_y, sz.x, sz.y, door_rot, door_off)
+	SaveManager.save_room_to_plot(hotel_id, parcel_x, parcel_y, room.to_dict())
+	if is_new:
+		SaveManager.set_plot_built(hotel_id, parcel_x, parcel_y)
+		_configure_walls()
+
+
+func world_to_grid(world_pos: Vector2) -> Vector2i:
+	var local := ($WorldRoot as Node2D).to_local(world_pos)
+	var gx := int((local.x - WALK_W * TILE_PX) / (PARCEL_SZ * TILE_PX))
+	var gy := int((local.y - WALK_W * TILE_PX) / (PARCEL_SZ * TILE_PX))
+	return Vector2i(gx, gy)
+
+
+func is_buildable(x: int, y: int) -> bool:
+	if x < 0 or x >= grid_cols or y < 0 or y >= grid_rows:
+		return false
+	return not _grid[y][x].visible
+
+
+func is_parcel_owned(x: int, y: int) -> bool:
+	if x < 0 or x >= grid_cols or y < 0 or y >= grid_rows:
+		return false
+	return _grid[y][x].visible
+
+
+func get_first_owned_parcel() -> Vector2i:
+	for y: int in grid_rows:
+		for x: int in grid_cols:
+			if _grid[y][x].visible:
+				return Vector2i(x, y)
+	return Vector2i(0, 0)
+
+
+func get_world_root() -> Node2D:
+	return $WorldRoot
+
+
+# ── Intern – Grid-Aufbau ──────────────────────────────────────────────────────
+
 func _show_built_parcels(built_plots: Array) -> void:
 	for plot in built_plots:
-		var x: int = plot["x"]
-		var y: int = plot["y"]
-		_grid[y][x].visible = true
+		_grid[plot["y"]][plot["x"]].visible = true
 
 
 func _configure_walls() -> void:
@@ -123,7 +216,14 @@ func _restore_rooms(built_plots: Array) -> void:
 			var path: String = SCENE_PATHS.get(type_id, "")
 			if path.is_empty():
 				continue
-			parcel.restore_room(room_data, load(path) as PackedScene)
+			var room: Node2D = parcel.restore_room(room_data, load(path) as PackedScene)
+			var sz: Vector2i = room.get_tile_size()
+			mark_placement(
+				plot["x"], plot["y"],
+				room_data.get("x_pos", 0), room_data.get("y_pos", 0),
+				sz.x, sz.y,
+				room_data.get("door_rotation", 0), room_data.get("door_offset", 0)
+			)
 
 
 func _is_built(x: int, y: int) -> bool:
@@ -132,65 +232,102 @@ func _is_built(x: int, y: int) -> bool:
 	return _grid[y][x].visible
 
 
-func world_to_grid(world_pos: Vector2) -> Vector2i:
-	var local := ($WorldRoot as Node2D).to_local(world_pos)
-	var gx := int((local.x - WALK_W * TILE_PX) / (PARCEL_SZ * TILE_PX))
-	var gy := int((local.y - WALK_W * TILE_PX) / (PARCEL_SZ * TILE_PX))
-	return Vector2i(gx, gy)
+# ── Occupancy Grid – Kern ─────────────────────────────────────────────────────
+
+func _occ_init() -> void:
+	_occ_w = grid_cols * PARCEL_SZ
+	_occ_h = grid_rows * PARCEL_SZ
+	_occ   = PackedByteArray()
+	_occ.resize(_occ_w * _occ_h)
+	_occ.fill(0)
 
 
-func is_buildable(x: int, y: int) -> bool:
-	if x < 0 or x >= grid_cols or y < 0 or y >= grid_rows:
+func _occ_mark(gx: int, gy: int, w: int, h: int) -> void:
+	for dy in h:
+		for dx in w:
+			var idx := (gy + dy) * _occ_w + (gx + dx)
+			if idx >= 0 and idx < _occ.size() and _occ[idx] != 3:
+				_occ[idx] = 1
+
+
+func _occ_mark_exit(gx: int, gy: int) -> void:
+	if gx < 0 or gy < 0 or gx >= _occ_w or gy >= _occ_h:
+		return
+	var idx := gy * _occ_w + gx
+	if _occ[idx] == 0:
+		_occ[idx] = 2
+
+
+func _occ_mark_wall(gx: int, gy: int, w: int, h: int) -> void:
+	for dy in h:
+		for dx in w:
+			var idx := (gy + dy) * _occ_w + (gx + dx)
+			if idx >= 0 and idx < _occ.size():
+				_occ[idx] = 3
+
+
+func _occ_clear(gx: int, gy: int, w: int, h: int) -> void:
+	for dy in h:
+		for dx in w:
+			var idx := (gy + dy) * _occ_w + (gx + dx)
+			if idx >= 0 and idx < _occ.size() and _occ[idx] != 3:
+				_occ[idx] = 0
+
+
+func _occ_is_free(gx: int, gy: int, w: int, h: int) -> bool:
+	for dy in h:
+		for dx in w:
+			var ngx := gx + dx
+			var ngy := gy + dy
+			if ngx < 0 or ngy < 0 or ngx >= _occ_w or ngy >= _occ_h:
+				return false
+			if _occ[ngy * _occ_w + ngx] != 0:
+				return false
+	return true
+
+
+# Exit-Tile darf auf Exit (2) landen – Tür-zu-Tür OK.
+# Body (1) und Wand (3) blockieren den Exit.
+func _occ_exit_free(gx: int, gy: int) -> bool:
+	if gx < 0 or gy < 0 or gx >= _occ_w or gy >= _occ_h:
 		return false
-	return not _grid[y][x].visible
+	var v := _occ[gy * _occ_w + gx]
+	return v == 0 or v == 2
 
 
-func place_room(parcel_x: int, parcel_y: int, room_scene: PackedScene, hotel_id: int,
-		door_rot: int, door_off: int, tile_x: int, tile_y: int, rflip: int = 0) -> void:
+func _mark_parcel_walls(parcel_x: int, parcel_y: int) -> void:
+	var gx := parcel_x * PARCEL_SZ
+	var gy := parcel_y * PARCEL_SZ
+	_occ_mark_wall(gx,                gy,                PARCEL_SZ, 1)
+	_occ_mark_wall(gx,                gy + PARCEL_SZ - 1, PARCEL_SZ, 1)
+	_occ_mark_wall(gx,                gy,                1, PARCEL_SZ)
+	_occ_mark_wall(gx + PARCEL_SZ - 1, gy,               1, PARCEL_SZ)
+
+
+func _mark_lobby_on_parcel(parcel_x: int, parcel_y: int) -> void:
 	var parcel: Node2D = _grid[parcel_y][parcel_x]
-	var is_new := not parcel.visible
-	parcel.visible = true
-	var room: Node2D = parcel.spawn_room(room_scene, door_rot, door_off, tile_x, tile_y, rflip)
-	SaveManager.save_room_to_plot(hotel_id, parcel_x, parcel_y, room.to_dict())
-	if is_new:
-		SaveManager.set_plot_built(hotel_id, parcel_x, parcel_y)
-		_configure_walls()
+	var gx := parcel_x * PARCEL_SZ
+	var gy := parcel_y * PARCEL_SZ
+	var lobby_rect: Rect2i = parcel.get_lobby_tile_rect()
+	if lobby_rect.has_area():
+		_occ_mark(gx + lobby_rect.position.x, gy + lobby_rect.position.y,
+			lobby_rect.size.x, lobby_rect.size.y)
+	var clearance: Rect2i = parcel.get_lobby_clearance_rect()
+	if clearance.has_area():
+		_occ_mark(gx + clearance.position.x, gy + clearance.position.y,
+			clearance.size.x, clearance.size.y)
 
 
-func is_parcel_owned(x: int, y: int) -> bool:
-	if x < 0 or x >= grid_cols or y < 0 or y >= grid_rows:
-		return false
-	return _grid[y][x].visible
-
-
-func would_block_door(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int, w: int, h: int) -> bool:
-	if not is_parcel_owned(parcel_x, parcel_y):
-		return false
-	return _grid[parcel_y][parcel_x].would_block_any_door(Rect2i(tile_x, tile_y, w, h))
-
-
-func is_tile_free(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int, w: int, h: int) -> bool:
-	if not is_parcel_owned(parcel_x, parcel_y):
-		return false
-	return _grid[parcel_y][parcel_x].is_area_free(tile_x, tile_y, w, h)
-
-
-func get_lobby_clearance_rect(parcel_x: int, parcel_y: int) -> Rect2i:
-	if not is_parcel_owned(parcel_x, parcel_y):
-		return Rect2i()
-	return _grid[parcel_y][parcel_x].get_lobby_clearance_rect()
-
-
-func get_first_owned_parcel() -> Vector2i:
-	for y: int in grid_rows:
-		for x: int in grid_cols:
-			if _grid[y][x].visible:
-				return Vector2i(x, y)
-	return Vector2i(0, 0)
-
-
-func get_world_root() -> Node2D:
-	return $WorldRoot
+func _exit_global(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
+		room_w: int, room_h: int, door_rot: int, door_off: int) -> Vector2i:
+	var gx := parcel_x * PARCEL_SZ + tile_x
+	var gy := parcel_y * PARCEL_SZ + tile_y
+	match door_rot:
+		0: return Vector2i(gx - 1,                      gy + door_off * (room_h - 1))
+		1: return Vector2i(gx + door_off * (room_w - 1), gy - 1)
+		2: return Vector2i(gx + room_w,                  gy + door_off * (room_h - 1))
+		3: return Vector2i(gx + door_off * (room_w - 1), gy + room_h)
+	return Vector2i(-1, -1)
 
 
 # ── Kamera ────────────────────────────────────────────────────────────────────

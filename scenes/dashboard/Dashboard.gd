@@ -42,6 +42,7 @@ const OUTFIT_COLORS := {
 
 
 func _ready() -> void:
+	MusicManager.play_menu()
 	btn_main_menu.pressed.connect(_on_main_menu_pressed)
 	btn_new_hotel.pressed.connect(_on_new_hotel_pressed)
 	_confirm_modal.confirmed.connect(_on_delete_confirmed)

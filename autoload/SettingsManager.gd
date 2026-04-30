@@ -9,9 +9,10 @@ var autosave_interval_minutes: int   = 10    # Echtzeit-Minuten
 var ff_speed:                  float = 10.0  # Schnellvorlauf-Faktor
 
 # ── Audio ─────────────────────────────────────────────────────────────────────
-var master_volume: float = 1.0  # 0.0 – 1.0
-var music_volume:  float = 0.5  # 0.0 – 1.0
-var sound_volume:  float = 0.5  # 0.0 – 1.0
+var master_volume:     float = 1.0  # 0.0 – 1.0
+var music_volume:      float = 0.2  # 0.0 – 1.0
+var menu_music_volume: float = 0.2  # 0.0 – 1.0
+var sound_volume:      float = 0.5  # 0.0 – 1.0
 
 # ── Oberfläche ────────────────────────────────────────────────────────────────
 var ui_scale:       float  = 1.0       # 0.75 / 1.0 / 1.25 / 1.5
@@ -38,6 +39,7 @@ func save() -> void:
 	cfg.set_value("gameplay", "ff_speed",                  ff_speed)
 	cfg.set_value("audio",    "master_volume",             master_volume)
 	cfg.set_value("audio",    "music_volume",              music_volume)
+	cfg.set_value("audio",    "menu_music_volume",         menu_music_volume)
 	cfg.set_value("audio",    "sound_volume",              sound_volume)
 	cfg.set_value("ui",       "scale",          ui_scale)
 	cfg.set_value("ui",       "toast_position", toast_position)
@@ -61,6 +63,7 @@ func _load() -> void:
 	ff_speed                  = cfg.get_value("gameplay", "ff_speed",                  ff_speed)
 	master_volume             = cfg.get_value("audio",    "master_volume",             master_volume)
 	music_volume              = cfg.get_value("audio",    "music_volume",              music_volume)
+	menu_music_volume         = cfg.get_value("audio",    "menu_music_volume",         menu_music_volume)
 	sound_volume              = cfg.get_value("audio",    "sound_volume",              sound_volume)
 	ui_scale                  = cfg.get_value("ui",       "scale",          ui_scale)
 	toast_position            = cfg.get_value("ui",       "toast_position", toast_position)
@@ -69,10 +72,12 @@ func _load() -> void:
 
 func _apply_audio() -> void:
 	_ensure_bus("Music")
+	_ensure_bus("Menu Music")
 	_ensure_bus("Sound")
 	AudioServer.set_bus_volume_db(0, linear_to_db(master_volume))
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), linear_to_db(music_volume))
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Sound"), linear_to_db(sound_volume))
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"),      linear_to_db(music_volume))
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Menu Music"), linear_to_db(menu_music_volume))
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Sound"),      linear_to_db(sound_volume))
 
 
 func _ensure_bus(bus_name: String) -> void:

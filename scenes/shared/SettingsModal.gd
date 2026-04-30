@@ -183,6 +183,17 @@ func _build_audio_tab() -> void:
 		(music_row.get_node("ValueLbl") as Label).text = "%d%%" % int(v)
 	)
 
+	var menu_music_row := _make_volume_row(
+		GameState.T("settings.audio.menu_music"),
+		SettingsManager.menu_music_volume,
+	)
+	panel.add_child(menu_music_row)
+	(menu_music_row.get_node("Slider") as HSlider).value_changed.connect(func(v: float) -> void:
+		SettingsManager.menu_music_volume = v / 100.0
+		(menu_music_row.get_node("ValueLbl") as Label).text = "%d%%" % int(v)
+		SettingsManager._apply_audio()
+	)
+
 	var sound_row := _make_volume_row(
 		GameState.T("settings.audio.sound"),
 		SettingsManager.sound_volume,

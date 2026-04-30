@@ -135,10 +135,8 @@ func _style_panel(node: Control, bg: Color, border: Color, bw: int, radius: int)
 	node.add_theme_stylebox_override("panel", s)
 
 
-func _style_bg(node: Control, color: Color) -> void:
-	# Panels und HBoxContainer haben kein "panel" override – wir nutzen einen unsichtbaren StyleBox-Trick
-	# HBoxContainer hat keine panel StyleBox; wir wrappen ggf. in _apply_styles direkt über den Parent
-	pass  # HBoxContainers werden über den Parent-Panel gestylt
+func _style_bg(_node: Control, _color: Color) -> void:
+	pass  # HBoxContainer hat kein "panel"-Override; Hintergrundfarbe kommt vom Parent-Panel
 
 
 func _style_nav_btn(btn: Button) -> void:

@@ -43,6 +43,7 @@ var _slide_timer := 0.0
 
 
 func _ready() -> void:
+	MusicManager.play_menu()
 	_load_assets()
 	_setup_modal()
 	_try_restore_last_profile()

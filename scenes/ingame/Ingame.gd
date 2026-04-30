@@ -48,12 +48,14 @@ const CONFIRM_SCENE      := preload("res://scenes/shared/ConfirmModal.tscn")
 const DEV_CONSOLE_SCENE  := preload("res://scenes/ingame/DevConsole.tscn")
 const PAUSE_MENU_SCENE   := preload("res://scenes/ingame/PauseMenu.tscn")
 const SAVE_MODAL_SCENE   := preload("res://scenes/ingame/InGameSaveModal.tscn")
-const SIM_BROWSER_SCENE  := preload("res://scenes/ingame/SimBrowser.tscn")
+const SIM_BROWSER_SCENE    := preload("res://scenes/ingame/SimBrowser.tscn")
+const MUSIC_CONTROLS_SCENE := preload("res://scenes/ingame/hud/MusicControls.tscn")
 
 var _hotel: Dictionary = {}
 
 
 func _ready() -> void:
+	MusicManager.play_ingame()
 	_hotel = _load_hotel()
 	var api_name: String = GameState.selected_hotel.get("name", "")
 	if api_name != "":
@@ -149,6 +151,9 @@ func _setup_subsystems() -> void:
 
 	_sim_browser = SIM_BROWSER_SCENE.instantiate() as SimBrowser
 	add_child(_sim_browser)
+
+	var music_controls := MUSIC_CONTROLS_SCENE.instantiate()
+	$HUD.add_child(music_controls)
 
 	if OS.is_debug_build():
 		_dev_console = DEV_CONSOLE_SCENE.instantiate() as DevConsole

@@ -2,6 +2,7 @@ extends Node2D
 ## ANG-161 – Bau-Cursor. Lebt als Kind von MapGrid/WorldRoot wenn aktiv.
 ## Ghost bewegt sich innerhalb eigener Parzellen, rastet auf 16px-Tile-Raster.
 ## Weiß = Tile-Bereich frei, Rot = Überlappung. R=Tür-Wand, T=Tür-Position, Z=Raum-Flip. ESC = abbrechen.
+## ANG-186 – Validierung über MapGrid.is_placement_valid() statt Einzelchecks.
 
 signal room_placed(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int, door_rotation: int, door_offset: int, room_flip: int)
 signal cancelled()
@@ -11,10 +12,9 @@ const ROOM_SCENES: Dictionary = {
 	"bed_double":   preload("res://scenes/ingame/rooms/bed_double/Bed_Double.tscn"),
 }
 
-# Koordinaten-Konstanten – spiegeln MapGrid-Werte wider
-const WALK_PX      := 48    # WALK_W(3) × TILE_PX(16)
+const WALK_PX      := 48
 const TILE_PX      := 16
-const PARCEL_PX    := 256   # PARCEL_SZ(16) × TILE_PX(16)
+const PARCEL_PX    := 256
 const PARCEL_TILES := 16
 
 var _map_grid:        Node2D
@@ -27,8 +27,8 @@ var _door_rotation:   int = 0
 var _door_offset:     int = 0
 var _room_flip:       int = 0
 var _snap_enabled:    bool = true
-var _room_w:          int = 2   # Tile-Breite des aktiven Raums
-var _room_h:          int = 2   # Tile-Höhe  des aktiven Raums
+var _room_w:          int = 2
+var _room_h:          int = 2
 
 
 func activate(map_grid: Node2D, room_type_id: String) -> void:
@@ -39,7 +39,6 @@ func activate(map_grid: Node2D, room_type_id: String) -> void:
 		cancelled.emit()
 		queue_free()
 		return
-	# Startparzelle: unter der Maus wenn owned, sonst erste owned Parzelle
 	var mouse_parcel: Vector2i = _map_grid.world_to_grid(get_global_mouse_position())
 	if _map_grid.is_parcel_owned(mouse_parcel.x, mouse_parcel.y):
 		_current_parcel = mouse_parcel
@@ -70,22 +69,20 @@ func _refresh_ghost() -> void:
 	var sz: Vector2i = _ghost.get_tile_size()
 	_room_w = sz.x
 	_room_h = sz.y
-	_is_valid = _map_grid.is_tile_free(
-		_current_parcel.x, _current_parcel.y, _tile_pos.x, _tile_pos.y, _room_w, _room_h) \
-		and not _map_grid.would_block_door(_current_parcel.x, _current_parcel.y, _tile_pos.x, _tile_pos.y, _room_w, _room_h) \
-		and not _door_is_blocked(_tile_pos.x, _tile_pos.y) \
-		and not _lobby_clearance_blocked(_tile_pos.x, _tile_pos.y)
+	_is_valid = _map_grid.is_placement_valid(
+		_current_parcel.x, _current_parcel.y,
+		_tile_pos.x, _tile_pos.y,
+		_room_w, _room_h, _door_rotation, _door_offset)
 	_update_modulate()
 
 
 func _update_modulate() -> void:
 	if not is_instance_valid(_ghost):
 		return
-	# Grün = gültig, Rot = ungültig (Überlappung oder außerhalb)
 	_ghost.modulate = Color(0.35, 1.0, 0.45, 0.70) if _is_valid else Color(1.0, 0.35, 0.35, 0.65)
 
 
-# ── Prozess – Ghost folgt Maus, bleibt in owned Parzellen ────────────────────
+# ── Prozess – Ghost folgt Maus ────────────────────────────────────────────────
 
 func _process(_delta: float) -> void:
 	if not is_instance_valid(_ghost) or not is_instance_valid(_map_grid):
@@ -95,7 +92,6 @@ func _process(_delta: float) -> void:
 	var room_w_px := _room_w * TILE_PX
 	var room_h_px := _room_h * TILE_PX
 
-	# Ghost-Top-Left = Maus minus halbe Raumgröße → Ghost zentriert unter Maus
 	var topleft: Vector2
 	if _snap_enabled:
 		topleft = Vector2(snappedf(mouse_local.x, float(TILE_PX)), snappedf(mouse_local.y, float(TILE_PX))) \
@@ -103,13 +99,11 @@ func _process(_delta: float) -> void:
 	else:
 		topleft = mouse_local - Vector2(room_w_px / 2.0, room_h_px / 2.0)
 
-	# Parzel-Erkennung auf Mausposition (nicht Top-Left) – wechselt beim Grenzübertritt
 	var cx := int((mouse_local.x - WALK_PX) / PARCEL_PX)
 	var cy := int((mouse_local.y - WALK_PX) / PARCEL_PX)
 	if _map_grid.is_parcel_owned(cx, cy):
 		_current_parcel = Vector2i(cx, cy)
 
-	# Ghost auf aktive Parzelle einschränken
 	var min_x := float(WALK_PX + _current_parcel.x * PARCEL_PX)
 	var min_y := float(WALK_PX + _current_parcel.y * PARCEL_PX)
 	_ghost.position = Vector2(
@@ -117,24 +111,21 @@ func _process(_delta: float) -> void:
 		clampf(topleft.y, min_y, min_y + float(PARCEL_PX - room_h_px))
 	)
 
-	# Tile-Position innerhalb der Parzelle
 	var new_tile := Vector2i(
 		int((_ghost.position.x - min_x) / TILE_PX),
 		int((_ghost.position.y - min_y) / TILE_PX)
 	)
 
-	# Validität nur neu berechnen wenn Tile sich geändert hat
 	if new_tile != _tile_pos:
 		_tile_pos = new_tile
-		_is_valid = _map_grid.is_tile_free(
-			_current_parcel.x, _current_parcel.y, _tile_pos.x, _tile_pos.y, _room_w, _room_h) \
-			and not _map_grid.would_block_door(_current_parcel.x, _current_parcel.y, _tile_pos.x, _tile_pos.y, _room_w, _room_h) \
-			and not _door_is_blocked(_tile_pos.x, _tile_pos.y) \
-			and not _lobby_clearance_blocked(_tile_pos.x, _tile_pos.y)
+		_is_valid = _map_grid.is_placement_valid(
+			_current_parcel.x, _current_parcel.y,
+			_tile_pos.x, _tile_pos.y,
+			_room_w, _room_h, _door_rotation, _door_offset)
 		_update_modulate()
 
 
-# ── Input – _input für Vorrang vor MapGrid-Kamera (_unhandled_input) ─────────
+# ── Input ─────────────────────────────────────────────────────────────────────
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -168,7 +159,6 @@ func _input(event: InputEvent) -> void:
 
 
 func _try_place() -> void:
-	# Beim Platzieren immer auf Tile-Raster snappen – unabhängig von snap_enabled
 	var mouse_local := (get_parent() as Node2D).to_local(get_global_mouse_position())
 	var min_x := float(WALK_PX + _current_parcel.x * PARCEL_PX)
 	var min_y := float(WALK_PX + _current_parcel.y * PARCEL_PX)
@@ -178,45 +168,10 @@ func _try_place() -> void:
 	var sx := clampf(snap_pos.x - room_w_px / 2.0, min_x, min_x + float(PARCEL_PX - room_w_px))
 	var sy := clampf(snap_pos.y - room_h_px / 2.0, min_y, min_y + float(PARCEL_PX - room_h_px))
 	var place_tile := Vector2i(int((sx - min_x) / TILE_PX), int((sy - min_y) / TILE_PX))
-	if _map_grid.is_tile_free(_current_parcel.x, _current_parcel.y, place_tile.x, place_tile.y, _room_w, _room_h) \
-			and not _map_grid.would_block_door(_current_parcel.x, _current_parcel.y, place_tile.x, place_tile.y, _room_w, _room_h) \
-			and not _door_is_blocked(place_tile.x, place_tile.y) \
-			and not _lobby_clearance_blocked(place_tile.x, place_tile.y):
+	if _map_grid.is_placement_valid(
+			_current_parcel.x, _current_parcel.y,
+			place_tile.x, place_tile.y,
+			_room_w, _room_h, _door_rotation, _door_offset):
 		get_viewport().set_input_as_handled()
 		room_placed.emit(_current_parcel.x, _current_parcel.y, place_tile.x, place_tile.y, _door_rotation, _door_offset, _room_flip)
 		_spawn_ghost()
-
-
-# ── Hilfsfunktionen ───────────────────────────────────────────────────────────
-
-func _door_is_blocked(tile_x: int, tile_y: int) -> bool:
-	# Außenwand-Schnellcheck + Belegtheits-Check des exakten Exit-Tiles vor der Tür.
-	# Formel: door_offset * (dim - 1) liefert 0 für erste, dim-1 für zweite Position –
-	# unabhängig von der Raumgröße (2×2, 4×2, 2×4 …).
-	match _door_rotation:
-		0:  # Tür links
-			if tile_x <= 1: return true
-			var ey := tile_y + _door_offset * (_room_h - 1)
-			return not _map_grid.is_tile_free(_current_parcel.x, _current_parcel.y,
-				tile_x - 1, ey, 1, 1)
-		1:  # Tür oben
-			if tile_y <= 1: return true
-			var ex := tile_x + _door_offset * (_room_w - 1)
-			return not _map_grid.is_tile_free(_current_parcel.x, _current_parcel.y,
-				ex, tile_y - 1, 1, 1)
-		2:  # Tür rechts
-			if tile_x + _room_w >= PARCEL_TILES - 1: return true
-			var ey := tile_y + _door_offset * (_room_h - 1)
-			return not _map_grid.is_tile_free(_current_parcel.x, _current_parcel.y,
-				tile_x + _room_w, ey, 1, 1)
-		3:  # Tür unten
-			if tile_y + _room_h >= PARCEL_TILES - 1: return true
-			var ex := tile_x + _door_offset * (_room_w - 1)
-			return not _map_grid.is_tile_free(_current_parcel.x, _current_parcel.y,
-				ex, tile_y + _room_h, 1, 1)
-	return false
-
-
-func _lobby_clearance_blocked(tile_x: int, tile_y: int) -> bool:
-	var clearance: Rect2i = _map_grid.get_lobby_clearance_rect(_current_parcel.x, _current_parcel.y)
-	return clearance.has_area() and Rect2i(tile_x, tile_y, _room_w, _room_h).intersects(clearance)

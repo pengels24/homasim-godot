@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://bsim0br0wser1"]
 
-[ext_resource type="Script" uid="uid://dsim0br0wser1" path="res://scenes/ingame/SimBrowser.gd" id="1_sim01"]
+[ext_resource type="Script" uid="uid://b0kr3j5kdeprm" path="res://scenes/ingame/SimBrowser.gd" id="1_sim01"]
 
 [node name="SimBrowser" type="CanvasLayer"]
 layer = 80

@@ -3,6 +3,7 @@ extends Node2D
 ## ANG-148 – Ingame-Grundgerüst (Orchestrator)
 ## ANG-170 – God-File aufgeteilt: HUD → IngameHud, Uhr → IngameClock, Bau → IngameBuild
 ## ANG-176 – PauseMenu + InGameSaveModal verdrahtet
+## ANG-166 – SimBrowser (F7)
 
 # ── Nodes ─────────────────────────────────────────────────────────────────────
 @onready var map_grid: Node2D = $MapGrid
@@ -37,15 +38,17 @@ var _dev_console:    DevConsole
 var _pause_menu:     PauseMenu
 var _save_modal:     InGameSaveModal
 var _quit_confirm:   ConfirmModal
+var _sim_browser:    SimBrowser
 
 var _pause_was_running: bool = false
 var _came_from_pause:   bool = false
 
-const SETTINGS_SCENE    := preload("res://scenes/shared/SettingsModal.tscn")
-const CONFIRM_SCENE     := preload("res://scenes/shared/ConfirmModal.tscn")
-const DEV_CONSOLE_SCENE := preload("res://scenes/ingame/DevConsole.tscn")
-const PAUSE_MENU_SCENE  := preload("res://scenes/ingame/PauseMenu.tscn")
-const SAVE_MODAL_SCENE  := preload("res://scenes/ingame/InGameSaveModal.tscn")
+const SETTINGS_SCENE     := preload("res://scenes/shared/SettingsModal.tscn")
+const CONFIRM_SCENE      := preload("res://scenes/shared/ConfirmModal.tscn")
+const DEV_CONSOLE_SCENE  := preload("res://scenes/ingame/DevConsole.tscn")
+const PAUSE_MENU_SCENE   := preload("res://scenes/ingame/PauseMenu.tscn")
+const SAVE_MODAL_SCENE   := preload("res://scenes/ingame/InGameSaveModal.tscn")
+const SIM_BROWSER_SCENE  := preload("res://scenes/ingame/SimBrowser.tscn")
 
 var _hotel: Dictionary = {}
 
@@ -144,6 +147,9 @@ func _setup_subsystems() -> void:
 	_save_modal.load_completed.connect(_on_save_modal_loaded)
 	_save_modal.back_requested.connect(_on_save_modal_back)
 
+	_sim_browser = SIM_BROWSER_SCENE.instantiate() as SimBrowser
+	add_child(_sim_browser)
+
 	if OS.is_debug_build():
 		_dev_console = DEV_CONSOLE_SCENE.instantiate() as DevConsole
 		add_child(_dev_console)
@@ -170,6 +176,10 @@ func _unhandled_input(event: InputEvent) -> void:
 				return
 			if is_instance_valid(_save_modal) and _save_modal.visible:
 				return
+			if is_instance_valid(_sim_browser) and _sim_browser.visible:
+				if ke.keycode == KEY_F7 or ke.keycode == KEY_ESCAPE:
+					_close_sim_browser()
+				return
 			if ke.keycode == KEY_S and ke.alt_pressed:
 				_open_settings()
 			else:
@@ -184,7 +194,7 @@ func _handle_hotkey(keycode: int) -> void:
 		KEY_F4:     _hud.trigger_button(2)
 		KEY_F5:     _quick_save()
 		KEY_F6:     _hud.trigger_button(4)
-		KEY_F7:     _hud.trigger_button(5)
+		KEY_F7:     _open_sim_browser()
 		KEY_F9:     _quick_load()
 		KEY_F12:    if is_instance_valid(_dev_console): _dev_console.toggle()
 
@@ -215,12 +225,27 @@ func _update_map_grid_mode() -> void:
 	var blocked := (is_instance_valid(_dev_console)    and _dev_console.visible)    \
 			or (is_instance_valid(_pause_menu)     and _pause_menu.visible)     \
 			or (is_instance_valid(_save_modal)     and _save_modal.visible)     \
-			or (is_instance_valid(_settings_modal) and _settings_modal.visible)
+			or (is_instance_valid(_settings_modal) and _settings_modal.visible) \
+			or (is_instance_valid(_sim_browser)    and _sim_browser.visible)
 	map_grid.process_mode = Node.PROCESS_MODE_DISABLED if blocked else Node.PROCESS_MODE_INHERIT
 
 
 func _on_pause_resume() -> void:
 	_close_pause()
+
+
+# ── SimBrowser ────────────────────────────────────────────────────────────────
+
+func _open_sim_browser() -> void:
+	_clock.pause()
+	_sim_browser.open()
+	_update_map_grid_mode()
+
+
+func _close_sim_browser() -> void:
+	_sim_browser.close()
+	_clock.resume()
+	_update_map_grid_mode()
 
 
 func _on_pause_save() -> void:

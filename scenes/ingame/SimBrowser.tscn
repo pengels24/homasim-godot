@@ -1,0 +1,66 @@
+[gd_scene format=4 uid="uid://bsim0br0wser1"]
+
+[ext_resource type="Script" uid="uid://dsim0br0wser1" path="res://scenes/ingame/SimBrowser.gd" id="1_sim01"]
+
+[node name="SimBrowser" type="CanvasLayer"]
+layer = 80
+visible = false
+script = ExtResource("1_sim01")
+
+[node name="Overlay" type="ColorRect" parent="."]
+color = Color(0, 0, 0, 0.65)
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Center" type="CenterContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Window" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(1500, 880)
+
+[node name="VBox" type="VBoxContainer" parent="Center/Window"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="TitleBar" type="HBoxContainer" parent="Center/Window/VBox"]
+custom_minimum_size = Vector2(0, 28)
+
+[node name="TitleLbl" type="Label" parent="Center/Window/VBox/TitleBar"]
+text = ""
+size_flags_horizontal = 3
+
+[node name="BtnClose" type="Button" parent="Center/Window/VBox/TitleBar"]
+text = "✕"
+
+[node name="NavBar" type="HBoxContainer" parent="Center/Window/VBox"]
+custom_minimum_size = Vector2(0, 44)
+
+[node name="BtnBack" type="Button" parent="Center/Window/VBox/NavBar"]
+text = "<"
+disabled = true
+
+[node name="BtnForward" type="Button" parent="Center/Window/VBox/NavBar"]
+text = ">"
+disabled = true
+
+[node name="BtnHome" type="Button" parent="Center/Window/VBox/NavBar"]
+text = "~"
+
+[node name="AddressBar" type="LineEdit" parent="Center/Window/VBox/NavBar"]
+editable = false
+text = "home.sim"
+size_flags_horizontal = 3
+
+[node name="TabStrip" type="HBoxContainer" parent="Center/Window/VBox"]
+custom_minimum_size = Vector2(0, 36)
+
+[node name="TabHome" type="PanelContainer" parent="Center/Window/VBox/TabStrip"]
+[node name="TabLbl" type="Label" parent="Center/Window/VBox/TabStrip/TabHome"]
+text = "  home.sim  "
+
+[node name="ContentScroll" type="ScrollContainer" parent="Center/Window/VBox"]
+size_flags_vertical = 3
+
+[node name="ContentVBox" type="VBoxContainer" parent="Center/Window/VBox/ContentScroll"]
+size_flags_horizontal = 3

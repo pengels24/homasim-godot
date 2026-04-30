@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://b3x1qmainmenu"]
+[gd_scene load_steps=20 format=3 uid="uid://b3x1qmainmenu"]
 
 [ext_resource type="Script" path="res://scenes/main_menu/MainMenu.gd" id="1_mainmenu"]
 [ext_resource type="PackedScene" uid="uid://c1managersel" path="res://scenes/manager_select/ManagerSelect.tscn" id="2_mgsel"]
@@ -170,6 +170,22 @@ content_margin_right = 24.0
 content_margin_top = 16.0
 content_margin_bottom = 16.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_menu_bg"]
+bg_color = Color(0, 0, 0, 0.28)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_left = 12
+corner_radius_bottom_right = 12
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(1, 1, 1, 0.08)
+content_margin_left = 32.0
+content_margin_right = 32.0
+content_margin_top = 20.0
+content_margin_bottom = 20.0
+
 [node name="MainMenu" type="Control"]
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
@@ -237,19 +253,28 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_subtitle_bg")
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="Buttons" type="GridContainer" parent="Content"]
+[node name="MenuBox" type="PanelContainer" parent="Content"]
 layout_mode = 2
-size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_menu_bg")
+
+[node name="MenuVBox" type="VBoxContainer" parent="Content/MenuBox"]
+layout_mode = 2
+theme_override_constants/separation = 28
+
+[node name="Buttons" type="GridContainer" parent="Content/MenuBox/MenuVBox"]
+layout_mode = 2
+size_flags_horizontal = 3
 columns = 2
 theme_override_constants/h_separation = 24
 theme_override_constants/v_separation = 28
 
-[node name="BtnPlay" type="Button" parent="Content/Buttons"]
+[node name="BtnPlay" type="Button" parent="Content/MenuBox/MenuVBox/Buttons"]
 layout_mode = 2
 mouse_default_cursor_shape = 8
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 52)
 text = "Spiel starten"
+horizontal_alignment = 0
 disabled = true
 theme_override_font_sizes/font_size = 34
 theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
@@ -264,12 +289,13 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
-[node name="BtnSettings" type="Button" parent="Content/Buttons"]
+[node name="BtnSettings" type="Button" parent="Content/MenuBox/MenuVBox/Buttons"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 52)
 text = "Einstellungen"
+horizontal_alignment = 2
 theme_override_font_sizes/font_size = 34
 theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
 theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
@@ -281,12 +307,13 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
-[node name="BtnLogin" type="Button" parent="Content/Buttons"]
+[node name="BtnLogin" type="Button" parent="Content/MenuBox/MenuVBox/Buttons"]
 layout_mode = 2
 mouse_default_cursor_shape = 8
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 52)
 text = "Login / Register"
+horizontal_alignment = 0
 theme_override_font_sizes/font_size = 34
 theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
 theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
@@ -300,12 +327,13 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
-[node name="BtnManager" type="Button" parent="Content/Buttons"]
+[node name="BtnManager" type="Button" parent="Content/MenuBox/MenuVBox/Buttons"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 52)
 text = "Manager wählen"
+horizontal_alignment = 2
 theme_override_font_sizes/font_size = 34
 theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
 theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
@@ -317,12 +345,13 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
-[node name="BtnTutorial" type="Button" parent="Content/Buttons"]
+[node name="BtnTutorial" type="Button" parent="Content/MenuBox/MenuVBox/Buttons"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 52)
 text = "Tutorial"
+horizontal_alignment = 0
 theme_override_font_sizes/font_size = 34
 theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
 theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
@@ -334,12 +363,13 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
-[node name="BtnCredits" type="Button" parent="Content/Buttons"]
+[node name="BtnCredits" type="Button" parent="Content/MenuBox/MenuVBox/Buttons"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
-size_flags_horizontal = 4
+size_flags_horizontal = 3
 custom_minimum_size = Vector2(0, 52)
 text = "Info"
+horizontal_alignment = 2
 theme_override_font_sizes/font_size = 34
 theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
 theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
@@ -351,13 +381,13 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
-
-[node name="BtnQuit" type="Button" parent="Content"]
+[node name="BtnQuit" type="Button" parent="Content/MenuBox/MenuVBox"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 4
 custom_minimum_size = Vector2(0, 52)
 text = "Beenden"
+horizontal_alignment = 1
 theme_override_font_sizes/font_size = 34
 theme_override_colors/font_color = Color(0.55, 0.55, 0.55, 1)
 theme_override_colors/font_hover_color = Color(0.863, 0.149, 0.149, 1)

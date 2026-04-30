@@ -13,10 +13,10 @@ const FADE_DURATION  := 1.2
 	$BgSlideshow/Bg2,
 	$BgSlideshow/Bg3,
 ]
-@onready var btn_login:    Button   = $Content/Buttons/BtnLogin
-@onready var btn_settings: Button   = $Content/Buttons/BtnSettings
-@onready var btn_play:     Button   = $Content/Buttons/BtnPlay
-@onready var btn_quit:     Button   = $Content/BtnQuit
+@onready var btn_login:    Button   = $Content/MenuBox/MenuVBox/Buttons/BtnLogin
+@onready var btn_settings: Button   = $Content/MenuBox/MenuVBox/Buttons/BtnSettings
+@onready var btn_play:     Button   = $Content/MenuBox/MenuVBox/Buttons/BtnPlay
+@onready var btn_quit:     Button   = $Content/MenuBox/MenuVBox/BtnQuit
 @onready var logo:         TextureRect = $Content/Logo
 @onready var title_label:  Label    = $Content/Title
 @onready var subtitle:     Label    = $Content/Subtitle
@@ -30,9 +30,9 @@ const FADE_DURATION  := 1.2
 @onready var remember_checkbox:  CheckBox  = $LoginModal/Center/Card/VBox/RememberCheck
 @onready var btn_close_modal:    Button    = $LoginModal/Center/Card/VBox/BtnClose
 @onready var btn_to_register:   Button    = $LoginModal/Center/Card/VBox/BtnToRegister
-@onready var btn_manager:       Button       = $Content/Buttons/BtnManager
-@onready var btn_tutorial:      Button       = $Content/Buttons/BtnTutorial
-@onready var btn_credits:       Button       = $Content/Buttons/BtnCredits
+@onready var btn_manager:       Button       = $Content/MenuBox/MenuVBox/Buttons/BtnManager
+@onready var btn_tutorial:      Button       = $Content/MenuBox/MenuVBox/Buttons/BtnTutorial
+@onready var btn_credits:       Button       = $Content/MenuBox/MenuVBox/Buttons/BtnCredits
 @onready var _manager_modal:    Control      = $ManagerModal
 @onready var _settings_modal:   SettingsModal = $SettingsModal
 @onready var _version_lbl:      Label        = $Footer/VersionLbl

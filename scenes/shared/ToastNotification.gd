@@ -22,7 +22,6 @@ func _ready() -> void:
 	var font := load("res://assets/fonts/Outfit-Bold.ttf") as FontFile
 	if font:
 		_msg_lbl.add_theme_font_override("font", font)
-	layer = 10
 	_panel.modulate.a = 0.0
 
 

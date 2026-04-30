@@ -18,7 +18,7 @@ shadow_size = 14
 shadow_offset = Vector2(0, 3)
 
 [node name="ToastNotification" type="CanvasLayer"]
-layer = 10
+layer = 200
 script = ExtResource("1_toastnoti")
 
 [node name="Panel" type="PanelContainer" parent="."]

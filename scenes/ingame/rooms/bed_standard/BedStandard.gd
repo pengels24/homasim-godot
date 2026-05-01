@@ -23,6 +23,10 @@ func _ready() -> void:
 	room_type_id = "bed_standard"
 
 
+func get_valid_door_combos() -> Array[Vector2i]:
+	return [Vector2i(0, 0), Vector2i(0, 1)]  # nur LeftTop + LeftBottom
+
+
 # ── Visuals ───────────────────────────────────────────────────────────────────
 
 func _apply_visuals() -> void:

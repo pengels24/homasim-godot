@@ -29,6 +29,7 @@ var _room_flip:       int = 0
 var _snap_enabled:    bool = true
 var _room_w:          int = 2
 var _room_h:          int = 2
+var _valid_combos:    Array[Vector2i] = []
 
 
 func activate(map_grid: Node2D, room_type_id: String) -> void:
@@ -59,6 +60,8 @@ func _spawn_ghost() -> void:
 	var sz: Vector2i = _ghost.get_tile_size()
 	_room_w = sz.x
 	_room_h = sz.y
+	_valid_combos = _ghost.get_valid_door_combos()
+	_snap_to_valid_combo()
 	_update_modulate()
 
 
@@ -148,14 +151,60 @@ func _input(event: InputEvent) -> void:
 				cancelled.emit()
 				queue_free()
 			KEY_R:
-				_door_rotation = (_door_rotation + 1) % 4
+				_advance_rotation()
 				_refresh_ghost()
 			KEY_T:
-				_door_offset = 1 - _door_offset
+				_advance_offset()
 				_refresh_ghost()
 			KEY_Z:
 				_room_flip = 1 - _room_flip
 				_refresh_ghost()
+
+
+# ── Kombo-Navigation ──────────────────────────────────────────────────────────
+
+func _snap_to_valid_combo() -> void:
+	if _valid_combos.is_empty():
+		return
+	var current := Vector2i(_door_rotation, _door_offset)
+	if current not in _valid_combos:
+		_door_rotation = _valid_combos[0].x
+		_door_offset   = _valid_combos[0].y
+
+
+func _advance_rotation() -> void:
+	var rotations: Array[int] = _unique_rotations()
+	if rotations.is_empty():
+		return
+	var idx: int = rotations.find(_door_rotation)
+	_door_rotation = rotations[(idx + 1) % rotations.size()]
+	var offsets := _offsets_for_rotation(_door_rotation)
+	if not offsets.is_empty():
+		_door_offset = offsets[0]
+
+
+func _advance_offset() -> void:
+	var offsets := _offsets_for_rotation(_door_rotation)
+	if offsets.is_empty():
+		return
+	var idx: int = offsets.find(_door_offset)
+	_door_offset = offsets[(idx + 1) % offsets.size()]
+
+
+func _unique_rotations() -> Array[int]:
+	var seen: Array[int] = []
+	for combo: Vector2i in _valid_combos:
+		if combo.x not in seen:
+			seen.append(combo.x)
+	return seen
+
+
+func _offsets_for_rotation(rot: int) -> Array[int]:
+	var result: Array[int] = []
+	for combo: Vector2i in _valid_combos:
+		if combo.x == rot:
+			result.append(combo.y)
+	return result
 
 
 func _try_place() -> void:

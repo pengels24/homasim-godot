@@ -99,5 +99,15 @@ func get_tile_size() -> Vector2i:
 	return Vector2i(2, 2)
 
 
+## Gibt alle gültigen (door_rotation, door_offset)-Kombos zurück (x=rotation, y=offset).
+## Unterklassen überschreiben, wenn nur ein Teil der 8 Kombos gebaut ist.
+func get_valid_door_combos() -> Array[Vector2i]:
+	var all: Array[Vector2i] = []
+	for r: int in range(4):
+		for o: int in range(2):
+			all.append(Vector2i(r, o))
+	return all
+
+
 func _apply_visuals() -> void:
 	pass

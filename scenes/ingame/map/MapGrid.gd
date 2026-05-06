@@ -105,15 +105,18 @@ func center_on_entry(entry_plot: Vector2i) -> void:
 ## Ersetzt: is_tile_free + would_block_door + _door_is_blocked + _lobby_clearance_blocked.
 func is_placement_valid(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 		room_w: int, room_h: int, door_rot: int, door_off: int) -> bool:
-	# Raum muss innerhalb der Parzelleninnenfläche liegen (Wand = Tile 0 und PARCEL_SZ-1 ausschließen)
-	if tile_x < 1 or tile_y < 1 or tile_x + room_w > PARCEL_SZ - 1 or tile_y + room_h > PARCEL_SZ - 1:
+	if tile_x < 0 or tile_y < 0 or tile_x + room_w > PARCEL_SZ or tile_y + room_h > PARCEL_SZ:
 		return false
 	var gx := parcel_x * PARCEL_SZ + tile_x
 	var gy := parcel_y * PARCEL_SZ + tile_y
-	if not _occ_is_free(gx, gy, room_w, room_h):
+	if not _occ_free_for_room(gx, gy, room_w, room_h):
 		return false
 	var exit := _exit_global(parcel_x, parcel_y, tile_x, tile_y, room_w, room_h, door_rot, door_off)
-	return _occ_exit_free(exit.x, exit.y)
+	if not _occ_exit_free(exit.x, exit.y):
+		return false
+	if _exit_outside_parcel(parcel_x, parcel_y, exit, door_rot):
+		return false
+	return true
 
 
 ## Markiert Room-Body (Wert 1) + Exit-Tile (Wert 2) im Grid.
@@ -138,19 +141,20 @@ func unmark_placement(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 
 
 func place_room(parcel_x: int, parcel_y: int, room_scene: PackedScene, hotel_id: int,
-		door_rot: int, door_off: int, tile_x: int, tile_y: int, rflip: int = 0) -> void:
+		door_rot: int, door_off: int, tile_x: int, tile_y: int, rflip: int = 0, room_rot: int = 0) -> void:
 	var parcel: Node2D = _grid[parcel_y][parcel_x]
 	var is_new := not parcel.visible
 	parcel.visible = true
 	if is_new:
 		_mark_parcel_walls(parcel_x, parcel_y)
-	var room: Node2D = parcel.spawn_room(room_scene, door_rot, door_off, tile_x, tile_y, rflip)
+	var room: Node2D = parcel.spawn_room(room_scene, door_rot, door_off, tile_x, tile_y, rflip, room_rot)
 	var sz: Vector2i = room.get_tile_size()
 	mark_placement(parcel_x, parcel_y, tile_x, tile_y, sz.x, sz.y, door_rot, door_off)
 	SaveManager.save_room_to_plot(hotel_id, parcel_x, parcel_y, room.to_dict())
 	if is_new:
 		SaveManager.set_plot_built(hotel_id, parcel_x, parcel_y)
 		_configure_walls()
+	_update_all_floor_neighbors()
 
 
 func world_to_grid(world_pos: Vector2) -> Vector2i:
@@ -218,18 +222,29 @@ func _restore_rooms(built_plots: Array) -> void:
 				continue
 			var room: Node2D = parcel.restore_room(room_data, load(path) as PackedScene)
 			var sz: Vector2i = room.get_tile_size()
+			var tx: int = room_data.get("x_pos", 0)
+			var ty: int = room_data.get("y_pos", 0)
 			mark_placement(
-				plot["x"], plot["y"],
-				room_data.get("x_pos", 0), room_data.get("y_pos", 0),
+				plot["x"], plot["y"], tx, ty,
 				sz.x, sz.y,
 				room_data.get("door_rotation", 0), room_data.get("door_offset", 0)
 			)
+	_update_all_floor_neighbors()
 
 
 func _is_built(x: int, y: int) -> bool:
 	if x < 0 or x >= grid_cols or y < 0 or y >= grid_rows:
 		return false
 	return _grid[y][x].visible
+
+
+func _exit_outside_parcel(px: int, py: int, exit: Vector2i, door_rot: int) -> bool:
+	match door_rot:
+		0: return exit.x < px * PARCEL_SZ
+		2: return exit.x >= (px + 1) * PARCEL_SZ
+		1: return exit.y < py * PARCEL_SZ
+		3: return exit.y >= (py + 1) * PARCEL_SZ
+	return false
 
 
 # ── Occupancy Grid – Kern ─────────────────────────────────────────────────────
@@ -246,7 +261,7 @@ func _occ_mark(gx: int, gy: int, w: int, h: int) -> void:
 	for dy in h:
 		for dx in w:
 			var idx := (gy + dy) * _occ_w + (gx + dx)
-			if idx >= 0 and idx < _occ.size() and _occ[idx] != 3:
+			if idx >= 0 and idx < _occ.size():
 				_occ[idx] = 1
 
 
@@ -274,14 +289,16 @@ func _occ_clear(gx: int, gy: int, w: int, h: int) -> void:
 				_occ[idx] = 0
 
 
-func _occ_is_free(gx: int, gy: int, w: int, h: int) -> bool:
+# Raum-Body darf auf freie (0) und Wand-Tiles (3) platziert werden; Body (1) und Exit (2) blockieren.
+func _occ_free_for_room(gx: int, gy: int, w: int, h: int) -> bool:
 	for dy in h:
 		for dx in w:
 			var ngx := gx + dx
 			var ngy := gy + dy
 			if ngx < 0 or ngy < 0 or ngx >= _occ_w or ngy >= _occ_h:
 				return false
-			if _occ[ngy * _occ_w + ngx] != 0:
+			var v := _occ[ngy * _occ_w + ngx]
+			if v == 1 or v == 2:
 				return false
 	return true
 
@@ -292,7 +309,39 @@ func _occ_exit_free(gx: int, gy: int) -> bool:
 	if gx < 0 or gy < 0 or gx >= _occ_w or gy >= _occ_h:
 		return false
 	var v := _occ[gy * _occ_w + gx]
-	return v == 0 or v == 2
+	return v == 0 or v == 2 or v == 3
+
+
+func _occ_has_room_body(gx: int, gy: int, w: int, h: int) -> bool:
+	for dy in h:
+		for dx in w:
+			var ngx := gx + dx
+			var ngy := gy + dy
+			if ngx < 0 or ngy < 0 or ngx >= _occ_w or ngy >= _occ_h:
+				continue
+			if _occ[ngy * _occ_w + ngx] == 1:
+				return true
+	return false
+
+
+func _update_all_floor_neighbors() -> void:
+	for py in grid_rows:
+		for px in grid_cols:
+			var parcel: Node2D = _grid[py][px]
+			if not parcel.visible:
+				continue
+			for child: Node2D in parcel.get_children():
+				if not child.has_method("get_tile_size"):
+					continue
+				var sz: Vector2i  = child.get_tile_size()
+				var gx: int = px * PARCEL_SZ + int(child.position.x / TILE_PX)
+				var gy: int = py * PARCEL_SZ + int(child.position.y / TILE_PX)
+				child.set_floor_neighbors(
+					_occ_has_room_body(gx,        gy - 1,   sz.x, 1),
+					_occ_has_room_body(gx + sz.x, gy,       1,    sz.y),
+					_occ_has_room_body(gx,        gy + sz.y, sz.x, 1),
+					_occ_has_room_body(gx - 1,    gy,       1,    sz.y)
+				)
 
 
 func _mark_parcel_walls(parcel_x: int, parcel_y: int) -> void:

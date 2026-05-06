@@ -34,6 +34,10 @@ window/size/mode=3
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg")
+
 [internationalization]
 
 locale/translations=PackedStringArray("res://translations/de.de.translation")

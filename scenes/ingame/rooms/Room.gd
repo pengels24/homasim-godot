@@ -16,9 +16,10 @@ var condition:  int = 100   # Verschleiß:  sinkt durch Nutzung, braucht Reparat
 var cleanliness: int = 100  # Sauberkeit:  sinkt täglich, braucht Personal
 
 # ── Tür / Orientierung ────────────────────────────────────────────────────────
-var door_rotation: int = 0   # Welche Wand   0–3  (R-Taste: im Uhrzeigersinn)
-var door_offset:   int = 0   # Position auf Wand 0–1  (T-Taste)
-var room_flip:     int = 0   # Orientierung  0=landscape 1=portrait  (Z-Taste)
+var door_rotation: int = 0   # Welche Wand   0–3  (.-Taste: nur Tür wandert)
+var door_offset:   int = 0   # Position auf Wand 0–1  (,-Taste)
+var room_flip:     int = 0   # Orientierung  0=landscape 1=portrait  (F-Taste)
+var room_rotation: int = 0   # Interior-Rotation 0–3  (R-Taste: ganzer Raum dreht)
 
 
 # ── Definition (von Unterklassen überschreiben) ───────────────────────────────
@@ -54,6 +55,7 @@ func configure(data: Dictionary) -> void:
 	door_rotation = data.get("door_rotation", door_rotation)
 	door_offset   = data.get("door_offset",   door_offset)
 	room_flip     = data.get("room_flip",     room_flip)
+	room_rotation = data.get("room_rotation", room_rotation)
 	_apply_visuals()
 
 
@@ -70,6 +72,7 @@ func to_dict() -> Dictionary:
 		"door_rotation": door_rotation,
 		"door_offset":   door_offset,
 		"room_flip":     room_flip,
+		"room_rotation": room_rotation,
 	}
 
 
@@ -107,6 +110,10 @@ func get_valid_door_combos() -> Array[Vector2i]:
 		for o: int in range(2):
 			all.append(Vector2i(r, o))
 	return all
+
+
+func set_floor_neighbors(_top: bool, _right: bool, _bottom: bool, _left: bool) -> void:
+	pass
 
 
 func _apply_visuals() -> void:

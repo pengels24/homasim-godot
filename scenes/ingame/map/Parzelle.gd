@@ -39,10 +39,10 @@ func buy(hotel_id: int) -> void:
 	SaveManager.set_plot_built(hotel_id, _grid_x(), _grid_y())
 
 
-func spawn_room(room_scene: PackedScene, door_rot: int, door_off: int, tile_x: int, tile_y: int, rflip: int = 0) -> Node2D:
+func spawn_room(room_scene: PackedScene, door_rot: int, door_off: int, tile_x: int, tile_y: int, rflip: int = 0, room_rot: int = 0) -> Node2D:
 	var room: Node2D = room_scene.instantiate()
 	add_child(room)
-	room.configure({"door_rotation": door_rot, "door_offset": door_off, "room_flip": rflip, "x_pos": tile_x, "y_pos": tile_y})
+	room.configure({"door_rotation": door_rot, "door_offset": door_off, "room_flip": rflip, "room_rotation": room_rot, "x_pos": tile_x, "y_pos": tile_y})
 	room.position = Vector2(tile_x * TILE_PX, tile_y * TILE_PX)
 	return room
 
@@ -89,12 +89,11 @@ func _spawn_lobby() -> void:
 
 func _lobby_position() -> Vector2:
 	var center_offset: int = int((PARCEL_TILES - LOBBY_TILES) / 2.0) * TILE_PX
-	var inset: int = TILE_PX
 	match entrance_dir:
-		"top":    return Vector2(center_offset, inset)
-		"bottom": return Vector2(center_offset, (PARCEL_TILES - LOBBY_TILES - 1) * TILE_PX)
-		"left":   return Vector2(inset, center_offset)
-		"right":  return Vector2((PARCEL_TILES - LOBBY_TILES - 1) * TILE_PX, center_offset)
+		"top":    return Vector2(center_offset, 0)
+		"bottom": return Vector2(center_offset, (PARCEL_TILES - LOBBY_TILES) * TILE_PX)
+		"left":   return Vector2(0, center_offset)
+		"right":  return Vector2((PARCEL_TILES - LOBBY_TILES) * TILE_PX, center_offset)
 	return Vector2(center_offset, center_offset)
 
 

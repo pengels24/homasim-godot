@@ -100,8 +100,8 @@ func _on_build_room_selected(room_type_id: String) -> void:
 	var cursor := Node2D.new()
 	cursor.set_script(load("res://scenes/ingame/build/BuildCursor.gd"))
 	_map_grid.get_world_root().add_child(cursor)
-	cursor.room_placed.connect(func(px: int, py: int, tx: int, ty: int, dr: int, doff: int, rflip: int, wc: Vector2) -> void:
-		_on_room_placed(room_type_id, px, py, tx, ty, dr, doff, rflip, wc)
+	cursor.room_placed.connect(func(px: int, py: int, tx: int, ty: int, dr: int, doff: int, rflip: int, rrot: int, wc: Vector2) -> void:
+		_on_room_placed(room_type_id, px, py, tx, ty, dr, doff, rflip, rrot, wc)
 	)
 	cursor.cancelled.connect(_on_build_cursor_done)
 	cursor.tree_exited.connect(func() -> void:
@@ -113,7 +113,7 @@ func _on_build_room_selected(room_type_id: String) -> void:
 	cursor.activate(_map_grid, room_type_id)
 
 
-func _on_room_placed(room_type_id: String, px: int, py: int, tx: int, ty: int, dr: int, doff: int, rflip: int, world_center: Vector2) -> void:
+func _on_room_placed(room_type_id: String, px: int, py: int, tx: int, ty: int, dr: int, doff: int, rflip: int, rrot: int, world_center: Vector2) -> void:
 	var path: String = SCENE_PATHS.get(room_type_id, "")
 	if path == "":
 		return
@@ -125,7 +125,7 @@ func _on_room_placed(room_type_id: String, px: int, py: int, tx: int, ty: int, d
 		Toast.show(GameState.T("toast.build.no_money"))
 		return
 
-	_map_grid.place_room(px, py, load(path), _hotel.get("id", -1), dr, doff, tx, ty, rflip)
+	_map_grid.place_room(px, py, load(path), _hotel.get("id", -1), dr, doff, tx, ty, rflip, rrot)
 	_apply_build_costs(def, cost, world_center)
 
 

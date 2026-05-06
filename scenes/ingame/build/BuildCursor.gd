@@ -1,10 +1,10 @@
 extends Node2D
 ## ANG-161 – Bau-Cursor. Lebt als Kind von MapGrid/WorldRoot wenn aktiv.
 ## Ghost bewegt sich innerhalb eigener Parzellen, rastet auf 16px-Tile-Raster.
-## Weiß = Tile-Bereich frei, Rot = Überlappung. R=Tür-Wand, T=Tür-Position, Z=Raum-Flip. ESC = abbrechen.
+## Weiß = Tile-Bereich frei, Rot = Überlappung. .=Tür-Wand, ,=Tür-Position, R=Raum-Rotation, F=Flip. ESC = abbrechen.
 ## ANG-186 – Validierung über MapGrid.is_placement_valid() statt Einzelchecks.
 
-signal room_placed(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int, door_rotation: int, door_offset: int, room_flip: int, world_center: Vector2)
+signal room_placed(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int, door_rotation: int, door_offset: int, room_flip: int, room_rotation: int, world_center: Vector2)
 signal cancelled()
 
 const ROOM_SCENES: Dictionary = {
@@ -30,6 +30,7 @@ var _snap_enabled:    bool = true
 var _room_w:          int = 2
 var _room_h:          int = 2
 var _valid_combos:    Array[Vector2i] = []
+var _room_rotation:   int = 0
 
 
 func activate(map_grid: Node2D, room_type_id: String) -> void:
@@ -56,11 +57,11 @@ func _spawn_ghost() -> void:
 	_ghost         = _room_scene.instantiate()
 	_ghost.z_index = 10
 	add_child(_ghost)
-	_ghost.configure({"door_rotation": _door_rotation, "door_offset": _door_offset, "room_flip": _room_flip})
+	_ghost.configure({"door_rotation": _door_rotation, "door_offset": _door_offset, "room_flip": _room_flip, "room_rotation": _room_rotation})
 	var sz: Vector2i = _ghost.get_tile_size()
 	_room_w = sz.x
 	_room_h = sz.y
-	_valid_combos = _ghost.get_valid_door_combos()
+	_update_valid_combos()
 	_snap_to_valid_combo()
 	_update_modulate()
 
@@ -68,10 +69,11 @@ func _spawn_ghost() -> void:
 func _refresh_ghost() -> void:
 	if not is_instance_valid(_ghost):
 		return
-	_ghost.configure({"door_rotation": _door_rotation, "door_offset": _door_offset, "room_flip": _room_flip})
+	_ghost.configure({"door_rotation": _door_rotation, "door_offset": _door_offset, "room_flip": _room_flip, "room_rotation": _room_rotation})
 	var sz: Vector2i = _ghost.get_tile_size()
 	_room_w = sz.x
 	_room_h = sz.y
+	_update_valid_combos()
 	_is_valid = _map_grid.is_placement_valid(
 		_current_parcel.x, _current_parcel.y,
 		_tile_pos.x, _tile_pos.y,
@@ -150,18 +152,31 @@ func _input(event: InputEvent) -> void:
 				get_viewport().set_input_as_handled()
 				cancelled.emit()
 				queue_free()
-			KEY_R:
+			KEY_PERIOD:
 				_advance_rotation()
 				_refresh_ghost()
-			KEY_T:
+			KEY_COMMA:
 				_advance_offset()
 				_refresh_ghost()
-			KEY_Z:
-				_room_flip = 1 - _room_flip
+			KEY_R:
+				_advance_room_rotation()
 				_refresh_ghost()
+			KEY_F:
+				pass  # Flip portrait/landscape – kommt später
 
 
 # ── Kombo-Navigation ──────────────────────────────────────────────────────────
+
+# Übersetzt die raumrelativen door-Combos in Weltkoordinaten (+ room_rotation-Offset).
+# Damit bleibt .-Taste immer auf der aktuellen Wand, egal wie oft R gedrückt wurde.
+func _update_valid_combos() -> void:
+	if not is_instance_valid(_ghost):
+		return
+	var raw: Array[Vector2i] = _ghost.get_valid_door_combos()
+	_valid_combos.clear()
+	for c: Vector2i in raw:
+		_valid_combos.append(Vector2i((c.x + _room_rotation) % 4, c.y))
+
 
 func _snap_to_valid_combo() -> void:
 	if _valid_combos.is_empty():
@@ -170,6 +185,16 @@ func _snap_to_valid_combo() -> void:
 	if current not in _valid_combos:
 		_door_rotation = _valid_combos[0].x
 		_door_offset   = _valid_combos[0].y
+
+
+func _advance_room_rotation() -> void:
+	# R: dreht den ganzen Raum 90° im UZS.
+	# room_rotation steuert das Interior; door_rotation folgt synchron (Tür bleibt an gleicher Wand relativ zum Raum).
+	_room_rotation = (_room_rotation + 1) % 4
+	_door_rotation = (_door_rotation + 1) % 4
+	var offsets := _offsets_for_rotation(_door_rotation)
+	if not offsets.is_empty():
+		_door_offset = offsets[0]
 
 
 func _advance_rotation() -> void:
@@ -223,5 +248,5 @@ func _try_place() -> void:
 			_room_w, _room_h, _door_rotation, _door_offset):
 		get_viewport().set_input_as_handled()
 		var ghost_center := _ghost.global_position + Vector2(_room_w, _room_h) * float(TILE_PX) * 0.5
-		room_placed.emit(_current_parcel.x, _current_parcel.y, place_tile.x, place_tile.y, _door_rotation, _door_offset, _room_flip, ghost_center)
+		room_placed.emit(_current_parcel.x, _current_parcel.y, place_tile.x, place_tile.y, _door_rotation, _door_offset, _room_flip, _room_rotation, ghost_center)
 		_spawn_ghost()

@@ -1,289 +1,188 @@
-[gd_scene format=4 uid="uid://7xtcnb8xd5nt"]
+[gd_scene format=3 uid="uid://7xtcnb8xd5nt"]
 
 [ext_resource type="Script" uid="uid://drbkwcnyit8px" path="res://scenes/ingame/rooms/bed_double/BedDouble.gd" id="1_g681v"]
-[ext_resource type="Texture2D" uid="uid://myivw2ucwujc" path="res://assets/tiles/Rooms/tile_0649.png" id="1_mcun7"]
-[ext_resource type="Texture2D" uid="uid://8ngubspvwnea" path="res://assets/tiles/Rooms/tile_0653.png" id="2_3jqqa"]
-[ext_resource type="Texture2D" uid="uid://ceclvitaigygd" path="res://assets/tiles/Rooms/tile_0723.png" id="3_elac5"]
-[ext_resource type="Texture2D" uid="uid://cebvqrnkk03dj" path="res://assets/tiles/Rooms/tile_0727.png" id="4_4tnl0"]
-[ext_resource type="Texture2D" uid="uid://cwcoy7pemticc" path="res://assets/tiles/Rooms/tile_0650.png" id="5_3jqqa"]
-[ext_resource type="Texture2D" uid="uid://bbctr1acfres" path="res://assets/tiles/Rooms/tile_0725.png" id="5_elac5"]
-[ext_resource type="Texture2D" uid="uid://pm26loxwhfhk" path="res://assets/tiles/Rooms/room_standard_door_left_top.png" id="7_4tnl0"]
-[ext_resource type="Texture2D" uid="uid://cwtq21gu4lr2o" path="res://assets/tiles/Rooms/room_standard_door_left_bottom.png" id="8_q7rso"]
-[ext_resource type="Texture2D" uid="uid://bgxibvw7m08mt" path="res://assets/tiles/Rooms/room_standard_door_top_left.png" id="9_c5een"]
-[ext_resource type="Texture2D" uid="uid://bfricqock0kkl" path="res://assets/tiles/Rooms/room_standard_door_bottom_left.png" id="10_kws0x"]
-[ext_resource type="Texture2D" uid="uid://5v1xfhwpoh37" path="res://assets/tiles/Rooms/room_standard_door_top_right.png" id="11_stcsy"]
-[ext_resource type="Texture2D" uid="uid://ccrtptourytws" path="res://assets/tiles/Rooms/room_standard_door_right_top.png" id="12_g681v"]
-[ext_resource type="Texture2D" uid="uid://2gh2ggah47xw" path="res://assets/tiles/Rooms/room_standard_door_right_bottom.png" id="13_4aldt"]
-[ext_resource type="Texture2D" uid="uid://d0pyii8in7y6q" path="res://assets/tiles/Rooms/room_standard_door_bottom_right.png" id="14_3raxn"]
-[ext_resource type="Texture2D" uid="uid://cgeexuffnfp21" path="res://assets/tiles/Rooms/tile_0686.png" id="17_3raxn"]
-[ext_resource type="Texture2D" uid="uid://c1yqrotctifp1" path="res://assets/tiles/Rooms/tile_0690.png" id="17_stpkj"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_q7rso"]
-texture = ExtResource("1_mcun7")
-0:0/0 = 0
+[sub_resource type="Gradient" id="Gradient_fo40m"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xpyy5"]
-texture = ExtResource("2_3jqqa")
-0:0/0 = 0
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_pdcbc"]
+gradient = SubResource("Gradient_fo40m")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_c5een"]
-texture = ExtResource("3_elac5")
-0:0/0 = 0
+[sub_resource type="Gradient" id="Gradient_qfmep"]
+offsets = PackedFloat32Array(0.5, 0.5)
+colors = PackedColorArray(0.23137255, 0.23921569, 0.3019608, 1, 0.9607843, 0.972549, 0.98039216, 1)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kws0x"]
-texture = ExtResource("4_4tnl0")
-0:0/0 = 0
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_djd5q"]
+gradient = SubResource("Gradient_qfmep")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4tnl0"]
-texture = ExtResource("5_elac5")
-0:0/0 = 0
+[sub_resource type="Gradient" id="Gradient_pdcbc"]
+offsets = PackedFloat32Array(0.5, 0.5)
+colors = PackedColorArray(0.23137255, 0.23921569, 0.3019608, 1, 0.9607843, 0.972549, 0.98039216, 1)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_elac5"]
-texture = ExtResource("5_3jqqa")
-0:0/0 = 0
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_mcun7"]
+gradient = SubResource("Gradient_pdcbc")
 
-[sub_resource type="TileSet" id="TileSet_lur8e"]
-sources/0 = SubResource("TileSetAtlasSource_q7rso")
-sources/1 = SubResource("TileSetAtlasSource_xpyy5")
-sources/2 = SubResource("TileSetAtlasSource_c5een")
-sources/3 = SubResource("TileSetAtlasSource_kws0x")
-sources/5 = SubResource("TileSetAtlasSource_elac5")
-sources/4 = SubResource("TileSetAtlasSource_4tnl0")
+[sub_resource type="Gradient" id="Gradient_djd5q"]
+offsets = PackedFloat32Array(0.5, 0.5)
+colors = PackedColorArray(0.23137255, 0.23921569, 0.3019608, 1, 0.9607843, 0.972549, 0.98039216, 1)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lur8e"]
-texture = ExtResource("7_4tnl0")
-0:0/0 = 0
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_3jqqa"]
+gradient = SubResource("Gradient_djd5q")
 
-[sub_resource type="TileSet" id="TileSet_n2ypb"]
-sources/0 = SubResource("TileSetAtlasSource_lur8e")
+[sub_resource type="Gradient" id="Gradient_mcun7"]
+offsets = PackedFloat32Array(0.5, 0.5)
+colors = PackedColorArray(0.23137255, 0.23921569, 0.3019608, 1, 0.9607843, 0.972549, 0.98039216, 1)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_n2ypb"]
-texture = ExtResource("8_q7rso")
-0:0/0 = 0
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_elac5"]
+gradient = SubResource("Gradient_mcun7")
 
-[sub_resource type="TileSet" id="TileSet_stcsy"]
-sources/0 = SubResource("TileSetAtlasSource_n2ypb")
+[sub_resource type="Gradient" id="Gradient_elac5"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.21568628, 0.3764706, 0.78431374, 1)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_stcsy"]
-texture = ExtResource("9_c5een")
-0:0/0 = 0
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_q7rso"]
+gradient = SubResource("Gradient_elac5")
 
-[sub_resource type="TileSet" id="TileSet_g681v"]
-sources/0 = SubResource("TileSetAtlasSource_stcsy")
+[sub_resource type="Gradient" id="Gradient_q7rso"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4aldt"]
-texture = ExtResource("10_kws0x")
-0:0/0 = 0
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_c5een"]
+gradient = SubResource("Gradient_q7rso")
 
-[sub_resource type="TileSet" id="TileSet_3raxn"]
-sources/0 = SubResource("TileSetAtlasSource_4aldt")
+[sub_resource type="Gradient" id="Gradient_kws0x"]
+offsets = PackedFloat32Array(0.5, 0.5)
+colors = PackedColorArray(0.23137255, 0.23921569, 0.3019608, 1, 0.9607843, 0.972549, 0.98039216, 1)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_stpkj"]
-texture = ExtResource("11_stcsy")
-0:0/0 = 0
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_lur8e"]
+gradient = SubResource("Gradient_kws0x")
 
-[sub_resource type="TileSet" id="TileSet_22hqp"]
-sources/0 = SubResource("TileSetAtlasSource_stpkj")
+[sub_resource type="Gradient" id="Gradient_xpyy5"]
+offsets = PackedFloat32Array(0.5, 0.5)
+colors = PackedColorArray(0.23137255, 0.23921569, 0.3019608, 1, 0.9607843, 0.972549, 0.98039216, 1)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uacmi"]
-texture = ExtResource("12_g681v")
-0:0/0 = 0
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_kws0x"]
+gradient = SubResource("Gradient_xpyy5")
 
-[sub_resource type="TileSet" id="TileSet_wk6yp"]
-sources/0 = SubResource("TileSetAtlasSource_uacmi")
+[sub_resource type="Gradient" id="Gradient_lur8e"]
+offsets = PackedFloat32Array(0.5, 0.5)
+colors = PackedColorArray(0.23137255, 0.23921569, 0.3019608, 1, 0.9607843, 0.972549, 0.98039216, 1)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_36kct"]
-texture = ExtResource("13_4aldt")
-0:0/0 = 0
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_n2ypb"]
+gradient = SubResource("Gradient_lur8e")
 
-[sub_resource type="TileSet" id="TileSet_b3ant"]
-sources/0 = SubResource("TileSetAtlasSource_36kct")
+[sub_resource type="Gradient" id="Gradient_c5een"]
+offsets = PackedFloat32Array(0.5, 0.5)
+colors = PackedColorArray(0.23137255, 0.23921569, 0.3019608, 1, 0.9607843, 0.972549, 0.98039216, 1)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lilm8"]
-texture = ExtResource("14_3raxn")
-0:0/0 = 0
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_stcsy"]
+gradient = SubResource("Gradient_c5een")
 
-[sub_resource type="TileSet" id="TileSet_javdj"]
-sources/0 = SubResource("TileSetAtlasSource_lilm8")
+[sub_resource type="Gradient" id="Gradient_4tnl0"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.21568628, 0.3764706, 0.78431374, 1)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_22hqp"]
-texture = ExtResource("1_mcun7")
-0:0/0 = 0
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_xpyy5"]
+gradient = SubResource("Gradient_4tnl0")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wk6yp"]
-texture = ExtResource("2_3jqqa")
-0:0/0 = 0
+[sub_resource type="Gradient" id="Gradient_3jqqa"]
+offsets = PackedFloat32Array(0.5, 0.5)
+colors = PackedColorArray(0.21568628, 0.3764706, 0.78431374, 1, 0.23137255, 0.23921569, 0.3019608, 1)
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b3ant"]
-texture = ExtResource("3_elac5")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_javdj"]
-texture = ExtResource("4_4tnl0")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sut0v"]
-texture = ExtResource("17_stpkj")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iyy72"]
-texture = ExtResource("17_3raxn")
-0:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_suhdn"]
-sources/0 = SubResource("TileSetAtlasSource_22hqp")
-sources/1 = SubResource("TileSetAtlasSource_wk6yp")
-sources/2 = SubResource("TileSetAtlasSource_b3ant")
-sources/3 = SubResource("TileSetAtlasSource_javdj")
-sources/5 = SubResource("TileSetAtlasSource_sut0v")
-sources/8 = SubResource("TileSetAtlasSource_iyy72")
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3raxn"]
-texture = ExtResource("7_4tnl0")
-0:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_stpkj"]
-sources/0 = SubResource("TileSetAtlasSource_3raxn")
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_suhdn"]
-texture = ExtResource("8_q7rso")
-0:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_g7h67"]
-sources/0 = SubResource("TileSetAtlasSource_suhdn")
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3rvqi"]
-texture = ExtResource("9_c5een")
-0:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_6ucw2"]
-sources/0 = SubResource("TileSetAtlasSource_3rvqi")
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8hmm2"]
-texture = ExtResource("10_kws0x")
-0:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_2tbpx"]
-sources/0 = SubResource("TileSetAtlasSource_8hmm2")
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g7h67"]
-texture = ExtResource("11_stcsy")
-0:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_3rvqi"]
-sources/0 = SubResource("TileSetAtlasSource_g7h67")
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6ucw2"]
-texture = ExtResource("12_g681v")
-0:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_8hmm2"]
-sources/0 = SubResource("TileSetAtlasSource_6ucw2")
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2tbpx"]
-texture = ExtResource("13_4aldt")
-0:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_i6qka"]
-sources/0 = SubResource("TileSetAtlasSource_2tbpx")
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3cxf5"]
-texture = ExtResource("14_3raxn")
-0:0/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_l3gif"]
-sources/0 = SubResource("TileSetAtlasSource_3cxf5")
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_4tnl0"]
+gradient = SubResource("Gradient_3jqqa")
 
 [node name="BedDouble" type="Node2D" unique_id=393608142]
 script = ExtResource("1_g681v")
 
-[node name="Landscape" type="TileMapLayer" parent="." unique_id=355467585]
-visible = false
+[node name="Landscape" type="Node2D" parent="." unique_id=272879892]
 
-[node name="Ground" type="TileMapLayer" parent="Landscape" unique_id=121111963]
-tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAADAAAAAQAAAAAAAAAAAAEAAgAAAAAAAAADAAEAAwAAAAAAAAABAAAABQAAAAAAAAACAAAABQAAAAAAAAABAAEABAAAAAAAAAACAAEABAAAAAAAAAA=")
-tile_set = SubResource("TileSet_lur8e")
+[node name="Ground" type="Node2D" parent="Landscape" unique_id=445309638]
 
-[node name="Floor" type="Polygon2D" parent="Landscape/Ground" unique_id=310004161]
-color = Color(0.003921569, 0.30980393, 0.5254902, 1)
-polygon = PackedVector2Array(2, 2, 2, 30, 62, 30, 62, 2)
-uv = PackedVector2Array(-176, -47.999996, -176, -16, -120, -16, -120, -47.999996)
+[node name="BaseFloor" type="Sprite2D" parent="Landscape/Ground" unique_id=980754525]
+position = Vector2(32, 16)
+scale = Vector2(0.25, 32)
+texture = SubResource("GradientTexture1D_pdcbc")
 
-[node name="Door" type="TileMapLayer" parent="Landscape" unique_id=477237860]
+[node name="WallLeft" type="Sprite2D" parent="Landscape/Ground" unique_id=1458085534]
+position = Vector2(1, 16)
+rotation = 3.1415927
+scale = Vector2(0.008, 30)
+texture = SubResource("GradientTexture1D_djd5q")
 
-[node name="LeftTop" type="TileMapLayer" parent="Landscape/Door" unique_id=831541926]
-tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_n2ypb")
+[node name="WallRight" type="Sprite2D" parent="Landscape/Ground" unique_id=1604598084]
+position = Vector2(63, 16)
+scale = Vector2(0.007887039, 30)
+skew = -0.00032782555
+texture = SubResource("GradientTexture1D_mcun7")
 
-[node name="LeftBottom" type="TileMapLayer" parent="Landscape/Door" unique_id=468592211]
-tile_map_data = PackedByteArray("AAAAAAEAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_stcsy")
+[node name="WallTop" type="Sprite2D" parent="Landscape/Ground" unique_id=1935484222]
+position = Vector2(32, 1)
+rotation = 4.712389
+scale = Vector2(0.008, 62)
+texture = SubResource("GradientTexture1D_3jqqa")
 
-[node name="TopLeft" type="TileMapLayer" parent="Landscape/Door" unique_id=1972889787]
-tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_g681v")
+[node name="WallBottom" type="Sprite2D" parent="Landscape/Ground" unique_id=34248839]
+position = Vector2(32, 31.000002)
+rotation = 1.5707964
+scale = Vector2(0.008, 62)
+texture = SubResource("GradientTexture1D_elac5")
 
-[node name="BottomLeft" type="TileMapLayer" parent="Landscape/Door" unique_id=869960849]
-tile_map_data = PackedByteArray("AAAAAAEAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_3raxn")
+[node name="Interior" type="Node2D" parent="Landscape" unique_id=343101699]
 
-[node name="TopRight" type="TileMapLayer" parent="Landscape/Door" unique_id=1844035738]
-tile_map_data = PackedByteArray("AAADAAAAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_22hqp")
+[node name="Floor" type="Sprite2D" parent="Landscape/Interior" unique_id=413487138]
+position = Vector2(32, 16)
+scale = Vector2(0.234375, 28)
+texture = SubResource("GradientTexture1D_q7rso")
 
-[node name="RightTop" type="TileMapLayer" parent="Landscape/Door" unique_id=695264125]
-tile_map_data = PackedByteArray("AAADAAAAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_wk6yp")
-
-[node name="RightBottom" type="TileMapLayer" parent="Landscape/Door" unique_id=1745744662]
-tile_map_data = PackedByteArray("AAADAAEAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_b3ant")
-
-[node name="BottomRight" type="TileMapLayer" parent="Landscape/Door" unique_id=484513621]
-tile_map_data = PackedByteArray("AAADAAEAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_javdj")
+[node name="Furniture" type="Node2D" parent="Landscape/Interior" unique_id=1433087066]
 
 [node name="Portrait" type="TileMapLayer" parent="." unique_id=1619843191]
 
-[node name="Ground" type="TileMapLayer" parent="Portrait" unique_id=1719395984]
-tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAAABAAEABQAAAAAAAAABAAIABQAAAAAAAAABAAMAAwAAAAAAAAAAAAMAAgAAAAAAAAAAAAIACAAAAAAAAAAAAAEACAAAAAAAAAA=")
-tile_set = SubResource("TileSet_suhdn")
+[node name="Ground" type="Node2D" parent="Portrait" unique_id=255117826]
 
-[node name="Floor" type="Polygon2D" parent="Portrait/Ground" unique_id=760883337]
-color = Color(0.003921569, 0.30980393, 0.5254902, 1)
-polygon = PackedVector2Array(2, 2, 2, 62, 30, 62, 30, 2)
-uv = PackedVector2Array(-80, -16, -80, 16, 0, 16, 0, -24)
+[node name="BaseFloor" type="Sprite2D" parent="Portrait/Ground" unique_id=449114326]
+position = Vector2(16, 32)
+scale = Vector2(0.125, 64)
+texture = SubResource("GradientTexture1D_c5een")
 
-[node name="Door" type="TileMapLayer" parent="Portrait" unique_id=1430755512]
+[node name="WallLeft" type="Sprite2D" parent="Portrait/Ground" unique_id=1018073334]
+position = Vector2(1, 32)
+rotation = 3.1415927
+scale = Vector2(0.008, 62)
+skew = -4.4822693e-05
+texture = SubResource("GradientTexture1D_lur8e")
 
-[node name="LeftTop" type="TileMapLayer" parent="Portrait/Door" unique_id=1794445915]
-tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_stpkj")
+[node name="WallRight" type="Sprite2D" parent="Portrait/Ground" unique_id=15992754]
+position = Vector2(31, 32)
+scale = Vector2(0.008, 62)
+skew = -0.00032782555
+texture = SubResource("GradientTexture1D_kws0x")
 
-[node name="LeftBottom" type="TileMapLayer" parent="Portrait/Door" unique_id=575006546]
-tile_map_data = PackedByteArray("AAAAAAMAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_g7h67")
+[node name="WallTop" type="Sprite2D" parent="Portrait/Ground" unique_id=2061692754]
+position = Vector2(16, 1)
+rotation = 4.712389
+scale = Vector2(0.008, 30)
+texture = SubResource("GradientTexture1D_n2ypb")
 
-[node name="TopLeft" type="TileMapLayer" parent="Portrait/Door" unique_id=1779649687]
-tile_map_data = PackedByteArray("AAAAAAAAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_6ucw2")
+[node name="WallBottom" type="Sprite2D" parent="Portrait/Ground" unique_id=1070361006]
+position = Vector2(16, 63)
+rotation = 1.5707964
+scale = Vector2(0.008, 30)
+texture = SubResource("GradientTexture1D_stcsy")
 
-[node name="BottomLeft" type="TileMapLayer" parent="Portrait/Door" unique_id=83154534]
-tile_map_data = PackedByteArray("AAAAAAMAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_2tbpx")
+[node name="Interior" type="Node2D" parent="Portrait" unique_id=1756728371]
 
-[node name="TopRight" type="TileMapLayer" parent="Portrait/Door" unique_id=635874725]
-tile_map_data = PackedByteArray("AAABAAAAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_3rvqi")
+[node name="Floor" type="Sprite2D" parent="Portrait/Interior" unique_id=183976298]
+position = Vector2(16, 32)
+scale = Vector2(0.10937501, 60)
+texture = SubResource("GradientTexture1D_xpyy5")
 
-[node name="RightTop" type="TileMapLayer" parent="Portrait/Door" unique_id=1817889773]
-tile_map_data = PackedByteArray("AAABAAAAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_8hmm2")
+[node name="Furniture" type="Node2D" parent="Portrait/Interior" unique_id=196761714]
 
-[node name="RightBottom" type="TileMapLayer" parent="Portrait/Door" unique_id=1055779003]
-tile_map_data = PackedByteArray("AAABAAMAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_i6qka")
-
-[node name="BottomRight" type="TileMapLayer" parent="Portrait/Door" unique_id=1334975370]
-tile_map_data = PackedByteArray("AAABAAMAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_l3gif")
+[node name="Door" type="Sprite2D" parent="." unique_id=1595754863]
+position = Vector2(1, 8)
+rotation = 3.1415927
+scale = Vector2(0.008, 5.109)
+texture = SubResource("GradientTexture1D_4tnl0")

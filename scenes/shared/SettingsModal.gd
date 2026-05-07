@@ -430,8 +430,8 @@ func _make_hud_side_row() -> HBoxContainer:
 	lbl.add_theme_color_override("font_color", Color(0.85, 0.85, 0.85))
 	hbox.add_child(lbl)
 
-	var labels := [GameState.T("settings.ui.hud_side.left"), GameState.T("settings.ui.hud_side.right")]
-	var values := ["left", "right"]
+	var labels := [GameState.T("settings.ui.hud_side.left"), GameState.T("settings.ui.hud_side.center"), GameState.T("settings.ui.hud_side.right")]
+	var values := ["left", "center", "right"]
 
 	var btn_row := HBoxContainer.new()
 	btn_row.add_theme_constant_override("separation", 8)
@@ -441,7 +441,7 @@ func _make_hud_side_row() -> HBoxContainer:
 	for i in labels.size():
 		var btn := Button.new()
 		btn.text = labels[i]
-		btn.custom_minimum_size = Vector2(110, 36)
+		btn.custom_minimum_size = Vector2(80, 36)
 		btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 		btns.append(btn)

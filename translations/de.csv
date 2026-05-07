@@ -533,6 +533,7 @@
 "settings.ui.toast.bottom","Unten",""
 "settings.ui.hud_side","Menüleiste Position",""
 "settings.ui.hud_side.left","Links",""
+"settings.ui.hud_side.center","Mitte",""
 "settings.ui.hud_side.right","Rechts",""
 "settings.controls.coming_soon","Tastenbelegung – kommt in einer der nächsten Versionen.",""
 "dashboard.delete_hotel.title","Hotel löschen?",""

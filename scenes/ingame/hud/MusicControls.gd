@@ -36,7 +36,7 @@ func _reposition() -> void:
 		_hbox.offset_right    = MARGIN + WIDTH
 		_hbox.grow_horizontal = Control.GROW_DIRECTION_END
 	else:
-		# HUD links (default) → Audio-Controls unten rechts
+		# HUD links oder Mitte → Audio-Controls unten rechts
 		_hbox.anchor_left     = 1.0
 		_hbox.anchor_right    = 1.0
 		_hbox.offset_left     = -(MARGIN + WIDTH)

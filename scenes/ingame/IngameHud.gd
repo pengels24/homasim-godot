@@ -50,9 +50,9 @@ var _mode_icon_center:      Label
 var _mode_icon_back:        TextureRect
 var _bottom_buttons:        Array[Button]     = []
 var _active_btn_idx:  int               = -1
-var _bb_sb_normal:    StyleBoxFlat
-var _bb_sb_hover:     StyleBoxFlat
-var _bb_sb_active:    StyleBoxFlat
+var _bb_sb_normal:    StyleBox
+var _bb_sb_hover:     StyleBox
+var _bb_sb_active:    StyleBox
 var _tooltip_panel:   PanelContainer
 var _tooltip_lbl:     Label
 var _bb_btn_defs:     Array[Dictionary] = []
@@ -297,9 +297,26 @@ func _build_bottom_bar() -> void:
 		{"icon": "★", "icon_path": "res://assets/icons/ic_techtree.svg",   "label": GameState.T("ingame.btn.research"),   "key": "F6",    "locked": true,  "dot_color": Color.TRANSPARENT},
 	]
 
-	_bb_sb_normal = _make_btn_stylebox(Color(0.06, 0.10, 0.18, 0.90), Color(0.20, 0.24, 0.35, 0.55))
-	_bb_sb_hover  = _make_btn_stylebox(Color(0.10, 0.16, 0.26, 0.96), Color(0.918, 0.702, 0.031, 0.70))
-	_bb_sb_active = _make_btn_stylebox(Color(0.22, 0.16, 0.02, 1.0),  Color(0.918, 0.702, 0.031, 1.0))
+	var btn_tex := load("res://assets/UI/hud_button_round.aseprite") as Texture2D
+	if btn_tex != null:
+		var sb_base := StyleBoxTexture.new()
+		sb_base.texture              = btn_tex
+		sb_base.expand_margin_left   = 4.0
+		sb_base.expand_margin_right  = 5.0
+		sb_base.expand_margin_top    = 3.0
+		sb_base.expand_margin_bottom = 3.0
+		_bb_sb_normal = sb_base
+		var sb_h := sb_base.duplicate() as StyleBoxTexture
+		sb_h.modulate_color = Color(1.2, 1.2, 1.35)
+		_bb_sb_hover  = sb_h
+		var sb_a := sb_base.duplicate() as StyleBoxTexture
+		sb_a.modulate_color = Color(1.4, 1.05, 0.35)
+		_bb_sb_active = sb_a
+	else:
+		# Fallback StyleBoxFlat
+		_bb_sb_normal = _make_btn_stylebox(Color(0.06, 0.10, 0.18, 0.90), Color(0.20, 0.24, 0.35, 0.55))
+		_bb_sb_hover  = _make_btn_stylebox(Color(0.10, 0.16, 0.26, 0.96), Color(0.918, 0.702, 0.031, 0.70))
+		_bb_sb_active = _make_btn_stylebox(Color(0.22, 0.16, 0.02, 1.0),  Color(0.918, 0.702, 0.031, 1.0))
 
 	var btn_count := _bb_btn_defs.size()
 	_bar_w = BB_PADDING_X * 2.0 + btn_count * BB_BTN_SIZE + (btn_count - 1) * BB_BTN_GAP
@@ -307,22 +324,34 @@ func _build_bottom_bar() -> void:
 	_apply_bar_anchor()
 
 	# Hintergrund
-	var sb_bg := StyleBoxFlat.new()
-	sb_bg.bg_color                   = Color(0.03, 0.06, 0.12, 0.93)
-	sb_bg.corner_radius_top_left     = 12
-	sb_bg.corner_radius_top_right    = 12
-	sb_bg.corner_radius_bottom_left  = 6
-	sb_bg.corner_radius_bottom_right = 6
-	sb_bg.border_width_top           = 1
-	sb_bg.border_width_left          = 1
-	sb_bg.border_width_right         = 1
-	sb_bg.border_width_bottom        = 1
-	sb_bg.border_color               = Color(0.918, 0.702, 0.031, 0.38)
-	var bg_panel := Panel.new()
-	bg_panel.add_theme_stylebox_override("panel", sb_bg)
-	bg_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	bg_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_bottom_anchor.add_child(bg_panel)
+	var bar_tex := load("res://assets/UI/hud_bottom.aseprite") as Texture2D
+	if bar_tex != null:
+		var bg := NinePatchRect.new()
+		bg.texture              = bar_tex
+		bg.patch_margin_left   = 15
+		bg.patch_margin_right  = 15
+		bg.patch_margin_top    = 15
+		bg.patch_margin_bottom = 15
+		bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_bottom_anchor.add_child(bg)
+	else:
+		var sb_bg := StyleBoxFlat.new()
+		sb_bg.bg_color                   = Color(0.03, 0.06, 0.12, 0.93)
+		sb_bg.corner_radius_top_left     = 12
+		sb_bg.corner_radius_top_right    = 12
+		sb_bg.corner_radius_bottom_left  = 6
+		sb_bg.corner_radius_bottom_right = 6
+		sb_bg.border_width_top           = 1
+		sb_bg.border_width_left          = 1
+		sb_bg.border_width_right         = 1
+		sb_bg.border_width_bottom        = 1
+		sb_bg.border_color               = Color(0.918, 0.702, 0.031, 0.38)
+		var bg_panel := Panel.new()
+		bg_panel.add_theme_stylebox_override("panel", sb_bg)
+		bg_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		bg_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_bottom_anchor.add_child(bg_panel)
 
 	# Buttons horizontal
 	for i in btn_count:
@@ -347,31 +376,43 @@ func _build_bottom_bar() -> void:
 func _apply_bar_anchor() -> void:
 	_bottom_anchor.anchor_top    = 1.0
 	_bottom_anchor.anchor_bottom = 1.0
-	if SettingsManager.hud_side == "right":
-		_bottom_anchor.anchor_left  = 1.0
-		_bottom_anchor.anchor_right = 1.0
-		_bottom_anchor.offset_left  = -(BB_MARGIN + _bar_w)
-		_bottom_anchor.offset_right = -BB_MARGIN
-	else:
-		_bottom_anchor.anchor_left  = 0.0
-		_bottom_anchor.anchor_right = 0.0
-		_bottom_anchor.offset_left  = BB_MARGIN
-		_bottom_anchor.offset_right = BB_MARGIN + _bar_w
+	match SettingsManager.hud_side:
+		"right":
+			_bottom_anchor.anchor_left  = 1.0
+			_bottom_anchor.anchor_right = 1.0
+			_bottom_anchor.offset_left  = -(BB_MARGIN + _bar_w)
+			_bottom_anchor.offset_right = -BB_MARGIN
+		"center":
+			_bottom_anchor.anchor_left  = 0.5
+			_bottom_anchor.anchor_right = 0.5
+			_bottom_anchor.offset_left  = -_bar_w * 0.5
+			_bottom_anchor.offset_right =  _bar_w * 0.5
+		_: # left
+			_bottom_anchor.anchor_left  = 0.0
+			_bottom_anchor.anchor_right = 0.0
+			_bottom_anchor.offset_left  = BB_MARGIN
+			_bottom_anchor.offset_right = BB_MARGIN + _bar_w
 	_bottom_anchor.offset_top    = -(BB_MARGIN + _bar_h)
 	_bottom_anchor.offset_bottom = -BB_MARGIN
 	# ContextBar direkt über der Bar positionieren
 	_context_bar.anchor_top    = 1.0
 	_context_bar.anchor_bottom = 1.0
-	if SettingsManager.hud_side == "right":
-		_context_bar.anchor_left  = 1.0
-		_context_bar.anchor_right = 1.0
-		_context_bar.offset_left  = -(BB_MARGIN + _bar_w)
-		_context_bar.offset_right = -BB_MARGIN
-	else:
-		_context_bar.anchor_left  = 0.0
-		_context_bar.anchor_right = 0.0
-		_context_bar.offset_left  = BB_MARGIN
-		_context_bar.offset_right = BB_MARGIN + _bar_w
+	match SettingsManager.hud_side:
+		"right":
+			_context_bar.anchor_left  = 1.0
+			_context_bar.anchor_right = 1.0
+			_context_bar.offset_left  = -(BB_MARGIN + _bar_w)
+			_context_bar.offset_right = -BB_MARGIN
+		"center":
+			_context_bar.anchor_left  = 0.5
+			_context_bar.anchor_right = 0.5
+			_context_bar.offset_left  = -_bar_w * 0.5
+			_context_bar.offset_right =  _bar_w * 0.5
+		_: # left
+			_context_bar.anchor_left  = 0.0
+			_context_bar.anchor_right = 0.0
+			_context_bar.offset_left  = BB_MARGIN
+			_context_bar.offset_right = BB_MARGIN + _bar_w
 	_context_bar.offset_bottom = -(BB_MARGIN + _bar_h + 6.0)
 	_context_bar.offset_top    = _context_bar.offset_bottom - 32.0
 
@@ -381,7 +422,13 @@ func _position_mode_btn() -> void:
 		return
 	var vw := float(get_viewport().get_visible_rect().size.x)
 	var vh := float(get_viewport().get_visible_rect().size.y)
-	_fan_mode_btn.position = Vector2((vw - BB_BTN_SIZE) * 0.5, vh - BB_MARGIN - BB_BTN_SIZE)
+	var btn_y := vh - BB_MARGIN - BB_BTN_SIZE
+	if SettingsManager.hud_side == "center":
+		# Bar mittig → Sprung-Button in die freie linke Ecke
+		_fan_mode_btn.position = Vector2(BB_MARGIN, btn_y)
+	else:
+		# Bar links oder rechts → Sprung-Button bleibt unten-mitte
+		_fan_mode_btn.position = Vector2((vw - BB_BTN_SIZE) * 0.5, btn_y)
 
 
 func _build_tooltip() -> void:

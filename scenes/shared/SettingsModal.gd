@@ -225,6 +225,9 @@ func _build_oberflaeche_tab() -> void:
 	panel.add_child(_make_separator())
 	panel.add_child(_make_toast_position_row())
 
+	panel.add_child(_make_separator())
+	panel.add_child(_make_hud_side_row())
+
 
 # ── Steuerung-Tab (Platzhalter) ───────────────────────────────────────────────
 
@@ -415,6 +418,51 @@ func _style_pos_btn(btn: Button, active: bool) -> void:
 	btn.add_theme_font_size_override("font_size", 14)
 
 
+## Button-Gruppe für HUD-Seite (Links / Rechts).
+func _make_hud_side_row() -> HBoxContainer:
+	var hbox := HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 20)
+
+	var lbl := Label.new()
+	lbl.text = GameState.T("settings.ui.hud_side")
+	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lbl.add_theme_font_size_override("font_size", 16)
+	lbl.add_theme_color_override("font_color", Color(0.85, 0.85, 0.85))
+	hbox.add_child(lbl)
+
+	var labels := [GameState.T("settings.ui.hud_side.left"), GameState.T("settings.ui.hud_side.right")]
+	var values := ["left", "right"]
+
+	var btn_row := HBoxContainer.new()
+	btn_row.add_theme_constant_override("separation", 8)
+	hbox.add_child(btn_row)
+
+	var btns: Array[Button] = []
+	for i in labels.size():
+		var btn := Button.new()
+		btn.text = labels[i]
+		btn.custom_minimum_size = Vector2(110, 36)
+		btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+		btns.append(btn)
+		btn_row.add_child(btn)
+
+	var refresh := func() -> void:
+		for i in btns.size():
+			_style_pos_btn(btns[i], values[i] == SettingsManager.hud_side)
+
+	for i in values.size():
+		var val: String = values[i]
+		btns[i].pressed.connect(func() -> void:
+			SettingsManager.hud_side = val
+			SettingsManager.hud_side_changed.emit()
+			refresh.call()
+		)
+
+	refresh.call()
+	return hbox
+
+
 func _make_separator() -> HSeparator:
 	var sep := HSeparator.new()
 	sep.modulate = Color(1, 1, 1, 0.08)
@@ -478,6 +526,7 @@ func _take_snapshot() -> Dictionary:
 		"sound_volume":              SettingsManager.sound_volume,
 		"ui_scale":                  SettingsManager.ui_scale,
 		"toast_position":            SettingsManager.toast_position,
+		"hud_side":                  SettingsManager.hud_side,
 	}
 
 

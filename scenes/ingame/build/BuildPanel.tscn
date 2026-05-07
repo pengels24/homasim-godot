@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://c8vp3m4n2j7x1"]
+
+[ext_resource type="Script" path="res://scenes/ingame/build/BuildPanel.gd" id="1_panel"]
+
+[node name="BuildPanel" type="PanelContainer"]
+script = ExtResource("1_panel")
+
+[node name="Margin" type="MarginContainer" parent="."]
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="./Margin"]
+theme_override_constants/separation = 8
+
+[node name="CategoryTabs" type="HBoxContainer" parent="./Margin/VBox"]
+theme_override_constants/separation = 6
+
+[node name="Separator" type="HSeparator" parent="./Margin/VBox"]
+
+[node name="ItemGrid" type="GridContainer" parent="./Margin/VBox"]
+columns = 5
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6

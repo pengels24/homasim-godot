@@ -3,8 +3,8 @@ class_name IngameBuild
 ## ANG-170 – BuildMenu + BuildCursor Koordination, BottomBar-Button-Handler.
 ## Erhält alle nötigen Node-Referenzen via configure(). Keine @onready.
 
-const BUILD_MENU_SCENE   := preload("res://scenes/ingame/build/BuildMenu.tscn")
-const BUILD_MENU_SCRIPT  := preload("res://scenes/ingame/build/BuildMenu.gd")
+const BUILD_PANEL_SCENE  := preload("res://scenes/ingame/build/BuildPanel.tscn")
+const BUILD_PANEL_SCRIPT := preload("res://scenes/ingame/build/BuildPanel.gd")
 
 const SCENE_PATHS: Dictionary = {
 	"bed_standard": "res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn",
@@ -16,9 +16,8 @@ var _map_grid:           Node2D
 var _hud:                IngameHud
 var _hud_canvas:         CanvasLayer
 
-var _build_menu:          CanvasLayer
-var _last_build_category: String = ""
-var _build_cursor:        Node2D
+var _build_panel:  PanelContainer
+var _build_cursor: Node2D
 var _active_submenu:      PanelContainer
 var _active_submenu_idx:  int = -1
 
@@ -34,7 +33,7 @@ func configure(hotel: Dictionary, map_grid: Node2D, hud: IngameHud, hud_canvas: 
 
 func on_button_pressed(idx: int) -> void:
 	if idx == 0:
-		_toggle_build_menu()
+		_toggle_build_panel()
 		return
 
 	if _active_submenu != null:
@@ -57,13 +56,10 @@ func close_all() -> bool:
 	if is_instance_valid(_build_cursor):
 		_build_cursor.queue_free()
 		_build_cursor = null
-		_hud.show_context_bar(false)
 		_hud.set_btn_active(-1)
 		return true
-	if is_instance_valid(_build_menu):
-		_build_menu.queue_free()
-		_build_menu = null
-		_hud.set_btn_active(-1)
+	if is_instance_valid(_build_panel):
+		_close_build_panel_animated()
 		return true
 	if _active_submenu != null:
 		_active_submenu.queue_free()
@@ -74,24 +70,64 @@ func close_all() -> bool:
 	return false
 
 
-# ── BuildMenu ─────────────────────────────────────────────────────────────────
+# ── BuildPanel ────────────────────────────────────────────────────────────────
 
-func _toggle_build_menu() -> void:
-	if is_instance_valid(_build_menu):
-		_build_menu.queue_free()
-		_build_menu = null
-		_hud.set_btn_active(-1)
+func _toggle_build_panel() -> void:
+	if is_instance_valid(_build_panel):
+		_close_build_panel_animated()
 		return
 	_hud.set_btn_active(0)
-	_build_menu = BUILD_MENU_SCENE.instantiate()
-	_build_menu.initial_category = _last_build_category
-	_build_menu.room_selected.connect(_on_build_room_selected)
-	_build_menu.category_changed.connect(func(cat: String) -> void: _last_build_category = cat)
-	_build_menu.tree_exited.connect(func() -> void:
-		_build_menu = null
+	_build_panel = BUILD_PANEL_SCENE.instantiate()
+	_build_panel.room_selected.connect(_on_build_room_selected)
+	_build_panel.tree_exited.connect(func() -> void:
+		_build_panel = null
 		_hud.set_btn_active(-1)
 	)
-	get_tree().get_root().add_child(_build_menu)
+	_hud_canvas.add_child(_build_panel)
+	await get_tree().process_frame
+	_position_build_panel()
+	_animate_panel_in()
+
+
+func _position_build_panel() -> void:
+	if not is_instance_valid(_build_panel):
+		return
+	var bar_rect := _hud.get_bottom_bar_global_rect()
+	_build_panel.position = Vector2(
+		bar_rect.position.x,
+		bar_rect.position.y - _build_panel.size.y - 6.0
+	)
+
+
+func _animate_panel_in() -> void:
+	if not is_instance_valid(_build_panel):
+		return
+	var final_y := _build_panel.position.y
+	_build_panel.position.y = final_y + _build_panel.size.y + 8.0
+	_build_panel.modulate = Color(1.0, 1.0, 1.0, 0.0)
+	var tw := _build_panel.create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(_build_panel, "position:y", final_y, 0.20) \
+		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	tw.tween_property(_build_panel, "modulate:a", 1.0, 0.16) \
+		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_LINEAR)
+
+
+func _close_build_panel_animated() -> void:
+	if not is_instance_valid(_build_panel):
+		return
+	_hud.set_btn_active(-1)
+	var panel := _build_panel
+	_build_panel = null
+	var target_y := panel.position.y + panel.size.y + 8.0
+	var tw := panel.create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(panel, "position:y", target_y, 0.16) \
+		.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	tw.tween_property(panel, "modulate:a", 0.0, 0.12) \
+		.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_LINEAR)
+	tw.set_parallel(false)
+	tw.tween_callback(panel.queue_free)
 
 
 func _on_build_room_selected(room_type_id: String) -> void:
@@ -105,12 +141,13 @@ func _on_build_room_selected(room_type_id: String) -> void:
 	)
 	cursor.cancelled.connect(_on_build_cursor_done)
 	cursor.tree_exited.connect(func() -> void:
-		_build_cursor = null
-		_hud.show_context_bar(false)
+		if _build_cursor == cursor:
+			_build_cursor = null
+			_hud.show_context_bar(false)
 	)
 	_build_cursor = cursor
-	_hud.show_context_bar(true)
 	cursor.activate(_map_grid, room_type_id)
+	# Panel bleibt offen – Cursor läuft parallel
 
 
 func _on_room_placed(room_type_id: String, px: int, py: int, tx: int, ty: int, dr: int, doff: int, rrot: int, world_center: Vector2) -> void:
@@ -118,7 +155,7 @@ func _on_room_placed(room_type_id: String, px: int, py: int, tx: int, ty: int, d
 	if path == "":
 		return
 
-	var def:  Dictionary = BUILD_MENU_SCRIPT.find_definition(room_type_id)
+	var def:  Dictionary = BUILD_PANEL_SCRIPT.find_definition(room_type_id)
 	var cost: int        = def.get("build_cost", 0)
 
 	if float(cost) > _hotel.get("money", 0.0):
@@ -144,7 +181,8 @@ func _apply_build_costs(def: Dictionary, cost: int, world_center: Vector2) -> vo
 
 func _on_build_cursor_done() -> void:
 	_build_cursor = null
-	_hud.show_context_bar(false)
+	if is_instance_valid(_build_panel):
+		_build_panel.clear_active_item()
 
 
 # ── Submenü (Platzhalter) ─────────────────────────────────────────────────────
@@ -175,15 +213,10 @@ func _open_submenu(idx: int) -> void:
 	panel.add_child(lbl)
 
 	_hud_canvas.add_child(panel)
-	panel.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	panel.set_anchors_preset(Control.PRESET_CENTER)
 	await get_tree().process_frame
 	if not is_instance_valid(self) or not is_instance_valid(panel):
 		return
-	var btn := _hud.get_bottom_button(idx)
-	if not is_instance_valid(btn):
-		panel.queue_free()
-		return
-	var btn_pos  := btn.global_position
-	var btn_size := btn.size
-	panel.position = Vector2(btn_pos.x + btn_size.x + 12.0, btn_pos.y)
+	var vp := get_viewport().get_visible_rect().size
+	panel.position = (vp - panel.size) * 0.5
 	_active_submenu = panel

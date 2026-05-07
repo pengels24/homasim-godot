@@ -1,14 +1,18 @@
 extends Control
-## Musik-Steuerung im Ingame-HUD (unten rechts): Pause/Resume + Next.
+## Musik-Steuerung im Ingame-HUD: Pause/Resume + Next.
+## Position wechselt automatisch mit SettingsManager.hud_side.
 
 const COLOR_BG       := Color(0.04, 0.07, 0.13, 0.92)
 const COLOR_BG_HOVER := Color(0.10, 0.13, 0.20, 0.96)
 const COLOR_GOLD     := Color(0.918, 0.702, 0.031, 0.85)
 const COLOR_GOLD_HOV := Color(0.918, 0.702, 0.031, 1.0)
 const RADIUS         := 10
+const MARGIN         := 16.0
+const WIDTH          := 100.0   # offset_right – offset_left
 
-@onready var _btn_pause_resume: Button = $HBox/BtnPauseResume
-@onready var _btn_next:         Button = $HBox/BtnNext
+@onready var _btn_pause_resume: Button        = $HBox/BtnPauseResume
+@onready var _btn_next:         Button        = $HBox/BtnNext
+@onready var _hbox:             HBoxContainer = $HBox
 
 
 func _ready() -> void:
@@ -18,7 +22,26 @@ func _ready() -> void:
 	_btn_pause_resume.pressed.connect(_on_pause_resume)
 	_btn_next.pressed.connect(_on_next)
 	MusicManager.playback_changed.connect(_update_icon)
+	SettingsManager.hud_side_changed.connect(_reposition)
 	_update_icon()
+	_reposition()
+
+
+func _reposition() -> void:
+	if SettingsManager.hud_side == "right":
+		# HUD rechts → Audio-Controls unten links
+		_hbox.anchor_left     = 0.0
+		_hbox.anchor_right    = 0.0
+		_hbox.offset_left     = MARGIN
+		_hbox.offset_right    = MARGIN + WIDTH
+		_hbox.grow_horizontal = Control.GROW_DIRECTION_END
+	else:
+		# HUD links (default) → Audio-Controls unten rechts
+		_hbox.anchor_left     = 1.0
+		_hbox.anchor_right    = 1.0
+		_hbox.offset_left     = -(MARGIN + WIDTH)
+		_hbox.offset_right    = -MARGIN
+		_hbox.grow_horizontal = Control.GROW_DIRECTION_BEGIN
 
 
 func _on_pause_resume() -> void:

@@ -128,7 +128,7 @@ func _setup_subsystems() -> void:
 	add_child(_build)
 	_build.configure(_hotel, map_grid, _hud, hud_canvas)
 
-	_hud.bottom_button_pressed.connect(_build.on_button_pressed)
+	_hud.bottom_button_pressed.connect(_on_bottom_button_pressed)
 	_hud.view_reset_requested.connect(map_grid.reset_view)
 	map_grid.view_saved_changed.connect(_hud.set_mode_btn_saved)
 	_clock.day_ended.connect(_on_day_ended)
@@ -194,7 +194,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _handle_hotkey(keycode: int) -> void:
 	match keycode:
 		KEY_ESCAPE: _on_exit_pressed()
-		KEY_F2:     _hud.trigger_button(0)
+		KEY_F2, KEY_B: _hud.trigger_button(0)
 		KEY_F3:     _hud.trigger_button(1)
 		KEY_F4:     _hud.trigger_button(2)
 		KEY_F5:     _quick_save()
@@ -202,6 +202,14 @@ func _handle_hotkey(keycode: int) -> void:
 		KEY_F7:     _open_sim_browser()
 		KEY_F9:     _quick_load()
 		KEY_F12:    if is_instance_valid(_dev_console): _dev_console.toggle()
+		KEY_HOME:   map_grid.reset_view()
+
+
+func _on_bottom_button_pressed(idx: int) -> void:
+	match idx:
+		1: _open_sim_browser()
+		2: _open_settings()
+		_: _build.on_button_pressed(idx)
 
 
 func _on_exit_pressed() -> void:

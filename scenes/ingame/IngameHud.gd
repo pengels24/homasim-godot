@@ -15,14 +15,12 @@ const HF_XL   := 18
 const HF_TIME := 22
 const HF_LOGO := 22
 
-# ── BottomBar Fächer-Konstanten ───────────────────────────────────────────────
-const BB_RING1_RADIUS := 108.0
-const BB_RING2_RADIUS := 160.0
-const BB_RING1_COUNT  := 3
-const BB_BTN_SIZE     := 46.0
-const BB_FAN_SIZE     := 192.0
-const BB_ANGLE_MIN    := 14.0
-const BB_ANGLE_MAX    := 76.0
+# ── BottomBar Konstanten ──────────────────────────────────────────────────────
+const BB_BTN_SIZE  := 46.0
+const BB_BTN_GAP   := 8.0
+const BB_PADDING_X := 14.0
+const BB_PADDING_Y := 12.0
+const BB_MARGIN    := 8.0
 
 # ── Node-Referenzen (gesetzt via configure) ───────────────────────────────────
 var _hotel:              Dictionary
@@ -58,6 +56,8 @@ var _bb_sb_active:    StyleBoxFlat
 var _tooltip_panel:   PanelContainer
 var _tooltip_lbl:     Label
 var _bb_btn_defs:     Array[Dictionary] = []
+var _bar_w:           float = 0.0
+var _bar_h:           float = 0.0
 
 
 func configure(hotel: Dictionary, refs: Dictionary, hud_canvas: CanvasLayer) -> void:
@@ -77,7 +77,9 @@ func configure(hotel: Dictionary, refs: Dictionary, hud_canvas: CanvasLayer) -> 
 	_stat_ruf_lbl       = refs["stat_ruf_lbl"]
 	_stat_fp_val        = refs["stat_fp_val"]
 	_bottom_anchor      = refs["bottom_anchor"]
-	_context_bar        = refs["context_bar"]
+	_context_bar          = refs["context_bar"]
+	_context_bar.z_index  = 10
+	SettingsManager.hud_side_changed.connect(reposition_hud)
 	_setup_hud()
 	_build_exp_bar(0, 100)
 	_build_ruf_bar()
@@ -287,78 +289,105 @@ func _update_ruf_display(rep: int) -> void:
 func _build_bottom_bar() -> void:
 	_bb_btn_defs = [
 		{"icon": "+", "icon_path": "res://assets/icons/ic_buildmode.svg",  "label": GameState.T("ingame.btn.build"),      "key": "F2",    "locked": false, "dot_color": Color.TRANSPARENT},
-		{"icon": "★", "icon_path": "res://assets/icons/ic_browser.svg",    "label": GameState.T("ingame.btn.simbrowser"), "key": "F7",    "locked": false, "dot_color": Color(0.20, 0.78, 0.35, 1)},
+		{"icon": "★", "icon_path": "res://assets/icons/ic_browser.svg",    "label": GameState.T("ingame.btn.simbrowser"), "key": "F7",    "locked": false, "dot_color": Color(0.20, 0.78, 0.35, 1.0)},
 		{"icon": "⚙", "icon_path": "res://assets/icons/ic_settings.svg",   "label": GameState.T("ingame.btn.settings"),   "key": "ALT+S", "locked": false, "dot_color": Color.TRANSPARENT},
-		{"icon": "R", "icon_path": "res://assets/icons/ic_reception.svg",  "label": GameState.T("ingame.btn.reception"),  "key": "F3",    "locked": false, "dot_color": Color(0.20, 0.78, 0.35, 1)},
+		{"icon": "R", "icon_path": "res://assets/icons/ic_reception.svg",  "label": GameState.T("ingame.btn.reception"),  "key": "F3",    "locked": false, "dot_color": Color(0.20, 0.78, 0.35, 1.0)},
 		{"icon": "P", "icon_path": "res://assets/icons/ic_staff.svg",      "label": GameState.T("ingame.btn.staff"),      "key": "F4",    "locked": true,  "dot_color": Color.TRANSPARENT},
 		{"icon": "–", "icon_path": "",                                       "label": GameState.T("ingame.btn.empty"),      "key": "",      "locked": true,  "dot_color": Color.TRANSPARENT},
 		{"icon": "★", "icon_path": "res://assets/icons/ic_techtree.svg",   "label": GameState.T("ingame.btn.research"),   "key": "F6",    "locked": true,  "dot_color": Color.TRANSPARENT},
 	]
 
-	_bb_sb_normal = _make_fan_stylebox(Color(0.06, 0.10, 0.18, 0.90), Color(0.20, 0.24, 0.35, 0.55))
-	_bb_sb_hover  = _make_fan_stylebox(Color(0.10, 0.16, 0.26, 0.96), Color(0.918, 0.702, 0.031, 0.70))
-	_bb_sb_active = _make_fan_stylebox(Color(0.22, 0.16, 0.02, 1.0),  Color(0.918, 0.702, 0.031, 1.0))
+	_bb_sb_normal = _make_btn_stylebox(Color(0.06, 0.10, 0.18, 0.90), Color(0.20, 0.24, 0.35, 0.55))
+	_bb_sb_hover  = _make_btn_stylebox(Color(0.10, 0.16, 0.26, 0.96), Color(0.918, 0.702, 0.031, 0.70))
+	_bb_sb_active = _make_btn_stylebox(Color(0.22, 0.16, 0.02, 1.0),  Color(0.918, 0.702, 0.031, 1.0))
 
+	var btn_count := _bb_btn_defs.size()
+	_bar_w = BB_PADDING_X * 2.0 + btn_count * BB_BTN_SIZE + (btn_count - 1) * BB_BTN_GAP
+	_bar_h = BB_PADDING_Y * 2.0 + BB_BTN_SIZE
+	_apply_bar_anchor()
+
+	# Hintergrund
 	var sb_bg := StyleBoxFlat.new()
-	sb_bg.bg_color                = Color(0.03, 0.06, 0.12, 0.93)
-	sb_bg.corner_radius_top_right = 192
-	sb_bg.border_width_top        = 1
-	sb_bg.border_width_right      = 1
-	sb_bg.border_color            = Color(0.918, 0.702, 0.031, 0.38)
-	var fan_bg := Panel.new()
-	fan_bg.add_theme_stylebox_override("panel", sb_bg)
-	fan_bg.mouse_filter  = Control.MOUSE_FILTER_IGNORE
-	fan_bg.anchor_right  = 1.0
-	fan_bg.anchor_bottom = 1.0
-	_bottom_anchor.add_child(fan_bg)
+	sb_bg.bg_color                   = Color(0.03, 0.06, 0.12, 0.93)
+	sb_bg.corner_radius_top_left     = 12
+	sb_bg.corner_radius_top_right    = 12
+	sb_bg.corner_radius_bottom_left  = 6
+	sb_bg.corner_radius_bottom_right = 6
+	sb_bg.border_width_top           = 1
+	sb_bg.border_width_left          = 1
+	sb_bg.border_width_right         = 1
+	sb_bg.border_width_bottom        = 1
+	sb_bg.border_color               = Color(0.918, 0.702, 0.031, 0.38)
+	var bg_panel := Panel.new()
+	bg_panel.add_theme_stylebox_override("panel", sb_bg)
+	bg_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	bg_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_bottom_anchor.add_child(bg_panel)
 
-	var sb_gloss := StyleBoxFlat.new()
-	sb_gloss.bg_color                = Color(0.22, 0.38, 0.65, 0.045)
-	sb_gloss.corner_radius_top_right = 140
-	var gloss := Panel.new()
-	gloss.add_theme_stylebox_override("panel", sb_gloss)
-	gloss.mouse_filter  = Control.MOUSE_FILTER_IGNORE
-	gloss.anchor_right  = 1.0
-	gloss.anchor_bottom = 1.0
-	_bottom_anchor.add_child(gloss)
-
-	for sep_r: int in [75, int((BB_RING1_RADIUS + BB_RING2_RADIUS) * 0.5)]:
-		var sb_sep := StyleBoxFlat.new()
-		sb_sep.bg_color                = Color(0, 0, 0, 0)
-		sb_sep.corner_radius_top_right = sep_r
-		sb_sep.border_width_top        = 1
-		sb_sep.border_width_right      = 1
-		sb_sep.border_color            = Color(0.918, 0.702, 0.031, 0.22)
-		var ring_sep := Panel.new()
-		ring_sep.add_theme_stylebox_override("panel", sb_sep)
-		ring_sep.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		ring_sep.size         = Vector2(sep_r, sep_r)
-		ring_sep.position     = Vector2(0.0, BB_FAN_SIZE - sep_r)
-		_bottom_anchor.add_child(ring_sep)
-
-	var origin := Vector2(0.0, BB_FAN_SIZE)
-	for i in _bb_btn_defs.size():
-		var ring       := 0 if i < BB_RING1_COUNT else 1
-		var ring_idx   := i - (BB_RING1_COUNT if ring == 1 else 0)
-		var ring_total := BB_RING1_COUNT if ring == 0 else (_bb_btn_defs.size() - BB_RING1_COUNT)
-		var radius     := BB_RING1_RADIUS if ring == 0 else BB_RING2_RADIUS
-		var t          := float(ring_idx) / float(max(ring_total - 1, 1))
-		var angle_rad  := deg_to_rad(lerp(BB_ANGLE_MIN, BB_ANGLE_MAX, t))
-		var center     := origin + Vector2(cos(angle_rad) * radius, -sin(angle_rad) * radius)
-		var btn        := _make_fan_btn(i)
-		btn.position    = center - Vector2(BB_BTN_SIZE, BB_BTN_SIZE) * 0.5
+	# Buttons horizontal
+	for i in btn_count:
+		var btn := _make_bar_btn(i)
+		btn.position = Vector2(BB_PADDING_X + i * (BB_BTN_SIZE + BB_BTN_GAP), BB_PADDING_Y)
 		_bottom_anchor.add_child(btn)
 		_bottom_buttons.append(btn)
 
-	_fan_mode_btn          = _make_mode_indicator()
-	_fan_mode_btn.position = Vector2(5.0, BB_FAN_SIZE - 52.0)
-	_fan_mode_btn.pressed.connect(func(): view_reset_requested.emit())
-	_fan_mode_btn.mouse_entered.connect(func(): _show_tooltip(GameState.T("ingame.btn.reset_view")))
-	_fan_mode_btn.mouse_exited.connect(func():  _hide_tooltip())
-	_bottom_anchor.add_child(_fan_mode_btn)
+	# Tooltip (immer auf hud_canvas)
+	_build_tooltip()
 
+	# Sprung-Button: fix unten-links, unabhängig von Bar-Seite
+	_fan_mode_btn = _make_mode_indicator()
+	_fan_mode_btn.pressed.connect(func(): view_reset_requested.emit())
+	_fan_mode_btn.mouse_entered.connect(func(): _show_tooltip("HOME · " + GameState.T("ingame.btn.reset_view")))
+	_fan_mode_btn.mouse_exited.connect(func():  _hide_tooltip())
+	_hud_canvas.add_child(_fan_mode_btn)
+	await get_tree().process_frame
+	_position_mode_btn()
+
+
+func _apply_bar_anchor() -> void:
+	_bottom_anchor.anchor_top    = 1.0
+	_bottom_anchor.anchor_bottom = 1.0
+	if SettingsManager.hud_side == "right":
+		_bottom_anchor.anchor_left  = 1.0
+		_bottom_anchor.anchor_right = 1.0
+		_bottom_anchor.offset_left  = -(BB_MARGIN + _bar_w)
+		_bottom_anchor.offset_right = -BB_MARGIN
+	else:
+		_bottom_anchor.anchor_left  = 0.0
+		_bottom_anchor.anchor_right = 0.0
+		_bottom_anchor.offset_left  = BB_MARGIN
+		_bottom_anchor.offset_right = BB_MARGIN + _bar_w
+	_bottom_anchor.offset_top    = -(BB_MARGIN + _bar_h)
+	_bottom_anchor.offset_bottom = -BB_MARGIN
+	# ContextBar direkt über der Bar positionieren
+	_context_bar.anchor_top    = 1.0
+	_context_bar.anchor_bottom = 1.0
+	if SettingsManager.hud_side == "right":
+		_context_bar.anchor_left  = 1.0
+		_context_bar.anchor_right = 1.0
+		_context_bar.offset_left  = -(BB_MARGIN + _bar_w)
+		_context_bar.offset_right = -BB_MARGIN
+	else:
+		_context_bar.anchor_left  = 0.0
+		_context_bar.anchor_right = 0.0
+		_context_bar.offset_left  = BB_MARGIN
+		_context_bar.offset_right = BB_MARGIN + _bar_w
+	_context_bar.offset_bottom = -(BB_MARGIN + _bar_h + 6.0)
+	_context_bar.offset_top    = _context_bar.offset_bottom - 32.0
+
+
+func _position_mode_btn() -> void:
+	if not is_instance_valid(_fan_mode_btn):
+		return
+	var vw := float(get_viewport().get_visible_rect().size.x)
+	var vh := float(get_viewport().get_visible_rect().size.y)
+	_fan_mode_btn.position = Vector2((vw - BB_BTN_SIZE) * 0.5, vh - BB_MARGIN - BB_BTN_SIZE)
+
+
+func _build_tooltip() -> void:
 	_tooltip_panel = PanelContainer.new()
 	_tooltip_panel.visible = false
+	_tooltip_panel.z_index = 100
 	var sb_tip := StyleBoxFlat.new()
 	sb_tip.bg_color                   = Color(0.04, 0.06, 0.10, 0.96)
 	sb_tip.corner_radius_top_left     = 6
@@ -375,12 +404,23 @@ func _build_bottom_bar() -> void:
 	_tooltip_lbl = Label.new()
 	_tooltip_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_tooltip_lbl.add_theme_font_size_override("font_size", 14)
-	_tooltip_lbl.add_theme_color_override("font_color", Color(0.85, 0.85, 0.85, 1))
+	_tooltip_lbl.add_theme_color_override("font_color", Color(0.85, 0.85, 0.85, 1.0))
 	_tooltip_panel.add_child(_tooltip_lbl)
 	_hud_canvas.add_child(_tooltip_panel)
 
 
-func _make_fan_stylebox(bg: Color, border: Color) -> StyleBoxFlat:
+## Gibt die globale Rect der BottomBar zurück (für BuildPanel-Positionierung).
+func get_bottom_bar_global_rect() -> Rect2:
+	return Rect2(_bottom_anchor.global_position, _bottom_anchor.size)
+
+
+## Repositioniert Bar + Sprung-Button nach Seitenwechsel in den Settings.
+func reposition_hud() -> void:
+	_apply_bar_anchor()
+	_position_mode_btn()
+
+
+func _make_btn_stylebox(bg: Color, border: Color) -> StyleBoxFlat:
 	var sb := StyleBoxFlat.new()
 	sb.bg_color                   = bg
 	sb.corner_radius_top_left     = 23
@@ -398,7 +438,7 @@ func _make_fan_stylebox(bg: Color, border: Color) -> StyleBoxFlat:
 	return sb
 
 
-func _make_fan_btn(idx: int) -> Button:
+func _make_bar_btn(idx: int) -> Button:
 	var def := _bb_btn_defs[idx]
 
 	var btn := Button.new()
@@ -530,10 +570,10 @@ func _show_tooltip(text: String) -> void:
 	await get_tree().process_frame
 	if not is_instance_valid(self) or not is_instance_valid(_tooltip_panel) or not _tooltip_panel.visible:
 		return
-	var vh := float(get_viewport().get_visible_rect().size.y)
+	var bar_rect := _bottom_anchor.get_global_rect()
 	_tooltip_panel.position = Vector2(
-		10.0,
-		vh - BB_FAN_SIZE - _tooltip_panel.size.y - 12.0
+		bar_rect.position.x + 10.0,
+		bar_rect.position.y - _tooltip_panel.size.y - 8.0
 	)
 	_tooltip_panel.modulate = Color(1, 1, 1, 1)
 

@@ -133,7 +133,7 @@ func _process(_delta: float) -> void:
 
 # ── Input ─────────────────────────────────────────────────────────────────────
 
-func _input(event: InputEvent) -> void:
+func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		var mb := event as InputEventMouseButton
 		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT:
@@ -207,6 +207,9 @@ func _try_place() -> void:
 	var mouse_local := (get_parent() as Node2D).to_local(get_global_mouse_position())
 	var min_x := float(WALK_PX + _current_parcel.x * PARCEL_PX)
 	var min_y := float(WALK_PX + _current_parcel.y * PARCEL_PX)
+	if mouse_local.x < min_x or mouse_local.x > min_x + PARCEL_PX or \
+			mouse_local.y < min_y or mouse_local.y > min_y + PARCEL_PX:
+		return
 	var room_w_px := _room_w * TILE_PX
 	var room_h_px := _room_h * TILE_PX
 	var sx := clampf(snappedf(mouse_local.x - room_w_px / 2.0, float(TILE_PX)), min_x, min_x + float(PARCEL_PX - room_w_px))

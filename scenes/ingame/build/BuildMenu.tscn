@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://buildmenu001"]
-
-[ext_resource type="Script" path="res://scenes/ingame/build/BuildMenu.gd" id="1_script"]
-
-[node name="BuildMenu" type="CanvasLayer"]
-script = ExtResource("1_script")

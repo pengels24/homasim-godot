@@ -1,6 +1,8 @@
 extends Node
 ## Persistente Spieleinstellungen via ConfigFile (user://settings.cfg).
 
+signal hud_side_changed
+
 const SETTINGS_PATH := "user://settings.cfg"
 
 # ── Gameplay ──────────────────────────────────────────────────────────────────
@@ -18,6 +20,7 @@ var sound_volume:      float = 0.5  # 0.0 – 1.0
 # ── Oberfläche ────────────────────────────────────────────────────────────────
 var ui_scale:       float  = 1.0       # 0.75 / 1.0 / 1.25 / 1.5
 var toast_position: String = "bottom"  # "top" / "middle" / "bottom"
+var hud_side:       String = "left"    # "left" / "right"
 
 # ── Session ───────────────────────────────────────────────────────────────────
 var last_profile_id: int = -1   # Zuletzt gewählter Manager – für Auto-Restore
@@ -45,6 +48,7 @@ func save() -> void:
 	cfg.set_value("audio",    "sound_volume",              sound_volume)
 	cfg.set_value("ui",       "scale",          ui_scale)
 	cfg.set_value("ui",       "toast_position", toast_position)
+	cfg.set_value("ui",       "hud_side",       hud_side)
 	cfg.set_value("session",  "last_profile_id",           last_profile_id)
 	cfg.save(SETTINGS_PATH)
 	_apply_audio()
@@ -70,6 +74,7 @@ func _load() -> void:
 	sound_volume              = cfg.get_value("audio",    "sound_volume",              sound_volume)
 	ui_scale                  = cfg.get_value("ui",       "scale",          ui_scale)
 	toast_position            = cfg.get_value("ui",       "toast_position", toast_position)
+	hud_side                  = cfg.get_value("ui",       "hud_side",       hud_side)
 	last_profile_id           = cfg.get_value("session",  "last_profile_id",           last_profile_id)
 
 

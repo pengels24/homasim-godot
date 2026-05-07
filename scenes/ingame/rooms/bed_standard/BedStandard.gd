@@ -22,26 +22,9 @@ func _ready() -> void:
 	room_type_id = "bed_standard"
 
 
-func get_valid_door_combos() -> Array[Vector2i]:
-	# EZ hat nur eine Tür-Wand: links. R rotiert den ganzen Raum (inkl. Tür-Wand).
-	# . darf daher nur zwischen den zwei Positionen auf der linken Wand wechseln.
-	return [Vector2i(0, 0), Vector2i(0, 1)]
-
-
-# ── Visuals ───────────────────────────────────────────────────────────────────
-
-# Tür-Positionen: (door_rotation, door_offset) → Position + Rotation des Door-Sprites.
-# Alle Koordinaten in lokalen Pixel innerhalb des 32×32px Raumes.
-const DOOR_CONFIGS: Dictionary = {
-	Vector2i(0, 0): {"pos": Vector2(1,  8),  "rot": PI},         # Links oben
-	Vector2i(0, 1): {"pos": Vector2(1,  24), "rot": PI},         # Links unten
-	Vector2i(1, 0): {"pos": Vector2(8,  1),  "rot": -PI / 2.0},  # Oben links
-	Vector2i(1, 1): {"pos": Vector2(24, 1),  "rot": -PI / 2.0},  # Oben rechts
-	Vector2i(2, 0): {"pos": Vector2(31, 8),  "rot": 0.0},        # Rechts oben
-	Vector2i(2, 1): {"pos": Vector2(31, 24), "rot": 0.0},        # Rechts unten
-	Vector2i(3, 0): {"pos": Vector2(8,  31), "rot": PI / 2.0},   # Unten links
-	Vector2i(3, 1): {"pos": Vector2(24, 31), "rot": PI / 2.0},   # Unten rechts
-}
+# EZ: Tür nur auf der linken Wand, L1 (unten) und L2 (oben).
+func get_valid_door_slots() -> Array[String]:
+	return ["L1", "L2"]
 
 # Interior-Transform je Tür-Wand: Raum rotiert um Mittelpunkt (16,16).
 # pos + rot so berechnet dass (0,0) des Interior-Nodes um (16,16) gedreht wird.
@@ -78,15 +61,9 @@ func set_floor_neighbors(top: bool, right: bool, bottom: bool, left: bool) -> vo
 func _apply_visuals() -> void:
 	if not is_node_ready():
 		return
-	var door := $Door as CanvasItem
-	var key  := Vector2i(door_rotation, door_offset)
-	var dcfg: Dictionary = DOOR_CONFIGS.get(key, {})
-	if dcfg.is_empty():
-		door.visible = false
-	else:
-		door.visible = true
-		($Door as Node2D).position = dcfg["pos"]
-		($Door as Node2D).rotation = dcfg["rot"]
+	var dtfm := _calc_door_transform(door_rotation, door_offset)
+	($Door as Node2D).position = dtfm["pos"]
+	($Door as Node2D).rotation = dtfm["rot"]
 	var icfg: Dictionary = INTERIOR_TRANSFORMS.get(room_rotation,
 		{"pos": Vector2.ZERO, "rot": 0.0})
 	($Interior as Node2D).position = icfg["pos"]

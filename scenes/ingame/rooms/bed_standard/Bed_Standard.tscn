@@ -11,29 +11,29 @@ colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
 gradient = SubResource("Gradient_2hw84")
 
 [sub_resource type="Gradient" id="Gradient_qfmep"]
-offsets = PackedFloat32Array(0.5, 0.5)
-colors = PackedColorArray(0.23137255, 0.23921569, 0.3019608, 1, 0.9607843, 0.972549, 0.98039216, 1)
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_0kbel"]
 gradient = SubResource("Gradient_qfmep")
 
 [sub_resource type="Gradient" id="Gradient_evq2g"]
-offsets = PackedFloat32Array(0.5, 0.5)
-colors = PackedColorArray(0.23137255, 0.23921569, 0.3019608, 1, 0.9607843, 0.972549, 0.98039216, 1)
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_ulmn4"]
 gradient = SubResource("Gradient_evq2g")
 
 [sub_resource type="Gradient" id="Gradient_4mj0y"]
-offsets = PackedFloat32Array(0.5, 0.5)
-colors = PackedColorArray(0.23137255, 0.23921569, 0.3019608, 1, 0.9607843, 0.972549, 0.98039216, 1)
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_0cpfk"]
 gradient = SubResource("Gradient_4mj0y")
 
 [sub_resource type="Gradient" id="Gradient_066q5"]
-offsets = PackedFloat32Array(0.5, 0.5)
-colors = PackedColorArray(0.23137255, 0.23921569, 0.3019608, 1, 0.9607843, 0.972549, 0.98039216, 1)
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_05i8p"]
 gradient = SubResource("Gradient_066q5")
@@ -96,7 +96,7 @@ texture = SubResource("GradientTexture1D_066q5")
 [node name="Furniture" type="Node2D" parent="Interior" unique_id=1816391707]
 
 [node name="Bed" type="Sprite2D" parent="Interior/Furniture" unique_id=1794655453]
-position = Vector2(26, 9)
+position = Vector2(27, 8)
 texture = ExtResource("6_cfvov")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
@@ -134,5 +134,5 @@ region_rect = Rect2(80, 0, 16, 16)
 [node name="Door" type="Sprite2D" parent="." unique_id=449780305]
 position = Vector2(1, 8)
 rotation = 3.1415927
-scale = Vector2(0.008, 5.109)
+scale = Vector2(0.008, 6)
 texture = SubResource("GradientTexture1D_4mj0y")

@@ -39,10 +39,10 @@ func buy(hotel_id: int) -> void:
 	SaveManager.set_plot_built(hotel_id, _grid_x(), _grid_y())
 
 
-func spawn_room(room_scene: PackedScene, door_rot: int, door_off: int, tile_x: int, tile_y: int, rflip: int = 0, room_rot: int = 0) -> Node2D:
+func spawn_room(room_scene: PackedScene, door_rot: int, door_off: int, tile_x: int, tile_y: int, room_rot: int = 0) -> Node2D:
 	var room: Node2D = room_scene.instantiate()
 	add_child(room)
-	room.configure({"door_rotation": door_rot, "door_offset": door_off, "room_flip": rflip, "room_rotation": room_rot, "x_pos": tile_x, "y_pos": tile_y})
+	room.configure({"door_rotation": door_rot, "door_offset": door_off, "room_rotation": room_rot, "x_pos": tile_x, "y_pos": tile_y})
 	room.position = Vector2(tile_x * TILE_PX, tile_y * TILE_PX)
 	return room
 

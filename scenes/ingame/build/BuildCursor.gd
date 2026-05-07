@@ -4,7 +4,7 @@ extends Node2D
 ## Weiß = Tile-Bereich frei, Rot = Überlappung. .=Tür-Wand, ,=Tür-Position, R=Raum-Rotation, F=Flip. ESC = abbrechen.
 ## ANG-186 – Validierung über MapGrid.is_placement_valid() statt Einzelchecks.
 
-signal room_placed(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int, door_rotation: int, door_offset: int, room_flip: int, room_rotation: int, world_center: Vector2)
+signal room_placed(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int, door_rotation: int, door_offset: int, room_rotation: int, world_center: Vector2)
 signal cancelled()
 
 const ROOM_SCENES: Dictionary = {
@@ -25,7 +25,6 @@ var _tile_pos:        Vector2i = Vector2i(0, 0)
 var _is_valid:        bool = false
 var _door_rotation:   int = 0
 var _door_offset:     int = 0
-var _room_flip:       int = 0
 var _snap_enabled:    bool = true
 var _room_w:          int = 2
 var _room_h:          int = 2
@@ -57,7 +56,7 @@ func _spawn_ghost() -> void:
 	_ghost         = _room_scene.instantiate()
 	_ghost.z_index = 10
 	add_child(_ghost)
-	_ghost.configure({"door_rotation": _door_rotation, "door_offset": _door_offset, "room_flip": _room_flip, "room_rotation": _room_rotation})
+	_ghost.configure({"door_rotation": _door_rotation, "door_offset": _door_offset, "room_rotation": _room_rotation})
 	var sz: Vector2i = _ghost.get_tile_size()
 	_room_w = sz.x
 	_room_h = sz.y
@@ -69,11 +68,13 @@ func _spawn_ghost() -> void:
 func _refresh_ghost() -> void:
 	if not is_instance_valid(_ghost):
 		return
-	_ghost.configure({"door_rotation": _door_rotation, "door_offset": _door_offset, "room_flip": _room_flip, "room_rotation": _room_rotation})
+	_ghost.configure({"door_rotation": _door_rotation, "door_offset": _door_offset, "room_rotation": _room_rotation})
 	var sz: Vector2i = _ghost.get_tile_size()
 	_room_w = sz.x
 	_room_h = sz.y
 	_update_valid_combos()
+	_snap_to_valid_combo()
+	_ghost.configure({"door_rotation": _door_rotation, "door_offset": _door_offset})
 	_is_valid = _map_grid.is_placement_valid(
 		_current_parcel.x, _current_parcel.y,
 		_tile_pos.x, _tile_pos.y,
@@ -99,8 +100,8 @@ func _process(_delta: float) -> void:
 
 	var topleft: Vector2
 	if _snap_enabled:
-		topleft = Vector2(snappedf(mouse_local.x, float(TILE_PX)), snappedf(mouse_local.y, float(TILE_PX))) \
-			- Vector2(room_w_px / 2.0, room_h_px / 2.0)
+		var raw := mouse_local - Vector2(room_w_px / 2.0, room_h_px / 2.0)
+		topleft = Vector2(snappedf(raw.x, float(TILE_PX)), snappedf(raw.y, float(TILE_PX)))
 	else:
 		topleft = mouse_local - Vector2(room_w_px / 2.0, room_h_px / 2.0)
 
@@ -153,16 +154,15 @@ func _input(event: InputEvent) -> void:
 				cancelled.emit()
 				queue_free()
 			KEY_PERIOD:
-				_advance_rotation()
+				_advance_door_combo()
 				_refresh_ghost()
 			KEY_COMMA:
-				_advance_offset()
-				_refresh_ghost()
+				pass  # reserviert
 			KEY_R:
 				_advance_room_rotation()
 				_refresh_ghost()
 			KEY_F:
-				pass  # Flip portrait/landscape – kommt später
+				pass  # reserviert
 
 
 # ── Kombo-Navigation ──────────────────────────────────────────────────────────
@@ -188,48 +188,19 @@ func _snap_to_valid_combo() -> void:
 
 
 func _advance_room_rotation() -> void:
-	# R: dreht den ganzen Raum 90° im UZS.
-	# room_rotation steuert das Interior; door_rotation folgt synchron (Tür bleibt an gleicher Wand relativ zum Raum).
 	_room_rotation = (_room_rotation + 1) % 4
 	_door_rotation = (_door_rotation + 1) % 4
-	var offsets := _offsets_for_rotation(_door_rotation)
-	if not offsets.is_empty():
-		_door_offset = offsets[0]
+	# _snap_to_valid_combo() korrigiert die Tür-Position in _refresh_ghost()
 
 
-func _advance_rotation() -> void:
-	var rotations: Array[int] = _unique_rotations()
-	if rotations.is_empty():
+func _advance_door_combo() -> void:
+	if _valid_combos.is_empty():
 		return
-	var idx: int = rotations.find(_door_rotation)
-	_door_rotation = rotations[(idx + 1) % rotations.size()]
-	var offsets := _offsets_for_rotation(_door_rotation)
-	if not offsets.is_empty():
-		_door_offset = offsets[0]
-
-
-func _advance_offset() -> void:
-	var offsets := _offsets_for_rotation(_door_rotation)
-	if offsets.is_empty():
-		return
-	var idx: int = offsets.find(_door_offset)
-	_door_offset = offsets[(idx + 1) % offsets.size()]
-
-
-func _unique_rotations() -> Array[int]:
-	var seen: Array[int] = []
-	for combo: Vector2i in _valid_combos:
-		if combo.x not in seen:
-			seen.append(combo.x)
-	return seen
-
-
-func _offsets_for_rotation(rot: int) -> Array[int]:
-	var result: Array[int] = []
-	for combo: Vector2i in _valid_combos:
-		if combo.x == rot:
-			result.append(combo.y)
-	return result
+	var current := Vector2i(_door_rotation, _door_offset)
+	var idx := _valid_combos.find(current)
+	var next := _valid_combos[(idx + 1) % _valid_combos.size()]
+	_door_rotation = next.x
+	_door_offset   = next.y
 
 
 func _try_place() -> void:
@@ -238,9 +209,8 @@ func _try_place() -> void:
 	var min_y := float(WALK_PX + _current_parcel.y * PARCEL_PX)
 	var room_w_px := _room_w * TILE_PX
 	var room_h_px := _room_h * TILE_PX
-	var snap_pos := Vector2(snappedf(mouse_local.x, float(TILE_PX)), snappedf(mouse_local.y, float(TILE_PX)))
-	var sx := clampf(snap_pos.x - room_w_px / 2.0, min_x, min_x + float(PARCEL_PX - room_w_px))
-	var sy := clampf(snap_pos.y - room_h_px / 2.0, min_y, min_y + float(PARCEL_PX - room_h_px))
+	var sx := clampf(snappedf(mouse_local.x - room_w_px / 2.0, float(TILE_PX)), min_x, min_x + float(PARCEL_PX - room_w_px))
+	var sy := clampf(snappedf(mouse_local.y - room_h_px / 2.0, float(TILE_PX)), min_y, min_y + float(PARCEL_PX - room_h_px))
 	var place_tile := Vector2i(int((sx - min_x) / TILE_PX), int((sy - min_y) / TILE_PX))
 	if _map_grid.is_placement_valid(
 			_current_parcel.x, _current_parcel.y,
@@ -248,5 +218,5 @@ func _try_place() -> void:
 			_room_w, _room_h, _door_rotation, _door_offset):
 		get_viewport().set_input_as_handled()
 		var ghost_center := _ghost.global_position + Vector2(_room_w, _room_h) * float(TILE_PX) * 0.5
-		room_placed.emit(_current_parcel.x, _current_parcel.y, place_tile.x, place_tile.y, _door_rotation, _door_offset, _room_flip, _room_rotation, ghost_center)
+		room_placed.emit(_current_parcel.x, _current_parcel.y, place_tile.x, place_tile.y, _door_rotation, _door_offset, _room_rotation, ghost_center)
 		_spawn_ghost()

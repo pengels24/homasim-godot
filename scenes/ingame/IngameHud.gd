@@ -113,6 +113,12 @@ func update_money(amount: float) -> void:
 	_stat_money_val.text = "€ " + _format_money(int(amount))
 
 
+func update_guest_stats(waiting: int, active: int, checkout: int) -> void:
+	_stat_guests_wait.text   = str(waiting)
+	_stat_guests_active.text = str(active)
+	_stat_guests_out.text    = str(checkout)
+
+
 func update_exp(xp: int) -> void:
 	_stat_exp_lbl.text = "%d XP" % xp
 
@@ -138,6 +144,16 @@ func get_bottom_button(idx: int) -> Button:
 	if idx < 0 or idx >= _bottom_buttons.size():
 		return null
 	return _bottom_buttons[idx]
+
+
+func set_btn_locked(idx: int, locked: bool) -> void:
+	if idx < 0 or idx >= _bottom_buttons.size():
+		return
+	_bb_btn_defs[idx]["locked"] = locked
+	var btn: Button = _bottom_buttons[idx]
+	btn.disabled = locked
+	if btn.get_child_count() > 0:
+		btn.get_child(0).modulate = Color(1.0, 1.0, 1.0, 0.35 if locked else 1.0)
 
 
 ## Locked-Check + Signal-Emission – gleiche Logik wie physischer Button-Klick.
@@ -291,7 +307,7 @@ func _build_bottom_bar() -> void:
 		{"icon": "+", "icon_path": "res://assets/icons/ic_buildmode.svg",  "label": GameState.T("ingame.btn.build"),      "key": "F2",    "locked": false, "dot_color": Color.TRANSPARENT},
 		{"icon": "★", "icon_path": "res://assets/icons/ic_browser.svg",    "label": GameState.T("ingame.btn.simbrowser"), "key": "F7",    "locked": false, "dot_color": Color(0.20, 0.78, 0.35, 1.0)},
 		{"icon": "⚙", "icon_path": "res://assets/icons/ic_settings.svg",   "label": GameState.T("ingame.btn.settings"),   "key": "ALT+S", "locked": false, "dot_color": Color.TRANSPARENT},
-		{"icon": "R", "icon_path": "res://assets/icons/ic_reception.svg",  "label": GameState.T("ingame.btn.reception"),  "key": "F3",    "locked": false, "dot_color": Color(0.20, 0.78, 0.35, 1.0)},
+		{"icon": "R", "icon_path": "res://assets/icons/ic_reception.svg",  "label": GameState.T("ingame.btn.reception"),  "key": "F3",    "locked": true,  "dot_color": Color(0.20, 0.78, 0.35, 1.0)},
 		{"icon": "P", "icon_path": "res://assets/icons/ic_staff.svg",      "label": GameState.T("ingame.btn.staff"),      "key": "F4",    "locked": true,  "dot_color": Color.TRANSPARENT},
 		{"icon": "–", "icon_path": "",                                       "label": GameState.T("ingame.btn.empty"),      "key": "",      "locked": true,  "dot_color": Color.TRANSPARENT},
 		{"icon": "★", "icon_path": "res://assets/icons/ic_techtree.svg",   "label": GameState.T("ingame.btn.research"),   "key": "F6",    "locked": true,  "dot_color": Color.TRANSPARENT},
@@ -313,7 +329,6 @@ func _build_bottom_bar() -> void:
 		sb_a.modulate_color = Color(1.4, 1.05, 0.35)
 		_bb_sb_active = sb_a
 	else:
-		# Fallback StyleBoxFlat
 		_bb_sb_normal = _make_btn_stylebox(Color(0.06, 0.10, 0.18, 0.90), Color(0.20, 0.24, 0.35, 0.55))
 		_bb_sb_hover  = _make_btn_stylebox(Color(0.10, 0.16, 0.26, 0.96), Color(0.918, 0.702, 0.031, 0.70))
 		_bb_sb_active = _make_btn_stylebox(Color(0.22, 0.16, 0.02, 1.0),  Color(0.918, 0.702, 0.031, 1.0))
@@ -323,7 +338,25 @@ func _build_bottom_bar() -> void:
 	_bar_h = BB_PADDING_Y * 2.0 + BB_BTN_SIZE
 	_apply_bar_anchor()
 
-	# Hintergrund
+	# Hintergrund: explizite Größe – kein PRESET_FULL_RECT-Timing-Problem
+	var sb_bg := StyleBoxFlat.new()
+	sb_bg.bg_color                   = Color(0.03, 0.06, 0.12, 0.93)
+	sb_bg.corner_radius_top_left     = 12
+	sb_bg.corner_radius_top_right    = 12
+	sb_bg.corner_radius_bottom_left  = 6
+	sb_bg.corner_radius_bottom_right = 6
+	sb_bg.border_width_top           = 1
+	sb_bg.border_width_left          = 1
+	sb_bg.border_width_right         = 1
+	sb_bg.border_width_bottom        = 1
+	sb_bg.border_color               = Color(0.918, 0.702, 0.031, 0.38)
+	var bg_panel := Panel.new()
+	bg_panel.add_theme_stylebox_override("panel", sb_bg)
+	bg_panel.position    = Vector2.ZERO
+	bg_panel.size        = Vector2(_bar_w, _bar_h)
+	bg_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_bottom_anchor.add_child(bg_panel)
+	# Optionale Textur on top
 	var bar_tex := load("res://assets/UI/hud_bottom.aseprite") as Texture2D
 	if bar_tex != null:
 		var bg := NinePatchRect.new()
@@ -332,26 +365,10 @@ func _build_bottom_bar() -> void:
 		bg.patch_margin_right  = 15
 		bg.patch_margin_top    = 15
 		bg.patch_margin_bottom = 15
-		bg.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		bg.position            = Vector2.ZERO
+		bg.size                = Vector2(_bar_w, _bar_h)
+		bg.mouse_filter        = Control.MOUSE_FILTER_IGNORE
 		_bottom_anchor.add_child(bg)
-	else:
-		var sb_bg := StyleBoxFlat.new()
-		sb_bg.bg_color                   = Color(0.03, 0.06, 0.12, 0.93)
-		sb_bg.corner_radius_top_left     = 12
-		sb_bg.corner_radius_top_right    = 12
-		sb_bg.corner_radius_bottom_left  = 6
-		sb_bg.corner_radius_bottom_right = 6
-		sb_bg.border_width_top           = 1
-		sb_bg.border_width_left          = 1
-		sb_bg.border_width_right         = 1
-		sb_bg.border_width_bottom        = 1
-		sb_bg.border_color               = Color(0.918, 0.702, 0.031, 0.38)
-		var bg_panel := Panel.new()
-		bg_panel.add_theme_stylebox_override("panel", sb_bg)
-		bg_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		bg_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		_bottom_anchor.add_child(bg_panel)
 
 	# Buttons horizontal
 	for i in btn_count:
@@ -489,8 +506,9 @@ func _make_bar_btn(idx: int) -> Button:
 	var def := _bb_btn_defs[idx]
 
 	var btn := Button.new()
-	btn.custom_minimum_size = Vector2(BB_BTN_SIZE, BB_BTN_SIZE)
-	btn.focus_mode          = Control.FOCUS_NONE
+	btn.custom_minimum_size      = Vector2(BB_BTN_SIZE, BB_BTN_SIZE)
+	btn.focus_mode               = Control.FOCUS_NONE
+	btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	btn.add_theme_stylebox_override("normal",   _bb_sb_normal)
 	btn.add_theme_stylebox_override("hover",    _bb_sb_hover)
 	btn.add_theme_stylebox_override("pressed",  _bb_sb_active)

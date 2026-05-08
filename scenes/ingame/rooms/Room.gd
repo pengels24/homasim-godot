@@ -48,6 +48,7 @@ static func get_definition() -> Dictionary:
 		"name":          "Unbekannter Raum",
 		"category":      "",
 		"icon":          "",
+		"nightly_price": 0,
 		"locked":        false,
 		"in_build_menu": false,
 	}

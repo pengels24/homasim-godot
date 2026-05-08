@@ -65,6 +65,18 @@ func _ready() -> void:
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
+func get_placed_rooms() -> Array:
+	var result: Array = []
+	for row: Array in _grid:
+		for parcel: Node2D in row:
+			if not parcel.visible:
+				continue
+			for child: Node in parcel.get_children():
+				if "room_type_id" in child:
+					result.append(child)
+	return result
+
+
 func build_map(built_plots: Array, entry_plot: Vector2i, enter_dir: String) -> void:
 	RenderingServer.set_default_clear_color(Color("#292929"))
 	_entry_plot = entry_plot
@@ -141,13 +153,15 @@ func unmark_placement(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 
 
 func place_room(parcel_x: int, parcel_y: int, room_scene: PackedScene, hotel_id: int,
-		door_rot: int, door_off: int, tile_x: int, tile_y: int, room_rot: int = 0) -> void:
+		door_rot: int, door_off: int, tile_x: int, tile_y: int, room_rot: int = 0,
+		room_number: String = "") -> void:
 	var parcel: Node2D = _grid[parcel_y][parcel_x]
 	var is_new := not parcel.visible
 	parcel.visible = true
 	if is_new:
 		_mark_parcel_walls(parcel_x, parcel_y)
 	var room: Node2D = parcel.spawn_room(room_scene, door_rot, door_off, tile_x, tile_y, room_rot)
+	room.room_number = room_number
 	var sz: Vector2i = room.get_tile_size()
 	mark_placement(parcel_x, parcel_y, tile_x, tile_y, sz.x, sz.y, door_rot, door_off)
 	SaveManager.save_room_to_plot(hotel_id, parcel_x, parcel_y, room.to_dict())

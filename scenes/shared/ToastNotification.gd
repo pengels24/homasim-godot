@@ -4,7 +4,7 @@ class_name ToastNotification
 ## Wird ausschliesslich von Toast.gd (Autoload) instanziiert und verwaltet.
 
 const FADE_IN_SEC  : float = 0.25
-const HOLD_SEC     : float = 2.20
+const HOLD_SEC     : float = 3.50
 const FADE_OUT_SEC : float = 0.40
 
 const PANEL_LEFT   : float = 660.0

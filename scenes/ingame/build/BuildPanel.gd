@@ -26,11 +26,11 @@ var _selected_category: String     = ""
 var _cat_buttons:       Dictionary = {}   # category_id → Button
 var _active_item_btn:   Button     = null
 
-var _sb_cat_normal:  StyleBoxFlat
-var _sb_cat_active:  StyleBoxFlat
-var _sb_item_normal: StyleBoxFlat
-var _sb_item_hover:  StyleBoxFlat
-var _sb_item_active: StyleBoxFlat
+var _sb_cat_normal:  StyleBox
+var _sb_cat_active:  StyleBox
+var _sb_item_normal: StyleBox
+var _sb_item_hover:  StyleBox
+var _sb_item_active: StyleBox
 var _tooltip_panel:  PanelContainer
 var _tooltip_lbl:    Label
 
@@ -59,18 +59,28 @@ func _ready() -> void:
 # ── Aufbau ────────────────────────────────────────────────────────────────────
 
 func _apply_panel_style() -> void:
-	var sb := StyleBoxFlat.new()
-	sb.bg_color                   = Color(0.03, 0.06, 0.12, 0.95)
-	sb.corner_radius_top_left     = 10
-	sb.corner_radius_top_right    = 10
-	sb.corner_radius_bottom_left  = 6
-	sb.corner_radius_bottom_right = 6
-	sb.border_width_top           = 1
-	sb.border_width_left          = 1
-	sb.border_width_right         = 1
-	sb.border_width_bottom        = 1
-	sb.border_color               = Color(0.918, 0.702, 0.031, 0.38)
-	add_theme_stylebox_override("panel", sb)
+	var tex := load("res://assets/UI/hud_build.aseprite") as Texture2D
+	if tex != null:
+		var sb := StyleBoxTexture.new()
+		sb.texture               = tex
+		sb.texture_margin_left   = 15.0
+		sb.texture_margin_right  = 15.0
+		sb.texture_margin_top    = 15.0
+		sb.texture_margin_bottom = 15.0
+		add_theme_stylebox_override("panel", sb)
+	else:
+		var sb := StyleBoxFlat.new()
+		sb.bg_color                   = Color(0.03, 0.06, 0.12, 0.95)
+		sb.corner_radius_top_left     = 10
+		sb.corner_radius_top_right    = 10
+		sb.corner_radius_bottom_left  = 6
+		sb.corner_radius_bottom_right = 6
+		sb.border_width_top           = 1
+		sb.border_width_left          = 1
+		sb.border_width_right         = 1
+		sb.border_width_bottom        = 1
+		sb.border_color               = Color(0.918, 0.702, 0.031, 0.38)
+		add_theme_stylebox_override("panel", sb)
 
 
 func _build_room_items() -> void:
@@ -87,12 +97,30 @@ func _build_room_items() -> void:
 
 
 func _build_styleboxes() -> void:
+	_build_cat_styleboxes()
+	_build_item_styleboxes()
+
+
+func _build_cat_styleboxes() -> void:
 	var cr := int(CAT_BTN_SIZE * 0.5)
-	_sb_cat_normal = _make_sb(Color(0.06, 0.10, 0.18, 0.90), Color(0.20, 0.24, 0.35, 0.55), cr)
-	_sb_cat_active = _make_sb(Color(0.22, 0.16, 0.02, 1.0),  Color(0.918, 0.702, 0.031, 1.0), cr)
-	_sb_item_normal = _make_sb(Color(0.06, 0.10, 0.18, 0.90), Color(0.20, 0.24, 0.35, 0.55), 8)
-	_sb_item_hover  = _make_sb(Color(0.10, 0.16, 0.26, 0.96), Color(0.918, 0.702, 0.031, 0.70), 8)
-	_sb_item_active = _make_sb(Color(0.22, 0.16, 0.02, 1.0),  Color(0.918, 0.702, 0.031, 1.0), 8)
+	_sb_cat_normal = _load_tex_sb("res://assets/UI/hud_button_round.aseprite",
+			4.0, 5.0, 3.0, 3.0,
+			_make_sb(Color(0.06, 0.10, 0.18, 0.90), Color(0.20, 0.24, 0.35, 0.55), cr))
+	_sb_cat_active = _load_tex_sb("res://assets/UI/hud_button_round_active.aseprite",
+			4.0, 5.0, 3.0, 3.0,
+			_make_sb(Color(0.22, 0.16, 0.02, 1.0), Color(0.918, 0.702, 0.031, 1.0), cr))
+
+
+func _build_item_styleboxes() -> void:
+	_sb_item_normal = _load_tex_sb("res://assets/UI/hud_build_item_button.aseprite",
+			4.0, 4.0, 4.0, 4.0,
+			_make_sb(Color(0.06, 0.10, 0.18, 0.90), Color(0.20, 0.24, 0.35, 0.55), 8))
+	_sb_item_hover  = _load_tex_sb("res://assets/UI/hud_build_item_button_hover.aseprite",
+			4.0, 4.0, 4.0, 4.0,
+			_make_sb(Color(0.10, 0.16, 0.26, 0.96), Color(0.918, 0.702, 0.031, 0.70), 8))
+	_sb_item_active = _load_tex_sb("res://assets/UI/hud_build_item_button_active.aseprite",
+			4.0, 4.0, 4.0, 4.0,
+			_make_sb(Color(0.22, 0.16, 0.02, 1.0), Color(0.918, 0.702, 0.031, 1.0), 8))
 
 
 func _build_category_tabs() -> void:
@@ -232,9 +260,10 @@ func _hide_tooltip() -> void:
 
 func _make_icon_btn(icon_path: String, fallback_label: String, btn_size: float, locked: bool) -> Button:
 	var btn := Button.new()
-	btn.custom_minimum_size = Vector2(btn_size, btn_size)
-	btn.focus_mode          = Control.FOCUS_NONE
-	btn.disabled            = locked
+	btn.custom_minimum_size        = Vector2(btn_size, btn_size)
+	btn.focus_mode                 = Control.FOCUS_NONE
+	btn.disabled                   = locked
+	btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 
 	var icon_node: Control
@@ -273,6 +302,20 @@ func _make_icon_btn(icon_path: String, fallback_label: String, btn_size: float, 
 		btn.add_child(lock_lbl)
 
 	return btn
+
+
+## Lädt eine Aseprite-Textur als StyleBoxTexture; fällt auf `fallback` zurück wenn nicht vorhanden.
+func _load_tex_sb(path: String, el: float, er: float, et: float, eb: float, fallback: StyleBox) -> StyleBox:
+	var tex := load(path) as Texture2D if ResourceLoader.exists(path) else null
+	if tex == null:
+		return fallback
+	var sb := StyleBoxTexture.new()
+	sb.texture              = tex
+	sb.expand_margin_left   = el
+	sb.expand_margin_right  = er
+	sb.expand_margin_top    = et
+	sb.expand_margin_bottom = eb
+	return sb
 
 
 func _make_sb(bg: Color, border: Color, radius: int) -> StyleBoxFlat:

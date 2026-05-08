@@ -5,6 +5,7 @@ class_name IngameClock
 
 signal day_ended(new_day: int)
 signal save_requested(game_time: int)
+signal hour_passed(hour: int)
 
 const SECONDS_PER_GAME_MINUTE := 2.0
 
@@ -48,6 +49,9 @@ func configure(hotel: Dictionary, time_lbl: Label,
 func get_game_time() -> int:
 	return _game_hour * 60 + _game_minute
 
+func get_hour() -> int:
+	return _game_hour
+
 
 func is_paused() -> bool:
 	return _game_paused
@@ -88,8 +92,11 @@ func _tick_game_clock(delta: float) -> void:
 	_time_accum -= minutes_passed * SECONDS_PER_GAME_MINUTE
 	_game_minute += minutes_passed
 	if _game_minute >= 60:
-		_game_hour  += int(_game_minute / 60.0)
-		_game_minute  = _game_minute % 60
+		var prev_hour := _game_hour
+		_game_hour    += int(_game_minute / 60.0)
+		_game_minute   = _game_minute % 60
+		if _game_hour != prev_hour and _game_hour < 24:
+			hour_passed.emit(_game_hour)
 	if _game_hour >= 24:
 		_game_hour   = 6
 		_game_minute = 0

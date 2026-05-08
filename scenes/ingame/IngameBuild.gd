@@ -11,6 +11,8 @@ const SCENE_PATHS: Dictionary = {
 	"bed_double":   "res://scenes/ingame/rooms/bed_double/Bed_Double.tscn",
 }
 
+signal room_built(room_type_id: String)
+
 var _hotel:              Dictionary
 var _map_grid:           Node2D
 var _hud:                IngameHud
@@ -162,8 +164,10 @@ func _on_room_placed(room_type_id: String, px: int, py: int, tx: int, ty: int, d
 		Toast.show(GameState.T("toast.build.no_money"))
 		return
 
-	_map_grid.place_room(px, py, load(path), _hotel.get("id", -1), dr, doff, tx, ty, rrot)
+	var room_number := _next_room_number(def)
+	_map_grid.place_room(px, py, load(path), _hotel.get("id", -1), dr, doff, tx, ty, rrot, room_number)
 	_apply_build_costs(def, cost, world_center)
+	room_built.emit(room_type_id)
 
 
 func _apply_build_costs(def: Dictionary, cost: int, world_center: Vector2) -> void:
@@ -185,9 +189,19 @@ func _on_build_cursor_done() -> void:
 		_build_panel.clear_active_item()
 
 
+func _next_room_number(def: Dictionary) -> String:
+	var prefix: String = def.get("prefix", "")
+	if prefix == "":
+		return ""
+	var key  := "next_%s_id" % prefix.to_lower()
+	var next := _hotel.get(key, 1) as int
+	_hotel[key] = next + 1
+	return "%s%04d" % [prefix, next]
+
+
 # ── Submenü (Platzhalter) ─────────────────────────────────────────────────────
 
-func _open_submenu(idx: int) -> void:
+func _open_submenu(_idx: int) -> void:
 	var panel := PanelContainer.new()
 	var sb := StyleBoxFlat.new()
 	sb.bg_color                   = Color(0.04, 0.06, 0.10, 0.95)

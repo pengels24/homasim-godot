@@ -40,8 +40,20 @@ var _save_modal:     InGameSaveModal
 var _quit_confirm:   ConfirmModal
 var _sim_browser:    SimBrowser
 
+var _guest_mgr:         GuestManager
+var _rezeption:         Control   # RezeptionModal
+
 var _pause_was_running: bool = false
 var _came_from_pause:   bool = false
+
+## Tagesablauf: Stundenbasierte Events. Neue Events hier eintragen – kein Code anfassen.
+const DAILY_SCHEDULE: Array[Dictionary] = [
+	{"hour":  6, "event": "day_start"},
+	{"hour":  7, "event": "reception_open"},
+	{"hour": 10, "event": "guest_arrival"},
+	{"hour": 15, "event": "guest_arrival"},
+	{"hour": 22, "event": "reception_close"},
+]
 
 const SETTINGS_SCENE     := preload("res://scenes/shared/SettingsModal.tscn")
 const CONFIRM_SCENE      := preload("res://scenes/shared/ConfirmModal.tscn")
@@ -62,6 +74,8 @@ func _ready() -> void:
 		_hotel["name"] = api_name
 	_start_map()
 	_setup_subsystems()
+	await get_tree().process_frame
+	_restore_button_states()
 
 
 # ── Map-Start ─────────────────────────────────────────────────────────────────
@@ -127,12 +141,21 @@ func _setup_subsystems() -> void:
 	_build = IngameBuild.new()
 	add_child(_build)
 	_build.configure(_hotel, map_grid, _hud, hud_canvas)
+	_build.room_built.connect(_on_room_built)
+
+	_guest_mgr = GuestManager.new()
+	add_child(_guest_mgr)
+	_guest_mgr.configure(_hotel, _clock, map_grid)
+	_guest_mgr.parties_changed.connect(_on_parties_changed)
+	_guest_mgr.checkout_forgotten.connect(_on_checkout_forgotten)
 
 	_hud.bottom_button_pressed.connect(_on_bottom_button_pressed)
 	_hud.view_reset_requested.connect(map_grid.reset_view)
 	map_grid.view_saved_changed.connect(_hud.set_mode_btn_saved)
 	_clock.day_ended.connect(_on_day_ended)
 	_clock.save_requested.connect(_save_progress)
+	_clock.hour_passed.connect(_guest_mgr.on_hour_passed)
+	_clock.hour_passed.connect(_on_hour_passed)
 	_setup_autosave_timer()
 
 	_pause_menu = PAUSE_MENU_SCENE.instantiate() as PauseMenu
@@ -166,7 +189,74 @@ func _setup_subsystems() -> void:
 
 func _on_day_ended(new_day: int) -> void:
 	_hud.update_day(new_day)
+	_guest_mgr.on_day_ended(new_day)
 	SaveManager.save_auto(_hotel.get("id", -1))
+
+
+func _on_parties_changed() -> void:
+	_hud.update_guest_stats(
+		_guest_mgr.get_waiting().size(),
+		_guest_mgr.get_active().size(),
+		_guest_mgr.get_checkout().size(),
+	)
+	_hud.update_money(_hotel.get("money", 0.0))
+
+
+func _on_checkout_forgotten(count: int) -> void:
+	Toast.show("⚠ %d Gast/Gäste haben noch nicht ausgecheckt!" % count)
+
+
+func _on_hour_passed(hour: int) -> void:
+	for entry: Dictionary in DAILY_SCHEDULE:
+		if entry["hour"] == hour:
+			_dispatch_daily_event(entry["event"])
+
+
+func _dispatch_daily_event(event_id: String) -> void:
+	match event_id:
+		"day_start":       _on_event_day_start()
+		"reception_open":  _on_event_reception_open()
+		"guest_arrival":   _on_event_guest_arrival()
+		"reception_close": _on_event_reception_close()
+
+
+func _on_event_day_start() -> void:
+	Toast.show(GameState.T("toast.event.day_start"))
+
+
+func _on_event_reception_open() -> void:
+	if not _guest_mgr.has_bookable_rooms():
+		Toast.show(GameState.T("toast.rezeption.no_rooms"))
+		return
+	_hud.set_btn_locked(3, false)
+	Toast.show(GameState.T("toast.rezeption.open"))
+
+
+func _on_event_guest_arrival() -> void:
+	var count := _guest_mgr.spawn_guests()
+	if count > 0:
+		Toast.show(GameState.T("toast.guest.arrival").replace("###", str(count)))
+
+
+func _on_event_reception_close() -> void:
+	if is_instance_valid(_rezeption) and _rezeption.visible:
+		_close_rezeption()
+	_hud.set_btn_locked(3, true)
+	Toast.show(GameState.T("toast.event.day_soft_end"))
+
+
+## Sofort nach dem Bau prüfen ob Rezeption freischaltbar ist (Zeit 07-22 + Zimmer vorhanden).
+func _on_room_built(_room_type_id: String) -> void:
+	var hour: int = _clock.get_hour()
+	if hour >= 7 and hour < 22 and _guest_mgr.has_bookable_rooms():
+		_hud.set_btn_locked(3, false)
+
+
+## Button-States nach dem Laden eines Spielstands wiederherstellen.
+func _restore_button_states() -> void:
+	var hour: int = _clock.get_hour()
+	var reception_should_be_open := hour >= 7 and hour < 22 and _guest_mgr.has_bookable_rooms()
+	_hud.set_btn_locked(3, not reception_should_be_open)
 
 
 # ── Input ─────────────────────────────────────────────────────────────────────
@@ -195,7 +285,7 @@ func _handle_hotkey(keycode: int) -> void:
 	match keycode:
 		KEY_ESCAPE: _on_exit_pressed()
 		KEY_F2, KEY_B: _hud.trigger_button(0)
-		KEY_F3:     _hud.trigger_button(1)
+		KEY_F3:     _hud.trigger_button(3)
 		KEY_F4:     _hud.trigger_button(2)
 		KEY_F5:     _quick_save()
 		KEY_F6:     _hud.trigger_button(4)
@@ -209,6 +299,7 @@ func _on_bottom_button_pressed(idx: int) -> void:
 	match idx:
 		1: _open_sim_browser()
 		2: _open_settings()
+		3: _open_rezeption()
 		_: _build.on_button_pressed(idx)
 
 
@@ -235,11 +326,13 @@ func _close_pause() -> void:
 
 
 func _update_map_grid_mode() -> void:
-	var blocked := (is_instance_valid(_dev_console)    and _dev_console.visible)    \
+	var blocked: bool = \
+			(is_instance_valid(_dev_console)    and _dev_console.visible)    \
 			or (is_instance_valid(_pause_menu)     and _pause_menu.visible)     \
 			or (is_instance_valid(_save_modal)     and _save_modal.visible)     \
 			or (is_instance_valid(_settings_modal) and _settings_modal.visible) \
-			or (is_instance_valid(_sim_browser)    and _sim_browser.visible)
+			or (is_instance_valid(_sim_browser)    and _sim_browser.visible)    \
+			or (is_instance_valid(_rezeption)      and _rezeption.visible)
 	map_grid.process_mode = Node.PROCESS_MODE_DISABLED if blocked else Node.PROCESS_MODE_INHERIT
 
 
@@ -258,6 +351,32 @@ func _open_sim_browser() -> void:
 func _close_sim_browser() -> void:
 	_sim_browser.close()
 	_clock.resume()
+	_update_map_grid_mode()
+
+
+# ── Rezeption ─────────────────────────────────────────────────────────────────
+
+func _open_rezeption() -> void:
+	if not _guest_mgr.has_bookable_rooms():
+		Toast.show(GameState.T("toast.rezeption.no_rooms"))
+		return
+	if not is_instance_valid(_rezeption):
+		var scene := load("res://scenes/ingame/rezeption/RezeptionModal.tscn") as PackedScene
+		if scene == null:
+			return
+		_rezeption = scene.instantiate()
+		$HUD.add_child(_rezeption)
+		_rezeption.closed.connect(_close_rezeption)
+		_rezeption.configure(_guest_mgr, _clock)
+	_clock.pause()
+	_rezeption.visible = true
+	_rezeption.refresh()
+	_update_map_grid_mode()
+
+
+func _close_rezeption() -> void:
+	if is_instance_valid(_rezeption):
+		_rezeption.visible = false
 	_update_map_grid_mode()
 
 
@@ -330,12 +449,16 @@ func _save_progress(game_time_min: int) -> void:
 	var hotel_id: int = _hotel.get("id", -1)
 	if hotel_id < 0:
 		return
-	SaveManager.update_hotel(hotel_id, {
+	var save_data := {
 		"day":       _hotel.get("day", 1),
 		"money":     _hotel.get("money", 0),
 		"xp":        _hotel.get("xp", 0),
 		"game_time": game_time_min,
-	})
+	}
+	for key: String in _hotel:
+		if key.begins_with("next_") and key.ends_with("_id"):
+			save_data[key] = _hotel[key]
+	SaveManager.update_hotel(hotel_id, save_data)
 
 
 func _open_settings() -> void:

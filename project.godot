@@ -25,6 +25,7 @@ SettingsManager="*res://autoload/SettingsManager.gd"
 MusicManager="*res://autoload/MusicManager.gd"
 FloatingValues="*res://autoload/FloatingValues.gd"
 Toast="*res://autoload/Toast.gd"
+ActivityLog="*res://autoload/ActivityLog.gd"
 
 [display]
 

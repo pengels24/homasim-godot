@@ -24,12 +24,12 @@ colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_ulmn4"]
 gradient = SubResource("Gradient_evq2g")
 
-[sub_resource type="Gradient" id="Gradient_4mj0y"]
+[sub_resource type="Gradient" id="Gradient_0kbel"]
 offsets = PackedFloat32Array(0)
 colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_0cpfk"]
-gradient = SubResource("Gradient_4mj0y")
+gradient = SubResource("Gradient_0kbel")
 
 [sub_resource type="Gradient" id="Gradient_066q5"]
 offsets = PackedFloat32Array(0)
@@ -65,25 +65,25 @@ texture = SubResource("GradientTexture1D_cfvov")
 [node name="WallLeft" type="Sprite2D" parent="Ground" unique_id=1721734010]
 position = Vector2(1, 16)
 rotation = 3.1415927
-scale = Vector2(0.008, 30)
+scale = Vector2(0.008, 32)
 texture = SubResource("GradientTexture1D_0kbel")
 
 [node name="WallRight" type="Sprite2D" parent="Ground" unique_id=184210755]
 position = Vector2(31, 16)
-scale = Vector2(0.008, 30)
+scale = Vector2(0.008, 32)
 skew = -0.00032782555
 texture = SubResource("GradientTexture1D_ulmn4")
 
 [node name="WallTop" type="Sprite2D" parent="Ground" unique_id=1164458163]
 position = Vector2(16, 1)
 rotation = 4.712389
-scale = Vector2(0.008, 30)
+scale = Vector2(0.008, 32)
 texture = SubResource("GradientTexture1D_0cpfk")
 
 [node name="WallBottom" type="Sprite2D" parent="Ground" unique_id=1110367068]
 position = Vector2(16, 31)
 rotation = 1.5707964
-scale = Vector2(0.008, 30)
+scale = Vector2(0.008, 32)
 texture = SubResource("GradientTexture1D_05i8p")
 
 [node name="Interior" type="Node2D" parent="." unique_id=1750428163]

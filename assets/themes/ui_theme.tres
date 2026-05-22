@@ -1,0 +1,18 @@
+[gd_resource type="Theme" format=3 uid="uid://j01g5ime51by"]
+
+[ext_resource type="FontFile" uid="uid://3can1r2sqobx" path="res://assets/fonts/AvenuePixel-Regular.ttf" id="1_ndjfm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ndjfm"]
+bg_color = Color(0.10980392, 0.14901961, 0.21176471, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ftahe"]
+
+[resource]
+Label/colors/font_color = Color(0.46666667, 0.46666667, 0.46666667, 1)
+Label/font_sizes/font_size = 18
+Label/fonts/font = ExtResource("1_ndjfm")
+LineEdit/colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
+LineEdit/font_sizes/font_size = 24
+LineEdit/fonts/font = ExtResource("1_ndjfm")
+ProgressBar/styles/background = SubResource("StyleBoxFlat_ndjfm")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_ftahe")

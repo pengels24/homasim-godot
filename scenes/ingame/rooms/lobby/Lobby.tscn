@@ -1,15 +1,7 @@
-[gd_scene format=4 uid="uid://c85wek3dhlkfx"]
+[gd_scene format=3 uid="uid://c85wek3dhlkfx"]
 
 [ext_resource type="Script" uid="uid://bbobc1sk84dvn" path="res://scenes/ingame/rooms/lobby/Lobby.gd" id="1_k3aed"]
-[ext_resource type="Texture2D" uid="uid://dcflh6vmbcela" path="res://assets/tiles/floor_lobby_wall_top_right.png" id="2_606tn"]
-[ext_resource type="Texture2D" uid="uid://mkl7uru7ohvh" path="res://assets/tiles/floor_lobby_plain.png" id="3_jq5r5"]
-[ext_resource type="Texture2D" uid="uid://b5hvrnunjb0f3" path="res://assets/tiles/floor_lobby_wall_bottom.png" id="4_2homi"]
-[ext_resource type="Texture2D" uid="uid://bh7jrican8ubt" path="res://assets/tiles/floor_lobby_wall_bottom_left.png" id="5_xruoc"]
-[ext_resource type="Texture2D" uid="uid://cge43rblntx3c" path="res://assets/tiles/floor_lobby_wall_bottom_right.png" id="6_wk4mp"]
-[ext_resource type="Texture2D" uid="uid://dy320jaaaa4bp" path="res://assets/tiles/floor_lobby_wall_left.png" id="7_vf510"]
-[ext_resource type="Texture2D" uid="uid://c3spx7tf4sp0f" path="res://assets/tiles/floor_lobby_wall_right.png" id="8_jcwna"]
-[ext_resource type="Texture2D" uid="uid://cw0a3igyo4x16" path="res://assets/tiles/floor_lobby_wall_top-left.png" id="9_sxn03"]
-[ext_resource type="Texture2D" uid="uid://cl4kib77xjy7j" path="res://assets/tiles/floor_lobby_wall_top.png" id="10_3gdlt"]
+[ext_resource type="Texture2D" uid="uid://c56j32xfhvytj" path="res://assets/tiles/Furniture/furniture_lobby.aseprite" id="6_y7m36"]
 [ext_resource type="Texture2D" uid="uid://d3cwbl1m8claj" path="res://assets/tiles/Doors/standard_door_bottom.png" id="11_sy3ba"]
 [ext_resource type="Texture2D" uid="uid://bne7hh8huhwqy" path="res://assets/tiles/Doors/standard_door_left.png" id="12_rqqn2"]
 [ext_resource type="Texture2D" uid="uid://d0ohfrpyknxye" path="res://assets/tiles/Doors/standard_door_right.png" id="13_nv5dw"]
@@ -23,52 +15,42 @@
 [ext_resource type="Texture2D" uid="uid://30wniqet1hoa" path="res://assets/tiles/floor_lobby_door_bottom_left.png" id="22_ldigk"]
 [ext_resource type="Texture2D" uid="uid://df3o6fgygo3ug" path="res://assets/tiles/floor_lobby_door_bottom_right.png" id="23_kpxic"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pf3hf"]
-texture = ExtResource("2_606tn")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gqx1i"]
-texture = ExtResource("3_jq5r5")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_erq3e"]
-texture = ExtResource("4_2homi")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bcguh"]
-texture = ExtResource("5_xruoc")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hepst"]
-texture = ExtResource("6_wk4mp")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_kgloo"]
-texture = ExtResource("7_vf510")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6f2t8"]
-texture = ExtResource("8_jcwna")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6nkpv"]
-texture = ExtResource("9_sxn03")
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ql1ac"]
-texture = ExtResource("10_3gdlt")
-0:0/0 = 0
-
 [sub_resource type="TileSet" id="TileSet_eumws"]
-sources/2 = SubResource("TileSetAtlasSource_gqx1i")
-sources/3 = SubResource("TileSetAtlasSource_erq3e")
-sources/4 = SubResource("TileSetAtlasSource_bcguh")
-sources/5 = SubResource("TileSetAtlasSource_hepst")
-sources/6 = SubResource("TileSetAtlasSource_kgloo")
-sources/7 = SubResource("TileSetAtlasSource_6f2t8")
-sources/8 = SubResource("TileSetAtlasSource_6nkpv")
-sources/9 = SubResource("TileSetAtlasSource_ql1ac")
-sources/10 = SubResource("TileSetAtlasSource_pf3hf")
+
+[sub_resource type="Gradient" id="Gradient_g4gps"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.85490197, 0.8, 0.67058825, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ut2pv"]
+gradient = SubResource("Gradient_g4gps")
+
+[sub_resource type="Gradient" id="Gradient_1at7y"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_y1xy0"]
+gradient = SubResource("Gradient_1at7y")
+
+[sub_resource type="Gradient" id="Gradient_ut2pv"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1at7y"]
+gradient = SubResource("Gradient_ut2pv")
+
+[sub_resource type="Gradient" id="Gradient_y1xy0"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nv5dw"]
+gradient = SubResource("Gradient_y1xy0")
+
+[sub_resource type="Gradient" id="Gradient_nv5dw"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_wnmbo"]
+gradient = SubResource("Gradient_nv5dw")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_pu2tb"]
 texture = ExtResource("11_sy3ba")
@@ -97,6 +79,13 @@ texture = ExtResource("14_g4gps")
 
 [sub_resource type="TileSet" id="TileSet_a45ue"]
 sources/1 = SubResource("TileSetAtlasSource_ut2pv")
+
+[sub_resource type="Gradient" id="Gradient_gx5gx"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.85882354, 0.79607844, 0.67058825, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_y7m36"]
+gradient = SubResource("Gradient_gx5gx")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ogb25"]
 texture = ExtResource("16_47a3f")
@@ -150,39 +139,215 @@ sources/1 = SubResource("TileSetAtlasSource_33t03")
 script = ExtResource("1_k3aed")
 
 [node name="Ground" type="TileMapLayer" parent="." unique_id=1857395756]
-tile_map_data = PackedByteArray("AAAAAAAACAAAAAAAAAADAAAACgAAAAAAAAABAAAACQAAAAAAAAACAAAACQAAAAAAAAADAAEABwAAAAAAAAADAAIABwAAAAAAAAAAAAEABgAAAAAAAAAAAAIABgAAAAAAAAADAAMABQAAAAAAAAAAAAMABAAAAAAAAAABAAMAAwAAAAAAAAACAAMAAwAAAAAAAAABAAEAAgAAAAAAAAABAAIAAgAAAAAAAAACAAEAAgAAAAAAAAACAAIAAgAAAAAAAAA=")
 tile_set = SubResource("TileSet_eumws")
 
+[node name="BaseFloor" type="Sprite2D" parent="Ground" unique_id=909832140]
+position = Vector2(32, 32)
+scale = Vector2(0.25, 64)
+texture = SubResource("GradientTexture1D_ut2pv")
+
+[node name="WallLeft" type="Sprite2D" parent="Ground" unique_id=372470274]
+position = Vector2(1, 32)
+rotation = -3.1415925
+scale = Vector2(0.008, 64)
+texture = SubResource("GradientTexture1D_y1xy0")
+
+[node name="WallRight" type="Sprite2D" parent="Ground" unique_id=1313377617]
+position = Vector2(63, 32)
+scale = Vector2(0.008, 64)
+skew = -0.00032782555
+texture = SubResource("GradientTexture1D_1at7y")
+
+[node name="WallTop" type="Sprite2D" parent="Ground" unique_id=418443978]
+position = Vector2(32, 1)
+rotation = -1.5707964
+scale = Vector2(0.008, 64)
+texture = SubResource("GradientTexture1D_nv5dw")
+
+[node name="WallBottom" type="Sprite2D" parent="Ground" unique_id=1963274847]
+position = Vector2(32, 63)
+rotation = 1.5707964
+scale = Vector2(0.008, 64)
+texture = SubResource("GradientTexture1D_wnmbo")
+
 [node name="Top" type="TileMapLayer" parent="Ground" unique_id=786875660]
-tile_map_data = PackedByteArray("AAABAAMAAAAAAAAAAAACAAMAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray(0, 0, 1, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_1px3f")
 
 [node name="Right" type="TileMapLayer" parent="Ground" unique_id=1156738095]
-tile_map_data = PackedByteArray("AAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_bqggu")
 
 [node name="Left" type="TileMapLayer" parent="Ground" unique_id=1592733289]
-tile_map_data = PackedByteArray("AAADAAEAAAAAAAAAAAADAAIAAAAAAAAAAAA=")
+tile_map_data = PackedByteArray(0, 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_6bvg3")
 
 [node name="Bottom" type="TileMapLayer" parent="Ground" unique_id=1598116080]
-tile_map_data = PackedByteArray("AAABAAAAAQAAAAAAAAACAAAAAQAAAAAAAAA=")
+tile_map_data = PackedByteArray(0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_a45ue")
+
+[node name="Interior" type="Node2D" parent="." unique_id=971649538]
+
+[node name="Floor" type="Sprite2D" parent="Interior" unique_id=1643192345]
+position = Vector2(32, 32)
+scale = Vector2(0.234375, 60)
+texture = SubResource("GradientTexture1D_y7m36")
+
+[node name="Furniture" type="Node2D" parent="Interior" unique_id=1996587566]
+
+[node name="Flor Center" type="Node2D" parent="Interior/Furniture" unique_id=382641378]
+
+[node name="Floor TL" type="Sprite2D" parent="Interior/Furniture/Flor Center" unique_id=1393236582]
+position = Vector2(24, 24)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(64, 16, 16, 16)
+
+[node name="Floor TR" type="Sprite2D" parent="Interior/Furniture/Flor Center" unique_id=693146564]
+position = Vector2(40, 24)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(64, 16, 16, 16)
+
+[node name="Floor BL" type="Sprite2D" parent="Interior/Furniture/Flor Center" unique_id=2003277593]
+position = Vector2(24, 40)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(64, 16, 16, 16)
+
+[node name="Floor BR" type="Sprite2D" parent="Interior/Furniture/Flor Center" unique_id=1076180188]
+position = Vector2(40, 40)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(64, 16, 16, 16)
+
+[node name="Sofa" type="Node2D" parent="Interior/Furniture" unique_id=1604123786]
+
+[node name="Sofa TL" type="Sprite2D" parent="Interior/Furniture/Sofa" unique_id=1504985298]
+position = Vector2(7, 7)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Sofa TR" type="Sprite2D" parent="Interior/Furniture/Sofa" unique_id=2087157679]
+position = Vector2(57, 7)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(16, 0, 16, 16)
+
+[node name="Sofa BL" type="Sprite2D" parent="Interior/Furniture/Sofa" unique_id=1144594375]
+position = Vector2(7, 57)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(32, 0, 16, 16)
+
+[node name="Sofa BR" type="Sprite2D" parent="Interior/Furniture/Sofa" unique_id=133997104]
+position = Vector2(57, 57)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(48, 0, 16, 16)
+
+[node name="Desk" type="Node2D" parent="Interior/Furniture" unique_id=820866440]
+
+[node name="Desk TL" type="Sprite2D" parent="Interior/Furniture/Desk" unique_id=801603930]
+position = Vector2(22, 22)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(0, 16, 16, 16)
+
+[node name="Desk TR" type="Sprite2D" parent="Interior/Furniture/Desk" unique_id=1762750989]
+position = Vector2(41, 22)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(16, 16, 16, 16)
+
+[node name="Desk BL" type="Sprite2D" parent="Interior/Furniture/Desk" unique_id=1276644337]
+position = Vector2(22, 41)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(32, 16, 16, 16)
+
+[node name="Desk BR" type="Sprite2D" parent="Interior/Furniture/Desk" unique_id=119486653]
+position = Vector2(41, 41)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(48, 16, 16, 16)
+
+[node name="Desk Center" type="Sprite2D" parent="Interior/Furniture/Desk" unique_id=1289600076]
+position = Vector2(32, 32)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(112, 0, 16, 16)
+
+[node name="Chairs" type="Node2D" parent="Interior/Furniture" unique_id=542426889]
+
+[node name="Chair TL" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=704657898]
+position = Vector2(25, 25)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(64, 0, 16, 16)
+
+[node name="Chair TR" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=830523600]
+position = Vector2(39, 25)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(64, 0, 16, 16)
+
+[node name="Chair BL" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=27151063]
+position = Vector2(25, 39)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(64, 0, 16, 16)
+
+[node name="Chair BR" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=864058465]
+position = Vector2(39, 39)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(64, 0, 16, 16)
+
+[node name="Plants" type="Node2D" parent="Interior/Furniture" unique_id=1444749576]
+
+[node name="Plant1" type="Sprite2D" parent="Interior/Furniture/Plants" unique_id=2004090859]
+position = Vector2(3, 14)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(80, 0, 16, 16)
+
+[node name="Plant2" type="Sprite2D" parent="Interior/Furniture/Plants" unique_id=1836204255]
+position = Vector2(61, 50)
+rotation = 3.1415927
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(80, 0, 16, 16)
+
+[node name="Plant3" type="Sprite2D" parent="Interior/Furniture/Plants" unique_id=1284255805]
+position = Vector2(50, 3)
+rotation = 1.5707964
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(80, 0, 16, 16)
+
+[node name="Plant4" type="Sprite2D" parent="Interior/Furniture/Plants" unique_id=58706726]
+position = Vector2(14, 61)
+rotation = 4.712389
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(80, 0, 16, 16)
 
 [node name="Door" type="Node2D" parent="." unique_id=145803355]
 
 [node name="Top" type="TileMapLayer" parent="Door" unique_id=1450227237]
-tile_map_data = PackedByteArray("AAABAAAAAQAAAAAAAAACAAAAAgAAAAAAAAA=")
+tile_map_data = PackedByteArray(0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_rqtj4")
 
 [node name="Left" type="TileMapLayer" parent="Door" unique_id=885857355]
-tile_map_data = PackedByteArray("AAAAAAEAAAAAAAAAAAAAAAIAAQAAAAAAAAA=")
+tile_map_data = PackedByteArray(0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_yuq65")
 
 [node name="Right" type="TileMapLayer" parent="Door" unique_id=469474163]
-tile_map_data = PackedByteArray("AAADAAEAAAAAAAAAAAADAAIAAQAAAAAAAAA=")
+tile_map_data = PackedByteArray(0, 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_33t03")
 
 [node name="Bottom" type="TileMapLayer" parent="Door" unique_id=1945362188]
-tile_map_data = PackedByteArray("AAABAAMAAAAAAAAAAAACAAMAAQAAAAAAAAA=")
+tile_map_data = PackedByteArray(0, 0, 1, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, 0)
 tile_set = SubResource("TileSet_malkb")

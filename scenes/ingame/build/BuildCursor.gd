@@ -9,7 +9,10 @@ signal cancelled()
 
 const ROOM_SCENES: Dictionary = {
 	"bed_standard": preload("res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn"),
-	"bed_double":   preload("res://scenes/ingame/rooms/bed_double/Bed_Double.tscn"),
+	"bed_double": preload("res://scenes/ingame/rooms/bed_double/Bed_Double.tscn"),
+	"hr_office": preload("res://scenes/ingame/rooms/hr_office/Hr_Office.tscn"),
+	"sc_office": preload("res://scenes/ingame/rooms/sc_office/Sc_Office.tscn"),
+	"bar": preload("res://scenes/ingame/rooms/bar/Bar.tscn"),
 }
 
 const WALK_PX      := 48

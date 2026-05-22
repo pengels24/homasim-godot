@@ -7,6 +7,9 @@ signal room_selected(room_type_id: String)
 const ROOM_REGISTRY: Array[GDScript] = [
 	preload("res://scenes/ingame/rooms/bed_standard/BedStandard.gd"),
 	preload("res://scenes/ingame/rooms/bed_double/BedDouble.gd"),
+	preload("res://scenes/ingame/rooms/hr_office/HrOffice.gd"),
+	preload("res://scenes/ingame/rooms/sc_office/ScOffice.gd"),
+	preload("res://scenes/ingame/rooms/bar/Bar.gd"),
 ]
 
 const CATEGORIES: Array[Dictionary] = [

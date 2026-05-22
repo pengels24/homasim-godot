@@ -8,7 +8,10 @@ const BUILD_PANEL_SCRIPT := preload("res://scenes/ingame/build/BuildPanel.gd")
 
 const SCENE_PATHS: Dictionary = {
 	"bed_standard": "res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn",
-	"bed_double":   "res://scenes/ingame/rooms/bed_double/Bed_Double.tscn",
+	"bed_double": "res://scenes/ingame/rooms/bed_double/Bed_Double.tscn",
+	"hr_office": "res://scenes/ingame/rooms/hr_office/Hr_Office.tscn",
+	"sc_office": "res://scenes/ingame/rooms/sc_office/Sc_Office.tscn",
+	"bar": "res://scenes/ingame/rooms/bar/Bar.tscn",
 }
 
 signal room_built(room_type_id: String)

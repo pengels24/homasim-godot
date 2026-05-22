@@ -36,12 +36,15 @@ SIL Open Font License, Version 1.1
 Copyright 2020 The Inter Project Authors
 SIL Open Font License, Version 1.1
 
+= Avenue Pixel
+Copyright 2021 https://jdjimenez.itch.io
+SIL Open Font License, Version 1.1
+
 ## Musik
-= "Raving Energy" – Kevin MacLeod
-incompetech.com
+= "Almost Bliss", "Dreamer", "Leopard Print Elevator",
+= "Raving Energy", "Angel Share", "Autumn Day",
+= "Ether Vox", "Late Night Radio", "Universal",
+= "Pleasant Porridge"
+by Kevin MacLeod - incompetech.com
 Creative Commons: By Attribution 4.0
 creativecommons.org/licenses/by/4.0
-
-## Backend
-= Custom PHP API
-localhost:8848

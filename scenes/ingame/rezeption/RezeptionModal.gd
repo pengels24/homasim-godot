@@ -2,7 +2,7 @@
 ## ANG-162 – Rezeptions-Modal: 4-Spalten Matching-UI.
 ## Bidirektionales Matching: Gast-first oder Zimmer-first.
 
-const BUILD_PANEL_SCRIPT := preload("res://scenes/ingame/build/BuildPanel.gd")
+# const BUILD_PANEL_SCRIPT := preload("res://scenes/ingame/build/BuildPanel.gd")
 
 signal closed()
 
@@ -148,7 +148,8 @@ func _make_room_entry(room: Node2D, highlight: bool) -> PanelContainer:
 	card.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 	var type_id: String = str(room.get("room_type_id"))
-	var def := BUILD_PANEL_SCRIPT.find_definition(type_id)
+	#var def := BUILD_PANEL_SCRIPT.find_definition(type_id)
+	var def := {} # Dummy-Wert, bis die Rezeption neu gebaut wird
 	var label_str:  String = def.get("label", "?")
 	var name_str:   String = def.get("name", type_id)
 	var price:      int    = def.get("nightly_price", 0)

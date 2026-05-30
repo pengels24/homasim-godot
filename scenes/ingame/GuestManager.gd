@@ -3,8 +3,6 @@ class_name GuestManager
 ## ANG-162 – Spawn, Patience, Matching-Daten, Check-in/out.
 ## Wird via configure() aus Ingame.gd verdrahtet.
 
-const BUILD_PANEL_SCRIPT := preload("res://scenes/ingame/build/BuildPanel.gd")
-
 signal parties_changed()
 signal checkout_forgotten(count: int)
 
@@ -29,10 +27,14 @@ var _patience_rate: float = 0.05   # 5 % pro Spielstunde; über Settings anpassb
 
 # ── Setup ─────────────────────────────────────────────────────────────────────
 
+var _room_definitions: Dictionary = {}
+
 func configure(hotel: Dictionary, clock: IngameClock, map_grid: Node2D) -> void:
 	_hotel    = hotel
 	_clock    = clock
 	_map_grid = map_grid
+	# Sicherer Start: Dictionary bleibt leer, wenn keine Räume da sind.
+	_room_definitions = {}
 
 
 func set_patience_rate(rate: float) -> void:
@@ -56,16 +58,28 @@ func get_party(party_id: String) -> GuestParty:
 func get_free_rooms() -> Array:
 	if not is_instance_valid(_map_grid):
 		return []
+
 	var all_rooms: Array = _map_grid.get_placed_rooms()
 	var result: Array = []
-	for room: Node2D in all_rooms:
+
+	for room in all_rooms:
 		var type_id: String = str(room.get("room_type_id"))
-		if type_id == "":
-			continue
-		var def := BUILD_PANEL_SCRIPT.find_definition(type_id)
+
+		# Falls wir die Def noch nicht im Cache haben, hier kurz holen (Lazy Loading)
+		if not _room_definitions.has(type_id):
+
+			if room.has_method("get_definition"):
+				_room_definitions[type_id] = room.get_definition()
+			else:
+				continue
+
+		var def = _room_definitions[type_id]
+
 		if def.get("nightly_price", 0) <= 0:
 			continue
+
 		var rid := _room_key(room)
+
 		if not _room_assign.has(rid):
 			result.append(room)
 	return result
@@ -103,12 +117,19 @@ func spawn_guests() -> int:
 	return count
 
 
-## Gibt true zurück wenn mindestens ein buchbares Zimmer gebaut wurde.
 func has_bookable_rooms() -> bool:
+	if not is_instance_valid(_map_grid):
+		return false
+
 	for room in _map_grid.get_placed_rooms():
-		var def := BUILD_PANEL_SCRIPT.find_definition(str(room.get("room_type_id")))
-		if def.get("nightly_price", 0) > 0:
-			return true
+		# Wir nutzen hier den direkten Weg über den Raum selbst (statt BuildPanel)
+		if room.has_method("get_definition"):
+			var def := {}
+			if room.has_method("get_definition"):
+				def = room.get_definition()
+
+			if def.get("nightly_price", 0) > 0:
+				return true
 	return false
 
 

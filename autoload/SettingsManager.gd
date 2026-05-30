@@ -1,7 +1,7 @@
 extends Node
 ## Persistente Spieleinstellungen via ConfigFile (user://settings.cfg).
 
-signal hud_side_changed
+signal sig_hud_side_changed
 
 const SETTINGS_PATH := "user://settings.cfg"
 
@@ -52,7 +52,7 @@ func save() -> void:
 	cfg.set_value("session",  "last_profile_id",           last_profile_id)
 	cfg.save(SETTINGS_PATH)
 	_apply_audio()
-	hud_side_changed.emit()
+	sig_hud_side_changed.emit()
 
 
 ## Lädt Einstellungen vom Disk neu und wendet sie an (z.B. nach Verwerfen).

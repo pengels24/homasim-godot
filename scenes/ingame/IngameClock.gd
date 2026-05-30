@@ -15,6 +15,10 @@ var _btn_pause:   Button
 var _btn_play:    Button
 var _btn_ff:      Button
 
+# DUALMODE - new tophud
+var _new_time_lbl: Label
+var _new_day_lbl:  Label
+
 var _game_hour:   int   = 10
 var _game_minute: int   = 0
 var _game_paused: bool  = true
@@ -26,12 +30,19 @@ var _sb_active: StyleBoxFlat
 
 
 func configure(hotel: Dictionary, time_lbl: Label,
-		btn_pause: Button, btn_play: Button, btn_ff: Button) -> void:
+		btn_pause: Button, btn_play: Button, btn_ff: Button,
+		new_time_lbl: Label = null, new_day_lbl: Label = null) -> void:
+
 	_hotel     = hotel
 	_time_lbl  = time_lbl
 	_btn_pause = btn_pause
 	_btn_play  = btn_play
 	_btn_ff    = btn_ff
+
+	# merken der Labels des neuen HUDs
+	_new_time_lbl = new_time_lbl
+	_new_day_lbl  = new_day_lbl
+
 	_sb_normal = _make_ctrl_sb(Color(0.06, 0.10, 0.18, 0.90), Color(0.20, 0.24, 0.35, 0.55))
 	_sb_active = _make_ctrl_sb(Color(0.22, 0.16, 0.02, 1.0),  Color(0.918, 0.702, 0.031, 1.0))
 	for btn: Button in [btn_pause, btn_play, btn_ff]:
@@ -110,14 +121,23 @@ func _tick_game_clock(delta: float) -> void:
 func _on_day_end() -> void:
 	var new_day: int = int(_hotel.get("day", 1)) + 1
 	_hotel["day"] = new_day
+	_update_day_label() # Das neue HUD updaten!
 	day_ended.emit(new_day)
 	save_requested.emit(get_game_time())
 
 
 func _update_time_label() -> void:
-	if not is_instance_valid(_time_lbl):
-		return
-	_time_lbl.text = "%02d:%02d" % [_game_hour, _game_minute]
+	var formatted_time := "%02d:%02d" % [_game_hour, _game_minute]
+	# Altes HUD
+	if is_instance_valid(_time_lbl):
+		_time_lbl.text = formatted_time
+	# Neues HUD
+	if is_instance_valid(_new_time_lbl):
+		_new_time_lbl.text = formatted_time
+
+func _update_day_label() -> void:
+	if is_instance_valid(_new_day_lbl):
+		_new_day_lbl.text = str(_hotel.get("day", 1))
 
 
 # ── Spielgeschwindigkeit ──────────────────────────────────────────────────────

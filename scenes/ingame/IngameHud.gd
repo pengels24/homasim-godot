@@ -30,21 +30,21 @@ var _hotel_name_lbl:     Label
 var _level_lbl:          Label
 var _stat_day_val:       Label
 var _stat_money_val:     Label
-var _stat_guests_wait:   Label
-var _stat_guests_active: Label
-var _stat_guests_out:    Label
-var _stat_ap_val:        Label
-var _stat_exp_bar:       Control
-var _stat_exp_lbl:       Label
-var _exp_fill:           ColorRect
-var _stat_ruf_root:      Control
-var _stat_ruf_lbl:       Label
-var _stat_fp_val:        Label
+# var _stat_guests_wait:   Label
+# var _stat_guests_active: Label
+# var _stat_guests_out:    Label
+# var _stat_ap_val:        Label
+# var _stat_exp_bar:       Control
+# var _stat_exp_lbl:       Label
+# var _exp_fill:           ColorRect
+# var _stat_ruf_root:      Control
+# var _stat_ruf_lbl:       Label
+# var _stat_fp_val:        Label
 var _bottom_anchor:      Control
 var _context_bar:        HBoxContainer
 
 # ── Zustand ───────────────────────────────────────────────────────────────────
-var _ruf_indicator:         ColorRect
+# var _ruf_indicator:         ColorRect
 var _fan_mode_btn:          Button
 var _mode_icon_center:      Label
 var _mode_icon_back:        TextureRect
@@ -67,15 +67,15 @@ func configure(hotel: Dictionary, refs: Dictionary, hud_canvas: CanvasLayer) -> 
 	_level_lbl          = refs["level_lbl"]
 	_stat_day_val       = refs["stat_day_val"]
 	_stat_money_val     = refs["stat_money_val"]
-	_stat_guests_wait   = refs["stat_guests_wait"]
-	_stat_guests_active = refs["stat_guests_active"]
-	_stat_guests_out    = refs["stat_guests_out"]
-	_stat_ap_val        = refs["stat_ap_val"]
-	_stat_exp_bar       = refs["stat_exp_bar"]
-	_stat_exp_lbl       = refs["stat_exp_lbl"]
-	_stat_ruf_root      = refs["stat_ruf_root"]
-	_stat_ruf_lbl       = refs["stat_ruf_lbl"]
-	_stat_fp_val        = refs["stat_fp_val"]
+	# _stat_guests_wait   = refs["stat_guests_wait"]
+	# _stat_guests_active = refs["stat_guests_active"]
+	# _stat_guests_out    = refs["stat_guests_out"]
+	# _stat_ap_val        = refs["stat_ap_val"]
+	# _stat_exp_bar       = refs["stat_exp_bar"]
+	# _stat_exp_lbl       = refs["stat_exp_lbl"]
+	# _stat_ruf_root      = refs["stat_ruf_root"]
+	# _stat_ruf_lbl       = refs["stat_ruf_lbl"]
+	# _stat_fp_val        = refs["stat_fp_val"]
 	_bottom_anchor      = refs["bottom_anchor"]
 	_context_bar          = refs["context_bar"]
 	_context_bar.z_index  = 10
@@ -113,14 +113,16 @@ func update_money(amount: float) -> void:
 	_stat_money_val.text = "€ " + _format_money(int(amount))
 
 
-func update_guest_stats(waiting: int, active: int, checkout: int) -> void:
-	_stat_guests_wait.text   = str(waiting)
-	_stat_guests_active.text = str(active)
-	_stat_guests_out.text    = str(checkout)
+func update_guest_stats(_waiting: int, _active: int, _checkout: int) -> void:
+	# _stat_guests_wait.text   = str(waiting)
+	# _stat_guests_active.text = str(active)
+	# _stat_guests_out.text    = str(checkout)
+	pass
 
 
-func update_exp(xp: int) -> void:
-	_stat_exp_lbl.text = "%d XP" % xp
+func update_exp(_xp: int) -> void:
+	# _stat_exp_lbl.text = "%d XP" % xp
+	pass
 
 
 func set_mode_btn_saved(saved: bool) -> void:
@@ -133,11 +135,13 @@ func get_stat_money_node() -> Control:
 
 
 func get_stat_exp_node() -> Control:
-	return _stat_exp_lbl
+	# return _stat_exp_lbl
+	return
 
 
 func get_stat_fp_node() -> Control:
-	return _stat_fp_val
+	# return _stat_fp_val
+	return
 
 
 func get_bottom_button(idx: int) -> Button:
@@ -166,26 +170,27 @@ func trigger_button(idx: int) -> void:
 # ── HUD-Setup ─────────────────────────────────────────────────────────────────
 
 func _setup_hud() -> void:
-	_hotel_name_lbl.text     = _hotel.get("name", "Hotel")
-	_level_lbl.text          = "LVL 1"
-	_stat_day_val.text       = str(int(_hotel.get("day", 1)))
-	_stat_money_val.text     = "€ " + _format_money(int(_hotel.get("money", 0)))
-	_stat_guests_wait.text   = "0"
-	_stat_guests_active.text = "0"
-	_stat_guests_out.text    = "0"
-	_stat_ap_val.text        = "0 / 100"
-	var initial_xp: int = _hotel.get("xp", 0)
-	_stat_exp_lbl.text = "%d XP" % initial_xp
-	_build_exp_bar(initial_xp, 100)
-	_stat_fp_val.text        = "0"
-	_update_ruf_display(500)
-	_apply_value_box(_stat_money_val)
-	_apply_value_box(_stat_ap_val)
-	_apply_value_box(_stat_fp_val)
-	_apply_value_box(_stat_day_val)
-	_apply_guest_badge(_stat_guests_wait,   Color(0.20, 0.78, 0.35))
-	_apply_guest_badge(_stat_guests_active, Color(0.918, 0.702, 0.031))
-	_apply_guest_badge(_stat_guests_out,    Color(0.85, 0.20, 0.20))
+	# _hotel_name_lbl.text     = _hotel.get("name", "Hotel")
+	# _level_lbl.text          = "LVL 1"
+	# _stat_day_val.text       = str(int(_hotel.get("day", 1)))
+	# _stat_money_val.text     = "€ " + _format_money(int(_hotel.get("money", 0)))
+	# _stat_guests_wait.text   = "0"
+	# _stat_guests_active.text = "0"
+	# _stat_guests_out.text    = "0"
+	# _stat_ap_val.text        = "0 / 100"
+	# var initial_xp: int = _hotel.get("xp", 0)
+	# _stat_exp_lbl.text = "%d XP" % initial_xp
+	# _build_exp_bar(initial_xp, 100)
+	# _stat_fp_val.text        = "0"
+	# _update_ruf_display(500)
+	# _apply_value_box(_stat_money_val)
+	# _apply_value_box(_stat_ap_val)
+	# _apply_value_box(_stat_fp_val)
+	# _apply_value_box(_stat_day_val)
+	# _apply_guest_badge(_stat_guests_wait,   Color(0.20, 0.78, 0.35))
+	# _apply_guest_badge(_stat_guests_active, Color(0.918, 0.702, 0.031))
+	# _apply_guest_badge(_stat_guests_out,    Color(0.85, 0.20, 0.20))
+	pass
 
 
 func _apply_value_box(lbl: Label) -> void:
@@ -229,75 +234,79 @@ func _apply_guest_badge(lbl: Label, tint: Color) -> void:
 # ── RUF-Bar ───────────────────────────────────────────────────────────────────
 
 func _build_ruf_bar() -> void:
-	var colors: Array[Color] = [
-		Color(0.82, 0.15, 0.15),
-		Color(0.88, 0.48, 0.08),
-		Color(0.84, 0.74, 0.08),
-		Color(0.30, 0.74, 0.22),
-		Color(0.08, 0.50, 0.12),
-	]
-	var bar_w  := 130.0
-	var bar_h  := 10.0
-	var seg_w  := bar_w / colors.size()
+	# var colors: Array[Color] = [
+	# 	Color(0.82, 0.15, 0.15),
+	# 	Color(0.88, 0.48, 0.08),
+	# 	Color(0.84, 0.74, 0.08),
+	# 	Color(0.30, 0.74, 0.22),
+	# 	Color(0.08, 0.50, 0.12),
+	# ]
+	# var bar_w  := 130.0
+	# var bar_h  := 10.0
+	# var seg_w  := bar_w / colors.size()
 
-	for i in colors.size():
-		var seg := ColorRect.new()
-		seg.color    = colors[i]
-		seg.position = Vector2(i * seg_w, 2.0)
-		seg.size     = Vector2(seg_w, bar_h)
-		_stat_ruf_root.add_child(seg)
+	# for i in colors.size():
+	# 	var seg := ColorRect.new()
+	# 	seg.color    = colors[i]
+	# 	seg.position = Vector2(i * seg_w, 2.0)
+	# 	seg.size     = Vector2(seg_w, bar_h)
+	# 	_stat_ruf_root.add_child(seg)
 
-	_ruf_indicator          = ColorRect.new()
-	_ruf_indicator.color    = Color(1, 1, 1, 0.90)
-	_ruf_indicator.size     = Vector2(2, 14)
-	_ruf_indicator.position = Vector2(0, 0)
-	_stat_ruf_root.add_child(_ruf_indicator)
+	# _ruf_indicator          = ColorRect.new()
+	# _ruf_indicator.color    = Color(1, 1, 1, 0.90)
+	# _ruf_indicator.size     = Vector2(2, 14)
+	# _ruf_indicator.position = Vector2(0, 0)
+	# _stat_ruf_root.add_child(_ruf_indicator)
 
-	await get_tree().process_frame
-	_update_ruf_display(500)
+	# await get_tree().process_frame
+	# _update_ruf_display(500)
+	pass
 
 
 # ── EXP-Bar ───────────────────────────────────────────────────────────────────
 
-func _build_exp_bar(value: int, max_val: int) -> void:
-	var bg := ColorRect.new()
-	bg.color = Color(0.12, 0.16, 0.22, 1)
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_stat_exp_bar.add_child(bg)
+func _build_exp_bar(_value: int, _max_val: int) -> void:
+	# var bg := ColorRect.new()
+	# bg.color = Color(0.12, 0.16, 0.22, 1)
+	# bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+	# _stat_exp_bar.add_child(bg)
 
-	_exp_fill          = ColorRect.new()
-	_exp_fill.color    = Color(0.20, 0.48, 0.85, 1.0)
-	_exp_fill.position = Vector2.ZERO
-	_exp_fill.size     = Vector2.ZERO
-	_stat_exp_bar.add_child(_exp_fill)
+	# _exp_fill          = ColorRect.new()
+	# _exp_fill.color    = Color(0.20, 0.48, 0.85, 1.0)
+	# _exp_fill.position = Vector2.ZERO
+	# _exp_fill.size     = Vector2.ZERO
+	# _stat_exp_bar.add_child(_exp_fill)
 
-	await get_tree().process_frame
-	_update_exp_fill(value, max_val)
-
-
-func _update_exp_fill(value: int, max_val: int) -> void:
-	if not is_instance_valid(_exp_fill):
-		return
-	var bar_w := _stat_exp_bar.size.x
-	var bar_h := _stat_exp_bar.size.y
-	if bar_w == 0:
-		bar_w = 120.0
-	if bar_h == 0:
-		bar_h = 10.0
-	_exp_fill.size = Vector2(
-		clampf((float(value) / float(max(max_val, 1))) * bar_w, 0.0, bar_w),
-		bar_h
-	)
+	# await get_tree().process_frame
+	# _update_exp_fill(value, max_val)
+	pass
 
 
-func _update_ruf_display(rep: int) -> void:
-	_stat_ruf_lbl.text = "%d / 1000" % rep
-	if not is_instance_valid(_ruf_indicator):
-		return
-	var bar_w := _stat_ruf_root.size.x
-	if bar_w == 0:
-		bar_w = 130.0
-	_ruf_indicator.position.x = clampf((rep / 1000.0) * bar_w - 1.0, 0.0, bar_w - 2.0)
+func _update_exp_fill(_value: int, _max_val: int) -> void:
+	# if not is_instance_valid(_exp_fill):
+	# 	return
+	# var bar_w := _stat_exp_bar.size.x
+	# var bar_h := _stat_exp_bar.size.y
+	# if bar_w == 0:
+	# 	bar_w = 120.0
+	# if bar_h == 0:
+	# 	bar_h = 10.0
+	# _exp_fill.size = Vector2(
+	# 	clampf((float(value) / float(max(max_val, 1))) * bar_w, 0.0, bar_w),
+	# 	bar_h
+	# )
+	pass
+
+
+func _update_ruf_display(_rep: int) -> void:
+	# _stat_ruf_lbl.text = "%d / 1000" % rep
+	# if not is_instance_valid(_ruf_indicator):
+	# 	return
+	# var bar_w := _stat_ruf_root.size.x
+	# if bar_w == 0:
+	# 	bar_w = 130.0
+	# _ruf_indicator.position.x = clampf((rep / 1000.0) * bar_w - 1.0, 0.0, bar_w - 2.0)
+	pass
 
 
 # ── BottomBar ─────────────────────────────────────────────────────────────────
@@ -435,17 +444,18 @@ func _apply_bar_anchor() -> void:
 
 
 func _position_mode_btn() -> void:
-	if not is_instance_valid(_fan_mode_btn):
-		return
-	var vw := float(get_viewport().get_visible_rect().size.x)
-	var vh := float(get_viewport().get_visible_rect().size.y)
-	var btn_y := vh - BB_MARGIN - BB_BTN_SIZE
-	if SettingsManager.hud_side == "center":
-		# Bar mittig → Sprung-Button in die freie linke Ecke
-		_fan_mode_btn.position = Vector2(BB_MARGIN, btn_y)
-	else:
-		# Bar links oder rechts → Sprung-Button bleibt unten-mitte
-		_fan_mode_btn.position = Vector2((vw - BB_BTN_SIZE) * 0.5, btn_y)
+	# if not is_instance_valid(_fan_mode_btn):
+	# 	return
+	# var vw := float(get_viewport().get_visible_rect().size.x)
+	# var vh := float(get_viewport().get_visible_rect().size.y)
+	# var btn_y := vh - BB_MARGIN - BB_BTN_SIZE
+	# if SettingsManager.hud_side == "center":
+	# 	# Bar mittig → Sprung-Button in die freie linke Ecke
+	# 	_fan_mode_btn.position = Vector2(BB_MARGIN, btn_y)
+	# else:
+	# 	# Bar links oder rechts → Sprung-Button bleibt unten-mitte
+	# 	_fan_mode_btn.position = Vector2((vw - BB_BTN_SIZE) * 0.5, btn_y)
+	pass
 
 
 func _build_tooltip() -> void:

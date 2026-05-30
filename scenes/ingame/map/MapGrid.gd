@@ -53,6 +53,24 @@ var _occ_h: int
 
 
 func _ready() -> void:
+	# --- central input handler verdrahten ---
+	InputHandler.sig_camera_save_view_requested.connect(save_current_view)
+	InputHandler.sig_camera_restore_view_requested.connect(restore_saved_view)
+	InputHandler.sig_camera_pan_requested.connect(_on_input_camera_pan)
+	InputHandler.sig_camera_zoom_requested.connect(_on_input_camera_zoom)
+	InputHandler.sig_camera_drag_started.connect(_on_input_drag_started)
+	InputHandler.sig_camera_drag_moved.connect(_on_input_drag_moved)
+	InputHandler.sig_camera_drag_ended.connect(_on_input_drag_ended)
+	InputHandler.sig_kill_reset_pin_requested.connect(func():
+		if _has_saved_view:
+			_has_saved_view = false
+			view_saved_changed.emit(false)
+	)
+
+	view_saved_changed.connect(func(has_saved: bool):
+		InputHandler.is_view_saved = has_saved
+	)
+
 	var p := $WorldRoot/ParcelsRoot
 	_grid = [
 		[p.get_node("P_0_0"), p.get_node("P_1_0"), p.get_node("P_2_0"), p.get_node("P_3_0"), p.get_node("P_4_0")],
@@ -61,6 +79,7 @@ func _ready() -> void:
 		[p.get_node("P_0_3"), p.get_node("P_1_3"), p.get_node("P_2_3"), p.get_node("P_3_3"), p.get_node("P_4_3")],
 		[p.get_node("P_0_4"), p.get_node("P_1_4"), p.get_node("P_2_4"), p.get_node("P_3_4"), p.get_node("P_4_4")],
 	]
+
 	for row: Array in _grid:
 		for parcel: Node2D in row:
 			parcel.visible = false
@@ -93,19 +112,6 @@ func build_map(built_plots: Array, entry_plot: Vector2i, enter_dir: String) -> v
 	_mark_lobby_on_parcel(entry_plot.x, entry_plot.y)
 	_restore_rooms(built_plots)
 	center_on_entry(entry_plot)
-
-
-func reset_view() -> void:
-	if _has_saved_view:
-		camera.global_position = _saved_cam_pos
-		camera.zoom            = Vector2(_saved_cam_zoom, _saved_cam_zoom)
-		_has_saved_view        = false
-	else:
-		_saved_cam_pos  = camera.global_position
-		_saved_cam_zoom = camera.zoom.x
-		_has_saved_view = true
-		center_on_entry(_entry_plot)
-	view_saved_changed.emit(_has_saved_view)
 
 
 func center_on_entry(entry_plot: Vector2i) -> void:
@@ -398,6 +404,7 @@ func _exit_global(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 
 # ── Kamera ────────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _set_camera_limits() -> void:
 	var map_px: float = (grid_cols * PARCEL_SZ + WALK_W * 2) * TILE_PX * SCALE
 	var vp    := get_viewport_rect().size
@@ -407,64 +414,70 @@ func _set_camera_limits() -> void:
 	camera.limit_bottom = int(map_px) + int(vp.y / 2.0)
 
 
-func _process(delta: float) -> void:
-	_handle_wasd_pan(delta)
-	_handle_keyboard_zoom(delta)
-
-
-func _handle_wasd_pan(delta: float) -> void:
-	var dir := Vector2.ZERO
-	if Input.is_key_pressed(KEY_D): dir.x += 1.0
-	if Input.is_key_pressed(KEY_A): dir.x -= 1.0
-	if Input.is_key_pressed(KEY_S): dir.y += 1.0
-	if Input.is_key_pressed(KEY_W): dir.y -= 1.0
-	if dir != Vector2.ZERO:
-		_clear_saved_view()
-		camera.position += dir.normalized() * PAN_SPEED * delta / camera.zoom.x
-
-
-func _handle_keyboard_zoom(delta: float) -> void:
-	if Input.is_key_pressed(KEY_KP_MULTIPLY):
-		_clear_saved_view()
-		camera.zoom = Vector2(1.0, 1.0)
-		return
-	var zoom_dir := 0.0
-	if   Input.is_key_pressed(KEY_EQUAL)   or Input.is_key_pressed(KEY_KP_ADD):      zoom_dir =  1.0
-	elif Input.is_key_pressed(KEY_MINUS)   or Input.is_key_pressed(KEY_KP_SUBTRACT): zoom_dir = -1.0
-	if zoom_dir != 0.0:
-		_apply_zoom(zoom_dir * ZOOM_STEP * delta * 10.0)
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		_handle_mouse_button(event as InputEventMouseButton)
-	elif event is InputEventMouseMotion and _drag_active:
-		_clear_saved_view()
-		var mm := event as InputEventMouseMotion
-		camera.position = _cam_origin - (mm.position - _drag_origin) / camera.zoom
-
-
-func _handle_mouse_button(mb: InputEventMouseButton) -> void:
-	match mb.button_index:
-		MOUSE_BUTTON_WHEEL_UP:
-			if mb.pressed: _apply_zoom(ZOOM_STEP)
-		MOUSE_BUTTON_WHEEL_DOWN:
-			if mb.pressed: _apply_zoom(-ZOOM_STEP)
-		MOUSE_BUTTON_RIGHT:
-			_drag_active = mb.pressed
-			if _drag_active:
-				_drag_origin = mb.position
-				_cam_origin  = camera.position
-
-
+# =============================================================================
 func _apply_zoom(delta: float) -> void:
 	_clear_saved_view()
 	var new_zoom: float = clampf(camera.zoom.x + delta, ZOOM_MIN, ZOOM_MAX)
 	camera.zoom = Vector2(new_zoom, new_zoom)
 
 
+# =============================================================================
 func _clear_saved_view() -> void:
 	if not _has_saved_view:
 		return
 	_has_saved_view = false
+	view_saved_changed.emit(false)
+
+
+# ── Signale vom InputHandler ausführen ────────────────────────────────────────
+
+# =============================================================================
+func _on_input_camera_pan(dir_delta: Vector2) -> void:
+	camera.position += dir_delta * PAN_SPEED / camera.zoom.x
+
+
+# =============================================================================
+func _on_input_camera_zoom(step: float) -> void:
+	# Wenn der Wert extrem klein ist, kommt er aus der _process (Tastatur-Delta)
+	if abs(step) < 0.5:
+		# Tastatur-Zoom drosseln, indem wir es verkleinern
+		_apply_zoom(step * 0.2)
+	else:
+		# Mausrad-Impuls (1.0 / -1.0) sanfter machen: wir nutzen 50% des normalen Steps
+		_apply_zoom(step * (ZOOM_STEP * 0.5))
+
+
+# =============================================================================
+func _on_input_drag_started(mouse_pos: Vector2) -> void:
+	_drag_active = true
+	_drag_origin = mouse_pos
+	_cam_origin = camera.position
+	Input.set_default_cursor_shape(Input.CURSOR_DRAG)
+
+
+# =============================================================================
+func _on_input_drag_moved(mouse_pos: Vector2) -> void:
+	if _drag_active:
+		camera.position = _cam_origin - (mouse_pos - _drag_origin) / camera.zoom
+
+
+# =============================================================================
+# =============================================================================
+func _on_input_drag_ended() -> void:
+	_drag_active = false
+	Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+
+
+# =============================================================================
+func save_current_view() -> void:
+	_saved_cam_pos = camera.global_position
+	_saved_cam_zoom = camera.zoom.x
+	center_on_entry(_entry_plot)
+	view_saved_changed.emit(true)
+
+
+# =============================================================================
+func restore_saved_view() -> void:
+	camera.global_position = _saved_cam_pos
+	camera.zoom = Vector2(_saved_cam_zoom, _saved_cam_zoom)
 	view_saved_changed.emit(false)

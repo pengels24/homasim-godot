@@ -1,4 +1,5 @@
 extends Node
+
 ## ANG-184 – Save-System auf Einzeldateien umgestellt (ConfigFile + binäre Snapshots).
 ## Jedes Hotel = eigene .cfg, jeder Save-Slot = eigene .sav.
 ## API-Oberfläche identisch zu vorher.
@@ -20,6 +21,7 @@ var _next_hotel_id:   int   = 1
 
 # ── Lifecycle ─────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _ready() -> void:
 	_ensure_dirs()
 	_load_profiles()
@@ -28,10 +30,12 @@ func _ready() -> void:
 
 # ── Profile ───────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func get_profiles() -> Array:
 	return _profiles
 
 
+# =============================================================================
 func create_profile(profile_name: String, appearance: Dictionary = {}) -> int:
 	var new_id := _next_profile_id
 	_next_profile_id += 1
@@ -42,6 +46,7 @@ func create_profile(profile_name: String, appearance: Dictionary = {}) -> int:
 	return new_id
 
 
+# =============================================================================
 func get_profile(profile_id: int) -> Dictionary:
 	for p in _profiles:
 		if p["id"] == profile_id:
@@ -49,6 +54,7 @@ func get_profile(profile_id: int) -> Dictionary:
 	return {}
 
 
+# =============================================================================
 func delete_profile(profile_id: int) -> void:
 	_profiles = _profiles.filter(func(p: Dictionary) -> bool: return p["id"] != profile_id)
 	var to_delete: Array = _hotels.filter(
@@ -61,28 +67,42 @@ func delete_profile(profile_id: int) -> void:
 
 # ── Hotels ────────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func get_hotels(profile_id: int) -> Array:
 	return _hotels.filter(func(h: Dictionary) -> bool: return h["profile_id"] == profile_id)
 
 
+# =============================================================================
 func can_create_hotel(profile_id: int) -> bool:
 	return get_hotels(profile_id).size() < MAX_HOTELS
 
 
+# =============================================================================
 func create_hotel(profile_id: int, hotel_name: String, cols: int = 5, rows: int = 5) -> int:
 	var new_id := _next_hotel_id
 	_next_hotel_id += 1
 	var hotel := {
-		"id":         new_id,
+		"id": new_id,
 		"profile_id": profile_id,
-		"name":       hotel_name,
-		"grid_cols":  cols,
-		"grid_rows":  rows,
-		"day":        1,
-		"money":      50000.0,
-		"game_time":  360,
-		"plots":      _init_plots(cols, rows),
+		"name": hotel_name,
+		"grid_cols": cols,
+		"grid_rows": rows,
+		"day": 1,
+		"money": 50000,
+		"game_time": 360,
+		"plots": _init_plots(cols, rows),
 		"auto_count": 0,
+		# neue felder ab v0.1.23gd
+		"level": 1,
+		"stars": 0,
+		"guests_active": 0,
+		"guests_checkin": 0,
+		"guests_checkout": 0,
+		"exp": 0,
+		"exp_max": 100,
+		"rep": 500,
+		"rep_max": 1000,
+		"fp": 0,
 	}
 	_hotels.append(hotel)
 	_save_profiles()
@@ -90,6 +110,7 @@ func create_hotel(profile_id: int, hotel_name: String, cols: int = 5, rows: int 
 	return new_id
 
 
+# =============================================================================
 func get_hotel(hotel_id: int) -> Dictionary:
 	for h in _hotels:
 		if h["id"] == hotel_id:
@@ -97,6 +118,7 @@ func get_hotel(hotel_id: int) -> Dictionary:
 	return {}
 
 
+# =============================================================================
 func update_hotel(hotel_id: int, fields: Dictionary) -> void:
 	for h in _hotels:
 		if h["id"] == hotel_id:
@@ -106,6 +128,7 @@ func update_hotel(hotel_id: int, fields: Dictionary) -> void:
 			return
 
 
+# =============================================================================
 func delete_hotel(hotel_id: int) -> void:
 	_hotels = _hotels.filter(func(h: Dictionary) -> bool: return h["id"] != hotel_id)
 	_delete_hotel_files(hotel_id)
@@ -113,14 +136,17 @@ func delete_hotel(hotel_id: int) -> void:
 
 # ── Plots ─────────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func get_plots(hotel_id: int) -> Array:
 	return get_hotel(hotel_id).get("plots", [])
 
 
+# =============================================================================
 func get_built_plots(hotel_id: int) -> Array:
 	return get_plots(hotel_id).filter(func(p: Dictionary) -> bool: return p["is_built"])
 
 
+# =============================================================================
 func set_plot_built(hotel_id: int, x: int, y: int, entrance_dir: String = "") -> void:
 	var hotel := get_hotel(hotel_id)
 	for p in hotel.get("plots", []):
@@ -133,6 +159,7 @@ func set_plot_built(hotel_id: int, x: int, y: int, entrance_dir: String = "") ->
 
 # ── Räume ─────────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func save_room_to_plot(hotel_id: int, parcel_x: int, parcel_y: int, room_dict: Dictionary) -> void:
 	var hotel := get_hotel(hotel_id)
 	for p in hotel.get("plots", []):
@@ -146,6 +173,7 @@ func save_room_to_plot(hotel_id: int, parcel_x: int, parcel_y: int, room_dict: D
 
 # ── Save-Slots ────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func get_save_slots(hotel_id: int) -> Dictionary:
 	var hotel  := get_hotel(hotel_id)
 	var result := _default_saves()
@@ -161,6 +189,7 @@ func get_save_slots(hotel_id: int) -> Dictionary:
 	return result
 
 
+# =============================================================================
 func save_quick(hotel_id: int) -> void:
 	var hotel := get_hotel(hotel_id)
 	if hotel.is_empty():
@@ -168,6 +197,7 @@ func save_quick(hotel_id: int) -> void:
 	_write_snapshot(_save_path_quick(hotel_id), _take_snapshot(hotel, "Quicksave"))
 
 
+# =============================================================================
 func load_quick(hotel_id: int) -> bool:
 	var hotel := get_hotel(hotel_id)
 	if hotel.is_empty():
@@ -180,6 +210,7 @@ func load_quick(hotel_id: int) -> bool:
 	return true
 
 
+# =============================================================================
 func save_manual(hotel_id: int, slot: int, save_name: String) -> void:
 	if slot < 0 or slot >= MANUAL_SLOTS:
 		return
@@ -189,6 +220,7 @@ func save_manual(hotel_id: int, slot: int, save_name: String) -> void:
 	_write_snapshot(_save_path_manual(hotel_id, slot), _take_snapshot(hotel, save_name))
 
 
+# =============================================================================
 func load_manual(hotel_id: int, slot: int) -> bool:
 	if slot < 0 or slot >= MANUAL_SLOTS:
 		return false
@@ -203,6 +235,7 @@ func load_manual(hotel_id: int, slot: int) -> bool:
 	return true
 
 
+# =============================================================================
 func save_auto(hotel_id: int) -> void:
 	var hotel := get_hotel(hotel_id)
 	if hotel.is_empty():
@@ -221,6 +254,7 @@ func save_auto(hotel_id: int) -> void:
 	_save_hotel(hotel)
 
 
+# =============================================================================
 func load_auto(hotel_id: int, index: int) -> bool:
 	var hotel := get_hotel(hotel_id)
 	if hotel.is_empty():
@@ -236,6 +270,7 @@ func load_auto(hotel_id: int, index: int) -> bool:
 	return true
 
 
+# =============================================================================
 func delete_save(hotel_id: int, slot_type: String, slot_idx: int = 0) -> void:
 	var dir := DirAccess.open(SAVES_DIR)
 	if not dir:
@@ -266,21 +301,29 @@ func delete_save(hotel_id: int, slot_type: String, slot_idx: int = 0) -> void:
 
 # ── Pfad-Helfer ───────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _hotel_cfg_path(id: int) -> String:
 	return HOTELS_DIR + "hotel_%d.cfg" % id
 
+
+# =============================================================================
 func _save_path_quick(id: int) -> String:
 	return SAVES_DIR + "hotel_%d_quick.sav" % id
 
+
+# =============================================================================
 func _save_path_manual(id: int, n: int) -> String:
 	return SAVES_DIR + "hotel_%d_manual_%d.sav" % [id, n]
 
+
+# =============================================================================
 func _save_path_auto(id: int, n: int) -> String:
 	return SAVES_DIR + "hotel_%d_auto_%d.sav" % [id, n]
 
 
 # ── Persistenz – Profile ──────────────────────────────────────────────────────
 
+# =============================================================================
 func _load_profiles() -> void:
 	var cfg := ConfigFile.new()
 	if cfg.load(PROFILES_PATH) != OK:
@@ -299,6 +342,7 @@ func _load_profiles() -> void:
 		_profiles.append(profile)
 
 
+# =============================================================================
 func _save_profiles() -> void:
 	var cfg := ConfigFile.new()
 	cfg.set_value("meta", "next_profile_id", _next_profile_id)
@@ -316,6 +360,7 @@ func _save_profiles() -> void:
 
 # ── Persistenz – Hotels ───────────────────────────────────────────────────────
 
+# =============================================================================
 func _load_all_hotels() -> void:
 	var dir := DirAccess.open(HOTELS_DIR)
 	if not dir:
@@ -328,34 +373,48 @@ func _load_all_hotels() -> void:
 		fname = dir.get_next()
 
 
+# =============================================================================
 func _load_hotel_file(filename: String) -> void:
 	var cfg := ConfigFile.new()
 	if cfg.load(HOTELS_DIR + filename) != OK:
 		return
 	var id := int(filename.get_basename().trim_prefix("hotel_"))
 	_hotels.append({
-		"id":         id,
+		"id": id,
 		"profile_id": cfg.get_value("hotel", "profile_id", 0),
-		"name":       cfg.get_value("hotel", "name",       ""),
-		"grid_cols":  cfg.get_value("hotel", "grid_cols",  5),
-		"grid_rows":  cfg.get_value("hotel", "grid_rows",  5),
-		"day":        cfg.get_value("hotel", "day",        1),
-		"money":      cfg.get_value("hotel", "money",      50000.0),
-		"game_time":  cfg.get_value("hotel", "game_time",  360),
-		"plots":      cfg.get_value("hotel", "plots",      []),
+		"name": cfg.get_value("hotel", "name", ""),
+		"grid_cols": cfg.get_value("hotel", "grid_cols", 5),
+		"grid_rows": cfg.get_value("hotel", "grid_rows", 5),
+		"day": cfg.get_value("hotel", "day", 1),
+		"money": cfg.get_value("hotel", "money", 50000),
+		"game_time": cfg.get_value("hotel", "game_time", 360),
+		"plots":  cfg.get_value("hotel", "plots", []),
 		"auto_count": cfg.get_value("hotel", "auto_count", 0),
+		# neue felder ab v0.1.23gd
+		"level": cfg.get_value("hotel", "level", 1),
+		"stars": cfg.get_value("hotel", "stars", 0),
+		"guests_active": cfg.get_value("hotel", "guests_active", 0),
+		"guests_checkin": cfg.get_value("hotel", "guests_checkin", 0),
+		"guests_checkout": cfg.get_value("hotel", "guests_checkout", 0),
+		"exp": cfg.get_value("hotel", "exp", 0),
+		"exp_max": cfg.get_value("hotel", "exp_max", 100),
+		"rep": cfg.get_value("hotel", "rep", 500),
+		"rep_max": cfg.get_value("hotel", "rep_max", 1000),
+		"fp": cfg.get_value("hotel", "fp", 0),
 	})
 
 
+# =============================================================================
 func _save_hotel(hotel: Dictionary) -> void:
 	if hotel.is_empty():
 		return
 	var cfg := ConfigFile.new()
-	for key in ["profile_id", "name", "grid_cols", "grid_rows", "day", "money", "game_time", "plots", "auto_count"]:
+	for key in ["profile_id", "name", "grid_cols", "grid_rows", "day", "money", "game_time", "plots", "auto_count",	"level", "stars", "guests_active", "guests_checkin", "guests_checkout", "exp", "exp_max", "rep", "rep_max", "fp"]:
 		cfg.set_value("hotel", key, hotel.get(key))
 	cfg.save(_hotel_cfg_path(hotel["id"]))
 
 
+# =============================================================================
 func _delete_hotel_files(hotel_id: int) -> void:
 	var hdir := DirAccess.open(HOTELS_DIR)
 	if hdir:
@@ -376,12 +435,14 @@ func _delete_hotel_files(hotel_id: int) -> void:
 
 # ── Persistenz – Snapshots ────────────────────────────────────────────────────
 
+# =============================================================================
 func _write_snapshot(path: String, snap: Dictionary) -> void:
 	var file := FileAccess.open(path, FileAccess.WRITE)
 	if file:
 		file.store_var(snap)
 
 
+# =============================================================================
 func _read_snapshot(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
 		return {}
@@ -394,6 +455,7 @@ func _read_snapshot(path: String) -> Dictionary:
 
 # ── Hilfsfunktionen ───────────────────────────────────────────────────────────
 
+# =============================================================================
 func _ensure_dirs() -> void:
 	DirAccess.make_dir_recursive_absolute(
 		ProjectSettings.globalize_path(HOTELS_DIR))
@@ -401,6 +463,7 @@ func _ensure_dirs() -> void:
 		ProjectSettings.globalize_path(SAVES_DIR))
 
 
+# =============================================================================
 func _init_plots(cols: int, rows: int) -> Array:
 	var plots: Array = []
 	for row in rows:
@@ -415,10 +478,12 @@ func _init_plots(cols: int, rows: int) -> Array:
 	return plots
 
 
+# =============================================================================
 func _default_saves() -> Dictionary:
 	return { "quick": null, "manual": _empty_manual(), "auto": [] }
 
 
+# =============================================================================
 func _empty_manual() -> Array:
 	var arr: Array = []
 	for _i in MANUAL_SLOTS:
@@ -426,23 +491,47 @@ func _empty_manual() -> Array:
 	return arr
 
 
+# =============================================================================
 func _take_snapshot(hotel: Dictionary, snap_name: String) -> Dictionary:
 	return {
-		"name":       snap_name,
-		"timestamp":  int(Time.get_unix_time_from_system()),
-		"hotel_name": hotel.get("name",       ""),
+		"name": snap_name,
+		"timestamp": int(Time.get_unix_time_from_system()),
+		"hotel_name": hotel.get("name", ""),
 		"profile_id": hotel.get("profile_id", 0),
-		"grid_cols":  hotel.get("grid_cols",  5),
-		"grid_rows":  hotel.get("grid_rows",  5),
-		"day":        hotel.get("day",        1),
-		"money":      hotel.get("money",      0.0),
-		"game_time":  hotel.get("game_time",  360),
-		"plots":      hotel.get("plots",      []).duplicate(true),
+		"grid_cols": hotel.get("grid_cols", 5),
+		"grid_rows": hotel.get("grid_rows", 5),
+		"day": hotel.get("day", 1),
+		"money": hotel.get("money", 0),
+		"game_time": hotel.get("game_time", 360),
+		"plots": hotel.get("plots", []).duplicate(true),
+		# neue felder ab v0.1.23gd
+		"level": hotel.get("level", 1),
+		"stars": hotel.get("stars", 0),
+		"guests_active": hotel.get("guests_active", 0),
+		"guests_checkin": hotel.get("guests_checkin", 0),
+		"guests_checkout": hotel.get("guests_checkout", 0),
+		"exp": hotel.get("exp", 0),
+		"exp_max": hotel.get("exp_max", 100),
+		"rep": hotel.get("rep", 500),
+		"rep_max": hotel.get("rep_max", 1000),
+		"fp": hotel.get("fp", 0),
 	}
 
 
+# =============================================================================
 func _apply_snapshot(hotel: Dictionary, snap: Dictionary) -> void:
-	hotel["day"]       = snap.get("day",       1)
-	hotel["money"]     = snap.get("money",     0.0)
-	hotel["game_time"] = snap.get("game_time", 360)
-	hotel["plots"]     = snap.get("plots",     []).duplicate(true)
+	hotel["day"] = snap.get("day", 1)
+	hotel["money"] = snap.get("money", 0)
+	hotel["game_time"] = snap.get("game_time",360)
+	hotel["plots"] = snap.get("plots", []).duplicate(true)
+	# neue felder ab v0.1.23gd
+	hotel["level"] = snap.get("level", 1)
+	hotel["stars"] = snap.get("stars", 0)
+	hotel["guests_active"] = snap.get("guests_active", 0)
+	hotel["guests_checkin"] = snap.get("guests_checkin", 0)
+	hotel["guests_checkout"] = snap.get("guests_checkout", 0)
+	hotel["exp"] = snap.get("exp", 0)
+	hotel["exp_max"] = snap.get("exp_max", 100)
+	hotel["rep"] = snap.get("rep", 500)
+	hotel["rep_max"] = snap.get("rep_max", 1000)
+	hotel["fp"] = snap.get("fp", 0)

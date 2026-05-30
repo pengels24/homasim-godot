@@ -7,13 +7,7 @@ extends Node2D
 signal room_placed(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int, door_rotation: int, door_offset: int, room_rotation: int, world_center: Vector2)
 signal cancelled()
 
-const ROOM_SCENES: Dictionary = {
-	"bed_standard": preload("res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn"),
-	"bed_double": preload("res://scenes/ingame/rooms/bed_double/Bed_Double.tscn"),
-	"hr_office": preload("res://scenes/ingame/rooms/hr_office/Hr_Office.tscn"),
-	"sc_office": preload("res://scenes/ingame/rooms/sc_office/Sc_Office.tscn"),
-	"bar": preload("res://scenes/ingame/rooms/bar/Bar.tscn"),
-}
+# Das alte ROOM_SCENES Dictionary wurde hier restlos entfernt!
 
 const WALK_PX      := 48
 const TILE_PX      := 16
@@ -34,15 +28,18 @@ var _room_h:          int = 2
 var _valid_combos:    Array[Vector2i] = []
 var _room_rotation:   int = 0
 
-
-func activate(map_grid: Node2D, room_type_id: String) -> void:
+# =============================================================================
+# NEU: Wir verlangen nun direkt die PackedScene vom Menü!
+func activate(map_grid: Node2D, room_scene: PackedScene) -> void:
 	_map_grid     = map_grid
 	_snap_enabled = GameState.snap_to_grid
-	_room_scene   = ROOM_SCENES.get(room_type_id)
+	_room_scene   = room_scene
+
 	if _room_scene == null:
 		cancelled.emit()
 		queue_free()
 		return
+
 	var mouse_parcel: Vector2i = _map_grid.world_to_grid(get_global_mouse_position())
 	if _map_grid.is_parcel_owned(mouse_parcel.x, mouse_parcel.y):
 		_current_parcel = mouse_parcel
@@ -50,9 +47,9 @@ func activate(map_grid: Node2D, room_type_id: String) -> void:
 		_current_parcel = _map_grid.get_first_owned_parcel()
 	_spawn_ghost()
 
-
 # ── Ghost ─────────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _spawn_ghost() -> void:
 	if is_instance_valid(_ghost):
 		_ghost.queue_free()
@@ -68,6 +65,7 @@ func _spawn_ghost() -> void:
 	_update_modulate()
 
 
+# =============================================================================
 func _refresh_ghost() -> void:
 	if not is_instance_valid(_ghost):
 		return
@@ -85,14 +83,15 @@ func _refresh_ghost() -> void:
 	_update_modulate()
 
 
+# =============================================================================
 func _update_modulate() -> void:
 	if not is_instance_valid(_ghost):
 		return
 	_ghost.modulate = Color(0.35, 1.0, 0.45, 0.70) if _is_valid else Color(1.0, 0.35, 0.35, 0.65)
 
-
 # ── Prozess – Ghost folgt Maus ────────────────────────────────────────────────
 
+# =============================================================================
 func _process(_delta: float) -> void:
 	if not is_instance_valid(_ghost) or not is_instance_valid(_map_grid):
 		return
@@ -133,9 +132,9 @@ func _process(_delta: float) -> void:
 			_room_w, _room_h, _door_rotation, _door_offset)
 		_update_modulate()
 
-
 # ── Input ─────────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		var mb := event as InputEventMouseButton
@@ -167,9 +166,9 @@ func _unhandled_input(event: InputEvent) -> void:
 			KEY_F:
 				pass  # reserviert
 
-
 # ── Kombo-Navigation ──────────────────────────────────────────────────────────
 
+# =============================================================================
 # Übersetzt die raumrelativen door-Combos in Weltkoordinaten (+ room_rotation-Offset).
 # Damit bleibt .-Taste immer auf der aktuellen Wand, egal wie oft R gedrückt wurde.
 func _update_valid_combos() -> void:
@@ -181,6 +180,7 @@ func _update_valid_combos() -> void:
 		_valid_combos.append(Vector2i((c.x + _room_rotation) % 4, c.y))
 
 
+# =============================================================================
 func _snap_to_valid_combo() -> void:
 	if _valid_combos.is_empty():
 		return
@@ -190,12 +190,13 @@ func _snap_to_valid_combo() -> void:
 		_door_offset   = _valid_combos[0].y
 
 
+# =============================================================================
 func _advance_room_rotation() -> void:
 	_room_rotation = (_room_rotation + 1) % 4
 	_door_rotation = (_door_rotation + 1) % 4
-	# _snap_to_valid_combo() korrigiert die Tür-Position in _refresh_ghost()
 
 
+# =============================================================================
 func _advance_door_combo() -> void:
 	if _valid_combos.is_empty():
 		return
@@ -206,6 +207,7 @@ func _advance_door_combo() -> void:
 	_door_offset   = next.y
 
 
+# =============================================================================
 func _try_place() -> void:
 	var mouse_local := (get_parent() as Node2D).to_local(get_global_mouse_position())
 	var min_x := float(WALK_PX + _current_parcel.x * PARCEL_PX)

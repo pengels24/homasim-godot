@@ -1,0 +1,22 @@
+[gd_resource type="Theme" format=3 uid="uid://m7vvlxrl4xfq"]
+
+[ext_resource type="FontFile" uid="uid://bs3xl562plyi2" path="res://assets/fonts/Jersey25-Regular.ttf" id="1_vos2p"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vos2p"]
+bg_color = Color(0.10980392, 0.14901961, 0.21176471, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.19215687, 0.20784314, 0.27450982, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[resource]
+default_base_scale = 1.0
+default_font = ExtResource("1_vos2p")
+default_font_size = 26
+Button/font_sizes/font_size = 24
+Panel/styles/panel = SubResource("StyleBoxFlat_vos2p")

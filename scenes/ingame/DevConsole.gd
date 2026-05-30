@@ -11,7 +11,7 @@ class_name DevConsole
 @onready var _close_btn: Button          = $Panel/Margin/VBox/Header/CloseBtn
 
 var _hotel:       Dictionary = {}
-var _hud:         IngameHud
+var _hud:         Node
 var _clock:       IngameClock
 var _was_paused:  bool    = true
 var _dragging:    bool    = false
@@ -23,7 +23,7 @@ const CLR_INFO := Color(0.55, 0.75, 0.55, 1.0)
 const CLR_CMD  := Color(0.90, 0.90, 0.90, 1.0)
 
 
-func configure(hotel: Dictionary, hud: IngameHud, clock: IngameClock) -> void:
+func configure(hotel: Dictionary, hud: Node, clock: IngameClock) -> void:
 	_hotel = hotel
 	_hud   = hud
 	_clock = clock

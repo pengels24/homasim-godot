@@ -455,7 +455,7 @@ func _make_hud_side_row() -> HBoxContainer:
 		var val: String = values[i]
 		btns[i].pressed.connect(func() -> void:
 			SettingsManager.hud_side = val
-			SettingsManager.hud_side_changed.emit()
+			SettingsManager.sig_hud_side_changed.emit()
 			refresh.call()
 		)
 

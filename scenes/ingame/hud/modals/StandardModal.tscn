@@ -1,0 +1,148 @@
+[gd_scene format=3 uid="uid://bcweu4cs7d73x"]
+
+[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_m2mrv"]
+[ext_resource type="Script" uid="uid://cwcvnhw4upr5k" path="res://scenes/ingame/hud/modals/StandardModal.gd" id="2_x344n"]
+[ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://menu_button_red.tres" id="3_lle5v"]
+[ext_resource type="StyleBox" uid="uid://cg2q7w0wqska8" path="res://modal_panel_glow.tres" id="3_o51y1"]
+[ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://menu_button_red_pressed.tres" id="4_o51y1"]
+[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://menu_button_red_hover.tres" id="5_3uw2v"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ffpxq"]
+load_path = "res://.godot/imported/x.svg-521876a1ce6500a0794bff7c22c09e07.ctex"
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_3uw2v"]
+content_margin_left = 4.0
+content_margin_top = 0.0
+content_margin_right = 4.0
+content_margin_bottom = 0.0
+color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+
+[sub_resource type="Animation" id="Animation_x344n"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_sirnm"]
+resource_name = "fade_in"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_54oow"]
+resource_name = "fade_out"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_54oow"]
+_data = {
+&"RESET": SubResource("Animation_x344n"),
+&"fade_in": SubResource("Animation_sirnm"),
+&"fade_out": SubResource("Animation_54oow")
+}
+
+[node name="StandardModal" type="Control" unique_id=979018255]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_m2mrv")
+script = ExtResource("2_x344n")
+
+[node name="Dimmer" type="ColorRect" parent="." unique_id=1362492489]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.8627451)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1670883523]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=1257451715]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_o51y1")
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer" unique_id=577997434]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer" unique_id=1646995726]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=206447694]
+layout_mode = 2
+
+[node name="ModalTitel" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=651880424]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 32
+text = "Titel"
+
+[node name="CloseButton" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1822338981]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("3_lle5v")
+theme_override_styles/pressed = ExtResource("4_o51y1")
+theme_override_styles/hover = ExtResource("5_3uw2v")
+icon = SubResource("CompressedTexture2D_ffpxq")
+
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=256772575]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_3uw2v")
+
+[node name="ContentAnchor" type="MarginContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=104942527]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=804896074]
+process_mode = 3
+libraries/ = SubResource("AnimationLibrary_54oow")
+
+[connection signal="pressed" from="CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/CloseButton" to="." method="_on_close_button_pressed"]

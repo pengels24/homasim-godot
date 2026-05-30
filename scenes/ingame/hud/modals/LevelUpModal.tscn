@@ -1,0 +1,147 @@
+[gd_scene format=3 uid="uid://dnlttoshpxisb"]
+
+[ext_resource type="PackedScene" uid="uid://ko6ykqv7mw6r" path="res://scenes/ingame/hud/modals/BaseModal.tscn" id="1_ok5ie"]
+[ext_resource type="Script" uid="uid://blyvdw0x00i5i" path="res://scenes/ingame/hud/modals/LevelUpModal.gd" id="2_7dprx"]
+[ext_resource type="Texture2D" uid="uid://b5t0f4jht5r17" path="res://assets/icons/star.svg" id="3_1tw3x"]
+[ext_resource type="AudioStream" uid="uid://fi32mghrolpa" path="res://assets/audio/sounds/levelup-1.mp3" id="4_gc17k"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7dprx"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.101960786, 0.101960786, 0.101960786, 0)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_7dprx"]
+load_path = "res://.godot/imported/banknote.svg-29b4050f0b5b9a829f80f7c113e85890.ctex"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1tw3x"]
+load_path = "res://.godot/imported/flask-conical.svg-59064ced8b7d2397bf99eb8f261f3e14.ctex"
+
+[sub_resource type="Environment" id="Environment_7dprx"]
+background_mode = 3
+glow_enabled = true
+glow_normalized = true
+glow_blend_mode = 0
+
+[node name="LevelUpModal" unique_id=2093243680 instance=ExtResource("1_ok5ie")]
+script = ExtResource("2_7dprx")
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" parent_id_path=PackedInt32Array(2075030056) index="0" unique_id=517079283]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_7dprx")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer" index="0" unique_id=650183878]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+
+[node name="Titel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" index="0" unique_id=2012609103]
+layout_mode = 2
+theme_override_font_sizes/font_size = 60
+text = "LEVEL UP !"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="Level" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" index="1" unique_id=484188599]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(2.454227, 1.8946, 0.16910705, 1)
+theme_override_font_sizes/font_size = 500
+text = "3"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer/VBoxContainer" index="2" unique_id=825180169]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer" index="0" unique_id=1636385083]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer" index="0" unique_id=1666953656]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer" index="0" unique_id=658499661]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="MoneyIcon" type="TextureRect" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer" index="0" unique_id=127964632]
+unique_name_in_owner = true
+layout_mode = 2
+texture = SubResource("CompressedTexture2D_7dprx")
+
+[node name="Money" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer" index="1" unique_id=1397248746]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1.000"
+
+[node name="MarginContainer2" type="MarginContainer" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer" index="1" unique_id=939038713]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer2" index="0" unique_id=1842051894]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="FPIcon" type="TextureRect" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer2" index="0" unique_id=1104905884]
+unique_name_in_owner = true
+layout_mode = 2
+texture = SubResource("CompressedTexture2D_1tw3x")
+
+[node name="FP" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer2/HBoxContainer2" index="1" unique_id=1242542651]
+unique_name_in_owner = true
+layout_mode = 2
+text = "500"
+
+[node name="MarginContainer3" type="MarginContainer" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer" index="2" unique_id=1893004795]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 20
+
+[node name="Unlock" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer3" index="0" unique_id=1931046857]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.91764706, 0.7019608, 0.03137255, 1)
+text = "XXX ist nun verfügbar"
+horizontal_alignment = 1
+
+[node name="ButtonOK" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" index="3" unique_id=1141093485]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Weiter"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." index="3" unique_id=1391309661]
+environment = SubResource("Environment_7dprx")
+
+[node name="Partikel" type="CPUParticles2D" parent="." index="4" unique_id=222691070]
+unique_name_in_owner = true
+show_behind_parent = true
+position = Vector2(958, 431)
+emitting = false
+texture = ExtResource("3_1tw3x")
+one_shot = true
+explosiveness = 0.8
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 300.0
+initial_velocity_max = 500.0
+damping_min = 100.0
+damping_max = 100.0
+scale_amount_min = 3.0
+scale_amount_max = 4.0
+
+[node name="LevelUpSound" type="AudioStreamPlayer" parent="." index="5" unique_id=344414698]
+unique_name_in_owner = true
+stream = ExtResource("4_gc17k")

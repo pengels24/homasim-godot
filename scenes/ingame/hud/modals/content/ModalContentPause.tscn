@@ -1,0 +1,100 @@
+[gd_scene format=3 uid="uid://c1l3fvmx7jji4"]
+
+[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_dba5f"]
+[ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://menu_button_green.tres" id="2_hn2ft"]
+[ext_resource type="Script" uid="uid://dd200kru7yfhi" path="res://scenes/ingame/hud/modals/content/ModalContentPause.gd" id="2_t2cls"]
+[ext_resource type="StyleBox" uid="uid://byn5sg5pqc4ux" path="res://menu_button_blue.tres" id="3_0q4dp"]
+[ext_resource type="StyleBox" uid="uid://bxdxryd4oglat" path="res://menu_button_blue_pressed.tres" id="4_tmvwh"]
+[ext_resource type="StyleBox" uid="uid://bc0pipuhgp5c7" path="res://menu_button_blue_hover.tres" id="5_j7a1d"]
+[ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://menu_button_red.tres" id="6_5nhsn"]
+[ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://menu_button_red_pressed.tres" id="7_5nhsn"]
+[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://menu_button_red_hover.tres" id="8_5nhsn"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5nhsn"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.15294118, 0.3019608, 0.25490198, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_offset = Vector2(3, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t2cls"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.24705882, 0.56078434, 0.30980393, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_size = 3
+shadow_offset = Vector2(3, 3)
+
+[node name="ModalContentPause" type="VBoxContainer" unique_id=686953818]
+offset_right = 8.0
+offset_bottom = 8.0
+theme = ExtResource("1_dba5f")
+theme_override_constants/separation = 10
+alignment = 1
+script = ExtResource("2_t2cls")
+
+[node name="ButtonContinue" type="Button" parent="." unique_id=316122449]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_hn2ft")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_5nhsn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_t2cls")
+text = "Fortsetzen"
+
+[node name="Panel" type="Panel" parent="." unique_id=217634743]
+layout_mode = 2
+
+[node name="ButtonSave" type="Button" parent="." unique_id=407450508]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("3_0q4dp")
+theme_override_styles/pressed = ExtResource("4_tmvwh")
+theme_override_styles/hover = ExtResource("5_j7a1d")
+text = "Speichern"
+
+[node name="ButtonLoad" type="Button" parent="." unique_id=2052523913]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("3_0q4dp")
+theme_override_styles/pressed = ExtResource("4_tmvwh")
+theme_override_styles/hover = ExtResource("5_j7a1d")
+text = "Laden"
+
+[node name="ButtonSettings" type="Button" parent="." unique_id=838210304]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("3_0q4dp")
+theme_override_styles/pressed = ExtResource("4_tmvwh")
+theme_override_styles/hover = ExtResource("5_j7a1d")
+text = "Einstellungen"
+
+[node name="Panel2" type="Panel" parent="." unique_id=183366081]
+layout_mode = 2
+
+[node name="ButtonMainMenu" type="Button" parent="." unique_id=670552485]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("6_5nhsn")
+theme_override_styles/pressed = ExtResource("7_5nhsn")
+theme_override_styles/hover = ExtResource("8_5nhsn")
+text = "Hauptmenü"

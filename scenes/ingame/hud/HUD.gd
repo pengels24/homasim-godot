@@ -1,0 +1,217 @@
+extends CanvasLayer
+
+# Referenzen
+@onready var label_name: Label = %Hotelname
+@onready var label_level: Label = %Level
+@onready var hotel_stars: TextureProgressBar = %GourmetStars
+@onready var label_money: Label = %Capital
+@onready var label_guests_active: Label = %GuestsActive
+@onready var label_guests_checkin: Label = %GuestsCheckIn
+@onready var label_guests_checkout: Label = %GuestsCheckOut
+@onready var bar_exp: ProgressBar = %EXP
+@onready var label_exp_range: Label = %EXPRange
+@onready var bar_rep: ProgressBar = %REP
+@onready var label_rep_range: Label = %REPRange
+@onready var label_fp: Label = %FP
+@onready var label_day: Label = %Day
+@onready var label_time: Label = %Time
+
+@onready var btn_pause: Button = %Pause
+@onready var btn_play: Button  = %Play
+@onready var btn_ff: Button    = %Forward
+
+# Steuerung der unteren UI-Rochade (Links / Mitte / Rechts)
+@onready var lower_hbox: HBoxContainer = $BottomBarContainer
+@onready var reset_view: Node = %HUDResetView
+@onready var bottom_bar: Node = %HUDBottom
+@onready var music_ctrl: Node = %HUDMusicControl
+
+
+# =============================================================================
+func _ready() -> void:
+	GameState.sig_hotel_name_changed.connect(_on_hotel_name_changed)
+	GameState.sig_hotel_level_changed.connect(_on_hotel_level_changed)
+	GameState.sig_hotel_stars_changed.connect(_on_hotel_stars_changed)
+	GameState.sig_hotel_money_changed.connect(_on_hotel_money_changed)
+	GameState.sig_hotel_guests_active_changed.connect(_on_hotel_guests_active_changed)
+	GameState.sig_hotel_guests_checkin_changed.connect(_on_hotel_guests_checkin_changed)
+	GameState.sig_hotel_guests_checkout_changed.connect(_on_hotel_guests_checkout_changed)
+	GameState.sig_hotel_exp_changed.connect(_on_hotel_exp_changed)
+	GameState.sig_hotel_rep_changed.connect(_on_hotel_rep_changed)
+	GameState.sig_hotel_fp_changed.connect(_on_hotel_fp_changed)
+	GameState.sig_hotel_day_changed.connect(_on_hotel_day_changed)
+	GameState.sig_hotel_time_changed.connect(_on_hotel_time_changed)
+
+	SettingsManager.sig_hud_side_changed.connect(func(): update_bottom_layout(SettingsManager.hud_side))
+	update_bottom_layout(SettingsManager.hud_side)
+
+	EffectManager.ui_money_node = %Capital
+	EffectManager.ui_exp_node = %EXP
+
+	GameState.sig_hotel_level_up.connect(_on_hotel_level_up)
+	%LevelUpModal.sig_rewards_claimed.connect(_on_level_up_rewards_claimed)
+
+
+# =============================================================================
+func _on_hotel_name_changed(new_name: String) -> void:
+	label_name.text = new_name
+
+
+# =============================================================================
+func _on_hotel_level_changed(new_level: int) -> void:
+	label_level.text = str(new_level)
+
+
+# =============================================================================
+func _on_hotel_money_changed(new_money: int) -> void:
+	label_money.text = GameState.format_money(new_money)
+
+
+# =============================================================================
+func _on_hotel_stars_changed(stars: int) -> void:
+	hotel_stars.value = stars
+
+
+# =============================================================================
+func _on_hotel_guests_active_changed(guests_active: int) -> void:
+	label_guests_active.text = str(guests_active)
+
+
+# =============================================================================
+func _on_hotel_guests_checkin_changed(guests_checkin: int) -> void:
+	label_guests_checkin.text = str(guests_checkin)
+
+
+# =============================================================================
+func _on_hotel_guests_checkout_changed(guests_checkout: int) -> void:
+	label_guests_checkout.text = str(guests_checkout)
+
+
+# =============================================================================
+func _on_hotel_exp_changed(exp_curr: int, exp_max: int) -> void:
+	bar_exp.max_value = exp_max
+	bar_exp.value = exp_curr
+	label_exp_range.text = "%d / %d" % [exp_curr, exp_max]
+
+
+# =============================================================================
+func _on_hotel_rep_changed(rep_curr: int, rep_max: int) -> void:
+	bar_rep.max_value = rep_max
+	bar_rep.value = rep_curr
+	label_rep_range.text = "%d / %d" % [rep_curr, rep_max]
+
+	var rep_color: Color
+
+	if rep_curr < 250:
+		rep_color = label_guests_checkout.get_theme_color("font_color")
+		# Animation starten, falls sie nicht schon läuft
+		if not %AnimateREPPulse.is_playing():
+			%AnimateREPPulse.play("pulse")
+
+	elif rep_curr <= 750:
+		rep_color = label_guests_checkin.get_theme_color("font_color")
+		# Wieder im Normalbereich: Animation stoppen
+		if %AnimateREPPulse.is_playing():
+			%AnimateREPPulse.stop()
+
+	else:
+		rep_color = label_guests_active.get_theme_color("font_color")
+		# Im Top-Bereich: Sicherstellen, dass die Animation steht
+		if %AnimateREPPulse.is_playing():
+			%AnimateREPPulse.stop()
+
+	var stylebox_fill = bar_rep.get_theme_stylebox("fill").duplicate()
+	stylebox_fill.bg_color = rep_color
+	bar_rep.add_theme_stylebox_override("fill", stylebox_fill)
+
+
+# =============================================================================
+func _on_hotel_fp_changed(new_fp: int) -> void:
+	label_fp.text = str(new_fp)
+
+
+# =============================================================================
+func _on_hotel_day_changed(day_number: int) -> void:
+	label_day.text = str(day_number)
+
+
+# =============================================================================
+func _on_hotel_time_changed(time_string: String) -> void:
+	label_time.text = time_string
+
+
+# =============================================================================
+func _on_hotel_level_up(new_level: int) -> void:
+	# Platzhalter-Werte für Geld/FP/Unlock, bis wir echte Rewards aus einer Datenbank haben:
+	# todo - datenquelle für belohnungen etablieren
+	var reward_money = 1500
+	var reward_fp = 250
+	var unlock_text = "Pool-Bereich"
+
+	%LevelUpModal.setup(new_level, reward_money, reward_fp, unlock_text)
+	%LevelUpModal.open()
+
+
+# =============================================================================
+func _on_level_up_rewards_claimed(money: int, fp: int) -> void:
+	await get_tree().create_timer(0.3).timeout
+
+	var camera = get_viewport().get_camera_2d()
+	var spawn_pos = Vector2.ZERO
+	if camera:
+		spawn_pos = camera.get_screen_center_position()
+
+	if money > 0:
+		GameState.add_money(money)
+		EffectManager.spawn_money_text(money, spawn_pos)
+
+	if fp > 0:
+		GameState.add_fp(fp)
+		EffectManager.spawn_fp_text(fp, spawn_pos)
+
+
+# =============================================================================
+func update_bottom_layout(_position_setting: String) -> void:
+	if not is_inside_tree():
+		await ready
+
+	if not reset_view or not bottom_bar or not music_ctrl:
+		return
+
+	# Standard-Rochade
+	lower_hbox.move_child(reset_view, 0)
+	lower_hbox.move_child(bottom_bar, 1)
+	lower_hbox.move_child(music_ctrl, 2)
+
+
+# =============================================================================
+func toggle_build_menu() -> void:
+	if InputHandler.current_mode == InputHandler.InputMode.NORMAL:
+		InputHandler.current_mode = InputHandler.InputMode.BUILD
+		$BottomBarContainer/HUDBottom/BuildMenu.visible = true
+
+	elif InputHandler.current_mode == InputHandler.InputMode.BUILD:
+		InputHandler.current_mode = InputHandler.InputMode.NORMAL
+		$BottomBarContainer/HUDBottom/BuildMenu.visible = false
+
+# # =============================================================================
+# func toggle_build_menu() -> void:
+# 	# Wenn wir im Normalmodus sind -> Öffne das Menü und geh in den Baumodus
+# 	if InputHandler.current_mode == InputHandler.InputMode.NORMAL:
+# 		InputHandler.current_mode = InputHandler.InputMode.BUILD
+# 		$HUDBottom/BuildMenu.visible = true
+
+# 	# Wenn wir schon im Baumodus sind -> Schließe das Menü und geh zurück zu Normal
+# 	elif InputHandler.current_mode == InputHandler.InputMode.BUILD:
+# 		InputHandler.current_mode = InputHandler.InputMode.NORMAL
+# 		$HUDBottom/BuildMenu.visible = false
+
+
+# =============================================================================
+func set_reception_locked(is_locked: bool) -> void:
+	bottom_bar.set_reception_locked(is_locked)
+
+
+# =============================================================================
+func set_reception_alert(has_waiting_guests: bool) -> void:
+	bottom_bar.set_reception_alert(has_waiting_guests)

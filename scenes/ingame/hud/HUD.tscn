@@ -1,0 +1,619 @@
+[gd_scene format=3 uid="uid://0t2xw8x412a"]
+
+[ext_resource type="Script" uid="uid://c3gc6t5sg7n76" path="res://scenes/ingame/hud/HUD.gd" id="1_jp5st"]
+[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="2_n7g7k"]
+[ext_resource type="Texture2D" uid="uid://p63omxtgdu35" path="res://assets/icons/play.svg" id="3_2d45u"]
+[ext_resource type="PackedScene" path="res://scenes/ingame/hud/LabelPanel.tscn" id="3_unqwd"]
+[ext_resource type="Texture2D" uid="uid://d35lpn3ej3op7" path="res://assets/icons/house.svg" id="4_1a3cs"]
+[ext_resource type="Texture2D" uid="uid://digmreddi030f" path="res://assets/icons/fast-forward.svg" id="4_feby4"]
+[ext_resource type="Texture2D" uid="uid://d3qtauemfxupf" path="res://assets/icons/trending-up.svg" id="5_s3kxq"]
+[ext_resource type="Texture2D" uid="uid://dvuvt72n64q4v" path="res://assets/icons/star-progress.png" id="6_eas3h"]
+[ext_resource type="Texture2D" uid="uid://eea5n5pqc655" path="res://assets/icons/star-progress_overlay.png" id="7_wqcpy"]
+[ext_resource type="Texture2D" uid="uid://binuqinwev353" path="res://assets/icons/banknote.svg" id="8_grv02"]
+[ext_resource type="Texture2D" uid="uid://edwv5uggcu88" path="res://assets/icons/briefcase.svg" id="9_dhj4j"]
+[ext_resource type="Texture2D" uid="uid://coow8q5bvjgrm" path="res://assets/icons/lightbulb.svg" id="10_f542l"]
+[ext_resource type="Texture2D" uid="uid://bfib8j3upw5hb" path="res://assets/icons/calendar-days.svg" id="11_l8bek"]
+[ext_resource type="Texture2D" uid="uid://yxnshplq4qqh" path="res://assets/icons/pause.svg" id="12_unqwd"]
+[ext_resource type="PackedScene" uid="uid://qc5ayqs3wl0s" path="res://scenes/ingame/hud/HUDResetView.tscn" id="15_pek3b"]
+[ext_resource type="PackedScene" uid="uid://c5yo6bx5wcaoj" path="res://scenes/ingame/hud/HUDBottom.tscn" id="15_r421g"]
+[ext_resource type="PackedScene" uid="uid://dkopq8is4u4sl" path="res://scenes/ingame/hud/HUDMusicControl.tscn" id="16_6fy26"]
+[ext_resource type="PackedScene" uid="uid://2l7rq0krey8f" path="res://scenes/ingame/hud/BuildMenu.tscn" id="17_8e3pd"]
+[ext_resource type="PackedScene" uid="uid://cxi5q33hphmqv" path="res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn" id="18_0bsoo"]
+[ext_resource type="PackedScene" uid="uid://7xtcnb8xd5nt" path="res://scenes/ingame/rooms/bed_double/Bed_Double.tscn" id="19_6iy1x"]
+[ext_resource type="PackedScene" uid="uid://hwbmqwvkmmk4" path="res://scenes/ingame/rooms/bar/Bar.tscn" id="20_fiam6"]
+[ext_resource type="PackedScene" uid="uid://bls0008lhyaya" path="res://scenes/ingame/rooms/hr_office/Hr_Office.tscn" id="21_yugll"]
+[ext_resource type="PackedScene" uid="uid://1u65f5t5c2fp" path="res://scenes/ingame/rooms/sc_office/Sc_Office.tscn" id="22_hsjc7"]
+[ext_resource type="PackedScene" uid="uid://dnlttoshpxisb" path="res://scenes/ingame/hud/modals/LevelUpModal.tscn" id="24_6iy1x"]
+[ext_resource type="PackedScene" uid="uid://bcweu4cs7d73x" path="res://scenes/ingame/hud/modals/StandardModal.tscn" id="25_fiam6"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_gfles"]
+content_margin_left = 0.0
+content_margin_top = 4.0
+content_margin_right = 0.0
+content_margin_bottom = 4.0
+color = Color(0.19215687, 0.20784314, 0.27450982, 1)
+vertical = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gfles"]
+content_margin_left = 2.0
+content_margin_top = 14.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.13333334, 0.1254902, 0.18039216, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.19215687, 0.20784314, 0.27450982, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cxhb7"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.31764707, 0.6509804, 0.9411765, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aixkq"]
+content_margin_left = 2.0
+content_margin_top = 14.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.13333334, 0.1254902, 0.18039216, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.19215687, 0.20784314, 0.27450982, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5uuaq"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.8392157, 0.7176471, 0.31764707, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[sub_resource type="Animation" id="Animation_cxhb7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer/HBoxContainer/Reputation/REP:theme_override_styles/background:border_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.19215687, 0.20784314, 0.27450982, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5uuaq"]
+resource_name = "pulse"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer/HBoxContainer/Reputation/REP:theme_override_styles/background:border_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.19215687, 0.20784314, 0.27450982, 1), Color(1.0774862, 0, 0.09574715, 1), Color(0.19215685, 0.20784314, 0.27450982, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_p3vm3"]
+_data = {
+&"RESET": SubResource("Animation_cxhb7"),
+&"pulse": SubResource("Animation_5uuaq")
+}
+
+[node name="HUDTop" type="CanvasLayer" unique_id=102009972]
+script = ExtResource("1_jp5st")
+
+[node name="TopBar" type="Control" parent="." unique_id=1528619980]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme = ExtResource("2_n7g7k")
+
+[node name="ColorRect" type="ColorRect" parent="TopBar" unique_id=1367042194]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.043137256, 0.0627451, 0.101960786, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="TopBar" unique_id=1775848502]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TopBar/MarginContainer" unique_id=858509248]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HotelName" parent="TopBar/MarginContainer/HBoxContainer" unique_id=2061315483 instance=ExtResource("3_unqwd")]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/HotelName/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(2061315483, 994132176) index="0" unique_id=2010144105]
+modulate = Color(0.8039216, 0.61960787, 0.039215688, 1)
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+texture = ExtResource("4_1a3cs")
+expand_mode = 4
+stretch_mode = 5
+
+[node name="Hotelname" type="Label" parent="TopBar/MarginContainer/HBoxContainer/HotelName/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(2061315483, 994132176) index="1" unique_id=1895348508]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
+text = "Hotel Name XYZ"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Level" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1708982499 instance=ExtResource("3_unqwd")]
+custom_minimum_size = Vector2(85, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/Level/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1708982499, 994132176) index="0" unique_id=545323053]
+modulate = Color(0.96862745, 0.5372549, 0.32156864, 1)
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+texture = ExtResource("5_s3kxq")
+stretch_mode = 5
+
+[node name="Level" type="Label" parent="TopBar/MarginContainer/HBoxContainer/Level/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1708982499, 994132176) index="1" unique_id=2076223888]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
+text = "999"
+horizontal_alignment = 2
+
+[node name="GourmetStars" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=184062569]
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+
+[node name="GourmetStars" type="TextureProgressBar" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars" unique_id=1165738142]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 5.0
+value = 5.0
+texture_under = ExtResource("6_eas3h")
+texture_progress = ExtResource("7_wqcpy")
+
+[node name="Gap" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1833546165]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+
+[node name="Money" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1249543363 instance=ExtResource("3_unqwd")]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/Money/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1249543363, 994132176) index="0" unique_id=1717310057]
+modulate = Color(0.24705882, 0.56078434, 0.30980393, 1)
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+texture = ExtResource("8_grv02")
+stretch_mode = 5
+
+[node name="Capital" type="Label" parent="TopBar/MarginContainer/HBoxContainer/Money/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1249543363, 994132176) index="1" unique_id=1081669663]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
+text = "999.999.999"
+horizontal_alignment = 2
+
+[node name="Guests" type="Panel" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1747277186]
+clip_children = 2
+custom_minimum_size = Vector2(182, 0)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TopBar/MarginContainer/HBoxContainer/Guests" unique_id=1335395210]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer/Guests/HBoxContainer" unique_id=359649086]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 10
+
+[node name="TextureRect" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/Guests/HBoxContainer/MarginContainer" unique_id=1598537975]
+modulate = Color(0.31764707, 0.6509804, 0.9411765, 1)
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+texture = ExtResource("9_dhj4j")
+stretch_mode = 5
+
+[node name="VSeparator" type="VSeparator" parent="TopBar/MarginContainer/HBoxContainer/Guests/HBoxContainer" unique_id=2020579649]
+layout_mode = 2
+theme_override_constants/separation = 1
+theme_override_styles/separator = SubResource("StyleBoxLine_gfles")
+
+[node name="MarginContainer2" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer/Guests/HBoxContainer" unique_id=310547556]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 3
+
+[node name="GuestsActive" type="Label" parent="TopBar/MarginContainer/HBoxContainer/Guests/HBoxContainer/MarginContainer2" unique_id=546335765]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5254902, 0.83137256, 0.40784314, 1)
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VSeparator2" type="VSeparator" parent="TopBar/MarginContainer/HBoxContainer/Guests/HBoxContainer" unique_id=795643886]
+layout_mode = 2
+theme_override_constants/separation = 1
+theme_override_styles/separator = SubResource("StyleBoxLine_gfles")
+
+[node name="MarginContainer3" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer/Guests/HBoxContainer" unique_id=1018019022]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 3
+
+[node name="GuestsCheckIn" type="Label" parent="TopBar/MarginContainer/HBoxContainer/Guests/HBoxContainer/MarginContainer3" unique_id=36432714]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8392157, 0.7176471, 0.31764707, 1)
+text = "11"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VSeparator3" type="VSeparator" parent="TopBar/MarginContainer/HBoxContainer/Guests/HBoxContainer" unique_id=1001688970]
+layout_mode = 2
+theme_override_constants/separation = 1
+theme_override_styles/separator = SubResource("StyleBoxLine_gfles")
+
+[node name="MarginContainer4" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer/Guests/HBoxContainer" unique_id=364120395]
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 3
+
+[node name="GuestsCheckOut" type="Label" parent="TopBar/MarginContainer/HBoxContainer/Guests/HBoxContainer/MarginContainer4" unique_id=1996307872]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.87058824, 0.23529412, 0.19215687, 1)
+text = "789"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Gap2" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1662676105]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+
+[node name="Exp" type="VBoxContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=2054724630]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="EXP" type="ProgressBar" parent="TopBar/MarginContainer/HBoxContainer/Exp" unique_id=1172729700]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_gfles")
+theme_override_styles/fill = SubResource("StyleBoxFlat_cxhb7")
+step = 1.0
+value = 50.0
+show_percentage = false
+
+[node name="MarginContainer" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer/Exp" unique_id=372465195]
+layout_mode = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_bottom = -2
+
+[node name="EXPRange" type="Label" parent="TopBar/MarginContainer/HBoxContainer/Exp/MarginContainer" unique_id=1195717215]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.50980395, 0.5803922, 0.67058825, 1)
+theme_override_font_sizes/font_size = 16
+text = "45 / 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Gap3" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=688837031]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+
+[node name="Reputation" type="VBoxContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1618042155]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="REP" type="ProgressBar" parent="TopBar/MarginContainer/HBoxContainer/Reputation" unique_id=1901553854]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_aixkq")
+theme_override_styles/fill = SubResource("StyleBoxFlat_5uuaq")
+step = 1.0
+value = 50.0
+show_percentage = false
+
+[node name="MarginContainer2" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer/Reputation" unique_id=1433366593]
+layout_mode = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_bottom = -2
+
+[node name="REPRange" type="Label" parent="TopBar/MarginContainer/HBoxContainer/Reputation/MarginContainer2" unique_id=1538229470]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.50980395, 0.5803922, 0.67058825, 1)
+theme_override_font_sizes/font_size = 16
+text = "45 / 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimateREPPulse" type="AnimationPlayer" parent="TopBar/MarginContainer/HBoxContainer/Reputation" unique_id=778762040]
+unique_name_in_owner = true
+root_node = NodePath("../../../..")
+libraries/ = SubResource("AnimationLibrary_p3vm3")
+
+[node name="Gap4" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=114733798]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+
+[node name="FP" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1608358203 instance=ExtResource("3_unqwd")]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/FP/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1608358203, 994132176) index="0" unique_id=308361789]
+modulate = Color(0.92941177, 0.9411765, 0.40392157, 1)
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+texture = ExtResource("10_f542l")
+stretch_mode = 5
+
+[node name="FP" type="Label" parent="TopBar/MarginContainer/HBoxContainer/FP/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1608358203, 994132176) index="1" unique_id=1502268624]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
+text = "9.999"
+horizontal_alignment = 2
+
+[node name="Gap5" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1088045746]
+layout_mode = 2
+theme_override_constants/margin_left = 80
+
+[node name="Day" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1055048167 instance=ExtResource("3_unqwd")]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/Day/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1055048167, 994132176) index="0" unique_id=819640250]
+modulate = Color(0.9411765, 0.7294118, 0.6392157, 1)
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+texture = ExtResource("11_l8bek")
+stretch_mode = 5
+
+[node name="Day" type="Label" parent="TopBar/MarginContainer/HBoxContainer/Day/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1055048167, 994132176) index="1" unique_id=44184594]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
+text = "9.999"
+horizontal_alignment = 2
+
+[node name="Time" type="Label" parent="TopBar/MarginContainer/HBoxContainer" unique_id=576294517]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(95, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
+theme_override_font_sizes/font_size = 32
+text = "23:59"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Panel" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1438380072]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer/Button" unique_id=2133416726]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -17.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 10
+
+[node name="Pause" type="Button" parent="TopBar/MarginContainer/HBoxContainer/Button/MarginContainer" unique_id=1024382007]
+unique_name_in_owner = true
+modulate = Color(0.9411765, 0.7294118, 0.6392157, 1)
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+icon = ExtResource("12_unqwd")
+
+[node name="Button2" type="Panel" parent="TopBar/MarginContainer/HBoxContainer" unique_id=258683198]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer/Button2" unique_id=1828578882]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -17.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 10
+
+[node name="Play" type="Button" parent="TopBar/MarginContainer/HBoxContainer/Button2/MarginContainer" unique_id=1527988184]
+unique_name_in_owner = true
+modulate = Color(0.9411765, 0.7294118, 0.6392157, 1)
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+icon = ExtResource("3_2d45u")
+
+[node name="Button3" type="Panel" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1699511678]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer/Button3" unique_id=1558075564]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -17.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 10
+
+[node name="Forward" type="Button" parent="TopBar/MarginContainer/HBoxContainer/Button3/MarginContainer" unique_id=164350172]
+unique_name_in_owner = true
+modulate = Color(0.9411765, 0.7294118, 0.6392157, 1)
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+icon = ExtResource("4_feby4")
+
+[node name="BottomBarContainer" type="HBoxContainer" parent="." unique_id=378990724]
+custom_minimum_size = Vector2(0, 70)
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="HUDResetView" parent="BottomBarContainer" unique_id=1145923070 instance=ExtResource("15_pek3b")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HBoxContainer" parent="BottomBarContainer/HUDResetView" index="0" unique_id=464242108]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HUDBottom" parent="BottomBarContainer" unique_id=491735265 instance=ExtResource("15_r421g")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" parent="BottomBarContainer/HUDBottom" index="0" unique_id=1516826197]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -170.0
+offset_top = -30.0
+offset_right = 170.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BuildMenu" parent="BottomBarContainer/HUDBottom" unique_id=1714912306 instance=ExtResource("17_8e3pd")]
+layout_mode = 1
+offset_left = 150.0
+offset_top = -150.0
+offset_right = 350.0
+offset_bottom = -50.0
+room_scenes = Array[PackedScene]([ExtResource("18_0bsoo"), ExtResource("19_6iy1x"), ExtResource("20_fiam6"), ExtResource("21_yugll"), ExtResource("22_hsjc7")])
+
+[node name="VBoxContainer" parent="BottomBarContainer/HUDBottom/BuildMenu/MarginContainer" parent_id_path=PackedInt32Array(1714912306, 1905983299) index="0" unique_id=905183679]
+theme_override_constants/separation = 10
+
+[node name="HUDMusicControl" parent="BottomBarContainer" unique_id=52681627 instance=ExtResource("16_6fy26")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" parent="BottomBarContainer/HUDMusicControl" index="0" unique_id=1457741293]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 2
+
+[node name="LevelUpModal" parent="." unique_id=2093243680 instance=ExtResource("24_6iy1x")]
+unique_name_in_owner = true
+
+[node name="Partikel" parent="LevelUpModal" index="4" unique_id=222691070]
+z_index = 10
+scale_amount_max = 3.0
+
+[node name="StandardModal" parent="." unique_id=979018255 instance=ExtResource("25_fiam6")]
+unique_name_in_owner = true
+
+[editable path="TopBar/MarginContainer/HBoxContainer/HotelName"]
+[editable path="TopBar/MarginContainer/HBoxContainer/Level"]
+[editable path="TopBar/MarginContainer/HBoxContainer/Money"]
+[editable path="TopBar/MarginContainer/HBoxContainer/FP"]
+[editable path="TopBar/MarginContainer/HBoxContainer/Day"]
+[editable path="BottomBarContainer/HUDResetView"]
+[editable path="BottomBarContainer/HUDBottom"]
+[editable path="BottomBarContainer/HUDBottom/BuildMenu"]
+[editable path="BottomBarContainer/HUDMusicControl"]
+[editable path="LevelUpModal"]
+[editable path="StandardModal"]

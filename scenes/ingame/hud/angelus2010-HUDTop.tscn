@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://e0xkoifjm47y"]
 
-[ext_resource type="Theme" uid="uid://j01g5ime51by" path="res://assets/themes/ui_theme.tres" id="1_ibcbh"]
-[ext_resource type="Texture2D" uid="uid://p63omxtgdu35" path="res://assets/icons/play.svg" id="2_i1gmd"]
-[ext_resource type="Texture2D" uid="uid://digmreddi030f" path="res://assets/icons/fast-forward.svg" id="3_ibcbh"]
+[ext_resource type="Script" uid="uid://c3gc6t5sg7n76" path="res://scenes/ingame/hud/HUD.gd" id="1_jp5st"]
+[ext_resource type="Theme" uid="uid://j01g5ime51by" path="res://assets/themes/ui_theme.tres" id="2_0kfvs"]
+[ext_resource type="Texture2D" uid="uid://p63omxtgdu35" path="res://assets/icons/play.svg" id="3_2d45u"]
+[ext_resource type="Texture2D" uid="uid://digmreddi030f" path="res://assets/icons/fast-forward.svg" id="4_feby4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ibcbh"]
 content_margin_left = 10.0
@@ -164,6 +165,23 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jp5st"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8039216, 0.19215687, 0.19215687, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+corner_detail = 5
+
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8wip8"]
 load_path = "res://.godot/imported/lightbulb.svg-c3ce31e298346e15873588553ad8101d.ctex"
 
@@ -267,16 +285,20 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 corner_detail = 5
 
-[node name="HudTop" type="Node2D" unique_id=1041446689]
+[node name="HudTop" type="Control" unique_id=345730368]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_jp5st")
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=63748315]
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 70.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_ibcbh")
 
 [node name="ContainerTop" type="HBoxContainer" parent="PanelContainer" unique_id=1046050114]
 layout_mode = 2
-theme = ExtResource("1_ibcbh")
+theme = ExtResource("2_0kfvs")
 
 [node name="ContainerHotel" type="HBoxContainer" parent="PanelContainer/ContainerTop" unique_id=2055145716]
 custom_minimum_size = Vector2(550, 0)
@@ -315,7 +337,7 @@ layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer/ContainerTop/ContainerHotel/ColHotel/MarginContainer/Panel/MarginContainer/HBoxContainer" unique_id=160415034]
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 0
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 
@@ -325,14 +347,15 @@ texture = SubResource("CompressedTexture2D_8dhny")
 stretch_mode = 4
 
 [node name="Hotelname" type="Label" parent="PanelContainer/ContainerTop/ContainerHotel/ColHotel/MarginContainer/Panel/MarginContainer/HBoxContainer" unique_id=798300593]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 3
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 36
-text = "Hotelname länger"
+text = "name"
 
 [node name="ColLevel" type="VBoxContainer" parent="PanelContainer/ContainerTop/ContainerHotel" unique_id=507197965]
 custom_minimum_size = Vector2(110, 0)
@@ -377,60 +400,59 @@ texture = SubResource("CompressedTexture2D_uutuo")
 stretch_mode = 4
 
 [node name="Level" type="Label" parent="PanelContainer/ContainerTop/ContainerHotel/ColLevel/MarginContainer/Panel/MarginContainer/HBoxContainer" unique_id=1716319962]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 3
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 36
-text = "999"
-visible_characters = 16
-visible_ratio = 5.3333335
+text = "0"
+horizontal_alignment = 2
 
-[node name="ColMichelin" type="VBoxContainer" parent="PanelContainer/ContainerTop/ContainerHotel" unique_id=2123028531]
+[node name="ColGourmetStar" type="VBoxContainer" parent="PanelContainer/ContainerTop/ContainerHotel" unique_id=2123028531]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
-[node name="MichelinLabel" type="Label" parent="PanelContainer/ContainerTop/ContainerHotel/ColMichelin" unique_id=641679545]
-visible = false
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-text = "MICHELIN"
-
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/ContainerTop/ContainerHotel/ColMichelin" unique_id=1987053008]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/ContainerTop/ContainerHotel/ColGourmetStar" unique_id=1987053008]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/ContainerTop/ContainerHotel/ColMichelin/MarginContainer" unique_id=1916130575]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/ContainerTop/ContainerHotel/ColGourmetStar/MarginContainer" unique_id=1916130575]
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="TextureRect1" type="TextureButton" parent="PanelContainer/ContainerTop/ContainerHotel/ColMichelin/MarginContainer/HBoxContainer" unique_id=868860964]
+[node name="GourmetStar1" type="TextureButton" parent="PanelContainer/ContainerTop/ContainerHotel/ColGourmetStar/MarginContainer/HBoxContainer" unique_id=868860964]
+unique_name_in_owner = true
 layout_mode = 2
 disabled = true
 texture_normal = SubResource("CompressedTexture2D_24w6s")
 stretch_mode = 4
 
-[node name="TextureRect2" type="TextureButton" parent="PanelContainer/ContainerTop/ContainerHotel/ColMichelin/MarginContainer/HBoxContainer" unique_id=738310630]
+[node name="GourmetStar2" type="TextureButton" parent="PanelContainer/ContainerTop/ContainerHotel/ColGourmetStar/MarginContainer/HBoxContainer" unique_id=738310630]
+unique_name_in_owner = true
 layout_mode = 2
 disabled = true
 texture_normal = SubResource("CompressedTexture2D_ap3mx")
 stretch_mode = 4
 
-[node name="TextureRect3" type="TextureButton" parent="PanelContainer/ContainerTop/ContainerHotel/ColMichelin/MarginContainer/HBoxContainer" unique_id=335417090]
+[node name="GourmetStar3" type="TextureButton" parent="PanelContainer/ContainerTop/ContainerHotel/ColGourmetStar/MarginContainer/HBoxContainer" unique_id=335417090]
+unique_name_in_owner = true
 layout_mode = 2
 disabled = true
 texture_normal = SubResource("CompressedTexture2D_i1gmd")
 stretch_mode = 4
 
-[node name="TextureRect4" type="TextureButton" parent="PanelContainer/ContainerTop/ContainerHotel/ColMichelin/MarginContainer/HBoxContainer" unique_id=156290351]
+[node name="GourmetStar4" type="TextureButton" parent="PanelContainer/ContainerTop/ContainerHotel/ColGourmetStar/MarginContainer/HBoxContainer" unique_id=156290351]
+unique_name_in_owner = true
 layout_mode = 2
 disabled = true
 texture_normal = SubResource("CompressedTexture2D_ibcbh")
 stretch_mode = 4
 
-[node name="TextureRect5" type="TextureButton" parent="PanelContainer/ContainerTop/ContainerHotel/ColMichelin/MarginContainer/HBoxContainer" unique_id=1660440006]
+[node name="GourmetStar5" type="TextureButton" parent="PanelContainer/ContainerTop/ContainerHotel/ColGourmetStar/MarginContainer/HBoxContainer" unique_id=1660440006]
+unique_name_in_owner = true
 layout_mode = 2
 disabled = true
 texture_normal = SubResource("CompressedTexture2D_wem44")
@@ -440,25 +462,70 @@ stretch_mode = 4
 custom_minimum_size = Vector2(900, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 10
 alignment = 1
 
-[node name="ColCapital" type="VBoxContainer" parent="PanelContainer/ContainerTop/ContainerStats" unique_id=2093774150]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/ContainerTop/ContainerStats" unique_id=1214484760]
+layout_mode = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_bottom = 10
+
+[node name="ColCapital" type="Panel" parent="PanelContainer/ContainerTop/ContainerStats/MarginContainer" unique_id=1378345642]
+custom_minimum_size = Vector2(142, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wem44")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/ContainerTop/ContainerStats/MarginContainer/ColCapital" unique_id=114390404]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_right = 6
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/ContainerTop/ContainerStats/MarginContainer/ColCapital/MarginContainer" unique_id=186395829]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="CapitalIcon" type="TextureRect" parent="PanelContainer/ContainerTop/ContainerStats/MarginContainer/ColCapital/MarginContainer/HBoxContainer" unique_id=175177629]
+modulate = Color(0.29803923, 0.7411765, 0.28235295, 1)
+layout_mode = 2
+texture = SubResource("CompressedTexture2D_sb7t8")
+stretch_mode = 5
+
+[node name="Capital" type="Label" parent="PanelContainer/ContainerTop/ContainerStats/MarginContainer/ColCapital/MarginContainer/HBoxContainer" unique_id=514051069]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 36
+text = "999.999.999"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="ColCapital2" type="VBoxContainer" parent="PanelContainer/ContainerTop/ContainerStats" unique_id=1166023817]
+visible = false
 custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/ContainerTop/ContainerStats/ColCapital" unique_id=1786551813]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/ContainerTop/ContainerStats/ColCapital2" unique_id=223163131]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 10
 
-[node name="Panel" type="Panel" parent="PanelContainer/ContainerTop/ContainerStats/ColCapital/MarginContainer" unique_id=1378345642]
+[node name="Panel" type="Panel" parent="PanelContainer/ContainerTop/ContainerStats/ColCapital2/MarginContainer" unique_id=206865482]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wem44")
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/ContainerTop/ContainerStats/ColCapital/MarginContainer/Panel" unique_id=1693034295]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/ContainerTop/ContainerStats/ColCapital2/MarginContainer/Panel" unique_id=1380334119]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -470,29 +537,29 @@ grow_vertical = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/ContainerTop/ContainerStats/ColCapital/MarginContainer/Panel/MarginContainer" unique_id=646397414]
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/ContainerTop/ContainerStats/ColCapital2/MarginContainer/Panel/MarginContainer" unique_id=1737358055]
 layout_mode = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/ContainerTop/ContainerStats/ColCapital/MarginContainer/Panel/MarginContainer/HBoxContainer" unique_id=1544308029]
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/ContainerTop/ContainerStats/ColCapital2/MarginContainer/Panel/MarginContainer/HBoxContainer" unique_id=1471687150]
 layout_mode = 2
-size_flags_horizontal = 2
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 
-[node name="CapitalIcon" type="TextureRect" parent="PanelContainer/ContainerTop/ContainerStats/ColCapital/MarginContainer/Panel/MarginContainer/HBoxContainer/MarginContainer" unique_id=175177629]
+[node name="CapitalIcon" type="TextureRect" parent="PanelContainer/ContainerTop/ContainerStats/ColCapital2/MarginContainer/Panel/MarginContainer/HBoxContainer/MarginContainer" unique_id=1817046232]
 layout_mode = 2
 texture = SubResource("CompressedTexture2D_sb7t8")
-stretch_mode = 4
+stretch_mode = 5
 
-[node name="Capital" type="Label" parent="PanelContainer/ContainerTop/ContainerStats/ColCapital/MarginContainer/Panel/MarginContainer/HBoxContainer" unique_id=514051069]
+[node name="Capital" type="Label" parent="PanelContainer/ContainerTop/ContainerStats/ColCapital2/MarginContainer/Panel/MarginContainer/HBoxContainer" unique_id=1954236309]
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 3
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 36
-text = "15.599.599"
+text = "0"
+horizontal_alignment = 2
 
 [node name="ColGuests" type="VBoxContainer" parent="PanelContainer/ContainerTop/ContainerStats" unique_id=2140910699]
 custom_minimum_size = Vector2(240, 0)
@@ -502,7 +569,7 @@ layout_mode = 2
 visible = false
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
-theme = ExtResource("1_ibcbh")
+theme = ExtResource("2_0kfvs")
 text = "GÄSTE"
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer/ContainerTop/ContainerStats/ColGuests" unique_id=1852284498]
@@ -542,12 +609,13 @@ theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 
 [node name="GuestsActive" type="Label" parent="PanelContainer/ContainerTop/ContainerStats/ColGuests/MarginContainer/Panel/HBoxContainer/Panel1/MarginContainer" unique_id=1432109127]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.18039216, 0.69803923, 0.32156864, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 36
-text = "9.999"
+text = "0"
 horizontal_alignment = 2
 
 [node name="Panel2" type="Panel" parent="PanelContainer/ContainerTop/ContainerStats/ColGuests/MarginContainer/Panel/HBoxContainer" unique_id=1677478723]
@@ -566,12 +634,13 @@ theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 
 [node name="GuestsCheckIn" type="Label" parent="PanelContainer/ContainerTop/ContainerStats/ColGuests/MarginContainer/Panel/HBoxContainer/Panel2/MarginContainer" unique_id=1558203171]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.72156864, 0.56078434, 0.047058824, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 36
-text = "9.999"
+text = "0"
 horizontal_alignment = 2
 
 [node name="Panel3" type="Panel" parent="PanelContainer/ContainerTop/ContainerStats/ColGuests/MarginContainer/Panel/HBoxContainer" unique_id=186316299]
@@ -590,12 +659,13 @@ theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 
 [node name="GuestsCheckOut" type="Label" parent="PanelContainer/ContainerTop/ContainerStats/ColGuests/MarginContainer/Panel/HBoxContainer/Panel3/MarginContainer" unique_id=340822792]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.83137256, 0.19607843, 0.19607843, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 36
-text = "9.999"
+text = "0"
 horizontal_alignment = 2
 
 [node name="ColEXP" type="VBoxContainer" parent="PanelContainer/ContainerTop/ContainerStats" unique_id=681591731]
@@ -613,7 +683,8 @@ theme_override_constants/margin_bottom = 0
 layout_mode = 2
 
 [node name="EXP" type="ProgressBar" parent="PanelContainer/ContainerTop/ContainerStats/ColEXP/MarginContainer/VBoxContainer" unique_id=1005075836]
-custom_minimum_size = Vector2(0, 15)
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_vctc4")
 theme_override_styles/fill = SubResource("StyleBoxFlat_aei5g")
@@ -622,6 +693,7 @@ value = 45.0
 show_percentage = false
 
 [node name="EXPRange" type="Label" parent="PanelContainer/ContainerTop/ContainerStats/ColEXP/MarginContainer/VBoxContainer" unique_id=1905153576]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
@@ -641,8 +713,9 @@ theme_override_constants/margin_right = 20
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/ContainerTop/ContainerStats/ColReputation/MarginContainer" unique_id=786987072]
 layout_mode = 2
 
-[node name="Reputation" type="ProgressBar" parent="PanelContainer/ContainerTop/ContainerStats/ColReputation/MarginContainer/VBoxContainer" unique_id=847776528]
-custom_minimum_size = Vector2(0, 15)
+[node name="REP" type="ProgressBar" parent="PanelContainer/ContainerTop/ContainerStats/ColReputation/MarginContainer/VBoxContainer" unique_id=847776528]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_my005")
 theme_override_styles/fill = SubResource("StyleBoxFlat_sytx2")
@@ -652,7 +725,18 @@ page = 1.0
 value = 500.0
 show_percentage = false
 
-[node name="ReputationRange" type="Label" parent="PanelContainer/ContainerTop/ContainerStats/ColReputation/MarginContainer/VBoxContainer" unique_id=2131476391]
+[node name="REPPulseBorder" type="Panel" parent="PanelContainer/ContainerTop/ContainerStats/ColReputation/MarginContainer/VBoxContainer/REP" unique_id=438857326]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_jp5st")
+
+[node name="REPRange" type="Label" parent="PanelContainer/ContainerTop/ContainerStats/ColReputation/MarginContainer/VBoxContainer" unique_id=2131476391]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_font_sizes/font_size = 22
@@ -692,7 +776,6 @@ layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer/ContainerTop/ContainerStats/ColFP/MarginContainer/Panel/MarginContainer/HBoxContainer" unique_id=104312290]
 layout_mode = 2
-size_flags_horizontal = 2
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 
@@ -702,14 +785,16 @@ texture = SubResource("CompressedTexture2D_8wip8")
 stretch_mode = 4
 
 [node name="FP" type="Label" parent="PanelContainer/ContainerTop/ContainerStats/ColFP/MarginContainer/Panel/MarginContainer/HBoxContainer" unique_id=1152978242]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 3
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 36
-text = "9.599"
+text = "0"
+horizontal_alignment = 2
 
 [node name="ContainerTime" type="HBoxContainer" parent="PanelContainer/ContainerTop" unique_id=1207530641]
 custom_minimum_size = Vector2(400, 0)
@@ -749,7 +834,6 @@ layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer/ContainerTop/ContainerTime/ColDay/MarginContainer/Panel/MarginContainer/HBoxContainer" unique_id=970690343]
 layout_mode = 2
-size_flags_horizontal = 2
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 
@@ -759,14 +843,16 @@ texture = SubResource("CompressedTexture2D_vobty")
 stretch_mode = 4
 
 [node name="Day" type="Label" parent="PanelContainer/ContainerTop/ContainerTime/ColDay/MarginContainer/Panel/MarginContainer/HBoxContainer" unique_id=105875421]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 3
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 36
-text = "599"
+text = "0"
+horizontal_alignment = 2
 
 [node name="ColTime" type="VBoxContainer" parent="PanelContainer/ContainerTop/ContainerTime" unique_id=474760798]
 custom_minimum_size = Vector2(80, 0)
@@ -797,6 +883,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Time" type="Label" parent="PanelContainer/ContainerTop/ContainerTime/ColTime/MarginContainer/Panel/MarginContainer" unique_id=1760480542]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0)
@@ -838,6 +925,7 @@ theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
 [node name="Pause" type="Button" parent="PanelContainer/ContainerTop/ContainerTime/VBoxContainer/Panel/MarginContainer/ColTimeControl/MarginContainer" unique_id=458963380]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_i1gmd")
 theme_override_styles/hover = SubResource("StyleBoxFlat_njfsi")
@@ -853,9 +941,10 @@ theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
 [node name="Play" type="Button" parent="PanelContainer/ContainerTop/ContainerTime/VBoxContainer/Panel/MarginContainer/ColTimeControl/MarginContainer2" unique_id=337623238]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_xxmoj")
-icon = ExtResource("2_i1gmd")
+icon = ExtResource("3_2d45u")
 icon_alignment = 1
 
 [node name="MarginContainer3" type="MarginContainer" parent="PanelContainer/ContainerTop/ContainerTime/VBoxContainer/Panel/MarginContainer/ColTimeControl" unique_id=1867497726]
@@ -867,7 +956,8 @@ theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
 [node name="Forward" type="Button" parent="PanelContainer/ContainerTop/ContainerTime/VBoxContainer/Panel/MarginContainer/ColTimeControl/MarginContainer3" unique_id=730626977]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_cl27j")
-icon = ExtResource("3_ibcbh")
+icon = ExtResource("4_feby4")
 icon_alignment = 1

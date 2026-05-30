@@ -7,7 +7,7 @@ static func get_definition() -> Dictionary:
 	return {
 		"id":            "bar",
 		"build_cost":    1800,
-		"xp_reward":     50,
+		"exp_reward":     50,
 		"prefix":        "B",
 		"label":         "BA",
 		"name":          "Bar",

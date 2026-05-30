@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://jaa45iof4v8r"]
+
+[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_b0g3s"]
+[ext_resource type="Script" uid="uid://bjhkwy2xmbrps" path="res://scenes/ingame/hud/modals/content/GameSlot.gd" id="2_4nh85"]
+
+[node name="GameSlot" type="PanelContainer" unique_id=758019237]
+custom_minimum_size = Vector2(0, 50)
+theme = ExtResource("1_b0g3s")
+script = ExtResource("2_4nh85")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1217159717]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=2161130]
+layout_mode = 2
+
+[node name="SlotNumber" type="Label" parent="MarginContainer/HBoxContainer" unique_id=1464839651]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+text = "1"
+
+[node name="SlotName" type="Label" parent="MarginContainer/HBoxContainer" unique_id=750211728]
+unique_name_in_owner = true
+layout_mode = 2
+text = "- Leer -"
+
+[node name="Spacer" type="Control" parent="MarginContainer/HBoxContainer" unique_id=1586016461]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SlotInfo" type="Label" parent="MarginContainer/HBoxContainer" unique_id=589872621]
+unique_name_in_owner = true
+layout_mode = 2
+text = "29.05.2026  09:05"
+horizontal_alignment = 2

@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://ct7q3w8htdx6p"]
+
+[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_2nls7"]
+[ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://menu_button_green.tres" id="2_qjcy4"]
+[ext_resource type="Script" uid="uid://cpe2f0o26vphm" path="res://scenes/ingame/hud/modals/content/ModalContentLoad.gd" id="2_vncp5"]
+[ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://menu_button_green_pressed.tres" id="3_vncp5"]
+[ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://menu_button_green_hover.tres" id="4_i5kiy"]
+
+[node name="ModalContentLoad" type="VBoxContainer" unique_id=279179450]
+theme = ExtResource("1_2nls7")
+script = ExtResource("2_vncp5")
+
+[node name="Subtitle1" type="Label" parent="." unique_id=1071992313]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Manuelle Spielstände"
+
+[node name="ManualSlotContainer" type="VBoxContainer" parent="." unique_id=213443727]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="." unique_id=433815988]
+layout_mode = 2
+
+[node name="Subtitle2" type="Label" parent="." unique_id=269122665]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Autosaves"
+
+[node name="AutoSlotContainer" type="VBoxContainer" parent="." unique_id=1757976522]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Control" type="Control" parent="." unique_id=1678030525]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1954103626]
+layout_mode = 2
+
+[node name="LoadButton" type="Button" parent="CenterContainer" unique_id=1402951796]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_qjcy4")
+theme_override_styles/pressed = ExtResource("3_vncp5")
+theme_override_styles/hover = ExtResource("4_i5kiy")
+text = "Laden"

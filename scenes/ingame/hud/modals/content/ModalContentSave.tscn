@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://bwjjw66rnrk5m"]
+
+[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_3p06j"]
+[ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://menu_button_green.tres" id="1_6dxfo"]
+[ext_resource type="Script" uid="uid://h7biulptxkx6" path="res://scenes/ingame/hud/modals/content/ModalContentSave.gd" id="2_03gl7"]
+[ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://menu_button_green_pressed.tres" id="2_3p06j"]
+[ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://menu_button_green_hover.tres" id="3_03gl7"]
+
+[node name="ModalContentSave" type="VBoxContainer" unique_id=1081580216]
+size_flags_vertical = 3
+theme = ExtResource("1_3p06j")
+script = ExtResource("2_03gl7")
+
+[node name="Subtitle" type="Label" parent="." unique_id=1097180975]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Manuelle Spielstände"
+
+[node name="SlotContainer" type="VBoxContainer" parent="." unique_id=797401054]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HSeparator" type="HSeparator" parent="." unique_id=156463743]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=21517943]
+layout_mode = 2
+
+[node name="InputLabel" type="Label" parent="HBoxContainer" unique_id=433113355]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Name:"
+
+[node name="SaveNameInput" type="LineEdit" parent="HBoxContainer" unique_id=1782661221]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Spielstand benennen..."
+
+[node name="Control" type="Control" parent="." unique_id=1964984577]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1038585502]
+layout_mode = 2
+
+[node name="SaveButton" type="Button" parent="CenterContainer" unique_id=1709707808]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("1_6dxfo")
+theme_override_styles/pressed = ExtResource("2_3p06j")
+theme_override_styles/hover = ExtResource("3_03gl7")
+text = "Speichern"

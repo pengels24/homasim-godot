@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://bwjjw66rnrk5m"]
 
 [ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_3p06j"]
-[ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://menu_button_green.tres" id="1_6dxfo"]
+[ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://assets/UI/menu_button_green.tres" id="1_6dxfo"]
 [ext_resource type="Script" uid="uid://h7biulptxkx6" path="res://scenes/ingame/hud/modals/content/ModalContentSave.gd" id="2_03gl7"]
-[ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://menu_button_green_pressed.tres" id="2_3p06j"]
-[ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://menu_button_green_hover.tres" id="3_03gl7"]
+[ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://assets/UI/menu_button_green_pressed.tres" id="2_3p06j"]
+[ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://assets/UI/menu_button_green_hover.tres" id="3_03gl7"]
 
 [node name="ModalContentSave" type="VBoxContainer" unique_id=1081580216]
 size_flags_vertical = 3

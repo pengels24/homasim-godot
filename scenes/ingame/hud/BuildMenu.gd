@@ -70,11 +70,11 @@ func _sort_rooms_into_categories() -> void:
 func _display_category_buttons() -> void:
 	# Mapping: Kategorie-Name -> Pfad zum Icon
 	var category_icons := {
-		"zimmer": "res://assets/icons/house.svg",
-		"gastro": "res://assets/icons/utensils.svg",
-		"service": "res://assets/icons/brush-cleaning.svg",
-		"management": "res://assets/icons/laptop-minimal.svg",
-		"sonstiges": "res://assets/icons/wrench.svg"
+		"zimmer": "res://assets/icons/HUDTop/house.svg",
+		"gastro": "res://assets/icons/HUDBottom/utensils.svg",
+		"service": "res://assets/icons/HUDBottom/brush-cleaning.svg",
+		"management": "res://assets/icons/HUDBottom/laptop-minimal.svg",
+		"sonstiges": "res://assets/icons/HUDBottom/wrench.svg"
 	}
 
 	for child in category_grid.get_children():
@@ -87,7 +87,7 @@ func _display_category_buttons() -> void:
 		var btn: Button = new_instance.get_node("%MenuButton") as Button
 
 		# Wähle das passende Icon aus dem Dictionary (Fallback auf 'house.svg', falls Name unbekannt)
-		var icon_path = category_icons.get(cat_name.to_lower(), "res://assets/icons/house.svg")
+		var icon_path = category_icons.get(cat_name.to_lower(), "res://assets/icons/HUDTop/house.svg")
 		btn.icon = load(icon_path)
 
 		btn.text = "" # Text weg, Fokus auf Icon

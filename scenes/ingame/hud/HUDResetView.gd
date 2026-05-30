@@ -1,7 +1,7 @@
 extends Control
 
-const ICON_DEFAULT = preload("res://assets/icons/square-square.svg")
-const ICON_MAP_PIN = preload("res://assets/icons/map-pin.svg")
+const ICON_DEFAULT = preload("res://assets/icons/HUDBottom/square-square.svg")
+const ICON_MAP_PIN = preload("res://assets/icons/HUDBottom/map-pin.svg")
 
 @onready var reset_button: Button = %ResetView
 

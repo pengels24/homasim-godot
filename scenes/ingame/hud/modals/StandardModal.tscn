@@ -2,10 +2,10 @@
 
 [ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_m2mrv"]
 [ext_resource type="Script" uid="uid://cwcvnhw4upr5k" path="res://scenes/ingame/hud/modals/StandardModal.gd" id="2_x344n"]
-[ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://menu_button_red.tres" id="3_lle5v"]
-[ext_resource type="StyleBox" uid="uid://cg2q7w0wqska8" path="res://modal_panel_glow.tres" id="3_o51y1"]
-[ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://menu_button_red_pressed.tres" id="4_o51y1"]
-[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://menu_button_red_hover.tres" id="5_3uw2v"]
+[ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="3_lle5v"]
+[ext_resource type="StyleBox" uid="uid://cg2q7w0wqska8" path="res://assets/UI/modal_panel_glow.tres" id="3_o51y1"]
+[ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="4_o51y1"]
+[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="5_3uw2v"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ffpxq"]
 load_path = "res://.godot/imported/x.svg-521876a1ce6500a0794bff7c22c09e07.ctex"

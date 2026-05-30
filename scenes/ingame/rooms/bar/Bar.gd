@@ -12,7 +12,7 @@ static func get_definition() -> Dictionary:
 		"label":         "BA",
 		"name":          "Bar",
 		"category":      "gastro",
-		"icon":          "res://assets/icons/wine.svg",
+		"icon":          "res://assets/icons/HUDBottom/wine.svg",
 		"nightly_price": 0,
 		"locked":        false,
 		"in_build_menu": true,

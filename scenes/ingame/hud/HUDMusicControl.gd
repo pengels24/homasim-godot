@@ -2,9 +2,9 @@ extends Control
 ## Neue Musik-Steuerung im Ingame-HUD: Play/Stop + Next.
 
 # Die drei SVG-Icons als Konstanten vorgeladen
-const ICON_PLAY    = preload("res://assets/icons/play.svg")
-const ICON_STOP    = preload("res://assets/icons/square.svg")
-const ICON_FORWARD = preload("res://assets/icons/fast-forward.svg")
+const ICON_PLAY    = preload("res://assets/icons/HUDTop/play.svg")
+const ICON_STOP    = preload("res://assets/icons/HUDTop/square.svg")
+const ICON_FORWARD = preload("res://assets/icons/HUDTop/fast-forward.svg")
 
 @onready var music_stop_play: Button = %MusicStopPlay
 @onready var music_next: Button = %MusicNext

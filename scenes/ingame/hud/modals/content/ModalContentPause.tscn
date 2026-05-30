@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://c1l3fvmx7jji4"]
 
 [ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_dba5f"]
-[ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://menu_button_green.tres" id="2_hn2ft"]
+[ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://assets/UI/menu_button_green.tres" id="2_hn2ft"]
 [ext_resource type="Script" uid="uid://dd200kru7yfhi" path="res://scenes/ingame/hud/modals/content/ModalContentPause.gd" id="2_t2cls"]
-[ext_resource type="StyleBox" uid="uid://byn5sg5pqc4ux" path="res://menu_button_blue.tres" id="3_0q4dp"]
-[ext_resource type="StyleBox" uid="uid://bxdxryd4oglat" path="res://menu_button_blue_pressed.tres" id="4_tmvwh"]
-[ext_resource type="StyleBox" uid="uid://bc0pipuhgp5c7" path="res://menu_button_blue_hover.tres" id="5_j7a1d"]
-[ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://menu_button_red.tres" id="6_5nhsn"]
-[ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://menu_button_red_pressed.tres" id="7_5nhsn"]
-[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://menu_button_red_hover.tres" id="8_5nhsn"]
+[ext_resource type="StyleBox" uid="uid://byn5sg5pqc4ux" path="res://assets/UI/menu_button_blue.tres" id="3_0q4dp"]
+[ext_resource type="StyleBox" uid="uid://bxdxryd4oglat" path="res://assets/UI/menu_button_blue_pressed.tres" id="4_tmvwh"]
+[ext_resource type="StyleBox" uid="uid://bc0pipuhgp5c7" path="res://assets/UI/menu_button_blue_hover.tres" id="5_j7a1d"]
+[ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="6_5nhsn"]
+[ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="7_5nhsn"]
+[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="8_5nhsn"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5nhsn"]
 content_margin_left = 8.0

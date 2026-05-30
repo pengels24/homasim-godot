@@ -12,7 +12,7 @@ static func get_definition() -> Dictionary:
 		"label":         "PB",
 		"name":          "Personalbüro",
 		"category":      "management",
-		"icon":          "res://assets/icons/users.svg",
+		"icon":          "res://assets/icons/HUDBottom/users.svg",
 		"nightly_price": 0,
 		"locked":        false,
 		"in_build_menu": true,

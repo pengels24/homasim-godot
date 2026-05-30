@@ -12,7 +12,7 @@ static func get_definition() -> Dictionary:
 		"label":         "EZ",
 		"name":          "Einzelzimmer",
 		"category":      "zimmer",
-		"icon":          "res://assets/icons/bed-single.svg",
+		"icon":          "res://assets/icons/HUDBottom/bed-single.svg",
 		"nightly_price": 60,
 		"locked":        false,
 		"in_build_menu": true,

@@ -12,7 +12,7 @@ static func get_definition() -> Dictionary:
 		"label":         "FB",
 		"name":          "Forschungsbüro",
 		"category":      "management",
-		"icon":          "res://assets/icons/flask-conical.svg",
+		"icon":          "res://assets/icons/HUDBottom/flask-conical.svg",
 		"nightly_price": 0,
 		"locked":        false,
 		"in_build_menu": true,

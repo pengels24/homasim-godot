@@ -1,0 +1,143 @@
+[gd_scene format=3 uid="uid://devconsole"]
+
+[ext_resource type="Script" uid="uid://cymq6ksshaykr" path="res://autoload/DevConsole.gd" id="1_script"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.05, 0.1, 0.05, 0.96)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0.55, 0.15, 0.8)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_close_hover"]
+bg_color = Color(0.4, 0.08, 0.08, 0.8)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sep"]
+bg_color = Color(0, 0.45, 0.12, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input"]
+content_margin_left = 4.0
+content_margin_top = 3.0
+content_margin_right = 4.0
+content_margin_bottom = 3.0
+bg_color = Color(0.02, 0.06, 0.02, 1)
+border_width_bottom = 1
+border_color = Color(0, 0.45, 0.1, 0.5)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_focus"]
+content_margin_left = 4.0
+content_margin_top = 3.0
+content_margin_right = 4.0
+content_margin_bottom = 3.0
+bg_color = Color(0.02, 0.06, 0.02, 1)
+border_width_bottom = 1
+border_color = Color(0, 0.7, 0.2, 0.8)
+
+[node name="DevConsole" type="CanvasLayer" unique_id=1479635570]
+layer = 127
+visible = false
+script = ExtResource("1_script")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=150457641]
+offset_left = 1288.0
+offset_top = 688.0
+offset_right = 1908.0
+offset_bottom = 1068.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Margin" type="MarginContainer" parent="Panel" unique_id=386443465]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 8
+
+[node name="VBox" type="VBoxContainer" parent="Panel/Margin" unique_id=1630565119]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Header" type="HBoxContainer" parent="Panel/Margin/VBox" unique_id=1521783364]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="TitleLbl" type="Label" parent="Panel/Margin/VBox/Header" unique_id=2132246548]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.15, 0.9, 0.3, 1)
+theme_override_font_sizes/font_size = 13
+text = "⊕ DEV KONSOLE"
+vertical_alignment = 1
+
+[node name="CloseBtn" type="Button" parent="Panel/Margin/VBox/Header" unique_id=1663835896]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.55, 0.55, 0.55, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.35, 0.35, 1)
+theme_override_colors/font_hover_color = Color(1, 0.35, 0.35, 1)
+theme_override_font_sizes/font_size = 13
+theme_override_styles/normal = SubResource("StyleBoxEmpty_focus")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_close_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_close_hover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+text = "✕"
+
+[node name="HSep1" type="Panel" parent="Panel/Margin/VBox" unique_id=130228998]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sep")
+
+[node name="LogScroll" type="ScrollContainer" parent="Panel/Margin/VBox" unique_id=1668819564]
+custom_minimum_size = Vector2(0, 230)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="LogVBox" type="VBoxContainer" parent="Panel/Margin/VBox/LogScroll" unique_id=853750127]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 1
+
+[node name="HSep2" type="Panel" parent="Panel/Margin/VBox" unique_id=336882629]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_sep")
+
+[node name="InputRow" type="HBoxContainer" parent="Panel/Margin/VBox" unique_id=2062764220]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="PromptLbl" type="Label" parent="Panel/Margin/VBox/InputRow" unique_id=673718450]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.15, 0.9, 0.3, 1)
+theme_override_font_sizes/font_size = 15
+text = ">"
+vertical_alignment = 1
+
+[node name="InputField" type="LineEdit" parent="Panel/Margin/VBox/InputRow" unique_id=1180395706]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.15, 0.9, 0.3, 1)
+theme_override_colors/caret_color = Color(0.15, 0.9, 0.3, 1)
+theme_override_colors/selection_color = Color(0, 0.5, 0.15, 0.4)
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
+theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
+placeholder_text = "Befehl eingeben..."

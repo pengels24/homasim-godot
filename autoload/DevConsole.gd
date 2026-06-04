@@ -7,7 +7,7 @@ class_name DevConsole
 @onready var _header:    HBoxContainer   = $Panel/Margin/VBox/Header
 @onready var _log_vbox:  VBoxContainer   = $Panel/Margin/VBox/LogScroll/LogVBox
 @onready var _scroll:    ScrollContainer = $Panel/Margin/VBox/LogScroll
-@onready var _input:     LineEdit        = $Panel/Margin/VBox/InputRow/InputField
+@onready var _input_field:     LineEdit        = $Panel/Margin/VBox/InputRow/InputField
 @onready var _close_btn: Button          = $Panel/Margin/VBox/Header/CloseBtn
 
 var _hotel:       Dictionary = {}
@@ -23,17 +23,22 @@ const CLR_INFO := Color(0.55, 0.75, 0.55, 1.0)
 const CLR_CMD  := Color(0.90, 0.90, 0.90, 1.0)
 
 
+func _ready() -> void:
+	# Diese Basis-Dinge funktionieren jetzt IMMER, egal ob Hauptmenü oder Ingame
+	_close_btn.pressed.connect(_close)
+	_input_field.text_submitted.connect(_on_input_submitted)
+	_header.gui_input.connect(_on_header_gui_input)
+
+
 func configure(hotel: Dictionary, hud: Node, clock: IngameClock) -> void:
 	_hotel = hotel
 	_hud   = hud
 	_clock = clock
-	_close_btn.pressed.connect(_close)
-	_input.text_submitted.connect(_on_input_submitted)
-	_header.gui_input.connect(_on_header_gui_input)
-	_header.mouse_default_cursor_shape = Control.CURSOR_MOVE
+	# Die connect-Zeilen hier löschen, die sind ja jetzt in _ready()
 	_log("Dev-Konsole bereit. Tippe \"help\" für alle Befehle.", CLR_INFO)
 
 
+# =============================================================================
 func toggle() -> void:
 	if visible:
 		_close()
@@ -41,21 +46,32 @@ func toggle() -> void:
 		_open()
 
 
-# ── Öffnen / Schließen ────────────────────────────────────────────────────────
-
+# =============================================================================
 func _open() -> void:
-	_was_paused = _clock.is_paused()
-	_clock.pause()
+	# Nur pausieren, wenn wir wirklich im Spiel sind und die Uhr existiert
+	if is_instance_valid(_clock):
+		_was_paused = _clock.is_paused()
+		_clock.pause()
+
+	# InputHandler in den Konsolen-Modus zwingen!
+	InputHandler.current_mode = InputHandler.InputMode.CONSOLE
+
 	visible = true
-	_input.grab_focus()
+	_input_field.grab_focus()
 
 
+# =============================================================================
 func _close() -> void:
 	visible = false
-	if not _was_paused:
+
+	if is_instance_valid(_clock) and not _was_paused:
 		_clock.resume()
 
+	# InputHandler wieder freigeben
+	InputHandler.current_mode = InputHandler.InputMode.NORMAL
 
+
+# =============================================================================
 func _on_header_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		var mb := event as InputEventMouseButton
@@ -73,21 +89,27 @@ func _on_header_gui_input(event: InputEvent) -> void:
 		_panel.position = new_pos
 
 
-func _unhandled_input(event: InputEvent) -> void:
+# =============================================================================
+func _input(event: InputEvent) -> void:
+	# 1. Globaler Toggle mit F12 (Nur im Debug-Build!)
+	if OS.is_debug_build() and event is InputEventKey and event.pressed and event.keycode == KEY_F12:
+		get_viewport().set_input_as_handled()
+		toggle()
+		return
+
+	# 2. Schließen mit ESC
 	if visible and event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		_close()
 
 
-# ── Eingabe ───────────────────────────────────────────────────────────────────
-
+# =============================================================================
 func _on_input_submitted(cmd: String) -> void:
-	_input.clear()
+	_input_field.clear()
 	_execute(cmd.strip_edges())
 
 
-# ── Befehlsverarbeitung ───────────────────────────────────────────────────────
-
+# =============================================================================
 func _execute(cmd: String) -> void:
 	if cmd.is_empty():
 		return
@@ -173,8 +195,7 @@ func _execute(cmd: String) -> void:
 			_log("Unbekannter Befehl: \"%s\". Tippe \"help\"." % cmd_name, CLR_ERR)
 
 
-# ── Hilfsfunktionen ───────────────────────────────────────────────────────────
-
+# =============================================================================
 func _log(text: String, color: Color = CLR_OK) -> void:
 	var lbl := Label.new()
 	lbl.text             = text
@@ -185,11 +206,13 @@ func _log(text: String, color: Color = CLR_OK) -> void:
 	call_deferred("_scroll_to_bottom")
 
 
+# =============================================================================
 func _scroll_to_bottom() -> void:
 	if is_instance_valid(_scroll):
 		_scroll.scroll_vertical = int(_scroll.get_v_scroll_bar().max_value)
 
 
+# =============================================================================
 func _fmt_money(amount: int) -> String:
 	var s      := str(amount)
 	var result := ""

@@ -20,6 +20,7 @@ var entrance_dir: String = ""
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func configure(neighbors: Dictionary) -> void:
 	wall_n.visible = not neighbors.get("top",    false)
 	wall_s.visible = not neighbors.get("bottom", false)
@@ -27,18 +28,21 @@ func configure(neighbors: Dictionary) -> void:
 	wall_e.visible = not neighbors.get("right",  false)
 
 
+# =============================================================================
 func set_entrance(dir: String) -> void:
 	has_entrance = true
 	entrance_dir = dir
 	_spawn_lobby()
 
 
+# =============================================================================
 func buy(hotel_id: int) -> void:
 	is_built = true
 	visible  = true
 	SaveManager.set_plot_built(hotel_id, _grid_x(), _grid_y())
 
 
+# =============================================================================
 func spawn_room(room_scene: PackedScene, door_rot: int, door_off: int, tile_x: int, tile_y: int, room_rot: int = 0) -> Node2D:
 	var room: Node2D = room_scene.instantiate()
 	add_child(room)
@@ -47,6 +51,7 @@ func spawn_room(room_scene: PackedScene, door_rot: int, door_off: int, tile_x: i
 	return room
 
 
+# =============================================================================
 func restore_room(room_data: Dictionary, room_scene: PackedScene) -> Node2D:
 	var room: Node2D = room_scene.instantiate()
 	add_child(room)
@@ -57,6 +62,7 @@ func restore_room(room_data: Dictionary, room_scene: PackedScene) -> Node2D:
 	return room
 
 
+# =============================================================================
 func get_lobby_tile_rect() -> Rect2i:
 	if not has_entrance:
 		return Rect2i()
@@ -64,6 +70,7 @@ func get_lobby_tile_rect() -> Rect2i:
 	return Rect2i(int(lp.x / TILE_PX), int(lp.y / TILE_PX), LOBBY_TILES, LOBBY_TILES)
 
 
+# =============================================================================
 func get_lobby_clearance_rect() -> Rect2i:
 	if not has_entrance:
 		return Rect2i()
@@ -80,6 +87,7 @@ func get_lobby_clearance_rect() -> Rect2i:
 
 # ── Intern ────────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _spawn_lobby() -> void:
 	var lobby: Node2D = LOBBY_SCENE.instantiate()
 	add_child(lobby)
@@ -87,6 +95,7 @@ func _spawn_lobby() -> void:
 	lobby.configure({ "entrance_dir": entrance_dir })
 
 
+# =============================================================================
 func _lobby_position() -> Vector2:
 	var center_offset: int = int((PARCEL_TILES - LOBBY_TILES) / 2.0) * TILE_PX
 	match entrance_dir:
@@ -97,9 +106,11 @@ func _lobby_position() -> Vector2:
 	return Vector2(center_offset, center_offset)
 
 
+# =============================================================================
 func _grid_x() -> int:
 	return name.get_slice("_", 1).to_int()
 
 
+# =============================================================================
 func _grid_y() -> int:
 	return name.get_slice("_", 2).to_int()

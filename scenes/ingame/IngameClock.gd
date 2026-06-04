@@ -29,6 +29,7 @@ var _sb_normal: StyleBoxFlat
 var _sb_active: StyleBoxFlat
 
 
+# =============================================================================
 func configure(hotel: Dictionary, time_lbl: Label,
 		btn_pause: Button, btn_play: Button, btn_ff: Button,
 		new_time_lbl: Label = null, new_day_lbl: Label = null) -> void:
@@ -57,28 +58,35 @@ func configure(hotel: Dictionary, time_lbl: Label,
 	_update_speed_buttons()
 
 
+# =============================================================================
 func get_game_time() -> int:
 	return _game_hour * 60 + _game_minute
 
+
+# =============================================================================
 func get_hour() -> int:
 	return _game_hour
 
 
+# =============================================================================
 func is_paused() -> bool:
 	return _game_paused
 
 
+# =============================================================================
 func set_game_time(minutes: int) -> void:
 	_game_hour   = int(minutes / 60.0)
 	_game_minute = minutes % 60
 	_update_time_label()
 
 
+# =============================================================================
 func pause() -> void:
 	_game_paused = true
 	_update_speed_buttons()
 
 
+# =============================================================================
 func resume() -> void:
 	_game_paused = false
 	_game_speed  = 1.0
@@ -87,12 +95,14 @@ func resume() -> void:
 
 # ── Prozess ───────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _process(delta: float) -> void:
 	if _time_lbl == null:
 		return
 	_tick_game_clock(delta)
 
 
+# =============================================================================
 func _tick_game_clock(delta: float) -> void:
 	if _game_paused:
 		return
@@ -118,6 +128,7 @@ func _tick_game_clock(delta: float) -> void:
 	_update_time_label()
 
 
+# =============================================================================
 func _on_day_end() -> void:
 	var new_day: int = int(_hotel.get("day", 1)) + 1
 	_hotel["day"] = new_day
@@ -126,6 +137,7 @@ func _on_day_end() -> void:
 	save_requested.emit(get_game_time())
 
 
+# =============================================================================
 func _update_time_label() -> void:
 	var formatted_time := "%02d:%02d" % [_game_hour, _game_minute]
 	# Altes HUD
@@ -135,6 +147,8 @@ func _update_time_label() -> void:
 	if is_instance_valid(_new_time_lbl):
 		_new_time_lbl.text = formatted_time
 
+
+# =============================================================================
 func _update_day_label() -> void:
 	if is_instance_valid(_new_day_lbl):
 		_new_day_lbl.text = str(_hotel.get("day", 1))
@@ -142,24 +156,28 @@ func _update_day_label() -> void:
 
 # ── Spielgeschwindigkeit ──────────────────────────────────────────────────────
 
+# =============================================================================
 func _on_pause_pressed() -> void:
 	_game_paused = true
 	_game_speed  = 1.0
 	_update_speed_buttons()
 
 
+# =============================================================================
 func _on_play_pressed() -> void:
 	_game_paused = false
 	_game_speed  = 1.0
 	_update_speed_buttons()
 
 
+# =============================================================================
 func _on_ff_pressed() -> void:
 	_game_paused = false
 	_game_speed  = SettingsManager.ff_speed
 	_update_speed_buttons()
 
 
+# =============================================================================
 func _update_speed_buttons() -> void:
 	var gold   := Color(0.918, 0.702, 0.031, 1)
 	var normal := Color(0.65,  0.65,  0.65,  1)
@@ -172,6 +190,7 @@ func _update_speed_buttons() -> void:
 	_btn_ff.add_theme_color_override(   "font_color", gold if is_ff                                   else normal)
 
 
+# =============================================================================
 func _apply_ctrl_btn(btn: Button, active: bool) -> void:
 	var sb := _sb_active if active else _sb_normal
 	btn.add_theme_stylebox_override("normal",  sb)
@@ -179,6 +198,7 @@ func _apply_ctrl_btn(btn: Button, active: bool) -> void:
 	btn.add_theme_stylebox_override("pressed", _sb_active)
 
 
+# =============================================================================
 func _make_ctrl_sb(bg: Color, border: Color) -> StyleBoxFlat:
 	var sb := StyleBoxFlat.new()
 	sb.bg_color                   = bg

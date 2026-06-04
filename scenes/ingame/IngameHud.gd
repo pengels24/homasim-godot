@@ -30,21 +30,10 @@ var _hotel_name_lbl:     Label
 var _level_lbl:          Label
 var _stat_day_val:       Label
 var _stat_money_val:     Label
-# var _stat_guests_wait:   Label
-# var _stat_guests_active: Label
-# var _stat_guests_out:    Label
-# var _stat_ap_val:        Label
-# var _stat_exp_bar:       Control
-# var _stat_exp_lbl:       Label
-# var _exp_fill:           ColorRect
-# var _stat_ruf_root:      Control
-# var _stat_ruf_lbl:       Label
-# var _stat_fp_val:        Label
 var _bottom_anchor:      Control
 var _context_bar:        HBoxContainer
 
 # ── Zustand ───────────────────────────────────────────────────────────────────
-# var _ruf_indicator:         ColorRect
 var _fan_mode_btn:          Button
 var _mode_icon_center:      Label
 var _mode_icon_back:        TextureRect
@@ -60,6 +49,7 @@ var _bar_w:           float = 0.0
 var _bar_h:           float = 0.0
 
 
+# =============================================================================
 func configure(hotel: Dictionary, refs: Dictionary, hud_canvas: CanvasLayer) -> void:
 	_hotel              = hotel
 	_hud_canvas         = hud_canvas
@@ -67,15 +57,6 @@ func configure(hotel: Dictionary, refs: Dictionary, hud_canvas: CanvasLayer) -> 
 	_level_lbl          = refs["level_lbl"]
 	_stat_day_val       = refs["stat_day_val"]
 	_stat_money_val     = refs["stat_money_val"]
-	# _stat_guests_wait   = refs["stat_guests_wait"]
-	# _stat_guests_active = refs["stat_guests_active"]
-	# _stat_guests_out    = refs["stat_guests_out"]
-	# _stat_ap_val        = refs["stat_ap_val"]
-	# _stat_exp_bar       = refs["stat_exp_bar"]
-	# _stat_exp_lbl       = refs["stat_exp_lbl"]
-	# _stat_ruf_root      = refs["stat_ruf_root"]
-	# _stat_ruf_lbl       = refs["stat_ruf_lbl"]
-	# _stat_fp_val        = refs["stat_fp_val"]
 	_bottom_anchor      = refs["bottom_anchor"]
 	_context_bar          = refs["context_bar"]
 	_context_bar.z_index  = 10
@@ -89,6 +70,7 @@ func configure(hotel: Dictionary, refs: Dictionary, hud_canvas: CanvasLayer) -> 
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func set_btn_active(idx: int) -> void:
 	for i in _bottom_buttons.size():
 		var b: Button = _bottom_buttons[i]
@@ -101,18 +83,22 @@ func set_btn_active(idx: int) -> void:
 	_active_btn_idx = idx
 
 
+# =============================================================================
 func show_context_bar(shown: bool) -> void:
 	_context_bar.visible = shown
 
 
+# =============================================================================
 func update_day(day: int) -> void:
 	_stat_day_val.text = str(day)
 
 
+# =============================================================================
 func update_money(amount: float) -> void:
 	_stat_money_val.text = "€ " + _format_money(int(amount))
 
 
+# =============================================================================
 func update_guest_stats(_waiting: int, _active: int, _checkout: int) -> void:
 	# _stat_guests_wait.text   = str(waiting)
 	# _stat_guests_active.text = str(active)
@@ -120,36 +106,43 @@ func update_guest_stats(_waiting: int, _active: int, _checkout: int) -> void:
 	pass
 
 
+# =============================================================================
 func update_exp(_xp: int) -> void:
 	# _stat_exp_lbl.text = "%d XP" % xp
 	pass
 
 
+# =============================================================================
 func set_mode_btn_saved(saved: bool) -> void:
 	_mode_icon_center.visible = not saved
 	_mode_icon_back.visible   = saved
 
 
+# =============================================================================
 func get_stat_money_node() -> Control:
 	return _stat_money_val
 
 
+# =============================================================================
 func get_stat_exp_node() -> Control:
 	# return _stat_exp_lbl
 	return
 
 
+# =============================================================================
 func get_stat_fp_node() -> Control:
 	# return _stat_fp_val
 	return
 
 
+# =============================================================================
 func get_bottom_button(idx: int) -> Button:
 	if idx < 0 or idx >= _bottom_buttons.size():
 		return null
 	return _bottom_buttons[idx]
 
 
+# =============================================================================
 func set_btn_locked(idx: int, locked: bool) -> void:
 	if idx < 0 or idx >= _bottom_buttons.size():
 		return
@@ -160,6 +153,7 @@ func set_btn_locked(idx: int, locked: bool) -> void:
 		btn.get_child(0).modulate = Color(1.0, 1.0, 1.0, 0.35 if locked else 1.0)
 
 
+# =============================================================================
 ## Locked-Check + Signal-Emission – gleiche Logik wie physischer Button-Klick.
 func trigger_button(idx: int) -> void:
 	if idx < _bb_btn_defs.size() and _bb_btn_defs[idx].get("locked", false):
@@ -169,30 +163,12 @@ func trigger_button(idx: int) -> void:
 
 # ── HUD-Setup ─────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _setup_hud() -> void:
-	# _hotel_name_lbl.text     = _hotel.get("name", "Hotel")
-	# _level_lbl.text          = "LVL 1"
-	# _stat_day_val.text       = str(int(_hotel.get("day", 1)))
-	# _stat_money_val.text     = "€ " + _format_money(int(_hotel.get("money", 0)))
-	# _stat_guests_wait.text   = "0"
-	# _stat_guests_active.text = "0"
-	# _stat_guests_out.text    = "0"
-	# _stat_ap_val.text        = "0 / 100"
-	# var initial_xp: int = _hotel.get("xp", 0)
-	# _stat_exp_lbl.text = "%d XP" % initial_xp
-	# _build_exp_bar(initial_xp, 100)
-	# _stat_fp_val.text        = "0"
-	# _update_ruf_display(500)
-	# _apply_value_box(_stat_money_val)
-	# _apply_value_box(_stat_ap_val)
-	# _apply_value_box(_stat_fp_val)
-	# _apply_value_box(_stat_day_val)
-	# _apply_guest_badge(_stat_guests_wait,   Color(0.20, 0.78, 0.35))
-	# _apply_guest_badge(_stat_guests_active, Color(0.918, 0.702, 0.031))
-	# _apply_guest_badge(_stat_guests_out,    Color(0.85, 0.20, 0.20))
 	pass
 
 
+# =============================================================================
 func _apply_value_box(lbl: Label) -> void:
 	var sb := StyleBoxFlat.new()
 	sb.bg_color                   = Color(0.11, 0.15, 0.21, 1.0)
@@ -212,6 +188,7 @@ func _apply_value_box(lbl: Label) -> void:
 	lbl.add_theme_stylebox_override("normal", sb)
 
 
+# =============================================================================
 func _apply_guest_badge(lbl: Label, tint: Color) -> void:
 	var sb := StyleBoxFlat.new()
 	sb.bg_color                   = Color(tint.r, tint.g, tint.b, 0.12)
@@ -233,84 +210,31 @@ func _apply_guest_badge(lbl: Label, tint: Color) -> void:
 
 # ── RUF-Bar ───────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _build_ruf_bar() -> void:
-	# var colors: Array[Color] = [
-	# 	Color(0.82, 0.15, 0.15),
-	# 	Color(0.88, 0.48, 0.08),
-	# 	Color(0.84, 0.74, 0.08),
-	# 	Color(0.30, 0.74, 0.22),
-	# 	Color(0.08, 0.50, 0.12),
-	# ]
-	# var bar_w  := 130.0
-	# var bar_h  := 10.0
-	# var seg_w  := bar_w / colors.size()
-
-	# for i in colors.size():
-	# 	var seg := ColorRect.new()
-	# 	seg.color    = colors[i]
-	# 	seg.position = Vector2(i * seg_w, 2.0)
-	# 	seg.size     = Vector2(seg_w, bar_h)
-	# 	_stat_ruf_root.add_child(seg)
-
-	# _ruf_indicator          = ColorRect.new()
-	# _ruf_indicator.color    = Color(1, 1, 1, 0.90)
-	# _ruf_indicator.size     = Vector2(2, 14)
-	# _ruf_indicator.position = Vector2(0, 0)
-	# _stat_ruf_root.add_child(_ruf_indicator)
-
-	# await get_tree().process_frame
-	# _update_ruf_display(500)
 	pass
 
 
 # ── EXP-Bar ───────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _build_exp_bar(_value: int, _max_val: int) -> void:
-	# var bg := ColorRect.new()
-	# bg.color = Color(0.12, 0.16, 0.22, 1)
-	# bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	# _stat_exp_bar.add_child(bg)
-
-	# _exp_fill          = ColorRect.new()
-	# _exp_fill.color    = Color(0.20, 0.48, 0.85, 1.0)
-	# _exp_fill.position = Vector2.ZERO
-	# _exp_fill.size     = Vector2.ZERO
-	# _stat_exp_bar.add_child(_exp_fill)
-
-	# await get_tree().process_frame
-	# _update_exp_fill(value, max_val)
 	pass
 
 
+# =============================================================================
 func _update_exp_fill(_value: int, _max_val: int) -> void:
-	# if not is_instance_valid(_exp_fill):
-	# 	return
-	# var bar_w := _stat_exp_bar.size.x
-	# var bar_h := _stat_exp_bar.size.y
-	# if bar_w == 0:
-	# 	bar_w = 120.0
-	# if bar_h == 0:
-	# 	bar_h = 10.0
-	# _exp_fill.size = Vector2(
-	# 	clampf((float(value) / float(max(max_val, 1))) * bar_w, 0.0, bar_w),
-	# 	bar_h
-	# )
 	pass
 
 
+# =============================================================================
 func _update_ruf_display(_rep: int) -> void:
-	# _stat_ruf_lbl.text = "%d / 1000" % rep
-	# if not is_instance_valid(_ruf_indicator):
-	# 	return
-	# var bar_w := _stat_ruf_root.size.x
-	# if bar_w == 0:
-	# 	bar_w = 130.0
-	# _ruf_indicator.position.x = clampf((rep / 1000.0) * bar_w - 1.0, 0.0, bar_w - 2.0)
 	pass
 
 
 # ── BottomBar ─────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _build_bottom_bar() -> void:
 	_bb_btn_defs = [
 		{"icon": "+", "icon_path": "res://assets/icons/ic_buildmode.svg",  "label": GameState.T("ingame.btn.build"),      "key": "F2",    "locked": false, "dot_color": Color.TRANSPARENT},
@@ -399,6 +323,7 @@ func _build_bottom_bar() -> void:
 	_position_mode_btn()
 
 
+# =============================================================================
 func _apply_bar_anchor() -> void:
 	_bottom_anchor.anchor_top    = 1.0
 	_bottom_anchor.anchor_bottom = 1.0
@@ -443,21 +368,12 @@ func _apply_bar_anchor() -> void:
 	_context_bar.offset_top    = _context_bar.offset_bottom - 32.0
 
 
+# =============================================================================
 func _position_mode_btn() -> void:
-	# if not is_instance_valid(_fan_mode_btn):
-	# 	return
-	# var vw := float(get_viewport().get_visible_rect().size.x)
-	# var vh := float(get_viewport().get_visible_rect().size.y)
-	# var btn_y := vh - BB_MARGIN - BB_BTN_SIZE
-	# if SettingsManager.hud_side == "center":
-	# 	# Bar mittig → Sprung-Button in die freie linke Ecke
-	# 	_fan_mode_btn.position = Vector2(BB_MARGIN, btn_y)
-	# else:
-	# 	# Bar links oder rechts → Sprung-Button bleibt unten-mitte
-	# 	_fan_mode_btn.position = Vector2((vw - BB_BTN_SIZE) * 0.5, btn_y)
 	pass
 
 
+# =============================================================================
 func _build_tooltip() -> void:
 	_tooltip_panel = PanelContainer.new()
 	_tooltip_panel.visible = false
@@ -483,17 +399,20 @@ func _build_tooltip() -> void:
 	_hud_canvas.add_child(_tooltip_panel)
 
 
+# =============================================================================
 ## Gibt die globale Rect der BottomBar zurück (für BuildPanel-Positionierung).
 func get_bottom_bar_global_rect() -> Rect2:
 	return Rect2(_bottom_anchor.global_position, _bottom_anchor.size)
 
 
+# =============================================================================
 ## Repositioniert Bar + Sprung-Button nach Seitenwechsel in den Settings.
 func reposition_hud() -> void:
 	_apply_bar_anchor()
 	_position_mode_btn()
 
 
+# =============================================================================
 func _make_btn_stylebox(bg: Color, border: Color) -> StyleBoxFlat:
 	var sb := StyleBoxFlat.new()
 	sb.bg_color                   = bg
@@ -512,9 +431,9 @@ func _make_btn_stylebox(bg: Color, border: Color) -> StyleBoxFlat:
 	return sb
 
 
+# =============================================================================
 func _make_bar_btn(idx: int) -> Button:
 	var def := _bb_btn_defs[idx]
-
 	var btn := Button.new()
 	btn.custom_minimum_size      = Vector2(BB_BTN_SIZE, BB_BTN_SIZE)
 	btn.focus_mode               = Control.FOCUS_NONE
@@ -582,6 +501,7 @@ func _make_bar_btn(idx: int) -> Button:
 	return btn
 
 
+# =============================================================================
 func _make_mode_indicator() -> Button:
 	var btn := Button.new()
 	btn.custom_minimum_size = Vector2(46, 46)
@@ -632,12 +552,14 @@ func _make_mode_indicator() -> Button:
 	return btn
 
 
+# =============================================================================
 func _on_btn_pressed(idx: int) -> void:
 	if _bb_btn_defs[idx].get("locked", false):
 		return
 	bottom_button_pressed.emit(idx)
 
 
+# =============================================================================
 func _show_tooltip(text: String) -> void:
 	_tooltip_lbl.text       = text
 	_tooltip_panel.modulate = Color(1, 1, 1, 0)
@@ -653,12 +575,14 @@ func _show_tooltip(text: String) -> void:
 	_tooltip_panel.modulate = Color(1, 1, 1, 1)
 
 
+# =============================================================================
 func _hide_tooltip() -> void:
 	_tooltip_panel.visible = false
 
 
 # ── ContextBar ────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _build_context_bar() -> void:
 	var hints: Array[Dictionary] = [
 		{"key": "R", "label": GameState.T("ingame.ctx.rotate_door")},
@@ -690,6 +614,7 @@ func _build_context_bar() -> void:
 
 # ── Hilfsfunktionen ───────────────────────────────────────────────────────────
 
+# =============================================================================
 func _format_money(amount: int) -> String:
 	var s      := str(amount)
 	var result := ""

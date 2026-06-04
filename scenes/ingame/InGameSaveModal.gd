@@ -33,11 +33,13 @@ var _selected_auto: bool       = false
 var _slots:         Dictionary = {}
 
 
+# =============================================================================
 func _ready() -> void:
 	_btn_action.pressed.connect(_on_action_pressed)
 	_close_btn.pressed.connect(func(): back_requested.emit())
 
 
+# =============================================================================
 func open(hotel_id: int, is_save: bool) -> void:
 	_hotel_id      = hotel_id
 	_is_save       = is_save
@@ -62,12 +64,14 @@ func open(hotel_id: int, is_save: bool) -> void:
 	visible = true
 
 
+# =============================================================================
 func close() -> void:
 	visible = false
 
 
 # ── Layout ────────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _reposition_panel() -> void:
 	var h := PANEL_H_SAVE if _is_save else PANEL_H_LOAD
 	_panel.offset_left   = (1920.0 - PANEL_W) * 0.5
@@ -78,6 +82,7 @@ func _reposition_panel() -> void:
 
 # ── Slot-Aufbau ───────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _populate_slots() -> void:
 	for c in _slot_container.get_children():
 		c.queue_free()
@@ -102,6 +107,7 @@ func _populate_slots() -> void:
 				_auto_slot_container.add_child(_build_slot_row(i, autos[i], true))
 
 
+# =============================================================================
 func _build_slot_row(idx: int, snap: Variant, is_auto: bool) -> Control:
 	var row   := PanelContainer.new()
 	var style := StyleBoxFlat.new()
@@ -162,6 +168,7 @@ func _build_slot_row(idx: int, snap: Variant, is_auto: bool) -> Control:
 
 # ── Slot-Auswahl ──────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _on_slot_input(event: InputEvent, idx: int, is_auto: bool,
 		row: PanelContainer, style: StyleBoxFlat, snap: Variant) -> void:
 	if event is InputEventMouseButton:
@@ -170,6 +177,7 @@ func _on_slot_input(event: InputEvent, idx: int, is_auto: bool,
 			_select_slot(idx, is_auto, row, style, snap)
 
 
+# =============================================================================
 func _select_slot(idx: int, is_auto: bool, row: PanelContainer,
 		style: StyleBoxFlat, snap: Variant) -> void:
 	_deselect_all()
@@ -192,11 +200,13 @@ func _select_slot(idx: int, is_auto: bool, row: PanelContainer,
 		_btn_action.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if can_load else Control.CURSOR_ARROW
 
 
+# =============================================================================
 func _deselect_all() -> void:
 	_reset_container_styles(_slot_container)
 	_reset_container_styles(_auto_slot_container)
 
 
+# =============================================================================
 func _reset_container_styles(container: VBoxContainer) -> void:
 	for child in container.get_children():
 		if child is PanelContainer:
@@ -207,6 +217,7 @@ func _reset_container_styles(container: VBoxContainer) -> void:
 
 # ── Aktion ────────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _on_action_pressed() -> void:
 	if _selected_slot < 0:
 		return
@@ -232,6 +243,7 @@ func _on_action_pressed() -> void:
 			Toast.show(GameState.T("toast.manualload.empty"))
 
 
+# =============================================================================
 func _unhandled_input(event: InputEvent) -> void:
 	if visible and event is InputEventKey:
 		var ke := event as InputEventKey

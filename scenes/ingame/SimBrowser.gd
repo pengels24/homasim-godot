@@ -39,6 +39,7 @@ const SITES: Array[Dictionary] = [
 ]
 
 
+# =============================================================================
 func _ready() -> void:
 	_apply_styles()
 	_build_home_sim()
@@ -48,16 +49,19 @@ func _ready() -> void:
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func open() -> void:
 	visible = true
 
 
+# =============================================================================
 func close() -> void:
 	visible = false
 
 
 # ── Styles ────────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _apply_styles() -> void:
 	_style_panel(_window, COL_BG, Color(COL_GOLD.r, COL_GOLD.g, COL_GOLD.b, 0.25), 1, 8)
 
@@ -122,6 +126,7 @@ func _apply_styles() -> void:
 	scroll.add_theme_stylebox_override("panel", scroll_style)
 
 
+# =============================================================================
 func _style_panel(node: Control, bg: Color, border: Color, bw: int, radius: int) -> void:
 	var s := StyleBoxFlat.new()
 	s.bg_color = bg
@@ -135,10 +140,12 @@ func _style_panel(node: Control, bg: Color, border: Color, bw: int, radius: int)
 	node.add_theme_stylebox_override("panel", s)
 
 
+# =============================================================================
 func _style_bg(_node: Control, _color: Color) -> void:
 	pass  # HBoxContainer hat kein "panel"-Override; Hintergrundfarbe kommt vom Parent-Panel
 
 
+# =============================================================================
 func _style_nav_btn(btn: Button) -> void:
 	var s := StyleBoxFlat.new()
 	s.bg_color = Color.TRANSPARENT
@@ -154,6 +161,7 @@ func _style_nav_btn(btn: Button) -> void:
 
 # ── home.sim ──────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _build_home_sim() -> void:
 	_content_vbox.add_theme_constant_override("separation", 20)
 
@@ -187,6 +195,7 @@ func _build_home_sim() -> void:
 	tip_wrap.add_child(tip)
 
 
+# =============================================================================
 func _make_header() -> Control:
 	var vbox := VBoxContainer.new()
 	vbox.add_theme_constant_override("separation", 6)
@@ -217,6 +226,7 @@ func _make_header() -> Control:
 	return margin
 
 
+# =============================================================================
 func _make_tile(site: Dictionary) -> Control:
 	var btn := Button.new()
 	btn.custom_minimum_size = Vector2(0, 80)
@@ -302,6 +312,7 @@ func _make_tile(site: Dictionary) -> Control:
 	return btn
 
 
+# =============================================================================
 func _on_tile_pressed(site: Dictionary) -> void:
 	if site.has("easter"):
 		Toast.show(site["easter"])

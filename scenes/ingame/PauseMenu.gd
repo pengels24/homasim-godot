@@ -15,6 +15,7 @@ signal quit_requested
 @onready var _btn_quit:     Button = $Overlay/Panel/VBox/BtnQuit
 
 
+# =============================================================================
 func _ready() -> void:
 	_btn_resume.text   = GameState.T("pausemenu.btn.resume")
 	_btn_save.text     = GameState.T("pausemenu.btn.save")
@@ -33,15 +34,18 @@ func _ready() -> void:
 	_btn_quit.pressed.connect(func():     quit_requested.emit())
 
 
+# =============================================================================
 func open() -> void:
 	visible = true
 	_btn_resume.grab_focus()
 
 
+# =============================================================================
 func close() -> void:
 	visible = false
 
 
+# =============================================================================
 func _unhandled_input(event: InputEvent) -> void:
 	if visible and event is InputEventKey:
 		var ke := event as InputEventKey

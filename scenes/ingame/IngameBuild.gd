@@ -3,8 +3,6 @@ class_name IngameBuild
 ## ANG-170 – BuildMenu + BuildCursor Koordination, BottomBar-Button-Handler.
 ## Erhält alle nötigen Node-Referenzen via configure(). Keine @onready.
 
-# 1. ALTE PFADE UND MENÜS SIND KOMPLETT GELÖSCHT!
-
 signal room_built(room_type_id: String)
 
 var _hotel:              Dictionary
@@ -17,6 +15,7 @@ var _active_submenu:     PanelContainer
 var _active_submenu_idx: int = -1
 
 
+# =============================================================================
 func configure(hotel: Dictionary, map_grid: Node2D, hud: Node, hud_canvas: Node) -> void:
 	_hotel      = hotel
 	_map_grid   = map_grid
@@ -25,6 +24,7 @@ func configure(hotel: Dictionary, map_grid: Node2D, hud: Node, hud_canvas: Node)
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func on_button_pressed(idx: int) -> void:
 	if idx == 0:
 		# Das Build-Menu wird jetzt vom InputHandler gesteuert! Wir tun hier nichts.
@@ -44,6 +44,7 @@ func on_button_pressed(idx: int) -> void:
 	_open_submenu(idx)
 
 
+# =============================================================================
 func close_all() -> bool:
 	if is_instance_valid(_build_cursor):
 		_build_cursor.queue_free()
@@ -58,8 +59,10 @@ func close_all() -> bool:
 		return true
 	return false
 
+
 # ── Neue Schnittstelle für das BuildMenu ──────────────────────────────────────
 
+# =============================================================================
 func start_building(room_scene: PackedScene) -> void:
 	if is_instance_valid(_build_cursor):
 		_build_cursor.queue_free()
@@ -84,6 +87,7 @@ func start_building(room_scene: PackedScene) -> void:
 	cursor.activate(_map_grid, room_scene)
 
 
+# =============================================================================
 func _on_room_placed(room_scene: PackedScene, px: int, py: int, tx: int, ty: int, dr: int, doff: int, rrot: int, world_center: Vector2) -> void:
 	# Definition temporär und sauber direkt aus der Szene auslesen
 	var temp_room = room_scene.instantiate()
@@ -107,6 +111,7 @@ func _on_room_placed(room_scene: PackedScene, px: int, py: int, tx: int, ty: int
 	room_built.emit(def.get("id", "unknown"))
 
 
+# =============================================================================
 func _apply_build_costs(def: Dictionary, world_center: Vector2) -> void:
 	var cost: int = def.get("build_cost", 0)
 	if cost > 0:
@@ -114,6 +119,7 @@ func _apply_build_costs(def: Dictionary, world_center: Vector2) -> void:
 		EffectManager.spawn_money_text(-cost, world_center)
 
 
+# =============================================================================
 func _apply_build_rewards(def: Dictionary, world_center: Vector2) -> void:
 	var xp: int = def.get("exp_reward", 0)
 	if xp > 0:
@@ -121,10 +127,12 @@ func _apply_build_rewards(def: Dictionary, world_center: Vector2) -> void:
 		EffectManager.spawn_exp_text(xp, world_center)
 
 
+# =============================================================================
 func _on_build_cursor_done() -> void:
 	_build_cursor = null
 
 
+# =============================================================================
 func _next_room_number(def: Dictionary) -> String:
 	var prefix: String = def.get("prefix", "")
 	if prefix == "":
@@ -134,8 +142,10 @@ func _next_room_number(def: Dictionary) -> String:
 	_hotel[key] = next + 1
 	return "%s%04d" % [prefix, next]
 
+
 # ── Submenü (Platzhalter) ─────────────────────────────────────────────────────
 
+# =============================================================================
 func _open_submenu(_idx: int) -> void:
 	var panel := PanelContainer.new()
 	var sb := StyleBoxFlat.new()

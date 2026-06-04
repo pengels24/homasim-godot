@@ -7,6 +7,7 @@ signal entry_added(entry: Dictionary)
 var _entries: Array = []
 
 
+# =============================================================================
 func add(type: String, message: String, game_day: int, game_time: int) -> void:
 	var entry := {
 		"type":       type,
@@ -20,10 +21,12 @@ func add(type: String, message: String, game_day: int, game_time: int) -> void:
 	entry_added.emit(entry)
 
 
+# =============================================================================
 func get_entries() -> Array:
 	return _entries
 
 
+# =============================================================================
 func get_unread_count() -> int:
 	var n := 0
 	for e: Dictionary in _entries:
@@ -32,10 +35,12 @@ func get_unread_count() -> int:
 	return n
 
 
+# =============================================================================
 func mark_all_read() -> void:
 	for e: Dictionary in _entries:
 		e["is_read"] = true
 
 
+# =============================================================================
 func clear() -> void:
 	_entries.clear()

@@ -147,15 +147,6 @@ func format_timestamp(ts: int) -> String:
 	return "%02d.%02d.%04d %02d:%02d" % [dt["day"], dt["month"], dt["year"], dt["hour"], dt["minute"]]
 
 
-# # =============================================================================
-# ## Formatiert einen Unix-Timestamp in einen lesbaren String ("29.05.2026 09:05")
-# func format_timestamp(ts: int) -> String:
-# 	if ts == 0:
-# 		return ""
-# 	var dt = Time.get_datetime_dict_from_unix_time(ts)
-# 	return "%02d.%02d.%04d %02d:%02d" % [dt["day"], dt["month"], dt["year"], dt["hour"], dt["minute"]]
-
-
 # =============================================================================
 ## Formatiert rohes Geld (z.B. 44900) mit Tausendertrennzeichen ("44.900")
 func format_money(amount: int) -> String:

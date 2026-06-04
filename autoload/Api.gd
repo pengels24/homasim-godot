@@ -10,6 +10,7 @@ var session_cookie := ""
 var _active_requests: Array[HTTPRequest] = []
 
 
+# =============================================================================
 ## Sendet einen POST-Request mit Form-Data (application/x-www-form-urlencoded).
 ## callback: func(success: bool, data: Dictionary)
 func post_form(endpoint: String, params: Dictionary, callback: Callable) -> void:
@@ -41,6 +42,7 @@ func post_form(endpoint: String, params: Dictionary, callback: Callable) -> void
 		callback.call(false, {"error": "Request konnte nicht gesendet werden (Code %d)" % error})
 
 
+# =============================================================================
 ## Sendet einen POST-Request mit JSON-Body.
 ## callback: func(success: bool, data: Dictionary)
 func post_json(endpoint: String, data: Dictionary, callback: Callable) -> void:
@@ -71,6 +73,7 @@ func post_json(endpoint: String, data: Dictionary, callback: Callable) -> void:
 		callback.call(false, {"error": "Request konnte nicht gesendet werden (Code %d)" % error})
 
 
+# =============================================================================
 ## Sendet einen authentifizierten GET-Request mit Cookie.
 ## callback: func(success: bool, data: Dictionary)
 func get_json(endpoint: String, callback: Callable) -> void:
@@ -94,6 +97,7 @@ func get_json(endpoint: String, callback: Callable) -> void:
 		callback.call(false, {"error": "Request konnte nicht gesendet werden (Code %d)" % error})
 
 
+# =============================================================================
 func _handle_response(
 	result: int,
 	response_code: int,
@@ -125,6 +129,7 @@ func _handle_response(
 		callback.call(response_code >= 200 and response_code < 300, {"data": data})
 
 
+# =============================================================================
 ## Parst den Set-Cookie Header und gibt den Cookie-String zurück (ohne Flags).
 func _extract_cookie(headers: PackedStringArray) -> String:
 	for header in headers:
@@ -135,6 +140,7 @@ func _extract_cookie(headers: PackedStringArray) -> String:
 	return ""
 
 
+# =============================================================================
 ## Form-Data enkodieren (key=value&key2=value2)
 func _encode_form_data(params: Dictionary) -> String:
 	var parts: Array[String] = []

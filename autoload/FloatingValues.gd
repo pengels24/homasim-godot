@@ -9,10 +9,12 @@ const COLOR_POS := Color(0.20, 0.88, 0.38, 1.0)  # grün
 const COLOR_NEG := Color(0.95, 0.28, 0.28, 1.0)  # rot
 
 
+# =============================================================================
 func _ready() -> void:
 	layer = 99
 
 
+# =============================================================================
 ## world_pos: Position in Weltkoordinaten (MapGrid-Raum).
 ## target_node: HUD-Control zu dem das Label fliegt.
 ## screen_offset: Versatz des Startpunkts in Bildschirmkoordinaten (z.B. für nebeneinander).
@@ -27,5 +29,6 @@ func spawn(text: String, amount: float, world_pos: Vector2, target_node: Control
 	fv.spawn(text, color, from_screen, to_screen)
 
 
+# =============================================================================
 func _world_to_screen(world_pos: Vector2) -> Vector2:
 	return get_viewport().get_canvas_transform() * world_pos

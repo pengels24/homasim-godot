@@ -9,10 +9,12 @@ const _SAVE_PATH := "user://session.cfg"
 var saved_username: String = ""
 
 
+# =============================================================================
 func _ready() -> void:
 	_load()
 
 
+# =============================================================================
 ## Lädt Cookie und Username aus der Datei und setzt Api.session_cookie.
 func _load() -> void:
 	var cfg := ConfigFile.new()
@@ -22,6 +24,7 @@ func _load() -> void:
 	saved_username = cfg.get_value("session", "username", "")
 
 
+# =============================================================================
 ## Speichert den Session-Cookie persistent.
 func save_cookie(cookie: String) -> void:
 	var cfg := ConfigFile.new()
@@ -30,6 +33,7 @@ func save_cookie(cookie: String) -> void:
 	cfg.save(_SAVE_PATH)
 
 
+# =============================================================================
 ## Speichert den Username für den nächsten Login.
 func save_username(username: String) -> void:
 	saved_username = username
@@ -39,6 +43,7 @@ func save_username(username: String) -> void:
 	cfg.save(_SAVE_PATH)
 
 
+# =============================================================================
 ## Löscht Cookie + Username aus Datei und setzt Api.session_cookie zurück.
 func clear() -> void:
 	saved_username = ""
@@ -47,6 +52,7 @@ func clear() -> void:
 	cfg.save(_SAVE_PATH)
 
 
+# =============================================================================
 ## Prüft ob die gespeicherte Session noch gültig ist.
 ## callback: func(logged_in: bool)
 func check_session(callback: Callable) -> void:

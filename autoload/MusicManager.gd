@@ -22,6 +22,7 @@ var _paused:         bool  = false
 signal playback_changed  ## Wird emittiert wenn pause/resume/next ausgelöst wird
 
 
+# =============================================================================
 func _ready() -> void:
 	_menu_player = AudioStreamPlayer.new()
 	_menu_player.bus = "Menu Music"
@@ -39,6 +40,7 @@ func _ready() -> void:
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func play_menu() -> void:
 	if _menu_player.playing:
 		return
@@ -49,6 +51,7 @@ func play_menu() -> void:
 	_play_menu_track()
 
 
+# =============================================================================
 func play_ingame() -> void:
 	if _ingame_player.playing:
 		return
@@ -59,12 +62,14 @@ func play_ingame() -> void:
 	_play_ingame_track()
 
 
+# =============================================================================
 func stop() -> void:
 	_paused = false
 	_menu_tween   = _fade_out(_menu_player,   _menu_tween)
 	_ingame_tween = _fade_out(_ingame_player, _ingame_tween)
 
 
+# =============================================================================
 func toggle_pause() -> void:
 	_paused = not _paused
 	_menu_player.stream_paused   = _paused
@@ -72,6 +77,7 @@ func toggle_pause() -> void:
 	playback_changed.emit()
 
 
+# =============================================================================
 func next_track() -> void:
 	if _ingame_player.playing or _ingame_player.stream_paused:
 		_ingame_tween = _fade_out(_ingame_player, _ingame_tween)
@@ -86,12 +92,14 @@ func next_track() -> void:
 	playback_changed.emit()
 
 
+# =============================================================================
 func is_paused() -> bool:
 	return _paused
 
 
 # ── Intern ────────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _discover(prefix: String) -> Array[AudioStream]:
 	var tracks: Array[AudioStream] = []
 	for i in range(1, 100):
@@ -103,6 +111,7 @@ func _discover(prefix: String) -> Array[AudioStream]:
 	return tracks
 
 
+# =============================================================================
 func _play_menu_track() -> void:
 	if _menu_tracks.is_empty():
 		return
@@ -113,6 +122,7 @@ func _play_menu_track() -> void:
 	_menu_tween = _fade_in(_menu_player)
 
 
+# =============================================================================
 func _play_ingame_track() -> void:
 	if _ingame_tracks.is_empty():
 		return
@@ -123,6 +133,7 @@ func _play_ingame_track() -> void:
 	_ingame_tween = _fade_in(_ingame_player)
 
 
+# =============================================================================
 func _fade_in(player: AudioStreamPlayer) -> Tween:
 	player.volume_db = -80.0
 	var tw := create_tween()
@@ -130,6 +141,7 @@ func _fade_in(player: AudioStreamPlayer) -> Tween:
 	return tw
 
 
+# =============================================================================
 func _fade_out(player: AudioStreamPlayer, old_tween: Tween) -> Tween:
 	if not player.playing:
 		return null
@@ -141,16 +153,19 @@ func _fade_out(player: AudioStreamPlayer, old_tween: Tween) -> Tween:
 	return tw
 
 
+# =============================================================================
 func _kill_tween(tw: Tween) -> void:
 	if is_instance_valid(tw):
 		tw.kill()
 
 
+# =============================================================================
 func _on_menu_finished() -> void:
 	_menu_idx = (_menu_idx + 1) % _menu_tracks.size()
 	_play_menu_track()
 
 
+# =============================================================================
 func _on_ingame_finished() -> void:
 	_ingame_idx = (_ingame_idx + 1) % _ingame_tracks.size()
 	_play_ingame_track()

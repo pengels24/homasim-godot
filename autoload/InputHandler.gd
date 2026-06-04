@@ -104,13 +104,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("ui_build_menu"):
 		get_viewport().set_input_as_handled()
-		# Modus toggeln
 		if current_mode == InputMode.NORMAL:
 			current_mode = InputMode.BUILD
-		elif current_mode == InputMode.BUILD:
-			current_mode = InputMode.NORMAL
-
-		sig_hotkey_build_menu_requested.emit()
+			sig_hotkey_build_menu_requested.emit()
 		return
 
 	if event.is_action_pressed("ui_reception"):

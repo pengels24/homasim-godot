@@ -373,13 +373,14 @@ func _load_all_hotels() -> void:
 		fname = dir.get_next()
 
 
-# =============================================================================
 func _load_hotel_file(filename: String) -> void:
 	var cfg := ConfigFile.new()
 	if cfg.load(HOTELS_DIR + filename) != OK:
 		return
 	var id := int(filename.get_basename().trim_prefix("hotel_"))
-	_hotels.append({
+
+	# Packe das Dictionary erstmal in eine lokale Variable 'h'
+	var h := {
 		"id": id,
 		"profile_id": cfg.get_value("hotel", "profile_id", 0),
 		"name": cfg.get_value("hotel", "name", ""),
@@ -390,7 +391,6 @@ func _load_hotel_file(filename: String) -> void:
 		"game_time": cfg.get_value("hotel", "game_time", 360),
 		"plots":  cfg.get_value("hotel", "plots", []),
 		"auto_count": cfg.get_value("hotel", "auto_count", 0),
-		# neue felder ab v0.1.23gd
 		"level": cfg.get_value("hotel", "level", 1),
 		"stars": cfg.get_value("hotel", "stars", 0),
 		"guests_active": cfg.get_value("hotel", "guests_active", 0),
@@ -401,17 +401,71 @@ func _load_hotel_file(filename: String) -> void:
 		"rep": cfg.get_value("hotel", "rep", 500),
 		"rep_max": cfg.get_value("hotel", "rep_max", 1000),
 		"fp": cfg.get_value("hotel", "fp", 0),
-	})
+	}
+
+	# NEU: Dynamische Zähler aus der Config lesen und in 'h' einfügen
+	if cfg.has_section("hotel"):
+		for key in cfg.get_section_keys("hotel"):
+			if key.begins_with("next_") and key.ends_with("_id"):
+				h[key] = cfg.get_value("hotel", key)
+
+	_hotels.append(h)
 
 
-# =============================================================================
+# # =============================================================================
+# func _load_hotel_file(filename: String) -> void:
+# 	var cfg := ConfigFile.new()
+# 	if cfg.load(HOTELS_DIR + filename) != OK:
+# 		return
+# 	var id := int(filename.get_basename().trim_prefix("hotel_"))
+# 	_hotels.append({
+# 		"id": id,
+# 		"profile_id": cfg.get_value("hotel", "profile_id", 0),
+# 		"name": cfg.get_value("hotel", "name", ""),
+# 		"grid_cols": cfg.get_value("hotel", "grid_cols", 5),
+# 		"grid_rows": cfg.get_value("hotel", "grid_rows", 5),
+# 		"day": cfg.get_value("hotel", "day", 1),
+# 		"money": cfg.get_value("hotel", "money", 50000),
+# 		"game_time": cfg.get_value("hotel", "game_time", 360),
+# 		"plots":  cfg.get_value("hotel", "plots", []),
+# 		"auto_count": cfg.get_value("hotel", "auto_count", 0),
+# 		# neue felder ab v0.1.23gd
+# 		"level": cfg.get_value("hotel", "level", 1),
+# 		"stars": cfg.get_value("hotel", "stars", 0),
+# 		"guests_active": cfg.get_value("hotel", "guests_active", 0),
+# 		"guests_checkin": cfg.get_value("hotel", "guests_checkin", 0),
+# 		"guests_checkout": cfg.get_value("hotel", "guests_checkout", 0),
+# 		"exp": cfg.get_value("hotel", "exp", 0),
+# 		"exp_max": cfg.get_value("hotel", "exp_max", 100),
+# 		"rep": cfg.get_value("hotel", "rep", 500),
+# 		"rep_max": cfg.get_value("hotel", "rep_max", 1000),
+# 		"fp": cfg.get_value("hotel", "fp", 0),
+# 	})
+
+
 func _save_hotel(hotel: Dictionary) -> void:
 	if hotel.is_empty():
 		return
 	var cfg := ConfigFile.new()
-	for key in ["profile_id", "name", "grid_cols", "grid_rows", "day", "money", "game_time", "plots", "auto_count",	"level", "stars", "guests_active", "guests_checkin", "guests_checkout", "exp", "exp_max", "rep", "rep_max", "fp"]:
+	for key in ["profile_id", "name", "grid_cols", "grid_rows", "day", "money", "game_time", "plots", "auto_count", "level", "stars", "guests_active", "guests_checkin", "guests_checkout", "exp", "exp_max", "rep", "rep_max", "fp"]:
 		cfg.set_value("hotel", key, hotel.get(key))
+
+	# NEU: Alle dynamischen Zimmer-Zähler ("next_z_id", etc.) mitspeichern
+	for key in hotel:
+		if key is String and key.begins_with("next_") and key.ends_with("_id"):
+			cfg.set_value("hotel", key, hotel[key])
+
 	cfg.save(_hotel_cfg_path(hotel["id"]))
+
+
+# # =============================================================================
+# func _save_hotel(hotel: Dictionary) -> void:
+# 	if hotel.is_empty():
+# 		return
+# 	var cfg := ConfigFile.new()
+# 	for key in ["profile_id", "name", "grid_cols", "grid_rows", "day", "money", "game_time", "plots", "auto_count",	"level", "stars", "guests_active", "guests_checkin", "guests_checkout", "exp", "exp_max", "rep", "rep_max", "fp"]:
+# 		cfg.set_value("hotel", key, hotel.get(key))
+# 	cfg.save(_hotel_cfg_path(hotel["id"]))
 
 
 # =============================================================================
@@ -491,9 +545,8 @@ func _empty_manual() -> Array:
 	return arr
 
 
-# =============================================================================
 func _take_snapshot(hotel: Dictionary, snap_name: String) -> Dictionary:
-	return {
+	var snap := {
 		"name": snap_name,
 		"timestamp": int(Time.get_unix_time_from_system()),
 		"hotel_name": hotel.get("name", ""),
@@ -504,7 +557,6 @@ func _take_snapshot(hotel: Dictionary, snap_name: String) -> Dictionary:
 		"money": hotel.get("money", 0),
 		"game_time": hotel.get("game_time", 360),
 		"plots": hotel.get("plots", []).duplicate(true),
-		# neue felder ab v0.1.23gd
 		"level": hotel.get("level", 1),
 		"stars": hotel.get("stars", 0),
 		"guests_active": hotel.get("guests_active", 0),
@@ -517,14 +569,46 @@ func _take_snapshot(hotel: Dictionary, snap_name: String) -> Dictionary:
 		"fp": hotel.get("fp", 0),
 	}
 
+	# NEU: Zähler in den Snapshot kopieren
+	for key in hotel:
+		if key is String and key.begins_with("next_") and key.ends_with("_id"):
+			snap[key] = hotel[key]
 
-# =============================================================================
+	return snap
+
+
+# # =============================================================================
+# func _take_snapshot(hotel: Dictionary, snap_name: String) -> Dictionary:
+# 	return {
+# 		"name": snap_name,
+# 		"timestamp": int(Time.get_unix_time_from_system()),
+# 		"hotel_name": hotel.get("name", ""),
+# 		"profile_id": hotel.get("profile_id", 0),
+# 		"grid_cols": hotel.get("grid_cols", 5),
+# 		"grid_rows": hotel.get("grid_rows", 5),
+# 		"day": hotel.get("day", 1),
+# 		"money": hotel.get("money", 0),
+# 		"game_time": hotel.get("game_time", 360),
+# 		"plots": hotel.get("plots", []).duplicate(true),
+# 		# neue felder ab v0.1.23gd
+# 		"level": hotel.get("level", 1),
+# 		"stars": hotel.get("stars", 0),
+# 		"guests_active": hotel.get("guests_active", 0),
+# 		"guests_checkin": hotel.get("guests_checkin", 0),
+# 		"guests_checkout": hotel.get("guests_checkout", 0),
+# 		"exp": hotel.get("exp", 0),
+# 		"exp_max": hotel.get("exp_max", 100),
+# 		"rep": hotel.get("rep", 500),
+# 		"rep_max": hotel.get("rep_max", 1000),
+# 		"fp": hotel.get("fp", 0),
+# 	}
+
+
 func _apply_snapshot(hotel: Dictionary, snap: Dictionary) -> void:
 	hotel["day"] = snap.get("day", 1)
 	hotel["money"] = snap.get("money", 0)
 	hotel["game_time"] = snap.get("game_time",360)
 	hotel["plots"] = snap.get("plots", []).duplicate(true)
-	# neue felder ab v0.1.23gd
 	hotel["level"] = snap.get("level", 1)
 	hotel["stars"] = snap.get("stars", 0)
 	hotel["guests_active"] = snap.get("guests_active", 0)
@@ -535,3 +619,27 @@ func _apply_snapshot(hotel: Dictionary, snap: Dictionary) -> void:
 	hotel["rep"] = snap.get("rep", 500)
 	hotel["rep_max"] = snap.get("rep_max", 1000)
 	hotel["fp"] = snap.get("fp", 0)
+
+	# NEU: Zähler aus dem Snapshot wiederherstellen
+	for key in snap:
+		if key is String and key.begins_with("next_") and key.ends_with("_id"):
+			hotel[key] = snap[key]
+
+
+# # =============================================================================
+# func _apply_snapshot(hotel: Dictionary, snap: Dictionary) -> void:
+# 	hotel["day"] = snap.get("day", 1)
+# 	hotel["money"] = snap.get("money", 0)
+# 	hotel["game_time"] = snap.get("game_time",360)
+# 	hotel["plots"] = snap.get("plots", []).duplicate(true)
+# 	# neue felder ab v0.1.23gd
+# 	hotel["level"] = snap.get("level", 1)
+# 	hotel["stars"] = snap.get("stars", 0)
+# 	hotel["guests_active"] = snap.get("guests_active", 0)
+# 	hotel["guests_checkin"] = snap.get("guests_checkin", 0)
+# 	hotel["guests_checkout"] = snap.get("guests_checkout", 0)
+# 	hotel["exp"] = snap.get("exp", 0)
+# 	hotel["exp_max"] = snap.get("exp_max", 100)
+# 	hotel["rep"] = snap.get("rep", 500)
+# 	hotel["rep_max"] = snap.get("rep_max", 1000)
+# 	hotel["fp"] = snap.get("fp", 0)

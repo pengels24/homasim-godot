@@ -1,0 +1,628 @@
+[gd_scene format=3 uid="uid://qwgnai6agj28"]
+
+[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_jx7ge"]
+[ext_resource type="Texture2D" uid="uid://dd62aim03wf0t" path="res://assets/icons/Modals/arrow-left.svg" id="2_j758h"]
+[ext_resource type="StyleBox" uid="uid://byn5sg5pqc4ux" path="res://assets/UI/menu_button_blue.tres" id="2_jjod7"]
+[ext_resource type="Script" uid="uid://dmhiof6q2d5lg" path="res://scenes/ingame/hud/modals/content/ModalContentSettings.gd" id="2_u0uya"]
+[ext_resource type="StyleBox" uid="uid://bxdxryd4oglat" path="res://assets/UI/menu_button_blue_pressed.tres" id="3_d0jvy"]
+[ext_resource type="Texture2D" uid="uid://c4qeeryni0rp6" path="res://assets/icons/Modals/arrow-right.svg" id="3_xeut1"]
+[ext_resource type="StyleBox" uid="uid://bc0pipuhgp5c7" path="res://assets/UI/menu_button_blue_hover.tres" id="4_v1l06"]
+[ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="7_5g705"]
+[ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="8_u0uya"]
+[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="9_istr4"]
+[ext_resource type="Texture2D" uid="uid://chug26ioff260" path="res://assets/icons/x.svg" id="10_siby1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u0uya"]
+bg_color = Color(0.101960786, 0.11764706, 0.14117648, 1)
+border_width_top = 1
+border_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_jjod7"]
+content_margin_left = 4.0
+content_margin_top = 0.0
+content_margin_right = 4.0
+content_margin_bottom = 0.0
+color = Color(0.5019608, 0.5019608, 0.5019608, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hsv7h"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.23529412, 0.28235295, 0.5686275, 1)
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k6ylc"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.23529412, 0.28235295, 0.5686275, 1)
+border_width_bottom = 2
+border_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[node name="ModalContentSettings" type="TabContainer" unique_id=63188688]
+custom_minimum_size = Vector2(1200, 600)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.5
+offset_top = -66.5
+offset_right = 125.5
+offset_bottom = 66.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_jx7ge")
+theme_override_constants/side_margin = 0
+theme_override_constants/tab_separation = 40
+theme_override_styles/panel = SubResource("StyleBoxFlat_u0uya")
+current_tab = 0
+script = ExtResource("2_u0uya")
+
+[node name="Gameplay" type="VBoxContainer" parent="." unique_id=842060834]
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="Gameplay" unique_id=955464583]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Gameplay/MarginContainer" unique_id=211194199]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer" unique_id=935577677]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LabelAutosave" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer" unique_id=581197570]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Autosave"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer" unique_id=727269552]
+layout_mode = 2
+
+[node name="ButtonAutosaveLeft" type="Button" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer" unique_id=901634956]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("2_j758h")
+
+[node name="ButtonAutosave" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer" unique_id=1465451172]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_colors/font_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+text = "aus"
+horizontal_alignment = 1
+
+[node name="ButtonAutosaveRight" type="Button" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer" unique_id=1438295449]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("3_xeut1")
+
+[node name="Panel2" type="HSeparator" parent="Gameplay/MarginContainer/VBoxContainer" unique_id=1376600366]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer" unique_id=668669683]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LabelFastForward" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1102857729]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Schnellvorlauf"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=10961095]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="ButtonFastForwardLeft" type="Button" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer3/HBoxContainer" unique_id=322617303]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("2_j758h")
+
+[node name="LabelFastForwardValue" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer3/HBoxContainer" unique_id=1146263961]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+text = "x-fach"
+horizontal_alignment = 1
+
+[node name="ButtonFastForwardRight" type="Button" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer3/HBoxContainer" unique_id=401491023]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("3_xeut1")
+
+[node name="Audio" type="VBoxContainer" parent="." unique_id=1957786893]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Audio" unique_id=1977267033]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Audio/MarginContainer" unique_id=2032338134]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Audio/MarginContainer/VBoxContainer" unique_id=325853979]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LabelVolMaster" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1261289138]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Gesamtlautstärke"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer" unique_id=431243320]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 40
+
+[node name="HSliderVolMaster" type="HSlider" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer" unique_id=1918899640]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+value = 100.0
+
+[node name="LabelVolMasterValue" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer" unique_id=994360935]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+text = "100%"
+horizontal_alignment = 2
+
+[node name="Panel3" type="HSeparator" parent="Audio/MarginContainer/VBoxContainer" unique_id=2113877374]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Audio/MarginContainer/VBoxContainer" unique_id=1906575637]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LabelVolBG" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=944373306]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Hintergrundmusik"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1597552117]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 40
+
+[node name="HSliderVolBG" type="HSlider" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=936114346]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+value = 100.0
+
+[node name="LabelVolBGValue" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1883592075]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+text = "100%"
+horizontal_alignment = 2
+
+[node name="Panel" type="HSeparator" parent="Audio/MarginContainer/VBoxContainer" unique_id=80033252]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_jjod7")
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Audio/MarginContainer/VBoxContainer" unique_id=636173266]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LabelVolMenu" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=215719832]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Menü-Musik"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=2085917059]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 40
+
+[node name="HSliderVolMenu" type="HSlider" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer3/HBoxContainer" unique_id=1755804871]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+value = 100.0
+
+[node name="LabelVolMenuValue" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer3/HBoxContainer" unique_id=946573326]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+text = "100%"
+horizontal_alignment = 2
+
+[node name="Panel2" type="HSeparator" parent="Audio/MarginContainer/VBoxContainer" unique_id=2061517810]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_jjod7")
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Audio/MarginContainer/VBoxContainer" unique_id=728952333]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LabelVolSounds" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=109613270]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Sounds"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=1661693162]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 40
+
+[node name="HSliderVolSounds" type="HSlider" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer4/HBoxContainer" unique_id=1460356086]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+value = 100.0
+
+[node name="LabelVolSoundsValue" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer4/HBoxContainer" unique_id=233100714]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+text = "100%"
+horizontal_alignment = 2
+
+[node name="Oberfläche" type="VBoxContainer" parent="." unique_id=1408121644]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Oberfläche" unique_id=1182523435]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Oberfläche/MarginContainer" unique_id=1873993989]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer" unique_id=2010344050]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LabelUIScale" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=1111433092]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "UI-Skalierung"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer2" unique_id=172408411]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="ButtonUIScaleLeft" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=568659426]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("2_j758h")
+
+[node name="LabelUIScaleValue" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=681701116]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+text = "100 %"
+horizontal_alignment = 1
+
+[node name="ButtonUIScaleRight" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1060180884]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("3_xeut1")
+
+[node name="Panel" type="HSeparator" parent="Oberfläche/MarginContainer/VBoxContainer" unique_id=744575046]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer" unique_id=1688271609]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LabelToastPos" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=338274828]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Toast-Position (Benachrichtigung)"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=639891614]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="ButtonToastPosLeft" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer3/HBoxContainer" unique_id=151510974]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("2_j758h")
+
+[node name="LabelToastPosValue" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer3/HBoxContainer" unique_id=340105031]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+text = "Unten"
+horizontal_alignment = 1
+
+[node name="ButtonToastPosRight" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer3/HBoxContainer" unique_id=210944045]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("3_xeut1")
+
+[node name="Panel2" type="HSeparator" parent="Oberfläche/MarginContainer/VBoxContainer" unique_id=244121447]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer" unique_id=313999076]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LabelPosHUDBottom" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=1554095795]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Position HUD (unten)"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=1597567748]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="ButtonPosHUDBottomLeft" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer4/HBoxContainer" unique_id=140678251]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("2_j758h")
+
+[node name="LabelPosHUDBottomValue" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer4/HBoxContainer" unique_id=1089309950]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+text = "Mitte"
+horizontal_alignment = 1
+
+[node name="ButtonPosHUDBottomRight" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer4/HBoxContainer" unique_id=2046171601]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("3_xeut1")
+
+[node name="Tastaturbelegung" type="VBoxContainer" parent="." unique_id=1578150339]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Tastaturbelegung" unique_id=2080851122]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Tastaturbelegung/MarginContainer" unique_id=597877403]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="LabelControl" type="Label" parent="Tastaturbelegung/MarginContainer/VBoxContainer" unique_id=1668078435]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+text = "Kamera-Steuerung"
+
+[node name="HBoxControlUp" type="HBoxContainer" parent="Tastaturbelegung/MarginContainer/VBoxContainer" unique_id=1670602357]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="LabelControlUp" type="Label" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlUp" unique_id=1268261700]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Nach oben"
+
+[node name="LineEditControlUp1" type="LineEdit" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlUp" unique_id=1413722897]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_hsv7h")
+text = "W"
+placeholder_text = "-"
+alignment = 1
+
+[node name="LineEditControlUp2" type="LineEdit" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlUp" unique_id=1966750914]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_k6ylc")
+placeholder_text = "-"
+alignment = 1
+
+[node name="ButtonDeleteControlUp" type="Button" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlUp" unique_id=1194295342]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("7_5g705")
+theme_override_styles/pressed = ExtResource("8_u0uya")
+theme_override_styles/hover = ExtResource("9_istr4")
+icon = ExtResource("10_siby1")
+
+[node name="HBoxControlDown" type="HBoxContainer" parent="Tastaturbelegung/MarginContainer/VBoxContainer" unique_id=302335159]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="LabelControlDown" type="Label" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlDown" unique_id=1000600366]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Nach unten"
+
+[node name="LineEditControlDown1" type="LineEdit" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlDown" unique_id=555268245]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_hsv7h")
+text = "S"
+placeholder_text = "-"
+alignment = 1
+
+[node name="LineEditControlDown2" type="LineEdit" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlDown" unique_id=1654911923]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_k6ylc")
+placeholder_text = "-"
+alignment = 1
+
+[node name="ButtonDeleteControlDown" type="Button" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlDown" unique_id=1328729059]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("7_5g705")
+theme_override_styles/pressed = ExtResource("8_u0uya")
+theme_override_styles/hover = ExtResource("9_istr4")
+icon = ExtResource("10_siby1")
+
+[node name="HBoxControlLeft" type="HBoxContainer" parent="Tastaturbelegung/MarginContainer/VBoxContainer" unique_id=249671191]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="LabelControlLeft" type="Label" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlLeft" unique_id=1715996165]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Nach links"
+
+[node name="LineEditControlLeft1" type="LineEdit" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlLeft" unique_id=395695914]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_hsv7h")
+text = "A"
+placeholder_text = "-"
+alignment = 1
+
+[node name="LineEditControlLeft2" type="LineEdit" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlLeft" unique_id=356732788]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_k6ylc")
+placeholder_text = "-"
+alignment = 1
+
+[node name="ButtonDeleteControlLeft" type="Button" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlLeft" unique_id=815765717]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("7_5g705")
+theme_override_styles/pressed = ExtResource("8_u0uya")
+theme_override_styles/hover = ExtResource("9_istr4")
+icon = ExtResource("10_siby1")
+
+[node name="HBoxControlRight" type="HBoxContainer" parent="Tastaturbelegung/MarginContainer/VBoxContainer" unique_id=1835322142]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="LabelControlRight" type="Label" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlRight" unique_id=1660261300]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Nach rechts"
+
+[node name="LineEditControlRight1" type="LineEdit" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlRight" unique_id=18141135]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_hsv7h")
+text = "D"
+placeholder_text = "-"
+alignment = 1
+
+[node name="LineEditControlRight2" type="LineEdit" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlRight" unique_id=1810118126]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_k6ylc")
+placeholder_text = "-"
+alignment = 1
+
+[node name="ButtonDeleteControlRight" type="Button" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlRight" unique_id=1104927914]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("7_5g705")
+theme_override_styles/pressed = ExtResource("8_u0uya")
+theme_override_styles/hover = ExtResource("9_istr4")
+icon = ExtResource("10_siby1")

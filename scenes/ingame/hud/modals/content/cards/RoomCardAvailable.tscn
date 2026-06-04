@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://lej84xyko18t"]
+
+[ext_resource type="Script" uid="uid://btxuf0clltm4a" path="res://scenes/ingame/hud/modals/content/cards/RoomCardAvailable.gd" id="1_f7l65"]
+[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_sbuwa"]
+[ext_resource type="Texture2D" uid="uid://xi6ssml0f4rw" path="res://assets/icons/HUDBottom/bed-single.svg" id="3_p1qwh"]
+
+[node name="RoomCardAvailable" type="PanelContainer" unique_id=748349076]
+size_flags_horizontal = 3
+theme = ExtResource("1_sbuwa")
+script = ExtResource("1_f7l65")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=616657880]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=476702011]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=1880260662]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("3_p1qwh")
+expand_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=853742822]
+layout_mode = 2
+
+[node name="RoomName" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=54468826]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Z0001 (EZ)"
+
+[node name="RoomDetails" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=942186899]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Einzelzimmer | 60 € / Nacht"

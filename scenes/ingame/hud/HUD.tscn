@@ -140,6 +140,7 @@ layout_mode = 3
 anchors_preset = 10
 anchor_right = 1.0
 grow_horizontal = 2
+size_flags_horizontal = 3
 theme = ExtResource("2_n7g7k")
 
 [node name="ColorRect" type="ColorRect" parent="TopBar" unique_id=1367042194]
@@ -153,8 +154,10 @@ color = Color(0.043137256, 0.0627451, 0.101960786, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="TopBar" unique_id=1775848502]
 layout_mode = 1
-anchors_preset = 9
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
@@ -218,6 +221,7 @@ texture_progress = ExtResource("7_wqcpy")
 
 [node name="Gap" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1833546165]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/margin_left = 40
 
 [node name="Money" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1249543363 instance=ExtResource("3_unqwd")]
@@ -327,6 +331,7 @@ vertical_alignment = 1
 
 [node name="Gap2" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1662676105]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/margin_left = 20
 
 [node name="Exp" type="VBoxContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=2054724630]
@@ -541,16 +546,6 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="HBoxContainer" parent="BottomBarContainer/HUDResetView" index="0" unique_id=464242108]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 0.0
-offset_bottom = 0.0
-grow_horizontal = 2
-grow_vertical = 2
-
 [node name="HUDBottom" parent="BottomBarContainer" unique_id=491735265 instance=ExtResource("15_r421g")]
 unique_name_in_owner = true
 layout_mode = 2
@@ -566,8 +561,6 @@ offset_left = -170.0
 offset_top = -30.0
 offset_right = 170.0
 offset_bottom = 30.0
-grow_horizontal = 2
-grow_vertical = 2
 
 [node name="BuildMenu" parent="BottomBarContainer/HUDBottom" unique_id=1714912306 instance=ExtResource("17_8e3pd")]
 layout_mode = 1
@@ -586,14 +579,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="HBoxContainer" parent="BottomBarContainer/HUDMusicControl" index="0" unique_id=1457741293]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 0.0
-offset_bottom = 0.0
-grow_horizontal = 2
-grow_vertical = 2
 alignment = 2
 
 [node name="LevelUpModal" parent="." unique_id=2093243680 instance=ExtResource("24_6iy1x")]

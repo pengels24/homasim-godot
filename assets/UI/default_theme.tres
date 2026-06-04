@@ -2,7 +2,10 @@
 
 [ext_resource type="FontFile" uid="uid://bs3xl562plyi2" path="res://assets/fonts/Jersey25-Regular.ttf" id="1_vos2p"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vos2p"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gp7cf"]
+bg_color = Color(0.101960786, 0.11764706, 0.14117648, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4ek52"]
 bg_color = Color(0.10980392, 0.14901961, 0.21176471, 1)
 border_width_left = 1
 border_width_top = 1
@@ -14,9 +17,57 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1y6f5"]
+bg_color = Color(0.101960786, 0.11764706, 0.14117648, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n1ha2"]
+content_margin_left = 20.0
+content_margin_right = 20.0
+bg_color = Color(0.101960786, 0.11764706, 0.14117648, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0a7r7"]
+content_margin_left = 20.0
+content_margin_right = 20.0
+bg_color = Color(0.4117647, 0.30980393, 0.023529412, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_is7be"]
+content_margin_left = 20.0
+content_margin_right = 20.0
+bg_color = Color(0.101960786, 0.11764706, 0.14117648, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_color = Color(0.4, 0.4, 0.4, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+
 [resource]
 default_base_scale = 1.0
 default_font = ExtResource("1_vos2p")
 default_font_size = 26
 Button/font_sizes/font_size = 24
-Panel/styles/panel = SubResource("StyleBoxFlat_vos2p")
+CheckBox/font_sizes/font_size = 24
+CheckBox/styles/normal = SubResource("StyleBoxFlat_gp7cf")
+CheckButton/colors/button_checked_color = Color(0.21176471, 0.43137255, 0.3019608, 1)
+CheckButton/colors/button_unchecked_color = Color(0.87058824, 0.23529412, 0.19215687, 1)
+CheckButton/font_sizes/font_size = 19
+Label/font_sizes/font_size = 24
+LineEdit/font_sizes/font_size = 24
+Panel/styles/panel = SubResource("StyleBoxFlat_4ek52")
+TabContainer/font_sizes/font_size = 32
+TabContainer/styles/panel = SubResource("StyleBoxFlat_1y6f5")
+TabContainer/styles/tab_hovered = SubResource("StyleBoxFlat_n1ha2")
+TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_0a7r7")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_is7be")

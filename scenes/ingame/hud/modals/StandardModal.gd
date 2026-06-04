@@ -4,6 +4,7 @@ class_name StandardModal
 var _previous_input_mode = null
 var modal_input_mode = InputHandler.InputMode.MODAL
 
+
 # =============================================================================
 func _ready() -> void:
 	visible = false
@@ -11,7 +12,6 @@ func _ready() -> void:
 
 
 # =============================================================================
-# ── INHALT DYNAMISCH EINHÄNGEN ───────────────────────────────────────────────
 func set_content(content_node_or_path) -> Node: # <--- WICHTIG: -> Node statt -> void
 	for child in %ContentAnchor.get_children():
 		child.queue_free()
@@ -38,18 +38,9 @@ func open(title_text: String = "") -> void:
 	if visible:
 		return
 
-	# Titel setzen
 	set_title(title_text)
-	# if title_text != "":
-	# 	%ModalTitel.text = title_text
-	# 	%ModalTitel.visible = true
-	# else:
-	# 	%ModalTitel.visible = false
-
-	# InputHandler Bescheid geben
 	_previous_input_mode = InputHandler.current_mode
 	InputHandler.current_mode = modal_input_mode
-
 	visible = true
 	$AnimationPlayer.play("fade_in")
 

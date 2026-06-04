@@ -15,6 +15,7 @@ signal sig_room_selected(room_scene: PackedScene)
 
 var _categories: Dictionary = {}
 
+
 # =============================================================================
 func _ready() -> void:
 	top_level = true
@@ -26,15 +27,20 @@ func _ready() -> void:
 	if _categories.keys().size() > 0:
 		_show_category(_categories.keys()[0])
 
+	# visible = false
+	# InputHandler.sig_hotkey_build_menu_requested.connect(func():
+	# 	visible = (InputHandler.current_mode == InputHandler.InputMode.BUILD)
+
+	# 	if visible and get_parent() is Control:
+	# 		var parent_ctrl := get_parent() as Control
+	# 		global_position = parent_ctrl.global_position + Vector2(140, -160)
+	# )
+
 	visible = false
+	# SAUBERE VERBINDUNG: Wir nutzen eine benannte Funktion statt eines Lambdas
+	if not InputHandler.sig_hotkey_build_menu_requested.is_connected(_on_build_menu_requested):
+		InputHandler.sig_hotkey_build_menu_requested.connect(_on_build_menu_requested)
 
-	InputHandler.sig_hotkey_build_menu_requested.connect(func():
-		visible = (InputHandler.current_mode == InputHandler.InputMode.BUILD)
-
-		if visible and get_parent() is Control:
-			var parent_ctrl := get_parent() as Control
-			global_position = parent_ctrl.global_position + Vector2(140, -160)
-	)
 
 # =============================================================================
 func _sort_rooms_into_categories() -> void:
@@ -47,7 +53,6 @@ func _sort_rooms_into_categories() -> void:
 		var temp_room = scene.instantiate()
 		var script: Script = temp_room.get_script()
 
-		# 2. In Godot 4 nutzen wir has_method statt has_script_method
 		if script and script.has_method("get_definition"):
 			var def: Dictionary = script.call("get_definition")
 			var cat_name: String = def.get("category", "Sonstiges")
@@ -60,15 +65,14 @@ func _sort_rooms_into_categories() -> void:
 				"def": def
 			})
 
-		# 3. Direkt wieder aufräumen
 		temp_room.free()
 
 
 # =============================================================================
-# =============================================================================
 ## Erstellt die oberen Knöpfe für die Kategorien (Zimmer, Gastro etc.)
 func _display_category_buttons() -> void:
 	# Mapping: Kategorie-Name -> Pfad zum Icon
+	# todo - category-list extern auslagern - wg modding
 	var category_icons := {
 		"zimmer": "res://assets/icons/HUDTop/house.svg",
 		"gastro": "res://assets/icons/HUDBottom/utensils.svg",
@@ -124,3 +128,12 @@ func _show_category(cat_name: String) -> void:
 		btn.tooltip_text = "%s\nKosten: %d €" % [def.get("name", "Raum"), def.get("build_cost", 0)]
 
 		btn.pressed.connect(func(): sig_room_selected.emit(scene))
+
+
+# =============================================================================
+func _on_build_menu_requested() -> void:
+	visible = (InputHandler.current_mode == InputHandler.InputMode.BUILD)
+
+	if visible and get_parent() is Control:
+		var parent_ctrl := get_parent() as Control
+		global_position = parent_ctrl.global_position + Vector2(140, -160)

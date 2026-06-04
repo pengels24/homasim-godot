@@ -1,5 +1,4 @@
 extends Control
-## Das neue Hauptmenü am unteren Bildschirmrand (Bottom-HUD).
 
 signal sig_build_menu_toggled
 signal sig_reception_toggled
@@ -12,24 +11,18 @@ signal sig_sim_browser_toggled
 @onready var staff: Button = %Staff
 @onready var tech_tree: Button = %TechTree
 @onready var sim_browser: Button = %SimBrowser
-
-# --- NEU: Die Referenzen zu den Indikatoren ---
 @onready var ind_reception: Panel = %IndReception
 @onready var ind_sim_browser: Panel = %IndSimBrowser
 
+
 # =============================================================================
 func _ready() -> void:
-	# Wenn die Bohrmaschine geklickt wird, leiten wir das ebenfalls an die Funktion weiter
 	build_menu.pressed.connect(func():
-		print("--- [Intern] HUDBottom: Build-Button geklickt!")
-
-		# Modus im InputHandler umschalten
 		if InputHandler.current_mode == InputHandler.InputMode.NORMAL:
 			InputHandler.current_mode = InputHandler.InputMode.BUILD
 		elif InputHandler.current_mode == InputHandler.InputMode.BUILD:
 			InputHandler.current_mode = InputHandler.InputMode.NORMAL
 
-		# Signal feuern, damit das Baumenü (und alle anderen) reagieren können
 		InputHandler.sig_hotkey_build_menu_requested.emit()
 		sig_build_menu_toggled.emit()
 	)
@@ -52,7 +45,6 @@ func _ready() -> void:
 		sig_sim_browser_toggled.emit()
 	)
 
-	# Tooltips zuweisen
 	build_menu.tooltip_text = GameState.T("hud.bottom.build_menu_tt")
 	reception.tooltip_text  = GameState.T("hud.bottom.reception_tt")
 	staff.tooltip_text      = GameState.T("hud.bottom.staff_tt")
@@ -62,16 +54,21 @@ func _ready() -> void:
 	ind_reception.modulate = Color.GREEN
 	ind_sim_browser.modulate = Color.GREEN
 
+	InputHandler.sig_hotkey_build_menu_requested.connect(update_build_menu_position)
 
+
+# =============================================================================
 func set_reception_locked(is_locked: bool) -> void:
 	reception.disabled = is_locked
 	ind_reception.visible = not is_locked
 
 
+# =============================================================================
 func set_reception_alert(has_waiting_guests: bool) -> void:
 	ind_reception.modulate = Color.RED if has_waiting_guests else Color.GREEN
 
 
+# =============================================================================
 func set_browser_alert(has_news: bool) -> void:
 	ind_sim_browser.modulate = Color.DARK_ORANGE if has_news else Color.GREEN
 
@@ -88,3 +85,20 @@ func set_btn_active(idx: int) -> void:
 		tech_tree.release_focus()
 		sim_browser.release_focus()
 
+
+# =============================================================================
+func update_build_menu_position() -> void:
+	if not has_node("BuildMenu") or not has_node("HBoxContainer/Panel1"):
+		return
+
+	var target_button = $HBoxContainer/Panel1
+	var build_menu_box = $BuildMenu
+	build_menu_box.top_level = true
+
+	await get_tree().process_frame
+
+	var offset_x = 10
+	var new_x = target_button.global_position.x - offset_x
+	var new_y = target_button.global_position.y - build_menu_box.size.y - 10
+
+	build_menu_box.global_position = Vector2(new_x, new_y)

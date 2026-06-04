@@ -99,7 +99,6 @@ func _on_hotel_rep_changed(rep_curr: int, rep_max: int) -> void:
 	bar_rep.max_value = rep_max
 	bar_rep.value = rep_curr
 	label_rep_range.text = "%d / %d" % [rep_curr, rep_max]
-
 	var rep_color: Color
 
 	if rep_curr < 250:
@@ -171,17 +170,55 @@ func _on_level_up_rewards_claimed(money: int, fp: int) -> void:
 
 
 # =============================================================================
-func update_bottom_layout(_position_setting: String) -> void:
+func _set_inner_alignment(node: Node, alignment: BoxContainer.AlignmentMode) -> void:
+	if not node:
+		return
+
+	var hbox = node.get_node_or_null("HBoxContainer")
+	if hbox:
+		hbox.set_anchors_preset(Control.PRESET_FULL_RECT)
+		hbox.offset_left = 0
+		hbox.offset_top = 0
+		hbox.offset_right = 0
+		hbox.offset_bottom = 0
+		hbox.alignment = alignment
+
+
+# =============================================================================
+func update_bottom_layout(position_setting: String) -> void:
 	if not is_inside_tree():
 		await ready
 
 	if not reset_view or not bottom_bar or not music_ctrl:
 		return
 
-	# Standard-Rochade
-	lower_hbox.move_child(reset_view, 0)
-	lower_hbox.move_child(bottom_bar, 1)
-	lower_hbox.move_child(music_ctrl, 2)
+	match position_setting.to_lower():
+		"left":
+			lower_hbox.move_child(bottom_bar, 0)
+			_set_inner_alignment(bottom_bar, BoxContainer.ALIGNMENT_BEGIN)
+			lower_hbox.move_child(reset_view, 1)
+			_set_inner_alignment(reset_view, BoxContainer.ALIGNMENT_CENTER)
+			lower_hbox.move_child(music_ctrl, 2)
+			_set_inner_alignment(music_ctrl, BoxContainer.ALIGNMENT_END)
+
+		"right":
+			lower_hbox.move_child(reset_view, 0)
+			_set_inner_alignment(reset_view, BoxContainer.ALIGNMENT_BEGIN)
+			lower_hbox.move_child(music_ctrl, 1)
+			_set_inner_alignment(music_ctrl, BoxContainer.ALIGNMENT_CENTER)
+			lower_hbox.move_child(bottom_bar, 2)
+			_set_inner_alignment(bottom_bar, BoxContainer.ALIGNMENT_END)
+
+		"center", _:
+			lower_hbox.move_child(reset_view, 0)
+			_set_inner_alignment(reset_view, BoxContainer.ALIGNMENT_BEGIN)
+			lower_hbox.move_child(bottom_bar, 1)
+			_set_inner_alignment(bottom_bar, BoxContainer.ALIGNMENT_CENTER)
+			lower_hbox.move_child(music_ctrl, 2)
+			_set_inner_alignment(music_ctrl, BoxContainer.ALIGNMENT_END)
+
+	if bottom_bar.has_method("update_build_menu_position"):
+		bottom_bar.update_build_menu_position()
 
 
 # =============================================================================
@@ -193,18 +230,6 @@ func toggle_build_menu() -> void:
 	elif InputHandler.current_mode == InputHandler.InputMode.BUILD:
 		InputHandler.current_mode = InputHandler.InputMode.NORMAL
 		$BottomBarContainer/HUDBottom/BuildMenu.visible = false
-
-# # =============================================================================
-# func toggle_build_menu() -> void:
-# 	# Wenn wir im Normalmodus sind -> Öffne das Menü und geh in den Baumodus
-# 	if InputHandler.current_mode == InputHandler.InputMode.NORMAL:
-# 		InputHandler.current_mode = InputHandler.InputMode.BUILD
-# 		$HUDBottom/BuildMenu.visible = true
-
-# 	# Wenn wir schon im Baumodus sind -> Schließe das Menü und geh zurück zu Normal
-# 	elif InputHandler.current_mode == InputHandler.InputMode.BUILD:
-# 		InputHandler.current_mode = InputHandler.InputMode.NORMAL
-# 		$HUDBottom/BuildMenu.visible = false
 
 
 # =============================================================================

@@ -51,8 +51,13 @@ script = ExtResource("2_l5yvd")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1516826197]
 layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 offset_right = 340.0
 offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 10
 
 [node name="Panel1" type="Panel" parent="HBoxContainer" unique_id=1153240142]

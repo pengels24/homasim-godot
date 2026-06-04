@@ -3,6 +3,7 @@ extends "res://scenes/ingame/rooms/Room.gd"
 ## door_rotation: 0=Links 1=Oben 2=Rechts 3=Unten  (R=Raum+Tür rotieren, .=nur Tür)
 ## door_offset:   0=erste Position  1=zweite Position auf Wand  (,=Wechsel)
 
+# =============================================================================
 static func get_definition() -> Dictionary:
 	return {
 		"id":            "bed_standard",
@@ -19,13 +20,15 @@ static func get_definition() -> Dictionary:
 	}
 
 
+# =============================================================================
 func _ready() -> void:
 	room_type_id = "bed_standard"
 
 
-# EZ: Tür nur auf der linken Wand, L1 (unten) und L2 (oben).
+# =============================================================================
+# EZ: Tür auf der linken Wand, L1 (unten) und L2 (oben) und oben T1 (links).
 func get_valid_door_slots() -> Array[String]:
-	return ["L1", "L2"]
+	return ["L1", "L2", "T1"]
 
 # Interior-Transform je Tür-Wand: Raum rotiert um Mittelpunkt (16,16).
 # pos + rot so berechnet dass (0,0) des Interior-Nodes um (16,16) gedreht wird.
@@ -40,6 +43,7 @@ const INTERIOR_TRANSFORMS: Dictionary = {
 const FLOOR_BASE_SIZE := 28.0
 const FLOOR_TEX_W     := 256.0
 
+# =============================================================================
 # Rotiert die Welt-Nachbar-Flags in den lokalen Raum des Interior-Nodes.
 # Interior dreht sich um room_rotation * 90° CW → Flags entsprechend verschieben.
 func set_floor_neighbors(top: bool, right: bool, bottom: bool, left: bool) -> void:
@@ -59,6 +63,7 @@ func set_floor_neighbors(top: bool, right: bool, bottom: bool, left: bool) -> vo
 								   16.0 + (ext_b - ext_t) * 0.5)
 
 
+# =============================================================================
 func _apply_visuals() -> void:
 	if not is_node_ready():
 		return

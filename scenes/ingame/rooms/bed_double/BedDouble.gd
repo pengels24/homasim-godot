@@ -4,6 +4,7 @@ extends "res://scenes/ingame/rooms/Room.gd"
 ## door_rotation: 0=Links 1=Oben 2=Rechts 3=Unten  (.)
 ## door_offset:   0=erste Position 1=zweite Position  (,)
 
+# =============================================================================
 static func get_definition() -> Dictionary:
 	return {
 		"id":            "bed_double",
@@ -20,10 +21,12 @@ static func get_definition() -> Dictionary:
 	}
 
 
+# =============================================================================
 func _ready() -> void:
 	room_type_id = "bed_double"
 
 
+# =============================================================================
 func get_tile_size() -> Vector2i:
 	return Vector2i(2, 3) if room_rotation % 2 == 1 else Vector2i(3, 2)
 
@@ -38,6 +41,8 @@ const PT_FLOOR_W := 28.0
 const PT_FLOOR_H := 44.0
 const FLOOR_TEX_W := 256.0
 
+
+# =============================================================================
 func set_floor_neighbors(top: bool, right: bool, bottom: bool, left: bool) -> void:
 	var w: Array[bool] = [top, right, bottom, left]
 	var l_top    := w[(0 + room_rotation) % 4]
@@ -58,11 +63,13 @@ func set_floor_neighbors(top: bool, right: bool, bottom: bool, left: bool) -> vo
 		f.position = Vector2(16.0 + (ext_r - ext_l) * 0.5, 24.0 + (ext_b - ext_t) * 0.5)
 
 
+# =============================================================================
 # DZ: alle geometrisch passenden Slots sind gültig (leer = auto aus Raumgröße).
 func get_valid_door_slots() -> Array[String]:
 	return ["L1", "L2", "T1", "B2"]
 
 
+# =============================================================================
 func _apply_visuals() -> void:
 	if not is_node_ready():
 		return

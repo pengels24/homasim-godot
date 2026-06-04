@@ -15,6 +15,7 @@ extends "res://scenes/ingame/rooms/Room.gd"
 var entrance_dir: String = "top"
 
 
+# =============================================================================
 static func get_definition() -> Dictionary:
 	return {
 		"id":            "lobby",
@@ -30,12 +31,14 @@ static func get_definition() -> Dictionary:
 	}
 
 
+# =============================================================================
 func _ready() -> void:
 	room_type_id = "lobby"
 
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func configure(data: Dictionary) -> void:
 	entrance_dir = data.get("entrance_dir", entrance_dir)
 	super.configure(data)
@@ -43,6 +46,7 @@ func configure(data: Dictionary) -> void:
 
 # ── Visuals ───────────────────────────────────────────────────────────────────
 
+# =============================================================================
 func _apply_visuals() -> void:
 	if not is_node_ready():
 		return

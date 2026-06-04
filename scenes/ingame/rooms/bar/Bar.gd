@@ -3,6 +3,7 @@ extends "res://scenes/ingame/rooms/Room.gd"
 ## door_rotation: 0=Links 1=Oben 2=Rechts 3=Unten  (R=Raum+Tür rotieren, .=nur Tür)
 ## door_offset:   0=erste Position  1=zweite Position auf Wand  (,=Wechsel)
 
+# =============================================================================
 static func get_definition() -> Dictionary:
 	return {
 		"id":            "bar",
@@ -19,15 +20,18 @@ static func get_definition() -> Dictionary:
 	}
 
 
+# =============================================================================
 func _ready() -> void:
 	room_type_id = "bar"
 
 
+# =============================================================================
 # PB: rechte Wand R1 (oben).
 func get_valid_door_slots() -> Array[String]:
 	return ["R1"]
 
 
+# =============================================================================
 # Interior-Transform je Tür-Wand: Raum rotiert um Mittelpunkt (16,16).
 # pos + rot so berechnet dass (0,0) des Interior-Nodes um (16,16) gedreht wird.
 const INTERIOR_TRANSFORMS: Dictionary = {
@@ -38,6 +42,7 @@ const INTERIOR_TRANSFORMS: Dictionary = {
 }
 
 
+# =============================================================================
 func _apply_visuals() -> void:
 	if not is_node_ready():
 		return

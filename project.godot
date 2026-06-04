@@ -28,6 +28,7 @@ Toast="*res://autoload/Toast.gd"
 ActivityLog="*res://autoload/ActivityLog.gd"
 InputHandler="*uid://dtgkxg376bsgm"
 EffectManager="*uid://x3kof0ue70uu"
+GlobalConsole="*uid://devconsole"
 
 [display]
 
@@ -41,6 +42,14 @@ window/stretch/aspect="expand"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg")
+
+[file_customization]
+
+folder_colors={
+"res://assets/": "yellow",
+"res://scenes/": "blue",
+"res://scenes/ingame/": "red"
+}
 
 [input]
 

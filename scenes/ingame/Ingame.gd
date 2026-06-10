@@ -1,45 +1,18 @@
 extends Node2D
 
-## ANG-148 – Ingame-Grundgerüst (Orchestrator)
-## ANG-170 – God-File aufgeteilt: HUD → IngameHud, Uhr → IngameClock, Bau → IngameBuild
-## ANG-176 – PauseMenu + InGameSaveModal verdrahtet
-## ANG-166 – SimBrowser (F7)
-
 # ── Nodes ─────────────────────────────────────────────────────────────────────
 @onready var map_grid: Node2D = $MapGrid
 @onready var hud_canvas: CanvasLayer = $HUD
 @onready var top_bar: Control        = $HUD/TopBar
-# @onready var bottom_bar = $HUD
 @onready var bottom_bar = $HUD/BottomBarContainer/HUDBottom
 @onready var standard_modal: StandardModal = $HUD/StandardModal
 
 # ── Subsysteme ────────────────────────────────────────────────────────────────
-var _hud:            IngameHud
-var _clock:          IngameClock
 var _build:          IngameBuild
-var _autosave_timer: Timer
-var _pause_menu:     PauseMenu
-var _quit_confirm:   ConfirmModal
-var _sim_browser:    SimBrowser
+var _save_ctrl: IngameSaveController
+var _ui_mgr: IngameUIManager
+var _guest_mgr:        GuestManager
 
-var _guest_mgr:         GuestManager
-var _reception:        Control   # ReceptionModal
-
-var _pause_was_running: bool = false
-var _came_from_pause:   bool = false
-
-## Tagesablauf: Stundenbasierte Events. Neue Events hier eintragen – kein Code anfassen.
-# todo - externe liste erstellen
-const DAILY_SCHEDULE: Array[Dictionary] = [
-	{"hour":  6, "event": "day_start"},
-	{"hour":  7, "event": "reception_open"},
-	{"hour": 10, "event": "guest_arrival"},
-	{"hour": 15, "event": "guest_arrival"},
-	{"hour": 22, "event": "reception_close"},
-]
-
-# const SETTINGS_SCENE     := preload("res://scenes/shared/SettingsModal.tscn")
-const CONFIRM_SCENE      := preload("res://scenes/shared/ConfirmModal.tscn")
 const SIM_BROWSER_SCENE    := preload("res://scenes/ingame/SimBrowser.tscn")
 
 var _hotel: Dictionary = {}
@@ -47,12 +20,10 @@ var _hotel: Dictionary = {}
 
 # =============================================================================
 func _ready() -> void:
+	InputHandler.current_mode = InputHandler.InputMode.NORMAL
+
 	MusicManager.play_ingame()
 	_hotel = _load_hotel()
-
-	# print("--- SAVEGAME DEBUG: Was wurde geladen? ---")
-	# print(_hotel)
-	# print("------------------------------------------")
 
 	GameState.select_hotel(_hotel)
 
@@ -60,31 +31,11 @@ func _ready() -> void:
 	_setup_subsystems()
 	await get_tree().process_frame
 
+	# Diese Kamera-Pin-Verbindung bleibt hier, da sie nicht zum Menü-System gehört
 	map_grid.view_saved_changed.connect(hud_canvas.reset_view.set_view_saved_state)
-	standard_modal.visibility_changed.connect(_update_map_grid_mode)
-	standard_modal.hidden.connect(_on_standard_modal_hidden)
 
-	# --- NEU: Hier verbinden wir die Signale deines HUDBottom mit den Funktionen ---
-	bottom_bar.sig_reception_toggled.connect(_open_reception)
-	bottom_bar.sig_sim_browser_toggled.connect(_open_sim_browser)
-	# Falls du später noch Einstellungen oder Personal hinzufügst, kannst du sie hier ergänzen:
-	# bottom_bar.sig_staff_toggled.connect(_open_staff)
-
-	# NEU: Einmaligen Check für die Rezeption (und andere Buttons) beim Start ausführen!
+	# Einmaliger Aufruf zum Start, ob die Rezeption auf oder zu sein soll
 	_restore_button_states()
-
-	# Signale vom globalen InputHandler empfangen (kugelsicher)
-	if not InputHandler.sig_hotkey_escape_pressed.is_connected(_on_exit_pressed):
-		InputHandler.sig_hotkey_escape_pressed.connect(_on_exit_pressed)
-
-	if not InputHandler.sig_hotkey_quicksave_requested.is_connected(_quick_save):
-		InputHandler.sig_hotkey_quicksave_requested.connect(_quick_save)
-
-	if not InputHandler.sig_hotkey_quickload_requested.is_connected(_quick_load):
-		InputHandler.sig_hotkey_quickload_requested.connect(_quick_load)
-
-	if not InputHandler.sig_hotkey_reception_requested.is_connected(_open_reception):
-		InputHandler.sig_hotkey_reception_requested.connect(_open_reception)
 
 
 # ── Map-Start ─────────────────────────────────────────────────────────────────
@@ -92,12 +43,16 @@ func _ready() -> void:
 # =============================================================================
 func _start_map() -> void:
 	var built: Array = SaveManager.get_built_plots(_hotel.get("id", -1))
+
 	if built.is_empty():
 		built = [{ "x": 1, "y": 0, "is_built": true, "entrance_dir": "" }]
+
 	var entry     := Vector2i(built[0]["x"], built[0]["y"])
 	var enter_dir : String = built[0].get("entrance_dir", "")
+
 	if enter_dir == "":
 		enter_dir = _derive_direction(entry.x, entry.y)
+
 	map_grid.build_map(built, entry, enter_dir)
 
 
@@ -105,11 +60,15 @@ func _start_map() -> void:
 func _load_hotel() -> Dictionary:
 	if GameState.active_hotel_id >= 0:
 		var h := SaveManager.get_hotel(GameState.active_hotel_id)
+
 		if not h.is_empty():
 			return h
+
 	var hotels: Array = SaveManager.get_hotels(GameState.active_profile_id)
+
 	if not hotels.is_empty():
 		return hotels[0]
+
 	return { "name": "Hotel", "day": 1, "money": 50000.0, "id": -1 }
 
 
@@ -121,67 +80,95 @@ func _derive_direction(px: int, py: int) -> String:
 	return "right"
 
 
+# =============================================================================
+func get_total_guest_rooms() -> int:
+	var count: int = 0
+	# Wir nutzen die bereits existierende Funktion von MapGrid!
+	for room in map_grid.get_placed_rooms():
+		if not room.has_method("get_definition"):
+			continue
+
+		var def = room.get_definition()
+		if def.get("max_beds", 0) > 0:
+			count += 1
+	return count
+
+
 # ── Subsystem-Setup ───────────────────────────────────────────────────────────
 
 # =============================================================================
 func _setup_subsystems() -> void:
-	# ingame-clock init
-	_clock = IngameClock.new()
-	add_child(_clock)
-	_clock.configure(
-		_hotel,
-		hud_canvas.label_time,
-		hud_canvas.btn_pause,
-		hud_canvas.btn_play,
-		hud_canvas.btn_ff,
-		hud_canvas.label_time,
-		hud_canvas.label_day
-	)
+	TimeManager.setup(_hotel)
+
+	# UI-Updates via Signal abonnieren
+	TimeManager.sig_time_updated.connect(func(t: String): if is_instance_valid(hud_canvas.label_time): hud_canvas.label_time.text = t)
+	TimeManager.sig_day_updated.connect(func(d: String): if is_instance_valid(hud_canvas.label_day): hud_canvas.label_day.text = d)
+
+	# Buttons verbinden
+	hud_canvas.btn_pause.pressed.connect(TimeManager.pause)
+	hud_canvas.btn_play.pressed.connect(TimeManager.resume)
+	hud_canvas.btn_ff.pressed.connect(func(): TimeManager.fast_forward(SettingsManager.ff_speed))
+	# --- Rückkanal: Wenn die Zeit per Code geändert wird, HUD visuell anpassen ---
+	if not TimeManager.sig_speed_changed.is_connected(_on_time_speed_changed):
+		TimeManager.sig_speed_changed.connect(_on_time_speed_changed)
+
+	# GuestManager
+	_guest_mgr = GuestManager.new()
+	add_child(_guest_mgr)
+	_guest_mgr.configure(_hotel, map_grid)
+	map_grid.guest_manager = _guest_mgr
+
+	for room in map_grid.get_placed_rooms():
+		if room.has_method("configure"):
+			room.configure({"guest_manager": _guest_mgr})
+
+	if _hotel.has("guest_data"):
+		_guest_mgr.load_from_dict(_hotel["guest_data"])
+
+	_guest_mgr.parties_changed.connect(_on_parties_changed)
+	_guest_mgr.checkout_forgotten.connect(_on_checkout_forgotten)
 
 	# Bausystem
 	_build = IngameBuild.new()
 	add_child(_build)
 	_build.configure(_hotel, map_grid, $HUD/BottomBarContainer/HUDBottom, $HUD)
-	_build.room_built.connect(_on_room_built)
+	_build.sig_room_built.connect(_on_room_built)
 	$HUD/BottomBarContainer/HUDBottom/BuildMenu.sig_room_selected.connect(_build.start_building)
 
-	# GuestManager (bleibt unverändert)
-	_guest_mgr = GuestManager.new()
-	add_child(_guest_mgr)
-	_guest_mgr.configure(_hotel, _clock, map_grid)
-	_guest_mgr.parties_changed.connect(_on_parties_changed)
-	_guest_mgr.checkout_forgotten.connect(_on_checkout_forgotten)
+	# Signale vom TimeManager fangen
+	TimeManager.sig_day_ended.connect(_on_day_ended)
+	TimeManager.sig_hour_passed.connect(_guest_mgr.on_hour_passed)
 
-	_clock.day_ended.connect(_on_day_ended)
-	_clock.save_requested.connect(_save_progress)
-	_clock.hour_passed.connect(_guest_mgr.on_hour_passed)
-	_clock.hour_passed.connect(_on_hour_passed)
-	_setup_autosave_timer()
+	var sim_browser = SIM_BROWSER_SCENE.instantiate() as SimBrowser
+	add_child(sim_browser)
 
-	_sim_browser = SIM_BROWSER_SCENE.instantiate() as SimBrowser
-	add_child(_sim_browser)
+	# Tagesplan-Manager (Wecker)
+	var schedule_mgr := IngameScheduleManager.new()
+	add_child(schedule_mgr)
+	schedule_mgr.setup()
+	schedule_mgr.sig_schedule_event.connect(_on_schedule_event)
 
-	# Dev-Console (Global über Autoload "GlobalConsole")
-	if OS.is_debug_build():
-		GlobalConsole.configure(_hotel, top_bar, _clock)
-		# Wichtig: Da das Autoload für immer existiert, verbinden wir das Signal nur,
-		# wenn es nicht schon vom letzten Laden verbunden ist!
-		if not GlobalConsole.visibility_changed.is_connected(_on_dev_console_visibility_changed):
-			GlobalConsole.visibility_changed.connect(_on_dev_console_visibility_changed)
+	# Save-Controller (Archivar)
+	_save_ctrl = IngameSaveController.new()
+	add_child(_save_ctrl)
+	# _save_ctrl.setup(_hotel)
+	_save_ctrl.setup(_hotel, _guest_mgr)
+
+	# UI-Manager (Zeremonienmeister)
+	_ui_mgr = IngameUIManager.new()
+	add_child(_ui_mgr)
+	_ui_mgr.setup(hud_canvas, bottom_bar, map_grid, standard_modal, sim_browser, _build, _guest_mgr, schedule_mgr)
+
 
 # ── Signal-Handler ────────────────────────────────────────────────────────────
 
 # =============================================================================
 func _on_day_ended(new_day: int) -> void:
-	_hud.update_day(new_day)
 	_guest_mgr.on_day_ended(new_day)
-	SaveManager.save_auto(_hotel.get("id", -1))
 
 
 # =============================================================================
 func _on_parties_changed() -> void:
-	# Die UI-Zahlen aktualisieren sich dank GameState-Signalen ganz von alleine!
-	# Wir kümmern uns hier NUR noch um den Rezeptions-Indikator (die rote Ampel).
 	var waiting_count := _guest_mgr.get_waiting().size()
 	hud_canvas.set_reception_alert(waiting_count > 0)
 
@@ -192,14 +179,7 @@ func _on_checkout_forgotten(count: int) -> void:
 
 
 # =============================================================================
-func _on_hour_passed(hour: int) -> void:
-	for entry: Dictionary in DAILY_SCHEDULE:
-		if entry["hour"] == hour:
-			_dispatch_daily_event(entry["event"])
-
-
-# =============================================================================
-func _dispatch_daily_event(event_id: String) -> void:
+func _on_schedule_event(event_id: String) -> void:
 	match event_id:
 		"day_start":       _on_event_day_start()
 		"reception_open":  _on_event_reception_open()
@@ -214,8 +194,9 @@ func _on_event_day_start() -> void:
 
 # =============================================================================
 func _on_event_reception_open() -> void:
-	if not _guest_mgr.has_bookable_rooms():
-		Toast.show(GameState.T("toast.reception.no_rooms"))
+	if get_total_guest_rooms() == 0:
+		# Wenn es 07:00 Uhr wird, der Spieler aber noch kein Zimmer hat,
+		# lassen wir die Rezeption zu und sparen uns nervige Toasts.
 		return
 
 	hud_canvas.set_reception_locked(false)
@@ -225,449 +206,49 @@ func _on_event_reception_open() -> void:
 # =============================================================================
 func _on_event_guest_arrival() -> void:
 	var count := _guest_mgr.spawn_guests()
-	if count > 0:
-		Toast.show(GameState.T("toast.guest.arrival").replace("###", str(count)))
+
+	if count == 1:
+		Toast.show(GameState.T("toast.guest.arrival.single"))
+	elif count > 1:
+		Toast.show(GameState.T("toast.guest.arrival.multi").replace("###", str(count)))
 
 
 # =============================================================================
 func _on_event_reception_close() -> void:
-	if is_instance_valid(_reception) and _reception.visible:
-		_close_reception()
+	# Der UIManager kümmert sich intern darum, ob sie offen ist und schließt sie sicher
+	_ui_mgr.close_reception()
+
 	hud_canvas.set_reception_locked(true)
 	Toast.show(GameState.T("toast.event.day_soft_end"))
 
 
 # =============================================================================
-## Sofort nach dem Bau prüfen ob Rezeption freischaltbar ist (Zeit 07-22 + Zimmer vorhanden).
 func _on_room_built(_room_type_id: String) -> void:
-	var hour: int = _clock.get_hour()
-	if hour >= 7 and hour < 22 and _guest_mgr.has_bookable_rooms():
+	var hour: int = TimeManager.get_hour()
+	# Wenn ein Raum gebaut wird, schauen wir: Ist es Tag UND haben wir Gästezimmer?
+	if hour >= 7 and hour < 22 and get_total_guest_rooms() > 0:
 		hud_canvas.set_reception_locked(false)
 
 
 # =============================================================================
-## Button-States nach dem Laden eines Spielstands wiederherstellen.
 func _restore_button_states() -> void:
-	var hour: int = _clock.get_hour()
-	var reception_should_be_open := hour >= 7 and hour < 22 and _guest_mgr.has_bookable_rooms()
-	hud_canvas.set_reception_locked(not reception_should_be_open) # NEU
-
-
-# ── Input ─────────────────────────────────────────────────────────────────────
-
-# =============================================================================
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey:
-		var ke := event as InputEventKey
-		if ke.pressed and not ke.echo:
-			# Schutzschild: Wenn Modals offen sind, blockieren wir hier lokal
-			# if is_instance_valid(_settings_modal) and _settings_modal.visible: return
-			if is_instance_valid(_pause_menu) and _pause_menu.visible: return
+	var hour: int = TimeManager.get_hour()
+	var reception_should_be_open := hour >= 7 and hour < 22 and get_total_guest_rooms() > 0
+	hud_canvas.set_reception_locked(not reception_should_be_open)
 
 
 # =============================================================================
-func _on_bottom_button_pressed(idx: int) -> void:
-	match idx:
-		1: _open_sim_browser()
-		2: _open_settings()
-		3: _open_reception()
-		_: _build.on_button_pressed(idx)
-
-
-# =============================================================================
-func _on_exit_pressed() -> void:
-	# 1. Zimmer an der Maus? -> Abbrechen!
-	if _build.close_all(): return
-
-	# 2. Baumenü offen? -> Sauber über den InputHandler schließen!
-	if InputHandler.current_mode == InputHandler.InputMode.BUILD:
-		InputHandler.current_mode = InputHandler.InputMode.NORMAL
-		InputHandler.sig_hotkey_build_menu_requested.emit()
+func _on_time_speed_changed(is_paused: bool, speed: float) -> void:
+	if not is_instance_valid(hud_canvas):
 		return
 
-	# 3. SimBrowser offen? -> Mit ESC schließen! (Da er scheinbar ein eigenes Fenster hat)
-	if is_instance_valid(_sim_browser) and _sim_browser.visible:
-		_close_sim_browser()
-		return
-
-	# 4. Ist das Standard-Modal offen? (Egal ob Rezeption, Settings oder Pause!) -> Schließen!
-	if is_instance_valid(standard_modal) and standard_modal.visible:
-		standard_modal.close()
-		return
-
-	# 5. Wenn gar nichts offen ist -> Pausemenü öffnen!
-	_open_pause_menu()
-
-
-# # =============================================================================
-# func _on_exit_pressed() -> void:
-# 	# 1. Zimmer an der Maus? -> Abbrechen!
-# 	if _build.close_all(): return
-
-# 	# 2. Baumenü offen? -> Sauber über den InputHandler schließen!
-# 	if InputHandler.current_mode == InputHandler.InputMode.BUILD:
-# 		InputHandler.current_mode = InputHandler.InputMode.NORMAL
-# 		InputHandler.sig_hotkey_build_menu_requested.emit()
-# 		return
-
-# 	# 3. Rezeption offen? -> Mit ESC schließen!
-# 	if is_instance_valid(_reception) and _reception.visible:
-# 		_close_reception()
-# 		return
-
-# 	# 4. SimBrowser offen? -> Mit ESC schließen!
-# 	if is_instance_valid(_sim_browser) and _sim_browser.visible:
-# 		_close_sim_browser()
-# 		return
-
-# 	# 5. Sonst: Normales Pausemenü öffnen/schließen
-# 	if standard_modal.visible:
-# 		_close_pause()
-# 	else:
-# 		_open_pause_menu()
-
-
-# ── Pause-Menü ────────────────────────────────────────────────────────────────
-
-# =============================================================================
-func _open_pause_menu() -> void:
-	_pause_was_running = not _clock.is_paused()
-	_clock.pause()
-
-	standard_modal.modal_input_mode = InputHandler.InputMode.PAUSE
-	var pause_content = standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentPause.tscn")
-
-	if pause_content:
-		pause_content.sig_resume_requested.connect(_on_pause_resume)
-		pause_content.sig_save_requested.connect(_on_pause_save)
-		pause_content.sig_load_requested.connect(_on_pause_load)
-		pause_content.sig_settings_requested.connect(_on_pause_settings)
-		pause_content.sig_quit_requested.connect(_on_pause_quit)
-
-	standard_modal.open(GameState.T("modal.pause.title")) # Oder fester String "PAUSE"
-	_update_map_grid_mode()
-
-
-# =============================================================================
-func _close_pause() -> void:
-	standard_modal.close()
-	if _pause_was_running:
-		_clock.resume()
-	_update_map_grid_mode()
-
-
-# =============================================================================
-func _update_map_grid_mode() -> void:
-	var blocked: bool = \
-		GlobalConsole.visible \
-		or (is_instance_valid(standard_modal) and standard_modal.visible) \
-		# or (is_instance_valid(_settings_modal) and _settings_modal.visible) \
-		or (is_instance_valid(_sim_browser)    and _sim_browser.visible)    \
-		or (is_instance_valid(_reception)      and _reception.visible)
-
-	map_grid.process_mode = Node.PROCESS_MODE_DISABLED if blocked else Node.PROCESS_MODE_INHERIT
-
-
-# =============================================================================
-func _on_pause_resume() -> void:
-	_close_pause()
-
-
-# ── SimBrowser ────────────────────────────────────────────────────────────────
-
-# =============================================================================
-func _open_sim_browser() -> void:
-	# Schutzschild: Wenn er schon offen ist, mach gar nichts
-	if is_instance_valid(_sim_browser) and _sim_browser.visible:
-		return
-
-	# NEU: Erstmal tabula rasa machen und alle anderen Menüs schließen!
-	_cleanup_current_states()
-
-	_clock.pause()
-	_sim_browser.open()
-	_update_map_grid_mode()
-	InputHandler.current_mode = InputHandler.InputMode.MODAL
-
-
-# =============================================================================
-func _close_sim_browser() -> void:
-	_sim_browser.close()
-	_clock.resume()
-	_update_map_grid_mode()
-
-
-# ── Rezeption ─────────────────────────────────────────────────────────────────
-
-# =============================================================================
-func _open_reception() -> void:
-	if not _guest_mgr.has_bookable_rooms():
-		Toast.show(GameState.T("toast.reception.no_rooms"))
-		return
-
-	# 1. Alles schließen, was vorher offen war (damit ist das Spielfeld sauber)
-	_cleanup_current_states()
-
-	# 2. Inhalt ans Standard-Modal übergeben UND direkt die Referenz abgreifen!
-	# Weil dein set_content() so gut geschrieben ist, fangen wir das Node direkt auf:
-	_reception = standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentReception.tscn")
-
-	if not is_instance_valid(_reception):
-		print("=> [FEHLER] Rezeptions-Inhalt wurde vom StandardModal nicht zurückgegeben!")
-		return
-
-	# 3. Daten füttern und refreshen
-	_reception.configure(_guest_mgr, _clock)
-	_reception.refresh()
-
-	# 4. Spiel pausieren und Modal öffnen (Dein Modal kümmert sich um den InputMode!)
-	_clock.pause()
-
-	if standard_modal.visible:
-		standard_modal.set_title(GameState.T("modal.reception.title"))
+	if is_paused:
+		# Spiel ist pausiert -> Pause-Button eindrücken
+		hud_canvas.btn_pause.set_pressed_no_signal(true)
+	elif speed > 1.0:
+		# Spiel läuft schneller -> FF-Button eindrücken
+		# (Passe die 1.0 an, falls deine Normalgeschwindigkeit ein anderer Wert ist)
+		hud_canvas.btn_ff.set_pressed_no_signal(true)
 	else:
-		standard_modal.open(GameState.T("modal.reception.title"))
-
-	_update_map_grid_mode()
-
-
-# =============================================================================
-func _close_reception() -> void:
-	if is_instance_valid(_reception):
-		_reception.visible = false
-	_update_map_grid_mode()
-	InputHandler.current_mode = InputHandler.InputMode.NORMAL
-
-
-# =============================================================================
-func _on_pause_save() -> void:
-	var hotel_id: int = _hotel.get("id", -1)
-	if hotel_id < 0: return
-
-	standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentSave.tscn")
-	standard_modal.set_title(GameState.T("modal.save.title"))
-	_update_map_grid_mode()
-
-
-# =============================================================================
-func _on_pause_load() -> void:
-	var hotel_id: int = _hotel.get("id", -1)
-	if hotel_id < 0: return
-
-	var load_content = standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentLoad.tscn")
-	standard_modal.set_title(GameState.T("modal.load.title"))
-
-	if load_content:
-		load_content.sig_load_completed.connect(_on_save_modal_loaded)
-
-	_update_map_grid_mode()
-
-
-# =============================================================================
-func _on_pause_settings() -> void:
-	_came_from_pause = true
-	# _close_pause()
-	_open_settings()
-
-
-# =============================================================================
-func _on_pause_quit() -> void:
-	standard_modal.visible = false # Versteckt den Rahmen für die Abfrage
-
-	if not is_instance_valid(_quit_confirm):
-		_quit_confirm = CONFIRM_SCENE.instantiate() as ConfirmModal
-		$HUD.add_child(_quit_confirm)
-		_quit_confirm.confirmed.connect(_on_quit_confirmed)
-		_quit_confirm.cancelled.connect(func(): standard_modal.visible = true) # Bei Abbruch wieder zeigen
-
-	_quit_confirm.ask(
-		GameState.T("ingame.quit.title"),
-		GameState.T("ingame.quit.message"),
-		GameState.T("ingame.quit.confirm"),
-		GameState.T("ingame.quit.cancel")
-	)
-
-
-# =============================================================================
-func _on_quit_confirmed() -> void:
-	_save_progress(_clock.get_game_time())
-	SaveManager.save_auto(_hotel.get("id", -1))
-	get_tree().change_scene_to_file("res://scenes/dashboard/Dashboard.tscn")
-
-
-# ── Save-Modal ────────────────────────────────────────────────────────────────
-
-# =============================================================================
-func _on_save_modal_loaded(hotel_id_loaded: int) -> void:
-	GameState.active_hotel_id = hotel_id_loaded
-	Toast.show_after_scene_change(GameState.T("toast.quickload.ok"))
-	get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
-
-
-# ── Persistenz ────────────────────────────────────────────────────────────────
-
-# =============================================================================
-func _save_progress(game_time_min: int) -> void:
-	var hotel_id: int = _hotel.get("id", -1)
-	if hotel_id < 0:
-		return
-	var save_data := {
-		"day":       _hotel.get("day", 1),
-		"money":     _hotel.get("money", 0),
-		"xp":        _hotel.get("xp", 0),
-		"game_time": game_time_min,
-	}
-	for key: String in _hotel:
-		if key.begins_with("next_") and key.ends_with("_id"):
-			save_data[key] = _hotel[key]
-	SaveManager.update_hotel(hotel_id, save_data)
-
-
-# =============================================================================
-func _open_settings() -> void:
-	# Inhalt austauschen (löscht das alte Pause-Inhalt-Node automatisch)
-	standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentSettings.tscn")
-
-	if standard_modal.visible:
-		# Wenn es schon offen ist, ändern wir einfach nur den Titel direkt ab!
-		standard_modal.set_title(GameState.T("modal.settings.title"))
-	else:
-		# Nur wenn es komplett zu war, spielen wir die Einblend-Animation ab
-		standard_modal.open(GameState.T("modal.settings.title"))
-
-	_update_map_grid_mode()
-
-
-# # =============================================================================
-# func _open_settings() -> void:
-# 	# WICHTIG: Passe den Pfad hier an den echten Pfad deiner neuen Szene an!
-# 	standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentSettings.tscn")
-# 	standard_modal.open(GameState.T("modal.settings.title")) # Oder fester Text wie "EINSTELLUNGEN"
-# 	_update_map_grid_mode()
-
-
-# =============================================================================
-# Wird automatisch aufgerufen, wenn das StandardModal unsichtbar wird
-func _on_standard_modal_hidden() -> void:
-	if _came_from_pause:
-		_came_from_pause = false
-		# Kurzer Delay, damit das alte Modal erst 100% zu ist, bevor es neu aufgeht
-		await get_tree().process_frame
-		_open_pause_menu()
-	else:
-		# NEU: Wenn wir nicht ins Pausemenü zurückkehren, sondern ins Spiel,
-		# muss die Hotel-Uhr natürlich wieder anfangen zu ticken!
-		if is_instance_valid(_clock):
-			_clock.resume()
-
-# # =============================================================================
-# # Wird automatisch aufgerufen, wenn das StandardModal unsichtbar wird (gebaut in Schritt 4)
-# func _on_standard_modal_hidden() -> void:
-# 	if _came_from_pause:
-# 		_came_from_pause = false
-# 		# Kurzer Delay, damit das alte Modal erst 100% zu ist, bevor es neu aufgeht
-# 		await get_tree().process_frame
-# 		_open_pause_menu()
-
-
-# # =============================================================================
-# func _open_settings() -> void:
-# 	if not is_instance_valid(_settings_modal):
-# 		_settings_modal = SETTINGS_SCENE.instantiate() as SettingsModal
-# 		$HUD.add_child(_settings_modal)
-# 		_settings_modal.closed.connect(_on_settings_closed)
-# 	_settings_modal.open()
-# 	_update_map_grid_mode()
-
-
-# =============================================================================
-func _on_settings_closed() -> void:
-	if _came_from_pause:
-		_came_from_pause = false
-		# _pause_menu.open()
-		_open_pause_menu()
-	_update_map_grid_mode()
-
-
-# =============================================================================
-func _on_dev_console_visibility_changed() -> void:
-	_update_map_grid_mode()
-
-
-# =============================================================================
-func _setup_autosave_timer() -> void:
-	if not SettingsManager.autosave_enabled:
-		return
-	_autosave_timer = Timer.new()
-	_autosave_timer.wait_time = SettingsManager.autosave_interval_minutes * 60.0
-	_autosave_timer.one_shot  = false
-	_autosave_timer.timeout.connect(_on_timed_autosave)
-	add_child(_autosave_timer)
-	_autosave_timer.start()
-
-
-# =============================================================================
-func _on_timed_autosave() -> void:
-	var hotel_id: int = _hotel.get("id", -1)
-	if hotel_id < 0:
-		return
-	_save_progress(_clock.get_game_time())
-	SaveManager.save_auto(hotel_id)
-	Toast.show(GameState.T("toast.system.autosave"))
-
-
-# =============================================================================
-func _quick_save() -> void:
-	var hotel_id: int = _hotel.get("id", -1)
-	if hotel_id < 0:
-		return
-	_save_progress(_clock.get_game_time())
-	SaveManager.save_quick(hotel_id)
-	Toast.show(GameState.T("toast.quicksave"))
-
-
-# =============================================================================
-func _quick_load() -> void:
-	var hotel_id: int = _hotel.get("id", -1)
-	if hotel_id < 0:
-		return
-	if SaveManager.load_quick(hotel_id):
-		Toast.show_after_scene_change(GameState.T("toast.quickload.ok"))
-		get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
-	else:
-		Toast.show(GameState.T("toast.quickload.empty"))
-
-
-# =============================================================================
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		if is_instance_valid(_clock):
-			_save_progress(_clock.get_game_time())
-
-
-# =============================================================================
-# BEREINIGUNG (Tabula Rasa)
-# Schließt alle offenen Menüs, Cursor und States, damit immer nur genau
-# ein Haupt-Fenster zur gleichen Zeit aktiv sein kann.
-# =============================================================================
-func _cleanup_current_states() -> void:
-	# 1. Bau-Cursor oder offene Untermenüs des Bausystems abbauen
-	if _build:
-		_build.close_all()
-
-	# 2. Falls das Haupt-Baumenü offen ist, schließen wir es komplett
-	if InputHandler.current_mode == InputHandler.InputMode.BUILD:
-		InputHandler.current_mode = InputHandler.InputMode.NORMAL
-		InputHandler.sig_hotkey_build_menu_requested.emit()
-
-	# 3. Falls der SimBrowser offen ist, schließen
-	if is_instance_valid(_sim_browser) and _sim_browser.visible:
-		_sim_browser.close()
-
-	# 4. Falls das Standard-Modal (Pause/Settings) offen ist, schließen
-	if is_instance_valid(standard_modal) and standard_modal.visible:
-		standard_modal.close()
-
-	# Grundzustand für Karte und Input wiederherstellen, bevor das neue Fenster öffnet
-	_update_map_grid_mode()
-	InputHandler.current_mode = InputHandler.InputMode.NORMAL
+		# Spiel läuft normal -> Play-Button eindrücken
+		hud_canvas.btn_play.set_pressed_no_signal(true)

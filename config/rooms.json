@@ -1,0 +1,34 @@
+{
+  "rooms": [
+    {
+      "id": "lobby",
+      "scene_path": "res://scenes/ingame/rooms/lobby/Lobby.tscn",
+      "script_path": "res://scenes/ingame/rooms/lobby/Lobby.gd"
+    },
+    {
+      "id": "bed_standard",
+      "scene_path": "res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn",
+      "script_path": "res://scenes/ingame/rooms/bed_standard/BedStandard.gd"
+    },
+    {
+      "id": "bed_double",
+      "scene_path": "res://scenes/ingame/rooms/bed_double/Bed_Double.tscn",
+      "script_path": "res://scenes/ingame/rooms/bed_double/BedDouble.gd"
+    },
+    {
+      "id": "bar",
+      "scene_path": "res://scenes/ingame/rooms/bar/Bar.tscn",
+      "script_path": "res://scenes/ingame/rooms/bar/Bar.gd"
+    },
+    {
+      "id": "hr_office",
+      "scene_path": "res://scenes/ingame/rooms/hr_office/Hr_Office.tscn",
+      "script_path": "res://scenes/ingame/rooms/hr_office/HrOffice.gd"
+    },
+    {
+      "id": "sc_office",
+      "scene_path": "res://scenes/ingame/rooms/sc_office/Sc_Office.tscn",
+      "script_path": "res://scenes/ingame/rooms/sc_office/ScOffice.gd"
+    }
+  ]
+}

@@ -1,546 +1,571 @@
-[gd_scene load_steps=20 format=3 uid="uid://b3x1qmainmenu"]
+[gd_scene format=3 uid="uid://b3x1qmainmenu"]
 
-[ext_resource type="Script" path="res://scenes/main_menu/MainMenu.gd" id="1_mainmenu"]
+[ext_resource type="Script" uid="uid://nflkh3eqs3tr" path="res://scenes/main_menu/MainMenu.gd" id="1_mainmenu"]
 [ext_resource type="PackedScene" uid="uid://c1managersel" path="res://scenes/manager_select/ManagerSelect.tscn" id="2_mgsel"]
+[ext_resource type="Texture2D" uid="uid://dwnfttdpcsskc" path="res://assets/images/logo.png" id="2_qmweu"]
+[ext_resource type="FontFile" uid="uid://3can1r2sqobx" path="res://assets/fonts/AvenuePixel-Regular.ttf" id="3_f1mbi"]
 [ext_resource type="PackedScene" uid="uid://cw7c5frsdut8j" path="res://scenes/shared/SettingsModal.tscn" id="3_settings"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gold"]
-bg_color = Color(0.918, 0.702, 0.031, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_left = 6
-corner_radius_bottom_right = 6
-content_margin_left = 24.0
-content_margin_right = 24.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gold_hover"]
-bg_color = Color(0.97, 0.80, 0.15, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.918, 0.702, 0.031, 0.85)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_left = 6
-corner_radius_bottom_right = 6
-content_margin_left = 24.0
-content_margin_right = 24.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gold_disabled"]
-bg_color = Color(0.918, 0.702, 0.031, 0.35)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_left = 6
-corner_radius_bottom_right = 6
-content_margin_left = 24.0
-content_margin_right = 24.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_bg"]
-bg_color = Color(0.07, 0.07, 0.09, 0.95)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_left = 12
-corner_radius_bottom_right = 12
-content_margin_left = 48.0
-content_margin_right = 48.0
-content_margin_top = 48.0
-content_margin_bottom = 48.0
-shadow_color = Color(0, 0, 0, 0.6)
-shadow_size = 24
-shadow_offset = Vector2(0, 8)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input"]
-bg_color = Color(0.13, 0.13, 0.16, 1)
-border_color = Color(0.35, 0.35, 0.35, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_left = 6
-corner_radius_bottom_right = 6
-content_margin_left = 16.0
-content_margin_right = 16.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_focus"]
-bg_color = Color(0.13, 0.13, 0.16, 1)
-border_color = Color(0.918, 0.702, 0.031, 0.8)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_left = 6
-corner_radius_bottom_right = 6
-content_margin_left = 16.0
-content_margin_right = 16.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_link"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_green"]
-bg_color = Color(0.086, 0.639, 0.290, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_left = 6
-corner_radius_bottom_right = 6
-content_margin_left = 24.0
-content_margin_right = 24.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_green_hover"]
-bg_color = Color(0.110, 0.780, 0.360, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.918, 0.702, 0.031, 0.85)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_left = 6
-corner_radius_bottom_right = 6
-content_margin_left = 24.0
-content_margin_right = 24.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_green_disabled"]
-bg_color = Color(0.086, 0.639, 0.290, 0.35)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_left = 6
-corner_radius_bottom_right = 6
-content_margin_left = 24.0
-content_margin_right = 24.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red"]
-bg_color = Color(0.863, 0.149, 0.149, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_left = 6
-corner_radius_bottom_right = 6
-content_margin_left = 24.0
-content_margin_right = 24.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red_hover"]
-bg_color = Color(0.980, 0.220, 0.220, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_left = 6
-corner_radius_bottom_right = 6
-content_margin_left = 24.0
-content_margin_right = 24.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_subtitle_bg"]
-bg_color = Color(0, 0, 0, 0.45)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_left = 10
-corner_radius_bottom_right = 10
+content_margin_left = 24.0
+content_margin_top = 16.0
+content_margin_right = 24.0
+content_margin_bottom = 16.0
+bg_color = Color(0, 0, 0, 0.5882353)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 0.12)
-content_margin_left = 24.0
-content_margin_right = 24.0
-content_margin_top = 16.0
-content_margin_bottom = 16.0
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0, 0, 0.5882353)
+shadow_size = 10
+shadow_offset = Vector2(10, 10)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_menu_bg"]
-bg_color = Color(0, 0, 0, 0.28)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_left = 12
-corner_radius_bottom_right = 12
+content_margin_left = 32.0
+content_margin_top = 20.0
+content_margin_right = 32.0
+content_margin_bottom = 20.0
+bg_color = Color(0, 0, 0, 0.5882353)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(1, 1, 1, 0.08)
-content_margin_left = 32.0
-content_margin_right = 32.0
-content_margin_top = 20.0
-content_margin_bottom = 20.0
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.5882353)
+shadow_size = 10
+shadow_offset = Vector2(10, 10)
 
-[node name="MainMenu" type="Control"]
-position = Vector2(0, 0)
-size = Vector2(1920, 1080)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_modal_bg"]
+content_margin_left = 48.0
+content_margin_top = 48.0
+content_margin_right = 48.0
+content_margin_bottom = 48.0
+bg_color = Color(0.07, 0.07, 0.09, 0.95)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_size = 24
+shadow_offset = Vector2(0, 8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input"]
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+bg_color = Color(0.13, 0.13, 0.16, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.35, 0.35, 0.35, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_focus"]
+content_margin_left = 16.0
+content_margin_top = 12.0
+content_margin_right = 16.0
+content_margin_bottom = 12.0
+bg_color = Color(0.13, 0.13, 0.16, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.918, 0.702, 0.031, 0.8)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_green"]
+content_margin_left = 24.0
+content_margin_top = 12.0
+content_margin_right = 24.0
+content_margin_bottom = 12.0
+bg_color = Color(0.086, 0.639, 0.29, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_green_hover"]
+content_margin_left = 24.0
+content_margin_top = 12.0
+content_margin_right = 24.0
+content_margin_bottom = 12.0
+bg_color = Color(0.11, 0.78, 0.36, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.918, 0.702, 0.031, 0.85)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_green_disabled"]
+content_margin_left = 24.0
+content_margin_top = 12.0
+content_margin_right = 24.0
+content_margin_bottom = 12.0
+bg_color = Color(0.086, 0.639, 0.29, 0.35)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red"]
+content_margin_left = 24.0
+content_margin_top = 12.0
+content_margin_right = 24.0
+content_margin_bottom = 12.0
+bg_color = Color(0.863, 0.149, 0.149, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_red_hover"]
+content_margin_left = 24.0
+content_margin_top = 12.0
+content_margin_right = 24.0
+content_margin_bottom = 12.0
+bg_color = Color(0.98, 0.22, 0.22, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_link"]
+
+[node name="MainMenu" type="Control" unique_id=1481950573]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_mainmenu")
 
-[node name="BgSlideshow" type="Control" parent="."]
-position = Vector2(0, 0)
-size = Vector2(1920, 1080)
+[node name="BgSlideshow" type="Control" parent="." unique_id=2028861907]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Bg1" type="TextureRect" parent="BgSlideshow"]
-position = Vector2(0, 0)
-size = Vector2(1920, 1080)
+[node name="Bg1" type="TextureRect" parent="BgSlideshow" unique_id=1065874376]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Bg2" type="TextureRect" parent="BgSlideshow"]
-position = Vector2(0, 0)
-size = Vector2(1920, 1080)
-expand_mode = 1
-stretch_mode = 6
+[node name="Bg2" type="TextureRect" parent="BgSlideshow" unique_id=1172782399]
+unique_name_in_owner = true
 modulate = Color(1, 1, 1, 0)
-
-[node name="Bg3" type="TextureRect" parent="BgSlideshow"]
-position = Vector2(0, 0)
-size = Vector2(1920, 1080)
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
 expand_mode = 1
 stretch_mode = 6
-modulate = Color(1, 1, 1, 0)
 
-[node name="Overlay" type="ColorRect" parent="."]
-position = Vector2(0, 0)
-size = Vector2(1920, 1080)
+[node name="Bg3" type="TextureRect" parent="BgSlideshow" unique_id=587377341]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Overlay" type="ColorRect" parent="." unique_id=60029057]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
 color = Color(0, 0, 0, 0.35)
 
-[node name="Content" type="VBoxContainer" parent="."]
-position = Vector2(560, 80)
-size = Vector2(800, 0)
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=418652309]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 400
+theme_override_constants/margin_top = 100
+theme_override_constants/margin_right = 400
+theme_override_constants/margin_bottom = 100
+
+[node name="Content" type="VBoxContainer" parent="MarginContainer" unique_id=1428007507]
+layout_mode = 2
 theme_override_constants/separation = 40
 
-[node name="Logo" type="TextureRect" parent="Content"]
-layout_mode = 2
+[node name="Logo" type="TextureRect" parent="MarginContainer/Content" unique_id=1488204258]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(800, 100)
+layout_mode = 2
+texture = ExtResource("2_qmweu")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Title" type="Label" parent="Content"]
-layout_mode = 2
+[node name="Title" type="Label" parent="MarginContainer/Content" unique_id=1564790938]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(800, 0)
-text = "Deine Hotel-Legende\nbeginnt hier"
-theme_override_font_sizes/font_size = 80
-theme_override_colors/font_color = Color(0.98, 0.98, 0.98, 1)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
-theme_override_constants/shadow_offset_x = 3
-theme_override_constants/shadow_offset_y = 4
+theme_override_constants/shadow_offset_x = 5
+theme_override_constants/shadow_offset_y = 5
+theme_override_fonts/font = ExtResource("3_f1mbi")
+theme_override_font_sizes/font_size = 110
+text = "Deine Hotel-Legende beginnt hier"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="Subtitle" type="Label" parent="Content"]
-layout_mode = 2
+[node name="Subtitle" type="Label" parent="MarginContainer/Content" unique_id=1831305294]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(800, 0)
-text = "Erlebe die ultimative Hotel-Management-Simulation im charmanten\nPixel-Art-Stil. Plane, baue und verwalte dein Imperium – von der ersten Fliese bis zum Luxus-Resort."
-theme_override_font_sizes/font_size = 20
+layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
+theme_override_fonts/font = ExtResource("3_f1mbi")
+theme_override_font_sizes/font_size = 36
 theme_override_styles/normal = SubResource("StyleBoxFlat_subtitle_bg")
+text = "Erlebe die ultimative Hotel-Management-Simulation.
+Plane, baue und verwalte dein Imperium – von der ersten Fliese bis zum Luxus-Resort."
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="MenuBox" type="PanelContainer" parent="Content"]
+[node name="MenuBox" type="PanelContainer" parent="MarginContainer/Content" unique_id=1229232634]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_menu_bg")
 
-[node name="MenuVBox" type="VBoxContainer" parent="Content/MenuBox"]
+[node name="MenuVBox" type="VBoxContainer" parent="MarginContainer/Content/MenuBox" unique_id=985458382]
 layout_mode = 2
 theme_override_constants/separation = 28
 
-[node name="Buttons" type="GridContainer" parent="Content/MenuBox/MenuVBox"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Content/MenuBox/MenuVBox" unique_id=2000429734]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_right = 50
+
+[node name="Buttons" type="GridContainer" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer" unique_id=924669182]
 layout_mode = 2
 size_flags_horizontal = 3
-columns = 2
-theme_override_constants/h_separation = 24
+theme_override_constants/h_separation = 100
 theme_override_constants/v_separation = 28
+columns = 2
 
-[node name="BtnPlay" type="Button" parent="Content/MenuBox/MenuVBox/Buttons"]
-layout_mode = 2
-mouse_default_cursor_shape = 8
-size_flags_horizontal = 3
+[node name="BtnPlay" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=355715255]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 52)
-text = "Spiel starten"
-horizontal_alignment = 0
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 8
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_pressed_color = Color(0.7, 0.53, 0.02, 1)
+theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
+theme_override_colors/font_disabled_color = Color(0.28, 0.28, 0.28, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("3_f1mbi")
+theme_override_font_sizes/font_size = 56
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 disabled = true
-theme_override_font_sizes/font_size = 34
+text = "Spiel starten"
+
+[node name="BtnSettings" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=2137549259]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_pressed_color = Color(0.7, 0.53, 0.02, 1)
 theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
-theme_override_colors/font_pressed_color = Color(0.70, 0.53, 0.02, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
-theme_override_colors/font_disabled_color = Color(0.28, 0.28, 0.28, 1)
+theme_override_fonts/font = ExtResource("3_f1mbi")
+theme_override_font_sizes/font_size = 56
 theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
-
-[node name="BtnSettings" type="Button" parent="Content/MenuBox/MenuVBox/Buttons"]
-layout_mode = 2
-mouse_default_cursor_shape = 2
-size_flags_horizontal = 3
-custom_minimum_size = Vector2(0, 52)
 text = "Einstellungen"
-horizontal_alignment = 2
-theme_override_font_sizes/font_size = 34
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
-theme_override_colors/font_pressed_color = Color(0.70, 0.53, 0.02, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
-[node name="BtnLogin" type="Button" parent="Content/MenuBox/MenuVBox/Buttons"]
-layout_mode = 2
-mouse_default_cursor_shape = 8
-size_flags_horizontal = 3
+[node name="BtnLogin" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=362375200]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 52)
-text = "Login / Register"
-horizontal_alignment = 0
-theme_override_font_sizes/font_size = 34
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 8
 theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_pressed_color = Color(0.7, 0.53, 0.02, 1)
 theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
-theme_override_colors/font_pressed_color = Color(0.70, 0.53, 0.02, 1)
+theme_override_colors/font_disabled_color = Color(0.28, 0.28, 0.28, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
-theme_override_colors/font_disabled_color = Color(0.28, 0.28, 0.28, 1)
+theme_override_fonts/font = ExtResource("3_f1mbi")
+theme_override_font_sizes/font_size = 56
 theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+text = "Login / Register"
 
-[node name="BtnManager" type="Button" parent="Content/MenuBox/MenuVBox/Buttons"]
+[node name="BtnManager" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=1714649453]
+unique_name_in_owner = true
 layout_mode = 2
-mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
-custom_minimum_size = Vector2(0, 52)
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_pressed_color = Color(0.7, 0.53, 0.02, 1)
+theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("3_f1mbi")
+theme_override_font_sizes/font_size = 56
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 text = "Manager wählen"
-horizontal_alignment = 2
-theme_override_font_sizes/font_size = 34
+
+[node name="BtnTutorial" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=1385949115]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_pressed_color = Color(0.7, 0.53, 0.02, 1)
 theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
-theme_override_colors/font_pressed_color = Color(0.70, 0.53, 0.02, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("3_f1mbi")
+theme_override_font_sizes/font_size = 56
 theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
-
-[node name="BtnTutorial" type="Button" parent="Content/MenuBox/MenuVBox/Buttons"]
-layout_mode = 2
-mouse_default_cursor_shape = 2
-size_flags_horizontal = 3
-custom_minimum_size = Vector2(0, 52)
 text = "Tutorial"
-horizontal_alignment = 0
-theme_override_font_sizes/font_size = 34
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
-theme_override_colors/font_pressed_color = Color(0.70, 0.53, 0.02, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 
-[node name="BtnCredits" type="Button" parent="Content/MenuBox/MenuVBox/Buttons"]
+[node name="BtnCredits" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=1852897334]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
-mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
-custom_minimum_size = Vector2(0, 52)
-text = "Info"
-horizontal_alignment = 2
-theme_override_font_sizes/font_size = 34
+mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_pressed_color = Color(0.7, 0.53, 0.02, 1)
 theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
-theme_override_colors/font_pressed_color = Color(0.70, 0.53, 0.02, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("3_f1mbi")
+theme_override_font_sizes/font_size = 56
 theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+text = "Info"
 
-[node name="BtnQuit" type="Button" parent="Content/MenuBox/MenuVBox"]
+[node name="BtnQuit" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox" unique_id=1864160667]
+unique_name_in_owner = true
 layout_mode = 2
 mouse_default_cursor_shape = 2
-size_flags_horizontal = 4
-custom_minimum_size = Vector2(0, 52)
-text = "Beenden"
-horizontal_alignment = 1
-theme_override_font_sizes/font_size = 34
 theme_override_colors/font_color = Color(0.55, 0.55, 0.55, 1)
+theme_override_colors/font_pressed_color = Color(0.65, 0.1, 0.1, 1)
 theme_override_colors/font_hover_color = Color(0.863, 0.149, 0.149, 1)
-theme_override_colors/font_pressed_color = Color(0.65, 0.10, 0.10, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("3_f1mbi")
+theme_override_font_sizes/font_size = 56
 theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+text = "Beenden"
 
-[node name="Footer" type="HBoxContainer" parent="."]
-position = Vector2(10, 1042)
-size = Vector2(1900, 28)
+[node name="Footer" type="HBoxContainer" parent="." unique_id=637569252]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 1042.0
+offset_right = 1910.0
+offset_bottom = 1070.0
 theme_override_constants/separation = 8
 
-[node name="VersionLbl" type="Label" parent="Footer"]
+[node name="VersionLbl" type="Label" parent="Footer" unique_id=2070749987]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 4
-theme_override_font_sizes/font_size = 17
-theme_override_colors/font_color = Color(0.75, 0.75, 0.80, 0.90)
+theme_override_colors/font_color = Color(0.75, 0.75, 0.8, 0.9)
+theme_override_fonts/font = ExtResource("3_f1mbi")
+theme_override_font_sizes/font_size = 24
 text = "v0.0.0"
 
-[node name="Spacer" type="Control" parent="Footer"]
+[node name="Spacer" type="Control" parent="Footer" unique_id=46122791]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="GodotIcon" type="TextureRect" parent="Footer"]
-layout_mode = 2
+[node name="GodotIcon" type="TextureRect" parent="Footer" unique_id=1892935208]
+unique_name_in_owner = true
+modulate = Color(1, 1, 1, 0.8)
 custom_minimum_size = Vector2(22, 22)
+layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 expand_mode = 1
 stretch_mode = 5
-modulate = Color(1.0, 1.0, 1.0, 0.80)
 
-[node name="MadeWithLbl" type="Label" parent="Footer"]
+[node name="MadeWithLbl" type="Label" parent="Footer" unique_id=2145226987]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 4
-theme_override_font_sizes/font_size = 17
-theme_override_colors/font_color = Color(0.75, 0.75, 0.80, 0.90)
+theme_override_colors/font_color = Color(0.75, 0.75, 0.8, 0.9)
+theme_override_fonts/font = ExtResource("3_f1mbi")
+theme_override_font_sizes/font_size = 24
 text = "Made with Godot 4"
 
-[node name="CopyrightLbl" type="Label" parent="."]
-position = Vector2(0, 1042)
-size = Vector2(1920, 28)
+[node name="CopyrightLbl" type="Label" parent="." unique_id=543462729]
+layout_mode = 0
+offset_top = 1042.0
+offset_right = 1920.0
+offset_bottom = 1070.0
+theme_override_colors/font_color = Color(0.75, 0.75, 0.8, 0.9)
+theme_override_fonts/font = ExtResource("3_f1mbi")
+theme_override_font_sizes/font_size = 24
+text = "© 2026 – Angelus2010"
 horizontal_alignment = 1
 vertical_alignment = 1
-theme_override_font_sizes/font_size = 17
-theme_override_colors/font_color = Color(0.75, 0.75, 0.80, 0.90)
-text = "© 2026 – Angelus2010"
 
-[node name="LoginModal" type="ColorRect" parent="."]
-position = Vector2(0, 0)
-size = Vector2(1920, 1080)
-color = Color(0, 0, 0, 0.65)
+[node name="LoginModal" type="ColorRect" parent="." unique_id=422479603]
 visible = false
-mouse_filter = 0
-
-[node name="Center" type="CenterContainer" parent="LoginModal"]
-position = Vector2(0, 0)
-size = Vector2(1920, 1080)
-
-[node name="Card" type="PanelContainer" parent="LoginModal/Center"]
-layout_mode = 2
-custom_minimum_size = Vector2(500, 0)
-theme_override_styles/panel = SubResource("StyleBoxFlat_modal_bg")
-
-[node name="VBox" type="VBoxContainer" parent="LoginModal/Center/Card"]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="Title" type="Label" parent="LoginModal/Center/Card/VBox"]
-layout_mode = 2
-text = "Anmelden"
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-horizontal_alignment = 1
-
-[node name="UsernameField" type="LineEdit" parent="LoginModal/Center/Card/VBox"]
-layout_mode = 2
-custom_minimum_size = Vector2(0, 52)
-placeholder_text = "Benutzername"
-theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_input")
-theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
-
-[node name="PasswordField" type="LineEdit" parent="LoginModal/Center/Card/VBox"]
-layout_mode = 2
-custom_minimum_size = Vector2(0, 52)
-placeholder_text = "Passwort"
-secret = true
-theme_override_font_sizes/font_size = 18
-theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_input")
-theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
-
-[node name="RememberCheck" type="CheckBox" parent="LoginModal/Center/Card/VBox"]
-layout_mode = 2
-text = "Benutzername merken"
-theme_override_font_sizes/font_size = 15
-theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
-
-[node name="LoginButton" type="Button" parent="LoginModal/Center/Card/VBox"]
-layout_mode = 2
-mouse_default_cursor_shape = 2
-custom_minimum_size = Vector2(0, 52)
-text = "Anmelden"
-theme_override_font_sizes/font_size = 20
-theme_override_colors/font_color = Color(0.05, 0.20, 0.08, 1)
-theme_override_colors/font_hover_color = Color(0.05, 0.20, 0.08, 1)
-theme_override_colors/font_pressed_color = Color(0.05, 0.20, 0.08, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_green")
-theme_override_styles/hover = SubResource("StyleBoxFlat_green_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_green")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_green_disabled")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
-
-[node name="ErrorLabel" type="Label" parent="LoginModal/Center/Card/VBox"]
-layout_mode = 2
-custom_minimum_size = Vector2(0, 20)
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
-horizontal_alignment = 1
-autowrap_mode = 3
-
-[node name="BtnClose" type="Button" parent="LoginModal/Center/Card/VBox"]
-layout_mode = 2
-mouse_default_cursor_shape = 2
-custom_minimum_size = Vector2(0, 44)
-text = "Abbrechen"
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_red")
-theme_override_styles/hover = SubResource("StyleBoxFlat_red_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_red")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_link")
-
-[node name="BtnToRegister" type="Button" parent="LoginModal/Center/Card/VBox"]
-layout_mode = 2
-mouse_default_cursor_shape = 2
-text = "Noch kein Account? Jetzt registrieren"
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
-theme_override_styles/normal = SubResource("StyleBoxEmpty_link")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_link")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_link")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_link")
-
-[node name="ManagerModal" parent="." instance=ExtResource("2_mgsel")]
-
-[node name="SettingsModal" parent="." instance=ExtResource("3_settings")]
 layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
+color = Color(0, 0, 0, 0.65)
+
+[node name="Center" type="CenterContainer" parent="LoginModal" unique_id=53522606]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+
+[node name="Card" type="PanelContainer" parent="LoginModal/Center" unique_id=496363723]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_modal_bg")
+
+[node name="VBox" type="VBoxContainer" parent="LoginModal/Center/Card" unique_id=1276348806]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="LoginModal/Center/Card/VBox" unique_id=1173167724]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_font_sizes/font_size = 30
+text = "Anmelden"
+horizontal_alignment = 1
+
+[node name="UsernameField" type="LineEdit" parent="LoginModal/Center/Card/VBox" unique_id=886533321]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
+theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
+placeholder_text = "Benutzername"
+
+[node name="PasswordField" type="LineEdit" parent="LoginModal/Center/Card/VBox" unique_id=919110881]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
+theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
+placeholder_text = "Passwort"
+secret = true
+
+[node name="RememberCheck" type="CheckBox" parent="LoginModal/Center/Card/VBox" unique_id=419489576]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 15
+text = "Benutzername merken"
+
+[node name="LoginButton" type="Button" parent="LoginModal/Center/Card/VBox" unique_id=2104714836]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.05, 0.2, 0.08, 1)
+theme_override_colors/font_pressed_color = Color(0.05, 0.2, 0.08, 1)
+theme_override_colors/font_hover_color = Color(0.05, 0.2, 0.08, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_green")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_green")
+theme_override_styles/hover = SubResource("StyleBoxFlat_green_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_green_disabled")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+text = "Anmelden"
+
+[node name="ErrorLabel" type="Label" parent="LoginModal/Center/Card/VBox" unique_id=189497084]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="BtnClose" type="Button" parent="LoginModal/Center/Card/VBox" unique_id=874876834]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_red")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_red")
+theme_override_styles/hover = SubResource("StyleBoxFlat_red_hover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_link")
+text = "Abbrechen"
+
+[node name="BtnToRegister" type="Button" parent="LoginModal/Center/Card/VBox" unique_id=310858369]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxEmpty_link")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_link")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_link")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_link")
+text = "Noch kein Account? Jetzt registrieren"
+
+[node name="ManagerModal" parent="." unique_id=1380502136 instance=ExtResource("2_mgsel")]
+layout_mode = 1
+
+[node name="SettingsModal" parent="." unique_id=1396702447 instance=ExtResource("3_settings")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+grow_horizontal = 1
+grow_vertical = 1

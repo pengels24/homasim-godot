@@ -1,13 +1,7 @@
 extends Node2D
-## ANG-161 – Bau-Cursor. Lebt als Kind von MapGrid/WorldRoot wenn aktiv.
-## Ghost bewegt sich innerhalb eigener Parzellen, rastet auf 16px-Tile-Raster.
-## Weiß = Tile-Bereich frei, Rot = Überlappung. .=Tür-Wand, ,=Tür-Position, R=Raum-Rotation, F=Flip. ESC = abbrechen.
-## ANG-186 – Validierung über MapGrid.is_placement_valid() statt Einzelchecks.
 
-signal room_placed(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int, door_rotation: int, door_offset: int, room_rotation: int, world_center: Vector2)
-signal cancelled()
-
-# Das alte ROOM_SCENES Dictionary wurde hier restlos entfernt!
+signal sig_room_placed(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int, door_rotation: int, door_offset: int, room_rotation: int, world_center: Vector2)
+signal sig_cancelled()
 
 const WALK_PX      := 48
 const TILE_PX      := 16
@@ -36,7 +30,7 @@ func activate(map_grid: Node2D, room_scene: PackedScene) -> void:
 	_room_scene   = room_scene
 
 	if _room_scene == null:
-		cancelled.emit()
+		sig_cancelled.emit()
 		queue_free()
 		return
 
@@ -49,10 +43,12 @@ func activate(map_grid: Node2D, room_scene: PackedScene) -> void:
 
 # ── Ghost ─────────────────────────────────────────────────────────────────────
 
+
 # =============================================================================
 func _spawn_ghost() -> void:
 	if is_instance_valid(_ghost):
 		_ghost.queue_free()
+
 	_ghost         = _room_scene.instantiate()
 	_ghost.z_index = 10
 	add_child(_ghost)
@@ -69,6 +65,7 @@ func _spawn_ghost() -> void:
 func _refresh_ghost() -> void:
 	if not is_instance_valid(_ghost):
 		return
+
 	_ghost.configure({"door_rotation": _door_rotation, "door_offset": _door_offset, "room_rotation": _room_rotation})
 	var sz: Vector2i = _ghost.get_tile_size()
 	_room_w = sz.x
@@ -87,6 +84,7 @@ func _refresh_ghost() -> void:
 func _update_modulate() -> void:
 	if not is_instance_valid(_ghost):
 		return
+
 	_ghost.modulate = Color(0.35, 1.0, 0.45, 0.70) if _is_valid else Color(1.0, 0.35, 0.35, 0.65)
 
 # ── Prozess – Ghost folgt Maus ────────────────────────────────────────────────
@@ -104,6 +102,7 @@ func _process(_delta: float) -> void:
 	if _snap_enabled:
 		var raw := mouse_local - Vector2(room_w_px / 2.0, room_h_px / 2.0)
 		topleft = Vector2(snappedf(raw.x, float(TILE_PX)), snappedf(raw.y, float(TILE_PX)))
+
 	else:
 		topleft = mouse_local - Vector2(room_w_px / 2.0, room_h_px / 2.0)
 
@@ -140,9 +139,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		var mb := event as InputEventMouseButton
 		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT:
 			_try_place()
+
 		elif mb.pressed and mb.button_index == MOUSE_BUTTON_RIGHT:
 			get_viewport().set_input_as_handled()
-			cancelled.emit()
+			sig_cancelled.emit()
 			queue_free()
 		return
 
@@ -150,19 +150,24 @@ func _unhandled_input(event: InputEvent) -> void:
 		var ke := event as InputEventKey
 		if not ke.pressed or ke.echo:
 			return
+
 		match ke.keycode:
 			KEY_ESCAPE:
 				get_viewport().set_input_as_handled()
-				cancelled.emit()
+				sig_cancelled.emit()
 				queue_free()
+
 			KEY_PERIOD:
 				_advance_door_combo()
 				_refresh_ghost()
+
 			KEY_COMMA:
 				pass  # reserviert
+
 			KEY_R:
 				_advance_room_rotation()
 				_refresh_ghost()
+
 			KEY_F:
 				pass  # reserviert
 
@@ -174,6 +179,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _update_valid_combos() -> void:
 	if not is_instance_valid(_ghost):
 		return
+
 	var raw: Array[Vector2i] = _ghost.get_valid_door_combos()
 	_valid_combos.clear()
 	for c: Vector2i in raw:
@@ -184,6 +190,7 @@ func _update_valid_combos() -> void:
 func _snap_to_valid_combo() -> void:
 	if _valid_combos.is_empty():
 		return
+
 	var current := Vector2i(_door_rotation, _door_offset)
 	if current not in _valid_combos:
 		_door_rotation = _valid_combos[0].x
@@ -200,6 +207,7 @@ func _advance_room_rotation() -> void:
 func _advance_door_combo() -> void:
 	if _valid_combos.is_empty():
 		return
+
 	var current := Vector2i(_door_rotation, _door_offset)
 	var idx := _valid_combos.find(current)
 	var next := _valid_combos[(idx + 1) % _valid_combos.size()]
@@ -215,6 +223,7 @@ func _try_place() -> void:
 	if mouse_local.x < min_x or mouse_local.x > min_x + PARCEL_PX or \
 			mouse_local.y < min_y or mouse_local.y > min_y + PARCEL_PX:
 		return
+
 	var room_w_px := _room_w * TILE_PX
 	var room_h_px := _room_h * TILE_PX
 	var sx := clampf(snappedf(mouse_local.x - room_w_px / 2.0, float(TILE_PX)), min_x, min_x + float(PARCEL_PX - room_w_px))
@@ -226,5 +235,5 @@ func _try_place() -> void:
 			_room_w, _room_h, _door_rotation, _door_offset):
 		get_viewport().set_input_as_handled()
 		var ghost_center := _ghost.global_position + Vector2(_room_w, _room_h) * float(TILE_PX) * 0.5
-		room_placed.emit(_current_parcel.x, _current_parcel.y, place_tile.x, place_tile.y, _door_rotation, _door_offset, _room_rotation, ghost_center)
+		sig_room_placed.emit(_current_parcel.x, _current_parcel.y, place_tile.x, place_tile.y, _door_rotation, _door_offset, _room_rotation, ghost_center)
 		_spawn_ghost()

@@ -8,18 +8,23 @@ const BG_IMAGES := [
 const SLIDE_INTERVAL := 5.0
 const FADE_DURATION  := 1.2
 
-@onready var bg_nodes: Array[TextureRect] = [
-	$BgSlideshow/Bg1,
-	$BgSlideshow/Bg2,
-	$BgSlideshow/Bg3,
-]
-@onready var btn_login:    Button   = $Content/MenuBox/MenuVBox/Buttons/BtnLogin
-@onready var btn_settings: Button   = $Content/MenuBox/MenuVBox/Buttons/BtnSettings
-@onready var btn_play:     Button   = $Content/MenuBox/MenuVBox/Buttons/BtnPlay
-@onready var btn_quit:     Button   = $Content/MenuBox/MenuVBox/BtnQuit
-@onready var logo:         TextureRect = $Content/Logo
-@onready var title_label:  Label    = $Content/Title
-@onready var subtitle:     Label    = $Content/Subtitle
+# MainMenu
+
+@onready var bg_nodes: Array[TextureRect] = [%Bg1, %Bg2, %Bg3]
+@onready var logo: TextureRect = %Logo
+@onready var title_label: Label = %Title
+@onready var subtitle: Label = %Subtitle
+@onready var btn_play: Button = %BtnPlay
+@onready var btn_settings: Button = %BtnSettings
+@onready var btn_login: Button = %BtnLogin
+@onready var btn_manager: Button = %BtnManager
+@onready var btn_tutorial: Button = %BtnTutorial
+@onready var btn_credits: Button = %BtnCredits
+@onready var btn_quit: Button = %BtnQuit
+
+# footer
+@onready var _version_lbl:      Label        = %VersionLbl
+@onready var _godot_icon:       TextureRect  = %GodotIcon
 
 # Login-Modal
 @onready var login_modal:     ColorRect = $LoginModal
@@ -30,18 +35,16 @@ const FADE_DURATION  := 1.2
 @onready var remember_checkbox:  CheckBox  = $LoginModal/Center/Card/VBox/RememberCheck
 @onready var btn_close_modal:    Button    = $LoginModal/Center/Card/VBox/BtnClose
 @onready var btn_to_register:   Button    = $LoginModal/Center/Card/VBox/BtnToRegister
-@onready var btn_manager:       Button       = $Content/MenuBox/MenuVBox/Buttons/BtnManager
-@onready var btn_tutorial:      Button       = $Content/MenuBox/MenuVBox/Buttons/BtnTutorial
-@onready var btn_credits:       Button       = $Content/MenuBox/MenuVBox/Buttons/BtnCredits
+
+# other modals
 @onready var _manager_modal:    Control      = $ManagerModal
 @onready var _settings_modal:   SettingsModal = $SettingsModal
-@onready var _version_lbl:      Label        = $Footer/VersionLbl
-@onready var _godot_icon:       TextureRect  = $Footer/GodotIcon
 
 var _current_bg := 0
 var _slide_timer := 0.0
 
 
+# =============================================================================
 func _ready() -> void:
 	MusicManager.play_menu()
 	_load_assets()
@@ -59,6 +62,7 @@ func _ready() -> void:
 	btn_quit.pressed.connect(get_tree().quit)
 
 
+# =============================================================================
 func _process(delta: float) -> void:
 	_slide_timer += delta
 	if _slide_timer >= SLIDE_INTERVAL:
@@ -66,24 +70,12 @@ func _process(delta: float) -> void:
 		_next_slide()
 
 
+# =============================================================================
 func _load_assets() -> void:
 	for i in bg_nodes.size():
 		var tex := load(BG_IMAGES[i]) as Texture2D
 		if tex:
 			bg_nodes[i].texture = tex
-
-	var logo_tex := load("res://assets/images/logo.png") as Texture2D
-	if logo_tex:
-		logo.texture = logo_tex
-
-	var font_outfit := load("res://assets/fonts/Outfit-Bold.ttf") as FontFile
-	var font_inter  := load("res://assets/fonts/Inter_18pt-Regular.ttf") as FontFile
-	if font_outfit:
-		title_label.add_theme_font_override("font", font_outfit)
-		for btn in [btn_login, btn_settings, btn_play, btn_quit, btn_tutorial, btn_manager, btn_credits, login_button]:
-			btn.add_theme_font_override("font", font_outfit)
-	if font_inter:
-		subtitle.add_theme_font_override("font", font_inter)
 
 	title_label.text = GameState.T("home.hero.title")
 	subtitle.text    = GameState.T("home.hero.subtitle")
@@ -103,6 +95,7 @@ func _load_assets() -> void:
 		_godot_icon.texture = godot_tex
 
 
+# =============================================================================
 func _setup_modal() -> void:
 	login_button.pressed.connect(_on_modal_login_pressed)
 	btn_close_modal.pressed.connect(_close_modal)
@@ -113,6 +106,7 @@ func _setup_modal() -> void:
 	remember_checkbox.button_pressed = SessionManager.saved_username != ""
 
 
+# =============================================================================
 func _try_restore_last_profile() -> void:
 	var last_id := SettingsManager.last_profile_id
 	if last_id < 0:
@@ -125,6 +119,7 @@ func _try_restore_last_profile() -> void:
 	GameState.select_profile(profile)
 
 
+# =============================================================================
 func _update_manager_state() -> void:
 	btn_play.disabled = GameState.active_profile_id < 0
 	btn_play.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if GameState.active_profile_id >= 0 else Control.CURSOR_FORBIDDEN
@@ -134,6 +129,7 @@ func _update_manager_state() -> void:
 		btn_manager.text = GameState.T("menu.btn.manager")
 
 
+# =============================================================================
 func _next_slide() -> void:
 	var next := (_current_bg + 1) % bg_nodes.size()
 	var tween := create_tween().set_parallel(true)
@@ -142,6 +138,7 @@ func _next_slide() -> void:
 	_current_bg = next
 
 
+# =============================================================================
 func _on_login_pressed() -> void:
 	if GameState.is_logged_in():
 		GameState.logout()
@@ -150,6 +147,7 @@ func _on_login_pressed() -> void:
 		_open_modal()
 
 
+# =============================================================================
 func _open_modal() -> void:
 	error_label.text = ""
 	password_field.text = ""
@@ -157,10 +155,12 @@ func _open_modal() -> void:
 	username_field.grab_focus()
 
 
+# =============================================================================
 func _close_modal() -> void:
 	login_modal.visible = false
 
 
+# =============================================================================
 func _on_modal_login_pressed() -> void:
 	var username := username_field.text.strip_edges()
 	var password := password_field.text
@@ -172,6 +172,7 @@ func _on_modal_login_pressed() -> void:
 	Api.post_form("/api/auth/login", {"username": username, "password": password}, _on_login_response)
 
 
+# =============================================================================
 func _on_login_response(success: bool, data: Dictionary) -> void:
 	login_button.disabled = false
 	if not success:
@@ -187,10 +188,12 @@ func _on_login_response(success: bool, data: Dictionary) -> void:
 	_close_modal()
 
 
+# =============================================================================
 func _on_play_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/dashboard/Dashboard.tscn")
 
 
+# =============================================================================
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey:
 		var ke := event as InputEventKey
@@ -198,33 +201,40 @@ func _unhandled_input(event: InputEvent) -> void:
 			_on_settings_pressed()
 
 
+# =============================================================================
 func _on_settings_pressed() -> void:
 	btn_quit.visible = false
 	_settings_modal.open()
 
 
+# =============================================================================
 func _on_settings_closed() -> void:
 	btn_quit.visible = true
 
 
+# =============================================================================
 func _on_manager_pressed() -> void:
 	btn_quit.visible = false
 	_manager_modal.open()
 
 
+# =============================================================================
 func _on_manager_modal_closed() -> void:
 	_manager_modal.visible = false
 	btn_quit.visible = true
 	_update_manager_state()
 
 
+# =============================================================================
 func _on_tutorial_pressed() -> void:
 	pass # TODO: Tutorial-Szene (ANG-xxx)
 
 
+# =============================================================================
 func _on_credits_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/credits/Credits.tscn")
 
 
+# =============================================================================
 func _on_to_register_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/register/Register.tscn")

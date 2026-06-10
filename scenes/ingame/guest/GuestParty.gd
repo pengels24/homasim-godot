@@ -14,13 +14,17 @@ var arrived_day:   int    = 1
 var arrived_time:  int    = 0         # Spielminuten
 var state:         String = "waiting" # "waiting"|"active"|"checkout"|"gone"
 var checkout_days: int    = 0         # Tage die der Gast bereits in checkout-Spalte wartet
+var has_been_seen: bool = false
+var pays_surcharge: bool = false
 
 
+# =============================================================================
 func _init(p_id: String, p_type: String) -> void:
 	id   = p_id
 	type = p_type
 
 
+# =============================================================================
 func get_primary() -> GuestMember:
 	for m: GuestMember in members:
 		if m.is_primary():
@@ -28,19 +32,23 @@ func get_primary() -> GuestMember:
 	return members[0] if not members.is_empty() else null
 
 
+# =============================================================================
 func get_display_name() -> String:
 	var primary := get_primary()
 	return primary.name if primary != null else "?"
 
 
+# =============================================================================
 func get_type_def() -> Dictionary:
 	return GuestDefinitions.ALL.get(type, {})
 
 
+# =============================================================================
 func get_type_name() -> String:
 	return GuestDefinitions.ALL.get(type, {}).get("name", type)
 
 
+# =============================================================================
 func to_dict() -> Dictionary:
 	var member_arr: Array = []
 	for m: GuestMember in members:
@@ -58,9 +66,12 @@ func to_dict() -> Dictionary:
 		"arrived_time":  arrived_time,
 		"state":         state,
 		"checkout_days": checkout_days,
+		"has_been_seen": has_been_seen,
+		"pays_surcharge": pays_surcharge,
 	}
 
 
+# =============================================================================
 static func from_dict(d: Dictionary) -> GuestParty:
 	var p := GuestParty.new(d.get("id", ""), d.get("type", ""))
 	p.room_id       = d.get("room_id",       "")
@@ -72,6 +83,9 @@ static func from_dict(d: Dictionary) -> GuestParty:
 	p.arrived_time  = d.get("arrived_time",  0)
 	p.state         = d.get("state",         "waiting")
 	p.checkout_days = d.get("checkout_days", 0)
+	p.has_been_seen = d.get("has_been_seen", false)
+	p.pays_surcharge = d.get("pays_surcharge", false)
+
 	for md: Dictionary in d.get("members", []):
 		p.members.append(GuestMember.from_dict(md))
 	return p

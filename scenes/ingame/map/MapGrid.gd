@@ -6,6 +6,7 @@ signal view_saved_changed(has_saved: bool)
 
 # ── Nodes ─────────────────────────────────────────────────────────────────────
 @onready var camera: Camera2D = $Camera2D
+var guest_manager: GuestManager
 
 # ── Grid-Konfiguration ────────────────────────────────────────────────────────
 @export var grid_cols:  int = 5
@@ -18,6 +19,7 @@ const TILE_PX   := 16
 const SCALE     := 2.0
 
 # Raum-Typ → Szenen-Pfad
+# todo - nach eextern auslagern wie daily_schedule -> modding
 const SCENE_PATHS: Dictionary = {
 	"bed_standard": "res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn",
 	"bed_double": "res://scenes/ingame/rooms/bed_double/Bed_Double.tscn",
@@ -178,6 +180,10 @@ func place_room(parcel_x: int, parcel_y: int, room_scene: PackedScene, hotel_id:
 		_mark_parcel_walls(parcel_x, parcel_y)
 	var room: Node2D = parcel.spawn_room(room_scene, door_rot, door_off, tile_x, tile_y, room_rot)
 	room.room_number = room_number
+
+	if room.has_method("configure"):
+		room.configure({"guest_manager": guest_manager})
+
 	var sz: Vector2i = room.get_tile_size()
 	mark_placement(parcel_x, parcel_y, tile_x, tile_y, sz.x, sz.y, door_rot, door_off)
 	SaveManager.save_room_to_plot(hotel_id, parcel_x, parcel_y, room.to_dict())
@@ -258,6 +264,9 @@ func _restore_rooms(built_plots: Array) -> void:
 			var path: String = SCENE_PATHS.get(type_id, "")
 			if path.is_empty():
 				continue
+
+			room_data["guest_manager"] = guest_manager
+
 			var room: Node2D = parcel.restore_room(room_data, load(path) as PackedScene)
 			var sz: Vector2i = room.get_tile_size()
 			var tx: int = room_data.get("x_pos", 0)

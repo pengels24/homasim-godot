@@ -29,6 +29,7 @@ ActivityLog="*res://autoload/ActivityLog.gd"
 InputHandler="*uid://dtgkxg376bsgm"
 EffectManager="*uid://x3kof0ue70uu"
 GlobalConsole="*uid://devconsole"
+TimeManager="*uid://bjb8v5puj4udo"
 
 [display]
 

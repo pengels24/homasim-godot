@@ -1,0 +1,707 @@
+Auflistung der Ordnerpfade HO·MA·SIM
+
+Version 0.1.25gd
+
+D:.
+|   icon.svg
+|   icon.svg.import
+|   project.godot
+|   version.txt
+|
++---addons
+|   \---AsepriteWizard
+|
++---assets
+|   |   credits.txt
+|   |
+|   +---audio
+|   |   |   credits_music.mp3
+|   |   |   credits_music.mp3.import
+|   |   |   ingame_music_01.mp3
+|   |   |   ingame_music_01.mp3.import
+|   |   |   ingame_music_02.mp3
+|   |   |   ingame_music_02.mp3.import
+|   |   |   ingame_music_03.mp3
+|   |   |   ingame_music_03.mp3.import
+|   |   |   ingame_music_04.mp3
+|   |   |   ingame_music_04.mp3.import
+|   |   |   ingame_music_05.mp3
+|   |   |   ingame_music_05.mp3.import
+|   |   |   ingame_music_06.mp3
+|   |   |   ingame_music_06.mp3.import
+|   |   |   menu_music_01.mp3
+|   |   |   menu_music_01.mp3.import
+|   |   |   menu_music_02.mp3
+|   |   |   menu_music_02.mp3.import
+|   |   |   menu_music_03.mp3
+|   |   |   menu_music_03.mp3.import
+|   |   |
+|   |   \---sounds
+|   |           levelup-1.mp3
+|   |           levelup-1.mp3.import
+|   |
+|   +---fonts
+|   |       AvenuePixel-Regular.ttf
+|   |       AvenuePixel-Regular.ttf.import
+|   |       AvenuePixelSoft-Stroke-Regular.ttf
+|   |       AvenuePixelSoft-Stroke-Regular.ttf.import
+|   |       AvenuePixelStroke-Regular.ttf
+|   |       AvenuePixelStroke-Regular.ttf.import
+|   |       Inter_18pt-Regular.ttf
+|   |       Inter_18pt-Regular.ttf.import
+|   |       Inter_18pt-SemiBold.ttf
+|   |       Inter_18pt-SemiBold.ttf.import
+|   |       Jersey25-Regular.ttf
+|   |       Jersey25-Regular.ttf.import
+|   |       m3x6.ttf
+|   |       m3x6.ttf.import
+|   |       MONOGRAM-EXTENDED.TTF
+|   |       MONOGRAM-EXTENDED.TTF.import
+|   |       Outfit-Bold.ttf
+|   |       Outfit-Bold.ttf.import
+|   |       Rajdhani-Bold.ttf
+|   |       Rajdhani-Bold.ttf.import
+|   |       Rajdhani-Medium.ttf
+|   |       Rajdhani-Medium.ttf.import
+|   |
+|   +---icons
+|   |   |   award.svg
+|   |   |   award.svg.import
+|   |   |   bath.svg
+|   |   |   bath.svg.import
+|   |   |   chef-hat.svg
+|   |   |   chef-hat.svg.import
+|   |   |   coins.svg
+|   |   |   coins.svg.import
+|   |   |   cooking-pot.svg
+|   |   |   cooking-pot.svg.import
+|   |   |   dumbbell.svg
+|   |   |   dumbbell.svg.import
+|   |   |   fast-forward.svg.bak
+|   |   |   ic_browser.svg
+|   |   |   ic_browser.svg.import
+|   |   |   ic_buildmode.svg
+|   |   |   ic_buildmode.svg.import
+|   |   |   ic_discord.png
+|   |   |   ic_discord.png.import
+|   |   |   ic_discord.svg
+|   |   |   ic_discord.svg.import
+|   |   |   ic_help.svg
+|   |   |   ic_help.svg.import
+|   |   |   ic_instagram.png
+|   |   |   ic_instagram.png.import
+|   |   |   ic_instagram.svg
+|   |   |   ic_instagram.svg.import
+|   |   |   ic_kofi.png
+|   |   |   ic_kofi.png.import
+|   |   |   ic_logout.svg
+|   |   |   ic_logout.svg.import
+|   |   |   ic_reception.svg
+|   |   |   ic_reception.svg.import
+|   |   |   ic_rotate_ccw.svg
+|   |   |   ic_rotate_ccw.svg.import
+|   |   |   ic_settings.svg
+|   |   |   ic_settings.svg.import
+|   |   |   ic_staff.svg
+|   |   |   ic_staff.svg.import
+|   |   |   ic_techtree.svg
+|   |   |   ic_techtree.svg.import
+|   |   |   ic_tipeee.png
+|   |   |   ic_tipeee.png.import
+|   |   |   ic_youtube.png
+|   |   |   ic_youtube.png.import
+|   |   |   ic_youtube.svg
+|   |   |   ic_youtube.svg.import
+|   |   |   pause.svg.bak
+|   |   |   play.svg.bak
+|   |   |   presentation.svg
+|   |   |   presentation.svg.import
+|   |   |   star.svg
+|   |   |   star.svg.import
+|   |   |   trash.svg
+|   |   |   trash.svg.import
+|   |   |   users-round.svg
+|   |   |   users-round.svg.import
+|   |   |   x.svg
+|   |   |   x.svg.import
+|   |   |
+|   |   +---guests
+|   |   |       briefcase.svg
+|   |   |       briefcase.svg.bak
+|   |   |       briefcase.svg.import
+|   |   |       laptop-minimal.svg
+|   |   |       laptop-minimal.svg.bak
+|   |   |       laptop-minimal.svg.import
+|   |   |       sunset.svg
+|   |   |       sunset.svg.import
+|   |   |       user-star.svg
+|   |   |       user-star.svg.import
+|   |   |       user.svg
+|   |   |       user.svg.bak
+|   |   |       user.svg.import
+|   |   |       users.svg
+|   |   |       users.svg.bak
+|   |   |       users.svg.import
+|   |   |       van.svg
+|   |   |       van.svg.import
+|   |   |       wallet-minimal.svg
+|   |   |       wallet-minimal.svg.bak
+|   |   |       wallet-minimal.svg.import
+|   |   |
+|   |   +---HUDBottom
+|   |   |       bed-double.svg
+|   |   |       bed-double.svg.import
+|   |   |       bed-single.svg
+|   |   |       bed-single.svg.import
+|   |   |       bed.svg
+|   |   |       bed.svg.import
+|   |   |       brush-cleaning.svg
+|   |   |       brush-cleaning.svg.import
+|   |   |       concierge-bell.svg
+|   |   |       concierge-bell.svg.import
+|   |   |       drill.svg
+|   |   |       drill.svg.import
+|   |   |       flask-conical.svg
+|   |   |       flask-conical.svg.import
+|   |   |       globe.svg
+|   |   |       globe.svg.import
+|   |   |       laptop-minimal.svg
+|   |   |       laptop-minimal.svg.import
+|   |   |       map-pin.svg
+|   |   |       map-pin.svg.import
+|   |   |       square-square.svg
+|   |   |       square-square.svg.import
+|   |   |       users.svg
+|   |   |       users.svg.import
+|   |   |       utensils.svg
+|   |   |       utensils.svg.import
+|   |   |       wine.svg
+|   |   |       wine.svg.import
+|   |   |       wrench.svg
+|   |   |       wrench.svg.import
+|   |   |
+|   |   +---HUDTop
+|   |   |       banknote.svg
+|   |   |       banknote.svg.import
+|   |   |       briefcase.svg
+|   |   |       briefcase.svg.import
+|   |   |       calendar-days.svg
+|   |   |       calendar-days.svg.import
+|   |   |       fast-forward.svg
+|   |   |       fast-forward.svg.import
+|   |   |       house.svg
+|   |   |       house.svg.import
+|   |   |       lightbulb.svg
+|   |   |       lightbulb.svg.import
+|   |   |       pause.svg
+|   |   |       pause.svg.import
+|   |   |       play.svg
+|   |   |       play.svg.import
+|   |   |       square.svg
+|   |   |       square.svg.import
+|   |   |       star-progress.png
+|   |   |       star-progress.png.import
+|   |   |       star-progress_overlay.png
+|   |   |       star-progress_overlay.png.import
+|   |   |       trending-up.svg
+|   |   |       trending-up.svg.import
+|   |   |
+|   |   +---Modals
+|   |   |       arrow-left.svg
+|   |   |       arrow-left.svg.import
+|   |   |       arrow-right.svg
+|   |   |       arrow-right.svg.import
+|   |   |
+|   |   \---rooms
+|   |           bed-double.svg
+|   |           bed-double.svg.bak
+|   |           bed-double.svg.import
+|   |           bed-single.svg
+|   |           bed-single.svg.bak
+|   |           bed-single.svg.import
+|   |           flask-conical.svg
+|   |           flask-conical.svg.import
+|   |           users.svg
+|   |           users.svg.import
+|   |           wine.svg
+|   |           wine.svg.import
+|   |
+|   +---images
+|   |   |   logo-transparent-50.png
+|   |   |   logo-transparent-50.png.import
+|   |   |   logo-transparent-80.png
+|   |   |   logo-transparent-80.png.import
+|   |   |   logo-transparent.png
+|   |   |   logo-transparent.png.import
+|   |   |   logo.png
+|   |   |   logo.png.import
+|   |   |   logo.svg
+|   |   |   logo.svg.import
+|   |   |   titelbild.png
+|   |   |   titelbild.png.import
+|   |   |
+|   |   \---home
+|   |           homasim_premium_hero-1.jpg
+|   |           homasim_premium_hero-1.jpg.import
+|   |           homasim_premium_hero-2.jpg
+|   |           homasim_premium_hero-2.jpg.import
+|   |           homasim_premium_hero-3.jpg
+|   |           homasim_premium_hero-3.jpg.import
+|   |           home-background-001.png
+|   |           home-background-001.png.import
+|   |           home-background-002.png
+|   |           home-background-002.png.import
+|   |           home-background-003.png
+|   |           home-background-003.png.import
+|   |
+|   +---themes
+|   |       ui_theme.tres
+|   |
+|   +---tiles
+|   |   |   floor_lobby_door_bottom_left.png
+|   |   |   floor_lobby_door_bottom_left.png.import
+|   |   |   floor_lobby_door_bottom_right.png
+|   |   |   floor_lobby_door_bottom_right.png.import
+|   |   |   floor_lobby_door_left.png
+|   |   |   floor_lobby_door_left.png.import
+|   |   |   floor_lobby_door_left_bottom.png
+|   |   |   floor_lobby_door_left_bottom.png.import
+|   |   |   floor_lobby_door_left_top.png
+|   |   |   floor_lobby_door_left_top.png.import
+|   |   |   floor_lobby_door_right.png
+|   |   |   floor_lobby_door_right.png.import
+|   |   |   floor_lobby_door_right_bottom.png
+|   |   |   floor_lobby_door_right_bottom.png.import
+|   |   |   floor_lobby_door_right_top.png
+|   |   |   floor_lobby_door_right_top.png.import
+|   |   |   floor_lobby_door_top_left.png
+|   |   |   floor_lobby_door_top_left.png.import
+|   |   |   floor_lobby_door_top_right.png
+|   |   |   floor_lobby_door_top_right.png.import
+|   |   |   floor_lobby_plain.png
+|   |   |   floor_lobby_plain.png.import
+|   |   |   floor_lobby_wall_bottom.png
+|   |   |   floor_lobby_wall_bottom.png.import
+|   |   |   floor_lobby_wall_bottom_left.png
+|   |   |   floor_lobby_wall_bottom_left.png.import
+|   |   |   floor_lobby_wall_bottom_right.png
+|   |   |   floor_lobby_wall_bottom_right.png.import
+|   |   |   floor_lobby_wall_left.png
+|   |   |   floor_lobby_wall_left.png.import
+|   |   |   floor_lobby_wall_right.png
+|   |   |   floor_lobby_wall_right.png.import
+|   |   |   floor_lobby_wall_top-left.png
+|   |   |   floor_lobby_wall_top-left.png.import
+|   |   |   floor_lobby_wall_top.png
+|   |   |   floor_lobby_wall_top.png.import
+|   |   |   floor_lobby_wall_top_right.png
+|   |   |   floor_lobby_wall_top_right.png.import
+|   |   |   ground_base.png
+|   |   |   ground_base.png.import
+|   |   |   ground_brick.png
+|   |   |   ground_brick.png.import
+|   |   |   ground_floor.png
+|   |   |   ground_floor.png.import
+|   |   |   ground_lobby.png
+|   |   |   ground_lobby.png.import
+|   |   |   ground_walking.png
+|   |   |   ground_walking.png.import
+|   |   |   main_door.png
+|   |   |   main_door.png.import
+|   |   |
+|   |   +---Doors
+|   |   |       standard_door_bottom.png
+|   |   |       standard_door_bottom.png.import
+|   |   |       standard_door_left.png
+|   |   |       standard_door_left.png.import
+|   |   |       standard_door_right.png
+|   |   |       standard_door_right.png.import
+|   |   |       standard_door_top.png
+|   |   |       standard_door_top.png.import
+|   |   |
+|   |   +---Furniture
+|   |   |       furniture_bar.aseprite
+|   |   |       furniture_bar.aseprite.import
+|   |   |       furniture_bed_double.aseprite
+|   |   |       furniture_bed_double.aseprite.import
+|   |   |       furniture_bed_standard.aseprite
+|   |   |       furniture_bed_standard.aseprite.import
+|   |   |       furniture_hr_office.aseprite
+|   |   |       furniture_hr_office.aseprite.import
+|   |   |       furniture_lobby.aseprite
+|   |   |       furniture_lobby.aseprite.import
+|   |   |       furniture_sc_office.aseprite
+|   |   |       furniture_sc_office.aseprite.import
+|   |   |       ground_grasland.aseprite
+|   |   |       ground_grasland.aseprite.import
+|   |   |       ground_walkway.aseprite
+|   |   |       ground_walkway.aseprite.import
+|   |   |
+|   |   +---Grounds
+|   |   |       ground_parcel.png
+|   |   |       ground_parcel.png.import
+|   |   |
+|   |   +---Rooms
+|   |   \---Walls
+|   |           wall_bottom.png
+|   |           wall_bottom.png.import
+|   |           wall_bottom_left.png
+|   |           wall_bottom_left.png.import
+|   |           wall_bottom_right.png
+|   |           wall_bottom_right.png.import
+|   |           wall_left.png
+|   |           wall_left.png.import
+|   |           wall_right.png
+|   |           wall_right.png.import
+|   |           wall_top.png
+|   |           wall_top.png.import
+|   |           wall_top_left.png
+|   |           wall_top_left.png.import
+|   |           wall_top_right.png
+|   |           wall_top_right.png.import
+|   |
+|   \---UI
+|           card_pulse_border.tres
+|           card_selection_border.tres
+|           default_theme.tres
+|           hud_bottom.aseprite
+|           hud_bottom.aseprite.import
+|           hud_bottom_button_group.tres
+|           hud_build.aseprite
+|           hud_build.aseprite.import
+|           hud_build_item_button.aseprite
+|           hud_build_item_button.aseprite.import
+|           hud_build_item_button_active.aseprite
+|           hud_build_item_button_active.aseprite.import
+|           hud_build_item_button_hover.aseprite
+|           hud_build_item_button_hover.aseprite.import
+|           hud_button_pressed_gold_bgt.tres
+|           hud_button_round.aseprite
+|           hud_button_round.aseprite.import
+|           hud_button_round_active.aseprite
+|           hud_button_round_active.aseprite.import
+|           hud_button_round_hover.aseprite
+|           hud_button_round_hover.aseprite.import
+|           menu_button_blue.tres
+|           menu_button_blue_hover.tres
+|           menu_button_blue_pressed.tres
+|           menu_button_darkblue.tres
+|           menu_button_darkblue_disabled.tres
+|           menu_button_darkblue_hover.tres
+|           menu_button_golden.tres
+|           menu_button_golden_hover.tres
+|           menu_button_golden_pressed.tres
+|           menu_button_green.tres
+|           menu_button_green_hover.tres
+|           menu_button_green_pressed.tres
+|           menu_button_red.tres
+|           menu_button_red_hover.tres
+|           menu_button_red_pressed.tres
+|           modal_panel_glow.tres
+|           pal_ui.pal
+|           reception_button_disabled.tres
+|           reception_button_normal.tres
+|           reception_scrollbox.tres
+|           test_theme.tres
+|
++---autoload
+|       ActivityLog.gd
+|       ActivityLog.gd.uid
+|       Api.gd
+|       Api.gd.uid
+|       DevConsole.gd
+|       DevConsole.gd.uid
+|       DevConsole.tscn
+|       EffectManager.gd
+|       EffectManager.gd.uid
+|       FloatingValues.gd
+|       FloatingValues.gd.uid
+|       GameState.gd
+|       GameState.gd.uid
+|       InputHandler.gd
+|       InputHandler.gd.uid
+|       MusicManager.gd
+|       MusicManager.gd.uid
+|       SaveManager.gd
+|       SaveManager.gd.uid
+|       SessionManager.gd
+|       SessionManager.gd.uid
+|       SettingsManager.gd
+|       SettingsManager.gd.uid
+|       TimeManager.gd
+|       TimeManager.gd.uid
+|       Toast.gd
+|       Toast.gd.uid
+|
++---changelog
+|       0-1-1-vorlage.md
+|       gd-0.1.0.md
+|       gd-0.1.1.md
+|       gd-0.1.10.md
+|       gd-0.1.11.md
+|       gd-0.1.12.md
+|       gd-0.1.13.md
+|       gd-0.1.14.md
+|       gd-0.1.15.md
+|       gd-0.1.16.md
+|       gd-0.1.17.md
+|       gd-0.1.17b.md
+|       gd-0.1.18.md
+|       gd-0.1.18b.md
+|       gd-0.1.18c.md
+|       gd-0.1.18d.md
+|       gd-0.1.19.md
+|       gd-0.1.19b.md
+|       gd-0.1.19c.md
+|       gd-0.1.19d.md
+|       gd-0.1.19e.md
+|       gd-0.1.2.md
+|       gd-0.1.20.md
+|       gd-0.1.20b.md
+|       gd-0.1.20c.md
+|       gd-0.1.21.md
+|       gd-0.1.22.md
+|       gd-0.1.23.md
+|       gd-0.1.3.md
+|       gd-0.1.4.md
+|       gd-0.1.5.md
+|       gd-0.1.6.md
+|       gd-0.1.7.md
+|       gd-0.1.8.md
+|       gd-0.1.9.md
+|
++---config
+|       daily_schedule.json
+|
++---data
+|       GuestDefinitions.gd
+|       GuestDefinitions.gd.uid
+|       NameDatabase.gd
+|       NameDatabase.gd.uid
+|
++---scenes
+|   +---character
+|   |       CharacterDisplay.gd
+|   |       CharacterDisplay.gd.uid
+|   |       CharacterDisplay.tscn
+|   |       CharacterEdit.gd
+|   |       CharacterEdit.gd.uid
+|   |       CharacterEdit.tscn
+|   |
+|   +---credits
+|   |       Credits.gd
+|   |       Credits.gd.uid
+|   |       Credits.tscn
+|   |
+|   +---dashboard
+|   |       Dashboard.gd
+|   |       Dashboard.gd.uid
+|   |       Dashboard.tscn
+|   |
+|   +---hotel_select
+|   |       HotelSelect.gd
+|   |       HotelSelect.gd.uid
+|   |       HotelSelect.tscn
+|   |
+|   +---ingame
+|   |   |   GuestManager.gd
+|   |   |   GuestManager.gd.uid
+|   |   |   Ingame.gd
+|   |   |   Ingame.gd.uid
+|   |   |   Ingame.tscn
+|   |   |   IngameBuild.gd
+|   |   |   IngameBuild.gd.uid
+|   |   |   IngameClock.gd
+|   |   |   IngameClock.gd.uid
+|   |   |   InGameSaveModal.gd
+|   |   |   InGameSaveModal.gd.uid
+|   |   |   InGameSaveModal.tscn
+|   |   |   PauseMenu.gd
+|   |   |   PauseMenu.gd.uid
+|   |   |   PauseMenu.tscn
+|   |   |   SimBrowser.gd
+|   |   |   SimBrowser.gd.uid
+|   |   |   SimBrowser.tscn
+|   |   |
+|   |   +---build
+|   |   |       BuildCursor.gd
+|   |   |       BuildCursor.gd.uid
+|   |   |
+|   |   +---guest
+|   |   |       GuestMember.gd
+|   |   |       GuestMember.gd.uid
+|   |   |       GuestParty.gd
+|   |   |       GuestParty.gd.uid
+|   |   |
+|   |   +---hud
+|   |   |   |   angelus2010-HUDTop.tscn
+|   |   |   |   BuildMenu.gd
+|   |   |   |   BuildMenu.gd.uid
+|   |   |   |   BuildMenu.tscn
+|   |   |   |   BuildMenuButton.tscn
+|   |   |   |   HUD.gd
+|   |   |   |   HUD.gd.uid
+|   |   |   |   HUD.tscn
+|   |   |   |   HUDBottom.gd
+|   |   |   |   HUDBottom.gd.uid
+|   |   |   |   HUDBottom.tscn
+|   |   |   |   HUDMusicControl.gd
+|   |   |   |   HUDMusicControl.gd.uid
+|   |   |   |   HUDMusicControl.tscn
+|   |   |   |   HUDResetView.gd
+|   |   |   |   HUDResetView.gd.uid
+|   |   |   |   HUDResetView.tscn
+|   |   |   |   LabelPanel.tscn
+|   |   |   |
+|   |   |   \---modals
+|   |   |       |   BaseModal.gd
+|   |   |       |   BaseModal.gd.uid
+|   |   |       |   BaseModal.tscn
+|   |   |       |   DialogModal.tscn
+|   |   |       |   LevelUpModal.gd
+|   |   |       |   LevelUpModal.gd.uid
+|   |   |       |   LevelUpModal.tscn
+|   |   |       |   StandardModal.gd
+|   |   |       |   StandardModal.gd.uid
+|   |   |       |   StandardModal.tscn
+|   |   |       |
+|   |   |       \---content
+|   |   |           |   GameSlot.gd
+|   |   |           |   GameSlot.gd.uid
+|   |   |           |   GameSlot.tscn
+|   |   |           |   ModalContentLoad.gd
+|   |   |           |   ModalContentLoad.gd.uid
+|   |   |           |   ModalContentLoad.tscn
+|   |   |           |   ModalContentPause.gd
+|   |   |           |   ModalContentPause.gd.uid
+|   |   |           |   ModalContentPause.tscn
+|   |   |           |   ModalContentReception.gd
+|   |   |           |   ModalContentReception.gd.uid
+|   |   |           |   ModalContentReception.tscn
+|   |   |           |   ModalContentSave.gd
+|   |   |           |   ModalContentSave.gd.uid
+|   |   |           |   ModalContentSave.tscn
+|   |   |           |   ModalContentSettings.gd
+|   |   |           |   ModalContentSettings.gd.uid
+|   |   |           |   ModalContentSettings.tscn
+|   |   |           |
+|   |   |           \---cards
+|   |   |                   GuestCard.gd
+|   |   |                   GuestCard.gd.uid
+|   |   |                   GuestCard.tscn
+|   |   |                   RoomCardAvailable.gd
+|   |   |                   RoomCardAvailable.gd.uid
+|   |   |                   RoomCardAvailable.tscn
+|   |   |
+|   |   +---map
+|   |   |       MapGrid.gd
+|   |   |       MapGrid.gd.uid
+|   |   |       MapGrid.tscn
+|   |   |       Parzelle.gd
+|   |   |       Parzelle.gd.uid
+|   |   |       Parzelle.tscn
+|   |   |
+|   |   +---rezeption
+|   |   |       RezeptionModal.gd
+|   |   |       RezeptionModal.gd.uid
+|   |   |       RezeptionModal.tscn
+|   |   |
+|   |   +---rooms
+|   |   |   |   Room.gd
+|   |   |   |   Room.gd.uid
+|   |   |   |   RoomStatusIndicator.gd
+|   |   |   |   RoomStatusIndicator.gd.uid
+|   |   |   |   RoomStatusIndicator.tscn
+|   |   |   |
+|   |   |   +---bar
+|   |   |   |       Bar.gd
+|   |   |   |       Bar.gd.uid
+|   |   |   |       Bar.tscn
+|   |   |   |
+|   |   |   +---bathroom
+|   |   |   +---bed_double
+|   |   |   |       BedDouble.gd
+|   |   |   |       BedDouble.gd.uid
+|   |   |   |       Bed_Double.tscn
+|   |   |   |
+|   |   |   +---bed_family
+|   |   |   +---bed_standard
+|   |   |   |       BedStandard.gd
+|   |   |   |       BedStandard.gd.uid
+|   |   |   |       Bed_Standard.tscn
+|   |   |   |
+|   |   |   +---bed_superior
+|   |   |   +---conference
+|   |   |   +---fitness
+|   |   |   +---hr_office
+|   |   |   |       HrOffice.gd
+|   |   |   |       HrOffice.gd.uid
+|   |   |   |       Hr_Office.tscn
+|   |   |   |
+|   |   |   +---kitchen
+|   |   |   +---lobby
+|   |   |   |       Lobby.gd
+|   |   |   |       Lobby.gd.uid
+|   |   |   |       Lobby.tscn
+|   |   |   |
+|   |   |   +---restaurant
+|   |   |   \---sc_office
+|   |   |           ScOffice.gd
+|   |   |           ScOffice.gd.uid
+|   |   |           Sc_Office.tscn
+|   |   |
+|   |   \---scripts
+|   |       +---managers
+|   |       |       IngameSaveController.gd
+|   |       |       IngameSaveController.gd.uid
+|   |       |       IngameScheduleManager.gd
+|   |       |       IngameScheduleManager.gd.uid
+|   |       |       IngameUIManager.gd
+|   |       |       IngameUIManager.gd.uid
+|   |       |
+|   |       \---UI
+|   +---login
+|   |       Login.gd
+|   |       Login.gd.uid
+|   |       Login.tscn
+|   |
+|   +---main_menu
+|   |       MainMenu.gd
+|   |       MainMenu.gd.uid
+|   |       MainMenu.tscn
+|   |
+|   +---manager_select
+|   |       ManagerSelect.gd
+|   |       ManagerSelect.gd.uid
+|   |       ManagerSelect.tscn
+|   |
+|   +---register
+|   |       Register.gd
+|   |       Register.gd.uid
+|   |       Register.tscn
+|   |
+|   \---shared
+|           ConfirmModal.gd
+|           ConfirmModal.gd.uid
+|           ConfirmModal.tscn
+|           FloatingValue.gd
+|           FloatingValue.gd.uid
+|           FloatingValue.tscn
+|           LoadScreen.gd
+|           LoadScreen.gd.uid
+|           LoadScreen.tscn
+|           NewHotelModal.gd
+|           NewHotelModal.gd.uid
+|           NewHotelModal.tscn
+|           SettingsModal.gd
+|           SettingsModal.gd.uid
+|           SettingsModal.tscn
+|           ToastNotification.gd
+|           ToastNotification.gd.uid
+|           ToastNotification.tscn
+|
++---translations
+|       de.csv
+|       de.csv.import
+|       de.de.translation
+|       de.en.translation

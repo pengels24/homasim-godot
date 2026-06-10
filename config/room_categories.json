@@ -1,0 +1,24 @@
+{
+  "room_categories": {
+    "zimmer": {
+      "label": "Zimmer",
+      "icon": "res://assets/icons/HUDTop/house.svg"
+    },
+    "gastro": {
+      "label": "Gastronomie",
+      "icon": "res://assets/icons/HUDBottom/utensils.svg"
+    },
+    "service": {
+      "label": "Service",
+      "icon": "res://assets/icons/HUDBottom/brush-cleaning.svg"
+    },
+    "management": {
+      "label": "Management",
+      "icon": "res://assets/icons/HUDBottom/laptop-minimal.svg"
+    },
+    "sonstiges": {
+      "label": "Sonstiges",
+      "icon": "res://assets/icons/HUDBottom/wrench.svg"
+    }
+  }
+}

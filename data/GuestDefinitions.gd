@@ -1,5 +1,3 @@
-## Gast-Archetypen: alle spielbaren Typen mit ihren Spawn-/Matching-Parametern.
-## Direkter Port aus _dev/references/GuestDefinitions.php.
 class_name GuestDefinitions
 
 const ALL: Dictionary = {
@@ -11,8 +9,11 @@ const ALL: Dictionary = {
 		"spawn_chance":    35,
 		"min_stay":        1,
 		"max_stay":        3,
-		"min_base_price":  30.0,
-		"max_base_price":  60.0,
+		"min_base_price":  30,
+		"max_base_price":  60,
+		"icon":            "res://assets/icons/guests/user.svg",
+		"base_exp": 10,
+		"rep_penalty": 5
 	},
 	"couple": {
 		"name":            "Paar",
@@ -22,8 +23,11 @@ const ALL: Dictionary = {
 		"spawn_chance":    25,
 		"min_stay":        1,
 		"max_stay":        4,
-		"min_base_price":  50.0,
-		"max_base_price":  100.0,
+		"min_base_price":  50,
+		"max_base_price":  100,
+		"icon":            "res://assets/icons/guests/users.svg",
+		"base_exp": 15,
+		"rep_penalty": 5
 	},
 	"business": {
 		"name":            "Geschäftsreisender",
@@ -33,8 +37,11 @@ const ALL: Dictionary = {
 		"spawn_chance":    15,
 		"min_stay":        1,
 		"max_stay":        3,
-		"min_base_price":  60.0,
-		"max_base_price":  120.0,
+		"min_base_price":  60,
+		"max_base_price":  120,
+		"icon":            "res://assets/icons/guests/briefcase.svg",
+		"base_exp": 20,
+		"rep_penalty": 10
 	},
 	"family": {
 		"name":            "Familie",
@@ -44,8 +51,11 @@ const ALL: Dictionary = {
 		"spawn_chance":    10,
 		"min_stay":        2,
 		"max_stay":        5,
-		"min_base_price":  80.0,
-		"max_base_price":  150.0,
+		"min_base_price":  80,
+		"max_base_price":  150,
+		"icon":            "res://assets/icons/guests/van.svg",
+		"base_exp": 15,
+		"rep_penalty": 5
 	},
 	"budget": {
 		"name":            "Budgetreisender",
@@ -55,8 +65,11 @@ const ALL: Dictionary = {
 		"spawn_chance":    20,
 		"min_stay":        1,
 		"max_stay":        2,
-		"min_base_price":  20.0,
-		"max_base_price":  40.0,
+		"min_base_price":  20,
+		"max_base_price":  40,
+		"icon":            "res://assets/icons/guests/wallet-minimal.svg",
+		"base_exp": 5,
+		"rep_penalty": 2,
 	},
 	"nomad": {
 		"name":            "Digitaler Nomade",
@@ -66,8 +79,11 @@ const ALL: Dictionary = {
 		"spawn_chance":    7,
 		"min_stay":        7,
 		"max_stay":        14,
-		"min_base_price":  35.0,
-		"max_base_price":  70.0,
+		"min_base_price":  35,
+		"max_base_price":  70,
+		"icon":            "res://assets/icons/guests/laptop-minimal.svg",
+		"base_exp": 10,
+		"rep_penalty": 5
 	},
 	"event": {
 		"name":            "Event-Teilnehmer",
@@ -77,8 +93,11 @@ const ALL: Dictionary = {
 		"spawn_chance":    10,
 		"min_stay":        1,
 		"max_stay":        2,
-		"min_base_price":  45.0,
-		"max_base_price":  90.0,
+		"min_base_price":  45,
+		"max_base_price":  90,
+		"icon":            "res://assets/icons/guests/sunset.svg",
+		"base_exp": 10,
+		"rep_penalty": 5
 	},
 	"luxury": {
 		"name":            "Luxus-Gast",
@@ -88,7 +107,10 @@ const ALL: Dictionary = {
 		"spawn_chance":    5,
 		"min_stay":        2,
 		"max_stay":        5,
-		"min_base_price":  150.0,
-		"max_base_price":  300.0,
+		"min_base_price":  150,
+		"max_base_price":  300,
+		"icon":            "res://assets/icons/guests/user-star.svg",
+		"base_exp": 25,
+		"rep_penalty": 15
 	},
 }

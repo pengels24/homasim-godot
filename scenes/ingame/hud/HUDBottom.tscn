@@ -2,6 +2,8 @@
 
 [ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_mxw05"]
 [ext_resource type="Script" uid="uid://c52p86vmpmrik" path="res://scenes/ingame/hud/HUDBottom.gd" id="2_l5yvd"]
+[ext_resource type="StyleBox" uid="uid://brk7dwg72hmhm" path="res://assets/UI/hud_button_pressed_gold_bgt.tres" id="3_jm8q0"]
+[ext_resource type="ButtonGroup" uid="uid://bsedvtka3eabc" path="res://assets/UI/hud_bottom_button_group.tres" id="4_hq4tq"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_5kvvh"]
 load_path = "res://.godot/imported/drill.svg-bbefe30ad831414eee3045fcaed6c1c3.ctex"
@@ -82,6 +84,10 @@ theme_override_constants/margin_bottom = 10
 [node name="BuildMenu" type="Button" parent="HBoxContainer/Panel1/MarginContainer" unique_id=1033111495]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
+theme_override_styles/pressed = ExtResource("3_jm8q0")
+toggle_mode = true
+button_group = ExtResource("4_hq4tq")
 icon = SubResource("CompressedTexture2D_5kvvh")
 icon_alignment = 1
 
@@ -107,7 +113,11 @@ theme_override_constants/margin_bottom = 10
 [node name="Reception" type="Button" parent="HBoxContainer/Panel2/MarginContainer" unique_id=2132307684]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
+theme_override_styles/pressed = ExtResource("3_jm8q0")
 disabled = true
+toggle_mode = true
+button_group = ExtResource("4_hq4tq")
 icon = SubResource("CompressedTexture2D_l5yvd")
 icon_alignment = 1
 
@@ -146,7 +156,11 @@ theme_override_constants/margin_bottom = 10
 [node name="Staff" type="Button" parent="HBoxContainer/Panel3/MarginContainer" unique_id=1652034052]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
+theme_override_styles/pressed = ExtResource("3_jm8q0")
 disabled = true
+toggle_mode = true
+button_group = ExtResource("4_hq4tq")
 icon = SubResource("CompressedTexture2D_jm8q0")
 icon_alignment = 1
 
@@ -172,7 +186,11 @@ theme_override_constants/margin_bottom = 10
 [node name="TechTree" type="Button" parent="HBoxContainer/Panel4/MarginContainer" unique_id=1848820052]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
+theme_override_styles/pressed = ExtResource("3_jm8q0")
 disabled = true
+toggle_mode = true
+button_group = ExtResource("4_hq4tq")
 icon = SubResource("CompressedTexture2D_hq4tq")
 icon_alignment = 1
 
@@ -198,7 +216,11 @@ theme_override_constants/margin_bottom = 10
 [node name="SimBrowser" type="Button" parent="HBoxContainer/Panel5/MarginContainer" unique_id=103433776]
 unique_name_in_owner = true
 layout_mode = 2
+focus_mode = 0
+theme_override_styles/pressed = ExtResource("3_jm8q0")
 disabled = true
+toggle_mode = true
+button_group = ExtResource("4_hq4tq")
 icon = SubResource("CompressedTexture2D_mxw05")
 icon_alignment = 1
 

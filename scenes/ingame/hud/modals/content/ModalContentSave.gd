@@ -105,6 +105,3 @@ func _on_save_button_pressed() -> void:
 	_generate_slots()
 	save_button.disabled = true
 	save_name_input.clear()
-
-	# Feedback (Nutzt GameState Translation, falls vorhanden)
-	print("=> [ModalContentSave] Spielstand erfolgreich gespeichert!")

@@ -18,43 +18,34 @@ signal sig_sim_browser_toggled
 # =============================================================================
 func _ready() -> void:
 	build_menu.pressed.connect(func():
-		if InputHandler.current_mode == InputHandler.InputMode.NORMAL:
-			InputHandler.current_mode = InputHandler.InputMode.BUILD
-		elif InputHandler.current_mode == InputHandler.InputMode.BUILD:
-			InputHandler.current_mode = InputHandler.InputMode.NORMAL
-
-		InputHandler.sig_hotkey_build_menu_requested.emit()
 		sig_build_menu_toggled.emit()
 	)
 
-	# Alle Knöpfe verdrahten + lokalen Test-Print hinzufügen
 	reception.pressed.connect(func():
-		print("--- [Intern] HUDBottom: Reception-Button geklickt!")
 		sig_reception_toggled.emit()
 	)
+
 	staff.pressed.connect(func():
-		print("--- [Intern] HUDBottom: Staff-Button geklickt!")
 		sig_staff_toggled.emit()
 	)
+
 	tech_tree.pressed.connect(func():
-		print("--- [Intern] HUDBottom: TechTree-Button geklickt!")
 		sig_tech_tree_toggled.emit()
 	)
+
 	sim_browser.pressed.connect(func():
-		print("--- [Intern] HUDBottom: SimBrowser-Button geklickt!")
 		sig_sim_browser_toggled.emit()
 	)
 
-	build_menu.tooltip_text = GameState.T("hud.bottom.build_menu_tt")
-	reception.tooltip_text  = GameState.T("hud.bottom.reception_tt")
-	staff.tooltip_text      = GameState.T("hud.bottom.staff_tt")
-	tech_tree.tooltip_text  = GameState.T("hud.bottom.tech_tree_tt")
-	sim_browser.tooltip_text = GameState.T("hud.bottom.sim_browser_tt")
+	# todo - zugewiesene tasten aus settings in den ttoltip setzen
+	build_menu.tooltip_text = GameState.T("hud.bottom.build_menu_tt", "F2")
+	reception.tooltip_text  = GameState.T("hud.bottom.reception_tt", "F3")
+	staff.tooltip_text      = GameState.T("hud.bottom.staff_tt", "F4")
+	tech_tree.tooltip_text  = GameState.T("hud.bottom.tech_tree_tt", "F6")
+	sim_browser.tooltip_text = GameState.T("hud.bottom.sim_browser_tt", "F7")
 
 	ind_reception.modulate = Color.GREEN
 	ind_sim_browser.modulate = Color.GREEN
-
-	InputHandler.sig_hotkey_build_menu_requested.connect(update_build_menu_position)
 
 
 # =============================================================================
@@ -74,19 +65,7 @@ func set_browser_alert(has_news: bool) -> void:
 
 
 # =============================================================================
-# Wird vom IngameBuild (Bausystem) aufgerufen, um den Button-State zu steuern.
-# idx -1 bedeutet: Baumodus/Submenü wurde geschlossen, alles zurücksetzen.
-func set_btn_active(idx: int) -> void:
-	if idx == -1:
-		# Fokus von allen Knöpfen nehmen, damit nichts mehr "gehighlighted" bleibt
-		build_menu.release_focus()
-		reception.release_focus()
-		staff.release_focus()
-		tech_tree.release_focus()
-		sim_browser.release_focus()
-
-
-# =============================================================================
+# Wird von Ingame.gd aufgerufen, um die Position des Baumenü-Panels anzupassen
 func update_build_menu_position() -> void:
 	if not has_node("BuildMenu") or not has_node("HBoxContainer/Panel1"):
 		return
@@ -102,3 +81,25 @@ func update_build_menu_position() -> void:
 	var new_y = target_button.global_position.y - build_menu_box.size.y - 10
 
 	build_menu_box.global_position = Vector2(new_x, new_y)
+
+
+# =============================================================================
+# Synchronisiert die visuelle Anzeige der Buttons mit dem aktuellen Menü-Status
+func sync_button_state(active_menu: String = "") -> void:
+	# Alle Buttons sicherheitshalber ausschalten und Fokus entfernen
+	for btn in [build_menu, reception, staff, tech_tree, sim_browser]:
+		btn.set_pressed_no_signal(false)
+		btn.release_focus()
+
+	# Nur den aktuell gewünschten Button wieder "eindrücken"
+	match active_menu:
+		"reception":
+			reception.set_pressed_no_signal(true)
+		"sim_browser":
+			sim_browser.set_pressed_no_signal(true)
+		"build":
+			build_menu.set_pressed_no_signal(true)
+		"staff":
+			staff.set_pressed_no_signal(true)
+		"tech_tree":
+			tech_tree.set_pressed_no_signal(true)

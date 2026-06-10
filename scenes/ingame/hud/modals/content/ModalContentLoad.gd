@@ -114,7 +114,6 @@ func _on_load_button_pressed() -> void:
 		loaded = SaveManager.load_auto(active_hotel_id, array_index)
 
 	if loaded:
-		print("=> [ModalContentLoad] Spielstand erfolgreich geladen!")
 		sig_load_completed.emit(active_hotel_id)
 	else:
 		print("=> [ModalContentLoad] Fehler beim Laden des Spielstands!")

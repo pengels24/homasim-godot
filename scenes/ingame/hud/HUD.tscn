@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://coow8q5bvjgrm" path="res://assets/icons/HUDTop/lightbulb.svg" id="10_f542l"]
 [ext_resource type="Texture2D" uid="uid://bfib8j3upw5hb" path="res://assets/icons/HUDTop/calendar-days.svg" id="11_l8bek"]
 [ext_resource type="Texture2D" uid="uid://yxnshplq4qqh" path="res://assets/icons/HUDTop/pause.svg" id="12_unqwd"]
+[ext_resource type="StyleBox" uid="uid://brk7dwg72hmhm" path="res://assets/UI/hud_button_pressed_gold_bgt.tres" id="12_yugll"]
 [ext_resource type="PackedScene" uid="uid://qc5ayqs3wl0s" path="res://scenes/ingame/hud/HUDResetView.tscn" id="15_pek3b"]
 [ext_resource type="PackedScene" uid="uid://c5yo6bx5wcaoj" path="res://scenes/ingame/hud/HUDBottom.tscn" id="15_r421g"]
 [ext_resource type="PackedScene" uid="uid://dkopq8is4u4sl" path="res://scenes/ingame/hud/HUDMusicControl.tscn" id="16_6fy26"]
@@ -129,6 +130,11 @@ _data = {
 &"RESET": SubResource("Animation_cxhb7"),
 &"pulse": SubResource("Animation_5uuaq")
 }
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_fiam6"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_yugll"]
+allow_unpress = true
 
 [node name="HUDTop" type="CanvasLayer" unique_id=102009972]
 script = ExtResource("1_jp5st")
@@ -357,7 +363,7 @@ theme_override_constants/margin_bottom = -2
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.50980395, 0.5803922, 0.67058825, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "45 / 100"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -389,7 +395,7 @@ theme_override_constants/margin_bottom = -2
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.50980395, 0.5803922, 0.67058825, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "45 / 100"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -478,6 +484,10 @@ unique_name_in_owner = true
 modulate = Color(0.9411765, 0.7294118, 0.6392157, 1)
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
+theme_override_styles/pressed = ExtResource("12_yugll")
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ButtonGroup_fiam6")
 icon = ExtResource("12_unqwd")
 
 [node name="Button2" type="Panel" parent="TopBar/MarginContainer/HBoxContainer" unique_id=258683198]
@@ -503,6 +513,9 @@ unique_name_in_owner = true
 modulate = Color(0.9411765, 0.7294118, 0.6392157, 1)
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
+theme_override_styles/pressed = ExtResource("12_yugll")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_fiam6")
 icon = ExtResource("3_2d45u")
 
 [node name="Button3" type="Panel" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1699511678]
@@ -528,6 +541,9 @@ unique_name_in_owner = true
 modulate = Color(0.9411765, 0.7294118, 0.6392157, 1)
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
+theme_override_styles/pressed = ExtResource("12_yugll")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_fiam6")
 icon = ExtResource("4_feby4")
 
 [node name="BottomBarContainer" type="HBoxContainer" parent="." unique_id=378990724]
@@ -561,6 +577,21 @@ offset_left = -170.0
 offset_top = -30.0
 offset_right = 170.0
 offset_bottom = 30.0
+
+[node name="BuildMenu" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel1/MarginContainer" parent_id_path=PackedInt32Array(491735265, 566754857) index="0" unique_id=1033111495]
+button_group = SubResource("ButtonGroup_yugll")
+
+[node name="Reception" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel2/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1938624481) index="0" unique_id=2132307684]
+button_group = SubResource("ButtonGroup_yugll")
+
+[node name="Staff" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel3/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1093129650) index="0" unique_id=1652034052]
+button_group = SubResource("ButtonGroup_yugll")
+
+[node name="TechTree" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel4/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1152472691) index="0" unique_id=1848820052]
+button_group = SubResource("ButtonGroup_yugll")
+
+[node name="SimBrowser" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel5/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1000552068) index="0" unique_id=103433776]
+button_group = SubResource("ButtonGroup_yugll")
 
 [node name="BuildMenu" parent="BottomBarContainer/HUDBottom" unique_id=1714912306 instance=ExtResource("17_8e3pd")]
 layout_mode = 1

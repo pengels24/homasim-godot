@@ -2,10 +2,45 @@
 
 [ext_resource type="Script" uid="uid://c3b0bkll04n4x" path="res://scenes/ingame/hud/modals/content/cards/GuestCard.gd" id="1_8ojwh"]
 [ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_ysa16"]
+[ext_resource type="Texture2D" uid="uid://xi6ssml0f4rw" path="res://assets/icons/HUDBottom/bed-single.svg" id="3_jm1fy"]
+[ext_resource type="Texture2D" uid="uid://blr8jhhrp5bys" path="res://assets/icons/coins.svg" id="4_dh4y5"]
+[ext_resource type="Texture2D" uid="uid://chug26ioff260" path="res://assets/icons/x.svg" id="4_gk2u5"]
+[ext_resource type="StyleBox" uid="uid://kli5rv3atqkf" path="res://assets/UI/card_selection_border.tres" id="4_yk8x6"]
+[ext_resource type="StyleBox" uid="uid://gk6wdpdttr7a" path="res://assets/UI/card_pulse_border.tres" id="5_mapiw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jm1fy"]
+bg_color = Color(0.12156863, 0.14901961, 0.22352941, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25882354, 0.30588236, 0.43529412, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yk8x6"]
+bg_color = Color(0.043137256, 0.05882353, 0.09019608, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.19215687, 0.20784314, 0.27450982, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
 
 [node name="GuestCardWaiting" type="PanelContainer" unique_id=600346358]
 size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
 theme = ExtResource("1_ysa16")
+theme_override_styles/panel = SubResource("StyleBoxFlat_jm1fy")
 script = ExtResource("1_8ojwh")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1071477191]
@@ -18,17 +53,70 @@ theme_override_constants/margin_bottom = 5
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=637126509]
 layout_mode = 2
 
-[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=1683654487]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer" unique_id=223595833]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/MarginContainer" unique_id=792963085]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_yk8x6")
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer" unique_id=1683654487]
 unique_name_in_owner = true
 layout_mode = 2
+texture = ExtResource("3_jm1fy")
+expand_mode = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=2080478576]
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="GuestName" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=472972342]
+[node name="NameContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=2006744795]
+layout_mode = 2
+
+[node name="GuestName" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/NameContainer" unique_id=472972342]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 22
+text = "Max Mustermann"
+vertical_alignment = 1
+
+[node name="SurchargeIcon" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/NameContainer" unique_id=855058761]
+unique_name_in_owner = true
+visible = false
+modulate = Color(0.8901961, 0.68235296, 0.03137255, 1)
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+texture = ExtResource("4_dh4y5")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="GuestDetails" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1730271360]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 18
+text = "2 Nächte | Paar"
+
+[node name="RejectButton" type="TextureButton" parent="MarginContainer/HBoxContainer" unique_id=2042891413]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("4_gk2u5")
+
+[node name="SelectionBorder" type="Panel" parent="." unique_id=1932403878]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("4_yk8x6")
+
+[node name="PulseBorder" type="Panel" parent="." unique_id=1430701615]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("5_mapiw")

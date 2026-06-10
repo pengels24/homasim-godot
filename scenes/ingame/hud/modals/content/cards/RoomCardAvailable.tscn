@@ -3,10 +3,46 @@
 [ext_resource type="Script" uid="uid://btxuf0clltm4a" path="res://scenes/ingame/hud/modals/content/cards/RoomCardAvailable.gd" id="1_f7l65"]
 [ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_sbuwa"]
 [ext_resource type="Texture2D" uid="uid://xi6ssml0f4rw" path="res://assets/icons/HUDBottom/bed-single.svg" id="3_p1qwh"]
+[ext_resource type="StyleBox" uid="uid://kli5rv3atqkf" path="res://assets/UI/card_selection_border.tres" id="4_s74ba"]
+[ext_resource type="StyleBox" uid="uid://gk6wdpdttr7a" path="res://assets/UI/card_pulse_border.tres" id="5_bujft"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p1qwh"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.12156863, 0.14901961, 0.22352941, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25882354, 0.30588236, 0.43529412, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s74ba"]
+bg_color = Color(0.043137256, 0.05882353, 0.09019608, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.19215687, 0.20784314, 0.27450982, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
 
 [node name="RoomCardAvailable" type="PanelContainer" unique_id=748349076]
 size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
 theme = ExtResource("1_sbuwa")
+theme_override_styles/panel = SubResource("StyleBoxFlat_p1qwh")
 script = ExtResource("1_f7l65")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=616657880]
@@ -19,7 +55,17 @@ theme_override_constants/margin_bottom = 5
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=476702011]
 layout_mode = 2
 
-[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=1880260662]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer" unique_id=1281172685]
+layout_mode = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/MarginContainer" unique_id=399612762]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_s74ba")
+
+[node name="Icon" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer" unique_id=1880260662]
 unique_name_in_owner = true
 layout_mode = 2
 texture = ExtResource("3_p1qwh")
@@ -31,9 +77,28 @@ layout_mode = 2
 [node name="RoomName" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=54468826]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 22
 text = "Z0001 (EZ)"
+vertical_alignment = 1
 
 [node name="RoomDetails" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=942186899]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 18
 text = "Einzelzimmer | 60 € / Nacht"
+
+[node name="SelectionBorder" type="Panel" parent="." unique_id=1284468219]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("4_s74ba")
+
+[node name="PulseBorder" type="Panel" parent="." unique_id=1964189942]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = ExtResource("5_bujft")

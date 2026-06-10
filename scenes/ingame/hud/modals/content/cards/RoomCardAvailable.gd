@@ -1,54 +1,65 @@
 extends PanelContainer
 
-signal clicked(room: Node2D)
+# Wir nutzen das exakt gleiche Namensschema wie bei der GuestCard
+signal sig_clicked(room: Node2D)
 
 var current_room: Node2D = null
 
 @onready var _name_label: Label = %RoomName
 @onready var _details_label: Label = %RoomDetails
-# @onready var _icon: TextureRect = %Icon
+@onready var _icon: TextureRect = %Icon
 
+# Dein neuer edler Auswahlrahmen
+@onready var _selection_border: Panel = %SelectionBorder
+
+
+# =============================================================================
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	# Den Mauszeiger auf eine Hand ändern (aus deinem alten Code übernommen, sehr gutes UX-Detail!)
-	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	_selection_border.hide()
 
-# -----------------------------------------------------------------------------
+
+# =============================================================================
 # DATEN BEFÜLLEN
-# -----------------------------------------------------------------------------
 func populate(room: Node2D) -> void:
 	current_room = room
 
-	# Das externe Definition-Dictionary des Raums abrufen (perfekt fürs spätere Modding!)
+	# Definition dynamisch aus dem Skript holen
 	var def: Dictionary = {}
-	if room.has_method("get_definition"):
-		def = room.get_definition()
+	if room.get_script().has_method("get_definition"):
+		def = room.get_script().get_definition()
 
-	# Namen und Raumnummer zusammensetzen (z.B. "Einzelzimmer | Z101")
-	var type_label: String = def.get("label", "Zimmer")
-	var room_num: String = str(room.get("room_number"))
+	# 1. Namen und ID zusammenbauen (z.B. "EZ | Z0001")
+	var label: String = def.get("label", "Zimmer")
+	var prefix: String = def.get("prefix", "")
+	var r_num: String = room.room_number if "room_number" in room else "????"
 
-	var title_text = type_label
-	if room_num != "" and room_num != "null":
-		title_text += " | " + room_num
-	_name_label.text = title_text
+	# Falls das Prefix 'Z' nicht eh schon in der Nummer gespeichert ist:
+	var display_id: String = r_num
+	if prefix != "" and not r_num.begins_with(prefix):
+		display_id = prefix + r_num
 
-	# Preis und Details auslesen
+	_name_label.text = label + " | " + display_id
+
+	# 2. Details zusammenbauen (z.B. "Einzelzimmer | 60 € / Nacht")
+	var full_name: String = def.get("name", "Raum")
 	var price: int = def.get("nightly_price", 0)
-	var name_str: String = def.get("name", str(room.get("room_type_id")))
+	_details_label.text = full_name + " | " + str(price) + " € / Nacht"
 
-	if price > 0:
-		_details_label.text = name_str + " | " + str(price) + " € / Nacht"
-	else:
-		_details_label.text = name_str
+	# 3. Icon laden
+	var icon_path: String = def.get("icon", "")
+	if icon_path != "" and ResourceLoader.exists(icon_path):
+		_icon.texture = load(icon_path)
 
-# -----------------------------------------------------------------------------
+
+# =============================================================================
 # INTERAKTION
-# -----------------------------------------------------------------------------
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		clicked.emit(current_room)
+		sig_clicked.emit(current_room)
 
+
+# =============================================================================
 func set_highlight(active: bool) -> void:
-	# Nutzt deine bestehende Highlight-Farbe aus dem alten Rezeptions-Code
-	modulate = Color(0.20, 0.78, 0.35, 1.0) if active else Color.WHITE
+	# Die edle Methode: Nur den Rahmen umschalten!
+	_selection_border.visible = active

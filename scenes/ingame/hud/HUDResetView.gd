@@ -28,7 +28,6 @@ func _ready() -> void:
 
 	# Sobald das Restore-Signal gefeuert wird (egal ob von Taste oder UI)
 	InputHandler.sig_camera_restore_view_requested.connect(func():
-		print("=> [Spur 2-Restore] HUDResetView: Restore-Signal empfangen!")
 		await get_tree().process_frame
 		_apply_state(InputHandler.is_view_saved)
 		Toast.show(GameState.T("hud.button.reset_view.restore_toast"))

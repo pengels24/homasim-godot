@@ -42,6 +42,8 @@ func _ready() -> void:
 	GameState.sig_hotel_day_changed.connect(_on_hotel_day_changed)
 	GameState.sig_hotel_time_changed.connect(_on_hotel_time_changed)
 
+	TimeManager.sig_speed_changed.connect(_on_time_speed_changed)
+
 	SettingsManager.sig_hud_side_changed.connect(func(): update_bottom_layout(SettingsManager.hud_side))
 	update_bottom_layout(SettingsManager.hud_side)
 
@@ -222,17 +224,6 @@ func update_bottom_layout(position_setting: String) -> void:
 
 
 # =============================================================================
-func toggle_build_menu() -> void:
-	if InputHandler.current_mode == InputHandler.InputMode.NORMAL:
-		InputHandler.current_mode = InputHandler.InputMode.BUILD
-		$BottomBarContainer/HUDBottom/BuildMenu.visible = true
-
-	elif InputHandler.current_mode == InputHandler.InputMode.BUILD:
-		InputHandler.current_mode = InputHandler.InputMode.NORMAL
-		$BottomBarContainer/HUDBottom/BuildMenu.visible = false
-
-
-# =============================================================================
 func set_reception_locked(is_locked: bool) -> void:
 	bottom_bar.set_reception_locked(is_locked)
 
@@ -240,3 +231,21 @@ func set_reception_locked(is_locked: bool) -> void:
 # =============================================================================
 func set_reception_alert(has_waiting_guests: bool) -> void:
 	bottom_bar.set_reception_alert(has_waiting_guests)
+
+
+# =============================================================================
+func _on_time_speed_changed(is_paused: bool, speed: float) -> void:
+	if is_paused:
+		btn_pause.set_pressed_no_signal(true)
+		btn_play.set_pressed_no_signal(false)
+		btn_ff.set_pressed_no_signal(false)
+
+	elif speed > 1.0:
+		btn_ff.set_pressed_no_signal(true)
+		btn_pause.set_pressed_no_signal(false)
+		btn_play.set_pressed_no_signal(false)
+
+	else:
+		btn_play.set_pressed_no_signal(true)
+		btn_pause.set_pressed_no_signal(false)
+		btn_ff.set_pressed_no_signal(false)

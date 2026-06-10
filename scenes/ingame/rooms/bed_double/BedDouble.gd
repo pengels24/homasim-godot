@@ -14,10 +14,15 @@ static func get_definition() -> Dictionary:
 		"label":         "DZ",
 		"name":          "Doppelzimmer",
 		"category":      "zimmer",
-		"icon":          "res://assets/icons/HUDBottom/bed-double.svg",
+		"icon":          "res://assets/icons/rooms/bed-double.svg",
 		"nightly_price": 120,
 		"locked":        false,
 		"in_build_menu": true,
+		"req_level": 0,
+		"req_tech": "",
+		"max_beds": 2,
+		"open_from": 0,
+		"open_to": 0,
 	}
 
 

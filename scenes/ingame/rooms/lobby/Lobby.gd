@@ -26,8 +26,14 @@ static func get_definition() -> Dictionary:
 		"name":          "Lobby / Rezeption",
 		"category":      "management",
 		"icon":          "",
+		"nightly_price": 0,
 		"locked":        false,
 		"in_build_menu": false,
+		"req_level": 0,
+		"req_tech": "",
+		"max_beds": 0,
+		"open_from": 420,
+		"open_to": 1320,
 	}
 
 

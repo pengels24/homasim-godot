@@ -14,6 +14,9 @@ const DOOR_SLOTS: Array[Array] = [
 	["B1", "B2", "B3", "B4", "B5"],
 ]
 
+# externe
+var _guest_mgr: GuestManager
+
 # ── Raum-Identität ────────────────────────────────────────────────────────────
 var room_type_id: String = ""     # "lobby", "bed_standard", …
 var room_level:   int    = 1
@@ -33,6 +36,9 @@ var door_rotation: int = 0   # Welche Wand   0–3  (.-Taste: nur Tür wandert)
 var door_offset:   int = 0   # Position auf Wand 0–1  (,-Taste)
 var room_rotation: int = 0   # Interior-Rotation 0–3  (R-Taste: ganzer Raum dreht)
 
+# ── UI / Indikatoren ──────────────────────────────────────────────────────────
+const INDICATOR_SCENE := preload("res://scenes/ingame/rooms/RoomStatusIndicator.tscn")
+var _status_indicator: RoomStatusIndicator
 
 # ── Definition (von Unterklassen überschreiben) ───────────────────────────────
 
@@ -42,7 +48,7 @@ static func get_definition() -> Dictionary:
 	return {
 		"id":            "",
 		"build_cost":    0,
-		"xp_reward":     0,
+		"exp_reward":     0,
 		"prefix":        "Z",
 		"label":         "?",
 		"name":          "Unbekannter Raum",
@@ -51,12 +57,23 @@ static func get_definition() -> Dictionary:
 		"nightly_price": 0,
 		"locked":        false,
 		"in_build_menu": false,
+		"req_level": 0,
+		"req_tech": "",
+		"max_beds": 0,
+		"open_from": 0,
+		"open_to": 0,
 	}
 
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
+
 func configure(data: Dictionary) -> void:
+	_guest_mgr    = data.get("guest_manager", _guest_mgr)
+
+	if _guest_mgr != null and not _guest_mgr.parties_changed.is_connected(_update_indicator):
+		_guest_mgr.parties_changed.connect(_update_indicator)
+
 	room_type_id  = data.get("room_type_id",  room_type_id)
 	room_level    = data.get("room_level",    room_level)
 	room_number   = data.get("room_number",   room_number)
@@ -69,6 +86,7 @@ func configure(data: Dictionary) -> void:
 	door_offset   = data.get("door_offset",   door_offset)
 	room_rotation = data.get("room_rotation", room_rotation)
 	_apply_visuals()
+	_update_indicator()
 
 
 func to_dict() -> Dictionary:
@@ -159,3 +177,43 @@ func set_floor_neighbors(_top: bool, _right: bool, _bottom: bool, _left: bool) -
 
 func _apply_visuals() -> void:
 	pass
+
+
+# =============================================================================
+func _update_indicator() -> void:
+	# 1. LAZY INSTANTIATION: Wenn es den Indikator noch nicht gibt, bauen wir ihn JETZT.
+	if not is_instance_valid(_status_indicator):
+		_status_indicator = INDICATOR_SCENE.instantiate()
+		add_child(_status_indicator)
+
+		# 1. POSITION: Ab in die obere linke Ecke (z.B. 4 Pixel vom Rand)
+		_status_indicator.position = Vector2(4, 4)
+		_status_indicator.scale = Vector2(0.5, 0.5) # Werte ggf. anpassen (z.B. 0.3, 0.3)
+		_status_indicator.z_index = 100
+		_status_indicator.z_as_relative = false
+
+
+	# 2. HOLEN DER DATEN:
+	var def = get_definition()
+	if def.get("max_beds", 0) == 0:
+		_status_indicator.visible = false
+		return
+
+	_status_indicator.visible = true
+
+	if cleanliness < 50 or condition < 50:
+		_status_indicator.set_state(RoomStatusIndicator.RoomState.SERVICE)
+	else:
+		# Sicherheits-Check, falls der Raum (z.B. im Baumodus) noch keinen Manager hat
+		if _guest_mgr:
+			var party = _guest_mgr.get_party_in_room(self)
+
+			if party != null:
+				if party.state == "checkout":
+					_status_indicator.set_state(RoomStatusIndicator.RoomState.CHECKOUT)
+				else:
+					_status_indicator.set_state(RoomStatusIndicator.RoomState.OCCUPIED)
+				return # <-- Wichtig, damit er nicht in den FREE-Block unten rennt
+
+		# Fallback: Kein Gast da (oder kein Manager zugewiesen)
+		_status_indicator.set_state(RoomStatusIndicator.RoomState.FREE)

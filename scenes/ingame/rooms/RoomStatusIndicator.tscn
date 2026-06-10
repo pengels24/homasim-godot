@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ccgtp2kpkbyhb"]
+
+[ext_resource type="Script" uid="uid://dmepe6kyhtf8x" path="res://scenes/ingame/rooms/RoomStatusIndicator.gd" id="1_i30wr"]
+
+[node name="RoomStatusIndicator" type="Node2D" unique_id=851193798]
+script = ExtResource("1_i30wr")

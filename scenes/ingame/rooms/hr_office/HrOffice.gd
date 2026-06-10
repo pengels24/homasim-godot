@@ -8,15 +8,20 @@ static func get_definition() -> Dictionary:
 	return {
 		"id":            "hr_office",
 		"build_cost":    800,
-		"exp_reward":     50,
+		"exp_reward":     80,
 		"prefix":        "V",
 		"label":         "PB",
 		"name":          "Personalbüro",
 		"category":      "management",
-		"icon":          "res://assets/icons/HUDBottom/users.svg",
+		"icon":          "res://assets/icons/rooms/users.svg",
 		"nightly_price": 0,
 		"locked":        false,
 		"in_build_menu": true,
+		"req_level": 2,
+		"req_tech": "",
+		"max_beds": 0,
+		"open_from": 0,
+		"open_to": 0,
 	}
 
 

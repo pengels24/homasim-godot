@@ -13,10 +13,15 @@ static func get_definition() -> Dictionary:
 		"label":         "EZ",
 		"name":          "Einzelzimmer",
 		"category":      "zimmer",
-		"icon":          "res://assets/icons/HUDBottom/bed-single.svg",
+		"icon":          "res://assets/icons/rooms/bed-single.svg",
 		"nightly_price": 60,
 		"locked":        false,
 		"in_build_menu": true,
+		"req_level": 0,
+		"req_tech": "",
+		"max_beds": 1,
+		"open_from": 0,
+		"open_to": 0,
 	}
 
 

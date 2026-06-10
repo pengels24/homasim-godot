@@ -8,15 +8,20 @@ static func get_definition() -> Dictionary:
 	return {
 		"id":            "sc_office",
 		"build_cost":    1200,
-		"exp_reward":     50,
+		"exp_reward":     120,
 		"prefix":        "V",
 		"label":         "FB",
 		"name":          "Forschungsbüro",
 		"category":      "management",
-		"icon":          "res://assets/icons/HUDBottom/flask-conical.svg",
+		"icon":          "res://assets/icons/rooms/flask-conical.svg",
 		"nightly_price": 0,
 		"locked":        false,
 		"in_build_menu": true,
+		"req_level": 3,
+		"req_tech": "",
+		"max_beds": 0,
+		"open_from": 0,
+		"open_to": 0,
 	}
 
 

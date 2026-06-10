@@ -1,3 +1,5 @@
+# GameState - autoload
+
 extends Node
 
 ## Shared Game State – speichert spielübergreifende Daten wie den eingeloggten User
@@ -22,6 +24,15 @@ signal sig_hotel_time_changed(time_string: String)
 
 signal sig_hotel_level_up(new_level: int)
 
+# globale signale
+signal sig_dev_spawn_guests(count: int)
+
+# REGISTRY - Zentrales Verzeichnis aller geladenen Räume.
+## Struktur: { "room_id": { "scene_path": String, "def": Dictionary } }
+var room_registry: Dictionary = {}
+## Zentrales Verzeichnis aller Bau-Kategorien.
+var room_category_registry: Dictionary = {}
+
 # =============================================================================
 
 var current_user:      Dictionary = {}
@@ -31,6 +42,74 @@ var active_hotel_id:   int        = -1   # SaveManager-Hotel-ID; -1 = kein Hotel
 var active_profile_id: int        = -1   # SaveManager-Profil-ID; -1 = kein Profil gewählt
 var active_profile:    Dictionary = {}   # Aktives Manager-Profil
 var snap_to_grid:      bool       = true  # Tile-Snap im Baumodus (Settings-Toggle)
+
+
+# =============================================================================
+func _ready() -> void:
+	load_room_category_config()
+	load_room_config()
+
+
+# =============================================================================
+## Lädt die room_categories.json und baut das room_category_registry auf.
+func load_room_category_config() -> void:
+	var config_path := "res://config/room_categories.json"
+
+	if not FileAccess.file_exists(config_path):
+		push_error("GameState: config/room_categories.json nicht gefunden!")
+		return
+
+	var file := FileAccess.open(config_path, FileAccess.READ)
+	var parsed_data = JSON.parse_string(file.get_as_text())
+
+	if type_string(typeof(parsed_data)) != "Dictionary" or not parsed_data.has("room_categories"):
+		push_error("GameState: Fehler beim Parsen der room_categories.json!")
+		return
+
+	room_category_registry = parsed_data["room_categories"]
+	print("GameState: Room Category Registry geladen. ", room_category_registry.size(), " Kategorien registriert.")
+
+
+# =============================================================================
+## Lädt die rooms.json und baut das room_registry auf.
+## Kann zur Laufzeit erneut aufgerufen werden (z.B. über die Entwickler-Konsole).
+func load_room_config() -> void:
+	var config_path := "res://config/rooms.json"
+
+	if not FileAccess.file_exists(config_path):
+		push_error("GameState: config/rooms.json nicht gefunden!")
+		return
+
+	var file := FileAccess.open(config_path, FileAccess.READ)
+	var json_string := file.get_as_text()
+	var parsed_data = JSON.parse_string(json_string)
+
+	if type_string(typeof(parsed_data)) != "Dictionary" or not parsed_data.has("rooms"):
+		push_error("GameState: Fehler beim Parsen der rooms.json!")
+		return
+
+	room_registry.clear()
+
+	for room_entry in parsed_data["rooms"]:
+		var r_id: String = room_entry.get("id", "")
+		var scene_path: String = room_entry.get("scene_path", "")
+		var script_path: String = room_entry.get("script_path", "")
+
+		if r_id.is_empty() or script_path.is_empty():
+			continue
+
+		# Skript laden, um die get_definition() abzurufen
+		var room_script = load(script_path)
+		if room_script and room_script.has_method("get_definition"):
+			var def: Dictionary = room_script.get_definition()
+
+			# Im Registry speichern
+			room_registry[r_id] = {
+				"scene_path": scene_path,
+				"def": def
+			}
+
+	print("GameState: Room Registry geladen. ", room_registry.size(), " Räume registriert.")
 
 
 # =============================================================================
@@ -96,7 +175,7 @@ func select_hotel(hotel_data: Dictionary) -> void:
 	var hotel_guests_checkout: int = int(hotel_data.get("guests_checkout", 30))
 	var hotel_exp: int = int(hotel_data.get("exp", 25))
 	var hotel_exp_max: int  = int(hotel_data.get("exp_max", 100))
-	var hotel_rep: int = int(hotel_data.get("rep", 200))
+	var hotel_rep: int = int(hotel_data.get("rep", 500))
 	var hotel_rep_max: int  = int(hotel_data.get("rep_max", 1000))
 	var hotel_fp: int   = int(hotel_data.get("fp", 0))
 	var hotel_day: int   = int(hotel_data.get("day", 0))
@@ -128,6 +207,27 @@ func format_game_time(total_minutes: int) -> String:
 	var hours: int = int(floor(total_minutes / 60.0))
 	var minutes: int = total_minutes % 60
 	return "%02d:%02d" % [hours, minutes]
+
+
+# =============================================================================
+## Prüft anhand der Raum-Definition, ob eine Einrichtung aktuell geöffnet ist.
+## open_from = 0 und open_to = 0 bedeutet 24/7 geöffnet.
+func is_facility_open(def: Dictionary) -> bool:
+	var open_from: int = def.get("open_from", 0)
+	var open_to: int = def.get("open_to", 0)
+
+	if open_from == 0 and open_to == 0:
+		return true
+
+	var current_time: int = TimeManager.get_game_time()
+
+	if open_from < open_to:
+		# Regulärer Tag (z.B. 07:00 bis 22:00)
+		return current_time >= open_from and current_time < open_to
+
+	else:
+		# Nachtbetrieb über Mitternacht (z.B. 22:00 bis 04:00)
+		return current_time >= open_from or current_time < open_to
 
 
 # =============================================================================
@@ -176,10 +276,12 @@ func add_fp(amount: int) -> void:
 # =============================================================================
 ## Berechnet die benötigte EXP für ein bestimmtes Level basierend auf dem Modell.
 func get_xp_needed_for_level(level: int) -> int:
+	var base_exp = 500 # <--- NEU: Vorher 100. Das erste Level dauert nun 5x so lang.
+
 	if level <= 1:
-		return 100
+		return base_exp
 	elif level <= 5:
-		return int(100 * pow(1.5, level - 1))
+		return int(base_exp * pow(1.5, level - 1))
 	elif level <= 10:
 		return int(get_xp_needed_for_level(5) * pow(1.4, level - 5))
 	else:
@@ -213,3 +315,52 @@ func add_exp(amount: int) -> void:
 	selected_hotel["exp"] = current_exp
 	sig_hotel_exp_changed.emit(current_exp, exp_max)
 	sig_hotel_level_changed.emit(current_level)
+
+
+# =============================================================================
+func add_rep(amount: int) -> void:
+	var current_rep: int = selected_hotel.get("rep", 500)
+	var rep_max: int = selected_hotel.get("rep_max", 1000)
+
+	current_rep += amount
+
+	# Begrenzung: Ruf sinkt nicht unter 0 und steigt nicht über Max
+	current_rep = clamp(current_rep, 0, rep_max)
+
+	selected_hotel["rep"] = current_rep
+	sig_hotel_rep_changed.emit(current_rep, rep_max)
+
+
+# =============================================================================
+# BALANCING & BERECHNUNGEN
+# =============================================================================
+
+# =============================================================================
+## Berechnet die EXP beim Check-in.
+func calc_checkin_exp(party: GuestParty) -> int:
+	var def: Dictionary = GuestDefinitions.ALL.get(party.type, {})
+	var base_exp: int = def.get("base_exp", 10)
+
+	# Wir geben fürs Erste NUR den flachen Basiswert aus der Definition.
+	# Eine Familie gibt also genau 15 EXP, ein Single genau 10.
+	# (Die Nächte belohnen wir später lieber separat beim Check-out!)
+	return base_exp
+
+
+# =============================================================================
+## Berechnet den Ruf-Verlust beim Rauswurf.
+func calc_reject_rep_penalty(party: GuestParty) -> int:
+	# Werte aus der Definition holen, mit Fallback auf 5, falls noch nicht eingetragen
+	var def: Dictionary = GuestDefinitions.ALL.get(party.type, {})
+	var penalty: int = def.get("rep_penalty", 5)
+
+	# Hier reicht meist der reine Basiswert der Gruppe ohne Formel
+	return penalty
+
+
+# =============================================================================
+## Hilfsfunktion für MapGrid.gd und das Bau-Menü, um den Szenen-Pfad zu holen.
+func get_room_scene_path(room_type_id: String) -> String:
+	if room_registry.has(room_type_id):
+		return room_registry[room_type_id].get("scene_path", "")
+	return ""

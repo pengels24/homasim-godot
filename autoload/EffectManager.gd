@@ -1,3 +1,5 @@
+# EffectManager
+
 extends Node
 
 # Hier merkt sich der Manager die UI-Ziele
@@ -33,6 +35,7 @@ func spawn_fp_text(amount: int, world_pos: Vector2) -> void:
 # UI EFFEKTE (Neu hinzugefügt)
 # =============================================================================
 
+# =============================================================================
 # Startet einen weichen Transparenz-Puls und gibt den Tween zurück.
 func start_ui_pulse(target_node: Control, duration: float = 0.8) -> Tween:
 	# Prüfen, ob der Node (noch) existiert, um Fehler zu vermeiden
@@ -48,6 +51,8 @@ func start_ui_pulse(target_node: Control, duration: float = 0.8) -> Tween:
 
 	return tween
 
+
+# =============================================================================
 # Stoppt einen aktiven Puls-Effekt und stellt die Sichtbarkeit wieder vollständig her.
 func stop_ui_pulse(target_node: Control, tween: Tween) -> void:
 	if is_instance_valid(tween):

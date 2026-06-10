@@ -1,3 +1,5 @@
+# InputHandler
+
 extends Node
 
 # Die verschiedenen Zustände des Spiels
@@ -33,6 +35,7 @@ signal sig_hotkey_sim_browser_requested
 signal sig_hotkey_escape_pressed
 signal sig_hotkey_quicksave_requested
 signal sig_hotkey_quickload_requested
+
 
 # =============================================================================
 func _process(delta: float) -> void:
@@ -87,10 +90,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 		# HIER PASSIERT JETZT DIE EXAKTE TRENNUNG:
 		if not is_view_saved:
-			print("=> [Spur 1-Save] InputHandler: Sende AUSSCHLIESSLICH sig_camera_save_view_requested")
 			sig_camera_save_view_requested.emit()
 		else:
-			print("=> [Spur 1-Restore] InputHandler: Sende AUSSCHLIESSLICH sig_camera_restore_view_requested")
 			sig_camera_restore_view_requested.emit()
 		return
 
@@ -104,9 +105,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("ui_build_menu"):
 		get_viewport().set_input_as_handled()
-		if current_mode == InputMode.NORMAL:
-			current_mode = InputMode.BUILD
-			sig_hotkey_build_menu_requested.emit()
+		sig_hotkey_build_menu_requested.emit()
 		return
 
 	if event.is_action_pressed("ui_reception"):

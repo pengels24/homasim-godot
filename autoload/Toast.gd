@@ -1,3 +1,5 @@
+# Toast
+
 extends Node
 ## Toast – globaler Singleton für kurze UI-Benachrichtigungen.
 ## Aufruf: Toast.show("Meine Nachricht")

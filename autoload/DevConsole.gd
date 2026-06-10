@@ -1,7 +1,5 @@
 extends CanvasLayer
 class_name DevConsole
-## ANG-174 – Dev-Konsole. Nur im Debug-Build aktiv (OS.is_debug_build()).
-## Toggle: F12. Befehlsformat: name:wert (z.B. set-money:50000).
 
 @onready var _panel:     PanelContainer  = $Panel
 @onready var _header:    HBoxContainer   = $Panel/Margin/VBox/Header
@@ -12,7 +10,6 @@ class_name DevConsole
 
 var _hotel:       Dictionary = {}
 var _hud:         Node
-var _clock:       IngameClock
 var _was_paused:  bool    = true
 var _dragging:    bool    = false
 var _drag_offset: Vector2 = Vector2.ZERO
@@ -23,18 +20,17 @@ const CLR_INFO := Color(0.55, 0.75, 0.55, 1.0)
 const CLR_CMD  := Color(0.90, 0.90, 0.90, 1.0)
 
 
+# =============================================================================
 func _ready() -> void:
-	# Diese Basis-Dinge funktionieren jetzt IMMER, egal ob Hauptmenü oder Ingame
 	_close_btn.pressed.connect(_close)
 	_input_field.text_submitted.connect(_on_input_submitted)
 	_header.gui_input.connect(_on_header_gui_input)
 
 
-func configure(hotel: Dictionary, hud: Node, clock: IngameClock) -> void:
+# =============================================================================
+func configure(hotel: Dictionary, hud: Node) -> void:
 	_hotel = hotel
 	_hud   = hud
-	_clock = clock
-	# Die connect-Zeilen hier löschen, die sind ja jetzt in _ready()
 	_log("Dev-Konsole bereit. Tippe \"help\" für alle Befehle.", CLR_INFO)
 
 
@@ -48,14 +44,10 @@ func toggle() -> void:
 
 # =============================================================================
 func _open() -> void:
-	# Nur pausieren, wenn wir wirklich im Spiel sind und die Uhr existiert
-	if is_instance_valid(_clock):
-		_was_paused = _clock.is_paused()
-		_clock.pause()
-
-	# InputHandler in den Konsolen-Modus zwingen!
+	# Nur pausieren, wenn wir wirklich im Spiel sind
+	_was_paused = TimeManager.is_paused()
+	TimeManager.pause()
 	InputHandler.current_mode = InputHandler.InputMode.CONSOLE
-
 	visible = true
 	_input_field.grab_focus()
 
@@ -64,10 +56,9 @@ func _open() -> void:
 func _close() -> void:
 	visible = false
 
-	if is_instance_valid(_clock) and not _was_paused:
-		_clock.resume()
+	if not _was_paused:
+		TimeManager.resume()
 
-	# InputHandler wieder freigeben
 	InputHandler.current_mode = InputHandler.InputMode.NORMAL
 
 
@@ -75,12 +66,15 @@ func _close() -> void:
 func _on_header_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		var mb := event as InputEventMouseButton
+
 		if mb.button_index == MOUSE_BUTTON_LEFT:
 			if mb.pressed:
 				_dragging    = true
 				_drag_offset = _panel.position - get_viewport().get_mouse_position()
+
 			else:
 				_dragging = false
+
 	elif event is InputEventMouseMotion and _dragging:
 		var new_pos := get_viewport().get_mouse_position() + _drag_offset
 		var vp      := get_viewport().get_visible_rect().size
@@ -91,13 +85,11 @@ func _on_header_gui_input(event: InputEvent) -> void:
 
 # =============================================================================
 func _input(event: InputEvent) -> void:
-	# 1. Globaler Toggle mit F12 (Nur im Debug-Build!)
 	if OS.is_debug_build() and event is InputEventKey and event.pressed and event.keycode == KEY_F12:
 		get_viewport().set_input_as_handled()
 		toggle()
 		return
 
-	# 2. Schließen mit ESC
 	if visible and event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
 		_close()
@@ -128,6 +120,8 @@ func _execute(cmd: String) -> void:
 			_log("  set-time:1320     – Setzt Uhrzeit (360=06:00 bis 1439=23:59)", CLR_INFO)
 			_log("  get-time:2200     – HHMM → Spielminuten", CLR_INFO)
 			_log("  save              – Quicksave auslösen", CLR_INFO)
+			_log("  spawn-guests:3    – Spawnt 3 neue Gästegruppen", CLR_INFO)
+			_log("  reload-conig      – Lädt die JSoN-Daten aus config neu ein", CLR_INFO)
 
 		"set-money":
 			if not val_s.is_valid_int():
@@ -163,7 +157,8 @@ func _execute(cmd: String) -> void:
 			if mins < 360 or mins > 1439:
 				_log("Fehler: Wert muss zwischen 360 (06:00) und 1439 (23:59) liegen.", CLR_ERR)
 				return
-			_clock.set_game_time(mins)
+			# _clock.set_game_time(mins)
+			TimeManager.set_game_time(mins)
 			_log("Uhrzeit gesetzt auf %02d:%02d." % [int(mins / 60.0), mins % 60], CLR_OK)
 
 		"get-time":
@@ -185,11 +180,34 @@ func _execute(cmd: String) -> void:
 			SaveManager.update_hotel(hotel_id, {
 				"day":       _hotel.get("day",   1),
 				"money":     _hotel.get("money", 0.0),
-				"game_time": _clock.get_game_time(),
+				# "game_time": _clock.get_game_time(),
+				"game_time": TimeManager.get_game_time(),
 			})
 			SaveManager.save_quick(hotel_id)
 			Toast.show(GameState.T("toast.quicksave"))
 			_log("Quicksave gespeichert.", CLR_OK)
+
+		"spawn-guests":
+			if not val_s.is_valid_int():
+				_log("Fehler: Anzahl muss eine ganze Zahl sein.", CLR_ERR)
+				return
+
+			var count := int(val_s)
+			if count < 1:
+				_log("Fehler: Anzahl muss >= 1 sein.", CLR_ERR)
+				return
+
+			GameState.sig_dev_spawn_guests.emit(count)
+			_log("Befehl zum Spawnen von %d Parteien gesendet." % count, CLR_OK)
+
+		"reload-config":
+			if hotel_id < 0:
+				_log("Fehler: Kein Hotel geladen.", CLR_ERR)
+				return
+
+			GameState.load_room_config()
+			Toast.show(GameState.T("CONFIGS neu geladen"))
+			_log("CONFIGS neu geladen.", CLR_OK)
 
 		_:
 			_log("Unbekannter Befehl: \"%s\". Tippe \"help\"." % cmd_name, CLR_ERR)

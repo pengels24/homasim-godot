@@ -1,3 +1,5 @@
+# ActivityLog
+
 extends Node
 ## Globales Activity-Log: schreibt Einträge bei jedem Gast-Event.
 ## UI-Darstellung kommt als eigenes Issue.

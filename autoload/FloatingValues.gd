@@ -1,3 +1,5 @@
+# FloatingValues
+
 extends CanvasLayer
 ## ANG-191 – Spawnt animierte Ressourcen-Labels (Kapital, XP, FP).
 ## Aufruf: FloatingValues.spawn("−500 €", -500.0, world_pos, target_node)

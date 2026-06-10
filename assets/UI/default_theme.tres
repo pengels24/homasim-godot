@@ -53,6 +53,25 @@ border_color = Color(0.4, 0.4, 0.4, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qx8ka"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.043137256, 0.05882353, 0.09019608, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.6117647, 0.4745098, 0.047058824, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0, 0, 0, 0.5882353)
+shadow_size = 5
+shadow_offset = Vector2(5, 5)
+
 [resource]
 default_base_scale = 1.0
 default_font = ExtResource("1_vos2p")
@@ -71,3 +90,6 @@ TabContainer/styles/panel = SubResource("StyleBoxFlat_1y6f5")
 TabContainer/styles/tab_hovered = SubResource("StyleBoxFlat_n1ha2")
 TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_0a7r7")
 TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_is7be")
+TooltipLabel/colors/font_color = Color(0.8, 0.8, 0.8, 1)
+TooltipLabel/font_sizes/font_size = 20
+TooltipPanel/styles/panel = SubResource("StyleBoxFlat_qx8ka")

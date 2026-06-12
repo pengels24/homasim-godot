@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://dvwf0ma4rn7ns"]
+
+[ext_resource type="Script" uid="uid://bc8o1xopxudlj" path="res://scenes/ingame/guest/guestavatar/GuestAvatar.gd" id="1_5euny"]
+[ext_resource type="Texture2D" uid="uid://c8hass4sjg3yj" path="res://assets/guests/guest_avatar_01.aseprite" id="2_5euny"]
+[ext_resource type="Texture2D" uid="uid://dvht5sljs58ra" path="res://assets/guests/guest_avatar_hair_male.aseprite" id="3_wi6o3"]
+[ext_resource type="Texture2D" uid="uid://ddbp754v0o8od" path="res://assets/guests/guest_avatar_body_male.aseprite" id="4_huk18"]
+[ext_resource type="Texture2D" uid="uid://ce6ewl3xwkldk" path="res://assets/guests/guest_avatar_female.aseprite" id="5_a44pv"]
+[ext_resource type="Texture2D" uid="uid://b0cxfgkpjbiow" path="res://assets/guests/guest_avatar_hair_female.aseprite" id="6_2a0vq"]
+[ext_resource type="Texture2D" uid="uid://c0o38nx5jiae6" path="res://assets/guests/guest_avatar_body_female.aseprite" id="7_tb4k5"]
+
+[node name="GuestAvatar" type="Node2D" unique_id=1269709945]
+script = ExtResource("1_5euny")
+
+[node name="Male" type="Node2D" parent="." unique_id=1468963890]
+unique_name_in_owner = true
+
+[node name="MaleDefault" type="Sprite2D" parent="Male" unique_id=1312541912]
+unique_name_in_owner = true
+rotation = 1.5707964
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("2_5euny")
+
+[node name="MaleHair" type="Sprite2D" parent="Male" unique_id=1902482380]
+unique_name_in_owner = true
+rotation = 1.5707964
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("3_wi6o3")
+
+[node name="MaleBody" type="Sprite2D" parent="Male" unique_id=691101789]
+unique_name_in_owner = true
+rotation = 1.5707964
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("4_huk18")
+
+[node name="Female" type="Node2D" parent="." unique_id=1208952807]
+unique_name_in_owner = true
+
+[node name="FemaleDefault" type="Sprite2D" parent="Female" unique_id=371097999]
+unique_name_in_owner = true
+rotation = 1.5707964
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("5_a44pv")
+
+[node name="FemaleHair" type="Sprite2D" parent="Female" unique_id=442144162]
+unique_name_in_owner = true
+rotation = 1.5707964
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("6_2a0vq")
+
+[node name="FemaleBody" type="Sprite2D" parent="Female" unique_id=455369974]
+unique_name_in_owner = true
+rotation = 1.5707964
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("7_tb4k5")

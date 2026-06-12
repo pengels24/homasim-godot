@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cone0bkotycuj"]
+
+[ext_resource type="Script" uid="uid://dgd3ydm2odxlc" path="res://scenes/ingame/hud/modals/content/ModalContentEndOfDay.gd" id="1_1tvma"]
+
+[node name="ModalContentEndOfDay" type="PanelContainer" unique_id=1792935592]
+script = ExtResource("1_1tvma")

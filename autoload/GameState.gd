@@ -26,12 +26,15 @@ signal sig_hotel_level_up(new_level: int)
 
 # globale signale
 signal sig_dev_spawn_guests(count: int)
+signal sig_configs_reloaded()
 
 # REGISTRY - Zentrales Verzeichnis aller geladenen Räume.
 ## Struktur: { "room_id": { "scene_path": String, "def": Dictionary } }
 var room_registry: Dictionary = {}
 ## Zentrales Verzeichnis aller Bau-Kategorien.
 var room_category_registry: Dictionary = {}
+## Zentrales Verzeichnis für den Master-Tagesplan.
+var daily_schedule_registry: Array = []
 
 # =============================================================================
 
@@ -48,6 +51,9 @@ var snap_to_grid:      bool       = true  # Tile-Snap im Baumodus (Settings-Togg
 func _ready() -> void:
 	load_room_category_config()
 	load_room_config()
+	load_daily_schedule_config()
+	# Das macht diesen Autoload immun gegen die Godot-Pause!
+	process_mode = Node.PROCESS_MODE_ALWAYS
 
 
 # =============================================================================
@@ -110,6 +116,43 @@ func load_room_config() -> void:
 			}
 
 	print("GameState: Room Registry geladen. ", room_registry.size(), " Räume registriert.")
+
+
+# =============================================================================
+## Lädt die daily_schedule.json und baut das daily_schedule_registry auf.
+func load_daily_schedule_config() -> void:
+	var config_path := "res://config/daily_schedule.json"
+
+	if not FileAccess.file_exists(config_path):
+		push_error("GameState: config/daily_schedule.json nicht gefunden!")
+		return
+
+	var file := FileAccess.open(config_path, FileAccess.READ)
+	var content := file.get_as_text()
+	file.close()
+
+	var parsed_data = JSON.parse_string(content)
+	if typeof(parsed_data) == TYPE_ARRAY:
+		daily_schedule_registry.clear()
+
+		for entry in parsed_data:
+			if typeof(entry) == TYPE_DICTIONARY and entry.has("hour") and entry.has("event"):
+				var h: int = int(entry["hour"])
+				var m: int = int(entry.get("minute", 0))
+				var trigger_time: int = (h * 60) + m
+
+				daily_schedule_registry.append({
+					"trigger_time": trigger_time,
+					"event": entry["event"]
+				})
+			else:
+				push_error("GameState: Ungültiges Event-Format in daily_schedule.json.")
+
+		daily_schedule_registry.sort_custom(func(a, b): return a["trigger_time"] < b["trigger_time"])
+		print("GameState: Daily Schedule geladen. ", daily_schedule_registry.size(), " Events registriert.")
+
+	else:
+		push_error("GameState: Ungültiges JSON-Format (kein Array) in: " + config_path)
 
 
 # =============================================================================
@@ -364,3 +407,11 @@ func get_room_scene_path(room_type_id: String) -> String:
 	if room_registry.has(room_type_id):
 		return room_registry[room_type_id].get("scene_path", "")
 	return ""
+
+
+# =============================================================================
+func reload_all_configs() -> void:
+	load_room_category_config()
+	load_room_config()
+	load_daily_schedule_config()
+	sig_configs_reloaded.emit()

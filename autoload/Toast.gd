@@ -12,6 +12,8 @@ var _pending: String = ""
 
 
 func _ready() -> void:
+	# Das macht diesen Autoload immun gegen die Godot-Pause!
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().node_added.connect(_on_node_added)
 
 

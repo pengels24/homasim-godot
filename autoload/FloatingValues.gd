@@ -14,6 +14,8 @@ const COLOR_NEG := Color(0.95, 0.28, 0.28, 1.0)  # rot
 # =============================================================================
 func _ready() -> void:
 	layer = 99
+	# Das macht diesen Autoload immun gegen die Godot-Pause!
+	process_mode = Node.PROCESS_MODE_ALWAYS
 
 
 # =============================================================================

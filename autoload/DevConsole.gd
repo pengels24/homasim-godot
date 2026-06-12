@@ -201,10 +201,6 @@ func _execute(cmd: String) -> void:
 			_log("Befehl zum Spawnen von %d Parteien gesendet." % count, CLR_OK)
 
 		"reload-config":
-			if hotel_id < 0:
-				_log("Fehler: Kein Hotel geladen.", CLR_ERR)
-				return
-
 			GameState.load_room_config()
 			Toast.show(GameState.T("CONFIGS neu geladen"))
 			_log("CONFIGS neu geladen.", CLR_OK)

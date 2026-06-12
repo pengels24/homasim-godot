@@ -8,6 +8,11 @@ signal entry_added(entry: Dictionary)
 
 var _entries: Array = []
 
+# =============================================================================
+func _ready() -> void:
+	# Das macht diesen Autoload immun gegen die Godot-Pause!
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
 
 # =============================================================================
 func add(type: String, message: String, game_day: int, game_time: int) -> void:

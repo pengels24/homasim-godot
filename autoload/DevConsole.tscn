@@ -45,6 +45,7 @@ border_width_bottom = 1
 border_color = Color(0, 0.7, 0.2, 0.8)
 
 [node name="DevConsole" type="CanvasLayer" unique_id=1479635570]
+process_mode = 3
 layer = 127
 visible = false
 script = ExtResource("1_script")

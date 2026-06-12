@@ -44,6 +44,8 @@ var ui_hudbottom_pos_labels: Array[String] = [GameState.T("settings.ui.hud_side.
 
 # =============================================================================
 func _ready() -> void:
+	# Das macht diesen Autoload immun gegen die Godot-Pause!
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_load()
 	_apply_audio()
 	call_deferred("_apply_startup_scale")

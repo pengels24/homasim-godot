@@ -11,6 +11,8 @@ var saved_username: String = ""
 
 # =============================================================================
 func _ready() -> void:
+	# Das macht diesen Autoload immun gegen die Godot-Pause!
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_load()
 
 

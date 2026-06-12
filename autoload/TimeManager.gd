@@ -11,6 +11,9 @@ signal sig_speed_changed(is_paused: bool, current_speed: float)
 signal sig_minute_passed(total_game_minutes: int)
 signal sig_time_jumped(new_time: int) # <--- NEU: Signal für den DevConsole Zeitsprung
 
+signal sig_midnight_struck(day: int) # <--- NEU: Für den Kassensturz (23:59)
+signal sig_morning_struck()          # <--- NEU: Fürs Aufstehen (06:00)
+
 const SECONDS_PER_GAME_MINUTE := 2.0
 
 var _hotel_ref: Dictionary # Merken wir uns, um Tag/Zeit beim Tageswechsel ins Savegame zu schreiben
@@ -20,6 +23,12 @@ var _game_minute: int = 0
 var _game_paused: bool = true
 var _game_speed: float = 1.0
 var _time_accum: float = 0.0
+
+
+# =============================================================================
+func _ready() -> void:
+  # Das macht diesen Autoload immun gegen die Godot-Pause!
+  process_mode = Node.PROCESS_MODE_ALWAYS
 
 
 # =============================================================================
@@ -53,6 +62,7 @@ func is_paused() -> bool:
 # =============================================================================
 func pause() -> void:
   _game_paused = true
+  get_tree().paused = true # <--- NEU: Die harte Engine-Pause!
   sig_speed_changed.emit(_game_paused, _game_speed)
 
 
@@ -60,6 +70,7 @@ func pause() -> void:
 func resume() -> void:
   _game_paused = false
   _game_speed = 1.0
+  get_tree().paused = false # <--- NEU: Spielwelt läuft weiter
   sig_speed_changed.emit(_game_paused, _game_speed)
 
 
@@ -67,6 +78,7 @@ func resume() -> void:
 func fast_forward(ff_speed: float) -> void:
   _game_paused = false
   _game_speed = ff_speed
+  get_tree().paused = false # <--- NEU: Spielwelt läuft weiter (schneller)
   sig_speed_changed.emit(_game_paused, _game_speed)
 
 
@@ -101,25 +113,29 @@ func _tick_game_clock(delta: float) -> void:
     if _game_hour != prev_hour and _game_hour < 24:
       sig_hour_passed.emit(_game_hour)
 
+  # Um Punkt Mitternacht ist Schichtwechsel / Tagesabschluss
   if _game_hour >= 24:
-    _game_hour = 6
+    _game_hour = 24
     _game_minute = 0
     _game_paused = true
+    get_tree().paused = true
     _game_speed = 1.0
     sig_speed_changed.emit(_game_paused, _game_speed)
     _on_day_end()
 
   _update_time_ui()
-  sig_minute_passed.emit(get_game_time()) # <--- NEU
+  sig_minute_passed.emit(get_game_time())
 
 
 # =============================================================================
 func _on_day_end() -> void:
-  var new_day: int = int(_hotel_ref.get("day", 1)) + 1
-  _hotel_ref["day"] = new_day
-  _update_day_ui()
-  sig_day_ended.emit(new_day)
-  sig_save_requested.emit(get_game_time())
+  var current_day: int = int(_hotel_ref.get("day", 1))
+
+  # 1. Wir rufen laut, dass Mitternacht ist. Der GuestManager kann jetzt seine Strafen verteilen.
+  sig_midnight_struck.emit(current_day)
+
+  # 2. Erst DANACH sagen wir dem UI, dass der Tag beendet ist (damit die Strafen in der Kasse sind).
+  sig_day_ended.emit(current_day)
 
 
 # =============================================================================
@@ -139,3 +155,21 @@ func set_game_time(minutes: int) -> void:
   _game_minute = minutes % 60
   _update_time_ui()
   sig_time_jumped.emit(minutes) # <--- NEU: UI und Co. informieren!
+
+
+# =============================================================================
+func start_next_day() -> void:
+  var new_day: int = int(_hotel_ref.get("day", 1)) + 1
+  _hotel_ref["day"] = new_day
+
+  _game_hour = 6
+  _game_minute = 0
+
+  # NEU: 3. Wir rufen laut, dass es Morgen ist. Der GuestManager schickt jetzt die Leute zum Checkout.
+  sig_morning_struck.emit()
+
+  _update_day_ui()
+  _update_time_ui()
+
+  resume()
+  sig_save_requested.emit(get_game_time())

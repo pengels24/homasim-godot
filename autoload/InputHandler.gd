@@ -38,6 +38,12 @@ signal sig_hotkey_quickload_requested
 
 
 # =============================================================================
+func _ready() -> void:
+	# Das macht diesen Autoload immun gegen die Godot-Pause!
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
+
+# =============================================================================
 func _process(delta: float) -> void:
 	# Wenn Pause, ein Modal oder die Konsole offen ist, blockieren wir jegliche Tastatur-Bewegung
 	if current_mode in [InputMode.PAUSE, InputMode.MODAL, InputMode.CONSOLE]:

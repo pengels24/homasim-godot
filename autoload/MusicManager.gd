@@ -24,6 +24,9 @@ signal playback_changed  ## Wird emittiert wenn pause/resume/next ausgelöst wir
 
 # =============================================================================
 func _ready() -> void:
+	# Das macht diesen Autoload immun gegen die Godot-Pause!
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
 	_menu_player = AudioStreamPlayer.new()
 	_menu_player.bus = "Menu Music"
 	add_child(_menu_player)

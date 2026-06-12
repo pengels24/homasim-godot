@@ -9,6 +9,12 @@ var ui_fp_node: Control = null
 
 
 # =============================================================================
+func _ready() -> void:
+	# Das macht diesen Autoload immun gegen die Godot-Pause!
+	process_mode = Node.PROCESS_MODE_ALWAYS
+
+
+# =============================================================================
 # Wird gerufen, wenn Geld fliegt (egal ob Plus oder Minus)
 func spawn_money_text(amount: int, world_pos: Vector2) -> void:
 	if ui_money_node != null:

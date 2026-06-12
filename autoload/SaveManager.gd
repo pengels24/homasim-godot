@@ -19,6 +19,8 @@ var _next_hotel_id:   int   = 1
 
 # =============================================================================
 func _ready() -> void:
+	# Das macht diesen Autoload immun gegen die Godot-Pause!
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_ensure_dirs()
 	_load_profiles()
 	_load_all_hotels()
@@ -98,6 +100,7 @@ func create_hotel(profile_id: int, hotel_name: String, cols: int = 5, rows: int 
 		"exp_max": GameState.get_xp_needed_for_level(1),
 		"rep_max": 1000,
 		"fp": 0,
+		"transactions": [],
 	}
 	_hotels.append(hotel)
 	_save_profiles()
@@ -405,6 +408,7 @@ func _load_hotel_file(filename: String) -> void:
 		"rep_max": cfg.get_value("hotel", "rep_max", 1000),
 		"fp": cfg.get_value("hotel", "fp", 0),
 		"guest_data": cfg.get_value("hotel", "guest_data", {}),
+		"transactions": cfg.get_value("hotel", "transactions", []),
 	}
 
 	# Alle dynamischen Zimmer-Zähler aus der Config lesen und in 'h' einfügen
@@ -421,7 +425,7 @@ func _save_hotel(hotel: Dictionary) -> void:
 	if hotel.is_empty():
 		return
 	var cfg := ConfigFile.new()
-	for key in ["profile_id", "name", "grid_cols", "grid_rows", "day", "money", "game_time", "plots", "auto_count", "level", "stars", "guests_active", "guests_checkin", "guests_checkout", "exp", "exp_max", "rep", "rep_max", "fp", "guest_data"]:
+	for key in ["profile_id", "name", "grid_cols", "grid_rows", "day", "money", "game_time", "plots", "auto_count", "level", "stars", "guests_active", "guests_checkin", "guests_checkout", "exp", "exp_max", "rep", "rep_max", "fp", "guest_data", "transactions"]:
 		cfg.set_value("hotel", key, hotel.get(key))
 
 	# NEU: Alle dynamischen Zimmer-Zähler ("next_z_id", etc.) mitspeichern
@@ -533,6 +537,7 @@ func _take_snapshot(hotel: Dictionary, snap_name: String) -> Dictionary:
 		"rep_max": hotel.get("rep_max", 1000),
 		"fp": hotel.get("fp", 0),
 		"guest_data": hotel.get("guest_data", {}).duplicate(true),
+		"transactions": hotel.get("transactions", []).duplicate(true),
 	}
 
 	# NEU: Zähler in den Snapshot kopieren
@@ -565,6 +570,7 @@ func _apply_snapshot(hotel: Dictionary, snap: Dictionary) -> void:
 	hotel["rep_max"] = snap.get("rep_max", 1000)
 	hotel["fp"] = snap.get("fp", 0)
 	hotel["guest_data"] = snap.get("guest_data", {}).duplicate(true)
+	hotel["transactions"] = snap.get("transactions", []).duplicate(true)
 
 	# Zähler aus dem Snapshot wiederherstellen
 	for key in snap:

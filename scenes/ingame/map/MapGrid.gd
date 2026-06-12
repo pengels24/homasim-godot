@@ -6,7 +6,12 @@ signal view_saved_changed(has_saved: bool)
 
 # ── Nodes ─────────────────────────────────────────────────────────────────────
 @onready var camera: Camera2D = $Camera2D
-var guest_manager: GuestManager
+var guest_manager: GuestManager:
+	set(value):
+		guest_manager = value
+		# Sobald der Manager zugewiesen wird, verbinden wir das Signal sicher:
+		if guest_manager != null and not guest_manager.sig_party_checked_in.is_connected(_on_party_checked_in):
+			guest_manager.sig_party_checked_in.connect(_on_party_checked_in)
 
 # ── Grid-Konfiguration ────────────────────────────────────────────────────────
 @export var grid_cols:  int = 5
@@ -44,6 +49,10 @@ var _saved_cam_zoom: float    = 1.0
 var _has_saved_view: bool     = false
 
 var _grid: Array = []
+var active_rooms: Array = []
+
+# ── Pathfinding ───────────────────────────────────────────────────────────────
+var astar: AStarGrid2D = AStarGrid2D.new()
 
 # ── Occupancy Grid ────────────────────────────────────────────────────────────
 # Flaches PackedByteArray: 1 = belegt, 0 = frei.
@@ -53,6 +62,9 @@ var _occ:   PackedByteArray
 var _occ_w: int
 var _occ_h: int
 
+# ── Debugging ─────────────────────────────────────────────────────────────────
+var _show_debug_grid: bool = false
+var _debug_path: Array[Vector2i] = []
 
 # =============================================================================
 func _ready() -> void:
@@ -89,6 +101,25 @@ func _ready() -> void:
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
+
+# =============================================================================
+## Wandelt globale Kachel-Koordinaten (AStar) in Welt-Pixel für den Avatar um.
+func tile_to_world(tile_coord: Vector2i) -> Vector2:
+	# WALK_W addieren, damit der Gast exakt auf dem Grid der Parzellen landet
+	var local_x := (tile_coord.x + WALK_W + 0.5) * TILE_PX
+	var local_y := (tile_coord.y + WALK_W + 0.5) * TILE_PX
+
+	return ($WorldRoot as Node2D).to_global(Vector2(local_x, local_y))
+
+
+# =============================================================================
+## Gibt ein Array von globalen Tile-Koordinaten (Vector2i) für die Bewegung zurück.
+func get_path_between_tiles(start_tile: Vector2i, end_tile: Vector2i) -> Array[Vector2i]:
+	if not astar.is_in_boundsv(start_tile) or not astar.is_in_boundsv(end_tile):
+		return []
+	return astar.get_id_path(start_tile, end_tile)
+
+
 # =============================================================================
 func get_placed_rooms() -> Array:
 	var result: Array = []
@@ -123,27 +154,85 @@ func center_on_entry(entry_plot: Vector2i) -> void:
 	var parcel: Node2D = _grid[entry_plot.y][entry_plot.x]
 	var target := parcel.global_position + Vector2(PARCEL_SZ * TILE_PX, PARCEL_SZ * TILE_PX) * (SCALE / 2.0)
 	camera.global_position = target
-	camera.zoom = Vector2(1.0, 1.0)
+	camera.zoom = Vector2(1.5, 1.5)
 	_set_camera_limits()
 
 
 # =============================================================================
-## Prüft ob Raum-Body + Tür-Exit-Tile vollständig frei sind.
-## Ersetzt: is_tile_free + would_block_door + _door_is_blocked + _lobby_clearance_blocked.
 func is_placement_valid(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 		room_w: int, room_h: int, door_rot: int, door_off: int) -> bool:
+
 	if tile_x < 0 or tile_y < 0 or tile_x + room_w > PARCEL_SZ or tile_y + room_h > PARCEL_SZ:
 		return false
 	var gx := parcel_x * PARCEL_SZ + tile_x
 	var gy := parcel_y * PARCEL_SZ + tile_y
+
 	if not _occ_free_for_room(gx, gy, room_w, room_h):
 		return false
+
 	var exit := _exit_global(parcel_x, parcel_y, tile_x, tile_y, room_w, room_h, door_rot, door_off)
 	if not _occ_exit_free(exit.x, exit.y):
 		return false
 	if _exit_outside_parcel(parcel_x, parcel_y, exit, door_rot):
 		return false
-	return true
+
+	# --- NEU: Reachability Check (Erreichbarkeits-Prüfung) ---
+	# Wenn es noch keine Zimmer gibt, gibt es auch nichts einzusperren
+	if active_rooms.is_empty():
+		return true
+
+	# 1. SIMULATION: Raum auf dem Pathfinding-Grid blockieren
+	# (Wir blockieren nur den Raumkörper, die Tür als Flur-Tile bleibt durchgängig!)
+	var sim_coords: Array[Vector2i] = []
+	for dy in room_h:
+		for dx in room_w:
+			var sim_x := gx + dx
+			var sim_y := gy + dy
+			if not astar.is_point_solid(Vector2i(sim_x, sim_y)):
+				astar.set_point_solid(Vector2i(sim_x, sim_y), true)
+				sim_coords.append(Vector2i(sim_x, sim_y))
+
+	# Startpunkt (Lobby) berechnen
+	var entry_parcel: Node2D = _grid[_entry_plot.y][_entry_plot.x]
+	var clearance: Rect2i = entry_parcel.get_lobby_clearance_rect()
+	var start_x := (_entry_plot.x * PARCEL_SZ) + clearance.position.x + int(clearance.size.x / 2.0)
+	var start_y := (_entry_plot.y * PARCEL_SZ) + clearance.position.y + int(clearance.size.y / 2.0)
+	var lobby_tile := Vector2i(start_x, start_y)
+
+	# 2. PRÜFUNG: Teste alle aktiven Zimmer
+	var is_valid := true
+	for room: Node2D in active_rooms:
+		# Ignoriere Zimmer, die gerade abgerissen werden oder ungültig sind
+		if not is_instance_valid(room):
+			continue
+
+		var r_sz: Vector2i = room.get_tile_size()
+		var r_rot: int = room.get("door_rotation")
+		var r_off: int = room.get("door_offset")
+		var r_tx: int = int(room.position.x / TILE_PX)
+		var r_ty: int = int(room.position.y / TILE_PX)
+		var r_px: int = int(room.get_parent().name.split("_")[1])
+		var r_py: int = int(room.get_parent().name.split("_")[2])
+
+		var room_door_tile := _exit_global(r_px, r_py, r_tx, r_ty, r_sz.x, r_sz.y, r_rot, r_off)
+
+		# Check 1: Findet das bestehende Zimmer noch einen Weg zur Lobby?
+		var path := get_path_between_tiles(lobby_tile, room_door_tile)
+		if path.is_empty():
+			is_valid = false
+			break # Sobald ein Raum meckert, brechen wir ab
+
+	# Check 2: Findet der GHOST selbst einen Weg? (Damit man keine Inseln baut)
+	if is_valid:
+		var ghost_path := get_path_between_tiles(lobby_tile, exit)
+		if ghost_path.is_empty():
+			is_valid = false
+
+	# 3. AUFRÄUMEN: Simulation rückgängig machen
+	for sim_p in sim_coords:
+		astar.set_point_solid(sim_p, false)
+
+	return is_valid
 
 
 # =============================================================================
@@ -171,26 +260,43 @@ func unmark_placement(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 
 # =============================================================================
 func place_room(parcel_x: int, parcel_y: int, room_scene: PackedScene, hotel_id: int,
-		door_rot: int, door_off: int, tile_x: int, tile_y: int, room_rot: int = 0,
-		room_number: String = "") -> void:
+	door_rot: int, door_off: int, tile_x: int, tile_y: int, room_rot: int = 0,
+	room_number: String = "") -> void:
+
 	var parcel: Node2D = _grid[parcel_y][parcel_x]
 	var is_new := not parcel.visible
 	parcel.visible = true
+
 	if is_new:
 		_mark_parcel_walls(parcel_x, parcel_y)
+
 	var room: Node2D = parcel.spawn_room(room_scene, door_rot, door_off, tile_x, tile_y, room_rot)
 	room.room_number = room_number
 
 	if room.has_method("configure"):
-		room.configure({"guest_manager": guest_manager})
+		room.configure({
+			"guest_manager": guest_manager,
+			"door_rotation": door_rot,
+			"door_offset": door_off,
+			"room_rotation": room_rot
+		})
 
 	var sz: Vector2i = room.get_tile_size()
 	mark_placement(parcel_x, parcel_y, tile_x, tile_y, sz.x, sz.y, door_rot, door_off)
+
+	active_rooms.append(room)
+
 	SaveManager.save_room_to_plot(hotel_id, parcel_x, parcel_y, room.to_dict())
+
 	if is_new:
 		SaveManager.set_plot_built(hotel_id, parcel_x, parcel_y)
 		_configure_walls()
 	_update_all_floor_neighbors()
+
+	print("--- RAUM GEBAUT ---")
+	print("Tür-Rotation: ", door_rot)
+	print("Tür-Offset: ", door_off)
+	print("Raumgröße: ", sz.x, "x", sz.y)
 
 
 # =============================================================================
@@ -276,6 +382,8 @@ func _restore_rooms(built_plots: Array) -> void:
 				sz.x, sz.y,
 				room_data.get("door_rotation", 0), room_data.get("door_offset", 0)
 			)
+			active_rooms.append(room)
+
 	_update_all_floor_neighbors()
 
 
@@ -304,7 +412,8 @@ func _occ_init() -> void:
 	_occ_h = grid_rows * PARCEL_SZ
 	_occ   = PackedByteArray()
 	_occ.resize(_occ_w * _occ_h)
-	_occ.fill(0)
+	_occ.fill(3) # <--- ÄNDERUNG: Alles ist Wiese (blockiert)
+	_setup_astar()
 
 
 # =============================================================================
@@ -314,6 +423,7 @@ func _occ_mark(gx: int, gy: int, w: int, h: int) -> void:
 			var idx := (gy + dy) * _occ_w + (gx + dx)
 			if idx >= 0 and idx < _occ.size():
 				_occ[idx] = 1
+				_sync_astar_cell(gx + dx, gy + dy) # <--- NEU
 
 
 # =============================================================================
@@ -323,6 +433,7 @@ func _occ_mark_exit(gx: int, gy: int) -> void:
 	var idx := gy * _occ_w + gx
 	if _occ[idx] == 0:
 		_occ[idx] = 2
+		_sync_astar_cell(gx, gy) # <--- NEU
 
 
 # =============================================================================
@@ -332,6 +443,7 @@ func _occ_mark_wall(gx: int, gy: int, w: int, h: int) -> void:
 			var idx := (gy + dy) * _occ_w + (gx + dx)
 			if idx >= 0 and idx < _occ.size():
 				_occ[idx] = 3
+				_sync_astar_cell(gx + dx, gy + dy) # <--- NEU
 
 
 # =============================================================================
@@ -339,12 +451,12 @@ func _occ_clear(gx: int, gy: int, w: int, h: int) -> void:
 	for dy in h:
 		for dx in w:
 			var idx := (gy + dy) * _occ_w + (gx + dx)
-			if idx >= 0 and idx < _occ.size() and _occ[idx] != 3:
+			if idx >= 0 and idx < _occ.size(): # <--- ÄNDERUNG: Die != 3 Prüfung ist weg!
 				_occ[idx] = 0
+				_sync_astar_cell(gx + dx, gy + dy)
 
 
 # =============================================================================
-# Raum-Body darf auf freie (0) und Wand-Tiles (3) platziert werden; Body (1) und Exit (2) blockieren.
 func _occ_free_for_room(gx: int, gy: int, w: int, h: int) -> bool:
 	for dy in h:
 		for dx in w:
@@ -353,7 +465,7 @@ func _occ_free_for_room(gx: int, gy: int, w: int, h: int) -> bool:
 			if ngx < 0 or ngy < 0 or ngx >= _occ_w or ngy >= _occ_h:
 				return false
 			var v := _occ[ngy * _occ_w + ngx]
-			if v == 1 or v == 2:
+			if v == 1 or v == 2 or v == 4: # <--- NEU: 4 (Clearance) blockiert Raumkörper!
 				return false
 	return true
 
@@ -382,6 +494,16 @@ func _occ_has_room_body(gx: int, gy: int, w: int, h: int) -> bool:
 
 
 # =============================================================================
+func _occ_mark_clearance(gx: int, gy: int, w: int, h: int) -> void:
+	for dy in h:
+		for dx in w:
+			var idx := (gy + dy) * _occ_w + (gx + dx)
+			if idx >= 0 and idx < _occ.size():
+				_occ[idx] = 4 # 4 = Freizuhaltende Zone (Begehbar, aber Bauverbot)
+				_sync_astar_cell(gx + dx, gy + dy)
+
+
+# =============================================================================
 func _update_all_floor_neighbors() -> void:
 	for py in grid_rows:
 		for px in grid_cols:
@@ -406,10 +528,8 @@ func _update_all_floor_neighbors() -> void:
 func _mark_parcel_walls(parcel_x: int, parcel_y: int) -> void:
 	var gx := parcel_x * PARCEL_SZ
 	var gy := parcel_y * PARCEL_SZ
-	_occ_mark_wall(gx,                gy,                PARCEL_SZ, 1)
-	_occ_mark_wall(gx,                gy + PARCEL_SZ - 1, PARCEL_SZ, 1)
-	_occ_mark_wall(gx,                gy,                1, PARCEL_SZ)
-	_occ_mark_wall(gx + PARCEL_SZ - 1, gy,               1, PARCEL_SZ)
+	# Wir baggern die komplette 16x16 Parzelle aus und machen sie zu Flur (0)
+	_occ_clear(gx, gy, PARCEL_SZ, PARCEL_SZ)
 
 
 # =============================================================================
@@ -417,26 +537,31 @@ func _mark_lobby_on_parcel(parcel_x: int, parcel_y: int) -> void:
 	var parcel: Node2D = _grid[parcel_y][parcel_x]
 	var gx := parcel_x * PARCEL_SZ
 	var gy := parcel_y * PARCEL_SZ
+
 	var lobby_rect: Rect2i = parcel.get_lobby_tile_rect()
 	if lobby_rect.has_area():
 		_occ_mark(gx + lobby_rect.position.x, gy + lobby_rect.position.y,
 			lobby_rect.size.x, lobby_rect.size.y)
+
 	var clearance: Rect2i = parcel.get_lobby_clearance_rect()
 	if clearance.has_area():
-		_occ_mark(gx + clearance.position.x, gy + clearance.position.y,
+		# --- NEU: Nutzen unserer Clearance-Funktion statt des normalen _occ_mark ---
+		_occ_mark_clearance(gx + clearance.position.x, gy + clearance.position.y,
 			clearance.size.x, clearance.size.y)
 
 
 # =============================================================================
 func _exit_global(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
-		room_w: int, room_h: int, door_rot: int, door_off: int) -> Vector2i:
+	room_w: int, room_h: int, door_rot: int, door_off: int) -> Vector2i:
 	var gx := parcel_x * PARCEL_SZ + tile_x
 	var gy := parcel_y * PARCEL_SZ + tile_y
+
 	match door_rot:
-		0: return Vector2i(gx - 1,                      gy + door_off * (room_h - 1))
-		1: return Vector2i(gx + door_off * (room_w - 1), gy - 1)
-		2: return Vector2i(gx + room_w,                  gy + door_off * (room_h - 1))
-		3: return Vector2i(gx + door_off * (room_w - 1), gy + room_h)
+		0: return Vector2i(gx - 1,                      gy + (room_h - 1 - door_off)) # L: von unten nach oben
+		1: return Vector2i(gx + door_off,               gy - 1)                       # T: von links nach rechts
+		2: return Vector2i(gx + room_w,                 gy + door_off)                # R: von oben nach unten
+		3: return Vector2i(gx + (room_w - 1 - door_off), gy + room_h)                 # B: von rechts nach links
+
 	return Vector2i(-1, -1)
 
 
@@ -518,3 +643,98 @@ func restore_saved_view() -> void:
 	camera.global_position = _saved_cam_pos
 	camera.zoom = Vector2(_saved_cam_zoom, _saved_cam_zoom)
 	view_saved_changed.emit(false)
+
+
+# pathfinding
+
+
+# =============================================================================
+func _setup_astar() -> void:
+	astar.region = Rect2i(0, 0, _occ_w, _occ_h)
+	astar.cell_size = Vector2i(1, 1)
+	astar.default_compute_heuristic = AStarGrid2D.HEURISTIC_MANHATTAN
+	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
+	astar.update()
+
+	# Initiale Synchronisation aller Tiles
+	for gy in _occ_h:
+		for gx in _occ_w:
+			_sync_astar_cell(gx, gy)
+
+
+# =============================================================================
+func _sync_astar_cell(gx: int, gy: int) -> void:
+	if gx < 0 or gy < 0 or gx >= _occ_w or gy >= _occ_h:
+		return
+	var val = _occ[gy * _occ_w + gx]
+	# 1 = Room Body, 3 = Wall -> Diese blockieren den Weg!
+	var is_solid: bool = (val == 1 or val == 3)
+	astar.set_point_solid(Vector2i(gx, gy), is_solid)
+
+
+# =============================================================================
+func _on_party_checked_in(party: GuestParty, room: Node2D) -> void:
+	# 1. Start und Ziel berechnen
+	var entry_parcel: Node2D = _grid[_entry_plot.y][_entry_plot.x]
+	var clearance: Rect2i = entry_parcel.get_lobby_clearance_rect()
+	var start_x := (_entry_plot.x * PARCEL_SZ) + clearance.position.x + int(clearance.size.x / 2.0)
+	var start_y := (_entry_plot.y * PARCEL_SZ) + clearance.position.y + int(clearance.size.y / 2.0)
+	var start_tile := Vector2i(start_x, start_y)
+
+	# Raum-Daten sicher auslesen
+	var sz: Vector2i = room.get_tile_size()
+	var door_rot: int = room.get("door_rotation")
+	var door_off: int = room.get("door_offset")
+	var tile_x: int = int(room.position.x / TILE_PX)
+	var tile_y: int = int(room.position.y / TILE_PX)
+	var px: int = int(room.get_parent().name.split("_")[1]) # Zieht die Parcel-X aus dem Namen "P_x_y"
+	var py: int = int(room.get_parent().name.split("_")[2])
+
+	var exit_tile := _exit_global(px, py, tile_x, tile_y, sz.x, sz.y, door_rot, door_off)
+
+	var path_tiles := get_path_between_tiles(start_tile, exit_tile)
+	if path_tiles.is_empty():
+		print("FEHLER: Kein Weg vom Check-In zum Zimmer gefunden!")
+		return
+
+	# 2. Welt-Pfad und Tür-Position berechnen
+	var world_path: Array[Vector2] = []
+	for tile in path_tiles:
+		world_path.append(tile_to_world(tile))
+
+	var door_tile := exit_tile
+	match door_rot:
+		0: door_tile.x += 1
+		1: door_tile.y += 1
+		2: door_tile.x -= 1
+		3: door_tile.y -= 1
+	var door_world_pos := tile_to_world(door_tile)
+
+	# 3. ENTENMARSCH SPAWN!
+	var avatar_scene = preload("res://scenes/ingame/guest/guestavatar/GuestAvatar.tscn")
+
+	for i in range(party.members.size()):
+		var member = party.members[i] # <--- NEU: Das Member-Objekt aus dem Array holen
+		var avatar = avatar_scene.instantiate()
+		avatar.z_index = 100
+
+		# ---> NEU: Das Setup aufrufen, BEVOR wir ihn in den Baum hängen
+		avatar.setup(member)
+
+		$WorldRoot.add_child(avatar)
+
+		# ---> NEU: Individueller Versatz pro Gast (z.B. -4 bis +4 Pixel)
+		var offset := Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
+
+		# Pfad für diesen spezifischen Gast anpassen
+		var my_path: Array[Vector2] = []
+		for wp in world_path:
+			my_path.append(wp + offset)
+
+		var my_door_pos := door_world_pos + offset
+
+		# Startposition ebenfalls mit Versatz
+		avatar.global_position = tile_to_world(path_tiles[0]) + offset
+
+		var delay: float = i * 0.8
+		avatar.walk_path(my_path, my_door_pos, delay)

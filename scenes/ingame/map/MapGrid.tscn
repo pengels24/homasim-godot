@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dm214nbenmjl0" path="res://assets/tiles/ground_base.png" id="2_base"]
 [ext_resource type="Texture2D" uid="uid://dcyafhq3ruvh4" path="res://assets/tiles/Furniture/ground_grasland.aseprite" id="4_jy87r"]
 [ext_resource type="Texture2D" uid="uid://ce7ywo73buro3" path="res://assets/tiles/Furniture/ground_walkway.aseprite" id="5_aiwpy"]
+[ext_resource type="Script" uid="uid://daif5pmlx7jhf" path="res://scenes/ingame/map/DebugOverlay.gd" id="6_aiwpy"]
 [ext_resource type="PackedScene" uid="uid://dwjxljl5lpe7u" path="res://scenes/ingame/map/Parzelle.tscn" id="Parzelle_tscn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e204k"]
@@ -24,9 +25,11 @@ sources/6 = SubResource("TileSetAtlasSource_slaec")
 sources/7 = SubResource("TileSetAtlasSource_aiwpy")
 
 [node name="MapGrid" type="Node2D" unique_id=1119860848]
+process_mode = 3
 script = ExtResource("1_mapgrid")
 
 [node name="WorldRoot" type="Node2D" parent="." unique_id=72904805]
+process_mode = 1
 scale = Vector2(2, 2)
 
 [node name="FloorLayer" type="TileMapLayer" parent="WorldRoot" unique_id=1347847631]
@@ -137,5 +140,9 @@ position = Vector2(816, 1072)
 [node name="P_4_4" parent="WorldRoot/ParcelsRoot" unique_id=1889789985 instance=ExtResource("Parzelle_tscn")]
 visible = false
 position = Vector2(1072, 1072)
+
+[node name="DebugOverlay" type="Node2D" parent="WorldRoot" unique_id=124749986]
+z_index = 200
+script = ExtResource("6_aiwpy")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=896693574]

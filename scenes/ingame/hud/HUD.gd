@@ -163,7 +163,9 @@ func _on_level_up_rewards_claimed(money: int, fp: int) -> void:
 		spawn_pos = camera.get_screen_center_position()
 
 	if money > 0:
-		GameState.add_money(money)
+		# NEU: Über den FinanceManager routen
+		FinanceManager.add_transaction(money, "reward", "Level-Up Bonus")
+
 		EffectManager.spawn_money_text(money, spawn_pos)
 
 	if fp > 0:

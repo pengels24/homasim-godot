@@ -254,7 +254,6 @@ func _on_schedule_event(event_id: String) -> void:
 	match event_id:
 		"reception_close":
 			_lock_reception()
-			_guest_mgr.clear_waiting_guests_with_penalty()
 		"reception_open":
 			_unlock_reception()
 
@@ -356,6 +355,9 @@ func _on_quit_confirmed() -> void:
 	var hotel_id: int = GameState.active_hotel_id
 	if hotel_id >= 0:
 		SaveManager.save_auto(hotel_id)
+
+	get_tree().paused = false
+
 	get_tree().change_scene_to_file("res://scenes/dashboard/Dashboard.tscn")
 
 

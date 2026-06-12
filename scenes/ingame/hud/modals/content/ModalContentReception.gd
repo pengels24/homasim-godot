@@ -44,8 +44,6 @@ var _sel_checkout_party: GuestParty = null
 
 # --- MATCHING STATE ---
 var _match_type: String = ""
-var _asked: bool = false
-var _ask_accepted: bool = false
 
 # =============================================================================
 # SETUP
@@ -165,8 +163,6 @@ func _clear_selection() -> void:
 	_sel_room = null
 	_sel_checkout_party = null
 	_match_type = ""
-	_asked = false
-	_ask_accepted = false
 	_update_checkin_button()
 
 	_btn_checkout.disabled = true
@@ -186,8 +182,6 @@ func _on_waiting_guest_clicked(party: GuestParty) -> void:
 	else:
 		_sel_party = party
 		_sel_party.has_been_seen = true
-		_asked = false
-		_ask_accepted = false
 
 	_highlight_cards(_list_waiting, _sel_party)
 	_highlight_cards(_list_rooms, _sel_room)
@@ -218,8 +212,6 @@ func _on_room_clicked(room: Node2D) -> void:
 		_sel_room = null
 	else:
 		_sel_room = room
-		_asked = false
-		_ask_accepted = false
 
 	_highlight_cards(_list_rooms, _sel_room)
 	_evaluate_match()
@@ -353,12 +345,9 @@ func _update_checkin_button() -> void:
 			_apply_btn_styles(style_green_normal, style_green_hover, style_green_pressed, style_rec_disabled)
 
 		"ask_price", "ask_requirements":
-			if _asked and _ask_accepted:
-				_btn_checkin.text = GameState.T("checkin.btn.confirm")
-				_apply_btn_styles(style_green_normal, style_green_hover, style_green_pressed, style_rec_disabled)
-			else:
-				_btn_checkin.text = GameState.T("checkin.btn.roll")
-				_apply_btn_styles(style_gold_normal, style_gold_hover, style_gold_pressed, style_rec_disabled)
+			# NEU: Kein Zwischenzustand mehr. Es ist immer der goldene Würfel-Button!
+			_btn_checkin.text = GameState.T("checkin.btn.roll")
+			_apply_btn_styles(style_gold_normal, style_gold_hover, style_gold_pressed, style_rec_disabled)
 
 		"disabled", _:
 			_btn_checkin.disabled = true
@@ -370,38 +359,42 @@ func _update_checkin_button() -> void:
 func _on_checkin_pressed() -> void:
 	if _sel_party == null or _sel_room == null: return
 
-	# FALL 1: Perfektes Match ODER bereits erfolgreich verhandelt
-	if _match_type == "perfect" or (_asked and _ask_accepted):
-
-		if _match_type != "perfect":
-			_sel_party.pays_surcharge = true
-
-		# ---> NEU: Dynamische EXP berechnen und vergeben
-		var exp_gain = GameState.calc_checkin_exp(_sel_party)
-		GameState.add_exp(exp_gain)
-
-		_guest_mgr.do_checkin(_sel_party, _sel_room)
-		Toast.show(GameState.T("toast.reception.checkin.success"))
-
-		_clear_selection()
-		refresh()
+	# FALL 1: Perfektes Match -> Sofortiger Check-in ohne Aufpreis
+	if _match_type == "perfect":
+		_execute_checkin_logic(false)
 
 	# FALL 2 & 3: Verhandlung starten
 	else:
-		_asked = true
 		var roll_result = _guest_mgr.roll_ask(_sel_party, _sel_room)
 
 		if roll_result["accepted"]:
-			_ask_accepted = true
+			# Toast für erfolgreiche Verhandlung
 			Toast.show(GameState.T("toast.surcharge.accepted", roll_result["roll_val"], roll_result["target_val"]))
-			_update_checkin_button()
+
+			# ---> NEU: Direkt einchecken! Kein zweiter Klick nötig.
+			_execute_checkin_logic(true)
 
 		else:
-			_guest_mgr.reject_party(_sel_party)
+			_guest_mgr.guest_declined_offer(_sel_party)
 			Toast.show(GameState.T("toast.surcharge.rejected", roll_result["roll_val"], roll_result["target_val"]))
 
 			_clear_selection()
 			refresh()
+
+
+# =============================================================================
+func _execute_checkin_logic(surcharge: bool) -> void:
+	if surcharge:
+		_sel_party.pays_surcharge = true
+
+	var exp_gain = GameState.calc_checkin_exp(_sel_party)
+	GameState.add_exp(exp_gain)
+
+	_guest_mgr.do_checkin(_sel_party, _sel_room)
+	Toast.show(GameState.T("toast.reception.checkin.success"))
+
+	_clear_selection()
+	refresh()
 
 
 # =============================================================================

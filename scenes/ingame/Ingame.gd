@@ -136,7 +136,6 @@ func _setup_subsystems() -> void:
 	$HUD/BottomBarContainer/HUDBottom/BuildMenu.sig_room_selected.connect(_build.start_building)
 
 	# Signale vom TimeManager fangen
-	TimeManager.sig_day_ended.connect(_on_day_ended)
 	TimeManager.sig_hour_passed.connect(_guest_mgr.on_hour_passed)
 
 	var sim_browser = SIM_BROWSER_SCENE.instantiate() as SimBrowser
@@ -162,10 +161,6 @@ func _setup_subsystems() -> void:
 
 # ── Signal-Handler ────────────────────────────────────────────────────────────
 
-# =============================================================================
-func _on_day_ended(new_day: int) -> void:
-	_guest_mgr.on_day_ended(new_day)
-
 
 # =============================================================================
 func _on_parties_changed() -> void:
@@ -184,6 +179,7 @@ func _on_schedule_event(event_id: String) -> void:
 		"day_start":       _on_event_day_start()
 		"reception_open":  _on_event_reception_open()
 		"guest_arrival":   _on_event_guest_arrival()
+		"reception_last_call": _on_event_reception_last_call() # <--- NEU (21:30)
 		"reception_close": _on_event_reception_close()
 
 
@@ -214,12 +210,14 @@ func _on_event_guest_arrival() -> void:
 
 
 # =============================================================================
+# ANGEPASST: Der harte Cut um 22:00 Uhr
 func _on_event_reception_close() -> void:
-	# Der UIManager kümmert sich intern darum, ob sie offen ist und schließt sie sicher
 	_ui_mgr.close_reception()
-
 	hud_canvas.set_reception_locked(true)
 	Toast.show(GameState.T("toast.event.day_soft_end"))
+
+	# HIER feuert jetzt zentral die Strafe für alle, die noch draußen standen
+	_guest_mgr.clear_waiting_guests_with_penalty()
 
 
 # =============================================================================
@@ -252,3 +250,12 @@ func _on_time_speed_changed(is_paused: bool, speed: float) -> void:
 	else:
 		# Spiel läuft normal -> Play-Button eindrücken
 		hud_canvas.btn_play.set_pressed_no_signal(true)
+
+
+# =============================================================================
+# NEU: Die Vorwarnung um 21:30 Uhr
+func _on_event_reception_last_call() -> void:
+	# Wenn gar niemand wartet, stören wir den Spieler auch nicht
+	if _guest_mgr.get_waiting().size() > 0:
+		TimeManager.pause()
+		Toast.show("Letzter Aufruf! Es warten noch Gäste auf den Check-in.")

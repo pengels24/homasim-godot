@@ -22,9 +22,12 @@ var _room_h:          int = 2
 var _valid_combos:    Array[Vector2i] = []
 var _room_rotation:   int = 0
 
+
 # =============================================================================
 # NEU: Wir verlangen nun direkt die PackedScene vom Menü!
 func activate(map_grid: Node2D, room_scene: PackedScene) -> void:
+	# ---> NEU: Zwingt das Bau-Skript, auch in der Pause komplett wach zu bleiben
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_map_grid     = map_grid
 	_snap_enabled = GameState.snap_to_grid
 	_room_scene   = room_scene

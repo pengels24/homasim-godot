@@ -3,6 +3,7 @@ class_name GuestManager
 
 signal parties_changed()
 signal checkout_forgotten(count: int)
+signal sig_party_checked_in(party: GuestParty, room: Node2D) # <--- NEU
 
 # ── Konfiguration ─────────────────────────────────────────────────────────────
 var _hotel:    Dictionary
@@ -12,6 +13,20 @@ var _map_grid: Node2D
 var _waiting:  Array = []   # Array[GuestParty]
 var _active:   Array = []   # Array[GuestParty]
 var _checkout: Array = []   # Array[GuestParty]
+
+# --- Tages-Statistiken ---
+var daily_checkin_parties: int = 0
+var daily_checkin_heads: int = 0
+var daily_checkout_parties: int = 0
+var daily_checkout_heads: int = 0
+var daily_rage_parties: int = 0
+var daily_rage_heads: int = 0
+var daily_timeout_parties: int = 0
+var daily_timeout_heads: int = 0
+var daily_reject_parties: int = 0
+var daily_reject_heads: int = 0
+var daily_declined_parties: int = 0
+var daily_declined_heads: int = 0
 
 # room_number → party_id; zeigt welches Zimmer belegt ist
 var _room_assign: Dictionary = {}
@@ -34,6 +49,13 @@ func configure(hotel: Dictionary, map_grid: Node2D) -> void:
 	_room_definitions = {}
 
 	GameState.sig_dev_spawn_guests.connect(func(count: int): spawn_guests(count))
+
+	# NEU: Auf die Uhr hören!
+	if not TimeManager.sig_midnight_struck.is_connected(process_midnight_penalties):
+		TimeManager.sig_midnight_struck.connect(process_midnight_penalties)
+
+	if not TimeManager.sig_morning_struck.is_connected(process_morning_routine):
+		TimeManager.sig_morning_struck.connect(process_morning_routine)
 
 
 # =============================================================================
@@ -188,41 +210,47 @@ func _generate_party() -> GuestParty:
 
 	var party := GuestParty.new(party_id, type_id)
 	var def: Dictionary = GuestDefinitions.ALL[type_id]
-	party.stay_days    = randi_range(def["min_stay"], def["max_stay"])
-	party.base_price   = randf_range(def["min_base_price"], def["max_base_price"])
-	party.arrived_day  = _hotel.get("day", 1)
+	party.stay_days = randi_range(def["min_stay"], def["max_stay"])
+	party.base_price = randi_range(def["min_base_price"], def["max_base_price"])
+	party.arrived_day = _hotel.get("day", 1)
 	party.arrived_time = TimeManager.get_game_time()
 
 	match type_id:
 		"couple":
 			var last := NameDatabase.random_last()
-			_add_member(party, NameDatabase.random_male(),   last, "primary")
-			_add_member(party, NameDatabase.random_female(), last, "partner")
+			_add_member(party, NameDatabase.random_male(),   last, "primary", "male", false)
+			_add_member(party, NameDatabase.random_female(), last, "partner", "female", false)
 
 		"family":
 			var last := NameDatabase.random_last()
-			_add_member(party, NameDatabase.random_male(),   last, "primary")
-			_add_member(party, NameDatabase.random_female(), last, "partner")
+			_add_member(party, NameDatabase.random_male(),   last, "primary", "male", false)
+			_add_member(party, NameDatabase.random_female(), last, "partner", "female", false)
 			var child_count := randi_range(1, 3)
 
 			for _c in child_count:
-				_add_member(party, NameDatabase.random_child(), last, "child")
+				var is_boy: bool = randf() > 0.5
+				var child_gender: String = "male" if is_boy else "female"
+				_add_member(party, NameDatabase.random_child(), last, "child", child_gender, true)
 
 		_:
 			var last  := NameDatabase.random_last()
-			var first := NameDatabase.random_male() if randf() > 0.5 else NameDatabase.random_female()
-			_add_member(party, first, last, "primary")
+			var is_male: bool = randf() > 0.5
+			var first := NameDatabase.random_male() if is_male else NameDatabase.random_female()
+			var gender: String = "male" if is_male else "female"
+			_add_member(party, first, last, "primary", gender, false)
 
 	return party
 
 
 # =============================================================================
-func _add_member(party: GuestParty, first: String, last: String, role: String) -> void:
+func _add_member(party: GuestParty, first: String, last: String, role: String, gender: String, is_child: bool) -> void:
 	var m := GuestMember.new(
 		"M%04d" % _next_member_id,
 		party.id,
 		"%s %s" % [first, last],
 		role,
+		gender,
+		is_child
 	)
 	_next_member_id += 1
 	party.members.append(m)
@@ -264,6 +292,10 @@ func _tick_patience() -> void:
 
 		if party == null:
 			continue
+
+		# NEU: Statistik füttern
+		daily_timeout_parties += 1
+		daily_timeout_heads += party.members.size()
 
 		_waiting.erase(party)
 		party.state = "gone"
@@ -335,12 +367,18 @@ func do_checkin(party: GuestParty, room: Node2D) -> void:
 	_waiting.erase(party)
 	_active.append(party)
 	_room_assign[rid] = party.id
+
+	# NEU: Statistik füttern
+	daily_checkin_parties += 1
+	daily_checkin_heads += party.members.size()
+
 	ActivityLog.add(
 		"check_in",
 		"Check-in: %s → %s" % [party.get_display_name(), str(room.get("room_number"))],
 		_hotel.get("day", 1),
 		TimeManager.get_game_time(),
 	)
+	sig_party_checked_in.emit(party, room) # <--- NEU: Ruf an die Welt
 	parties_changed.emit()
 
 
@@ -348,6 +386,11 @@ func do_checkin(party: GuestParty, room: Node2D) -> void:
 func reject_party(party: GuestParty) -> void:
 	party.state = "gone"
 	_waiting.erase(party)
+
+	# NEU: Statistik füttern
+	daily_reject_parties += 1
+	daily_reject_heads += party.members.size()
+
 	ActivityLog.add(
 		"guest_rejected",
 		"%s wurde abgelehnt" % party.get_display_name(),
@@ -398,24 +441,41 @@ func do_checkout(party: GuestParty) -> float:
 
 
 # =============================================================================
-func _finalize_checkout(party: GuestParty, payout: float, auto: bool) -> void:
+func _finalize_checkout(party: GuestParty, payout: int, auto: bool) -> void:
 	_checkout.erase(party)
 	_room_assign.erase(party.room_id)
 	party.state = "gone"
-	var msg := "Check-out: %s (%s €)" % [party.get_display_name(), "%.0f" % payout]
 
-	if auto:
-		msg += " [Auto-Checkout]"
+	var msg := ""
+	var log_type := "check_out"
+
+	# NEU: Unterscheidung für den Wut-Checkout inkl. getrennter Statistik
+	if auto and payout == 0:
+		msg = "Wut-Checkout: %s ist wütend abgereist (0 €)" % party.get_display_name()
+		log_type = "rage_quit"
+
+		daily_rage_parties += 1
+		daily_rage_heads += party.members.size()
+	else:
+		msg = "Check-out: %s (%d €)" % [party.get_display_name(), payout]
+		if auto:
+			msg += " [Auto-Checkout]"
+			log_type = "check_out_auto"
+
+		daily_checkout_parties += 1
+		daily_checkout_heads += party.members.size()
 
 	ActivityLog.add(
-		"check_out" if not auto else "check_out_auto",
+		log_type,
 		msg,
 		_hotel.get("day", 1),
-		TimeManager.get_game_time(),
+		TimeManager.get_game_time()
 	)
 
-	if payout > 0.0:
-		_hotel["money"] = _hotel.get("money", 0.0) + payout
+	if payout > 0:
+		var category := "room"
+		var desc := "Checkout: " + party.get_display_name()
+		FinanceManager.add_transaction(payout, category, desc)
 
 	parties_changed.emit()
 
@@ -423,61 +483,6 @@ func _finalize_checkout(party: GuestParty, payout: float, auto: bool) -> void:
 # =============================================================================
 func _calculate_payout(party: GuestParty) -> float:
 	return party.base_price * float(party.stay_days) * party.satisfaction
-
-
-# ── Tagesende ─────────────────────────────────────────────────────────────────
-
-# =============================================================================
-func on_day_ended(new_day: int) -> void:
-	# 1. Alle wartenden Gäste verlassen das Hotel
-	for party: GuestParty in _waiting:
-		party.state = "gone"
-		ActivityLog.add(
-			"guest_left",
-			"%s hat das Hotel verlassen (Tagesende)" % party.get_display_name(),
-			new_day - 1,
-			# _clock.get_game_time(),
-			TimeManager.get_game_time(),
-		)
-
-	_waiting.clear()
-
-	# 2. Vergessene Checkouts verarbeiten
-	var forgotten_count := _checkout.size()
-	var to_auto: Array  = []
-
-	for party: GuestParty in _checkout:
-		party.checkout_days += 1
-
-		if party.checkout_days >= 2:
-			to_auto.append(party)
-
-		else:
-			# Erste Vergessen-Strafe: Zufriedenheit -20 %, Preis -10–50 %
-			party.satisfaction = maxf(0.0, party.satisfaction - 0.2)
-			party.base_price  *= randf_range(0.5, 0.9)
-
-	for party: GuestParty in to_auto:
-		_finalize_checkout(party, 0.0, true)
-
-	if forgotten_count > 0:
-		checkout_forgotten.emit(forgotten_count)
-
-	# 3. Aktive Gäste: stay_days verringern, fällige in Checkout verschieben
-	var moving: Array = []
-
-	for party: GuestParty in _active:
-		party.stay_days -= 1
-
-		if party.stay_days <= 0:
-			moving.append(party)
-
-	for party: GuestParty in moving:
-		_active.erase(party)
-		party.state = "checkout"
-		_checkout.append(party)
-
-	parties_changed.emit()
 
 
 # ── Serialisierung ────────────────────────────────────────────────────────────
@@ -525,3 +530,90 @@ func _check_requirements(_room: Node2D, reqs: Array) -> bool:
 	# Räume haben noch kein Requirements-System – für jetzt immer false wenn Reqs vorhanden
 	# wird erweitert wenn Room-Ausstattung implementiert ist
 	return false
+
+
+# =============================================================================
+## Wird um 23:59 Uhr aufgerufen (VOR dem Tagesabschluss-Modal)
+func process_midnight_penalties(day: int) -> void:
+	# 1. Wartende Gäste an der Eingangstür verjagen
+	for party: GuestParty in _waiting:
+		party.state = "gone"
+		ActivityLog.add(
+			"guest_left",
+			"%s hat das Hotel verlassen (Tagesende)" % party.get_display_name(),
+			day,
+			TimeManager.get_game_time(),
+		)
+	_waiting.clear()
+
+	# 2. Wut-Checkout für ignorierte Gäste am Tresen
+	# Da sie seit 06:00 Uhr hier stehen, gibt es null Toleranz.
+	var forgotten_count := _checkout.size()
+	var to_rage_quit: Array = _checkout.duplicate() # Kopie, da wir die originale Liste gleich bearbeiten
+
+	for party: GuestParty in to_rage_quit:
+		# Saftige Ruf-Strafe (Passe den Wert gerne an)
+		GameState.add_rep(-20)
+		# Checkout mit 0 Euro Zahlung erzwingen
+		_finalize_checkout(party, 0, true)
+
+	if forgotten_count > 0:
+		checkout_forgotten.emit(forgotten_count)
+		Toast.show("%d Gäste sind wütend abgereist! (0 €)" % forgotten_count)
+
+	parties_changed.emit()
+
+
+# =============================================================================
+## Wird um 06:00 Uhr aufgerufen (Wenn der neue Tag physisch beginnt)
+func process_morning_routine() -> void:
+	# Tages-Statistiken auf null setzen
+	daily_checkin_parties = 0
+	daily_checkin_heads = 0
+	daily_checkout_parties = 0
+	daily_checkout_heads = 0
+	daily_rage_parties = 0
+	daily_rage_heads = 0
+	daily_timeout_parties = 0
+	daily_timeout_heads = 0
+	daily_reject_parties = 0
+	daily_reject_heads = 0
+	daily_declined_parties = 0
+	daily_declined_heads = 0
+
+	var moving: Array = []
+
+	# Aktive Gäste: stay_days verringern
+	for party: GuestParty in _active:
+		party.stay_days -= 1
+
+		if party.stay_days <= 0:
+			moving.append(party)
+
+	# Gäste mit abgelaufener Zeit ans Pult (in den Checkout) schicken
+	for party: GuestParty in moving:
+		_active.erase(party)
+		party.state = "checkout"
+		_checkout.append(party)
+
+	parties_changed.emit()
+
+
+# =============================================================================
+## Wird vom UI aufgerufen, wenn ein Gast einen Aufpreis/Deal ablehnt
+func guest_declined_offer(party: GuestParty) -> void:
+	party.state = "gone"
+	_waiting.erase(party)
+
+	# NEU: Statistik für gescheiterte Verhandlungen
+	daily_declined_parties += 1
+	daily_declined_heads += party.members.size()
+
+	ActivityLog.add(
+		"guest_declined",
+		"%s hat das Angebot abgelehnt und ist abgereist" % party.get_display_name(),
+		_hotel.get("day", 1),
+		TimeManager.get_game_time()
+	)
+
+	parties_changed.emit()

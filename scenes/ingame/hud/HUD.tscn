@@ -19,11 +19,6 @@
 [ext_resource type="PackedScene" uid="uid://c5yo6bx5wcaoj" path="res://scenes/ingame/hud/HUDBottom.tscn" id="15_r421g"]
 [ext_resource type="PackedScene" uid="uid://dkopq8is4u4sl" path="res://scenes/ingame/hud/HUDMusicControl.tscn" id="16_6fy26"]
 [ext_resource type="PackedScene" uid="uid://2l7rq0krey8f" path="res://scenes/ingame/hud/BuildMenu.tscn" id="17_8e3pd"]
-[ext_resource type="PackedScene" uid="uid://cxi5q33hphmqv" path="res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn" id="18_0bsoo"]
-[ext_resource type="PackedScene" uid="uid://7xtcnb8xd5nt" path="res://scenes/ingame/rooms/bed_double/Bed_Double.tscn" id="19_6iy1x"]
-[ext_resource type="PackedScene" uid="uid://hwbmqwvkmmk4" path="res://scenes/ingame/rooms/bar/Bar.tscn" id="20_fiam6"]
-[ext_resource type="PackedScene" uid="uid://bls0008lhyaya" path="res://scenes/ingame/rooms/hr_office/Hr_Office.tscn" id="21_yugll"]
-[ext_resource type="PackedScene" uid="uid://1u65f5t5c2fp" path="res://scenes/ingame/rooms/sc_office/Sc_Office.tscn" id="22_hsjc7"]
 [ext_resource type="PackedScene" uid="uid://dnlttoshpxisb" path="res://scenes/ingame/hud/modals/LevelUpModal.tscn" id="24_6iy1x"]
 [ext_resource type="PackedScene" uid="uid://bcweu4cs7d73x" path="res://scenes/ingame/hud/modals/StandardModal.tscn" id="25_fiam6"]
 
@@ -133,10 +128,11 @@ _data = {
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_fiam6"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_yugll"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_7mtkd"]
 allow_unpress = true
 
 [node name="HUDTop" type="CanvasLayer" unique_id=102009972]
+process_mode = 3
 script = ExtResource("1_jp5st")
 
 [node name="TopBar" type="Control" parent="." unique_id=1528619980]
@@ -579,19 +575,19 @@ offset_right = 170.0
 offset_bottom = 30.0
 
 [node name="BuildMenu" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel1/MarginContainer" parent_id_path=PackedInt32Array(491735265, 566754857) index="0" unique_id=1033111495]
-button_group = SubResource("ButtonGroup_yugll")
+button_group = SubResource("ButtonGroup_7mtkd")
 
 [node name="Reception" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel2/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1938624481) index="0" unique_id=2132307684]
-button_group = SubResource("ButtonGroup_yugll")
+button_group = SubResource("ButtonGroup_7mtkd")
 
 [node name="Staff" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel3/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1093129650) index="0" unique_id=1652034052]
-button_group = SubResource("ButtonGroup_yugll")
+button_group = SubResource("ButtonGroup_7mtkd")
 
 [node name="TechTree" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel4/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1152472691) index="0" unique_id=1848820052]
-button_group = SubResource("ButtonGroup_yugll")
+button_group = SubResource("ButtonGroup_7mtkd")
 
 [node name="SimBrowser" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel5/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1000552068) index="0" unique_id=103433776]
-button_group = SubResource("ButtonGroup_yugll")
+button_group = SubResource("ButtonGroup_7mtkd")
 
 [node name="BuildMenu" parent="BottomBarContainer/HUDBottom" unique_id=1714912306 instance=ExtResource("17_8e3pd")]
 layout_mode = 1
@@ -599,7 +595,6 @@ offset_left = 150.0
 offset_top = -150.0
 offset_right = 350.0
 offset_bottom = -50.0
-room_scenes = Array[PackedScene]([ExtResource("18_0bsoo"), ExtResource("19_6iy1x"), ExtResource("20_fiam6"), ExtResource("21_yugll"), ExtResource("22_hsjc7")])
 
 [node name="VBoxContainer" parent="BottomBarContainer/HUDBottom/BuildMenu/MarginContainer" parent_id_path=PackedInt32Array(1714912306, 1905983299) index="0" unique_id=905183679]
 theme_override_constants/separation = 10

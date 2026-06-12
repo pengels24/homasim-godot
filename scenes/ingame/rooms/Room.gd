@@ -3,6 +3,8 @@ extends Node2D
 
 const TILE_PX := 16
 
+@export var base_size := Vector2i(2, 2)
+
 # Namensschema für Tür-Slots. Reihenfolge: 0=L 1=T 2=R 3=B.
 # L: von unten nach oben  T: von links nach rechts
 # R: von oben nach unten  B: von rechts nach links
@@ -42,35 +44,44 @@ var _status_indicator: RoomStatusIndicator
 
 # ── Definition (von Unterklassen überschreiben) ───────────────────────────────
 
+
+# =============================================================================
 ## Gibt alle statischen Metadaten des Raumtyps zurück.
 ## Unterklassen überschreiben diese Funktion – kein zentrales Register nötig.
 static func get_definition() -> Dictionary:
 	return {
-		"id":            "",
-		"build_cost":    0,
-		"exp_reward":     0,
-		"prefix":        "Z",
-		"label":         "?",
-		"name":          "Unbekannter Raum",
-		"category":      "",
-		"icon":          "",
+		"id": "",
+		"build_cost": 0,
+		"exp_reward": 0,
+		"prefix": "Z",
+		"label": "?",
+		"name": "Unbekannter Raum",
+		"category": "",
+		"icon": "",
 		"nightly_price": 0,
-		"locked":        false,
+		"locked": false,
 		"in_build_menu": false,
 		"req_level": 0,
 		"req_tech": "",
 		"max_beds": 0,
 		"open_from": 0,
 		"open_to": 0,
+		"valid_door_slots": [],
 	}
+
+
+# =============================================================================
+func _ready() -> void:
+	var def := call("get_definition") as Dictionary
+	room_type_id = def.get("id", "")
 
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
 
+# =============================================================================
 func configure(data: Dictionary) -> void:
 	_guest_mgr    = data.get("guest_manager", _guest_mgr)
-
 	if _guest_mgr != null and not _guest_mgr.parties_changed.is_connected(_update_indicator):
 		_guest_mgr.parties_changed.connect(_update_indicator)
 
@@ -89,33 +100,36 @@ func configure(data: Dictionary) -> void:
 	_update_indicator()
 
 
+# =============================================================================
 func to_dict() -> Dictionary:
 	return {
-		"room_type_id":  room_type_id,
-		"room_level":    room_level,
-		"room_number":   room_number,
-		"x_pos":         x_pos,
-		"y_pos":         y_pos,
-		"floor_num":     floor_num,
-		"condition":     condition,
-		"cleanliness":   cleanliness,
+		"room_type_id": room_type_id,
+		"room_level": room_level,
+		"room_number": room_number,
+		"x_pos": x_pos,
+		"y_pos": y_pos,
+		"floor_num": floor_num,
+		"condition": condition,
+		"cleanliness": cleanliness,
 		"door_rotation": door_rotation,
-		"door_offset":   door_offset,
+		"door_offset": door_offset,
 		"room_rotation": room_rotation,
 	}
 
 
+# =============================================================================
 func rotate_door() -> void:
 	door_rotation = (door_rotation + 1) % 4
 	_apply_visuals()
 
 
+# =============================================================================
 func cycle_door_offset() -> void:
 	door_offset = 1 - door_offset
 	_apply_visuals()
 
 
-
+# =============================================================================
 func upgrade() -> void:
 	room_level += 1
 	_apply_visuals()
@@ -123,21 +137,31 @@ func upgrade() -> void:
 
 # ── Intern – von Unterklassen überschreiben ───────────────────────────────────
 
+# =============================================================================
 func get_tile_size() -> Vector2i:
-	return Vector2i(2, 2)
+	# Bei 90° (1) und 270° (3) tauschen Breite und Höhe die Plätze!
+	if room_rotation == 1 or room_rotation == 3:
+		return Vector2i(base_size.y, base_size.x)
+
+	return base_size
 
 
-## Welche benannten Slots darf dieser Raum nutzen? Leer = alle geometrisch passenden.
+# =============================================================================
+## Holt sich die erlaubten Türen nun direkt aus den Daten!
 func get_valid_door_slots() -> Array[String]:
-	return []
+	var def: Dictionary = call("get_definition")
+	var result: Array[String] = []
+	result.assign(def.get("valid_door_slots", []))
+	return result
 
 
+# =============================================================================
 ## Berechnet alle gültigen (door_rotation, door_offset)-Kombos aus Raumgröße + Slot-Deklaration.
 ## door_rotation = Wand (0=L 1=T 2=R 3=B), door_offset = 0-basierter Slot-Index.
 func get_valid_door_combos() -> Array[Vector2i]:
-	var sz       := get_tile_size()
+	var sz := get_tile_size()
 	var wall_len := [sz.y, sz.x, sz.y, sz.x]  # L/R = Höhe, T/B = Breite
-	var named    := get_valid_door_slots()
+	var named := get_valid_door_slots()
 	var result: Array[Vector2i] = []
 	for rot: int in range(4):
 		var slots: Array = DOOR_SLOTS[rot]
@@ -148,35 +172,71 @@ func get_valid_door_combos() -> Array[Vector2i]:
 	return result
 
 
+# =============================================================================
 ## Berechnet Position + Rotation des Tür-Sprites für einen Slot.
 ## L/B zählen von der Ecke (L1=unten, B1=rechts) – daher invertierte along-Formel.
 func _calc_door_transform(rot: int, off: int) -> Dictionary:
-	var sz    := get_tile_size()
-	var w_px  := sz.x * TILE_PX
-	var h_px  := sz.y * TILE_PX
+	var sz := get_tile_size()
+	var w_px := sz.x * TILE_PX
+	var h_px := sz.y * TILE_PX
 	var along: float
 	match rot:
-		0:  # L – von unten nach oben
+		0: # L – von unten nach oben
 			along = (sz.y - 1 - off) * TILE_PX + TILE_PX / 2.0
 			return {"pos": Vector2(1, along),       "rot": PI}
-		1:  # T – von links nach rechts
+		1: # T – von links nach rechts
 			along = off * TILE_PX + TILE_PX / 2.0
 			return {"pos": Vector2(along, 1),       "rot": -PI / 2.0}
-		2:  # R – von oben nach unten
+		2: # R – von oben nach unten
 			along = off * TILE_PX + TILE_PX / 2.0
 			return {"pos": Vector2(w_px - 1, along), "rot": 0.0}
-		3:  # B – von rechts nach links
+		3: # B – von rechts nach links
 			along = (sz.x - 1 - off) * TILE_PX + TILE_PX / 2.0
 			return {"pos": Vector2(along, h_px - 1), "rot": PI / 2.0}
 	return {"pos": Vector2.ZERO, "rot": 0.0}
 
 
+# =============================================================================
 func set_floor_neighbors(_top: bool, _right: bool, _bottom: bool, _left: bool) -> void:
 	pass
 
 
+# =============================================================================
 func _apply_visuals() -> void:
-	pass
+	if not is_node_ready():
+		return
+
+	# 1. Tür-Positionierung (für alle Räume gleich)
+	# Wir prüfen mit get_node_or_null, damit es keinen Crash gibt,
+	# falls ein Spezial-Raum mal keinen "Door" Node haben sollte.
+	var door := get_node_or_null("Door") as Node2D
+	if door:
+		var dtfm := _calc_door_transform(door_rotation, door_offset)
+		door.position = dtfm["pos"]
+		door.rotation = dtfm["rot"]
+
+	# 2. Interior-Rotation (für alle Standard-Räume)
+	var interior := get_node_or_null("Interior") as Node2D
+	if interior:
+		var icfg := _get_interior_transform(room_rotation)
+		interior.position = icfg["pos"]
+		interior.rotation = icfg["rot"]
+
+
+# =============================================================================
+# Berechnet den Dreh- und Verschiebe-Punkt dynamisch anhand der Raumgröße!
+func _get_interior_transform(rot: int) -> Dictionary:
+	var sz := get_tile_size()
+	var w_px := sz.x * TILE_PX
+	var h_px := sz.y * TILE_PX
+
+	match rot:
+		0: return {"pos": Vector2.ZERO, "rot": 0.0}
+		1: return {"pos": Vector2(w_px, 0), "rot": PI / 2.0}
+		2: return {"pos": Vector2(w_px, h_px), "rot": PI}
+		3: return {"pos": Vector2(0, h_px), "rot": -PI / 2.0}
+
+	return {"pos": Vector2.ZERO, "rot": 0.0}
 
 
 # =============================================================================

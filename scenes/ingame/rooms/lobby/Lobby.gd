@@ -18,16 +18,16 @@ var entrance_dir: String = "top"
 # =============================================================================
 static func get_definition() -> Dictionary:
 	return {
-		"id":            "lobby",
-		"build_cost":    0,
-		"xp_reward":     0,
-		"prefix":        "R",
-		"label":         "Lobby",
-		"name":          "Lobby / Rezeption",
-		"category":      "management",
-		"icon":          "",
+		"id": "lobby",
+		"build_cost": 0,
+		"xp_reward": 0,
+		"prefix": "R",
+		"label": "Lobby",
+		"name": "Lobby / Rezeption",
+		"category": "management",
+		"icon": "",
 		"nightly_price": 0,
-		"locked":        false,
+		"locked": false,
 		"in_build_menu": false,
 		"req_level": 0,
 		"req_tech": "",
@@ -35,11 +35,6 @@ static func get_definition() -> Dictionary:
 		"open_from": 420,
 		"open_to": 1320,
 	}
-
-
-# =============================================================================
-func _ready() -> void:
-	room_type_id = "lobby"
 
 
 # ── Public API ────────────────────────────────────────────────────────────────

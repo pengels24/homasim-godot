@@ -37,6 +37,9 @@ func _ready() -> void:
 	# Einmaliger Aufruf zum Start, ob die Rezeption auf oder zu sein soll
 	_restore_button_states()
 
+	# DEBUG-Verbindung
+	InputHandler.sig_debug_action_requested.connect(_on_debug_action_requested)
+
 
 # ── Map-Start ─────────────────────────────────────────────────────────────────
 
@@ -259,3 +262,17 @@ func _on_event_reception_last_call() -> void:
 	if _guest_mgr.get_waiting().size() > 0:
 		TimeManager.pause()
 		Toast.show("Letzter Aufruf! Es warten noch Gäste auf den Check-in.")
+
+
+# =============================================================================
+# TEMP TEST: Debug-Trigger (STRG + T)
+# =============================================================================
+func _on_debug_action_requested() -> void:
+	var transition_scene = preload("res://scenes/ingame/hud/modals/DayTransitionModal.tscn")
+	var transition = transition_scene.instantiate()
+
+	transition.sig_midnight_hidden.connect(
+		func(): print("--- MITTERNACHT! (Genau hier feuert das Backend-Update) ---")
+	)
+
+	get_tree().root.add_child(transition)

@@ -6,7 +6,7 @@ extends Node
 enum InputMode {
 	NORMAL,      # Kamera bewegen, UI klicken
 	BUILD,       # Bau-Modus aktiv
-  MODAL,       # Modal offen (Rezeption, Settings, Techtree) - hintergrund blockiert!
+	MODAL,       # Modal offen (Rezeption, Settings, Techtree) - hintergrund blockiert!
 	PAUSE,       # Pause-Menü offen
 	CONSOLE      # Dev-Konsole offen
 }
@@ -35,7 +35,8 @@ signal sig_hotkey_sim_browser_requested
 signal sig_hotkey_escape_pressed
 signal sig_hotkey_quicksave_requested
 signal sig_hotkey_quickload_requested
-
+# ── DEBUG HOTKEYS ─────────────────────────────────────────────
+signal sig_debug_action_requested
 
 # =============================================================================
 func _ready() -> void:
@@ -100,6 +101,14 @@ func _unhandled_input(event: InputEvent) -> void:
 		else:
 			sig_camera_restore_view_requested.emit()
 		return
+
+	# ── DEBUG HOTKEYS ───────────────────────────────────────────
+	# STRG + T (Test-Funktionen)
+	if event is InputEventKey and event.pressed and not event.is_echo():
+		if event.keycode == KEY_T and event.ctrl_pressed:
+			get_viewport().set_input_as_handled()
+			sig_debug_action_requested.emit()
+			return
 
 	# ── ALLGEMEINE HOTKEYS (Über InputMap) ──────────────────────────────────────
 	# Hier können Tasten in jedem Modus reagieren (z.B. zum Schließen von Menüs)

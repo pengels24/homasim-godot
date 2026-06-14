@@ -254,6 +254,9 @@ func _on_time_speed_changed(is_paused: bool, speed: float) -> void:
 		# Spiel läuft normal -> Play-Button eindrücken
 		hud_canvas.btn_play.set_pressed_no_signal(true)
 
+	if hud_canvas.has_method("set_pause_visuals"):
+		hud_canvas.set_pause_visuals(is_paused)
+
 
 # =============================================================================
 # NEU: Die Vorwarnung um 21:30 Uhr

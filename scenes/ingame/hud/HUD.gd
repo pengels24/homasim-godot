@@ -26,6 +26,12 @@ extends CanvasLayer
 @onready var bottom_bar: Node = %HUDBottom
 @onready var music_ctrl: Node = %HUDMusicControl
 
+@onready var state_border: ReferenceRect = $StateBorder
+@onready var pause_label: Label = $PauseLabel
+
+var _is_building: bool = false
+var _is_paused: bool = false
+
 
 # =============================================================================
 func _ready() -> void:
@@ -52,6 +58,9 @@ func _ready() -> void:
 
 	GameState.sig_hotel_level_up.connect(_on_hotel_level_up)
 	%LevelUpModal.sig_rewards_claimed.connect(_on_level_up_rewards_claimed)
+
+	# Initialen Pause-Status setzen (falls wir direkt pausiert ins Spiel starten)
+	set_pause_visuals(TimeManager.is_paused())
 
 
 # =============================================================================
@@ -251,3 +260,32 @@ func _on_time_speed_changed(is_paused: bool, speed: float) -> void:
 		btn_play.set_pressed_no_signal(true)
 		btn_pause.set_pressed_no_signal(false)
 		btn_ff.set_pressed_no_signal(false)
+
+
+# =============================================================================
+func update_state_visuals() -> void:
+	if not is_instance_valid(state_border) or not is_instance_valid(pause_label):
+		return
+
+	if _is_building:
+		state_border.border_color = Color(0.9, 0.7, 0.0) # Gold/Yellow
+		state_border.visible = true
+	elif _is_paused:
+		state_border.border_color = Color.WHITE
+		state_border.visible = true
+	else:
+		state_border.visible = false
+
+	pause_label.visible = _is_paused
+
+
+# =============================================================================
+func set_pause_visuals(p_paused: bool) -> void:
+	_is_paused = p_paused
+	update_state_visuals()
+
+
+# =============================================================================
+func set_build_mode_visuals(p_building: bool) -> void:
+	_is_building = p_building
+	update_state_visuals()

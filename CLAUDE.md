@@ -17,6 +17,7 @@ Linear-Projekt: **Angelus2010 / ANG-** für alle Issues.
 - Erklärungen in einfacher Sprache, mit Analogien wenn hilfreich
 - Nicht überladen – ein kurzer Satz pro Konzept reicht oft
 - Wenn dein Sohn (Webentwickler, Godot-Erfahrung) Fragen stellt: gerne einbeziehen und aus Webentwickler-Perspektive erklären
+- **Ehrliche Meinung:** Sag Peter nicht einfach nach dem Mund. Wenn eine Idee aus Game-Design- oder Architektur-Sicht "Blödsinn" ist oder überladen wirkt, lege dein Veto ein und mach einen besseren Vorschlag.
 
 ## Godot-Direktiven
 - **Immer Godot 4 API** – kein Godot 3 Syntax. Bei Unsicherheit Docs lesen, nicht halluzinieren.
@@ -33,6 +34,7 @@ Linear-Projekt: **Angelus2010 / ANG-** für alle Issues.
 - Sprechende Funktionsnamen; lange Funktionen in benannte Sub-Funktionen aufteilen
 - Keine Magic Numbers – alle Werte in benannten Konstanten
 - **Godot 4 Best Practices**: statische Typisierung überall, Ressourcen in `.tscn` definieren (nicht im Code bauen), `_ready()` nur für Node-Setup
+- **Signale** – Eigene Signale beginnen immer mit dem Präfix `sig_` zur besseren Unterscheidbarkeit (z.B. `sig_room_built`).
 - **UI immer in .tscn** – keine `Node.new()`-UI-Bauten in Scripts; Scripts befüllen nur Daten und verbinden Signale. So bleibt die UI im Godot-Editor bearbeitbar.
 - **Geteilte UI-Komponenten in `scenes/shared/`** – Jedes UI-Element das an mehr als einer Stelle vorkommt (Modals, Dialoge, gemeinsame Panels) wird als eigene `.tscn` + `.gd` unter `scenes/shared/` angelegt und per `instance=ExtResource(...)` eingebunden. Nie inline duplizieren. Beispiele: `ConfirmModal.tscn`, zukünftige Toast-Notifications, Info-Popups.
 - Kommentare erklären das *Warum*, nicht das *Was*

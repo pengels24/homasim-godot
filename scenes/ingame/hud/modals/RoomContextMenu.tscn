@@ -1,0 +1,123 @@
+[gd_scene format=3 uid="uid://b1m7jtk41q44a"]
+
+[ext_resource type="Script" uid="uid://cmfts47nr2emf" path="res://scenes/ingame/hud/modals/RoomContextMenu.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="2_theme"]
+[ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="3_l0jnf"]
+[ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="4_knild"]
+[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="5_0t5g4"]
+[ext_resource type="Texture2D" uid="uid://chug26ioff260" path="res://assets/icons/x.svg" id="6_2tvcn"]
+[ext_resource type="FontFile" uid="uid://3can1r2sqobx" path="res://assets/fonts/AvenuePixel-Regular.ttf" id="7_eqh8p"]
+[ext_resource type="StyleBox" uid="uid://byn5sg5pqc4ux" path="res://assets/UI/menu_button_blue.tres" id="8_8tpl6"]
+[ext_resource type="StyleBox" uid="uid://bxdxryd4oglat" path="res://assets/UI/menu_button_blue_pressed.tres" id="9_40ws1"]
+[ext_resource type="StyleBox" uid="uid://bc0pipuhgp5c7" path="res://assets/UI/menu_button_blue_hover.tres" id="10_f715c"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eqh8p"]
+content_margin_left = 0.0
+content_margin_top = 0.0
+content_margin_right = 0.0
+content_margin_bottom = 0.0
+bg_color = Color(0.043137256, 0.05882353, 0.09019608, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[node name="RoomContextMenu" type="Control" unique_id=2096430898]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
+
+[node name="MenuPanel" type="PanelContainer" parent="." unique_id=1786457492]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 140.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_eqh8p")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuPanel" unique_id=1978556721]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Header" type="HBoxContainer" parent="MenuPanel/VBoxContainer" unique_id=1114400592]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="DragHandle" type="ColorRect" parent="MenuPanel/VBoxContainer/Header" unique_id=74198778]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.15, 0.15, 0.15, 1)
+
+[node name="Label" type="Label" parent="MenuPanel/VBoxContainer/Header/DragHandle" unique_id=798281250]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.6745098, 0.5137255, 0.02745098, 1)
+theme_override_font_sizes/font_size = 18
+text = "  ::: Aktionen"
+vertical_alignment = 1
+
+[node name="BtnClose" type="Button" parent="MenuPanel/VBoxContainer/Header" unique_id=940631296]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.2, 0.2, 1)
+theme_override_constants/icon_max_width = 16
+theme_override_styles/normal = ExtResource("3_l0jnf")
+theme_override_styles/pressed = ExtResource("4_knild")
+theme_override_styles/hover = ExtResource("5_0t5g4")
+icon = ExtResource("6_2tvcn")
+
+[node name="MarginContainer" type="MarginContainer" parent="MenuPanel/VBoxContainer" unique_id=1060882370]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxButtons" type="VBoxContainer" parent="MenuPanel/VBoxContainer/MarginContainer" unique_id=1746716260]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="BtnDetails" type="Button" parent="MenuPanel/VBoxContainer/MarginContainer/VBoxButtons" unique_id=1228970060]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("7_eqh8p")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = ExtResource("8_8tpl6")
+theme_override_styles/pressed = ExtResource("9_40ws1")
+theme_override_styles/hover = ExtResource("10_f715c")
+text = "Details anzeigen"
+
+[node name="BtnService" type="Button" parent="MenuPanel/VBoxContainer/MarginContainer/VBoxButtons" unique_id=748987802]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("7_eqh8p")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = ExtResource("8_8tpl6")
+theme_override_styles/pressed = ExtResource("9_40ws1")
+theme_override_styles/hover = ExtResource("10_f715c")
+text = "Service rufen"
+
+[node name="HSeparator" type="HSeparator" parent="MenuPanel/VBoxContainer/MarginContainer/VBoxButtons" unique_id=1336479839]
+layout_mode = 2
+
+[node name="BtnDemolish" type="Button" parent="MenuPanel/VBoxContainer/MarginContainer/VBoxButtons" unique_id=453521187]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("7_eqh8p")
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = ExtResource("3_l0jnf")
+theme_override_styles/pressed = ExtResource("4_knild")
+theme_override_styles/hover = ExtResource("5_0t5g4")
+text = "Zimmer abreißen"

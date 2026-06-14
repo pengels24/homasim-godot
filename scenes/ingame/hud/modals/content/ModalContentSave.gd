@@ -97,6 +97,10 @@ func _on_name_input_changed(new_text: String) -> void:
 func _on_save_button_pressed() -> void:
 	var final_save_name = save_name_input.text.strip_edges()
 
+	# WICHTIG: Bevor wir speichern, müssen wir das laufende Spiel zwingen,
+	# seinen aktuellsten Zustand (Zeit, Geld, Gäste) in den SaveManager zu schreiben!
+	TimeManager.sig_save_requested.emit(TimeManager.get_game_time())
+
 	# Speichern über den SaveManager (Wichtig: Index 0-4 nutzen)
 	SaveManager.save_manual(active_hotel_id, selected_slot_index - 1, final_save_name)
 	Toast.show(GameState.T("toast.quicksave"))

@@ -64,6 +64,13 @@ func _on_close_button_pressed() -> void:
 
 
 # =============================================================================
+func set_close_button_visible(is_visible: bool) -> void:
+	var btn = find_child("CloseButton", true, false)
+	if btn:
+		btn.visible = is_visible
+
+
+# =============================================================================
 func set_title(new_title: String) -> void:
 	if new_title != "":
 		%ModalTitel.text = new_title

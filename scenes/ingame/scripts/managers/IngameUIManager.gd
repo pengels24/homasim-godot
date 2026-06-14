@@ -122,13 +122,9 @@ func cleanup_current_states() -> void:
 
 # =============================================================================
 func update_map_grid_mode() -> void:
-	var c_vis = GlobalConsole.visible if is_instance_valid(GlobalConsole) else false
-	var m_vis = _standard_modal.is_visible_in_tree() if is_instance_valid(_standard_modal) else false
-	var s_vis = _sim_browser.visible if is_instance_valid(_sim_browser) else false
-	var r_vis = _reception.is_visible_in_tree() if is_instance_valid(_reception) else false
-
-	var blocked: bool = c_vis or m_vis or s_vis or r_vis
-	_map_grid.process_mode = Node.PROCESS_MODE_DISABLED if blocked else Node.PROCESS_MODE_INHERIT
+	pass # Removed: Changing process_mode to DISABLED removes Area2Ds from the physics space.
+	# If the game is paused, they are never added back until unpaused.
+	# Input is safely blocked by InputHandler.current_mode checks instead.
 
 
 # ── Input Handling ────────────────────────────────────────────────────────────
@@ -247,6 +243,60 @@ func update_reception_button_state() -> void:
 	# um den Button zu enablen/disablen. (Name ggf. anpassen!)
 	if _bottom_bar.has_method("set_reception_disabled"):
 		_bottom_bar.set_reception_disabled(not has_rooms)
+
+
+# =============================================================================
+func show_end_of_day(guest_mgr: GuestManager) -> void:
+	cleanup_current_states()
+	_pause_time_for_ui()
+	_standard_modal.modal_input_mode = InputHandler.InputMode.PAUSE
+	
+	var eod_scene = load("res://scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn")
+	var eod_content = eod_scene.instantiate()
+	eod_content._guest_mgr = guest_mgr
+	
+	# Wichtig: Zuerst Signal verbinden, dann ins Modal setzen
+	eod_content.sig_continue_requested.connect(_on_end_of_day_continue)
+	
+	_standard_modal.set_content(eod_content)
+	
+	# Verstecke den Schließen-Button, damit man den Tag nicht abbrechen kann!
+	_standard_modal.set_close_button_visible(false)
+		
+	var title = "Tagesabschluss - Tag %d abgeschlossen" % GameState.selected_hotel.get("day", 1)
+	if _standard_modal.visible:
+		_standard_modal.set_title(title)
+	else:
+		_standard_modal.open(title)
+
+
+# =============================================================================
+func _on_end_of_day_continue() -> void:
+	# 1. Modal zu
+	if is_instance_valid(_standard_modal):
+		# Close-Button wieder einblenden für zukünftige Modals
+		_standard_modal.set_close_button_visible(true)
+		_standard_modal.close()
+		
+	# 2. Cinematic spawnen
+	var transition_scene = load("res://scenes/ingame/hud/modals/DayTransitionModal.tscn")
+	var transition = transition_scene.instantiate()
+	_hud.add_child(transition)
+	
+	# 3. Wenn Cinematic dunkel ist, Backend triggern
+	transition.sig_midnight_hidden.connect(func():
+		var current_day: int = GameState.selected_hotel.get("day", 1)
+		
+		# Setze Zeit offiziell auf 24:00 für Logs etc.
+		TimeManager.set_game_time(24 * 60)
+		
+		# Strafen austeilen
+		if is_instance_valid(_guest_mgr):
+			_guest_mgr.process_midnight_penalties(current_day)
+			
+		# Nächsten Tag starten (Zeit wird intern auf 06:00 gesetzt)
+		TimeManager.start_next_day()
+	)
 
 
 # =============================================================================

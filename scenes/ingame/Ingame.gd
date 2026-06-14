@@ -129,7 +129,6 @@ func _setup_subsystems() -> void:
 		_guest_mgr.load_from_dict(_hotel["guest_data"])
 
 	_guest_mgr.parties_changed.connect(_on_parties_changed)
-	_guest_mgr.checkout_forgotten.connect(_on_checkout_forgotten)
 
 	# Bausystem
 	_build = IngameBuild.new()
@@ -140,6 +139,7 @@ func _setup_subsystems() -> void:
 
 	# Signale vom TimeManager fangen
 	TimeManager.sig_hour_passed.connect(_guest_mgr.on_hour_passed)
+	TimeManager.sig_day_ended.connect(_on_event_day_end)
 
 	var sim_browser = SIM_BROWSER_SCENE.instantiate() as SimBrowser
 	add_child(sim_browser)
@@ -172,23 +172,23 @@ func _on_parties_changed() -> void:
 
 
 # =============================================================================
-func _on_checkout_forgotten(count: int) -> void:
-	Toast.show("⚠ %d Gast/Gäste haben noch nicht ausgecheckt!" % count)
-
-
-# =============================================================================
 func _on_schedule_event(event_id: String) -> void:
 	match event_id:
 		"day_start":       _on_event_day_start()
 		"reception_open":  _on_event_reception_open()
 		"guest_arrival":   _on_event_guest_arrival()
-		"reception_last_call": _on_event_reception_last_call() # <--- NEU (21:30)
+		"reception_last_call": _on_event_reception_last_call()
 		"reception_close": _on_event_reception_close()
 
 
 # =============================================================================
+func _on_event_day_end(_day: int) -> void:
+	# Wird nun via TimeManager.sig_day_ended aufgerufen (24:00 Uhr)
+	_ui_mgr.show_end_of_day(_guest_mgr)
+
 func _on_event_day_start() -> void:
-	Toast.show(GameState.T("toast.event.day_start"))
+	# Toast entfernt, da die Cinematic bereits "Ein neuer Tag beginnt" anzeigt.
+	pass
 
 
 # =============================================================================

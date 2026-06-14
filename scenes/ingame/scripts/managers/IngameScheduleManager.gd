@@ -13,8 +13,8 @@ func setup() -> void:
   elif not TimeManager.sig_minute_passed.is_connected(_on_minute_passed):
     TimeManager.sig_minute_passed.connect(_on_minute_passed)
 
-  if not TimeManager.sig_day_ended.is_connected(_on_day_ended):
-    TimeManager.sig_day_ended.connect(_on_day_ended)
+  if not TimeManager.sig_morning_struck.is_connected(_on_morning_struck):
+    TimeManager.sig_morning_struck.connect(_on_morning_struck)
 
   # ---> NEU: Auf den GameState hören
   if not GameState.sig_configs_reloaded.is_connected(force_reload_from_gamestate):
@@ -47,8 +47,9 @@ func _on_minute_passed(current_game_time: int) -> void:
 
 
 # =============================================================================
-func _on_day_ended(_new_day: int) -> void:
-  _build_daily_queue(0)
+func _on_morning_struck() -> void:
+  _build_daily_queue(TimeManager.get_game_time())
+  _on_minute_passed(TimeManager.get_game_time())
 
 
 # =============================================================================

@@ -4,6 +4,8 @@ class_name GuestManager
 signal parties_changed()
 signal checkout_forgotten(count: int)
 signal sig_party_checked_in(party: GuestParty, room: Node2D) # <--- NEU
+signal sig_party_moving_to_checkout(party: GuestParty, room_id: String)
+signal sig_party_checked_out_physically(party: GuestParty)
 
 # ── Konfiguration ─────────────────────────────────────────────────────────────
 var _hotel:    Dictionary
@@ -211,6 +213,7 @@ func _generate_party() -> GuestParty:
 	var party := GuestParty.new(party_id, type_id)
 	var def: Dictionary = GuestDefinitions.ALL[type_id]
 	party.stay_days = randi_range(def["min_stay"], def["max_stay"])
+	party.total_stay_days = party.stay_days
 	party.base_price = randi_range(def["min_base_price"], def["max_base_price"])
 	party.arrived_day = _hotel.get("day", 1)
 	party.arrived_time = TimeManager.get_game_time()
@@ -443,8 +446,17 @@ func do_checkout(party: GuestParty) -> float:
 # =============================================================================
 func _finalize_checkout(party: GuestParty, payout: int, auto: bool) -> void:
 	_checkout.erase(party)
+	
+	# TODO(Cleaning): Wenn wir das Personal-System (Housekeeping) haben, darf das Zimmer 
+	# hier NICHT sofort wieder freigegeben werden. Es muss den Status "needs_cleaning"
+	# erhalten. Erst wenn die Reinigungskraft fertig ist, darf es aus _room_assign gelöscht 
+	# (oder als "clean" markiert) und wieder buchbar werden!
 	_room_assign.erase(party.room_id)
+	
 	party.state = "gone"
+	
+	if not auto:
+		sig_party_checked_out_physically.emit(party)
 
 	var msg := ""
 	var log_type := "check_out"
@@ -482,7 +494,7 @@ func _finalize_checkout(party: GuestParty, payout: int, auto: bool) -> void:
 
 # =============================================================================
 func _calculate_payout(party: GuestParty) -> float:
-	return party.base_price * float(party.stay_days) * party.satisfaction
+	return party.base_price * float(party.total_stay_days) * (party.satisfaction / 100.0)
 
 
 # ── Serialisierung ────────────────────────────────────────────────────────────
@@ -547,19 +559,20 @@ func process_midnight_penalties(day: int) -> void:
 	_waiting.clear()
 
 	# 2. Wut-Checkout für ignorierte Gäste am Tresen
-	# Da sie seit 06:00 Uhr hier stehen, gibt es null Toleranz.
-	var forgotten_count := _checkout.size()
-	var to_rage_quit: Array = _checkout.duplicate() # Kopie, da wir die originale Liste gleich bearbeiten
+	# Strafen passieren erst ab Tag 2, da an Tag 1 noch niemand abreisen kann.
+	if day > 1:
+		var forgotten_count := _checkout.size()
+		var to_rage_quit: Array = _checkout.duplicate() # Kopie, da wir die originale Liste gleich bearbeiten
 
-	for party: GuestParty in to_rage_quit:
-		# Saftige Ruf-Strafe (Passe den Wert gerne an)
-		GameState.add_rep(-20)
-		# Checkout mit 0 Euro Zahlung erzwingen
-		_finalize_checkout(party, 0, true)
+		for party: GuestParty in to_rage_quit:
+			# Saftige Ruf-Strafe (Passe den Wert gerne an)
+			GameState.add_rep(-20)
+			# Checkout mit 0 Euro Zahlung erzwingen
+			_finalize_checkout(party, 0, true)
 
-	if forgotten_count > 0:
-		checkout_forgotten.emit(forgotten_count)
-		Toast.show("%d Gäste sind wütend abgereist! (0 €)" % forgotten_count)
+		if forgotten_count > 0:
+			checkout_forgotten.emit(forgotten_count)
+			Toast.show("%d Gäste sind wütend abgereist! (0 €)" % forgotten_count)
 
 	parties_changed.emit()
 
@@ -595,6 +608,7 @@ func process_morning_routine() -> void:
 		_active.erase(party)
 		party.state = "checkout"
 		_checkout.append(party)
+		sig_party_moving_to_checkout.emit(party, party.room_id)
 
 	parties_changed.emit()
 

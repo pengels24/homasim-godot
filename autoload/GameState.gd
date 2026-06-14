@@ -24,6 +24,10 @@ signal sig_hotel_time_changed(time_string: String)
 
 signal sig_hotel_level_up(new_level: int)
 
+# interaktion
+signal sig_room_hovered(room: Node2D, is_hovered: bool)
+signal sig_room_clicked(room: Node2D)
+
 # globale signale
 signal sig_dev_spawn_guests(count: int)
 signal sig_configs_reloaded()

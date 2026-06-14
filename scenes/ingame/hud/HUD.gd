@@ -62,6 +62,16 @@ func _ready() -> void:
 	# Initialen Pause-Status setzen (falls wir direkt pausiert ins Spiel starten)
 	set_pause_visuals(TimeManager.is_paused())
 
+	# Custom Tooltip einhängen
+	var tooltip_scene = preload("res://scenes/ingame/hud/CustomTooltip.tscn")
+	var tooltip_instance = tooltip_scene.instantiate()
+	add_child(tooltip_instance)
+
+	# Room Context Menu einhängen
+	var room_menu_scene = preload("res://scenes/ingame/hud/modals/RoomContextMenu.tscn")
+	var room_menu_instance = room_menu_scene.instantiate()
+	add_child(room_menu_instance)
+
 
 # =============================================================================
 func _on_hotel_name_changed(new_name: String) -> void:

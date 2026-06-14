@@ -71,7 +71,7 @@ func populate(party: GuestParty, mode: Mode, is_new: bool = false) -> void:
 			_build_active_tooltip()
 
 		Mode.CHECKOUT:
-			var est_price = party.base_price * party.stay_days * party.satisfaction
+			var est_price = party.base_price * float(party.total_stay_days) * (party.satisfaction / 100.0)
 			_details_label.text = "Zimmer " + party.room_id + " | " + "%.0f" % est_price + " €"
 			tooltip_text = ""
 

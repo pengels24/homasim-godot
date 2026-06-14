@@ -7,6 +7,7 @@ var type: String = "" # Schlüssel aus GuestDefinitions.ALL
 var members: Array  = [] # Array[GuestMember]
 var room_id: String = "" # leer bis Check-in (= room_number)
 var stay_days: int    = 1
+var total_stay_days: int = 1 # Speichert die ursprünglichen Nächte für die Abrechnung
 var base_price: int  = 0
 var satisfaction: int = 100 # 0–100
 var patience: int = 100 # 0.0–1.0; startet bei 1.0
@@ -59,6 +60,7 @@ func to_dict() -> Dictionary:
 		"members": member_arr,
 		"room_id": room_id,
 		"stay_days": stay_days,
+		"total_stay_days": total_stay_days,
 		"base_price": base_price,
 		"satisfaction": satisfaction,
 		"patience": patience,
@@ -76,6 +78,7 @@ static func from_dict(d: Dictionary) -> GuestParty:
 	var p := GuestParty.new(d.get("id", ""), d.get("type", ""))
 	p.room_id = d.get("room_id", "")
 	p.stay_days = d.get("stay_days", 1)
+	p.total_stay_days = d.get("total_stay_days", max(1, p.stay_days)) # Fallback für alte Savegames
 	p.base_price = int(d.get("base_price", 0))
 	p.satisfaction = int(d.get("satisfaction", 100))
 	p.patience = int(d.get("patience", 100))

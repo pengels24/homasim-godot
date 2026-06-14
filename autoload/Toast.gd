@@ -7,8 +7,9 @@ extends Node
 
 const TOAST_SCENE := preload("res://scenes/shared/ToastNotification.tscn")
 
-var _active:  ToastNotification = null
+var _active: ToastNotification = null
 var _pending: String = ""
+var _toast_queue: Array[String] = []
 
 
 func _ready() -> void:
@@ -17,14 +18,25 @@ func _ready() -> void:
 	get_tree().node_added.connect(_on_node_added)
 
 
-## Zeigt eine Benachrichtigung sofort an.
+## Fügt eine Benachrichtigung zur Warteschlange hinzu und zeigt sie an, sobald Platz ist.
 func show(message: String) -> void:
-	if is_instance_valid(_active):
-		_active.queue_free()
+	_toast_queue.append(message)
+	_process_queue()
+
+func _process_queue() -> void:
+	if is_instance_valid(_active) or _toast_queue.is_empty():
+		return
+		
+	var next_msg: String = _toast_queue.pop_front()
 	_active = TOAST_SCENE.instantiate() as ToastNotification
 	get_tree().get_root().add_child(_active)
-	_active.play(message)
-	_active.tree_exited.connect(func(): _active = null)
+	_active.play(next_msg)
+	
+	# Wenn der Toast fertig ist, das nächste Element aus der Queue holen
+	_active.tree_exited.connect(func():
+		_active = null
+		_process_queue()
+	)
 
 
 ## Merkt eine Nachricht vor, die nach dem nächsten Szenenwechsel angezeigt wird.

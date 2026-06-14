@@ -21,4 +21,7 @@ static func get_definition() -> Dictionary:
 		"open_from": 0,
 		"open_to": 0,
 		"valid_door_slots": ["T2", "B2"],
+		"cleanliness_level": 100,
+		"maintenance_level": 100,
+		"is_service_requested": false
 	}

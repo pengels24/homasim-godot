@@ -30,8 +30,9 @@ var y_pos: int = 0
 var floor_num: int = 1
 
 # ── Zustand ───────────────────────────────────────────────────────────────────
-var condition:  int = 100   # Verschleiß:  sinkt durch Nutzung, braucht Reparatur
-var cleanliness: int = 100  # Sauberkeit:  sinkt täglich, braucht Personal
+var cleanliness_level: int = 100
+var maintenance_level: int = 100
+var is_service_requested: bool = false
 
 # ── Tür / Orientierung ────────────────────────────────────────────────────────
 var door_rotation: int = 0   # Welche Wand   0–3  (.-Taste: nur Tür wandert)
@@ -74,6 +75,8 @@ static func get_definition() -> Dictionary:
 func _ready() -> void:
 	var def := call("get_definition") as Dictionary
 	room_type_id = def.get("id", "")
+	
+	_create_interaction_area()
 
 
 # ── Public API ────────────────────────────────────────────────────────────────
@@ -91,8 +94,9 @@ func configure(data: Dictionary) -> void:
 	x_pos         = data.get("x_pos",         x_pos)
 	y_pos         = data.get("y_pos",         y_pos)
 	floor_num     = data.get("floor_num",     floor_num)
-	condition     = data.get("condition",     condition)
-	cleanliness   = data.get("cleanliness",   cleanliness)
+	maintenance_level = data.get("maintenance_level", data.get("condition", maintenance_level))
+	cleanliness_level = data.get("cleanliness_level", data.get("cleanliness", cleanliness_level))
+	is_service_requested = data.get("is_service_requested", is_service_requested)
 	door_rotation = data.get("door_rotation", door_rotation)
 	door_offset   = data.get("door_offset",   door_offset)
 	room_rotation = data.get("room_rotation", room_rotation)
@@ -109,8 +113,9 @@ func to_dict() -> Dictionary:
 		"x_pos": x_pos,
 		"y_pos": y_pos,
 		"floor_num": floor_num,
-		"condition": condition,
-		"cleanliness": cleanliness,
+		"maintenance_level": maintenance_level,
+		"cleanliness_level": cleanliness_level,
+		"is_service_requested": is_service_requested,
 		"door_rotation": door_rotation,
 		"door_offset": door_offset,
 		"room_rotation": room_rotation,
@@ -133,6 +138,64 @@ func cycle_door_offset() -> void:
 func upgrade() -> void:
 	room_level += 1
 	_apply_visuals()
+
+var _highlight_rect: ReferenceRect
+
+# =============================================================================
+func set_highlight(active: bool) -> void:
+	if active:
+		if not is_instance_valid(_highlight_rect):
+			_highlight_rect = ReferenceRect.new()
+			_highlight_rect.editor_only = false
+			_highlight_rect.border_color = Color(1.0, 0.8, 0.1, 0.9) # Vibrant Yellow border
+			_highlight_rect.border_width = 3.0
+			_highlight_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			
+			var bg = ColorRect.new()
+			bg.color = Color(1.0, 0.8, 0.1, 0.2) # Light Yellow fill
+			bg.set_anchors_preset(Control.PRESET_FULL_RECT)
+			bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			_highlight_rect.add_child(bg)
+			
+			var sz = get_tile_size()
+			_highlight_rect.size = Vector2(sz.x * TILE_PX, sz.y * TILE_PX)
+			
+			add_child(_highlight_rect)
+		_highlight_rect.show()
+	else:
+		if is_instance_valid(_highlight_rect):
+			_highlight_rect.hide()
+
+
+var _interaction_collision: CollisionShape2D
+
+# =============================================================================
+func _create_interaction_area() -> void:
+	var area = Area2D.new()
+	area.process_mode = Node.PROCESS_MODE_ALWAYS # Fix: Allows Area2D to regain mouse focus after UI closes while paused
+	_interaction_collision = CollisionShape2D.new()
+	var shape = RectangleShape2D.new()
+	
+	var sz = get_tile_size()
+	shape.size = Vector2(sz.x * TILE_PX, sz.y * TILE_PX)
+	
+	_interaction_collision.position = shape.size / 2.0
+	_interaction_collision.shape = shape
+	
+	area.add_child(_interaction_collision)
+	add_child(area)
+	
+	area.mouse_entered.connect(func(): GameState.sig_room_hovered.emit(self, true))
+	area.mouse_exited.connect(func(): GameState.sig_room_hovered.emit(self, false))
+	area.input_event.connect(_on_interaction_area_input)
+
+
+# =============================================================================
+func _on_interaction_area_input(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if InputHandler.current_mode == InputHandler.InputMode.NORMAL:
+			get_viewport().set_input_as_handled()
+			GameState.sig_room_clicked.emit(self)
 
 
 # ── Intern – von Unterklassen überschreiben ───────────────────────────────────
@@ -222,6 +285,14 @@ func _apply_visuals() -> void:
 		interior.position = icfg["pos"]
 		interior.rotation = icfg["rot"]
 
+	# 3. Hitbox (Area2D) anpassen
+	if is_instance_valid(_interaction_collision):
+		var sz = get_tile_size()
+		var rect = _interaction_collision.shape as RectangleShape2D
+		if rect:
+			rect.size = Vector2(sz.x * TILE_PX, sz.y * TILE_PX)
+			_interaction_collision.position = rect.size / 2.0
+
 
 # =============================================================================
 # Berechnet den Dreh- und Verschiebe-Punkt dynamisch anhand der Raumgröße!
@@ -247,8 +318,8 @@ func _update_indicator() -> void:
 		add_child(_status_indicator)
 
 		# 1. POSITION: Ab in die obere linke Ecke (z.B. 4 Pixel vom Rand)
-		_status_indicator.position = Vector2(4, 4)
-		_status_indicator.scale = Vector2(0.5, 0.5) # Werte ggf. anpassen (z.B. 0.3, 0.3)
+		_status_indicator.position = Vector2(0, 0)
+		_status_indicator.scale = Vector2(0.3, 0.3) # Werte ggf. anpassen (z.B. 0.3, 0.3)
 		_status_indicator.z_index = 100
 		_status_indicator.z_as_relative = false
 
@@ -261,19 +332,4 @@ func _update_indicator() -> void:
 
 	_status_indicator.visible = true
 
-	if cleanliness < 50 or condition < 50:
-		_status_indicator.set_state(RoomStatusIndicator.RoomState.SERVICE)
-	else:
-		# Sicherheits-Check, falls der Raum (z.B. im Baumodus) noch keinen Manager hat
-		if _guest_mgr:
-			var party = _guest_mgr.get_party_in_room(self)
-
-			if party != null:
-				if party.state == "checkout":
-					_status_indicator.set_state(RoomStatusIndicator.RoomState.CHECKOUT)
-				else:
-					_status_indicator.set_state(RoomStatusIndicator.RoomState.OCCUPIED)
-				return # <-- Wichtig, damit er nicht in den FREE-Block unten rennt
-
-		# Fallback: Kein Gast da (oder kein Manager zugewiesen)
-		_status_indicator.set_state(RoomStatusIndicator.RoomState.FREE)
+	_status_indicator.set_status(is_service_requested, maintenance_level < 50)

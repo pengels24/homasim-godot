@@ -22,7 +22,10 @@ static func get_definition() -> Dictionary:
 		"max_beds": 1,
 		"open_from": 0,
 		"open_to": 0,
-		"valid_door_slots": ["L1", "L2", "T1"]
+		"valid_door_slots": ["L1", "L2", "T1"],
+		"cleanliness_level": 100,
+		"maintenance_level": 100,
+		"is_service_requested": false
 	}
 
 

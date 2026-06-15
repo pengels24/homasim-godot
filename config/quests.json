@@ -1,0 +1,57 @@
+{
+  "q_build_single_5": {
+    "name": "Einzelzimmer I",
+    "description": "Baue 5 Einzelzimmer",
+    "type": "build_room",
+    "target_id": "bed_standard",
+    "target_count": 5,
+    "reward_fp": 50,
+    "reward_money": 500,
+    "requires_tech": "",
+    "next_quest": "q_build_single_10"
+  },
+  "q_build_single_10": {
+    "name": "Einzelzimmer II",
+    "description": "Baue 10 Einzelzimmer",
+    "type": "build_room",
+    "target_id": "bed_standard",
+    "target_count": 10,
+    "reward_fp": 150,
+    "reward_money": 1500,
+    "requires_tech": "",
+    "next_quest": "q_build_single_25"
+  },
+  "q_build_single_25": {
+    "name": "Einzelzimmer III",
+    "description": "Baue 25 Einzelzimmer",
+    "type": "build_room",
+    "target_id": "bed_standard",
+    "target_count": 25,
+    "reward_fp": 400,
+    "reward_money": 5000,
+    "requires_tech": "",
+    "next_quest": ""
+  },
+  "q_build_double_5": {
+    "name": "Doppelzimmer I",
+    "description": "Baue 5 Doppelzimmer",
+    "type": "build_room",
+    "target_id": "bed_double",
+    "target_count": 5,
+    "reward_fp": 80,
+    "reward_money": 800,
+    "requires_tech": "",
+    "next_quest": "q_build_double_10"
+  },
+  "q_build_double_10": {
+    "name": "Doppelzimmer II",
+    "description": "Baue 10 Doppelzimmer",
+    "type": "build_room",
+    "target_id": "bed_double",
+    "target_count": 10,
+    "reward_fp": 200,
+    "reward_money": 2000,
+    "requires_tech": "",
+    "next_quest": ""
+  }
+}

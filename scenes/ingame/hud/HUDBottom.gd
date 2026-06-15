@@ -5,14 +5,17 @@ signal sig_reception_toggled
 signal sig_staff_toggled
 signal sig_tech_tree_toggled
 signal sig_sim_browser_toggled
+signal sig_quest_book_toggled
 
 @onready var build_menu: Button = %BuildMenu
 @onready var reception: Button = %Reception
 @onready var staff: Button = %Staff
 @onready var tech_tree: Button = %TechTree
 @onready var sim_browser: Button = %SimBrowser
+@onready var quest_book: Button = %QuestBook
 @onready var ind_reception: Panel = %IndReception
 @onready var ind_sim_browser: Panel = %IndSimBrowser
+@onready var ind_quest_book: Panel = %IndQuestBook
 
 
 # =============================================================================
@@ -37,15 +40,21 @@ func _ready() -> void:
 		sig_sim_browser_toggled.emit()
 	)
 
+	quest_book.pressed.connect(func():
+		sig_quest_book_toggled.emit()
+	)
+
 	# todo - zugewiesene tasten aus settings in den ttoltip setzen
 	build_menu.tooltip_text = GameState.T("hud.bottom.build_menu_tt", "F2")
 	reception.tooltip_text  = GameState.T("hud.bottom.reception_tt", "F3")
 	staff.tooltip_text      = GameState.T("hud.bottom.staff_tt", "F4")
 	tech_tree.tooltip_text  = GameState.T("hud.bottom.tech_tree_tt", "F6")
 	sim_browser.tooltip_text = GameState.T("hud.bottom.sim_browser_tt", "F7")
+	quest_book.tooltip_text = GameState.T("hud.bottom.quest_book_tt", "Aufgaben (J)")
 
 	ind_reception.modulate = Color.GREEN
 	ind_sim_browser.modulate = Color.GREEN
+	ind_quest_book.modulate = Color.DARK_ORANGE
 
 
 # =============================================================================
@@ -74,6 +83,10 @@ func set_techtree_locked(is_locked: bool) -> void:
 func set_browser_alert(has_news: bool) -> void:
 	ind_sim_browser.modulate = Color.DARK_ORANGE if has_news else Color.GREEN
 
+# =============================================================================
+func set_quest_alert(has_claimable: bool) -> void:
+	ind_quest_book.visible = has_claimable
+
 
 # =============================================================================
 # Wird von Ingame.gd aufgerufen, um die Position des Baumenü-Panels anzupassen
@@ -98,7 +111,7 @@ func update_build_menu_position() -> void:
 # Synchronisiert die visuelle Anzeige der Buttons mit dem aktuellen Menü-Status
 func sync_button_state(active_menu: String = "") -> void:
 	# Alle Buttons sicherheitshalber ausschalten und Fokus entfernen
-	for btn in [build_menu, reception, staff, tech_tree, sim_browser]:
+	for btn in [build_menu, reception, staff, tech_tree, sim_browser, quest_book]:
 		btn.set_pressed_no_signal(false)
 		btn.release_focus()
 
@@ -108,6 +121,8 @@ func sync_button_state(active_menu: String = "") -> void:
 			reception.set_pressed_no_signal(true)
 		"sim_browser":
 			sim_browser.set_pressed_no_signal(true)
+		"quest_book":
+			quest_book.set_pressed_no_signal(true)
 		"build":
 			build_menu.set_pressed_no_signal(true)
 		"staff":

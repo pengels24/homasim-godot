@@ -34,6 +34,7 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	_bottom_bar.sig_sim_browser_toggled.connect(open_sim_browser)
 	_bottom_bar.sig_staff_toggled.connect(open_staff)
 	_bottom_bar.sig_tech_tree_toggled.connect(open_tech_tree)
+	_bottom_bar.sig_quest_book_toggled.connect(open_quest_book)
 
 	_standard_modal.visibility_changed.connect(update_map_grid_mode)
 	_standard_modal.hidden.connect(_on_standard_modal_hidden)
@@ -57,6 +58,9 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	# simbrowser
 	if not InputHandler.sig_hotkey_sim_browser_requested.is_connected(open_sim_browser):
 		InputHandler.sig_hotkey_sim_browser_requested.connect(open_sim_browser)
+	# questbook
+	if not InputHandler.sig_hotkey_quest_book_requested.is_connected(open_quest_book):
+		InputHandler.sig_hotkey_quest_book_requested.connect(open_quest_book)
 
 	if OS.is_debug_build() and is_instance_valid(GlobalConsole):
 		if not GlobalConsole.visibility_changed.is_connected(update_map_grid_mode):
@@ -524,3 +528,26 @@ func open_sim_browser() -> void:
 # =============================================================================
 func close_sim_browser() -> void:
 	return
+
+# ── Aufgabenbuch ──────────────────────────────────────────────────────────────
+
+# =============================================================================
+func open_quest_book() -> void:
+	if _standard_modal.visible and _standard_modal.get_title() == "Aufgabenbuch":
+		_standard_modal.close()
+		return
+	
+	cleanup_current_states()
+	var qbook = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentQuestbook.tscn")
+	if not is_instance_valid(qbook): return
+	
+	_pause_time_for_ui()
+	
+	if _standard_modal.visible:
+		_standard_modal.set_title("Aufgabenbuch")
+	else:
+		_standard_modal.open("Aufgabenbuch")
+		
+	if is_instance_valid(_bottom_bar):
+		_bottom_bar.sync_button_state("quest_book")
+	update_map_grid_mode()

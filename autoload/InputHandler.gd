@@ -32,6 +32,7 @@ signal sig_hotkey_reception_requested
 signal sig_hotkey_staff_requested
 signal sig_hotkey_tech_tree_requested
 signal sig_hotkey_sim_browser_requested
+signal sig_hotkey_quest_book_requested
 signal sig_hotkey_escape_pressed
 signal sig_hotkey_quicksave_requested
 signal sig_hotkey_quickload_requested
@@ -143,9 +144,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		sig_hotkey_tech_tree_requested.emit()
 		return
 
-	if event.is_action_pressed("ui_sim_browser"):
-		get_viewport().set_input_as_handled()
-		sig_hotkey_sim_browser_requested.emit()
+	elif event.is_action_pressed("ui_sim_browser"):
+		if current_mode == InputMode.NORMAL or current_mode == InputMode.MODAL:
+			sig_hotkey_sim_browser_requested.emit()
+	elif event.is_action_pressed("ui_quest_book"):
+		if current_mode == InputMode.NORMAL or current_mode == InputMode.MODAL:
+			sig_hotkey_quest_book_requested.emit()
 		return
 
 	if event.is_action_pressed("ui_quickload"):

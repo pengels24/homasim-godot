@@ -1,26 +1,6 @@
 {
   "tech_nodes": [
     {
-      "id": "Z1.1",
-      "name": "techtree.room.single.name",
-      "description": "techtree.room.single.desc",
-      "category": "zimmer",
-      "cost_fp": 50,
-      "cost_money": 0,
-      "dependencies": [],
-      "unlocks": ["single_room"]
-    },
-    {
-      "id": "Z1.2",
-      "name": "techtree.room.double.name",
-      "description": "techtree.room.double.desc",
-      "category": "zimmer",
-      "cost_fp": 150,
-      "cost_money": 500,
-      "dependencies": ["Z1.1"],
-      "unlocks": ["double_room"]
-    },
-    {
       "id": "G1.1",
       "name": "techtree.gastro.diner.name",
       "description": "techtree.gastro.diner.desc",

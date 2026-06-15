@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://questbook_ui"]
+
+[ext_resource type="Script" uid="uid://questbook_script" path="res://scenes/ingame/hud/modals/content/ModalContentQuestbook.gd" id="1_qbook"]
+
+[node name="ModalContentQuestbook" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+custom_minimum_size = Vector2(800, 500)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_qbook")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="QuestList" type="VBoxContainer" parent="ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 15

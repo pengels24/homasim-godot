@@ -114,4 +114,5 @@ func unlock_tech(tech_id: String) -> bool:
 	SaveManager.update_hotel(GameState.active_hotel_id, GameState.selected_hotel)
 	
 	sig_tech_unlocked.emit(tech_id)
+	QuestManager.check_and_activate_quests()
 	return true

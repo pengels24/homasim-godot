@@ -76,6 +76,7 @@ func _on_room_placed(room_scene: PackedScene, px: int, py: int, tx: int, ty: int
 	_apply_build_costs(def, world_center)
 	_apply_build_rewards(def, world_center)
 	sig_room_built.emit(def.get("id", "unknown"))
+	GameState.sig_room_built.emit(def.get("id", "unknown"))
 
 
 # =============================================================================

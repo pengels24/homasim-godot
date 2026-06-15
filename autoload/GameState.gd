@@ -244,6 +244,9 @@ func select_hotel(hotel_data: Dictionary) -> void:
 
 	if TechtreeManager:
 		TechtreeManager.load_state(hotel_data.get("unlocked_techs", []))
+		
+	if QuestManager:
+		QuestManager.check_and_activate_quests()
 
 
 # =============================================================================
@@ -365,6 +368,8 @@ func add_exp(amount: int) -> void:
 	selected_hotel["exp"] = current_exp
 	sig_hotel_exp_changed.emit(current_exp, exp_max)
 	sig_hotel_level_changed.emit(current_level)
+
+signal sig_room_built(room_id: String)
 
 
 # =============================================================================

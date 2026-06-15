@@ -242,6 +242,9 @@ func select_hotel(hotel_data: Dictionary) -> void:
 	sig_hotel_day_changed.emit(hotel_day)
 	sig_hotel_time_changed.emit(format_game_time(hotel_time))
 
+	if TechtreeManager:
+		TechtreeManager.load_state(hotel_data.get("unlocked_techs", []))
+
 
 # =============================================================================
 # GLOBALE UTILITY FUNCTIONS (Überall aufrufbar via GameState.format_...)

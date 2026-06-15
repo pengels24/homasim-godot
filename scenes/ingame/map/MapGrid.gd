@@ -28,16 +28,7 @@ const WALK_W    := 3
 const TILE_PX   := 16
 const SCALE     := 2.0
 
-# Raum-Typ → Szenen-Pfad
-# todo - nach eextern auslagern wie daily_schedule -> modding
-const SCENE_PATHS: Dictionary = {
-	"bed_standard": "res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn",
-	"bed_double": "res://scenes/ingame/rooms/bed_double/Bed_Double.tscn",
-	"hr_office": "res://scenes/ingame/rooms/hr_office/Hr_Office.tscn",
-	"sc_office": "res://scenes/ingame/rooms/sc_office/Sc_Office.tscn",
-	"bar": "res://scenes/ingame/rooms/bar/Bar.tscn",
-}
-
+# Raum-Typ → Szenen-Pfad wird jetzt dynamisch aus GameState.room_registry bezogen
 # ── Kamera-Konfiguration ──────────────────────────────────────────────────────
 const PAN_SPEED := 400.0
 const ZOOM_MIN  := 0.5
@@ -372,7 +363,8 @@ func _restore_rooms(built_plots: Array) -> void:
 		var parcel: Node2D = _grid[plot["y"]][plot["x"]]
 		for room_data in rooms:
 			var type_id: String = room_data.get("room_type_id", "")
-			var path: String = SCENE_PATHS.get(type_id, "")
+			var room_def = GameState.room_registry.get(type_id, {})
+			var path: String = room_def.get("scene_path", "")
 			if path.is_empty():
 				continue
 

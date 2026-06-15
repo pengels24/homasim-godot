@@ -107,7 +107,7 @@ func _execute(cmd: String) -> void:
 		return
 	_log("> " + cmd, CLR_CMD)
 
-	var hotel_id: int = _hotel.get("id", -1)
+	var hotel_id: int = GameState.active_hotel_id
 	var parts         := cmd.split(":", false, 1)
 	var cmd_name      := parts[0].to_lower().strip_edges()
 	var val_s         := parts[1].strip_edges() if parts.size() > 1 else ""
@@ -121,7 +121,10 @@ func _execute(cmd: String) -> void:
 			_log("  get-time:2200     – HHMM → Spielminuten", CLR_INFO)
 			_log("  save              – Quicksave auslösen", CLR_INFO)
 			_log("  spawn-guests:3    – Spawnt 3 neue Gästegruppen", CLR_INFO)
-			_log("  reload-conig      – Lädt die JSoN-Daten aus config neu ein", CLR_INFO)
+			_log("  reload-config     – Lädt die JSoN-Daten aus config neu ein", CLR_INFO)
+			_log("  add-exp:500       – Addiert EXP hinzu", CLR_INFO)
+			_log("  set-level:5       – Setzt das Hotel-Level", CLR_INFO)
+			_log("  set-fp:1000       – Setzt die Forschungspunkte", CLR_INFO)
 
 		"set-money":
 			if not val_s.is_valid_int():
@@ -131,9 +134,12 @@ func _execute(cmd: String) -> void:
 			if amount < 0:
 				_log("Fehler: Wert muss >= 0 sein.", CLR_ERR)
 				return
-			_hotel["money"] = float(amount)
+			GameState.selected_hotel["money"] = float(amount)
 			SaveManager.update_hotel(hotel_id, { "money": float(amount) })
-			_hud.update_money(float(amount))
+			if is_instance_valid(_hud) and _hud.has_method("update_money"):
+				_hud.update_money(float(amount))
+			else:
+				GameState.sig_hotel_money_changed.emit(float(amount))
 			_log("Kapital gesetzt auf %s €." % _fmt_money(amount), CLR_OK)
 
 		"set-day":
@@ -144,9 +150,12 @@ func _execute(cmd: String) -> void:
 			if day < 1:
 				_log("Fehler: Tag muss >= 1 sein.", CLR_ERR)
 				return
-			_hotel["day"] = day
+			GameState.selected_hotel["day"] = day
 			SaveManager.update_hotel(hotel_id, { "day": day })
-			_hud.update_day(day)
+			if is_instance_valid(_hud) and _hud.has_method("update_day"):
+				_hud.update_day(day)
+			else:
+				GameState.sig_hotel_day_changed.emit(day)
 			_log("Tag gesetzt auf %d." % day, CLR_OK)
 
 		"set-time":
@@ -178,9 +187,8 @@ func _execute(cmd: String) -> void:
 				_log("Fehler: Kein Hotel geladen.", CLR_ERR)
 				return
 			SaveManager.update_hotel(hotel_id, {
-				"day":       _hotel.get("day",   1),
-				"money":     _hotel.get("money", 0.0),
-				# "game_time": _clock.get_game_time(),
+				"day":       GameState.selected_hotel.get("day",   1),
+				"money":     GameState.selected_hotel.get("money", 0.0),
 				"game_time": TimeManager.get_game_time(),
 			})
 			SaveManager.save_quick(hotel_id)
@@ -204,6 +212,57 @@ func _execute(cmd: String) -> void:
 			GameState.load_room_config()
 			Toast.show(GameState.T("CONFIGS neu geladen"))
 			_log("CONFIGS neu geladen.", CLR_OK)
+
+		"add-exp":
+			if not val_s.is_valid_int():
+				_log("Fehler: Wert muss eine ganze Zahl sein.", CLR_ERR)
+				return
+			var amount := int(val_s)
+			if amount <= 0:
+				_log("Fehler: Wert muss > 0 sein.", CLR_ERR)
+				return
+			GameState.add_exp(amount)
+			_log("EXP um %d erhöht." % amount, CLR_OK)
+
+		"set-level":
+			if not val_s.is_valid_int():
+				_log("Fehler: Wert muss eine ganze Zahl sein.", CLR_ERR)
+				return
+			var lvl := int(val_s)
+			if lvl < 1:
+				_log("Fehler: Level muss >= 1 sein.", CLR_ERR)
+				return
+			
+			if hotel_id < 0:
+				_log("Fehler: Kein Hotel geladen.", CLR_ERR)
+				return
+			
+			GameState.selected_hotel["level"] = lvl
+			var needed = GameState.get_xp_needed_for_level(lvl)
+			GameState.selected_hotel["exp_max"] = needed
+			GameState.selected_hotel["exp"] = 0
+			SaveManager.update_hotel(hotel_id, { "level": lvl, "exp_max": needed, "exp": 0 })
+			GameState.sig_hotel_level_changed.emit(lvl)
+			GameState.sig_hotel_exp_changed.emit(0, needed)
+			_log("Level auf %d gesetzt (EXP resettet)." % lvl, CLR_OK)
+
+		"set-fp":
+			if not val_s.is_valid_int():
+				_log("Fehler: Wert muss eine ganze Zahl sein.", CLR_ERR)
+				return
+			var fp := int(val_s)
+			if fp < 0:
+				_log("Fehler: Wert muss >= 0 sein.", CLR_ERR)
+				return
+			
+			if hotel_id < 0:
+				_log("Fehler: Kein Hotel geladen.", CLR_ERR)
+				return
+				
+			GameState.selected_hotel["fp"] = fp
+			SaveManager.update_hotel(hotel_id, { "fp": fp })
+			GameState.sig_hotel_fp_changed.emit(fp)
+			_log("FP auf %d gesetzt." % fp, CLR_OK)
 
 		_:
 			_log("Unbekannter Befehl: \"%s\". Tippe \"help\"." % cmd_name, CLR_ERR)

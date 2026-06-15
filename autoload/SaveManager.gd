@@ -101,6 +101,7 @@ func create_hotel(profile_id: int, hotel_name: String, cols: int = 5, rows: int 
 		"rep_max": 1000,
 		"fp": 0,
 		"transactions": [],
+		"unlocked_techs": [],
 	}
 	_hotels.append(hotel)
 	_save_profiles()
@@ -538,6 +539,7 @@ func _take_snapshot(hotel: Dictionary, snap_name: String) -> Dictionary:
 		"fp": hotel.get("fp", 0),
 		"guest_data": hotel.get("guest_data", {}).duplicate(true),
 		"transactions": hotel.get("transactions", []).duplicate(true),
+		"unlocked_techs": hotel.get("unlocked_techs", []).duplicate(true),
 	}
 
 	# NEU: Zähler in den Snapshot kopieren
@@ -571,6 +573,7 @@ func _apply_snapshot(hotel: Dictionary, snap: Dictionary) -> void:
 	hotel["fp"] = snap.get("fp", 0)
 	hotel["guest_data"] = snap.get("guest_data", {}).duplicate(true)
 	hotel["transactions"] = snap.get("transactions", []).duplicate(true)
+	hotel["unlocked_techs"] = snap.get("unlocked_techs", []).duplicate(true)
 
 	# Zähler aus dem Snapshot wiederherstellen
 	for key in snap:

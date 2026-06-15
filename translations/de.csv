@@ -1,4 +1,4 @@
-﻿keys,de,en
+keys,de,en
 "game.title","HO·MA·SIM - Hotel Manager Simulation",""
 "game.textlogo","HO·MA·SIM",""
 "label.night","Nacht",""
@@ -237,7 +237,8 @@
 "roomdef.name.short.hr_office","PV",""
 "toast.hr.unlocked","Personalverwaltung freigeschaltet!",""
 "toast.hr.coming_soon","Personalverwaltung – coming soon",""
-"levelup.unlock.hr_hint","Personalbüro bauen schaltet die Personalverwaltung frei",""
+"toast.hr.locked","Personalverwaltung benötigt Hotel-Level 2!",""
+"levelup.unlock.hr_hint","Vertrag mit Personaldienstleister (Personalverwaltung) freigeschaltet!",""
 "levelup.unlock.no_unlocks","Neue Freischaltungen kommen über den Forschungsbaum",""
 "manager.setup.title","Deinen Manager erstellen",""
 "manager.setup.intro","Bevor es losgeht – wer bist du? Erstelle deinen persönlichen Manager-Charakter.",""
@@ -620,4 +621,4 @@
 "toast.reception.checkin.success","Check-In erfolgreich!",""
 "tt.build.room.cost","###\nKosten: *** €",""
 "tt.build.room.locked","###\n🔒 GESPERRT\nBenötigt Hotel-Level ***",""
-
+"toast.techtree.locked","Forschung benötigt Hotel-Level 5",""

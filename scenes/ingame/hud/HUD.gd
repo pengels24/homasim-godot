@@ -81,6 +81,11 @@ func _on_hotel_name_changed(new_name: String) -> void:
 # =============================================================================
 func _on_hotel_level_changed(new_level: int) -> void:
 	label_level.text = str(new_level)
+	if is_instance_valid(bottom_bar):
+		if bottom_bar.has_method("set_staff_locked"):
+			bottom_bar.set_staff_locked(new_level < 2)
+		if bottom_bar.has_method("set_techtree_locked"):
+			bottom_bar.set_techtree_locked(new_level < 5)
 
 
 # =============================================================================
@@ -162,11 +167,22 @@ func _on_hotel_time_changed(time_string: String) -> void:
 
 # =============================================================================
 func _on_hotel_level_up(new_level: int) -> void:
-	# Platzhalter-Werte für Geld/FP/Unlock, bis wir echte Rewards aus einer Datenbank haben:
-	# todo - datenquelle für belohnungen etablieren
 	var reward_money = 1500
 	var reward_fp = 250
-	var unlock_text = "Pool-Bereich"
+	var unlock_text = ""
+	
+	match new_level:
+		2:
+			unlock_text = "Personalverwaltung"
+			reward_money = 1500
+			reward_fp = 250
+		5:
+			unlock_text = "Forschung & Technologie"
+			reward_money = 2500
+			reward_fp = 500
+		_:
+			reward_money = 1000 * new_level
+			reward_fp = 100 * new_level
 
 	%LevelUpModal.setup(new_level, reward_money, reward_fp, unlock_text)
 	%LevelUpModal.open()

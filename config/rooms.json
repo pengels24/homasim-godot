@@ -21,11 +21,6 @@
       "script_path": "res://scenes/ingame/rooms/bar/Bar.gd"
     },
     {
-      "id": "hr_office",
-      "scene_path": "res://scenes/ingame/rooms/hr_office/Hr_Office.tscn",
-      "script_path": "res://scenes/ingame/rooms/hr_office/HrOffice.gd"
-    },
-    {
       "id": "sc_office",
       "scene_path": "res://scenes/ingame/rooms/sc_office/Sc_Office.tscn",
       "script_path": "res://scenes/ingame/rooms/sc_office/ScOffice.gd"

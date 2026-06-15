@@ -60,6 +60,17 @@ func set_reception_alert(has_waiting_guests: bool) -> void:
 
 
 # =============================================================================
+func set_staff_locked(is_locked: bool) -> void:
+	staff.disabled = is_locked
+
+
+# =============================================================================
+func set_techtree_locked(is_locked: bool) -> void:
+	tech_tree.disabled = is_locked
+
+
+
+# =============================================================================
 func set_browser_alert(has_news: bool) -> void:
 	ind_sim_browser.modulate = Color.DARK_ORANGE if has_news else Color.GREEN
 

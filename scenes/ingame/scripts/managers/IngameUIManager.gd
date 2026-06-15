@@ -32,6 +32,8 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	_bottom_bar.sig_build_menu_toggled.connect(toggle_build_menu)
 	_bottom_bar.sig_reception_toggled.connect(open_reception)
 	_bottom_bar.sig_sim_browser_toggled.connect(open_sim_browser)
+	_bottom_bar.sig_staff_toggled.connect(open_staff)
+	_bottom_bar.sig_tech_tree_toggled.connect(open_tech_tree)
 
 	_standard_modal.visibility_changed.connect(update_map_grid_mode)
 	_standard_modal.hidden.connect(_on_standard_modal_hidden)
@@ -474,18 +476,41 @@ func _sync_guest_ui() -> void:
 
 # =============================================================================
 func open_staff() -> void:
-	# Später kommt hier ein Check rein, ob "hr_office" gebaut wurde.
-	# Fürs Erste blocken wir hart ab:
-	Toast.show("Personalverwaltung: Bald verfügbar! (Benötigt Personalbüro)")
+	var level = GameState.selected_hotel.get("level", 1)
+	
+	if level < 2:
+		Toast.show(GameState.T("toast.hr.locked"))
+		return
+		
+	# Modal noch nicht fertig, also Hinweis zeigen
+	Toast.show(GameState.T("toast.hr.coming_soon"))
 	return
 
 
-# ── Forschung / Tech-Tree (F6) ────────────────────────────────────────────────
+# ── Forschung & Techtree (F6) ──────────────────────────────────────────────────
 
 # =============================================================================
 func open_tech_tree() -> void:
-	Toast.show("Forschung: Coming soon!")
-	return
+	if GameState.selected_hotel.get("level", 1) < 5:
+		Toast.show(GameState.T("toast.techtree.locked", "Forschung benötigt Hotel-Level 5!"))
+		return
+
+	cleanup_current_states()
+	var techtree = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentTechtree.tscn")
+	if not is_instance_valid(techtree): return
+
+	_pause_time_for_ui()
+
+	if _standard_modal.visible:
+		_standard_modal.set_title("Forschung & Technologie")
+	else:
+		_standard_modal.open("Forschung & Technologie")
+
+	if is_instance_valid(_bottom_bar):
+		_bottom_bar.sync_button_state("tech_tree")
+	update_map_grid_mode()
+
+
 
 
 # ── Sim Browser (F7) ──────────────────────────────────────────────────────────

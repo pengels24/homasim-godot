@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dwnfttdpcsskc" path="res://assets/images/logo.png" id="2_qmweu"]
 [ext_resource type="FontFile" uid="uid://3can1r2sqobx" path="res://assets/fonts/AvenuePixel-Regular.ttf" id="3_f1mbi"]
 [ext_resource type="PackedScene" uid="uid://cw7c5frsdut8j" path="res://scenes/shared/SettingsModal.tscn" id="3_settings"]
+[ext_resource type="PackedScene" path="res://scenes/dashboard/Dashboard.tscn" id="99_dashboard"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_subtitle_bg"]
 content_margin_left = 24.0
@@ -569,3 +570,12 @@ offset_right = 1920.0
 offset_bottom = 1080.0
 grow_horizontal = 1
 grow_vertical = 1
+
+[node name="DashboardModal" parent="." instance=ExtResource("99_dashboard")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

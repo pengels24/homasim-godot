@@ -39,6 +39,7 @@ const FADE_DURATION  := 1.2
 # other modals
 @onready var _manager_modal:    Control      = $ManagerModal
 @onready var _settings_modal:   SettingsModal = $SettingsModal
+@onready var _dashboard_modal:  Control      = $DashboardModal
 
 var _current_bg := 0
 var _slide_timer := 0.0
@@ -58,8 +59,13 @@ func _ready() -> void:
 	btn_manager.pressed.connect(_on_manager_pressed)
 	btn_tutorial.pressed.connect(_on_tutorial_pressed)
 	_manager_modal.closed.connect(_on_manager_modal_closed)
+	_dashboard_modal.closed.connect(_on_dashboard_closed)
 	btn_credits.pressed.connect(_on_credits_pressed)
 	btn_quit.pressed.connect(get_tree().quit)
+
+	if GameState.open_dashboard_next:
+		GameState.open_dashboard_next = false
+		_on_play_pressed()
 
 
 # =============================================================================
@@ -190,7 +196,11 @@ func _on_login_response(success: bool, data: Dictionary) -> void:
 
 # =============================================================================
 func _on_play_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/dashboard/Dashboard.tscn")
+	btn_quit.visible = false
+	_dashboard_modal.open()
+
+func _on_dashboard_closed() -> void:
+	btn_quit.visible = true
 
 
 # =============================================================================

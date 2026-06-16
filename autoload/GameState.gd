@@ -53,6 +53,7 @@ var active_hotel_id:   int        = -1   # SaveManager-Hotel-ID; -1 = kein Hotel
 var active_profile_id: int        = -1   # SaveManager-Profil-ID; -1 = kein Profil gewählt
 var active_profile:    Dictionary = {}   # Aktives Manager-Profil
 var snap_to_grid:      bool       = true  # Tile-Snap im Baumodus (Settings-Toggle)
+var open_dashboard_next: bool     = false # Flag um Dashboard aus MainMenu direkt zu öffnen
 
 
 # =============================================================================

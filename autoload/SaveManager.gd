@@ -5,7 +5,7 @@ const PROFILES_PATH := "user://profiles.cfg"
 const HOTELS_DIR    := "user://hotels/"
 const SAVES_DIR     := "user://saves/"
 const MAX_AUTOSAVES := 5
-const MAX_HOTELS    := 5
+const MAX_HOTELS    := 10
 const MANUAL_SLOTS  := 5
 
 # ── State ─────────────────────────────────────────────────────────────────────
@@ -13,7 +13,16 @@ var _profiles:        Array = []
 var _hotels:          Array = []
 var _next_profile_id: int   = 1
 var _next_hotel_id:   int   = 1
+var _temp_thumbnail:  Image = null
 
+
+# =============================================================================
+func capture_thumbnail(viewport: Viewport) -> void:
+	# Holt den aktuellen Viewport, skaliert ihn für das Dashboard runter und speichert ihn
+	var img = viewport.get_texture().get_image()
+	if img:
+		img.resize(400, 225, Image.INTERPOLATE_BILINEAR)
+		_temp_thumbnail = img
 
 # ── Lifecycle ─────────────────────────────────────────────────────────────────
 
@@ -440,6 +449,19 @@ func _save_hotel(hotel: Dictionary) -> void:
 
 	cfg.save(_hotel_cfg_path(hotel["id"]))
 
+	if _temp_thumbnail:
+		var thumb_path := HOTELS_DIR + ("hotel_%d_thumb.png" % hotel["id"])
+		_temp_thumbnail.save_png(thumb_path)
+		_temp_thumbnail = null
+# =============================================================================
+func load_thumbnail(hotel_id: int) -> ImageTexture:
+	var thumb_path := HOTELS_DIR + ("hotel_%d_thumb.png" % hotel_id)
+	if FileAccess.file_exists(thumb_path):
+		var img = Image.load_from_file(thumb_path)
+		if img:
+			return ImageTexture.create_from_image(img)
+	return null
+
 
 # =============================================================================
 func _delete_hotel_files(hotel_id: int) -> void:
@@ -448,6 +470,9 @@ func _delete_hotel_files(hotel_id: int) -> void:
 		var cfg_name := "hotel_%d.cfg" % hotel_id
 		if hdir.file_exists(cfg_name):
 			hdir.remove(cfg_name)
+		var thumb_name := "hotel_%d_thumb.png" % hotel_id
+		if hdir.file_exists(thumb_name):
+			hdir.remove(thumb_name)
 	var sdir := DirAccess.open(SAVES_DIR)
 	if not sdir:
 		return

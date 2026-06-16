@@ -383,6 +383,9 @@ func _sync_reception_lock_by_time() -> void:
 
 # =============================================================================
 func open_pause_menu() -> void:
+	if is_instance_valid(_hud):
+		SaveManager.capture_thumbnail(_hud.get_viewport())
+		
 	_pause_time_for_ui()
 	_standard_modal.modal_input_mode = InputHandler.InputMode.PAUSE
 	var pause_content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentPause.tscn")
@@ -439,7 +442,8 @@ func _on_quit_confirmed() -> void:
 
 	get_tree().paused = false
 
-	get_tree().change_scene_to_file("res://scenes/dashboard/Dashboard.tscn")
+	GameState.open_dashboard_next = true
+	get_tree().change_scene_to_file("res://scenes/main_menu/MainMenu.tscn")
 
 
 # =============================================================================

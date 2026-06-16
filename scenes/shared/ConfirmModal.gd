@@ -30,7 +30,8 @@ func ask(
 	message:        String,
 	confirm_text:   String = "Bestätigen",
 	cancel_text:    String = "Abbrechen",
-	checkbox_label: String = ""
+	checkbox_label: String = "",
+	is_destructive: bool = false
 ) -> void:
 	_title_label.text   = title
 	_message_label.text = message
@@ -41,6 +42,16 @@ func ask(
 	_ack_check.button_pressed = false
 	_ack_check.text           = checkbox_label
 	_btn_confirm.disabled     = has_checkbox
+	
+	if is_destructive:
+		_btn_confirm.add_theme_stylebox_override("normal", preload("res://assets/UI/menu_button_red.tres"))
+		_btn_confirm.add_theme_stylebox_override("pressed", preload("res://assets/UI/menu_button_red_pressed.tres"))
+		_btn_confirm.add_theme_stylebox_override("hover", preload("res://assets/UI/menu_button_red_hover.tres"))
+	else:
+		_btn_confirm.add_theme_stylebox_override("normal", preload("res://assets/UI/menu_button_green.tres"))
+		_btn_confirm.add_theme_stylebox_override("pressed", preload("res://assets/UI/menu_button_green_pressed.tres"))
+		_btn_confirm.add_theme_stylebox_override("hover", preload("res://assets/UI/menu_button_green_hover.tres"))
+		
 	visible = true
 
 

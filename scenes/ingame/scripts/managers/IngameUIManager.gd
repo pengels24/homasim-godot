@@ -61,6 +61,9 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	# questbook
 	if not InputHandler.sig_hotkey_quest_book_requested.is_connected(open_quest_book):
 		InputHandler.sig_hotkey_quest_book_requested.connect(open_quest_book)
+	# codex/tutorial
+	if not InputHandler.sig_hotkey_tutorial_requested.is_connected(open_tutorial_codex):
+		InputHandler.sig_hotkey_tutorial_requested.connect(open_tutorial_codex)
 
 	if OS.is_debug_build() and is_instance_valid(GlobalConsole):
 		if not GlobalConsole.visibility_changed.is_connected(update_map_grid_mode):
@@ -149,6 +152,21 @@ func on_exit_pressed() -> void:
 		return
 	open_pause_menu()
 
+# =============================================================================
+func open_tutorial_codex() -> void:
+	cleanup_current_states()
+	var codex = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentTutorials.tscn")
+	if not is_instance_valid(codex): return
+
+	_pause_time_for_ui()
+
+	if _standard_modal.visible:
+		_standard_modal.set_title("Tutorials & Codex")
+	else:
+		_standard_modal.open("Tutorials & Codex")
+
+	update_map_grid_mode()
+
 
 # ── Build Menü ────────────────────────────────────────────────────────────────
 
@@ -169,6 +187,9 @@ func open_build_menu() -> void:
 			_bottom_bar.update_build_menu_position()
 			_bottom_bar.sync_button_state("build")
 			_bottom_bar.get_node("BuildMenu").show()
+		
+		if TutorialManager:
+			TutorialManager.trigger("build_mode")
 
 
 # =============================================================================
@@ -217,6 +238,9 @@ func open_reception() -> void:
 	_reception.configure(_guest_mgr)
 	_reception.refresh()
 	_pause_time_for_ui()
+
+	if TutorialManager:
+		TutorialManager.trigger("reception")
 
 	if _standard_modal.visible:
 		_standard_modal.set_title(GameState.T("modal.reception.title"))
@@ -401,7 +425,8 @@ func _on_pause_quit() -> void:
 
 	_quit_confirm.ask(
 		GameState.T("ingame.quit.title"), GameState.T("ingame.quit.message"),
-		GameState.T("ingame.quit.confirm"), GameState.T("ingame.quit.cancel")
+		GameState.T("ingame.quit.confirm"), GameState.T("ingame.quit.cancel"),
+		"", true
 	)
 
 
@@ -486,6 +511,9 @@ func open_staff() -> void:
 		Toast.show(GameState.T("toast.hr.locked"))
 		return
 		
+	if TutorialManager:
+		TutorialManager.trigger("staff")
+		
 	# Modal noch nicht fertig, also Hinweis zeigen
 	Toast.show(GameState.T("toast.hr.coming_soon"))
 	return
@@ -513,6 +541,9 @@ func open_tech_tree() -> void:
 	if is_instance_valid(_bottom_bar):
 		_bottom_bar.sync_button_state("tech_tree")
 	update_map_grid_mode()
+	
+	if TutorialManager:
+		TutorialManager.trigger("tech_tree")
 
 
 
@@ -521,6 +552,9 @@ func open_tech_tree() -> void:
 
 # =============================================================================
 func open_sim_browser() -> void:
+	if TutorialManager:
+		TutorialManager.trigger("sim_browser")
+
 	Toast.show("Sim-Browser: Coming soon!")
 	return
 
@@ -541,6 +575,9 @@ func open_quest_book() -> void:
 	var qbook = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentQuestbook.tscn")
 	if not is_instance_valid(qbook): return
 	
+	if TutorialManager:
+		TutorialManager.trigger("quest_book")
+
 	_pause_time_for_ui()
 	
 	if _standard_modal.visible:

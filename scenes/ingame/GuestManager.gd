@@ -438,7 +438,7 @@ func clear_waiting_guests_with_penalty() -> void:
 # =============================================================================
 func do_checkout(party: GuestParty) -> float:
 	var payout := _calculate_payout(party)
-	_finalize_checkout(party, payout, false)
+	_finalize_checkout(party, int(payout), false)
 
 	return payout
 

@@ -1,0 +1,114 @@
+[gd_scene format=3 uid="uid://cx6y8b2a3d4e5"]
+
+[ext_resource type="Script" path="res://autoload/BugReporter.gd" id="1_a2b3c"]
+
+[node name="BugReporter" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_a2b3c")
+
+[node name="BtnReport" type="Button" parent="."]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -120.0
+offset_right = -5.0
+offset_bottom = 120.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "🐞
+B
+u
+g
+
+M
+e
+l
+d
+e
+n"
+
+[node name="Dim" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7)
+mouse_filter = 0
+
+[node name="Modal" type="PanelContainer" parent="."]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Margin" type="MarginContainer" parent="Modal"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBox" type="VBoxContainer" parent="Modal/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Title" type="Label" parent="Modal/Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Bug Report senden"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="Modal/Margin/VBox"]
+layout_mode = 2
+text = "Was ist passiert? (Ein Screenshot & Systemdaten werden automatisch angehängt)"
+autowrap_mode = 2
+
+[node name="EmailInput" type="LineEdit" parent="Modal/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Deine E-Mail (Optional für Rückfragen)"
+
+[node name="Input" type="TextEdit" parent="Modal/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "Beschreibe den Fehler..."
+wrap_mode = 1
+
+[node name="Status" type="Label" parent="Modal/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="HBox" type="HBoxContainer" parent="Modal/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="BtnCancel" type="Button" parent="Modal/Margin/VBox/HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+text = "Abbrechen"
+
+[node name="BtnSend" type="Button" parent="Modal/Margin/VBox/HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+text = "Senden"
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+unique_name_in_owner = true

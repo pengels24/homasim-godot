@@ -95,7 +95,8 @@ func _on_delete_slot(i: int) -> void:
 		"Alle Hotels dieses Managers werden\nebenfalls entfernt.",
 		"Löschen",
 		"Abbrechen",
-		GameState.T("manager_select.delete.ack")
+		GameState.T("manager_select.delete.ack"),
+		true
 	)
 
 

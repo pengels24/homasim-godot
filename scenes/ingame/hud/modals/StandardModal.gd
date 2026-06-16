@@ -64,10 +64,10 @@ func _on_close_button_pressed() -> void:
 
 
 # =============================================================================
-func set_close_button_visible(is_visible: bool) -> void:
+func set_close_button_visible(show_btn: bool) -> void:
 	var btn = find_child("CloseButton", true, false)
 	if btn:
-		btn.visible = is_visible
+		btn.visible = show_btn
 
 
 # =============================================================================

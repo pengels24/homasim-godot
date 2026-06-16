@@ -1,24 +1,243 @@
 {
-  "tech_nodes": [
-    {
-      "id": "G1.1",
-      "name": "techtree.gastro.diner.name",
-      "description": "techtree.gastro.diner.desc",
-      "category": "gastronomie",
-      "cost_fp": 100,
-      "cost_money": 1000,
-      "dependencies": [],
-      "unlocks": ["diner"]
+  "tiers": {
+    "1": {
+      "gate": {
+        "cost_fp": 0,
+        "req_level": 5,
+        "req_stars": 0,
+        "req_items_unlocked": 0
+      },
+      "nodes": [
+        {
+          "id": "Z1.1",
+          "name": "techtree.zimmer.z11",
+          "category": "zimmer",
+          "col": 0,
+          "row": 0,
+          "cost_fp": 100,
+          "cost_money": 1000,
+          "dependencies": [],
+          "unlocks_emojis": "🛏️ 🚿",
+          "demo_locked": false
+        },
+        {
+          "id": "Z1.2",
+          "name": "techtree.zimmer.z12",
+          "category": "zimmer",
+          "col": 1,
+          "row": 0,
+          "cost_fp": 50000,
+          "cost_money": 2500,
+          "dependencies": [
+            "Z1.1"
+          ],
+          "unlocks_emojis": "📺 🛋️",
+          "demo_locked": false
+        },
+        {
+          "id": "Z1.3",
+          "name": "techtree.zimmer.z13",
+          "category": "zimmer",
+          "col": 1,
+          "row": 1,
+          "cost_fp": 50000,
+          "cost_money": 5000,
+          "dependencies": [
+            "Z1.1"
+          ],
+          "unlocks_emojis": "⭐ 🍾",
+          "demo_locked": false
+        },
+        {
+          "id": "G1.1",
+          "name": "techtree.gastro.g11",
+          "category": "gastronomie",
+          "col": 0,
+          "row": 0,
+          "cost_fp": 100,
+          "cost_money": 1000,
+          "dependencies": [],
+          "unlocks_emojis": "🍔 ☕",
+          "demo_locked": false
+        },
+        {
+          "id": "G1.2",
+          "name": "techtree.gastro.g12",
+          "category": "gastronomie",
+          "col": 1,
+          "row": 0,
+          "cost_fp": 250,
+          "cost_money": 2500,
+          "dependencies": [
+            "G1.1"
+          ],
+          "unlocks_emojis": "🍳 🥗",
+          "demo_locked": true
+        },
+        {
+          "id": "G1.3",
+          "name": "techtree.gastro.g13",
+          "category": "gastronomie",
+          "col": 1,
+          "row": 1,
+          "cost_fp": 500,
+          "cost_money": 5000,
+          "dependencies": [
+            "G1.1"
+          ],
+          "unlocks_emojis": "🍷 🥩",
+          "demo_locked": true
+        },
+        {
+          "id": "G1.4",
+          "name": "techtree.gastro.g14",
+          "category": "gastronomie",
+          "col": 2,
+          "row": 0,
+          "cost_fp": 1000,
+          "cost_money": 10000,
+          "dependencies": [
+            "G1.1"
+          ],
+          "unlocks_emojis": "⭐ 🍽️",
+          "demo_locked": true
+        },
+        {
+          "id": "W1.1",
+          "name": "techtree.wellness.w11",
+          "category": "wellness",
+          "col": 0,
+          "row": 0,
+          "cost_fp": 100,
+          "cost_money": 1000,
+          "dependencies": [],
+          "unlocks_emojis": "🧖 💆",
+          "demo_locked": true
+        },
+        {
+          "id": "W1.2",
+          "name": "techtree.wellness.w12",
+          "category": "wellness",
+          "col": 1,
+          "row": 0,
+          "cost_fp": 250,
+          "cost_money": 2500,
+          "dependencies": [
+            "Z1.1"
+          ],
+          "unlocks_emojis": "🏊 🌳",
+          "demo_locked": true
+        },
+        {
+          "id": "W1.3",
+          "name": "techtree.wellness.w13",
+          "category": "wellness",
+          "col": 2,
+          "row": 0,
+          "cost_fp": 500,
+          "cost_money": 5000,
+          "dependencies": [
+            "W1.2"
+          ],
+          "unlocks_emojis": "⭐ 🧘",
+          "demo_locked": true
+        },
+        {
+          "id": "M1.1",
+          "name": "techtree.management.m11",
+          "category": "management",
+          "col": 0,
+          "row": 0,
+          "cost_fp": 100,
+          "cost_money": 1000,
+          "dependencies": [],
+          "unlocks_emojis": "💼 📊",
+          "demo_locked": true
+        },
+        {
+          "id": "M1.2",
+          "name": "techtree.management.m12",
+          "category": "management",
+          "col": 1,
+          "row": 0,
+          "cost_fp": 250,
+          "cost_money": 2500,
+          "dependencies": [],
+          "unlocks_emojis": "🧑‍💼 📝",
+          "demo_locked": true
+        },
+        {
+          "id": "M1.3",
+          "name": "techtree.management.m13",
+          "category": "management",
+          "col": 1,
+          "row": 1,
+          "cost_fp": 500,
+          "cost_money": 5000,
+          "dependencies": [
+            "M1.1"
+          ],
+          "unlocks_emojis": "⚙️ ⏱️",
+          "demo_locked": true
+        },
+        {
+          "id": "M1.4",
+          "name": "techtree.management.m14",
+          "category": "management",
+          "col": 2,
+          "row": 0,
+          "cost_fp": 1000,
+          "cost_money": 10000,
+          "dependencies": [],
+          "unlocks_emojis": "🏢 📈",
+          "demo_locked": true
+        },
+        {
+          "id": "P1.1",
+          "name": "techtree.prestige.p11",
+          "category": "prestige",
+          "col": 0,
+          "row": 0,
+          "cost_fp": 100,
+          "cost_money": 1000,
+          "dependencies": [],
+          "unlocks_emojis": "🎪 🎤",
+          "demo_locked": true
+        },
+        {
+          "id": "P1.2",
+          "name": "techtree.prestige.p12",
+          "category": "prestige",
+          "col": 1,
+          "row": 0,
+          "cost_fp": 250,
+          "cost_money": 2500,
+          "dependencies": [],
+          "unlocks_emojis": "🏟️ 🎇",
+          "demo_locked": true
+        },
+        {
+          "id": "P1.3",
+          "name": "techtree.prestige.p13",
+          "category": "prestige",
+          "col": 2,
+          "row": 0,
+          "cost_fp": 500,
+          "cost_money": 5000,
+          "dependencies": [],
+          "unlocks_emojis": "🎭 🎵",
+          "demo_locked": true
+        }
+      ]
     },
-    {
-      "id": "W1.1",
-      "name": "techtree.wellness.pool.name",
-      "description": "techtree.wellness.pool.desc",
-      "category": "wellness",
-      "cost_fp": 200,
-      "cost_money": 2500,
-      "dependencies": [],
-      "unlocks": ["pool"]
+    "2": {
+      "gate": {
+        "cost_fp": 500,
+        "req_level": 10,
+        "req_stars": 1,
+        "req_items_unlocked": 5
+      },
+      "nodes": []
     }
-  ]
+  }
 }

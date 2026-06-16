@@ -1,23 +1,91 @@
 [gd_scene load_steps=2 format=3 uid="uid://questbook_ui"]
 
-[ext_resource type="Script" uid="uid://questbook_script" path="res://scenes/ingame/hud/modals/content/ModalContentQuestbook.gd" id="1_qbook"]
+[ext_resource type="Script" path="res://scenes/ingame/hud/modals/content/ModalContentQuestbook.gd" id="1_qbook"]
 
-[node name="ModalContentQuestbook" type="VBoxContainer"]
+[node name="ModalContentQuestbook" type="HBoxContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_minimum_size = Vector2(800, 500)
+custom_minimum_size = Vector2(1000, 600)
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/separation = 20
 script = ExtResource("1_qbook")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
+[node name="Sidebar" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="Sidebar"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBox" type="VBoxContainer" parent="Sidebar/Margin"]
+layout_mode = 2
+
+[node name="CategoryList" type="VBoxContainer" parent="Sidebar/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HSeparator" type="HSeparator" parent="Sidebar/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="RankList" type="VBoxContainer" parent="Sidebar/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="MainArea" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HeaderPanel" type="PanelContainer" parent="MainArea"]
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="MainArea/HeaderPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 15
+
+[node name="HBox" type="HBoxContainer" parent="MainArea/HeaderPanel/Margin"]
+layout_mode = 2
+
+[node name="RankLabel" type="Label" parent="MainArea/HeaderPanel/Margin/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Rang 1"
+
+[node name="Spacer" type="Control" parent="MainArea/HeaderPanel/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RankRewardLabel" type="Label" parent="MainArea/HeaderPanel/Margin/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Vergütung: 500 FP"
+
+[node name="RankClaimBtn" type="Button" parent="MainArea/HeaderPanel/Margin/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+custom_minimum_size = Vector2(150, 0)
+text = "Rang abschließen"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainArea"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="QuestList" type="VBoxContainer" parent="ScrollContainer"]
+[node name="QuestList" type="VBoxContainer" parent="MainArea/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

@@ -12,7 +12,6 @@ extends CanvasLayer
 @onready var label_exp_range: Label = %EXPRange
 @onready var bar_rep: ProgressBar = %REP
 @onready var label_rep_range: Label = %REPRange
-@onready var label_fp: Label = %FP
 @onready var label_day: Label = %Day
 @onready var label_time: Label = %Time
 
@@ -44,7 +43,6 @@ func _ready() -> void:
 	GameState.sig_hotel_guests_checkout_changed.connect(_on_hotel_guests_checkout_changed)
 	GameState.sig_hotel_exp_changed.connect(_on_hotel_exp_changed)
 	GameState.sig_hotel_rep_changed.connect(_on_hotel_rep_changed)
-	GameState.sig_hotel_fp_changed.connect(_on_hotel_fp_changed)
 	GameState.sig_hotel_day_changed.connect(_on_hotel_day_changed)
 	GameState.sig_hotel_time_changed.connect(_on_hotel_time_changed)
 
@@ -55,12 +53,17 @@ func _ready() -> void:
 
 	EffectManager.ui_money_node = %Capital
 	EffectManager.ui_exp_node = %EXP
+	EffectManager.ui_fp_node = bottom_bar.get_node("%TechTree")
 
 	GameState.sig_hotel_level_up.connect(_on_hotel_level_up)
 	%LevelUpModal.sig_rewards_claimed.connect(_on_level_up_rewards_claimed)
 
 	# Initialen Pause-Status setzen (falls wir direkt pausiert ins Spiel starten)
 	set_pause_visuals(TimeManager.is_paused())
+	
+	# FP-Anzeige verstecken (wird jetzt im Techtree geregelt)
+	if has_node("TopBar/MarginContainer/HBoxContainer/FP"):
+		get_node("TopBar/MarginContainer/HBoxContainer/FP").hide()
 
 	# Custom Tooltip einhängen
 	var tooltip_scene = preload("res://scenes/ingame/hud/CustomTooltip.tscn")
@@ -148,11 +151,6 @@ func _on_hotel_rep_changed(rep_curr: int, rep_max: int) -> void:
 	var stylebox_fill = bar_rep.get_theme_stylebox("fill").duplicate()
 	stylebox_fill.bg_color = rep_color
 	bar_rep.add_theme_stylebox_override("fill", stylebox_fill)
-
-
-# =============================================================================
-func _on_hotel_fp_changed(new_fp: int) -> void:
-	label_fp.text = str(new_fp)
 
 
 # =============================================================================

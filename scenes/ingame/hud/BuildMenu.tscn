@@ -5,6 +5,15 @@
 [ext_resource type="PackedScene" uid="uid://dewarw3udgon" path="res://scenes/ingame/hud/BuildMenuButton.tscn" id="3_66s4j"]
 [ext_resource type="PackedScene" uid="uid://cxi5q33hphmqv" path="res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn" id="3_rd224"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Breadcrumb"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(0, 0, 0, 0.501961)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
 [node name="BuildMenu" type="PanelContainer" unique_id=1714912306]
 custom_minimum_size = Vector2(200, 100)
 theme = ExtResource("1_rd224")
@@ -22,6 +31,11 @@ theme_override_constants/margin_bottom = 10
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=905183679]
 layout_mode = 2
 alignment = 1
+
+[node name="BreadcrumbLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1234567890]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_Breadcrumb")
+horizontal_alignment = 1
 
 [node name="CategoryGrid" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1240747846]
 layout_mode = 2

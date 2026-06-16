@@ -5,14 +5,14 @@ extends Control
 
 const BG_IMAGE := "res://assets/images/home/home-background-002.png"
 
-@onready var title_label:        Label       = $Center/Card/VBox/Title
-@onready var field_manager_name: LineEdit    = $Center/Card/VBox/HBox/Options/FieldManagerName
-@onready var btn_save:           Button      = $Center/Card/VBox/BtnSave
-@onready var btn_back:           Button      = $Center/Card/VBox/BtnBack
-@onready var error_label:        Label       = $Center/Card/VBox/ErrorLabel
-@onready var character_display:  Control     = $Center/Card/VBox/HBox/Preview/CharacterDisplay
-@onready var preview_name:       Label       = $Center/Card/VBox/HBox/Preview/PreviewName
-@onready var preview_sub:        Label       = $Center/Card/VBox/HBox/Preview/PreviewSub
+@onready var title_label:        Label       = $Center/Card/Margin/VBox/Header/Title
+@onready var field_manager_name: LineEdit    = $Center/Card/Margin/VBox/HBox/Options/FieldManagerName
+@onready var btn_save:           Button      = $Center/Card/Margin/VBox/BtnSave
+@onready var btn_back:           Button      = $Center/Card/Margin/VBox/Header/BtnBack
+@onready var error_label:        Label       = $Center/Card/Margin/VBox/ErrorLabel
+@onready var character_display:  Control     = $Center/Card/Margin/VBox/HBox/Preview/CharacterDisplay
+@onready var preview_name:       Label       = $Center/Card/Margin/VBox/HBox/Preview/PreviewName
+@onready var preview_sub:        Label       = $Center/Card/Margin/VBox/HBox/Preview/PreviewSub
 @onready var bg_image:           TextureRect = $Bg
 
 @onready var gender_buttons: Array[Button] = []
@@ -63,10 +63,10 @@ func _ready() -> void:
 
 
 func _collect_option_buttons() -> void:
-	var g := $Center/Card/VBox/HBox/Options/GenderRow
-	var s := $Center/Card/VBox/HBox/Options/SkinRow
-	var h := $Center/Card/VBox/HBox/Options/HairRow
-	var o := $Center/Card/VBox/HBox/Options/OutfitRow
+	var g := $Center/Card/Margin/VBox/HBox/Options/GenderRow
+	var s := $Center/Card/Margin/VBox/HBox/Options/SkinRow
+	var h := $Center/Card/Margin/VBox/HBox/Options/HairRow
+	var o := $Center/Card/Margin/VBox/HBox/Options/OutfitRow
 	for btn in g.get_children():
 		if btn is Button: gender_buttons.append(btn)
 	for btn in s.get_children():
@@ -102,7 +102,7 @@ func _prefill_from_manager() -> void:
 	if not GameState.has_manager():
 		_mode = "create"
 		title_label.text = GameState.T("register.character.title")
-		btn_back.visible = false
+		btn_back.visible = true
 		return
 
 	_mode = "update"

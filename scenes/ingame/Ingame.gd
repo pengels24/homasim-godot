@@ -136,6 +136,7 @@ func _setup_subsystems() -> void:
 	_build.configure(_hotel, map_grid, $HUD/BottomBarContainer/HUDBottom, $HUD)
 	_build.sig_room_built.connect(_on_room_built)
 	$HUD/BottomBarContainer/HUDBottom/BuildMenu.sig_room_selected.connect(_build.start_building)
+	$HUD/BottomBarContainer/HUDBottom/BuildMenu.sig_build_cancelled.connect(_build.close_all)
 
 	# Signale vom TimeManager fangen
 	TimeManager.sig_hour_passed.connect(_guest_mgr.on_hour_passed)

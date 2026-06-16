@@ -1,93 +1,60 @@
-[gd_scene load_steps=2 format=3 uid="uid://techtree_ui"]
+[gd_scene format=3 uid="uid://re4jhilgc733"]
 
-[ext_resource type="Script" uid="uid://techtree_script" path="res://scenes/ingame/hud/modals/content/ModalContentTechtree.gd" id="1_v4mxl"]
+[ext_resource type="Script" uid="uid://cofcmt2j3bej6" path="res://scenes/ingame/hud/modals/content/ModalContentTechtree.gd" id="1_v4mxl"]
+[ext_resource type="FontFile" uid="uid://bs3xl562plyi2" path="res://assets/fonts/Jersey25-Regular.ttf" id="2_dyrqm"]
 
-[node name="ModalContentTechtree" type="VBoxContainer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_panel"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_top = 1
+border_color = Color(0.918, 0.702, 0.031, 1)
+
+[node name="ModalContentTechtree" type="VBoxContainer" unique_id=1236005285]
+custom_minimum_size = Vector2(1500, 700)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_minimum_size = Vector2(800, 500)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_v4mxl")
 
-[node name="TabContainer" type="TabContainer" parent="."]
+[node name="Wrapper" type="MarginContainer" parent="." unique_id=166762396]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TabContainer" type="TabContainer" parent="Wrapper" unique_id=372301956]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_tab_panel")
 
-[node name="Zimmer" type="ScrollContainer" parent="TabContainer"]
+[node name="FPContainer" type="HBoxContainer" parent="Wrapper" unique_id=778153731]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/separation = 5
+alignment = 2
 
-[node name="GridZimmer" type="GridContainer" parent="TabContainer/Zimmer"]
+[node name="Margin" type="MarginContainer" parent="Wrapper/FPContainer" unique_id=1818255013]
+layout_mode = 2
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 10
+
+[node name="HBox" type="HBoxContainer" parent="Wrapper/FPContainer/Margin" unique_id=700628544]
+layout_mode = 2
+
+[node name="FPIcon" type="Label" parent="Wrapper/FPContainer/Margin/HBox" unique_id=876860777]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.803922, 0.619608, 0.0392157, 1)
+theme_override_fonts/font = ExtResource("2_dyrqm")
+theme_override_font_sizes/font_size = 40
+text = "Aktuelle FP: "
+
+[node name="FPLabel" type="Label" parent="Wrapper/FPContainer/Margin/HBox" unique_id=2119658467]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-columns = 3
-theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 20
-
-[node name="Gastronomie" type="ScrollContainer" parent="TabContainer"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="GridGastronomie" type="GridContainer" parent="TabContainer/Gastronomie"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-columns = 3
-theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 20
-
-[node name="Wellness" type="ScrollContainer" parent="TabContainer"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="GridWellness" type="GridContainer" parent="TabContainer/Wellness"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-columns = 3
-theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 20
-
-[node name="Management" type="ScrollContainer" parent="TabContainer"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="GridManagement" type="GridContainer" parent="TabContainer/Management"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-columns = 3
-theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 20
-
-[node name="Prestige" type="ScrollContainer" parent="TabContainer"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="GridPrestige" type="GridContainer" parent="TabContainer/Prestige"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-columns = 3
-theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_dyrqm")
+theme_override_font_sizes/font_size = 40
+text = "0"

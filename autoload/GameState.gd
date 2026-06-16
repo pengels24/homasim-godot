@@ -25,11 +25,15 @@ signal sig_hotel_time_changed(time_string: String)
 signal sig_hotel_level_up(new_level: int)
 
 # interaktion
+@warning_ignore("unused_signal")
 signal sig_room_hovered(room: Node2D, is_hovered: bool)
+@warning_ignore("unused_signal")
 signal sig_room_clicked(room: Node2D)
 
 # globale signale
+@warning_ignore("unused_signal")
 signal sig_dev_spawn_guests(count: int)
+
 signal sig_configs_reloaded()
 
 # REGISTRY - Zentrales Verzeichnis aller geladenen Räume.
@@ -180,12 +184,14 @@ func login(user_data: Dictionary) -> void:
 # =============================================================================
 ## Übersetzung mit optionalen Platzhaltern – identisch zu window.T() im Web.
 ## Beispiel: T("dayend.btn.next_day", 5)  →  "Weiter zu Tag 5"
-func T(key: String, val1: Variant = null, val2: Variant = null) -> String:
+func T(key: String, val1: Variant = null, val2: Variant = null, val3: Variant = null) -> String:
 	var text := TranslationServer.translate(key)
 	if val1 != null:
 		text = text.replace("###", str(val1))
 	if val2 != null:
 		text = text.replace("***", str(val2))
+	if val3 != null:
+		text = text.replace("+++", str(val3))
 	return text
 
 
@@ -243,7 +249,12 @@ func select_hotel(hotel_data: Dictionary) -> void:
 	sig_hotel_time_changed.emit(format_game_time(hotel_time))
 
 	if TechtreeManager:
-		TechtreeManager.load_state(hotel_data.get("unlocked_techs", []))
+		var techtree_data = hotel_data.get("techtree", {"techs": hotel_data.get("unlocked_techs", []), "tiers": ["1"]})
+		TechtreeManager.load_state(techtree_data)
+		
+	if TutorialManager:
+		var tutorials_data = hotel_data.get("tutorials", [])
+		TutorialManager.load_state(tutorials_data)
 		
 	if QuestManager:
 		QuestManager.check_and_activate_quests()
@@ -369,6 +380,7 @@ func add_exp(amount: int) -> void:
 	sig_hotel_exp_changed.emit(current_exp, exp_max)
 	sig_hotel_level_changed.emit(current_level)
 
+@warning_ignore("unused_signal")
 signal sig_room_built(room_id: String)
 
 

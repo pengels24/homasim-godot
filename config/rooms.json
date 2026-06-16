@@ -16,14 +16,19 @@
       "script_path": "res://scenes/ingame/rooms/bed_double/BedDouble.gd"
     },
     {
+      "id": "bed_family",
+      "scene_path": "res://scenes/ingame/rooms/bed_family/BedFamily.tscn",
+      "script_path": "res://scenes/ingame/rooms/bed_family/BedFamily.gd"
+    },
+    {
+      "id": "bed_superior",
+      "scene_path": "res://scenes/ingame/rooms/bed_superior/BedSuperior.tscn",
+      "script_path": "res://scenes/ingame/rooms/bed_superior/BedSuperior.gd"
+    },
+    {
       "id": "bar",
       "scene_path": "res://scenes/ingame/rooms/bar/Bar.tscn",
       "script_path": "res://scenes/ingame/rooms/bar/Bar.gd"
-    },
-    {
-      "id": "sc_office",
-      "scene_path": "res://scenes/ingame/rooms/sc_office/Sc_Office.tscn",
-      "script_path": "res://scenes/ingame/rooms/sc_office/ScOffice.gd"
     }
   ]
 }

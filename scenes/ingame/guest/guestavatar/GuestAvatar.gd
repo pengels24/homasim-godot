@@ -2,7 +2,7 @@ extends Node2D
 
 const FADE_TIME := 0.5 # Wie lange dauert das Ausblenden in Sekunden?
 
-var _current_tween: Tween
+# var _current_tween: Tween
 
 
 # =============================================================================

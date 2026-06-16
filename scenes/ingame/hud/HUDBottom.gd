@@ -44,6 +44,15 @@ func _ready() -> void:
 		sig_quest_book_toggled.emit()
 	)
 
+	_update_quest_book_indicator()
+	
+	# Events
+	if QuestManager:
+		QuestManager.sig_quest_claimable.connect(func(_id): _update_quest_book_indicator())
+		QuestManager.sig_quest_claimed.connect(func(_id): _update_quest_book_indicator())
+		QuestManager.sig_rank_claimable.connect(func(_id): _update_quest_book_indicator())
+		QuestManager.sig_rank_claimed.connect(func(_id): _update_quest_book_indicator())
+
 	# todo - zugewiesene tasten aus settings in den ttoltip setzen
 	build_menu.tooltip_text = GameState.T("hud.bottom.build_menu_tt", "F2")
 	reception.tooltip_text  = GameState.T("hud.bottom.reception_tt", "F3")
@@ -52,9 +61,11 @@ func _ready() -> void:
 	sim_browser.tooltip_text = GameState.T("hud.bottom.sim_browser_tt", "F7")
 	quest_book.tooltip_text = GameState.T("hud.bottom.quest_book_tt", "Aufgaben (J)")
 
-	ind_reception.modulate = Color.GREEN
+	ind_reception.hide()
 	ind_sim_browser.modulate = Color.GREEN
-	ind_quest_book.modulate = Color.DARK_ORANGE
+	ind_sim_browser.hide()
+	ind_quest_book.modulate = Color.GREEN
+	ind_quest_book.hide()
 
 
 # =============================================================================
@@ -129,3 +140,11 @@ func sync_button_state(active_menu: String = "") -> void:
 			staff.set_pressed_no_signal(true)
 		"tech_tree":
 			tech_tree.set_pressed_no_signal(true)
+
+
+# =============================================================================
+func _update_quest_book_indicator() -> void:
+	if QuestManager and QuestManager.has_any_claimable():
+		ind_quest_book.show()
+	else:
+		ind_quest_book.hide()

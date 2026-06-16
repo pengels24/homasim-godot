@@ -1,57 +1,179 @@
 {
-  "q_build_single_5": {
-    "name": "Einzelzimmer I",
-    "description": "Baue 5 Einzelzimmer",
-    "type": "build_room",
-    "target_id": "bed_standard",
-    "target_count": 5,
-    "reward_fp": 50,
-    "reward_money": 500,
-    "requires_tech": "",
-    "next_quest": "q_build_single_10"
-  },
-  "q_build_single_10": {
-    "name": "Einzelzimmer II",
-    "description": "Baue 10 Einzelzimmer",
-    "type": "build_room",
-    "target_id": "bed_standard",
-    "target_count": 10,
-    "reward_fp": 150,
-    "reward_money": 1500,
-    "requires_tech": "",
-    "next_quest": "q_build_single_25"
-  },
-  "q_build_single_25": {
-    "name": "Einzelzimmer III",
-    "description": "Baue 25 Einzelzimmer",
-    "type": "build_room",
-    "target_id": "bed_standard",
-    "target_count": 25,
-    "reward_fp": 400,
-    "reward_money": 5000,
-    "requires_tech": "",
-    "next_quest": ""
-  },
-  "q_build_double_5": {
-    "name": "Doppelzimmer I",
-    "description": "Baue 5 Doppelzimmer",
-    "type": "build_room",
-    "target_id": "bed_double",
-    "target_count": 5,
-    "reward_fp": 80,
-    "reward_money": 800,
-    "requires_tech": "",
-    "next_quest": "q_build_double_10"
-  },
-  "q_build_double_10": {
-    "name": "Doppelzimmer II",
-    "description": "Baue 10 Doppelzimmer",
-    "type": "build_room",
-    "target_id": "bed_double",
-    "target_count": 10,
-    "reward_fp": 200,
-    "reward_money": 2000,
-    "requires_tech": "",
-    "next_quest": ""
+  "categories": {
+    "zimmer": {
+      "ranks": {
+        "1": {
+          "reward_fp": 500,
+          "reward_money": 5000,
+          "targets": [
+            {
+              "id": "q_build_single_5",
+              "name": "quest.single.1.name",
+              "description": "quest.single.1.desc",
+              "type": "build_room",
+              "target_id": "bed_standard",
+              "target_count": 5,
+              "reward_fp": 50,
+              "reward_money": 500,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_build_double_5",
+              "name": "quest.double.1.name",
+              "description": "quest.double.1.desc",
+              "type": "build_room",
+              "target_id": "bed_double",
+              "target_count": 5,
+              "reward_fp": 80,
+              "reward_money": 800,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_build_family_5",
+              "name": "quest.family.1.name",
+              "description": "quest.family.1.desc",
+              "type": "build_room",
+              "target_id": "bed_family",
+              "target_count": 5,
+              "reward_fp": 100,
+              "reward_money": 1000,
+              "requires_tech": "Z1.2"
+            },
+            {
+              "id": "q_build_superior_5",
+              "name": "quest.superior.1.name",
+              "description": "quest.superior.1.desc",
+              "type": "build_room",
+              "target_id": "bed_superior",
+              "target_count": 5,
+              "reward_fp": 150,
+              "reward_money": 1500,
+              "requires_tech": "Z1.3"
+            }
+          ]
+        },
+        "2": {
+          "reward_fp": 1500,
+          "reward_money": 15000,
+          "targets": [
+            {
+              "id": "q_build_single_10",
+              "name": "quest.single.2.name",
+              "description": "quest.single.2.desc",
+              "type": "build_room",
+              "target_id": "bed_standard",
+              "target_count": 10,
+              "reward_fp": 150,
+              "reward_money": 1500,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_build_double_10",
+              "name": "quest.double.2.name",
+              "description": "quest.double.2.desc",
+              "type": "build_room",
+              "target_id": "bed_double",
+              "target_count": 10,
+              "reward_fp": 200,
+              "reward_money": 2000,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_build_family_10",
+              "name": "quest.family.2.name",
+              "description": "quest.family.2.desc",
+              "type": "build_room",
+              "target_id": "bed_family",
+              "target_count": 10,
+              "reward_fp": 250,
+              "reward_money": 2500,
+              "requires_tech": "Z1.2"
+            },
+            {
+              "id": "q_build_superior_10",
+              "name": "quest.superior.2.name",
+              "description": "quest.superior.2.desc",
+              "type": "build_room",
+              "target_id": "bed_superior",
+              "target_count": 10,
+              "reward_fp": 350,
+              "reward_money": 3500,
+              "requires_tech": "Z1.3"
+            }
+          ]
+        },
+        "3": {
+          "reward_fp": 3000,
+          "reward_money": 30000,
+          "targets": [
+            {
+              "id": "q_build_single_25",
+              "name": "quest.single.3.name",
+              "description": "quest.single.3.desc",
+              "type": "build_room",
+              "target_id": "bed_standard",
+              "target_count": 25,
+              "reward_fp": 400,
+              "reward_money": 5000,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_build_double_25",
+              "name": "quest.double.3.name",
+              "description": "quest.double.3.desc",
+              "type": "build_room",
+              "target_id": "bed_double",
+              "target_count": 25,
+              "reward_fp": 600,
+              "reward_money": 6000,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_build_family_25",
+              "name": "quest.family.3.name",
+              "description": "quest.family.3.desc",
+              "type": "build_room",
+              "target_id": "bed_family",
+              "target_count": 25,
+              "reward_fp": 800,
+              "reward_money": 8000,
+              "requires_tech": "Z1.2"
+            },
+            {
+              "id": "q_build_superior_25",
+              "name": "quest.superior.3.name",
+              "description": "quest.superior.3.desc",
+              "type": "build_room",
+              "target_id": "bed_superior",
+              "target_count": 25,
+              "reward_fp": 1000,
+              "reward_money": 10000,
+              "requires_tech": "Z1.3"
+            }
+          ]
+        }
+      }
+    },
+    "gastronomie": {
+      "ranks": {
+        "1": {
+          "reward_fp": 200,
+          "reward_money": 2000,
+          "targets": [
+            {
+              "id": "q_build_bar_1",
+              "name": "quest.bar.1.name",
+              "description": "quest.bar.1.desc",
+              "type": "build_room",
+              "target_id": "bar",
+              "target_count": 1,
+              "reward_fp": 100,
+              "reward_money": 1000,
+              "requires_tech": "G1.1"
+            }
+          ]
+        }
+      }
+    }
   }
 }

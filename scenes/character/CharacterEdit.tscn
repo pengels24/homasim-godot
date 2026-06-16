@@ -2,6 +2,19 @@
 
 [ext_resource type="Script" path="res://scenes/character/CharacterEdit.gd" id="1_charedit"]
 [ext_resource type="PackedScene" path="res://scenes/character/CharacterDisplay.tscn" id="2_chardisplay"]
+[ext_resource type="StyleBox" uid="uid://cg2q7w0wqska8" path="res://assets/UI/modal_panel_glow.tres" id="3_modal"]
+[ext_resource type="StyleBox" uid="uid://cna2b35jrscs7" path="res://assets/UI/menu_button_darkblue.tres" id="4_blue"]
+[ext_resource type="StyleBox" uid="uid://ctu17tayaclq4" path="res://assets/UI/menu_button_darkblue_hover.tres" id="5_blue_h"]
+[ext_resource type="StyleBox" uid="uid://b0jlf6ry834tk" path="res://assets/UI/menu_button_darkblue_pressed.tres" id="6_blue_p"]
+[ext_resource type="StyleBox" uid="uid://b75w4v5ow6m8j" path="res://assets/UI/menu_button_golden.tres" id="7_gold"]
+[ext_resource type="StyleBox" uid="uid://0d8a1qfs35qv" path="res://assets/UI/menu_button_golden_hover.tres" id="8_gold_h"]
+[ext_resource type="StyleBox" uid="uid://babqxaejnbxnp" path="res://assets/UI/menu_button_golden_pressed.tres" id="9_gold_p"]
+[ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://assets/UI/menu_button_green.tres" id="10_green"]
+[ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://assets/UI/menu_button_green_hover.tres" id="11_green_h"]
+[ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://assets/UI/menu_button_green_pressed.tres" id="12_green_p"]
+[ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="13_red"]
+[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="14_red_h"]
+[ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="15_red_p"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gold"]
 bg_color = Color(0.918, 0.702, 0.031, 1)
@@ -171,6 +184,9 @@ content_margin_right = 20.0
 content_margin_top = 10.0
 content_margin_bottom = 10.0
 
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_goldsep"]
+color = Color(0.890196, 0.682353, 0.0313726, 1)
+
 [node name="CharacterEdit" type="Control"]
 position = Vector2(0, 0)
 size = Vector2(1920, 1080)
@@ -193,30 +209,54 @@ size = Vector2(1920, 1080)
 
 [node name="Card" type="PanelContainer" parent="Center"]
 layout_mode = 2
-custom_minimum_size = Vector2(800, 0)
-theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+custom_minimum_size = Vector2(900, 0)
+theme_override_styles/panel = ExtResource("3_modal")
 
-[node name="VBox" type="VBoxContainer" parent="Center/Card"]
+[node name="Margin" type="MarginContainer" parent="Center/Card"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="VBox" type="VBoxContainer" parent="Center/Card/Margin"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Title" type="Label" parent="Center/Card/VBox"]
+[node name="Header" type="HBoxContainer" parent="Center/Card/Margin/VBox"]
 layout_mode = 2
-text = "Charakter erstellen"
-theme_override_font_sizes/font_size = 28
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-horizontal_alignment = 1
 
-[node name="HBox" type="HBoxContainer" parent="Center/Card/VBox"]
+[node name="Title" type="Label" parent="Center/Card/Margin/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Charakter erstellen"
+theme_override_colors/font_color = Color(0.890196, 0.682353, 0.0313726, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.588235)
+theme_override_font_sizes/font_size = 32
+
+[node name="BtnBack" type="Button" parent="Center/Card/Margin/VBox/Header"]
+layout_mode = 2
+custom_minimum_size = Vector2(40, 40)
+text = "X"
+theme_override_styles/focus = SubResource("StyleBoxEmpty_link")
+theme_override_styles/hover = ExtResource("14_red_h")
+theme_override_styles/pressed = ExtResource("15_red_p")
+theme_override_styles/normal = ExtResource("13_red")
+
+[node name="HSeparator" type="HSeparator" parent="Center/Card/Margin/VBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_goldsep")
+
+[node name="HBox" type="HBoxContainer" parent="Center/Card/Margin/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 32
 
-[node name="Options" type="VBoxContainer" parent="Center/Card/VBox/HBox"]
+[node name="Options" type="VBoxContainer" parent="Center/Card/Margin/VBox/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 14
 
-[node name="FieldManagerName" type="LineEdit" parent="Center/Card/VBox/HBox/Options"]
+[node name="FieldManagerName" type="LineEdit" parent="Center/Card/Margin/VBox/HBox/Options"]
 layout_mode = 2
 custom_minimum_size = Vector2(0, 52)
 placeholder_text = "Manager-Name"
@@ -225,17 +265,17 @@ theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
 theme_override_styles/normal = SubResource("StyleBoxFlat_input")
 theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
 
-[node name="LabelGender" type="Label" parent="Center/Card/VBox/HBox/Options"]
+[node name="LabelGender" type="Label" parent="Center/Card/Margin/VBox/HBox/Options"]
 layout_mode = 2
 text = "Geschlecht"
 theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
 
-[node name="GenderRow" type="HBoxContainer" parent="Center/Card/VBox/HBox/Options"]
+[node name="GenderRow" type="HBoxContainer" parent="Center/Card/Margin/VBox/HBox/Options"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="BtnGenderM" type="Button" parent="Center/Card/VBox/HBox/Options/GenderRow"]
+[node name="BtnGenderM" type="Button" parent="Center/Card/Margin/VBox/HBox/Options/GenderRow"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -246,12 +286,12 @@ theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
 theme_override_colors/font_hover_color = Color(0.08, 0.06, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_option")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_option")
+theme_override_styles/normal = ExtResource("4_blue")
+theme_override_styles/pressed = ExtResource("7_gold")
+theme_override_styles/hover = ExtResource("5_blue_h")
 metadata/value = "m"
 
-[node name="BtnGenderW" type="Button" parent="Center/Card/VBox/HBox/Options/GenderRow"]
+[node name="BtnGenderW" type="Button" parent="Center/Card/Margin/VBox/HBox/Options/GenderRow"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -260,12 +300,12 @@ toggle_mode = true
 theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_option")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_option")
+theme_override_styles/normal = ExtResource("4_blue")
+theme_override_styles/pressed = ExtResource("7_gold")
+theme_override_styles/hover = ExtResource("5_blue_h")
 metadata/value = "w"
 
-[node name="BtnGenderD" type="Button" parent="Center/Card/VBox/HBox/Options/GenderRow"]
+[node name="BtnGenderD" type="Button" parent="Center/Card/Margin/VBox/HBox/Options/GenderRow"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -274,22 +314,22 @@ toggle_mode = true
 theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_option")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_option")
+theme_override_styles/normal = ExtResource("4_blue")
+theme_override_styles/pressed = ExtResource("7_gold")
+theme_override_styles/hover = ExtResource("5_blue_h")
 metadata/value = "d"
 
-[node name="LabelSkin" type="Label" parent="Center/Card/VBox/HBox/Options"]
+[node name="LabelSkin" type="Label" parent="Center/Card/Margin/VBox/HBox/Options"]
 layout_mode = 2
 text = "Hautfarbe"
 theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
 
-[node name="SkinRow" type="HBoxContainer" parent="Center/Card/VBox/HBox/Options"]
+[node name="SkinRow" type="HBoxContainer" parent="Center/Card/Margin/VBox/HBox/Options"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="BtnSkinHell" type="Button" parent="Center/Card/VBox/HBox/Options/SkinRow"]
+[node name="BtnSkinHell" type="Button" parent="Center/Card/Margin/VBox/HBox/Options/SkinRow"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -300,12 +340,12 @@ theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
 theme_override_colors/font_hover_color = Color(0.08, 0.06, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_option")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_option")
+theme_override_styles/normal = ExtResource("4_blue")
+theme_override_styles/pressed = ExtResource("7_gold")
+theme_override_styles/hover = ExtResource("5_blue_h")
 metadata/value = "hell"
 
-[node name="BtnSkinMittel" type="Button" parent="Center/Card/VBox/HBox/Options/SkinRow"]
+[node name="BtnSkinMittel" type="Button" parent="Center/Card/Margin/VBox/HBox/Options/SkinRow"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -314,12 +354,12 @@ toggle_mode = true
 theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_option")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_option")
+theme_override_styles/normal = ExtResource("4_blue")
+theme_override_styles/pressed = ExtResource("7_gold")
+theme_override_styles/hover = ExtResource("5_blue_h")
 metadata/value = "mittel"
 
-[node name="BtnSkinDunkel" type="Button" parent="Center/Card/VBox/HBox/Options/SkinRow"]
+[node name="BtnSkinDunkel" type="Button" parent="Center/Card/Margin/VBox/HBox/Options/SkinRow"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -328,22 +368,22 @@ toggle_mode = true
 theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_option")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_option")
+theme_override_styles/normal = ExtResource("4_blue")
+theme_override_styles/pressed = ExtResource("7_gold")
+theme_override_styles/hover = ExtResource("5_blue_h")
 metadata/value = "dunkel"
 
-[node name="LabelHair" type="Label" parent="Center/Card/VBox/HBox/Options"]
+[node name="LabelHair" type="Label" parent="Center/Card/Margin/VBox/HBox/Options"]
 layout_mode = 2
 text = "Haarfarbe"
 theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
 
-[node name="HairRow" type="HBoxContainer" parent="Center/Card/VBox/HBox/Options"]
+[node name="HairRow" type="HBoxContainer" parent="Center/Card/Margin/VBox/HBox/Options"]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="BtnHairBlond" type="Button" parent="Center/Card/VBox/HBox/Options/HairRow"]
+[node name="BtnHairBlond" type="Button" parent="Center/Card/Margin/VBox/HBox/Options/HairRow"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -352,12 +392,12 @@ toggle_mode = true
 theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_option")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_option")
+theme_override_styles/normal = ExtResource("4_blue")
+theme_override_styles/pressed = ExtResource("7_gold")
+theme_override_styles/hover = ExtResource("5_blue_h")
 metadata/value = "blond"
 
-[node name="BtnHairBraun" type="Button" parent="Center/Card/VBox/HBox/Options/HairRow"]
+[node name="BtnHairBraun" type="Button" parent="Center/Card/Margin/VBox/HBox/Options/HairRow"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -368,12 +408,12 @@ theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
 theme_override_colors/font_hover_color = Color(0.08, 0.06, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_option")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_option")
+theme_override_styles/normal = ExtResource("4_blue")
+theme_override_styles/pressed = ExtResource("7_gold")
+theme_override_styles/hover = ExtResource("5_blue_h")
 metadata/value = "braun"
 
-[node name="BtnHairSchwarz" type="Button" parent="Center/Card/VBox/HBox/Options/HairRow"]
+[node name="BtnHairSchwarz" type="Button" parent="Center/Card/Margin/VBox/HBox/Options/HairRow"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -382,12 +422,12 @@ toggle_mode = true
 theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_option")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_option")
+theme_override_styles/normal = ExtResource("4_blue")
+theme_override_styles/pressed = ExtResource("7_gold")
+theme_override_styles/hover = ExtResource("5_blue_h")
 metadata/value = "schwarz"
 
-[node name="BtnHairHellblond" type="Button" parent="Center/Card/VBox/HBox/Options/HairRow"]
+[node name="BtnHairHellblond" type="Button" parent="Center/Card/Margin/VBox/HBox/Options/HairRow"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -396,12 +436,12 @@ toggle_mode = true
 theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_option")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_option")
+theme_override_styles/normal = ExtResource("4_blue")
+theme_override_styles/pressed = ExtResource("7_gold")
+theme_override_styles/hover = ExtResource("5_blue_h")
 metadata/value = "hellblond"
 
-[node name="BtnHairRot" type="Button" parent="Center/Card/VBox/HBox/Options/HairRow"]
+[node name="BtnHairRot" type="Button" parent="Center/Card/Margin/VBox/HBox/Options/HairRow"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -410,12 +450,12 @@ toggle_mode = true
 theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_option")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_option")
+theme_override_styles/normal = ExtResource("4_blue")
+theme_override_styles/pressed = ExtResource("7_gold")
+theme_override_styles/hover = ExtResource("5_blue_h")
 metadata/value = "rot"
 
-[node name="BtnHairGrau" type="Button" parent="Center/Card/VBox/HBox/Options/HairRow"]
+[node name="BtnHairGrau" type="Button" parent="Center/Card/Margin/VBox/HBox/Options/HairRow"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -424,22 +464,22 @@ toggle_mode = true
 theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_option")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_option")
+theme_override_styles/normal = ExtResource("4_blue")
+theme_override_styles/pressed = ExtResource("7_gold")
+theme_override_styles/hover = ExtResource("5_blue_h")
 metadata/value = "grau"
 
-[node name="LabelOutfit" type="Label" parent="Center/Card/VBox/HBox/Options"]
+[node name="LabelOutfit" type="Label" parent="Center/Card/Margin/VBox/HBox/Options"]
 layout_mode = 2
 text = "Outfit"
 theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
 
-[node name="OutfitRow" type="HBoxContainer" parent="Center/Card/VBox/HBox/Options"]
+[node name="OutfitRow" type="HBoxContainer" parent="Center/Card/Margin/VBox/HBox/Options"]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="BtnOutfitAnzugSchwarz" type="Button" parent="Center/Card/VBox/HBox/Options/OutfitRow"]
+[node name="BtnOutfitAnzugSchwarz" type="Button" parent="Center/Card/Margin/VBox/HBox/Options/OutfitRow"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -450,12 +490,12 @@ theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.08, 0.06, 0, 1)
 theme_override_colors/font_hover_color = Color(0.08, 0.06, 0, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_option")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_option")
+theme_override_styles/normal = ExtResource("4_blue")
+theme_override_styles/pressed = ExtResource("7_gold")
+theme_override_styles/hover = ExtResource("5_blue_h")
 metadata/value = "anzug_schwarz"
 
-[node name="BtnOutfitAnzugGrau" type="Button" parent="Center/Card/VBox/HBox/Options/OutfitRow"]
+[node name="BtnOutfitAnzugGrau" type="Button" parent="Center/Card/Margin/VBox/HBox/Options/OutfitRow"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -464,12 +504,12 @@ toggle_mode = true
 theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_option")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_option")
+theme_override_styles/normal = ExtResource("4_blue")
+theme_override_styles/pressed = ExtResource("7_gold")
+theme_override_styles/hover = ExtResource("5_blue_h")
 metadata/value = "anzug_grau"
 
-[node name="BtnOutfitCasual" type="Button" parent="Center/Card/VBox/HBox/Options/OutfitRow"]
+[node name="BtnOutfitCasual" type="Button" parent="Center/Card/Margin/VBox/HBox/Options/OutfitRow"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -478,12 +518,12 @@ toggle_mode = true
 theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
 theme_override_colors/font_pressed_color = Color(0.08, 0.06, 0, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_option")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
-theme_override_styles/hover = SubResource("StyleBoxFlat_option")
+theme_override_styles/normal = ExtResource("4_blue")
+theme_override_styles/pressed = ExtResource("7_gold")
+theme_override_styles/hover = ExtResource("5_blue_h")
 metadata/value = "casual"
 
-[node name="BtnOutfitUniform" type="Button" parent="Center/Card/VBox/HBox/Options/OutfitRow"]
+[node name="BtnOutfitUniform" type="Button" parent="Center/Card/Margin/VBox/HBox/Options/OutfitRow"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 size_flags_horizontal = 3
@@ -497,24 +537,24 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_option_active")
 theme_override_styles/hover = SubResource("StyleBoxFlat_option")
 metadata/value = "uniform"
 
-[node name="Preview" type="VBoxContainer" parent="Center/Card/VBox/HBox"]
+[node name="Preview" type="VBoxContainer" parent="Center/Card/Margin/VBox/HBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(200, 0)
 theme_override_constants/separation = 12
 alignment = 1
 
-[node name="PreviewLabel" type="Label" parent="Center/Card/VBox/HBox/Preview"]
+[node name="PreviewLabel" type="Label" parent="Center/Card/Margin/VBox/HBox/Preview"]
 layout_mode = 2
 text = "VORSCHAU"
 theme_override_font_sizes/font_size = 12
 theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
 horizontal_alignment = 1
 
-[node name="CharacterDisplay" parent="Center/Card/VBox/HBox/Preview" instance=ExtResource("2_chardisplay")]
+[node name="CharacterDisplay" parent="Center/Card/Margin/VBox/HBox/Preview" instance=ExtResource("2_chardisplay")]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="PreviewName" type="Label" parent="Center/Card/VBox/HBox/Preview"]
+[node name="PreviewName" type="Label" parent="Center/Card/Margin/VBox/HBox/Preview"]
 layout_mode = 2
 custom_minimum_size = Vector2(200, 0)
 text = "—"
@@ -523,14 +563,14 @@ theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="PreviewSub" type="Label" parent="Center/Card/VBox/HBox/Preview"]
+[node name="PreviewSub" type="Label" parent="Center/Card/Margin/VBox/HBox/Preview"]
 layout_mode = 2
 text = "MANAGER · LEVEL 1"
 theme_override_font_sizes/font_size = 11
 theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
 horizontal_alignment = 1
 
-[node name="BtnSave" type="Button" parent="Center/Card/VBox"]
+[node name="BtnSave" type="Button" parent="Center/Card/Margin/VBox"]
 layout_mode = 2
 mouse_default_cursor_shape = 2
 custom_minimum_size = Vector2(0, 52)
@@ -539,12 +579,12 @@ theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0.05, 0.20, 0.08, 1)
 theme_override_colors/font_hover_color = Color(0.05, 0.20, 0.08, 1)
 theme_override_colors/font_pressed_color = Color(0.05, 0.20, 0.08, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_green")
-theme_override_styles/hover = SubResource("StyleBoxFlat_green_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_green")
-theme_override_styles/disabled = SubResource("StyleBoxFlat_green_disabled")
+theme_override_styles/normal = ExtResource("10_green")
+theme_override_styles/hover = ExtResource("11_green_h")
+theme_override_styles/pressed = ExtResource("12_green_p")
+theme_override_styles/disabled = ExtResource("10_green")
 
-[node name="ErrorLabel" type="Label" parent="Center/Card/VBox"]
+[node name="ErrorLabel" type="Label" parent="Center/Card/Margin/VBox"]
 layout_mode = 2
 custom_minimum_size = Vector2(0, 20)
 theme_override_font_sizes/font_size = 15
@@ -552,14 +592,4 @@ theme_override_colors/font_color = Color(1, 0.4, 0.4, 1)
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="BtnBack" type="Button" parent="Center/Card/VBox"]
-layout_mode = 2
-mouse_default_cursor_shape = 2
-custom_minimum_size = Vector2(0, 44)
-text = "Zurück"
-theme_override_font_sizes/font_size = 15
-theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_red")
-theme_override_styles/hover = SubResource("StyleBoxFlat_red_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_red")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_link")
+

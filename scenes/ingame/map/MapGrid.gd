@@ -59,7 +59,9 @@ var _occ_w: int
 var _occ_h: int
 
 # ── Debugging ─────────────────────────────────────────────────────────────────
+@warning_ignore("unused_private_class_variable")
 var _show_debug_grid: bool = false
+@warning_ignore("unused_private_class_variable")
 var _debug_path: Array[Vector2i] = []
 
 # =============================================================================

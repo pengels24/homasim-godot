@@ -244,8 +244,9 @@ func _delete_hotel(hotel_id: int, _btn: Button) -> void:
 		GameState.T("dashboard.delete_hotel.title"),
 		GameState.T("dashboard.delete_hotel.message"),
 		GameState.T("dashboard.delete_hotel.confirm"),
-		"Abbrechen",
-		GameState.T("dashboard.delete_hotel.ack"))
+		GameState.T("dashboard.cancel"),
+		GameState.T("dashboard.delete_hotel.ack"),
+		true)
 
 
 func _on_delete_confirmed() -> void:

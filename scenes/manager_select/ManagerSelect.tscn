@@ -4,6 +4,16 @@
 [ext_resource type="Texture2D" uid="uid://dq7o8pdrqma4" path="res://assets/icons/trash.svg" id="2_trash"]
 [ext_resource type="PackedScene" path="res://scenes/shared/ConfirmModal.tscn" id="3_confirmmodal"]
 [ext_resource type="PackedScene" uid="uid://b3x1chardisplay" path="res://scenes/character/CharacterDisplay.tscn" id="4_chardisplay"]
+[ext_resource type="StyleBox" uid="uid://cg2q7w0wqska8" path="res://assets/UI/modal_panel_glow.tres" id="13_modal"]
+[ext_resource type="StyleBox" uid="uid://cna2b35jrscs7" path="res://assets/UI/menu_button_darkblue.tres" id="14_blue"]
+[ext_resource type="StyleBox" uid="uid://ctu17tayaclq4" path="res://assets/UI/menu_button_darkblue_hover.tres" id="15_blue_h"]
+[ext_resource type="StyleBox" uid="uid://b0jlf6ry834tk" path="res://assets/UI/menu_button_darkblue_pressed.tres" id="16_blue_p"]
+[ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://assets/UI/menu_button_green.tres" id="17_green"]
+[ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://assets/UI/menu_button_green_hover.tres" id="18_green_h"]
+[ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://assets/UI/menu_button_green_pressed.tres" id="19_green_p"]
+[ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="20_red"]
+[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="21_red_h"]
+[ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="22_red_p"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
 bg_color = Color(0.07, 0.07, 0.09, 0.97)
@@ -128,6 +138,9 @@ content_margin_right = 12.0
 content_margin_top = 6.0
 content_margin_bottom = 6.0
 
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_goldsep"]
+color = Color(0.890196, 0.682353, 0.0313726, 1)
+
 [node name="ManagerSelectModal" type="Control" unique_id=2032322512]
 visible = false
 layout_mode = 3
@@ -158,7 +171,7 @@ grow_vertical = 2
 [node name="Card" type="PanelContainer" parent="Center" unique_id=99347146]
 custom_minimum_size = Vector2(1000, 600)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_card")
+theme_override_styles/panel = ExtResource("13_modal")
 
 [node name="Margin" type="MarginContainer" parent="Center/Card" unique_id=1929645515]
 layout_mode = 2
@@ -178,21 +191,23 @@ theme_override_constants/separation = 16
 [node name="Title" type="Label" parent="Center/Card/Margin/VBox/Header" unique_id=469940153]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
-theme_override_font_sizes/font_size = 32
 text = "Manager wählen"
-horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.890196, 0.682353, 0.0313726, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.588235)
+theme_override_font_sizes/font_size = 32
 
 [node name="BtnClose" type="Button" parent="Center/Card/Margin/VBox/Header"]
 layout_mode = 2
-mouse_default_cursor_shape = 2
-text = "✕"
-theme_override_styles/normal = SubResource("StyleBoxFlat_close")
-theme_override_styles/hover = SubResource("StyleBoxFlat_close_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_close")
+custom_minimum_size = Vector2(40, 40)
+text = "X"
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
-theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
+theme_override_styles/hover = ExtResource("21_red_h")
+theme_override_styles/pressed = ExtResource("22_red_p")
+theme_override_styles/normal = ExtResource("20_red")
+
+[node name="HSeparator" type="HSeparator" parent="Center/Card/Margin/VBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_goldsep")
 
 [node name="Slots" type="HBoxContainer" parent="Center/Card/Margin/VBox" unique_id=114644237]
 layout_mode = 2
@@ -248,9 +263,9 @@ layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
 theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxFlat_create")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_create")
-theme_override_styles/hover = SubResource("StyleBoxFlat_create_hover")
+theme_override_styles/normal = ExtResource("14_blue")
+theme_override_styles/pressed = ExtResource("16_blue_p")
+theme_override_styles/hover = ExtResource("15_blue_h")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 text = "Neu erstellen"
 
@@ -310,9 +325,9 @@ theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(0.05, 0.20, 0.08, 1)
 theme_override_colors/font_hover_color = Color(0.05, 0.20, 0.08, 1)
 theme_override_colors/font_pressed_color = Color(0.05, 0.20, 0.08, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_select")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_select")
-theme_override_styles/hover = SubResource("StyleBoxFlat_select_hover")
+theme_override_styles/normal = ExtResource("17_green")
+theme_override_styles/pressed = ExtResource("19_green_p")
+theme_override_styles/hover = ExtResource("18_green_h")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
 text = "Auswählen"
 
@@ -320,9 +335,9 @@ text = "Auswählen"
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_delete")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_delete")
-theme_override_styles/hover = SubResource("StyleBoxFlat_delete_hover")
+theme_override_styles/normal = ExtResource("20_red")
+theme_override_styles/pressed = ExtResource("22_red_p")
+theme_override_styles/hover = ExtResource("21_red_h")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
 icon = ExtResource("2_trash")
 
@@ -375,9 +390,9 @@ layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
 theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxFlat_create")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_create")
-theme_override_styles/hover = SubResource("StyleBoxFlat_create_hover")
+theme_override_styles/normal = ExtResource("14_blue")
+theme_override_styles/pressed = ExtResource("16_blue_p")
+theme_override_styles/hover = ExtResource("15_blue_h")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 text = "Neu erstellen"
 
@@ -437,9 +452,9 @@ theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(0.05, 0.20, 0.08, 1)
 theme_override_colors/font_hover_color = Color(0.05, 0.20, 0.08, 1)
 theme_override_colors/font_pressed_color = Color(0.05, 0.20, 0.08, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_select")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_select")
-theme_override_styles/hover = SubResource("StyleBoxFlat_select_hover")
+theme_override_styles/normal = ExtResource("17_green")
+theme_override_styles/pressed = ExtResource("19_green_p")
+theme_override_styles/hover = ExtResource("18_green_h")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
 text = "Auswählen"
 
@@ -447,9 +462,9 @@ text = "Auswählen"
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_delete")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_delete")
-theme_override_styles/hover = SubResource("StyleBoxFlat_delete_hover")
+theme_override_styles/normal = ExtResource("20_red")
+theme_override_styles/pressed = ExtResource("22_red_p")
+theme_override_styles/hover = ExtResource("21_red_h")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
 icon = ExtResource("2_trash")
 
@@ -502,9 +517,9 @@ layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
 theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = SubResource("StyleBoxFlat_create")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_create")
-theme_override_styles/hover = SubResource("StyleBoxFlat_create_hover")
+theme_override_styles/normal = ExtResource("14_blue")
+theme_override_styles/pressed = ExtResource("16_blue_p")
+theme_override_styles/hover = ExtResource("15_blue_h")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 text = "Neu erstellen"
 
@@ -564,9 +579,9 @@ theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(0.05, 0.20, 0.08, 1)
 theme_override_colors/font_hover_color = Color(0.05, 0.20, 0.08, 1)
 theme_override_colors/font_pressed_color = Color(0.05, 0.20, 0.08, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_select")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_select")
-theme_override_styles/hover = SubResource("StyleBoxFlat_select_hover")
+theme_override_styles/normal = ExtResource("17_green")
+theme_override_styles/pressed = ExtResource("19_green_p")
+theme_override_styles/hover = ExtResource("18_green_h")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
 text = "Auswählen"
 
@@ -574,9 +589,9 @@ text = "Auswählen"
 custom_minimum_size = Vector2(48, 48)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_delete")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_delete")
-theme_override_styles/hover = SubResource("StyleBoxFlat_delete_hover")
+theme_override_styles/normal = ExtResource("20_red")
+theme_override_styles/pressed = ExtResource("22_red_p")
+theme_override_styles/hover = ExtResource("21_red_h")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_2")
 icon = ExtResource("2_trash")
 

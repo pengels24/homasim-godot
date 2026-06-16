@@ -10,7 +10,7 @@ var stay_days: int    = 1
 var total_stay_days: int = 1 # Speichert die ursprünglichen Nächte für die Abrechnung
 var base_price: int  = 0
 var satisfaction: int = 100 # 0–100
-var patience: int = 100 # 0.0–1.0; startet bei 1.0
+var patience: float = 1.0 # 0.0–1.0; startet bei 1.0
 var arrived_day: int = 1
 var arrived_time: int = 0 # Spielminuten
 var state: String = "waiting" # "waiting"|"active"|"checkout"|"gone"
@@ -81,7 +81,7 @@ static func from_dict(d: Dictionary) -> GuestParty:
 	p.total_stay_days = d.get("total_stay_days", max(1, p.stay_days)) # Fallback für alte Savegames
 	p.base_price = int(d.get("base_price", 0))
 	p.satisfaction = int(d.get("satisfaction", 100))
-	p.patience = int(d.get("patience", 100))
+	p.patience = float(d.get("patience", 1.0))
 	p.arrived_day = d.get("arrived_day", 1)
 	p.arrived_time = d.get("arrived_time", 0)
 	p.state = d.get("state", "waiting")

@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://357quoih37ep"]
+
+[ext_resource type="StyleBox" uid="uid://cna2b35jrscs7" path="res://assets/UI/menu_button_darkblue.tres" id="1_0s5n8"]
+[ext_resource type="Script" uid="uid://ctllgm7pv4e86" path="res://scenes/ingame/hud/modals/content/TechNodeButton.gd" id="1_xxx"]
+[ext_resource type="StyleBox" uid="uid://b0jlf6ry834tk" path="res://assets/UI/menu_button_darkblue_pressed.tres" id="2_150ly"]
+[ext_resource type="StyleBox" uid="uid://ctu17tayaclq4" path="res://assets/UI/menu_button_darkblue_hover.tres" id="3_hv5iv"]
+[ext_resource type="StyleBox" uid="uid://3p1dn200tb0v" path="res://assets/UI/menu_button_darkblue_disabled.tres" id="4_g6ejy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_glow"]
+bg_color = Color(0.043137256, 0.05882353, 0.09019608, 1)
+draw_center = false
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="TechNodeButton" type="Button" unique_id=1052314097]
+custom_minimum_size = Vector2(300, 50)
+theme_override_styles/normal = ExtResource("1_0s5n8")
+theme_override_styles/pressed = ExtResource("2_150ly")
+theme_override_styles/hover = ExtResource("3_hv5iv")
+theme_override_styles/disabled = ExtResource("4_g6ejy")
+alignment = 0
+autowrap_mode = 3
+script = ExtResource("1_xxx")
+
+[node name="GlowOverlay" type="Panel" parent="." unique_id=1859839316]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_glow")

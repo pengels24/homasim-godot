@@ -1,6 +1,7 @@
 extends Node2D
 class_name IngameBuild
 
+@warning_ignore("unused_signal")
 signal sig_room_built(room_type_id: String)
 
 var _hotel:              Dictionary
@@ -24,7 +25,7 @@ func configure(hotel: Dictionary, map_grid: Node2D, hud: Node, hud_canvas: Node)
 func close_all() -> void:
 	if is_instance_valid(_build_cursor):
 		_build_cursor.queue_free()
-		_build_cursor = null
+		_on_build_cursor_done()
 
 
 # ── Neue Schnittstelle für das BuildMenu ──────────────────────────────────────

@@ -9,14 +9,6 @@ signal view_saved_changed(has_saved: bool)
 var guest_manager: GuestManager:
 	set(value):
 		guest_manager = value
-		# Sobald der Manager zugewiesen wird, verbinden wir das Signal sicher:
-		if guest_manager != null:
-			if not guest_manager.sig_party_checked_in.is_connected(_on_party_checked_in):
-				guest_manager.sig_party_checked_in.connect(_on_party_checked_in)
-			if not guest_manager.sig_party_moving_to_checkout.is_connected(_on_party_checking_out):
-				guest_manager.sig_party_moving_to_checkout.connect(_on_party_checking_out)
-			if not guest_manager.sig_party_checked_out_physically.is_connected(_on_party_checked_out_physically):
-				guest_manager.sig_party_checked_out_physically.connect(_on_party_checked_out_physically)
 
 # ── Grid-Konfiguration ────────────────────────────────────────────────────────
 @export var grid_cols:  int = 5
@@ -115,6 +107,12 @@ func tile_to_world(tile_coord: Vector2i) -> Vector2:
 func get_path_between_tiles(start_tile: Vector2i, end_tile: Vector2i) -> Array[Vector2i]:
 	if not astar.is_in_boundsv(start_tile) or not astar.is_in_boundsv(end_tile):
 		return []
+	if astar.is_point_solid(start_tile):
+		var val = _occ[start_tile.y * _occ_w + start_tile.x]
+		print("ASTAR FAILED: Start tile ", start_tile, " is SOLID! (occ val: ", val, ")")
+	if astar.is_point_solid(end_tile):
+		var val = _occ[end_tile.y * _occ_w + end_tile.x]
+		print("ASTAR FAILED: End tile ", end_tile, " is SOLID! (occ val: ", val, ")")
 	return astar.get_id_path(start_tile, end_tile)
 
 
@@ -142,6 +140,7 @@ func build_map(built_plots: Array, entry_plot: Vector2i, enter_dir: String) -> v
 		_mark_parcel_walls(plot["x"], plot["y"])
 	var start_p: Node2D = _grid[entry_plot.y][entry_plot.x]
 	start_p.set_entrance(enter_dir)
+	_mark_parcel_walls(entry_plot.x, entry_plot.y)
 	_mark_lobby_on_parcel(entry_plot.x, entry_plot.y)
 	_restore_rooms(built_plots)
 	center_on_entry(entry_plot)
@@ -714,210 +713,7 @@ func get_room_exit_tile(room: Node2D) -> Vector2i:
 	var py: int = int(room.get_parent().name.split("_")[2])
 	return _exit_global(px, py, tile_x, tile_y, sz.x, sz.y, door_rot, door_off)
 
-# =============================================================================
-func _on_party_checked_in(party: GuestParty, room: Node2D) -> void:
-	# 1. Start und Ziel berechnen
-	var entry_parcel: Node2D = _grid[_entry_plot.y][_entry_plot.x]
-	var clearance: Rect2i = entry_parcel.get_lobby_clearance_rect()
-	var start_x := (_entry_plot.x * PARCEL_SZ) + clearance.position.x + int(clearance.size.x / 2.0)
-	var start_y := (_entry_plot.y * PARCEL_SZ) + clearance.position.y + int(clearance.size.y / 2.0)
-	var start_tile := Vector2i(start_x, start_y)
 
-	# Raum-Daten sicher auslesen
-	var sz: Vector2i = room.get_tile_size()
-	var door_rot: int = room.get("door_rotation")
-	var door_off: int = room.get("door_offset")
-	var tile_x: int = int(room.position.x / TILE_PX)
-	var tile_y: int = int(room.position.y / TILE_PX)
-	var px: int = int(room.get_parent().name.split("_")[1]) # Zieht die Parcel-X aus dem Namen "P_x_y"
-	var py: int = int(room.get_parent().name.split("_")[2])
-
-	var exit_tile := _exit_global(px, py, tile_x, tile_y, sz.x, sz.y, door_rot, door_off)
-
-	var path_tiles := get_path_between_tiles(start_tile, exit_tile)
-	if path_tiles.is_empty():
-		print("FEHLER: Kein Weg vom Check-In zum Zimmer gefunden!")
-		return
-
-	# 2. Welt-Pfad und Tür-Position berechnen
-	var world_path: Array[Vector2] = []
-	for tile in path_tiles:
-		world_path.append(tile_to_world(tile))
-
-	var door_tile := exit_tile
-	match door_rot:
-		0: door_tile.x += 1
-		1: door_tile.y += 1
-		2: door_tile.x -= 1
-		3: door_tile.y -= 1
-	var door_world_pos := tile_to_world(door_tile)
-
-	# 3. ENTENMARSCH SPAWN!
-	var avatar_scene = preload("res://scenes/ingame/guest/guestavatar/GuestAvatar.tscn")
-
-	for i in range(party.members.size()):
-		var member = party.members[i] # <--- NEU: Das Member-Objekt aus dem Array holen
-		var avatar = avatar_scene.instantiate()
-		avatar.z_index = 100
-
-		# ---> NEU: Das Setup aufrufen, BEVOR wir ihn in den Baum hängen
-		avatar.setup(member)
-
-		$WorldRoot.add_child(avatar)
-
-		# ---> NEU: Individueller Versatz pro Gast (z.B. -4 bis +4 Pixel)
-		var offset := Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
-
-		# Pfad für diesen spezifischen Gast anpassen
-		var my_path: Array[Vector2] = []
-		for wp in world_path:
-			my_path.append(wp + offset)
-
-		var my_door_pos := door_world_pos + offset
-
-		# Startposition ebenfalls mit Versatz
-		avatar.global_position = tile_to_world(path_tiles[0]) + offset
-
-		var delay: float = i * 0.8
-		avatar.walk_path(my_path, my_door_pos, delay, member.speed_offset)
-
-
-# =============================================================================
-func _on_party_checking_out(party: GuestParty, room_id: String) -> void:
-	# 1. Raum finden
-	var target_room: Node2D = null
-	for room in active_rooms:
-		if not is_instance_valid(room): continue
-		
-		var rnum: String = str(room.get("room_number"))
-		var rkey = rnum
-		if rnum == "" or rnum == "null":
-			rkey = "%s_%d_%d" % [str(room.get("room_type_id")), int(room.get("x_pos")), int(room.get("y_pos"))]
-			
-		if rkey == room_id:
-			target_room = room
-			break
-			
-	if not target_room:
-		print("MapGrid: Raum %s für Checkout-Walk nicht gefunden!" % room_id)
-		return
-
-	# 2. Start (Tür) und Ziel (Lobby) berechnen
-	var entry_parcel: Node2D = _grid[_entry_plot.y][_entry_plot.x]
-	var clearance: Rect2i = entry_parcel.get_lobby_clearance_rect()
-	var exit_x := (_entry_plot.x * PARCEL_SZ) + clearance.position.x + int(clearance.size.x / 2.0)
-	var exit_y := (_entry_plot.y * PARCEL_SZ) + clearance.position.y + int(clearance.size.y / 2.0)
-	var lobby_tile := Vector2i(exit_x, exit_y)
-
-	var sz: Vector2i = target_room.get_tile_size()
-	var door_rot: int = target_room.get("door_rotation")
-	var door_off: int = target_room.get("door_offset")
-	var tile_x: int = int(target_room.position.x / TILE_PX)
-	var tile_y: int = int(target_room.position.y / TILE_PX)
-	var px: int = int(target_room.get_parent().name.split("_")[1])
-	var py: int = int(target_room.get_parent().name.split("_")[2])
-
-	var door_tile := _exit_global(px, py, tile_x, tile_y, sz.x, sz.y, door_rot, door_off)
-
-	# Pfad von Tür zur Lobby
-	var path_tiles := get_path_between_tiles(door_tile, lobby_tile)
-	if path_tiles.is_empty():
-		return
-
-	var world_path: Array[Vector2] = []
-	for tile in path_tiles:
-		world_path.append(tile_to_world(tile))
-
-	var lobby_world_pos := tile_to_world(lobby_tile)
-	var avatar_scene = preload("res://scenes/ingame/guest/guestavatar/GuestAvatar.tscn")
-
-	for i in range(party.members.size()):
-		var member = party.members[i]
-		var avatar = avatar_scene.instantiate()
-		avatar.z_index = 100
-		avatar.setup(member)
-		$WorldRoot.add_child(avatar)
-
-		var offset := Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
-		var my_path: Array[Vector2] = []
-		for wp in world_path:
-			my_path.append(wp + offset)
-
-		var my_lobby_pos := lobby_world_pos + offset
-		
-		# Start an der Tür
-		avatar.global_position = tile_to_world(door_tile) + offset
-
-		var delay: float = i * 0.8
-		avatar.walk_path(my_path, my_lobby_pos, delay, member.speed_offset)
-
-
-# =============================================================================
-func _on_party_checked_out_physically(party: GuestParty) -> void:
-	var entry_parcel: Node2D = _grid[_entry_plot.y][_entry_plot.x]
-	var clearance: Rect2i = entry_parcel.get_lobby_clearance_rect()
-	var lobby_x := (_entry_plot.x * PARCEL_SZ) + clearance.position.x + int(clearance.size.x / 2.0)
-	var lobby_y := (_entry_plot.y * PARCEL_SZ) + clearance.position.y + int(clearance.size.y / 2.0)
-	var lobby_tile := Vector2i(lobby_x, lobby_y)
-	
-	# Ausgang basierend auf der Straßen-Richtung der Parzelle berechnen
-	var exit_x := lobby_x
-	var exit_y := lobby_y
-	
-	var way_1 := Vector2i(lobby_x, lobby_y)
-	var way_2 := Vector2i(lobby_x, lobby_y)
-	
-	match entry_parcel.entrance_dir:
-		"top":
-			exit_y = _entry_plot.y * PARCEL_SZ
-			way_1 = Vector2i(lobby_x - 2, lobby_y)     # Nach links ausweichen
-			way_2 = Vector2i(lobby_x - 2, exit_y + 1)  # Vor der Tür wieder mittig
-		"bottom":
-			exit_y = (_entry_plot.y + 1) * PARCEL_SZ - 1
-			way_1 = Vector2i(lobby_x - 2, lobby_y)
-			way_2 = Vector2i(lobby_x - 2, exit_y - 1)
-		"left":
-			exit_x = _entry_plot.x * PARCEL_SZ
-			way_1 = Vector2i(lobby_x, lobby_y - 2)
-			way_2 = Vector2i(exit_x + 1, lobby_y - 2)
-		"right":
-			exit_x = (_entry_plot.x + 1) * PARCEL_SZ - 1
-			way_1 = Vector2i(lobby_x, lobby_y - 2)
-			way_2 = Vector2i(exit_x - 1, lobby_y - 2)
-		
-	var exit_tile := Vector2i(exit_x, exit_y)
-	
-	# Da die Lobby im A* Grid blockiert ist, bauen wir den Pfad manuell!
-	# Wir fügen Wegpunkte hinzu, damit sie um den Tresen in der Mitte herumlaufen.
-	var world_path: Array[Vector2] = [
-		tile_to_world(lobby_tile),
-		tile_to_world(way_1),
-		tile_to_world(way_2),
-		tile_to_world(exit_tile)
-	]
-
-	var exit_world_pos := tile_to_world(exit_tile)
-	var avatar_scene = preload("res://scenes/ingame/guest/guestavatar/GuestAvatar.tscn")
-
-	for i in range(party.members.size()):
-		var member = party.members[i]
-		var avatar = avatar_scene.instantiate()
-		avatar.z_index = 100
-		avatar.setup(member)
-		$WorldRoot.add_child(avatar)
-
-		var offset := Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
-		var my_path: Array[Vector2] = []
-		for wp in world_path:
-			my_path.append(wp + offset)
-
-		var my_exit_pos := exit_world_pos + offset
-		
-		# Start an der Rezeption
-		avatar.global_position = tile_to_world(lobby_tile) + offset
-
-		var delay: float = i * 0.8
-		avatar.walk_path(my_path, my_exit_pos, delay, member.speed_offset)
 
  #   = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
  f u n c   s a v e _ a l l _ r o o m s _ t o _ d b ( h o t e l _ i d :   i n t )   - >   v o i d : 

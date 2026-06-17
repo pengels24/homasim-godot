@@ -10,6 +10,7 @@ var _controller: Node
 var _current_task: Dictionary = {}
 var _state: String = "idle" # idle, walking, working, returning
 var _work_timer: float = 0.0
+var _think_timer: float = 0.0
 
 var _path: Array[Vector2i] = []
 var _target_world_pos: Vector2 = Vector2.ZERO
@@ -54,6 +55,12 @@ func _physics_process(delta: float) -> void:
 	var speed_mult = TimeManager._game_speed
 	var actual_speed = SPEED * speed_mult
 	
+	# Denkpause
+	if _think_timer > 0.0:
+		_think_timer -= delta * speed_mult
+		if _think_timer > 0.0:
+			return
+	
 	match _state:
 		"idle":
 			_process_idle()
@@ -89,6 +96,7 @@ func _process_idle() -> void:
 					print("[StaffActor ", name, "] _path.size(): ", _path.size())
 					if _path.size() > 0:
 						_state = "walking"
+						_think_timer = 1.0 # Denkt kurz nach, bevor er losrennt
 					else:
 						# Kein Weg?
 						print("[StaffActor ", name, "] Path size is 0! Reverting task to open.")
@@ -179,3 +187,4 @@ func _process_working(delta: float, speed_mult: float) -> void:
 		if _state == "idle":
 			_start_path_to_lobby()
 			_state = "returning"
+			_think_timer = 1.0 # Nach der Arbeit kurz durchatmen

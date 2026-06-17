@@ -13,6 +13,7 @@ var _save_ctrl: IngameSaveController
 var _ui_mgr: IngameUIManager
 var _guest_mgr:        GuestManager
 var _staff_controller: StaffController
+var _guest_controller: GuestController
 
 const SIM_BROWSER_SCENE    := preload("res://scenes/ingame/SimBrowser.tscn")
 
@@ -122,6 +123,10 @@ func _setup_subsystems() -> void:
 	_guest_mgr.configure(_hotel, map_grid)
 	map_grid.guest_manager = _guest_mgr
 	
+	_guest_controller = GuestController.new()
+	add_child(_guest_controller)
+	_guest_controller.setup(_guest_mgr, map_grid)
+	
 	if StaffManager:
 		if _hotel.has("staff"):
 			StaffManager.load_state(_hotel["staff"])
@@ -139,6 +144,10 @@ func _setup_subsystems() -> void:
 
 	if _hotel.has("guest_data"):
 		_guest_mgr.load_from_dict(_hotel["guest_data"])
+		
+	# Jetzt, wo die Daten da sind, können wir die Gäste spawnen
+	if _guest_controller:
+		_guest_controller.spawn_active_guests()
 
 	_guest_mgr.parties_changed.connect(_on_parties_changed)
 

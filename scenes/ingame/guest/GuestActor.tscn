@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://cx6i1234567"]
+
+[ext_resource type="Script" path="res://scenes/ingame/guest/GuestActor.gd" id="1_act"]
+[ext_resource type="PackedScene" uid="uid://dpsa8rts2s465" path="res://scenes/ingame/guest/guestavatar/GuestAvatar.tscn" id="2_ava"]
+
+[node name="GuestActor" type="Node2D"]
+script = ExtResource("1_act")
+
+[node name="GuestAvatar" parent="." instance=ExtResource("2_ava")]

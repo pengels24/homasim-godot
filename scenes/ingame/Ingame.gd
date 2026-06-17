@@ -162,6 +162,12 @@ func _setup_subsystems() -> void:
 	add_child(_ui_mgr)
 	_ui_mgr.setup(hud_canvas, bottom_bar, map_grid, standard_modal, sim_browser, _build, _guest_mgr, schedule_mgr)
 
+	if StaffManager:
+		if _hotel.has("staff"):
+			StaffManager.load_state(_hotel["staff"])
+		else:
+			StaffManager.load_state({})
+
 
 # ── Signal-Handler ────────────────────────────────────────────────────────────
 

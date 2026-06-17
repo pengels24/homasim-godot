@@ -518,9 +518,16 @@ func open_staff() -> void:
 	if TutorialManager:
 		TutorialManager.trigger("staff")
 		
-	# Modal noch nicht fertig, also Hinweis zeigen
-	Toast.show(GameState.T("toast.hr.coming_soon"))
-	return
+	cleanup_current_states()
+	var staff_modal = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentStaff.tscn")
+	if not is_instance_valid(staff_modal): return
+
+	_pause_time_for_ui()
+
+	if _standard_modal.visible:
+		_standard_modal.set_title("Personalverwaltung")
+	else:
+		_standard_modal.open("Personalverwaltung")
 
 
 # ── Forschung & Techtree (F6) ──────────────────────────────────────────────────

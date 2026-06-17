@@ -125,6 +125,14 @@ func _execute(cmd: String) -> void:
 			_log("  add-exp:500       – Addiert EXP hinzu", CLR_INFO)
 			_log("  set-level:5       – Setzt das Hotel-Level", CLR_INFO)
 			_log("  set-fp:1000       – Setzt die Forschungspunkte", CLR_INFO)
+			_log("  reset-tutorial    – Setzt alle gesehenen Tutorials zurück", CLR_INFO)
+
+		"reset-tutorial":
+			if TutorialManager:
+				TutorialManager.reset_all()
+				_log("Alle Tutorials wurden zurückgesetzt.", CLR_OK)
+			else:
+				_log("Fehler: TutorialManager nicht gefunden.", CLR_ERR)
 
 		"set-money":
 			if not val_s.is_valid_int():

@@ -35,6 +35,7 @@ EffectManager="*uid://x3kof0ue70uu"
 GlobalConsole="*uid://devconsole"
 TimeManager="*uid://bjb8v5puj4udo"
 FinanceManager="*uid://cax7qo8lsmlug"
+StaffManager="*res://autoload/StaffManager.gd"
 
 [display]
 

@@ -1,8 +1,19 @@
 [gd_scene format=3 uid="uid://bsouwnmtw2p0b"]
 
-[ext_resource type="Script" path="res://scenes/shared/NewHotelModal.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://b6yp2pa1i28bw" path="res://scenes/shared/NewHotelModal.gd" id="1_script"]
+[ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://assets/UI/menu_button_green.tres" id="2_fqr2f"]
+[ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="2_tpw7c"]
+[ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://assets/UI/menu_button_green_pressed.tres" id="3_2c80o"]
+[ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="3_rcp5x"]
+[ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://assets/UI/menu_button_green_hover.tres" id="4_poabs"]
+[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="4_xxk82"]
+[ext_resource type="Texture2D" uid="uid://chug26ioff260" path="res://assets/icons/x.svg" id="5_yu5jm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+content_margin_left = 40.0
+content_margin_top = 40.0
+content_margin_right = 40.0
+content_margin_bottom = 40.0
 bg_color = Color(0.07, 0.07, 0.09, 0.97)
 border_width_left = 1
 border_width_top = 1
@@ -11,55 +22,35 @@ border_width_bottom = 1
 border_color = Color(0.918, 0.702, 0.031, 0.4)
 corner_radius_top_left = 16
 corner_radius_top_right = 16
-corner_radius_bottom_left = 16
 corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 shadow_color = Color(0.918, 0.702, 0.031, 0.15)
 shadow_size = 12
-content_margin_left = 40.0
-content_margin_right = 40.0
-content_margin_top = 40.0
-content_margin_bottom = 40.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_close"]
-bg_color = Color(0.14, 0.14, 0.18, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_left = 6
-corner_radius_bottom_right = 6
-content_margin_left = 12.0
-content_margin_right = 12.0
-content_margin_top = 6.0
-content_margin_bottom = 6.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_close_hover"]
-bg_color = Color(0.24, 0.24, 0.30, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_left = 6
-corner_radius_bottom_right = 6
-content_margin_left = 12.0
-content_margin_right = 12.0
-content_margin_top = 6.0
-content_margin_bottom = 6.0
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_normal"]
-bg_color = Color(0.10, 0.10, 0.14, 1.0)
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.1, 0.1, 0.14, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.35, 0.35, 0.45, 1.0)
+border_color = Color(0.35, 0.35, 0.45, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
-corner_radius_bottom_left = 6
 corner_radius_bottom_right = 6
-content_margin_left = 12.0
-content_margin_right = 12.0
-content_margin_top = 8.0
-content_margin_bottom = 8.0
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_focus"]
-bg_color = Color(0.10, 0.10, 0.14, 1.0)
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 8.0
+bg_color = Color(0.1, 0.1, 0.14, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -67,198 +58,166 @@ border_width_bottom = 2
 border_color = Color(0.918, 0.702, 0.031, 0.8)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
-corner_radius_bottom_left = 6
 corner_radius_bottom_right = 6
-content_margin_left = 12.0
-content_margin_right = 12.0
-content_margin_top = 8.0
-content_margin_bottom = 8.0
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grid_bg"]
-bg_color = Color(0.20, 0.22, 0.25, 1.0)
+bg_color = Color(0.2, 0.22, 0.25, 1)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
-corner_radius_bottom_left = 6
 corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_create"]
-bg_color = Color(0.086, 0.639, 0.290, 1.0)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_left = 8
-corner_radius_bottom_right = 8
-content_margin_left = 40.0
-content_margin_right = 40.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_create_hover"]
-bg_color = Color(0.15, 0.78, 0.38, 1.0)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.918, 0.702, 0.031, 0.85)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_left = 8
-corner_radius_bottom_right = 8
-content_margin_left = 40.0
-content_margin_right = 40.0
-content_margin_top = 12.0
-content_margin_bottom = 12.0
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
-
-[node name="NewHotelModal" type="Control"]
+[node name="NewHotelModal" type="Control" unique_id=1318200895]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-visible = false
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="Overlay" type="ColorRect" parent="."]
+[node name="Overlay" type="ColorRect" parent="." unique_id=879249765]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0, 0, 0, 0.75)
-mouse_filter = 0
 
-[node name="Center" type="CenterContainer" parent="Overlay"]
+[node name="Center" type="CenterContainer" parent="Overlay" unique_id=597842973]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Card" type="PanelContainer" parent="Overlay/Center"]
-layout_mode = 2
+[node name="Card" type="PanelContainer" parent="Overlay/Center" unique_id=559929293]
 custom_minimum_size = Vector2(860, 0)
+layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_card")
 
-[node name="VBox" type="VBoxContainer" parent="Overlay/Center/Card"]
+[node name="VBox" type="VBoxContainer" parent="Overlay/Center/Card" unique_id=447488426]
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Header" type="HBoxContainer" parent="Overlay/Center/Card/VBox"]
+[node name="Header" type="HBoxContainer" parent="Overlay/Center/Card/VBox" unique_id=1428245101]
 layout_mode = 2
 theme_override_constants/separation = 16
 
-[node name="TitleLbl" type="Label" parent="Overlay/Center/Card/VBox/Header"]
+[node name="TitleLbl" type="Label" parent="Overlay/Center/Card/VBox/Header" unique_id=523455934]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 32
 theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
-horizontal_alignment = 1
+theme_override_font_sizes/font_size = 42
 text = "Neues Hotel anlegen"
 
-[node name="BtnClose" type="Button" parent="Overlay/Center/Card/VBox/Header"]
+[node name="BtnClose" type="Button" parent="Overlay/Center/Card/VBox/Header" unique_id=1058062808]
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_close")
-theme_override_styles/hover = SubResource("StyleBoxFlat_close_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_close")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
-theme_override_font_sizes/font_size = 16
 theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
-mouse_default_cursor_shape = 2
-text = "✕"
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = ExtResource("2_tpw7c")
+theme_override_styles/pressed = ExtResource("3_rcp5x")
+theme_override_styles/hover = ExtResource("4_xxk82")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+icon = ExtResource("5_yu5jm")
 
-[node name="HeaderSpacer" type="Control" parent="Overlay/Center/Card/VBox"]
-layout_mode = 2
+[node name="HeaderSpacer" type="Control" parent="Overlay/Center/Card/VBox" unique_id=1462702280]
 custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
 
-[node name="Content" type="HBoxContainer" parent="Overlay/Center/Card/VBox"]
+[node name="Content" type="HBoxContainer" parent="Overlay/Center/Card/VBox" unique_id=236090949]
 layout_mode = 2
 theme_override_constants/separation = 40
 
-[node name="Left" type="VBoxContainer" parent="Overlay/Center/Card/VBox/Content"]
+[node name="Left" type="VBoxContainer" parent="Overlay/Center/Card/VBox/Content" unique_id=74147503]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 12
 
-[node name="NameLabel" type="Label" parent="Overlay/Center/Card/VBox/Content/Left"]
+[node name="NameLabel" type="Label" parent="Overlay/Center/Card/VBox/Content/Left" unique_id=1723593567]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.63, 0.63, 0.69, 1)
+theme_override_font_sizes/font_size = 20
 text = "Hotelname"
 
-[node name="HotelNameField" type="LineEdit" parent="Overlay/Center/Card/VBox/Content/Left"]
-layout_mode = 2
+[node name="HotelNameField" type="LineEdit" parent="Overlay/Center/Card/VBox/Content/Left" unique_id=1178346504]
 custom_minimum_size = Vector2(0, 48)
-theme_override_font_sizes/font_size = 16
+layout_mode = 2
 theme_override_colors/font_color = Color(0.92, 0.92, 0.94, 1)
+theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_input_normal")
 theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
 placeholder_text = "Hotelname"
 
-[node name="EntranceLbl" type="Label" parent="Overlay/Center/Card/VBox/Content/Left"]
+[node name="EntranceLbl" type="Label" parent="Overlay/Center/Card/VBox/Content/Left" unique_id=451842630]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.63, 0.63, 0.69, 1)
+theme_override_font_sizes/font_size = 20
 text = "Eingangsseite: –"
 
-[node name="ErrorLbl" type="Label" parent="Overlay/Center/Card/VBox/Content/Left"]
+[node name="ErrorLbl" type="Label" parent="Overlay/Center/Card/VBox/Content/Left" unique_id=1638235026]
 layout_mode = 2
-theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.937, 0.267, 0.267, 1)
+theme_override_font_sizes/font_size = 18
 autowrap_mode = 3
-text = ""
 
-[node name="Right" type="VBoxContainer" parent="Overlay/Center/Card/VBox/Content"]
+[node name="Right" type="VBoxContainer" parent="Overlay/Center/Card/VBox/Content" unique_id=971290819]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/separation = 8
 
-[node name="GridLabel" type="Label" parent="Overlay/Center/Card/VBox/Content/Right"]
+[node name="GridLabel" type="Label" parent="Overlay/Center/Card/VBox/Content/Right" unique_id=1083585645]
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
 theme_override_colors/font_color = Color(0.63, 0.63, 0.69, 1)
+theme_override_font_sizes/font_size = 20
 text = "Startparzelle"
 
-[node name="GridWrapper" type="PanelContainer" parent="Overlay/Center/Card/VBox/Content/Right"]
+[node name="GridWrapper" type="PanelContainer" parent="Overlay/Center/Card/VBox/Content/Right" unique_id=812471137]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_grid_bg")
 
-[node name="GridMargin" type="MarginContainer" parent="Overlay/Center/Card/VBox/Content/Right/GridWrapper"]
+[node name="GridMargin" type="MarginContainer" parent="Overlay/Center/Card/VBox/Content/Right/GridWrapper" unique_id=51132260]
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="GridHolder" type="GridContainer" parent="Overlay/Center/Card/VBox/Content/Right/GridWrapper/GridMargin"]
+[node name="GridHolder" type="GridContainer" parent="Overlay/Center/Card/VBox/Content/Right/GridWrapper/GridMargin" unique_id=986921904]
 layout_mode = 2
 theme_override_constants/h_separation = 4
 theme_override_constants/v_separation = 4
 columns = 5
 
-[node name="ContentSpacer" type="Control" parent="Overlay/Center/Card/VBox"]
-layout_mode = 2
+[node name="ContentSpacer" type="Control" parent="Overlay/Center/Card/VBox" unique_id=224063936]
 custom_minimum_size = Vector2(0, 24)
-
-[node name="BottomSep" type="HSeparator" parent="Overlay/Center/Card/VBox"]
 layout_mode = 2
+
+[node name="BottomSep" type="HSeparator" parent="Overlay/Center/Card/VBox" unique_id=500723879]
 modulate = Color(1, 1, 1, 0.12)
-
-[node name="SaveSpacer" type="Control" parent="Overlay/Center/Card/VBox"]
 layout_mode = 2
+
+[node name="SaveSpacer" type="Control" parent="Overlay/Center/Card/VBox" unique_id=2006094697]
 custom_minimum_size = Vector2(0, 16)
-
-[node name="BtnRow" type="CenterContainer" parent="Overlay/Center/Card/VBox"]
 layout_mode = 2
 
-[node name="BtnCreate" type="Button" parent="Overlay/Center/Card/VBox/BtnRow"]
+[node name="BtnRow" type="CenterContainer" parent="Overlay/Center/Card/VBox" unique_id=951672702]
+layout_mode = 2
+
+[node name="BtnCreate" type="Button" parent="Overlay/Center/Card/VBox/BtnRow" unique_id=10525404]
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_font_sizes/font_size = 15
-theme_override_colors/font_color = Color(0.05, 0.20, 0.08, 1)
-theme_override_colors/font_hover_color = Color(0.05, 0.20, 0.08, 1)
-theme_override_colors/font_pressed_color = Color(0.05, 0.20, 0.08, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_create")
-theme_override_styles/hover = SubResource("StyleBoxFlat_create_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_create")
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_colors/font_pressed_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_colors/font_hover_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = ExtResource("2_fqr2f")
+theme_override_styles/pressed = ExtResource("3_2c80o")
+theme_override_styles/hover = ExtResource("4_poabs")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
-mouse_default_cursor_shape = 2
 text = "Anlegen"

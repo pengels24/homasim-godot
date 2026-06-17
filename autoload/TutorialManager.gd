@@ -49,6 +49,14 @@ func get_state() -> Array:
 	return unlocked_tutorials
 
 # =============================================================================
+func reset_all() -> void:
+	unlocked_tutorials.clear()
+	if GameState.selected_hotel != null and not GameState.selected_hotel.is_empty():
+		GameState.selected_hotel["tutorials"] = []
+		SaveManager.update_hotel(GameState.active_hotel_id, GameState.selected_hotel)
+	print("[TutorialManager] Alle Tutorials wurden zurückgesetzt.")
+
+# =============================================================================
 func trigger(tutorial_id: String) -> void:
 	if not tutorial_registry.has(tutorial_id):
 		return

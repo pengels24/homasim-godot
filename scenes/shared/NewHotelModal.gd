@@ -129,7 +129,9 @@ func _on_cell_click(event: InputEvent, px: int, py: int) -> void:
 
 
 func _is_selectable(px: int, py: int) -> bool:
-	return px == 0 or px == GRID_COLS - 1 or py == 0 or py == GRID_ROWS - 1
+	var on_x_edge = (px == 0 or px == GRID_COLS - 1)
+	var on_y_edge = (py == 0 or py == GRID_ROWS - 1)
+	return on_x_edge != on_y_edge
 
 
 func _cell_index(px: int, py: int) -> int:

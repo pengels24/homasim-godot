@@ -90,6 +90,7 @@ func _load_hotels() -> void:
 		var card = _create_hotel_card(_hotels[i], i)
 		hotel_container.add_child(card)
 		card.setup(_hotels[i])
+	hotel_container.move_child(btn_new_hotel, -1)
 
 func _create_hotel_card(_hotel: Dictionary, _index: int) -> Control:
 	var card = HOTEL_CARD_SCENE.instantiate()

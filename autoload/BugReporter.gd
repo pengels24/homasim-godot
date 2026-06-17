@@ -1,7 +1,8 @@
 extends CanvasLayer
 
 # HIER DEINE DISCORD WEBHOOK URL EINTRAGEN:
-const WEBHOOK_URL = "https://discord.com/api/webhooks/1516187859131043950/TJkLivEh3-EtKX_ktJx4zIZ0Y_o6eQ0qHnl76_vLOsYJat9BAHChOUiLeMXNk8oSBIRE"
+# ACHTUNG: Niemals Webhooks direkt im Code committen!
+var WEBHOOK_URL = ""
 
 @onready var btn_report: Button = $BtnReport
 @onready var dim: ColorRect = $Dim
@@ -17,6 +18,10 @@ var screenshot_buffer: PackedByteArray
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS # Damit das Popup auch bei pausiertem Spiel läuft
+	
+	var config = ConfigFile.new()
+	if config.load("res://secrets.cfg") == OK:
+		WEBHOOK_URL = config.get_value("Discord", "webhook_url", "")
 	
 	btn_report.pressed.connect(_on_report_pressed)
 	btn_cancel.pressed.connect(_close_modal)
@@ -60,8 +65,8 @@ func _send_report() -> void:
 		status_lbl.add_theme_color_override("font_color", Color.RED)
 		return
 		
-	if WEBHOOK_URL.contains("DEINE_WEBHOOK_ID"):
-		status_lbl.text = "Webhook URL nicht konfiguriert!"
+	if WEBHOOK_URL == "" or WEBHOOK_URL.contains("DEINE_WEBHOOK_ID"):
+		status_lbl.text = "Webhook URL nicht konfiguriert (secrets.cfg fehlt)!"
 		status_lbl.add_theme_color_override("font_color", Color.RED)
 		return
 		

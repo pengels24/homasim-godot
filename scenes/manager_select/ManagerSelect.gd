@@ -102,7 +102,16 @@ func _on_delete_slot(i: int) -> void:
 
 func _on_delete_confirmed() -> void:
 	if _pending_delete_slot >= 0 and _pending_delete_slot < _profiles.size():
-		SaveManager.delete_profile(_profiles[_pending_delete_slot].get("id", -1))
+		var del_id: int = _profiles[_pending_delete_slot].get("id", -1)
+		SaveManager.delete_profile(del_id)
+		
+		# Falls das aktive Profil gelÃ¶scht wurde, Zustand zurÃ¼cksetzen
+		if GameState.active_profile_id == del_id:
+			GameState.active_profile_id = -1
+			GameState.active_profile = {}
+			SettingsManager.last_profile_id = -1
+			SettingsManager.save()
+			
 	_pending_delete_slot = -1
 	refresh()
 

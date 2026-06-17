@@ -33,6 +33,7 @@ var floor_num: int = 1
 var cleanliness_level: int = 100
 var maintenance_level: int = 100
 var is_service_requested: bool = false
+var is_repair_requested: bool = false
 
 # ── Tür / Orientierung ────────────────────────────────────────────────────────
 var door_rotation: int = 0   # Welche Wand   0–3  (.-Taste: nur Tür wandert)
@@ -77,7 +78,33 @@ func _ready() -> void:
 	room_type_id = def.get("id", "")
 	
 	_create_interaction_area()
+	
+	if TimeManager and not TimeManager.sig_hour_passed.is_connected(_on_hour_passed):
+		TimeManager.sig_hour_passed.connect(_on_hour_passed)
 
+# =============================================================================
+func _on_hour_passed(_hour: int) -> void:
+	if TimeManager.is_paused():
+		return
+		
+	# Werte langsam senken
+	cleanliness_level = clampi(cleanliness_level - 3, 0, 100)
+	maintenance_level = clampi(maintenance_level - 2, 0, 100)
+	
+	var needs_update = false
+	
+	if cleanliness_level < 50 and not is_service_requested:
+		is_service_requested = true
+		GameState.sig_room_needs_cleaning.emit(self)
+		needs_update = true
+		
+	if maintenance_level < 50 and not is_repair_requested:
+		is_repair_requested = true
+		GameState.sig_room_needs_repair.emit(self)
+		needs_update = true
+		
+	if needs_update:
+		_update_indicator()
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
@@ -97,11 +124,19 @@ func configure(data: Dictionary) -> void:
 	maintenance_level = data.get("maintenance_level", data.get("condition", maintenance_level))
 	cleanliness_level = data.get("cleanliness_level", data.get("cleanliness", cleanliness_level))
 	is_service_requested = data.get("is_service_requested", is_service_requested)
+	is_repair_requested = data.get("is_repair_requested", is_repair_requested)
 	door_rotation = data.get("door_rotation", door_rotation)
 	door_offset   = data.get("door_offset",   door_offset)
 	room_rotation = data.get("room_rotation", room_rotation)
 	_apply_visuals()
 	_update_indicator()
+	
+	# Nach dem Laden: Offene Tickets wiederherstellen!
+	if is_service_requested:
+		# call_deferred stellt sicher, dass der Node im Baum ist und TaskManager bereit
+		GameState.sig_room_needs_cleaning.emit.call_deferred(self)
+	if is_repair_requested:
+		GameState.sig_room_needs_repair.emit.call_deferred(self)
 
 
 # =============================================================================
@@ -116,6 +151,7 @@ func to_dict() -> Dictionary:
 		"maintenance_level": maintenance_level,
 		"cleanliness_level": cleanliness_level,
 		"is_service_requested": is_service_requested,
+		"is_repair_requested": is_repair_requested,
 		"door_rotation": door_rotation,
 		"door_offset": door_offset,
 		"room_rotation": room_rotation,
@@ -138,6 +174,11 @@ func cycle_door_offset() -> void:
 func upgrade() -> void:
 	room_level += 1
 	_apply_visuals()
+
+# =============================================================================
+func set_service_requested(requested: bool) -> void:
+	is_service_requested = requested
+	_update_indicator()
 
 var _highlight_rect: ReferenceRect
 
@@ -195,6 +236,17 @@ func _on_interaction_area_input(_viewport: Node, event: InputEvent, _shape_idx: 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if InputHandler.current_mode == InputHandler.InputMode.NORMAL:
 			get_viewport().set_input_as_handled()
+			
+			# Debug: Wenn der Raum schmutzig ist, manuell reinigen!
+			if is_service_requested:
+				if has_node("/root/TaskManager"):
+					# We assume TaskManager.complete_task accepts a room_id or we can just send the signal
+					# But wait, we can just call TaskManager directly since it's an Autoload
+					var TaskManager = get_node("/root/TaskManager")
+					if TaskManager.has_method("debug_complete_room_clean"):
+						TaskManager.debug_complete_room_clean(self)
+				return
+				
 			GameState.sig_room_clicked.emit(self)
 
 
@@ -332,4 +384,4 @@ func _update_indicator() -> void:
 
 	_status_indicator.visible = true
 
-	_status_indicator.set_status(is_service_requested, maintenance_level < 50)
+	_status_indicator.set_status(is_service_requested, is_repair_requested)

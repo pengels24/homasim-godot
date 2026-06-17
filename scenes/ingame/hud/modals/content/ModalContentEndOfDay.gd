@@ -9,6 +9,7 @@ signal sig_continue_requested
 @onready var _lbl_services: Label = %LblServices
 
 @onready var _lbl_total_income: Label = %LblTotalIncome
+@onready var _lbl_staff: Label = %LblStaff
 @onready var _lbl_total_expenses: Label = %LblTotalExpenses
 @onready var _lbl_profit: Label = %LblProfit
 
@@ -47,6 +48,7 @@ func _fill_finance_data(day: int) -> void:
 	var serv_inc := 0
 	var other_inc := 0
 	var expenses := 0
+	var staff_exp := 0
 
 	var transactions: Array = GameState.selected_hotel.get("transactions", [])
 
@@ -64,6 +66,8 @@ func _fill_finance_data(day: int) -> void:
 					_: other_inc += amount
 			else:
 				expenses += amount # Ausgaben sind bereits negativ
+				if category == "staff":
+					staff_exp += amount
 
 	var total_inc := room_inc + rest_inc + serv_inc + other_inc
 	var profit := total_inc + expenses # expenses ist negativ, also + (-) = -
@@ -74,6 +78,7 @@ func _fill_finance_data(day: int) -> void:
 	if is_instance_valid(_lbl_services): _lbl_services.text = "Services: %d €" % serv_inc
 
 	if is_instance_valid(_lbl_total_income): _lbl_total_income.text = "Einnahmen gesamt: %d €" % total_inc
+	if is_instance_valid(_lbl_staff): _lbl_staff.text = "Personal: %d €" % staff_exp
 	if is_instance_valid(_lbl_total_expenses): _lbl_total_expenses.text = "Ausgaben gesamt: %d €" % expenses
 	if is_instance_valid(_lbl_profit): _lbl_profit.text = "Tagesgewinn: %d €" % profit
 

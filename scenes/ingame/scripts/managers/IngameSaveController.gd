@@ -3,11 +3,13 @@ class_name IngameSaveController
 
 var _hotel: Dictionary
 var _guest_mgr: GuestManager
+var _map_grid: Node2D
 
 # =============================================================================
-func setup(hotel: Dictionary, guest_mgr: GuestManager) -> void:
+func setup(hotel: Dictionary, guest_mgr: GuestManager, map_grid: Node2D = null) -> void:
 	_hotel = hotel
 	_guest_mgr = guest_mgr
+	_map_grid = map_grid
 
 	_setup_autosave_timer()
 
@@ -44,6 +46,10 @@ func save_progress(game_time_min: int) -> void:
 			save_data[key] = _hotel[key]
 
 	SaveManager.update_hotel(hotel_id, save_data)
+	
+	# NEU: Wir müssen alle Räume frisch ins Savegame schreiben, damit der aktuelle Sauberkeits-Stand erhalten bleibt!
+	if is_instance_valid(_map_grid) and _map_grid.has_method("save_all_rooms_to_db"):
+		_map_grid.call("save_all_rooms_to_db", hotel_id)
 
 
 # =============================================================================

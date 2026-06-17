@@ -9,6 +9,11 @@ signal hotel_selected(hotel_data: Dictionary)
 signal user_logged_in(user_data: Dictionary)
 signal user_logged_out()
 
+# Room States
+@warning_ignore("unused_signal")
+signal sig_room_needs_cleaning(room_node: Node2D)
+@warning_ignore("unused_signal")
+signal sig_room_needs_repair(room_node: Node2D)
 signal sig_hotel_name_changed(new_name: String)
 signal sig_hotel_level_changed(new_level: int)
 signal sig_hotel_stars_changed(stars: int)

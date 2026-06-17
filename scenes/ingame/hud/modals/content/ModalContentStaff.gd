@@ -217,15 +217,31 @@ func _update_details() -> void:
 	detail_role.text = GameState.T("ui.staff.job", "Beruf: ") + GameState.T("staff.role." + s.get("role", ""))
 	action_btn.visible = true
 	
-	var is_female = s.get("gender", "male") == "female"
-	var role = s.get("role", "")
+	var job = s.get("role", "housekeeping")
+	var gender = s.get("gender", "female")
+	detail_image_lbl.text = ""
 	
-	if role == "maintenance":
-		detail_image_lbl.text = "👩‍🔧" if is_female else "👨‍🔧"
-	elif role == "housekeeping":
-		detail_image_lbl.text = "👩‍🍳" if is_female else "👨‍🍳"
+	var tex_rect = detail_image_lbl.get_node_or_null("AvatarRect")
+	if not tex_rect:
+		tex_rect = TextureRect.new()
+		tex_rect.name = "AvatarRect"
+		tex_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		tex_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		tex_rect.custom_minimum_size = Vector2(128, 128)
+		tex_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+		detail_image_lbl.add_child(tex_rect)
+		
+	var texture_path = "res://assets/staff/staff_avatar_%s_%s.aseprite" % [gender, job]
+	if ResourceLoader.exists(texture_path):
+		tex_rect.texture = load(texture_path)
 	else:
-		detail_image_lbl.text = "👩‍💼" if is_female else "👨‍💼"
+		tex_rect.texture = null
+		if job == "maintenance":
+			detail_image_lbl.text = "👩‍🔧" if gender == "female" else "👨‍🔧"
+		elif job == "housekeeping":
+			detail_image_lbl.text = "👩‍🍳" if gender == "female" else "👨‍🍳"
+		else:
+			detail_image_lbl.text = "👩‍💼" if gender == "female" else "👨‍💼"
 	
 	if _current_tab == 0:
 		_create_2col_row(GameState.T("ui.staff.daily_wage", "Tagesgehalt"), str(s.get("daily_wage", 0)) + " €", detail_costs, true)

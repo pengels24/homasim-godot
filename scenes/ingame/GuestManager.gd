@@ -15,6 +15,8 @@ var _map_grid: Node2D
 var _waiting:  Array = []   # Array[GuestParty]
 var _active:   Array = []   # Array[GuestParty]
 var _checkout: Array = []   # Array[GuestParty]
+var _pending_dirty_rooms: Array[String] = [] # NEU: Räume, die auf das Unpause warten
+
 
 # --- Tages-Statistiken ---
 var daily_checkin_parties: int = 0
@@ -58,6 +60,14 @@ func configure(hotel: Dictionary, map_grid: Node2D) -> void:
 
 	if not TimeManager.sig_morning_struck.is_connected(process_morning_routine):
 		TimeManager.sig_morning_struck.connect(process_morning_routine)
+		
+	if not TimeManager.sig_speed_changed.is_connected(_on_speed_changed):
+		TimeManager.sig_speed_changed.connect(_on_speed_changed)
+		
+	if TaskManager.has_signal("sig_room_cleaned"):
+		if not TaskManager.sig_room_cleaned.is_connected(_on_room_cleaned):
+			TaskManager.sig_room_cleaned.connect(_on_room_cleaned)
+
 
 
 # =============================================================================
@@ -147,6 +157,33 @@ static func _room_key(room: Node2D) -> String:
 		return rnum
 
 	return "%s_%d_%d" % [str(room.get("room_type_id")), int(room.get("x_pos")), int(room.get("y_pos"))]
+
+func _get_room_node(room_id: String) -> Node2D:
+	if not is_instance_valid(_map_grid):
+		return null
+	for room in _map_grid.get_placed_rooms():
+		if _room_key(room) == room_id:
+			return room
+	return null
+
+# =============================================================================
+func _on_speed_changed(is_paused: bool, _speed: float) -> void:
+	if not is_paused and _pending_dirty_rooms.size() > 0:
+		for rid in _pending_dirty_rooms:
+			var room = _get_room_node(rid)
+			if room:
+				room.set_service_requested(true)
+				GameState.sig_room_needs_cleaning.emit(room)
+		_pending_dirty_rooms.clear()
+
+
+# =============================================================================
+func _on_room_cleaned(room: Node2D) -> void:
+	var room_key = _room_key(room)
+	if _room_assign.has(room_key) and _room_assign[room_key] == "DIRTY":
+		_room_assign.erase(room_key)
+		parties_changed.emit()
+		print("[GuestManager] Zimmer '%s' ist wieder sauber und buchbar!" % room_key)
 
 
 # ── Spawn ─────────────────────────────────────────────────────────────────────
@@ -447,11 +484,16 @@ func do_checkout(party: GuestParty) -> float:
 func _finalize_checkout(party: GuestParty, payout: int, auto: bool) -> void:
 	_checkout.erase(party)
 	
-	# TODO(Cleaning): Wenn wir das Personal-System (Housekeeping) haben, darf das Zimmer 
-	# hier NICHT sofort wieder freigegeben werden. Es muss den Status "needs_cleaning"
-	# erhalten. Erst wenn die Reinigungskraft fertig ist, darf es aus _room_assign gelöscht 
-	# (oder als "clean" markiert) und wieder buchbar werden!
-	_room_assign.erase(party.room_id)
+	# Raum wird schmutzig und blockiert
+	_room_assign[party.room_id] = "DIRTY"
+	
+	if TimeManager.is_paused:
+		_pending_dirty_rooms.append(party.room_id)
+	else:
+		var room = _get_room_node(party.room_id)
+		if room:
+			room.set_service_requested(true)
+			GameState.sig_room_needs_cleaning.emit(room)
 	
 	party.state = "gone"
 	
@@ -514,6 +556,20 @@ func to_save_dict() -> Dictionary:
 		"room_assign":    _room_assign.duplicate(),
 		"next_party_id":  _next_party_id,
 		"next_member_id": _next_member_id,
+		
+		# Stats
+		"daily_checkin_parties": daily_checkin_parties,
+		"daily_checkin_heads": daily_checkin_heads,
+		"daily_checkout_parties": daily_checkout_parties,
+		"daily_checkout_heads": daily_checkout_heads,
+		"daily_rage_parties": daily_rage_parties,
+		"daily_rage_heads": daily_rage_heads,
+		"daily_timeout_parties": daily_timeout_parties,
+		"daily_timeout_heads": daily_timeout_heads,
+		"daily_reject_parties": daily_reject_parties,
+		"daily_reject_heads": daily_reject_heads,
+		"daily_declined_parties": daily_declined_parties,
+		"daily_declined_heads": daily_declined_heads,
 	}
 
 
@@ -529,6 +585,20 @@ func load_from_dict(d: Dictionary) -> void:
 	_room_assign    = d.get("room_assign",    {})
 	_next_party_id  = d.get("next_party_id",  1)
 	_next_member_id = d.get("next_member_id", 1)
+	
+	daily_checkin_parties = d.get("daily_checkin_parties", 0)
+	daily_checkin_heads = d.get("daily_checkin_heads", 0)
+	daily_checkout_parties = d.get("daily_checkout_parties", 0)
+	daily_checkout_heads = d.get("daily_checkout_heads", 0)
+	daily_rage_parties = d.get("daily_rage_parties", 0)
+	daily_rage_heads = d.get("daily_rage_heads", 0)
+	daily_timeout_parties = d.get("daily_timeout_parties", 0)
+	daily_timeout_heads = d.get("daily_timeout_heads", 0)
+	daily_reject_parties = d.get("daily_reject_parties", 0)
+	daily_reject_heads = d.get("daily_reject_heads", 0)
+	daily_declined_parties = d.get("daily_declined_parties", 0)
+	daily_declined_heads = d.get("daily_declined_heads", 0)
+	
 	parties_changed.emit()
 
 

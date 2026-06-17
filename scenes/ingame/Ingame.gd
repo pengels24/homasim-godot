@@ -12,6 +12,7 @@ var _build:          IngameBuild
 var _save_ctrl: IngameSaveController
 var _ui_mgr: IngameUIManager
 var _guest_mgr:        GuestManager
+var _staff_controller: StaffController
 
 const SIM_BROWSER_SCENE    := preload("res://scenes/ingame/SimBrowser.tscn")
 
@@ -120,6 +121,17 @@ func _setup_subsystems() -> void:
 	add_child(_guest_mgr)
 	_guest_mgr.configure(_hotel, map_grid)
 	map_grid.guest_manager = _guest_mgr
+	
+	if StaffManager:
+		if _hotel.has("staff"):
+			StaffManager.load_state(_hotel["staff"])
+		else:
+			StaffManager.load_state({})
+			
+	# StaffController
+	_staff_controller = StaffController.new()
+	add_child(_staff_controller)
+	_staff_controller.configure(map_grid)
 
 	for room in map_grid.get_placed_rooms():
 		if room.has_method("configure"):
@@ -154,19 +166,13 @@ func _setup_subsystems() -> void:
 	# Save-Controller (Archivar)
 	_save_ctrl = IngameSaveController.new()
 	add_child(_save_ctrl)
-	# _save_ctrl.setup(_hotel)
-	_save_ctrl.setup(_hotel, _guest_mgr)
+	_save_ctrl.setup(_hotel, _guest_mgr, map_grid)
 
 	# UI-Manager (Zeremonienmeister)
 	_ui_mgr = IngameUIManager.new()
 	add_child(_ui_mgr)
 	_ui_mgr.setup(hud_canvas, bottom_bar, map_grid, standard_modal, sim_browser, _build, _guest_mgr, schedule_mgr)
 
-	if StaffManager:
-		if _hotel.has("staff"):
-			StaffManager.load_state(_hotel["staff"])
-		else:
-			StaffManager.load_state({})
 
 
 # ── Signal-Handler ────────────────────────────────────────────────────────────
@@ -207,6 +213,12 @@ func _on_event_reception_open() -> void:
 
 	hud_canvas.set_reception_locked(false)
 	Toast.show(GameState.T("toast.reception.open"))
+	
+	# Quality of Life: Auto-Pause, wenn Gäste warten oder auschecken wollen
+	if _guest_mgr.get_waiting().size() > 0 or _guest_mgr.get_checkout().size() > 0:
+		if not TimeManager.is_paused():
+			TimeManager.pause()
+			Toast.show(GameState.T("toast.reception.auto_pause", "Auto-Pause: Gäste an der Rezeption!"))
 
 
 # =============================================================================

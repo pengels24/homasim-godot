@@ -25,6 +25,14 @@ func _ready() -> void:
 	btn_close.pressed.connect(close)
 	btn_details.pressed.connect(func(): _on_action("Details anzeigen"))
 	btn_service.pressed.connect(_on_service_pressed)
+	
+	var btn_repair = btn_service.duplicate()
+	btn_repair.text = "Wartung rufen"
+	btn_service.get_parent().add_child(btn_repair)
+	btn_repair.pressed.connect(_on_repair_pressed)
+	
+	# Demolish button ans Ende verschieben
+	btn_demolish.get_parent().move_child(btn_demolish, -1)
 	btn_demolish.pressed.connect(func(): _on_action("Zimmer abreißen"))
 	
 	hide()
@@ -33,17 +41,16 @@ func _ready() -> void:
 # =============================================================================
 func _on_service_pressed() -> void:
 	if is_instance_valid(_target_room):
-		# Test-Toggle: Sauber -> Dreckig/Kaputt -> Sauber
-		if _target_room.get("is_service_requested") or _target_room.get("maintenance_level") < 50:
+		# Test-Toggle: Sauber -> Dreckig -> Sauber
+		if _target_room.get("is_service_requested"):
 			_target_room.set("is_service_requested", false)
-			_target_room.set("maintenance_level", 100)
 			_target_room.set("cleanliness_level", 100)
 			if is_instance_valid(Toast):
-				Toast.show("Test: Zimmer wieder sauber & ganz!")
+				Toast.show("Test: Zimmer wieder sauber!")
 		else:
 			_target_room.set("is_service_requested", true)
-			_target_room.set("maintenance_level", 30)
 			_target_room.set("cleanliness_level", 30)
+			GameState.sig_room_needs_cleaning.emit(_target_room)
 			if is_instance_valid(Toast):
 				Toast.show("Test: Service angefordert!")
 		
@@ -117,3 +124,22 @@ func _on_handle_input(event: InputEvent) -> void:
 			_dragging = false
 	elif event is InputEventMouseMotion and _dragging:
 		panel.global_position = event.global_position - _drag_offset
+
+# =============================================================================
+func _on_repair_pressed() -> void:
+	if is_instance_valid(_target_room):
+		if _target_room.get("is_repair_requested"):
+			_target_room.set("is_repair_requested", false)
+			_target_room.set("maintenance_level", 100)
+			if _target_room.has_method("_update_indicator"):
+				_target_room.call("_update_indicator")
+			if is_instance_valid(Toast):
+				Toast.show("Test: Zimmer repariert!")
+		else:
+			_target_room.set("is_repair_requested", true)
+			_target_room.set("maintenance_level", 30)
+			if _target_room.has_method("_update_indicator"):
+				_target_room.call("_update_indicator")
+			GameState.sig_room_needs_repair.emit(_target_room)
+			if is_instance_valid(Toast):
+				Toast.show("Test: Wartung angefordert!")

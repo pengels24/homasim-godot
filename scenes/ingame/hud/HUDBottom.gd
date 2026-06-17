@@ -71,12 +71,15 @@ func _ready() -> void:
 # =============================================================================
 func set_reception_locked(is_locked: bool) -> void:
 	reception.disabled = is_locked
-	ind_reception.visible = not is_locked
+	if is_locked:
+		ind_reception.visible = false
 
 
 # =============================================================================
 func set_reception_alert(has_waiting_guests: bool) -> void:
-	ind_reception.modulate = Color.RED if has_waiting_guests else Color.GREEN
+	ind_reception.modulate = Color.RED
+	if not reception.disabled:
+		ind_reception.visible = has_waiting_guests
 
 
 # =============================================================================

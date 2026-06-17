@@ -83,4 +83,5 @@ func _update_content() -> void:
 				guests_label.text = "\n".join(names)
 				guests_label.show()
 				
+	status += "\nSauberkeit: %d%% | Zustand: %d%%" % [_target_room.cleanliness_level, _target_room.maintenance_level]
 	status_label.text = status

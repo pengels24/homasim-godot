@@ -304,6 +304,12 @@ func world_to_grid(world_pos: Vector2) -> Vector2i:
 	var gy := int((local.y - WALK_W * TILE_PX) / (PARCEL_SZ * TILE_PX))
 	return Vector2i(gx, gy)
 
+# =============================================================================
+func world_to_tile(world_pos: Vector2) -> Vector2i:
+	var local := ($WorldRoot as Node2D).to_local(world_pos)
+	var tx := int((local.x - WALK_W * TILE_PX) / TILE_PX)
+	var ty := int((local.y - WALK_W * TILE_PX) / TILE_PX)
+	return Vector2i(tx, ty)
 
 # =============================================================================
 func is_buildable(x: int, y: int) -> bool:
@@ -365,6 +371,8 @@ func _restore_rooms(built_plots: Array) -> void:
 		var parcel: Node2D = _grid[plot["y"]][plot["x"]]
 		for room_data in rooms:
 			var type_id: String = room_data.get("room_type_id", "")
+			if type_id == "lobby":
+				continue
 			var room_def = GameState.room_registry.get(type_id, {})
 			var path: String = room_def.get("scene_path", "")
 			if path.is_empty():
@@ -500,6 +508,22 @@ func _occ_mark_clearance(gx: int, gy: int, w: int, h: int) -> void:
 			if idx >= 0 and idx < _occ.size():
 				_occ[idx] = 4 # 4 = Freizuhaltende Zone (Begehbar, aber Bauverbot)
 				_sync_astar_cell(gx + dx, gy + dy)
+
+
+# =============================================================================
+func save_all_rooms_to_db(hotel_id: int) -> void:
+	for row_idx in range(_grid.size()):
+		var row = _grid[row_idx]
+		for col_idx in range(row.size()):
+			var parcel: Node2D = row[col_idx]
+			if not parcel.visible: continue
+			
+			var parcel_rooms: Array = []
+			for child: Node in parcel.get_children():
+				if child.has_method("to_dict") and child.get("room_type_id") != "lobby":
+					parcel_rooms.append(child.call("to_dict"))
+					
+			SaveManager.overwrite_rooms_in_plot(hotel_id, col_idx, row_idx, parcel_rooms)
 
 
 # =============================================================================
@@ -670,6 +694,25 @@ func _sync_astar_cell(gx: int, gy: int) -> void:
 	var is_solid: bool = (val == 1 or val == 3)
 	astar.set_point_solid(Vector2i(gx, gy), is_solid)
 
+
+# =============================================================================
+func get_lobby_spawn_pos_world() -> Vector2:
+	var entry_parcel: Node2D = _grid[_entry_plot.y][_entry_plot.x]
+	var clearance: Rect2i = entry_parcel.get_lobby_clearance_rect()
+	var start_x := (_entry_plot.x * PARCEL_SZ) + clearance.position.x + int(clearance.size.x / 2.0)
+	var start_y := (_entry_plot.y * PARCEL_SZ) + clearance.position.y + int(clearance.size.y / 2.0)
+	return tile_to_world(Vector2i(start_x, start_y))
+
+# =============================================================================
+func get_room_exit_tile(room: Node2D) -> Vector2i:
+	var sz: Vector2i = room.get_tile_size()
+	var door_rot: int = room.get("door_rotation")
+	var door_off: int = room.get("door_offset")
+	var tile_x: int = int(room.position.x / TILE_PX)
+	var tile_y: int = int(room.position.y / TILE_PX)
+	var px: int = int(room.get_parent().name.split("_")[1])
+	var py: int = int(room.get_parent().name.split("_")[2])
+	return _exit_global(px, py, tile_x, tile_y, sz.x, sz.y, door_rot, door_off)
 
 # =============================================================================
 func _on_party_checked_in(party: GuestParty, room: Node2D) -> void:
@@ -875,3 +918,17 @@ func _on_party_checked_out_physically(party: GuestParty) -> void:
 
 		var delay: float = i * 0.8
 		avatar.walk_path(my_path, my_exit_pos, delay, member.speed_offset)
+
+ #   = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+ f u n c   s a v e _ a l l _ r o o m s _ t o _ d b ( h o t e l _ i d :   i n t )   - >   v o i d : 
+ 	 f o r   r o w _ i d x   i n   r a n g e ( _ g r i d . s i z e ( ) ) : 
+ 	 	 v a r   r o w   =   _ g r i d [ r o w _ i d x ] 
+ 	 	 f o r   c o l _ i d x   i n   r a n g e ( r o w . s i z e ( ) ) : 
+ 	 	 	 v a r   p a r c e l :   N o d e 2 D   =   r o w [ c o l _ i d x ] 
+ 	 	 	 i f   n o t   p a r c e l . v i s i b l e :   c o n t i n u e 
+ 	 	 	 f o r   c h i l d :   N o d e   i n   p a r c e l . g e t _ c h i l d r e n ( ) : 
+ 	 	 	 	 i f   c h i l d . h a s _ m e t h o d ( \  
+ t o _ d i c t \ ) : 
+ 	 	 	 	 	 S a v e M a n a g e r . s a v e _ r o o m _ t o _ p l o t ( h o t e l _ i d ,   c o l _ i d x ,   r o w _ i d x ,   c h i l d . c a l l ( \ t o _ d i c t \ ) ) 
+  
+ 

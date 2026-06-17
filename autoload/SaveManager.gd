@@ -178,6 +178,15 @@ func save_room_to_plot(hotel_id: int, parcel_x: int, parcel_y: int, room_dict: D
 			break
 	_save_hotel(hotel)
 
+# =============================================================================
+func overwrite_rooms_in_plot(hotel_id: int, parcel_x: int, parcel_y: int, rooms_array: Array) -> void:
+	var hotel := get_hotel(hotel_id)
+	for p in hotel.get("plots", []):
+		if p["x"] == parcel_x and p["y"] == parcel_y:
+			p["rooms"] = rooms_array
+			break
+	_save_hotel(hotel)
+
 
 # ── Save-Slots ────────────────────────────────────────────────────────────────
 
@@ -423,6 +432,7 @@ func _load_hotel_file(filename: String) -> void:
 		"techtree": cfg.get_value("hotel", "techtree", {}),
 		"tutorials": cfg.get_value("hotel", "tutorials", []),
 		"quests": cfg.get_value("hotel", "quests", {}),
+		"staff": cfg.get_value("hotel", "staff", {}),
 	}
 
 	# Alle dynamischen Zimmer-Zähler aus der Config lesen und in 'h' einfügen
@@ -439,7 +449,7 @@ func _save_hotel(hotel: Dictionary) -> void:
 	if hotel.is_empty():
 		return
 	var cfg := ConfigFile.new()
-	for key in ["profile_id", "name", "grid_cols", "grid_rows", "day", "money", "game_time", "plots", "auto_count", "level", "stars", "guests_active", "guests_checkin", "guests_checkout", "exp", "exp_max", "rep", "rep_max", "fp", "guest_data", "transactions", "unlocked_techs", "techtree", "tutorials", "quests"]:
+	for key in ["profile_id", "name", "grid_cols", "grid_rows", "day", "money", "game_time", "plots", "auto_count", "level", "stars", "guests_active", "guests_checkin", "guests_checkout", "exp", "exp_max", "rep", "rep_max", "fp", "guest_data", "transactions", "unlocked_techs", "techtree", "tutorials", "quests", "staff"]:
 		cfg.set_value("hotel", key, hotel.get(key))
 
 	# NEU: Alle dynamischen Zimmer-Zähler ("next_z_id", etc.) mitspeichern
@@ -572,6 +582,7 @@ func _take_snapshot(hotel: Dictionary, snap_name: String) -> Dictionary:
 		"techtree": hotel.get("techtree", {}).duplicate(true),
 		"tutorials": hotel.get("tutorials", []).duplicate(true),
 		"quests": hotel.get("quests", {}).duplicate(true),
+		"staff": hotel.get("staff", {}).duplicate(true),
 	}
 
 	# NEU: Zähler in den Snapshot kopieren
@@ -609,6 +620,7 @@ func _apply_snapshot(hotel: Dictionary, snap: Dictionary) -> void:
 	hotel["techtree"] = snap.get("techtree", {}).duplicate(true)
 	hotel["tutorials"] = snap.get("tutorials", []).duplicate(true)
 	hotel["quests"] = snap.get("quests", {}).duplicate(true)
+	hotel["staff"] = snap.get("staff", {}).duplicate(true)
 
 	# Zähler aus dem Snapshot wiederherstellen
 	for key in snap:

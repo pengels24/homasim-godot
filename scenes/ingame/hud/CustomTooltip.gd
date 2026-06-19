@@ -71,11 +71,30 @@ func _update_content() -> void:
 	if _target_room.is_service_requested or _target_room.maintenance_level < 50:
 		status = "🧹 Service benötigt"
 	else:
-		var mgr = _target_room.get("_guest_mgr")
+		# GuestManager direkt befragen (nicht mehr über room._guest_mgr)
+		var ingame = get_tree().get_root().get_node_or_null("Ingame")
+		var mgr = ingame.get("_guest_mgr") if is_instance_valid(ingame) else null
 		if mgr:
 			var party = mgr.get_party_in_room(_target_room)
 			if party:
-				status = "👥 Belegt"
+				# Präsenz prüfen via GuestController
+				var ctrl = ingame.get("_guest_controller") if is_instance_valid(ingame) else null
+				var presence = "🚶 Gast unterwegs"
+				if ctrl:
+					for member in party.members:
+						var guest_id = member.id  # Stabile ID – überlebt Save/Load!
+						var actor = ctrl._actors.get(guest_id, null)
+						if is_instance_valid(actor):
+							if actor.current_state == actor.State.IN_ROOM:
+								presence = "📍 Gast anwesend"
+								break
+							elif actor.current_state == actor.State.IN_POI:
+								presence = "📍 Gast in der " + actor._current_poi_id.capitalize()
+								break
+							elif actor.current_state == actor.State.LEAVING or actor.current_state == actor.State.AWAITING_CHECKOUT or (actor.current_state == actor.State.WALKING and actor._is_checkout_walk):
+								presence = "🧳 Abreisend"
+								break
+				status = "👥 Belegt – " + presence
 				var names = ["Gäste im Zimmer:"]
 				for m in party.members:
 					var display_role = GameState.T("guest.member.type." + str(m.role))

@@ -190,7 +190,8 @@ func _setup_subsystems() -> void:
 # =============================================================================
 func _on_parties_changed() -> void:
 	var waiting_count := _guest_mgr.get_waiting().size()
-	hud_canvas.set_reception_alert(waiting_count > 0)
+	var checkout_count := _guest_mgr.get_checkout().size()
+	hud_canvas.set_reception_alert((waiting_count + checkout_count) > 0)
 
 
 # =============================================================================
@@ -246,6 +247,10 @@ func _on_event_reception_close() -> void:
 	_ui_mgr.close_reception()
 	hud_canvas.set_reception_locked(true)
 	Toast.show(GameState.T("toast.event.day_soft_end"))
+
+	# Alle Gäste in Lobby/Bar zurück ins Zimmer schicken
+	if _guest_controller:
+		_guest_controller.send_lobby_guests_to_rooms()
 
 	# HIER feuert jetzt zentral die Strafe für alle, die noch draußen standen
 	_guest_mgr.clear_waiting_guests_with_penalty()

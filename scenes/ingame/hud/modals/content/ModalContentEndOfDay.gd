@@ -66,7 +66,7 @@ func _fill_finance_data(day: int) -> void:
 					_: other_inc += amount
 			else:
 				expenses += amount # Ausgaben sind bereits negativ
-				if category == "staff":
+				if category == "Personal":
 					staff_exp += amount
 
 	var total_inc := room_inc + rest_inc + serv_inc + other_inc

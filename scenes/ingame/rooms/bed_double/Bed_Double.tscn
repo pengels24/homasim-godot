@@ -99,6 +99,7 @@ script = ExtResource("1_g681v")
 base_size = Vector2i(3, 2)
 
 [node name="Landscape" type="Node2D" parent="." unique_id=272879892]
+visible = false
 
 [node name="Ground" type="Node2D" parent="Landscape" unique_id=445309638]
 
@@ -202,7 +203,6 @@ region_enabled = true
 region_rect = Rect2(48, 0, 16, 16)
 
 [node name="Portrait" type="TileMapLayer" parent="." unique_id=1619843191]
-visible = false
 
 [node name="Ground" type="Node2D" parent="Portrait" unique_id=255117826]
 

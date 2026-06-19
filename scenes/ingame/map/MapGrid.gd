@@ -113,7 +113,12 @@ func get_path_between_tiles(start_tile: Vector2i, end_tile: Vector2i) -> Array[V
 	if astar.is_point_solid(end_tile):
 		var val = _occ[end_tile.y * _occ_w + end_tile.x]
 		print("ASTAR FAILED: End tile ", end_tile, " is SOLID! (occ val: ", val, ")")
-	return astar.get_id_path(start_tile, end_tile)
+	var path = astar.get_id_path(start_tile, end_tile)
+	for tile in path:
+		if astar.is_point_solid(tile):
+			var val = _occ[tile.y * _occ_w + tile.x]
+			print("CRITICAL: ASTAR RETURNED SOLID TILE ", tile, " with occ ", val)
+	return path
 
 
 # =============================================================================
@@ -233,15 +238,36 @@ func is_placement_valid(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 
 
 # =============================================================================
-## Markiert Room-Body (Wert 1) + Exit-Tile (Wert 2) im Grid.
+## Markiert Room-Body (Wert 4) + Obstacles (Wert 1) + Exit-Tile (Wert 2) im Grid.
 ## Wert 2 = Exit: darf von anderen Exit-Tiles überlappt werden (Tür-zu-Tür OK).
 func mark_placement(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
-		room_w: int, room_h: int, door_rot: int, door_off: int) -> void:
+		room_w: int, room_h: int, door_rot: int, door_off: int, room: Node2D = null) -> void:
 	var gx := parcel_x * PARCEL_SZ + tile_x
 	var gy := parcel_y * PARCEL_SZ + tile_y
+	
+	# 1. Gesamte Fläche als begehbar markieren (Bauverbot-Zone)
+	_occ_mark_clearance(gx, gy, room_w, room_h)
+	
+	# 1. Gesamte Fläche als Raum (Solid) markieren
 	_occ_mark(gx, gy, room_w, room_h)
+	
+	# 2. Tür-Öffnung NICHT freistanzen, damit kein Durchlauf-Shortcut entsteht!
+	# var door_border := _door_border_tile(gx, gy, room_w, room_h, door_rot, door_off)
+	# _occ_mark_clearance(door_border.x, door_border.y, 1, 1)
+	
+	# 3. Exit-Tile direkt vor der Tür setzen (AStar begehbar, aber kein Bauplatz)
 	var exit := _exit_global(parcel_x, parcel_y, tile_x, tile_y, room_w, room_h, door_rot, door_off)
 	_occ_mark_exit(exit.x, exit.y)
+
+# =============================================================================
+## Berechnet welches Tile im Außenrand die Tür-Öffnung ist (innerhalb des Raumes).
+func _door_border_tile(gx: int, gy: int, room_w: int, room_h: int, door_rot: int, door_off: int) -> Vector2i:
+	match door_rot:
+		0: return Vector2i(gx,                              gy + room_h - 1 - door_off) # Links
+		1: return Vector2i(gx + door_off,                   gy)                          # Oben
+		2: return Vector2i(gx + room_w - 1,                 gy + door_off)               # Rechts
+		3: return Vector2i(gx + room_w - 1 - door_off,      gy + room_h - 1)             # Unten
+	return Vector2i(gx, gy)
 
 
 # =============================================================================
@@ -279,7 +305,7 @@ func place_room(parcel_x: int, parcel_y: int, room_scene: PackedScene, hotel_id:
 		})
 
 	var sz: Vector2i = room.get_tile_size()
-	mark_placement(parcel_x, parcel_y, tile_x, tile_y, sz.x, sz.y, door_rot, door_off)
+	mark_placement(parcel_x, parcel_y, tile_x, tile_y, sz.x, sz.y, door_rot, door_off, room)
 
 	active_rooms.append(room)
 
@@ -386,7 +412,8 @@ func _restore_rooms(built_plots: Array) -> void:
 			mark_placement(
 				plot["x"], plot["y"], tx, ty,
 				sz.x, sz.y,
-				room_data.get("door_rotation", 0), room_data.get("door_offset", 0)
+				room_data.get("door_rotation", 0), room_data.get("door_offset", 0),
+				room
 			)
 			active_rooms.append(room)
 
@@ -408,6 +435,33 @@ func _exit_outside_parcel(px: int, py: int, exit: Vector2i, door_rot: int) -> bo
 		1: return exit.y < py * PARCEL_SZ
 		3: return exit.y >= (py + 1) * PARCEL_SZ
 	return false
+
+
+# =============================================================================
+## Gibt den occ-Wert eines Tiles zurück. 1 = solid, 4 = begehbar, 0 = Flur/leer.
+func get_occ_value(tile: Vector2i) -> int:
+	var idx := tile.y * _occ_w + tile.x
+	if idx < 0 or idx >= _occ.size():
+		return -1
+	return _occ[idx]
+
+
+# =============================================================================
+## Findet das nächste begehbare Tile in der Nähe von 'tile'.
+## Gibt das Original zurück falls es bereits begehbar ist.
+func find_nearest_walkable(tile: Vector2i, search_radius: int = 5) -> Vector2i:
+	if get_occ_value(tile) != 1:
+		return tile
+	for r in range(1, search_radius + 1):
+		for dy in range(-r, r + 1):
+			for dx in range(-r, r + 1):
+				if abs(dx) != r and abs(dy) != r:
+					continue
+				var candidate := tile + Vector2i(dx, dy)
+				var val := get_occ_value(candidate)
+				if val == 4 or val == 0:
+					return candidate
+	return tile
 
 
 # ── Occupancy Grid – Kern ─────────────────────────────────────────────────────
@@ -562,8 +616,19 @@ func _mark_lobby_on_parcel(parcel_x: int, parcel_y: int) -> void:
 
 	var lobby_rect: Rect2i = parcel.get_lobby_tile_rect()
 	if lobby_rect.has_area():
-		_occ_mark(gx + lobby_rect.position.x, gy + lobby_rect.position.y,
+		# Grundfläche der Lobby ist freizuhalten (4), damit das Pathfinding durchkommt
+		_occ_mark_clearance(gx + lobby_rect.position.x, gy + lobby_rect.position.y,
 			lobby_rect.size.x, lobby_rect.size.y)
+			
+		var lobby = parcel.get_lobby()
+		if lobby and lobby.has_method("get_solid_tiles"):
+			var solid_tiles = lobby.get_solid_tiles()
+			var tile_offset_x = int(lobby.position.x / TILE_PX)
+			var tile_offset_y = int(lobby.position.y / TILE_PX)
+			for t in solid_tiles:
+				var ax = gx + tile_offset_x + t.x
+				var ay = gy + tile_offset_y + t.y
+				_occ_mark(ax, ay, 1, 1)
 
 	var clearance: Rect2i = parcel.get_lobby_clearance_rect()
 	if clearance.has_area():

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dmepe6kyhtf8x" path="res://scenes/ingame/rooms/RoomStatusIndicator.gd" id="1_i30wr"]
 [ext_resource type="Texture2D" uid="uid://bv04ikak21deo" path="res://assets/icons/HUDBottom/brush-cleaning.svg" id="2_ssn4y"]
 [ext_resource type="Texture2D" uid="uid://beixwxl2kauq7" path="res://assets/icons/HUDBottom/wrench.svg" id="3_flo4l"]
+[ext_resource type="FontFile" uid="uid://bs3xl562plyi2" path="res://assets/fonts/Jersey25-Regular.ttf" id="4_flo4l"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_box"]
 content_margin_left = 3.0
@@ -16,6 +17,18 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.08, 0.12, 0.18, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_flo4l"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
 [node name="RoomStatusIndicator" type="PanelContainer" unique_id=1661092376]
 z_index = 10
 offset_right = 49.0
@@ -24,20 +37,34 @@ scale = Vector2(0.35, 0.35)
 theme_override_styles/panel = SubResource("StyleBoxFlat_box")
 script = ExtResource("1_i30wr")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1737122916]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1089916764]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1737122916]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 3
 alignment = 1
 
-[node name="IconClean" type="TextureRect" parent="HBoxContainer" unique_id=1853687642]
+[node name="IconClean" type="TextureRect" parent="VBoxContainer/HBoxContainer" unique_id=1853687642]
 unique_name_in_owner = true
 modulate = Color(0.8901961, 0.68235296, 0.03137255, 1)
 layout_mode = 2
 texture = ExtResource("2_ssn4y")
 
-[node name="IconRepair" type="TextureRect" parent="HBoxContainer" unique_id=55487271]
+[node name="IconRepair" type="TextureRect" parent="VBoxContainer/HBoxContainer" unique_id=55487271]
 unique_name_in_owner = true
 modulate = Color(0.8901961, 0.68235296, 0.03137255, 1)
 layout_mode = 2
 texture = ExtResource("3_flo4l")
+
+[node name="Progress" type="ProgressBar" parent="VBoxContainer" unique_id=799710579]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/font = ExtResource("4_flo4l")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/fill = SubResource("StyleBoxFlat_flo4l")
+step = 1.0
+show_percentage = false

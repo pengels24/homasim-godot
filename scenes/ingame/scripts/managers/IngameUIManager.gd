@@ -440,6 +440,9 @@ func _on_quit_confirmed() -> void:
 	if hotel_id >= 0:
 		SaveManager.save_auto(hotel_id)
 
+	# Alle offenen Tickets löschen – beim nächsten Start wird neu geprüft
+	TaskManager.clear_all_tasks()
+
 	get_tree().paused = false
 
 	GameState.open_dashboard_next = true

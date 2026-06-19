@@ -1,12 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://df7j1k2m3n4p5"]
+[gd_scene format=3 uid="uid://df7j1k2m3n4p5"]
 
-[ext_resource type="Script" path="res://scenes/ingame/staff/StaffActor.gd" id="1_act0r"]
+[ext_resource type="Script" uid="uid://bde60dclvhtsv" path="res://scenes/ingame/staff/StaffActor.gd" id="1_act0r"]
 
-[node name="StaffActor" type="Node2D"]
+[node name="StaffActor" type="Node2D" unique_id=242449992]
+scale = Vector2(0.8, 0.8)
 script = ExtResource("1_act0r")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=637383373]
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=596864349]
 path_desired_distance = 4.0
 target_desired_distance = 4.0

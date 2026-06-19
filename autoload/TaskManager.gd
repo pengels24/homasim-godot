@@ -63,6 +63,12 @@ func complete_task(task_id: String) -> void:
 				room.call("_update_indicator")
 
 
+func clear_all_tasks() -> void:
+	_tasks.clear()
+	_next_task_id = 1
+	print("[TaskManager] Schwarzes Brett geleert.")
+
+
 func _on_room_needs_cleaning(room: Node2D) -> void:
 	add_task("clean_room", room)
 

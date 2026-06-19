@@ -85,6 +85,13 @@ func get_lobby_clearance_rect() -> Rect2i:
 	return Rect2i()
 
 
+# =============================================================================
+func get_lobby() -> Node2D:
+	for child in get_children():
+		if child.get("room_type_id") == "lobby":
+			return child
+	return null
+
 # ── Intern ────────────────────────────────────────────────────────────────────
 
 # =============================================================================

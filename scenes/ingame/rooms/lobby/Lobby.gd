@@ -32,6 +32,7 @@ static func get_definition() -> Dictionary:
 		"req_level": 0,
 		"req_tech": "",
 		"max_beds": 0,
+		"is_poi": true,
 		"open_from": 420,
 		"open_to": 1320,
 	}

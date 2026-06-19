@@ -17,7 +17,7 @@ const DOOR_SLOTS: Array[Array] = [
 ]
 
 # externe
-var _guest_mgr: GuestManager
+# (GuestManager entfernt, wird vorerst nicht für Indikator genutzt)
 
 # ── Raum-Identität ────────────────────────────────────────────────────────────
 var room_type_id: String = ""     # "lobby", "bed_standard", …
@@ -83,6 +83,91 @@ func _ready() -> void:
 		TimeManager.sig_hour_passed.connect(_on_hour_passed)
 
 # =============================================================================
+func can_build_path(door_idx: int) -> bool:
+	return false
+
+func _get_obstacle_layers_recursive(node: Node, result: Array) -> void:
+	for child in node.get_children():
+		if child.has_method("get_used_cells"):
+			if "bstacles" in child.name or "dont_walk" in child.name:
+				result.append(child)
+		_get_obstacle_layers_recursive(child, result)
+
+# =============================================================================
+## Liest alle TileMapLayer namens "Obstacles" aus und liefert die Koordinaten
+## der bemalten Tiles (relativ zu dieser Room-Node).
+## Nur sichtbare Layer werden berücksichtigt (wichtig für Landscape/Portrait-Räume).
+func get_solid_tiles() -> Array[Vector2i]:
+	var solid_tiles: Array[Vector2i] = []
+	var all_obstacles = []
+	_get_obstacle_layers_recursive(self, all_obstacles)
+	
+	for obstacles in all_obstacles:
+		# Wenn Obstacles ein Kind von Landscape/Portrait ist, müssen wir schauen
+		# ob dieses Elternteil sichtbar ist. Der Obstacles-Layer selbst darf
+		# unsichtbar sein (damit man die roten Kästchen im Spiel nicht sieht).
+		if obstacles.get_parent() != self and "visible" in obstacles.get_parent():
+			if not obstacles.get_parent().visible:
+				continue
+		# Tile-Offset des Eltern-Nodes (z.B. Landscape oder Portrait) berücksichtigen
+		var parent_offset := Vector2i.ZERO
+		if obstacles.get_parent() != self:
+			var p = obstacles.get_parent()
+			parent_offset = Vector2i(
+				int(p.position.x / TILE_PX),
+				int(p.position.y / TILE_PX)
+			)
+		var obs_tile_size := Vector2i(TILE_PX, TILE_PX)
+		if obstacles.tile_set:
+			obs_tile_size = obstacles.tile_set.tile_size
+			
+		for t in obstacles.get_used_cells():
+			var game_x := int(t.x * obs_tile_size.x / float(TILE_PX))
+			var game_y := int(t.y * obs_tile_size.y / float(TILE_PX))
+			var final_pos = Vector2i(game_x, game_y) + parent_offset
+			if not solid_tiles.has(final_pos):
+				solid_tiles.append(final_pos)
+		print("[Room ", name, "] Obstacles '", obstacles.name, "' (size:", obs_tile_size, ") generiert ", solid_tiles.size(), " Game-Tiles. (aus ", obstacles.get_used_cells().size(), " Cells)")
+	return solid_tiles
+
+
+# =============================================================================
+## Liefert die MapGrid-Kachel (global), zu der Charaktere navigieren sollen.
+## Das ist nun strikt das Exit-Tile VOR der Tür, um World-Pathfinding 
+## von Room-Pathfinding sauber zu trennen.
+func get_target_tile(map_grid: Node) -> Vector2i:
+	var tile = map_grid.world_to_tile(global_position)
+	var gx = tile.x
+	var gy = tile.y
+	var sz = get_tile_size()
+	
+	match door_rotation:
+		0: return Vector2i(gx - 1,                    gy + sz.y - 1 - door_offset) # Links
+		1: return Vector2i(gx + door_offset,          gy - 1)                      # Oben
+		2: return Vector2i(gx + sz.x,                 gy + door_offset)            # Rechts
+		3: return Vector2i(gx + sz.x - 1 - door_offset, gy + sz.y)                 # Unten
+		
+	return tile
+
+# =============================================================================
+## Berechnet die exakte Pixel-Koordinate ca. 32px (2 Tiles) im Raum drinnen.
+func get_room_entry_pos(map_grid: Node) -> Vector2:
+	var exit_tile = get_target_tile(map_grid)
+	var exit_pos = map_grid.tile_to_world(exit_tile)
+	
+	# Gehe vom Exit-Tile in den Raum hinein (je nach Tür-Ausrichtung)
+	# 32 Pixel (2 Tiles) tief rein.
+	var entry_offset := Vector2(0, 0)
+	match door_rotation:
+		0: entry_offset = Vector2(32, 0)   # Tür ist links -> wir gehen nach rechts rein
+		1: entry_offset = Vector2(0, 32)   # Tür ist oben -> wir gehen nach unten rein
+		2: entry_offset = Vector2(-32, 0)  # Tür ist rechts -> wir gehen nach links rein
+		3: entry_offset = Vector2(0, -32)  # Tür ist unten -> wir gehen nach oben rein
+		
+	return exit_pos + entry_offset
+
+
+# =============================================================================
 func _on_hour_passed(_hour: int) -> void:
 	if TimeManager.is_paused():
 		return
@@ -111,9 +196,6 @@ func _on_hour_passed(_hour: int) -> void:
 
 # =============================================================================
 func configure(data: Dictionary) -> void:
-	_guest_mgr    = data.get("guest_manager", _guest_mgr)
-	if _guest_mgr != null and not _guest_mgr.parties_changed.is_connected(_update_indicator):
-		_guest_mgr.parties_changed.connect(_update_indicator)
 
 	room_type_id  = data.get("room_type_id",  room_type_id)
 	room_level    = data.get("room_level",    room_level)

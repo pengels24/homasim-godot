@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://nflkh3eqs3tr" path="res://scenes/main_menu/MainMenu.gd" id="1_mainmenu"]
 [ext_resource type="PackedScene" uid="uid://c1managersel" path="res://scenes/manager_select/ManagerSelect.tscn" id="2_mgsel"]
 [ext_resource type="Texture2D" uid="uid://dwnfttdpcsskc" path="res://assets/images/logo.png" id="2_qmweu"]
-[ext_resource type="FontFile" uid="uid://3can1r2sqobx" path="res://assets/fonts/AvenuePixel-Regular.ttf" id="3_f1mbi"]
 [ext_resource type="PackedScene" uid="uid://cw7c5frsdut8j" path="res://scenes/shared/SettingsModal.tscn" id="3_settings"]
+[ext_resource type="FontFile" uid="uid://bs3xl562plyi2" path="res://assets/fonts/Jersey25-Regular.ttf" id="3_wckin"]
 [ext_resource type="PackedScene" uid="uid://do0i6skwd4iil" path="res://scenes/dashboard/Dashboard.tscn" id="99_dashboard"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_subtitle_bg"]
@@ -235,8 +235,8 @@ theme_override_colors/font_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.85)
 theme_override_constants/shadow_offset_x = 5
 theme_override_constants/shadow_offset_y = 5
-theme_override_fonts/font = ExtResource("3_f1mbi")
-theme_override_font_sizes/font_size = 110
+theme_override_fonts/font = ExtResource("3_wckin")
+theme_override_font_sizes/font_size = 84
 text = "Deine Hotel-Legende beginnt hier"
 horizontal_alignment = 1
 autowrap_mode = 3
@@ -246,11 +246,11 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
-theme_override_fonts/font = ExtResource("3_f1mbi")
-theme_override_font_sizes/font_size = 36
+theme_override_fonts/font = ExtResource("3_wckin")
+theme_override_font_sizes/font_size = 30
 theme_override_styles/normal = SubResource("StyleBoxFlat_subtitle_bg")
 text = "Erlebe die ultimative Hotel-Management-Simulation.
-Plane, baue und verwalte dein Imperium – von der ersten Fliese bis zum Luxus-Resort."
+Plane, baue und verwalte dein Imperium – vom ersten Zimmer bis zum Luxus-Resort."
 horizontal_alignment = 1
 autowrap_mode = 3
 
@@ -287,8 +287,8 @@ theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
 theme_override_colors/font_disabled_color = Color(0.28, 0.28, 0.28, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("3_f1mbi")
-theme_override_font_sizes/font_size = 56
+theme_override_fonts/font = ExtResource("3_wckin")
+theme_override_font_sizes/font_size = 48
 theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
@@ -307,8 +307,8 @@ theme_override_colors/font_pressed_color = Color(0.7, 0.53, 0.02, 1)
 theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("3_f1mbi")
-theme_override_font_sizes/font_size = 56
+theme_override_fonts/font = ExtResource("3_wckin")
+theme_override_font_sizes/font_size = 48
 theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
@@ -327,8 +327,8 @@ theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
 theme_override_colors/font_disabled_color = Color(0.28, 0.28, 0.28, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("3_f1mbi")
-theme_override_font_sizes/font_size = 56
+theme_override_fonts/font = ExtResource("3_wckin")
+theme_override_font_sizes/font_size = 48
 theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
@@ -346,8 +346,8 @@ theme_override_colors/font_pressed_color = Color(0.7, 0.53, 0.02, 1)
 theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("3_f1mbi")
-theme_override_font_sizes/font_size = 56
+theme_override_fonts/font = ExtResource("3_wckin")
+theme_override_font_sizes/font_size = 48
 theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
@@ -365,8 +365,8 @@ theme_override_colors/font_pressed_color = Color(0.7, 0.53, 0.02, 1)
 theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("3_f1mbi")
-theme_override_font_sizes/font_size = 56
+theme_override_fonts/font = ExtResource("3_wckin")
+theme_override_font_sizes/font_size = 48
 theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
@@ -384,8 +384,8 @@ theme_override_colors/font_pressed_color = Color(0.7, 0.53, 0.02, 1)
 theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("3_f1mbi")
-theme_override_font_sizes/font_size = 56
+theme_override_fonts/font = ExtResource("3_wckin")
+theme_override_font_sizes/font_size = 48
 theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
@@ -401,8 +401,8 @@ theme_override_colors/font_pressed_color = Color(0.65, 0.1, 0.1, 1)
 theme_override_colors/font_hover_color = Color(0.863, 0.149, 0.149, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("3_f1mbi")
-theme_override_font_sizes/font_size = 56
+theme_override_fonts/font = ExtResource("3_wckin")
+theme_override_font_sizes/font_size = 48
 theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
@@ -421,8 +421,8 @@ theme_override_constants/separation = 8
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.75, 0.75, 0.8, 0.9)
-theme_override_fonts/font = ExtResource("3_f1mbi")
-theme_override_font_sizes/font_size = 24
+theme_override_fonts/font = ExtResource("3_wckin")
+theme_override_font_sizes/font_size = 20
 text = "v0.0.0"
 
 [node name="Spacer" type="Control" parent="Footer" unique_id=46122791]
@@ -443,8 +443,8 @@ stretch_mode = 5
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.75, 0.75, 0.8, 0.9)
-theme_override_fonts/font = ExtResource("3_f1mbi")
-theme_override_font_sizes/font_size = 24
+theme_override_fonts/font = ExtResource("3_wckin")
+theme_override_font_sizes/font_size = 20
 text = "Made with Godot 4"
 
 [node name="CopyrightLbl" type="Label" parent="." unique_id=543462729]
@@ -453,8 +453,8 @@ offset_top = 1042.0
 offset_right = 1920.0
 offset_bottom = 1070.0
 theme_override_colors/font_color = Color(0.75, 0.75, 0.8, 0.9)
-theme_override_fonts/font = ExtResource("3_f1mbi")
-theme_override_font_sizes/font_size = 24
+theme_override_fonts/font = ExtResource("3_wckin")
+theme_override_font_sizes/font_size = 20
 text = "© 2026 – Angelus2010"
 horizontal_alignment = 1
 vertical_alignment = 1

@@ -61,6 +61,7 @@ func _spawn_ghost() -> void:
 	_room_h = sz.y
 	_update_valid_combos()
 	_snap_to_valid_combo()
+	_ghost.configure({"door_rotation": _door_rotation, "door_offset": _door_offset})
 	_update_modulate()
 
 

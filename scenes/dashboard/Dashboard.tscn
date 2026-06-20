@@ -4,10 +4,7 @@
 [ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_theme"]
 [ext_resource type="PackedScene" uid="uid://cgjw8nvpmbcqm" path="res://scenes/character/CharacterDisplay.tscn" id="2_chardisplay"]
 [ext_resource type="PackedScene" uid="uid://confirmmodal" path="res://scenes/shared/ConfirmModal.tscn" id="3_confirmmodal"]
-[ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://assets/UI/menu_button_green.tres" id="4_green"]
 [ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="5_red"]
-[ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://assets/UI/menu_button_green_hover.tres" id="green_hover"]
-[ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://assets/UI/menu_button_green_pressed.tres" id="green_pressed"]
 [ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="red_hover"]
 [ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="red_normal"]
 
@@ -16,7 +13,7 @@ content_margin_left = 40.0
 content_margin_top = 40.0
 content_margin_right = 40.0
 content_margin_bottom = 40.0
-bg_color = Color(0.07, 0.07, 0.09, 0.97)
+bg_color = Color(0.07058824, 0.07058824, 0.09019608, 0.98039216)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -48,7 +45,6 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card_hover"]
 bg_color = Color(0.15, 0.15, 0.18, 1)
 border_width_left = 2
@@ -73,6 +69,7 @@ theme = ExtResource("1_theme")
 script = ExtResource("1_dashboard")
 
 [node name="Bg" type="ColorRect" parent="." unique_id=1696496841]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -182,7 +179,7 @@ autowrap_mode = 3
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HotelMargin" type="MarginContainer" parent="Center/Card/VBox/MainArea/HotelSection/Scroll"]
+[node name="HotelMargin" type="MarginContainer" parent="Center/Card/VBox/MainArea/HotelSection/Scroll" unique_id=1232409148]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/margin_left = 16
@@ -197,27 +194,29 @@ theme_override_constants/h_separation = 32
 theme_override_constants/v_separation = 32
 columns = 3
 
-[node name="BtnNewHotelCard" type="Button" parent="Center/Card/VBox/MainArea/HotelSection/Scroll/HotelMargin/HotelContainer"]
+[node name="BtnNewHotelCard" type="Button" parent="Center/Card/VBox/MainArea/HotelSection/Scroll/HotelMargin/HotelContainer" unique_id=2007079534]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(360, 360)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_card")
-theme_override_styles/hover = SubResource("StyleBoxFlat_card_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_card_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_card_hover")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 
-[node name="Center" type="CenterContainer" parent="Center/Card/VBox/MainArea/HotelSection/Scroll/HotelMargin/HotelContainer/BtnNewHotelCard"]
+[node name="Center" type="CenterContainer" parent="Center/Card/VBox/MainArea/HotelSection/Scroll/HotelMargin/HotelContainer/BtnNewHotelCard" unique_id=1238748152]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 
-[node name="Label" type="Label" parent="Center/Card/VBox/MainArea/HotelSection/Scroll/HotelMargin/HotelContainer/BtnNewHotelCard/Center"]
+[node name="Label" type="Label" parent="Center/Card/VBox/MainArea/HotelSection/Scroll/HotelMargin/HotelContainer/BtnNewHotelCard/Center" unique_id=1634212476]
 layout_mode = 2
-theme_override_font_sizes/font_size = 120
 theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 120
 text = "+"
 
 [node name="ConfirmModal" parent="." unique_id=870281273 instance=ExtResource("3_confirmmodal")]

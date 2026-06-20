@@ -49,3 +49,9 @@
 - Staff-Skill „Bewegung/Laufgeschwindigkeit" in `StaffActor` einbauen (aus `skill_speed`-Property).
 - Bar-Integration testen & ggf. Gast-Interaktionen (Konsumation, Verweildauer) vertiefen.
 - `NewHotelModal` Textgröße-Anpassung (optisch nicht passend zum großen Dashboard).
+
+### UI & Build-System Fixes
+- **Baumenü (BuildMenu):** Aktualisiert sich nun beim Öffnen (`visibility_changed`) automatisch. Behebt den Fehler, dass Freischaltungen durch Tech-Tree oder Levelaufstiege erst nach Neuladen sichtbar waren.
+- **Techtree Tooltips:** Tooltips der Forschungs-Knoten aktualisieren sich nun on-the-fly, auch wenn das Modal durchgehend geöffnet bleibt und der Status sich ändert.
+- **Ghost Spawn Tür-Position (BuildCursor):** Wenn der Standard-Tür-Slot (L1) ungültig ist und der BuildCursor intern auf den nächstgültigen Slot (z.B. L3) einrastet, wird dieser Offset nun korrekt an den visuellen Ghost zurückgemeldet. Verhindert, dass die Tür-Vorschau an der falschen Stelle angezeigt wird.
+- **Rooms Config:** Die Pfade für Icons und `.tscn`-Szenen für Räume (z.B. `Bed_Family.tscn`) wurden in `config/rooms.json` korrigiert.

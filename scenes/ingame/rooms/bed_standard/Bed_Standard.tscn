@@ -17,40 +17,40 @@ colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_0kbel"]
 gradient = SubResource("Gradient_qfmep")
 
-[sub_resource type="Gradient" id="Gradient_evq2g"]
-offsets = PackedFloat32Array(0)
-colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_ulmn4"]
-gradient = SubResource("Gradient_evq2g")
-
 [sub_resource type="Gradient" id="Gradient_0kbel"]
 offsets = PackedFloat32Array(0)
 colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_0cpfk"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ulmn4"]
 gradient = SubResource("Gradient_0kbel")
 
-[sub_resource type="Gradient" id="Gradient_066q5"]
+[sub_resource type="Gradient" id="Gradient_evq2g"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_0cpfk"]
+gradient = SubResource("Gradient_evq2g")
+
+[sub_resource type="Gradient" id="Gradient_cfvov"]
 offsets = PackedFloat32Array(0)
 colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_05i8p"]
-gradient = SubResource("Gradient_066q5")
+gradient = SubResource("Gradient_cfvov")
 
-[sub_resource type="Gradient" id="Gradient_cfvov"]
+[sub_resource type="Gradient" id="Gradient_066q5"]
 offsets = PackedFloat32Array(0)
 colors = PackedColorArray(0.78039217, 0.5137255, 0.3137255, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_066q5"]
-gradient = SubResource("Gradient_cfvov")
+gradient = SubResource("Gradient_066q5")
 
-[sub_resource type="Gradient" id="Gradient_ulmn4"]
+[sub_resource type="Gradient" id="Gradient_05i8p"]
 offsets = PackedFloat32Array(0.5, 0.5)
 colors = PackedColorArray(0.78039217, 0.5137255, 0.3137255, 1, 0.23137255, 0.23921569, 0.3019608, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_4mj0y"]
-gradient = SubResource("Gradient_ulmn4")
+gradient = SubResource("Gradient_05i8p")
 
 [node name="BedStandard" type="Node2D" unique_id=1250830351]
 script = ExtResource("1_script")

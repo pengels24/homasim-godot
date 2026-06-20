@@ -17,6 +17,7 @@ signal sig_build_cancelled()
 var _categories: Dictionary = {}
 var _category_btns: Dictionary = {}
 var _room_btns: Array = []
+var _current_category: String = ""
 @onready var _breadcrumb: Label = $MarginContainer/VBoxContainer/BreadcrumbLabel
 
 # =============================================================================
@@ -29,8 +30,15 @@ func _ready() -> void:
 	# Zeige beim ersten Öffnen direkt die erste Kategorie an (falls vorhanden)
 	if _categories.keys().size() > 0:
 		_show_category(_categories.keys()[0])
+		
+	visibility_changed.connect(_on_visibility_changed)
 
 	visible = false
+
+# =============================================================================
+func _on_visibility_changed() -> void:
+	if visible and _current_category != "":
+		_show_category(_current_category)
 
 # =============================================================================
 func _set_btn_active(btn: Button, active: bool) -> void:
@@ -170,6 +178,7 @@ func _display_category_buttons() -> void:
 
 # =============================================================================
 func _show_category(cat_name: String) -> void:
+	_current_category = cat_name
 	sig_build_cancelled.emit()
 	
 	for child in item_grid.get_children():

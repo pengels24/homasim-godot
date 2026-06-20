@@ -17,7 +17,7 @@
     },
     {
       "id": "bed_family",
-      "scene_path": "res://scenes/ingame/rooms/bed_family/BedFamily.tscn",
+      "scene_path": "res://scenes/ingame/rooms/bed_family/Bed_Family.tscn",
       "script_path": "res://scenes/ingame/rooms/bed_family/BedFamily.gd"
     },
     {

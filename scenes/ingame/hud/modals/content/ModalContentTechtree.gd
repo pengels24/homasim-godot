@@ -229,37 +229,7 @@ func _build_tier_content(parent: Control, _tier_id: String, tier_data: Dictionar
 				if is_demo_locked:
 					btn.modulate = Color(1, 1, 1, 0.5)
 				
-				var tt = ""
-				if is_demo_locked:
-					tt += "🔒 NICHT IN DER TECHDEMO VERFÜGBAR\n\n"
-					
-				if n.has("desc") and n["desc"] != "":
-					tt += GameState.T(n["desc"]) + "\n\n"
-				else:
-					var unlocks = []
-					for t in TechtreeManager.tech_registry.values():
-						if tech_id in t.get("dependencies", []):
-							unlocks.append("Forschung: " + GameState.T(t.get("name", t.get("id", ""))))
-					
-					for r in GameState.room_registry.values():
-						var r_def = r.get("def", {})
-						if r_def.get("req_tech", "") == tech_id:
-							unlocks.append("Raum: " + GameState.T(r_def.get("name", "Raum")))
-							
-					if unlocks.size() > 0:
-						tt += "Schaltet frei:\n- " + "\n- ".join(unlocks) + "\n\n"
-					else:
-						tt += "Schaltet neue Inhalte frei.\n\n"
-				
-				tt += ("✅ " if has_fp else "❌ ") + "%d / %d FP\n" % [cur_fp, cost_fp]
-				tt += ("✅ " if has_money else "❌ ") + "%d / %d €\n" % [cur_money, cost_money]
-				
-				for d in deps:
-					var dep_name = d + " " + GameState.T(TechtreeManager.get_tech_node(d).get("name", d))
-					var is_dep_unlocked = TechtreeManager.is_tech_unlocked(d)
-					tt += ("✅ " if is_dep_unlocked else "❌ ") + "Benötigt: %s\n" % dep_name
-					
-				btn.tooltip_text = tt.strip_edges()
+				# Tooltip wird nun in _update_single_button() via _generate_tooltip() gesetzt
 				
 				btn.pressed.connect(func():
 					if is_demo_locked:
@@ -341,6 +311,8 @@ func update_button_states() -> void:
 # =============================================================================
 func _update_single_button(tech_id: String) -> void:
 	var btn: Button = _tech_buttons[tech_id]
+	btn.tooltip_text = _generate_tooltip(tech_id)
+	
 	if TechtreeManager.is_tech_unlocked(tech_id):
 		btn.disabled = true
 		btn.modulate = Color.WHITE
@@ -357,6 +329,54 @@ func _update_single_button(tech_id: String) -> void:
 		btn.modulate = Color(0.4, 0.4, 0.4)
 		btn.remove_theme_color_override("font_disabled_color")
 		btn.set_glow_state(false, false)
+
+# =============================================================================
+func _generate_tooltip(tech_id: String) -> String:
+	var n = TechtreeManager.get_tech_node(tech_id)
+	if n.is_empty(): return ""
+	
+	var cost_fp = n.get("cost_fp", 0)
+	var cost_money = n.get("cost_money", 0)
+	var deps = n.get("dependencies", [])
+	
+	var cur_fp = int(GameState.selected_hotel.get("fp", 0))
+	var cur_money = int(GameState.selected_hotel.get("money", 0))
+	
+	var has_fp = cur_fp >= cost_fp
+	var has_money = cur_money >= cost_money
+	var is_demo_locked = n.get("demo_locked", false)
+	
+	var tt = ""
+	if is_demo_locked:
+		tt += "🔒 NICHT IN DER TECHDEMO VERFÜGBAR\n\n"
+		
+	if n.has("desc") and n["desc"] != "":
+		tt += GameState.T(n["desc"]) + "\n\n"
+	else:
+		var unlocks = []
+		for t in TechtreeManager.tech_registry.values():
+			if tech_id in t.get("dependencies", []):
+				unlocks.append("Forschung: " + GameState.T(t.get("name", t.get("id", ""))))
+		
+		for r in GameState.room_registry.values():
+			var r_def = r.get("def", {})
+			if r_def.get("req_tech", "") == tech_id:
+				unlocks.append("Raum: " + GameState.T(r_def.get("name", "Raum")))
+				
+		if unlocks.size() > 0:
+			tt += "Schaltet frei:\n- " + "\n- ".join(unlocks) + "\n\n"
+		else:
+			tt += "Schaltet neue Inhalte frei.\n\n"
+	
+	tt += ("✅ " if has_fp else "❌ ") + "%d / %d FP\n" % [cur_fp, cost_fp]
+	tt += ("✅ " if has_money else "❌ ") + "%d / %d €\n" % [cur_money, cost_money]
+	
+	for d in deps:
+		var dep_name = d + " " + GameState.T(TechtreeManager.get_tech_node(d).get("name", d))
+		var is_dep_unlocked = TechtreeManager.is_tech_unlocked(d)
+		tt += ("✅ " if is_dep_unlocked else "❌ ") + "Benötigt: %s\n" % dep_name
+		
+	return tt.strip_edges()
 
 # =============================================================================
 func _on_tech_unlocked(_tech_id: String) -> void:

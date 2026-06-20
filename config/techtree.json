@@ -26,7 +26,7 @@
           "category": "zimmer",
           "col": 1,
           "row": 0,
-          "cost_fp": 50000,
+          "cost_fp": 200,
           "cost_money": 2500,
           "dependencies": [
             "Z1.1"
@@ -40,7 +40,7 @@
           "category": "zimmer",
           "col": 1,
           "row": 1,
-          "cost_fp": 50000,
+          "cost_fp": 300,
           "cost_money": 5000,
           "dependencies": [
             "Z1.1"

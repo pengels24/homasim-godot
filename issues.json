@@ -1,0 +1,356 @@
+﻿{
+  "issues": {
+    "nodes": [
+      {
+        "identifier": "ANG-203",
+        "title": "ANG-203 - Generelle Einf\u00fchrungs-Szenen bei erstem Aufruf",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-200",
+        "title": "ANG-200 - Checkout Preiskalkulation",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-199",
+        "title": "ANG-199 - Tooltips auf custom umstellen (nach Techdemo)",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-198",
+        "title": "ANG-198 - Hotel erstellen erweitern um Spieleinstellungen",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-193",
+        "title": "ANG-193 \u2013 Wall-System Refactor: TileMap-basierte Au\u00dfenkontur + Trennw\u00e4nde",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-188",
+        "title": "ANG-188 - Baumen\u00fc \u2013 Abrissmodus mit konfigurierbarer R\u00fcckerstattung",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-165",
+        "title": "ANG-165 - Gourmet-Stern-Inspektor Event + 1. Stern",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-164",
+        "title": "ANG-164 - Technologiebaum \u2013 Planungsbuero + Tier 1 Forschung",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-159",
+        "title": "ANG-159 \u2013 Login optional: \u201eSpielen\" lokal + \u201eKonto verbinden\"",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-156",
+        "title": "ANG-156 - Export-Targets definieren \u2013 Windows/Mac/Linux f\u00fcr ITCH.IO",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-155",
+        "title": "ANG- 155 - Security \u2013 Validierung der Spiellogik",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-154",
+        "title": "ANG-154 - Scene-Architektur \u2013 Dashboard, Credits auf .tscn umstellen",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-149",
+        "title": "Tutorial-Szene implementieren",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-146",
+        "title": "Login- und HotelSelect-Szene visuell \u00fcberarbeiten",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-142",
+        "title": "feat: In-Game Browser \u2013 Simuliertes Webbrowser-Modal",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-141",
+        "title": "feat: Online-Buchungssystem & eigene Hotelwebseite",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-140",
+        "title": "feat: In-Game-Postfach (Mailsystem)",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-139",
+        "title": "feat: Game-Event \u2013 Der anonyme Michelin-Inspektor",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-138",
+        "title": "concept: Zimmer-Attribute & Gast-W\u00fcnsche System",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-132",
+        "title": "refactor: JS-Modularisierung \u2013 permanentes Refactoring parallel zur Feature-Entwicklung",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-130",
+        "title": "feat: Multi-Room-Buchung f\u00fcr Gruppen + guest_count beim Spawn",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-127",
+        "title": "bug: Gruppen-Gast + Doppelzimmer \u2013 falsches Kapazit\u00e4ts-Matching",
+        "state": {
+          "name": "Duplicate"
+        }
+      },
+      {
+        "identifier": "ANG-126",
+        "title": "bug: G\u00e4ste-Spawn Event triggert doppelt nach Pause/Play",
+        "state": {
+          "name": "Duplicate"
+        }
+      },
+      {
+        "identifier": "ANG-125",
+        "title": "bug: Raum-Punkte auf Hotelmap nicht live nach Check-In",
+        "state": {
+          "name": "Duplicate"
+        }
+      },
+      {
+        "identifier": "ANG-121",
+        "title": "feat: G\u00e4stebewertungen beim Checkout",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-106",
+        "title": "feat: Techtree \u2013 Card-\u00dcberarbeitung (Beschreibung, Requirements, Kosten, kein Dialog)",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-105",
+        "title": "concept: Techtree \u2013 Tier-System (Michelin-Sterne) als Redesign",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-103",
+        "title": "polish: Ereignisse-Panel \u2013 Animation und Feinschliff",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-83",
+        "title": "feat: Manager-Charakter bearbeiten (Edit Char)",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-79",
+        "title": "feat: Hotel-Karte Dashboard \u2013 3. Stat-Slot in Zeile 2",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-78",
+        "title": "feat: Spieler-XP-System f\u00fcr Manager-Charakter",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-76",
+        "title": "feat: Raumtyp Friseursalon (hair_salon) schaltet Manager-Haarwechsel frei",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-75",
+        "title": "feat: Tutorial-Modus mit Intro-Story (Bergisches Land Szenario)",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-63",
+        "title": "refactor: Exception-Meldungen in Controllern lokalisieren",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-61",
+        "title": "feat: RoomDefinitions \u2013 room_required Feld + serverseitige Pr\u00fcfung",
+        "state": {
+          "name": "In Review"
+        }
+      },
+      {
+        "identifier": "ANG-57",
+        "title": "feat: Raumverschlei\u00df & Service (Room Condition)",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-56",
+        "title": "feat: Reputationssystem",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-51",
+        "title": "feat: Raumtyp-Verf\u00fcgbarkeit 4",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-50",
+        "title": "feat: Raumtyp-Verf\u00fcgbarkeit 3",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-49",
+        "title": "feat: Raumtyp-Verf\u00fcgbarkeit 2",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-47",
+        "title": "feat: Unterschiedliche Raumtypen nach Kategorie/Zielgruppe",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-44",
+        "title": "new: Raumtyp - Service - Personalr\u00e4ume",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-43",
+        "title": "new: Raumtyp - Service - W\u00e4scherei",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-42",
+        "title": "new: Raumtyp - Service - K\u00fchlraum",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-41",
+        "title": "new: Raumtyp - Service - Lagerraum",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-39",
+        "title": "new: Raumtyp - \u00d6ff. Bereich - Parkplatz/Garage",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-38",
+        "title": "new: Raumtyp - \u00d6ff. Bereich - Terrasse/Garten",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-37",
+        "title": "new: Raumtyp - \u00d6ff. Bereich - Gesch\u00e4fte/Boutiquen",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-36",
+        "title": "new: Raumtyp - \u00d6ff. Bereich - Spielzimmer/Kinderbereich",
+        "state": {
+          "name": "Backlog"
+        }
+      },
+      {
+        "identifier": "ANG-35",
+        "title": "new: Raumtyp - \u00d6ff. Bereich - Schwimmbad",
+        "state": {
+          "name": "Backlog"
+        }
+      }
+    ]
+  }
+}

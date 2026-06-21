@@ -38,7 +38,7 @@ const FADE_DURATION  := 1.2
 
 # other modals
 @onready var _manager_modal:    Control      = $ManagerModal
-@onready var _settings_modal:   SettingsModal = $SettingsModal
+@onready var _settings_modal:   StandardModal = $SettingsModal
 @onready var _dashboard_modal:  Control      = $DashboardModal
 
 var _current_bg := 0
@@ -55,6 +55,7 @@ func _ready() -> void:
 	btn_login.pressed.connect(_on_login_pressed)
 	btn_play.pressed.connect(_on_play_pressed)
 	btn_settings.pressed.connect(_on_settings_pressed)
+	_settings_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentSettings.tscn")
 	_settings_modal.closed.connect(_on_settings_closed)
 	btn_manager.pressed.connect(_on_manager_pressed)
 	btn_tutorial.pressed.connect(_on_tutorial_pressed)
@@ -214,7 +215,7 @@ func _unhandled_input(event: InputEvent) -> void:
 # =============================================================================
 func _on_settings_pressed() -> void:
 	btn_quit.visible = false
-	_settings_modal.open()
+	_settings_modal.open(GameState.T("settings.title"))
 
 
 # =============================================================================

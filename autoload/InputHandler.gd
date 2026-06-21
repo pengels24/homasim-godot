@@ -55,10 +55,10 @@ func _process(delta: float) -> void:
 	# WASD-KAMERABEWEGUNG (Erlaubt im Normal- und im Bau-Modus!)
 	if current_mode == InputMode.NORMAL or current_mode == InputMode.BUILD:
 		var dir := Vector2.ZERO
-		if Input.is_key_pressed(KEY_D): dir.x += 1.0
-		if Input.is_key_pressed(KEY_A): dir.x -= 1.0
-		if Input.is_key_pressed(KEY_S): dir.y += 1.0
-		if Input.is_key_pressed(KEY_W): dir.y -= 1.0
+		if Input.is_action_pressed("camera_right"): dir.x += 1.0
+		if Input.is_action_pressed("camera_left"): dir.x -= 1.0
+		if Input.is_action_pressed("camera_down"): dir.y += 1.0
+		if Input.is_action_pressed("camera_up"): dir.y -= 1.0
 
 		if dir != Vector2.ZERO:
 			sig_camera_pan_requested.emit(dir.normalized() * delta)
@@ -66,9 +66,9 @@ func _process(delta: float) -> void:
 
 	# TASTATUR-ZOOM (Numpad - gilt für Normal und Bauen)
 	var zoom_dir := 0.0
-	if Input.is_key_pressed(KEY_EQUAL) or Input.is_key_pressed(KEY_KP_ADD):
+	if Input.is_action_pressed("camera_zoom_in"):
 		zoom_dir = 1.0
-	elif Input.is_key_pressed(KEY_MINUS) or Input.is_key_pressed(KEY_KP_SUBTRACT):
+	elif Input.is_action_pressed("camera_zoom_out"):
 		zoom_dir = -1.0
 
 	if zoom_dir != 0.0:
@@ -114,6 +114,14 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	# ── ALLGEMEINE HOTKEYS (Über InputMap) ──────────────────────────────────────
 	# Hier können Tasten in jedem Modus reagieren (z.B. zum Schließen von Menüs)
+
+	if event.is_action_pressed("ui_pause"):
+		get_viewport().set_input_as_handled()
+		if TimeManager.is_paused():
+			TimeManager.resume()
+		else:
+			TimeManager.pause()
+		return
 
 	if event.is_action_pressed("ui_escape"):
 		get_viewport().set_input_as_handled()

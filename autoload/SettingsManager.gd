@@ -25,6 +25,11 @@ var hud_side: String = "center"    # "left" / "center" / "right"
 # ── Session ───────────────────────────────────────────────────────────────────
 var last_profile_id: int = -1   # Zuletzt gewählter Manager – für Auto-Restore
 
+# ── Tastaturbelegung ──────────────────────────────────────────────────────────
+var custom_keybindings: Dictionary = {} # Speichert [primary_keycode, alt_keycode] pro Action
+var keybindings_config: Dictionary = {}
+const KEYBINDINGS_CONFIG_PATH := "res://config/keybindings.json"
+
 # ── Werte-Listen (für Slider-Positionen) ──────────────────────────────────────
 const AUTOSAVE_INTERVALS: Array[int]   = [5, 10, 15, 30]
 var autosave_intervals_labels: Array[String] = [GameState.T("settings.gameplay.autosave_interval.off"), GameState.T("settings.gameplay.autosave_interval.on", 5), GameState.T("settings.gameplay.autosave_interval.on", 10), GameState.T("settings.gameplay.autosave_interval.on", 15), GameState.T("settings.gameplay.autosave_interval.on", 30)]
@@ -46,8 +51,10 @@ var ui_hudbottom_pos_labels: Array[String] = [GameState.T("settings.ui.hud_side.
 func _ready() -> void:
 	# Das macht diesen Autoload immun gegen die Godot-Pause!
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_load_keybindings_config()
 	_load()
 	_apply_audio()
+	_apply_keybindings()
 	call_deferred("_apply_startup_scale")
 
 
@@ -71,6 +78,10 @@ func save() -> void:
 	cfg.set_value("ui", "toast_position", toast_position)
 	cfg.set_value("ui", "hud_side", hud_side)
 	cfg.set_value("session", "last_profile_id", last_profile_id)
+	
+	for action in custom_keybindings:
+		cfg.set_value("input", action, custom_keybindings[action])
+		
 	cfg.save(SETTINGS_PATH)
 	_apply_audio()
 	sig_hud_side_changed.emit()
@@ -100,6 +111,11 @@ func _load() -> void:
 	toast_position = cfg.get_value("ui",       "toast_position", toast_position)
 	hud_side = cfg.get_value("ui",       "hud_side",       hud_side)
 	last_profile_id = cfg.get_value("session",  "last_profile_id",           last_profile_id)
+	
+	custom_keybindings.clear()
+	if cfg.has_section("input"):
+		for action in cfg.get_section_keys("input"):
+			custom_keybindings[action] = cfg.get_value("input", action)
 
 
 # =============================================================================
@@ -121,3 +137,64 @@ func _ensure_bus(bus_name: String) -> void:
 	var idx := AudioServer.bus_count - 1
 	AudioServer.set_bus_name(idx, bus_name)
 	AudioServer.set_bus_send(idx, "Master")
+
+# =============================================================================
+func _load_keybindings_config() -> void:
+	if FileAccess.file_exists(KEYBINDINGS_CONFIG_PATH):
+		var text := FileAccess.get_file_as_string(KEYBINDINGS_CONFIG_PATH)
+		var parsed = JSON.parse_string(text)
+		if parsed is Dictionary:
+			keybindings_config = parsed
+
+# =============================================================================
+func _apply_keybindings() -> void:
+	for group_key in keybindings_config:
+		var group: Dictionary = keybindings_config[group_key]
+		var actions: Dictionary = group.get("actions", {})
+		for action in actions:
+			var default_primary_str: String = actions[action].get("default", "")
+			var default_alt_str: String = actions[action].get("default_alt", "")
+			var default_primary: Key = OS.find_keycode_from_string(default_primary_str) if default_primary_str != "" else KEY_NONE
+			var default_alt: Key = OS.find_keycode_from_string(default_alt_str) if default_alt_str != "" else KEY_NONE
+			
+			var current_primary: Key = default_primary
+			var current_alt: Key = default_alt
+			
+			if custom_keybindings.has(action):
+				var custom_arr = custom_keybindings[action]
+				if custom_arr is Array and custom_arr.size() >= 2:
+					current_primary = int(custom_arr[0])
+					current_alt = int(custom_arr[1])
+			
+			if not InputMap.has_action(action):
+				InputMap.add_action(action)
+			
+			InputMap.action_erase_events(action)
+			
+			if current_primary != KEY_NONE:
+				var ev_pri := InputEventKey.new()
+				ev_pri.physical_keycode = current_primary as Key
+				InputMap.action_add_event(action, ev_pri)
+			
+			if current_alt != KEY_NONE:
+				var ev_alt := InputEventKey.new()
+				ev_alt.physical_keycode = current_alt as Key
+				InputMap.action_add_event(action, ev_alt)
+
+# =============================================================================
+func update_keybinding(action: String, primary: Key, alt: Key) -> void:
+	custom_keybindings[action] = [primary, alt]
+	save()
+	_apply_keybindings()
+
+func reset_keybinding(action: String) -> void:
+	if custom_keybindings.has(action):
+		custom_keybindings.erase(action)
+		save()
+		_apply_keybindings()
+
+func reset_all_keybindings() -> void:
+	custom_keybindings.clear()
+	save()
+	_apply_keybindings()
+

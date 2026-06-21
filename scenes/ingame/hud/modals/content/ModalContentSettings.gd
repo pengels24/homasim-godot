@@ -1,5 +1,7 @@
 extends TabContainer
 
+const KEYBINDING_ROW = preload("res://scenes/ingame/hud/modals/content/KeybindingRow.tscn")
+
 # =============================================================================
 # ── ONREADY UI-ELEMENTE ──────────────────────────────────────────────────────
 # =============================================================================
@@ -44,6 +46,7 @@ func _ready() -> void:
 	_init_gameplay_tab()
 	_init_audio_tab()
 	_init_ui_tab()
+	_init_keybindings_tab()
 
 	get_tree().root.content_scale_factor = SettingsManager.ui_scale
 
@@ -78,6 +81,7 @@ func _init_audio_tab() -> void:
 
 # =============================================================================
 func _init_ui_tab() -> void:
+	_init_keybindings_tab()
 	_setup_selector("scale", btn_scale_left, btn_scale_right, lbl_scale,
 		SettingsManager.UI_SCALES_LABELS,
 		SettingsManager.UI_SCALES,
@@ -210,3 +214,258 @@ func _on_scale_changed(val: float) -> void:
 	SettingsManager.ui_scale = val
 	SettingsManager.save()
 	get_tree().root.content_scale_factor = val
+
+
+# =============================================================================
+# ── TASTATURBELEGUNG ─────────────────────────────────────────────────────────
+# =============================================================================
+
+@onready var kb_container: VBoxContainer = %KeybindingsContainer
+@onready var btn_reset_all_keys: Button = %ButtonResetAllKeys
+
+func _init_keybindings_tab() -> void:
+	if not is_instance_valid(kb_container):
+		return
+	
+	if not btn_reset_all_keys.pressed.is_connected(_on_reset_all_keys_pressed):
+		btn_reset_all_keys.pressed.connect(_on_reset_all_keys_pressed)
+	_build_keybindings_ui()
+
+
+func _build_keybindings_ui() -> void:
+	# Clear existing
+	for child in kb_container.get_children():
+		child.queue_free()
+	
+	var config = SettingsManager.keybindings_config
+	
+	# Sort groups by order
+	var groups = config.keys()
+	groups.sort_custom(func(a, b): return config[a].get("order", 99) < config[b].get("order", 99))
+	
+	for group_id in groups:
+		var group = config[group_id]
+		
+		# Group Header
+		var header = Label.new()
+		header.text = group.get("label", group_id)
+		header.add_theme_color_override("font_color", Color("f0a800")) # Yellow-ish
+		kb_container.add_child(header)
+		
+		# Sort actions by order
+		var actions = group.get("actions", {})
+		var action_keys = actions.keys()
+		action_keys.sort_custom(func(a, b): return actions[a].get("order", 99) < actions[b].get("order", 99))
+		
+		for action_id in action_keys:
+			var action_data = actions[action_id]
+			
+			var row = KEYBINDING_ROW.instantiate() as KeybindingRow
+			kb_container.add_child(row)
+			
+			row.lbl_action.text = GameState.T(action_data.get("label", action_id))
+			
+			# Current bindings
+			var _p_str = action_data.get("default", "")
+			var primary = OS.find_keycode_from_string(_p_str) if _p_str != "" else KEY_NONE
+			var _a_str = action_data.get("default_alt", "")
+			var alt = OS.find_keycode_from_string(_a_str) if _a_str != "" else KEY_NONE
+			if SettingsManager.custom_keybindings.has(action_id):
+				var custom = SettingsManager.custom_keybindings[action_id]
+				primary = int(custom[0]) as Key
+				alt = int(custom[1]) as Key
+				
+			row.btn_primary.text = _keycode_to_string(primary as Key) if primary != KEY_NONE else "-"
+			if primary == KEY_NONE:
+				row.btn_primary.add_theme_color_override("font_color", Color.RED)
+			row.btn_primary.pressed.connect(func(): _capture_key(action_id, 0))
+			
+			row.btn_alt.text = _keycode_to_string(alt as Key) if alt != KEY_NONE else "-"
+			row.btn_alt.pressed.connect(func(): _capture_key(action_id, 1))
+			
+			row.btn_delete.pressed.connect(func():
+				SettingsManager.reset_keybinding(action_id)
+				_build_keybindings_ui()
+			)
+
+
+func _on_reset_all_keys_pressed() -> void:
+	SettingsManager.reset_all_keybindings()
+	_build_keybindings_ui()
+
+
+func _capture_key(action_id: String, slot_idx: int) -> void:
+	# Add overlay in a CanvasLayer so it covers everything and anchors work
+	var canvas = CanvasLayer.new()
+	canvas.layer = 100
+	canvas.process_mode = Node.PROCESS_MODE_ALWAYS
+	
+	var group_id = ""
+	for g in SettingsManager.keybindings_config:
+		if SettingsManager.keybindings_config[g].get("actions", {}).has(action_id):
+			group_id = g
+			break
+			
+	var lbl_text = action_id
+	if group_id != "":
+		lbl_text = SettingsManager.keybindings_config[group_id]["actions"][action_id].get("label", action_id)
+	
+	var confirm = preload("res://scenes/shared/ConfirmModal.tscn").instantiate()
+	
+	# Zuerst in den Baum einhängen, damit die @onready Variablen von ConfirmModal initialisiert werden!
+	canvas.add_child(confirm)
+	get_tree().root.add_child(canvas)
+	
+	confirm.ask("Taste belegen", "Bitte drücke jetzt eine Taste für:\n" + GameState.T(lbl_text) + "\n\n(ESC zum Abbrechen)")
+	confirm.visible = true
+	# Verstecke die Buttons, da wir ja auf einen beliebigen Tastendruck warten
+	confirm.get_node("Center/Card/Margin/VBox/Buttons").hide()
+	
+	# Block input handling temporarily
+	var handler = Node.new()
+	handler.name = "KeyCaptureHandler"
+	handler.process_mode = Node.PROCESS_MODE_ALWAYS
+	
+	# Create local script dynamically to handle unhandled key input
+	var script = GDScript.new()
+	script.source_code = """
+extends Node
+var action_id: String
+var slot_idx: int
+var modal_ref: Node
+var callback: Callable
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed:
+		get_viewport().set_input_as_handled()
+		callback.call(event.physical_keycode)
+		modal_ref.queue_free()
+"""
+	script.reload()
+	handler.set_script(script)
+	handler.set("action_id", action_id)
+	handler.set("slot_idx", slot_idx)
+	handler.set("modal_ref", canvas)
+	handler.set("callback", Callable(self, "_on_key_captured").bind(action_id, slot_idx))
+	
+	# Explicitly enable input processing since the script was attached dynamically
+	handler.set_process_input(true)
+	
+	canvas.add_child(handler)
+
+
+func _on_key_captured(keycode: Key, action_id: String, slot_idx: int) -> void:
+	if keycode == KEY_ESCAPE:
+		return # Cancel
+		
+	# Check for collisions
+	var collision_action = ""
+	for group_key in SettingsManager.keybindings_config:
+		var actions = SettingsManager.keybindings_config[group_key].get("actions", {})
+		for a_id in actions:
+			if a_id == action_id and slot_idx == 0: continue # Same action, same slot is fine
+			
+			var _p_str = actions[a_id].get("default", "")
+			var p = OS.find_keycode_from_string(_p_str) if _p_str != "" else KEY_NONE
+			var _a_str = actions[a_id].get("default_alt", "")
+			var a = OS.find_keycode_from_string(_a_str) if _a_str != "" else KEY_NONE
+			if SettingsManager.custom_keybindings.has(a_id):
+				p = int(SettingsManager.custom_keybindings[a_id][0]) as Key
+				a = int(SettingsManager.custom_keybindings[a_id][1]) as Key
+				
+			if p == keycode or a == keycode:
+				collision_action = a_id
+				break
+		if collision_action != "": break
+	
+	if collision_action != "":
+		# Use ConfirmModal
+		var confirm = preload("res://scenes/shared/ConfirmModal.tscn").instantiate()
+		get_tree().root.add_child(confirm)
+		confirm.ask("Taste bereits belegt", "Die Taste ist bereits für '" + collision_action + "' belegt. Überschreiben?", "Ja", "Nein")
+		confirm.confirmed.connect(func():
+			_save_key(action_id, slot_idx, keycode)
+			# Unbind from old action
+			_unbind_key(collision_action, keycode)
+			confirm.queue_free()
+		)
+		confirm.cancelled.connect(func(): confirm.queue_free())
+	else:
+		_save_key(action_id, slot_idx, keycode)
+
+func _save_key(action_id: String, slot_idx: int, keycode: Key) -> void:
+	var p = KEY_NONE
+	var a = KEY_NONE
+	
+	var actions = {}
+	for g in SettingsManager.keybindings_config.values():
+		actions.merge(g.get("actions", {}))
+		
+	if SettingsManager.custom_keybindings.has(action_id):
+		p = int(SettingsManager.custom_keybindings[action_id][0]) as Key
+		a = int(SettingsManager.custom_keybindings[action_id][1]) as Key
+	elif actions.has(action_id):
+		var _p_str = actions[action_id].get("default", "")
+		var _a_str = actions[action_id].get("default_alt", "")
+		p = OS.find_keycode_from_string(_p_str) if _p_str != "" else KEY_NONE
+		a = OS.find_keycode_from_string(_a_str) if _a_str != "" else KEY_NONE
+		
+	if slot_idx == 0:
+		p = keycode
+	else:
+		a = keycode
+		
+	SettingsManager.update_keybinding(action_id, p, a)
+	_build_keybindings_ui()
+
+func _unbind_key(action_id: String, keycode: Key) -> void:
+	var p = KEY_NONE
+	var a = KEY_NONE
+	
+	var actions = {}
+	for g in SettingsManager.keybindings_config.values():
+		actions.merge(g.get("actions", {}))
+		
+	if SettingsManager.custom_keybindings.has(action_id):
+		p = int(SettingsManager.custom_keybindings[action_id][0]) as Key
+		a = int(SettingsManager.custom_keybindings[action_id][1]) as Key
+	elif actions.has(action_id):
+		var _p_str = actions[action_id].get("default", "")
+		var _a_str = actions[action_id].get("default_alt", "")
+		p = OS.find_keycode_from_string(_p_str) if _p_str != "" else KEY_NONE
+		a = OS.find_keycode_from_string(_a_str) if _a_str != "" else KEY_NONE
+		
+	if p == keycode: p = KEY_NONE
+	if a == keycode: a = KEY_NONE
+	
+	SettingsManager.update_keybinding(action_id, p, a)
+	_build_keybindings_ui()
+
+func _exit_tree() -> void:
+	var missing_primary = false
+	for group in SettingsManager.keybindings_config.values():
+		var actions = group.get("actions", {})
+		for action_id in actions:
+			var _p_str = actions[action_id].get("default", "")
+			var primary = OS.find_keycode_from_string(_p_str) if _p_str != "" else KEY_NONE
+			if SettingsManager.custom_keybindings.has(action_id):
+				primary = int(SettingsManager.custom_keybindings[action_id][0]) as Key
+			if primary == KEY_NONE:
+				missing_primary = true
+				break
+		if missing_primary: break
+	
+	if missing_primary:
+		Toast.show("Warnung: Nicht alle Aktionen haben eine Primär-Taste zugewiesen!")
+
+# =============================================================================
+func _translate_key(key_str: String) -> String:
+	var t_key = "key." + key_str.to_lower().replace(" ", "_")
+	var translated = GameState.T(t_key)
+	if translated == t_key:
+		return key_str
+	return translated
+
+func _keycode_to_string(keycode: Key) -> String:
+	if keycode == KEY_NONE: return "---"
+	return _translate_key(OS.get_keycode_string(keycode))

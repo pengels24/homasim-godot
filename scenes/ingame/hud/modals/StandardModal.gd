@@ -4,6 +4,8 @@ class_name StandardModal
 var _previous_input_mode = null
 var modal_input_mode = InputHandler.InputMode.MODAL
 
+signal closed
+
 
 # =============================================================================
 func _ready() -> void:
@@ -50,6 +52,7 @@ func close() -> void:
 	$AnimationPlayer.play("fade_out")
 	await $AnimationPlayer.animation_finished
 	visible = false
+	closed.emit()
 
 	# Input wiederherstellen
 	if _previous_input_mode != null:
@@ -57,6 +60,17 @@ func close() -> void:
 	else:
 		InputHandler.current_mode = InputHandler.InputMode.NORMAL
 
+
+# =============================================================================
+func _unhandled_input(event: InputEvent) -> void:
+	if visible and event.is_action_pressed("ui_cancel"):
+		# Check if there is an active ConfirmModal blocking us
+		# If any child is a visible ConfirmModal, do not close the parent modal.
+		# (StandardModal typically doesn't spawn ConfirmModals directly, 
+		# but if it does or its content does, we might want to be careful. 
+		# Actually, ui_cancel closing generic modals is standard.)
+		get_viewport().set_input_as_handled()
+		close()
 
 # =============================================================================
 func _on_close_button_pressed() -> void:

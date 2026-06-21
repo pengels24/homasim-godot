@@ -10,7 +10,6 @@
 [ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="7_5g705"]
 [ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="8_u0uya"]
 [ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="9_istr4"]
-[ext_resource type="Texture2D" uid="uid://chug26ioff260" path="res://assets/icons/x.svg" id="10_siby1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u0uya"]
 bg_color = Color(0.101960786, 0.11764706, 0.14117648, 1)
@@ -23,34 +22,6 @@ content_margin_top = 0.0
 content_margin_right = 4.0
 content_margin_bottom = 0.0
 color = Color(0.5019608, 0.5019608, 0.5019608, 0)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hsv7h"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.23529412, 0.28235295, 0.5686275, 1)
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 0.6)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k6ylc"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
-bg_color = Color(0.23529412, 0.28235295, 0.5686275, 1)
-border_width_bottom = 2
-border_color = Color(0, 0, 0, 0.6)
-corner_radius_top_left = 3
-corner_radius_top_right = 3
-corner_radius_bottom_right = 3
-corner_radius_bottom_left = 3
-corner_detail = 5
 
 [node name="ModalContentSettings" type="TabContainer" unique_id=63188688]
 custom_minimum_size = Vector2(1200, 600)
@@ -468,161 +439,39 @@ theme_override_styles/pressed = ExtResource("3_d0jvy")
 theme_override_styles/hover = ExtResource("4_v1l06")
 icon = ExtResource("3_xeut1")
 
-[node name="Tastaturbelegung" type="VBoxContainer" parent="." unique_id=1578150339]
+[node name="Tastaturbelegung" type="VBoxContainer" parent="." unique_id=603090970]
 visible = false
 layout_mode = 2
 metadata/_tab_index = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="Tastaturbelegung" unique_id=2080851122]
+[node name="MarginContainer" type="MarginContainer" parent="Tastaturbelegung" unique_id=1084571794]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/margin_left = 20
+theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
+theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Tastaturbelegung/MarginContainer" unique_id=597877403]
+[node name="ScrollContainer" type="ScrollContainer" parent="Tastaturbelegung/MarginContainer" unique_id=858547367]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="KeybindingsContainer" type="VBoxContainer" parent="Tastaturbelegung/MarginContainer/ScrollContainer" unique_id=1743262564]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_constants/separation = 20
 
-[node name="LabelControl" type="Label" parent="Tastaturbelegung/MarginContainer/VBoxContainer" unique_id=1668078435]
+[node name="MarginContainer2" type="MarginContainer" parent="Tastaturbelegung" unique_id=1349853108]
+layout_mode = 2
+theme_override_constants/margin_bottom = 20
+
+[node name="ButtonResetAllKeys" type="Button" parent="Tastaturbelegung/MarginContainer2" unique_id=314502703]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
-text = "Kamera-Steuerung"
-
-[node name="HBoxControlUp" type="HBoxContainer" parent="Tastaturbelegung/MarginContainer/VBoxContainer" unique_id=1670602357]
-layout_mode = 2
-theme_override_constants/separation = 40
-
-[node name="LabelControlUp" type="Label" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlUp" unique_id=1268261700]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-text = "Nach oben"
-
-[node name="LineEditControlUp1" type="LineEdit" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlUp" unique_id=1413722897]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_hsv7h")
-text = "W"
-placeholder_text = "-"
-alignment = 1
-
-[node name="LineEditControlUp2" type="LineEdit" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlUp" unique_id=1966750914]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_k6ylc")
-placeholder_text = "-"
-alignment = 1
-
-[node name="ButtonDeleteControlUp" type="Button" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlUp" unique_id=1194295342]
-unique_name_in_owner = true
-layout_mode = 2
+size_flags_horizontal = 4
 theme_override_styles/normal = ExtResource("7_5g705")
 theme_override_styles/pressed = ExtResource("8_u0uya")
 theme_override_styles/hover = ExtResource("9_istr4")
-icon = ExtResource("10_siby1")
-
-[node name="HBoxControlDown" type="HBoxContainer" parent="Tastaturbelegung/MarginContainer/VBoxContainer" unique_id=302335159]
-layout_mode = 2
-theme_override_constants/separation = 40
-
-[node name="LabelControlDown" type="Label" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlDown" unique_id=1000600366]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-text = "Nach unten"
-
-[node name="LineEditControlDown1" type="LineEdit" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlDown" unique_id=555268245]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_hsv7h")
-text = "S"
-placeholder_text = "-"
-alignment = 1
-
-[node name="LineEditControlDown2" type="LineEdit" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlDown" unique_id=1654911923]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_k6ylc")
-placeholder_text = "-"
-alignment = 1
-
-[node name="ButtonDeleteControlDown" type="Button" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlDown" unique_id=1328729059]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_styles/normal = ExtResource("7_5g705")
-theme_override_styles/pressed = ExtResource("8_u0uya")
-theme_override_styles/hover = ExtResource("9_istr4")
-icon = ExtResource("10_siby1")
-
-[node name="HBoxControlLeft" type="HBoxContainer" parent="Tastaturbelegung/MarginContainer/VBoxContainer" unique_id=249671191]
-layout_mode = 2
-theme_override_constants/separation = 40
-
-[node name="LabelControlLeft" type="Label" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlLeft" unique_id=1715996165]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-text = "Nach links"
-
-[node name="LineEditControlLeft1" type="LineEdit" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlLeft" unique_id=395695914]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_hsv7h")
-text = "A"
-placeholder_text = "-"
-alignment = 1
-
-[node name="LineEditControlLeft2" type="LineEdit" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlLeft" unique_id=356732788]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_k6ylc")
-placeholder_text = "-"
-alignment = 1
-
-[node name="ButtonDeleteControlLeft" type="Button" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlLeft" unique_id=815765717]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_styles/normal = ExtResource("7_5g705")
-theme_override_styles/pressed = ExtResource("8_u0uya")
-theme_override_styles/hover = ExtResource("9_istr4")
-icon = ExtResource("10_siby1")
-
-[node name="HBoxControlRight" type="HBoxContainer" parent="Tastaturbelegung/MarginContainer/VBoxContainer" unique_id=1835322142]
-layout_mode = 2
-theme_override_constants/separation = 40
-
-[node name="LabelControlRight" type="Label" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlRight" unique_id=1660261300]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-text = "Nach rechts"
-
-[node name="LineEditControlRight1" type="LineEdit" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlRight" unique_id=18141135]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_hsv7h")
-text = "D"
-placeholder_text = "-"
-alignment = 1
-
-[node name="LineEditControlRight2" type="LineEdit" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlRight" unique_id=1810118126]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxFlat_k6ylc")
-placeholder_text = "-"
-alignment = 1
-
-[node name="ButtonDeleteControlRight" type="Button" parent="Tastaturbelegung/MarginContainer/VBoxContainer/HBoxControlRight" unique_id=1104927914]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_styles/normal = ExtResource("7_5g705")
-theme_override_styles/pressed = ExtResource("8_u0uya")
-theme_override_styles/hover = ExtResource("9_istr4")
-icon = ExtResource("10_siby1")
+text = "Standard wiederherstellen"

@@ -1,0 +1,122 @@
+{
+  "camera": {
+    "label": "settings.controls.group.camera",
+    "order": 1,
+    "actions": {
+      "camera_up": {
+        "label": "settings.controls.camera.up",
+        "order": 1,
+        "default": "W",
+        "default_alt": "Up"
+      },
+      "camera_down": {
+        "label": "settings.controls.camera.down",
+        "order": 2,
+        "default": "S",
+        "default_alt": "Down"
+      },
+      "camera_left": {
+        "label": "settings.controls.camera.left",
+        "order": 3,
+        "default": "A",
+        "default_alt": "Left"
+      },
+      "camera_right": {
+        "label": "settings.controls.camera.right",
+        "order": 4,
+        "default": "D",
+        "default_alt": "Right"
+      },
+      "camera_zoom_in": {
+        "label": "settings.controls.camera.zoom_in",
+        "order": 5,
+        "default": "Kp Add",
+        "default_alt": "Equal"
+      },
+      "camera_zoom_out": {
+        "label": "settings.controls.camera.zoom_out",
+        "order": 6,
+        "default": "Kp Subtract",
+        "default_alt": "Minus"
+      },
+      "map_reset_camera_view": {
+        "label": "settings.controls.camera.reset",
+        "order": 7,
+        "default": "Home",
+        "default_alt": ""
+      }
+    }
+  },
+  "gameplay": {
+    "label": "settings.controls.group.gameplay",
+    "order": 2,
+    "actions": {
+      "ui_pause": {
+        "label": "settings.controls.gameplay.pause",
+        "order": 1,
+        "default": "Space",
+        "default_alt": ""
+      },
+      "ui_quicksave": {
+        "label": "settings.controls.gameplay.quicksave",
+        "order": 2,
+        "default": "F5",
+        "default_alt": ""
+      },
+      "ui_quickload": {
+        "label": "settings.controls.gameplay.quickload",
+        "order": 3,
+        "default": "F9",
+        "default_alt": ""
+      }
+    }
+  },
+  "ui": {
+    "label": "settings.controls.group.ui",
+    "order": 3,
+    "actions": {
+      "ui_tutorial": {
+        "label": "settings.controls.ui.tutorial",
+        "order": 1,
+        "default": "F1",
+        "default_alt": ""
+      },
+      "ui_build_menu": {
+        "label": "settings.controls.ui.build",
+        "order": 2,
+        "default": "F2",
+        "default_alt": ""
+      },
+      "ui_reception": {
+        "label": "settings.controls.ui.reception",
+        "order": 3,
+        "default": "F3",
+        "default_alt": ""
+      },
+      "ui_staff": {
+        "label": "settings.controls.ui.staff",
+        "order": 4,
+        "default": "F4",
+        "default_alt": ""
+      },
+      "ui_tech_tree": {
+        "label": "settings.controls.ui.tech",
+        "order": 5,
+        "default": "F6",
+        "default_alt": ""
+      },
+      "ui_sim_browser": {
+        "label": "settings.controls.ui.sim_browser",
+        "order": 6,
+        "default": "F7",
+        "default_alt": ""
+      },
+      "ui_quest_book": {
+        "label": "settings.controls.ui.quests",
+        "order": 7,
+        "default": "J",
+        "default_alt": ""
+      }
+    }
+  }
+}

@@ -88,7 +88,7 @@ func _ready() -> void:
 		TimeManager.sig_hour_passed.connect(_on_hour_passed)
 
 # =============================================================================
-func can_build_path(door_idx: int) -> bool:
+func can_build_path(_door_idx: int) -> bool:
 	return false
 
 func _get_obstacle_layers_recursive(node: Node, result: Array) -> void:

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://nflkh3eqs3tr" path="res://scenes/main_menu/MainMenu.gd" id="1_mainmenu"]
 [ext_resource type="PackedScene" uid="uid://c1managersel" path="res://scenes/manager_select/ManagerSelect.tscn" id="2_mgsel"]
 [ext_resource type="Texture2D" uid="uid://dwnfttdpcsskc" path="res://assets/images/logo.png" id="2_qmweu"]
-[ext_resource type="PackedScene" uid="uid://cw7c5frsdut8j" path="res://scenes/shared/SettingsModal.tscn" id="3_settings"]
+[ext_resource type="PackedScene" uid="uid://bcweu4cs7d73x" path="res://scenes/ingame/hud/modals/StandardModal.tscn" id="3_settings"]
 [ext_resource type="FontFile" uid="uid://bs3xl562plyi2" path="res://assets/fonts/Jersey25-Regular.ttf" id="3_wckin"]
 [ext_resource type="PackedScene" uid="uid://do0i6skwd4iil" path="res://scenes/dashboard/Dashboard.tscn" id="99_dashboard"]
 

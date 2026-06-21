@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://djq1k6j2f2w3x"]
+
+[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_6hslq"]
+[ext_resource type="Script" uid="uid://d3uumj6moo2d6" path="res://scenes/ingame/hud/modals/content/KeybindingRow.gd" id="1_abc12"]
+[ext_resource type="StyleBox" uid="uid://byn5sg5pqc4ux" path="res://assets/UI/menu_button_blue.tres" id="3_6hslq"]
+[ext_resource type="StyleBox" uid="uid://bxdxryd4oglat" path="res://assets/UI/menu_button_blue_pressed.tres" id="4_58nsi"]
+[ext_resource type="StyleBox" uid="uid://bc0pipuhgp5c7" path="res://assets/UI/menu_button_blue_hover.tres" id="5_1lxwa"]
+[ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="6_6oela"]
+[ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="7_cg8ph"]
+[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="8_7ay1e"]
+
+[node name="KeybindingRow" type="HBoxContainer" unique_id=1250124733]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_6hslq")
+theme_override_constants/separation = 20
+script = ExtResource("1_abc12")
+
+[node name="SpacerLeft" type="Control" parent="."]
+custom_minimum_size = Vector2(12, 0)
+layout_mode = 2
+
+[node name="LblAction" type="Label" parent="." unique_id=1710448115]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Action Name"
+
+[node name="BtnPrimary" type="Button" parent="." unique_id=666916397]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_styles/normal = ExtResource("3_6hslq")
+theme_override_styles/pressed = ExtResource("4_58nsi")
+theme_override_styles/hover = ExtResource("5_1lxwa")
+text = "Primary"
+
+[node name="BtnAlt" type="Button" parent="." unique_id=1646599877]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_styles/normal = ExtResource("3_6hslq")
+theme_override_styles/pressed = ExtResource("4_58nsi")
+theme_override_styles/hover = ExtResource("5_1lxwa")
+text = "Alt"
+
+[node name="BtnDelete" type="Button" parent="." unique_id=1974518263]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.803922, 0.360784, 0.360784, 1)
+theme_override_styles/normal = ExtResource("6_6oela")
+theme_override_styles/pressed = ExtResource("7_cg8ph")
+theme_override_styles/hover = ExtResource("8_7ay1e")
+text = " X "
+
+[node name="Spacer" type="Control" parent="." unique_id=2100835544]
+custom_minimum_size = Vector2(12, 0)
+layout_mode = 2

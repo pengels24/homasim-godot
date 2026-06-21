@@ -56,15 +56,18 @@ var _show_debug_grid: bool = false
 @warning_ignore("unused_private_class_variable")
 var _debug_path: Array[Vector2i] = []
 
+var is_miniature: bool = false
+
 # =============================================================================
 func _ready() -> void:
-	InputHandler.sig_camera_save_view_requested.connect(save_current_view)
-	InputHandler.sig_camera_restore_view_requested.connect(restore_saved_view)
-	InputHandler.sig_camera_pan_requested.connect(_on_input_camera_pan)
-	InputHandler.sig_camera_zoom_requested.connect(_on_input_camera_zoom)
-	InputHandler.sig_camera_drag_started.connect(_on_input_drag_started)
-	InputHandler.sig_camera_drag_moved.connect(_on_input_drag_moved)
-	InputHandler.sig_camera_drag_ended.connect(_on_input_drag_ended)
+	if not is_miniature:
+		InputHandler.sig_camera_save_view_requested.connect(save_current_view)
+		InputHandler.sig_camera_restore_view_requested.connect(restore_saved_view)
+		InputHandler.sig_camera_pan_requested.connect(_on_input_camera_pan)
+		InputHandler.sig_camera_zoom_requested.connect(_on_input_camera_zoom)
+		InputHandler.sig_camera_drag_started.connect(_on_input_drag_started)
+		InputHandler.sig_camera_drag_moved.connect(_on_input_drag_moved)
+		InputHandler.sig_camera_drag_ended.connect(_on_input_drag_ended)
 	InputHandler.sig_kill_reset_pin_requested.connect(func():
 		if _has_saved_view:
 			_has_saved_view = false
@@ -91,6 +94,23 @@ func _ready() -> void:
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
+func setup_as_miniature(selected_x: int, selected_y: int) -> void:
+	for row: Array in _grid:
+		for parcel: Node2D in row:
+			var px: int = parcel.name.get_slice("_", 1).to_int()
+			var py: int = parcel.name.get_slice("_", 2).to_int()
+			
+			if px == selected_x and py == selected_y:
+				parcel.visible = true
+				parcel.modulate = Color(0.8, 0.8, 0.8) # Beton-Look für den Bauplatz
+			else:
+				parcel.visible = false
+	
+	if camera:
+		var center_px = (5 * 16 * 16 + 2 * 3 * 16) * 2.0 / 2.0 # (cols*PARCEL_SZ*TILE_PX + 2*WALK_W*TILE_PX) * SCALE / 2
+		camera.position = Vector2(center_px, center_px)
+		camera.zoom = Vector2(0.14, 0.14)
+		camera.make_current()
 
 # =============================================================================
 ## Wandelt globale Kachel-Koordinaten (AStar) in Welt-Pixel für den Avatar um.

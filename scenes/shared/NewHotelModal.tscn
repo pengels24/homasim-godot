@@ -2,30 +2,11 @@
 
 [ext_resource type="Script" uid="uid://b6yp2pa1i28bw" path="res://scenes/shared/NewHotelModal.gd" id="1_script"]
 [ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://assets/UI/menu_button_green.tres" id="2_fqr2f"]
-[ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="2_tpw7c"]
 [ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://assets/UI/menu_button_green_pressed.tres" id="3_2c80o"]
-[ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="3_rcp5x"]
 [ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://assets/UI/menu_button_green_hover.tres" id="4_poabs"]
-[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="4_xxk82"]
-[ext_resource type="Texture2D" uid="uid://chug26ioff260" path="res://assets/icons/x.svg" id="5_yu5jm"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
-content_margin_left = 40.0
-content_margin_top = 40.0
-content_margin_right = 40.0
-content_margin_bottom = 40.0
-bg_color = Color(0.07, 0.07, 0.09, 0.97)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.918, 0.702, 0.031, 0.4)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-shadow_color = Color(0.918, 0.702, 0.031, 0.15)
-shadow_size = 12
+[ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="5_red"]
+[ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="6_red_p"]
+[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="7_red_h"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
 
@@ -67,85 +48,42 @@ corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.15, 0.15, 0.2, 1)
 
-[node name="NewHotelModal" type="Control" unique_id=1318200895]
-visible = false
-layout_mode = 3
+[node name="NewHotelModal" type="VBoxContainer"]
+custom_minimum_size = Vector2(960, 0)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 24
 script = ExtResource("1_script")
 
-[node name="Overlay" type="ColorRect" parent="." unique_id=879249765]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0.75)
-
-[node name="Center" type="CenterContainer" parent="Overlay" unique_id=597842973]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Card" type="PanelContainer" parent="Overlay/Center" unique_id=559929293]
-custom_minimum_size = Vector2(860, 0)
-layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_card")
-
-[node name="VBox" type="VBoxContainer" parent="Overlay/Center/Card" unique_id=447488426]
-layout_mode = 2
-theme_override_constants/separation = 0
-
-[node name="Header" type="HBoxContainer" parent="Overlay/Center/Card/VBox" unique_id=1428245101]
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="TitleLbl" type="Label" parent="Overlay/Center/Card/VBox/Header" unique_id=523455934]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
-theme_override_font_sizes/font_size = 42
-text = "Neues Hotel anlegen"
-
-[node name="BtnClose" type="Button" parent="Overlay/Center/Card/VBox/Header" unique_id=1058062808]
-layout_mode = 2
-mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.75, 0.75, 0.75, 1)
-theme_override_font_sizes/font_size = 16
-theme_override_styles/normal = ExtResource("2_tpw7c")
-theme_override_styles/pressed = ExtResource("3_rcp5x")
-theme_override_styles/hover = ExtResource("4_xxk82")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
-icon = ExtResource("5_yu5jm")
-
-[node name="HeaderSpacer" type="Control" parent="Overlay/Center/Card/VBox" unique_id=1462702280]
-custom_minimum_size = Vector2(0, 24)
-layout_mode = 2
-
-[node name="Content" type="HBoxContainer" parent="Overlay/Center/Card/VBox" unique_id=236090949]
+[node name="Content" type="HBoxContainer" parent="."]
 layout_mode = 2
 theme_override_constants/separation = 40
 
-[node name="Left" type="VBoxContainer" parent="Overlay/Center/Card/VBox/Content" unique_id=74147503]
+[node name="Left" type="VBoxContainer" parent="Content"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 12
+theme_override_constants/separation = 16
 
-[node name="NameLabel" type="Label" parent="Overlay/Center/Card/VBox/Content/Left" unique_id=1723593567]
+[node name="NameBox" type="VBoxContainer" parent="Content/Left"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="NameLabel" type="Label" parent="Content/Left/NameBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.63, 0.63, 0.69, 1)
 theme_override_font_sizes/font_size = 20
 text = "Hotelname"
 
-[node name="HotelNameField" type="LineEdit" parent="Overlay/Center/Card/VBox/Content/Left" unique_id=1178346504]
+[node name="HotelNameField" type="LineEdit" parent="Content/Left/NameBox"]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.92, 0.92, 0.94, 1)
@@ -154,70 +92,216 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_input_normal")
 theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
 placeholder_text = "Hotelname"
 
-[node name="EntranceLbl" type="Label" parent="Overlay/Center/Card/VBox/Content/Left" unique_id=451842630]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.63, 0.63, 0.69, 1)
-theme_override_font_sizes/font_size = 20
-text = "Eingangsseite: –"
-
-[node name="ErrorLbl" type="Label" parent="Overlay/Center/Card/VBox/Content/Left" unique_id=1638235026]
+[node name="ErrorLbl" type="Label" parent="Content/Left/NameBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.937, 0.267, 0.267, 1)
 theme_override_font_sizes/font_size = 18
 autowrap_mode = 3
 
-[node name="Right" type="VBoxContainer" parent="Overlay/Center/Card/VBox/Content" unique_id=971290819]
+[node name="SettingsBox" type="VBoxContainer" parent="Content/Left"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SettingsTitle" type="Label" parent="Content/Left/SettingsBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.63, 0.63, 0.69, 1)
+theme_override_font_sizes/font_size = 20
+text = "Schwierigkeitsgrad"
+
+[node name="DiffButtons" type="HBoxContainer" parent="Content/Left/SettingsBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BtnEasy" type="Button" parent="Content/Left/SettingsBox/DiffButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Einfach"
+
+[node name="BtnNormal" type="Button" parent="Content/Left/SettingsBox/DiffButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Standard"
+
+[node name="BtnHard" type="Button" parent="Content/Left/SettingsBox/DiffButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Hart"
+
+[node name="BtnCustom" type="Button" parent="Content/Left/SettingsBox/DiffButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Angepasst"
+
+[node name="Spacer" type="Control" parent="Content/Left/SettingsBox"]
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
+[node name="ParamGrid" type="GridContainer" parent="Content/Left/SettingsBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 12
+columns = 2
+
+[node name="LblMoney" type="Label" parent="Content/Left/SettingsBox/ParamGrid"]
+layout_mode = 2
+text = "Startkapital:"
+
+[node name="OptMoney" type="HBoxContainer" parent="Content/Left/SettingsBox/ParamGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LeftBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptMoney"]
+layout_mode = 2
+text = " ◀ "
+
+[node name="ValueLbl" type="Label" parent="Content/Left/SettingsBox/ParamGrid/OptMoney"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.917647, 0.701961, 0.0313726, 1)
+text = "50.000 €"
+horizontal_alignment = 1
+
+[node name="RightBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptMoney"]
+layout_mode = 2
+text = " ▶ "
+
+[node name="LblRefund" type="Label" parent="Content/Left/SettingsBox/ParamGrid"]
+layout_mode = 2
+text = "Baukosten-Rückerstattung:"
+
+[node name="OptRefund" type="HBoxContainer" parent="Content/Left/SettingsBox/ParamGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LeftBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptRefund"]
+layout_mode = 2
+disabled = true
+text = " ◀ "
+
+[node name="ValueLbl" type="Label" parent="Content/Left/SettingsBox/ParamGrid/OptRefund"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.917647, 0.701961, 0.0313726, 1)
+text = "25 %"
+horizontal_alignment = 1
+
+[node name="RightBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptRefund"]
+layout_mode = 2
+disabled = true
+text = " ▶ "
+
+[node name="LblExp" type="Label" parent="Content/Left/SettingsBox/ParamGrid"]
+layout_mode = 2
+text = "EXP-Boost:"
+
+[node name="OptExp" type="HBoxContainer" parent="Content/Left/SettingsBox/ParamGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LeftBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptExp"]
+layout_mode = 2
+disabled = true
+text = " ◀ "
+
+[node name="ValueLbl" type="Label" parent="Content/Left/SettingsBox/ParamGrid/OptExp"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.917647, 0.701961, 0.0313726, 1)
+text = "0 %"
+horizontal_alignment = 1
+
+[node name="RightBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptExp"]
+layout_mode = 2
+disabled = true
+text = " ▶ "
+
+[node name="WipLabel" type="Label" parent="Content/Left/SettingsBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 14
+text = "🔒 Einige Settings sind in der TechDemo noch ohne Effekt."
+
+[node name="Right" type="VBoxContainer" parent="Content"]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/separation = 8
 
-[node name="GridLabel" type="Label" parent="Overlay/Center/Card/VBox/Content/Right" unique_id=1083585645]
+[node name="GridLabel" type="Label" parent="Content/Right"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.63, 0.63, 0.69, 1)
 theme_override_font_sizes/font_size = 20
 text = "Startparzelle"
 
-[node name="GridWrapper" type="PanelContainer" parent="Overlay/Center/Card/VBox/Content/Right" unique_id=812471137]
+[node name="MapContainer" type="PanelContainer" parent="Content/Right"]
+custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_grid_bg")
 
-[node name="GridMargin" type="MarginContainer" parent="Overlay/Center/Card/VBox/Content/Right/GridWrapper" unique_id=51132260]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Content/Right/MapContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+stretch = true
 
-[node name="GridHolder" type="GridContainer" parent="Overlay/Center/Card/VBox/Content/Right/GridWrapper/GridMargin" unique_id=986921904]
+[node name="SubViewport" type="SubViewport" parent="Content/Right/MapContainer/SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(396, 396)
+render_target_update_mode = 4
+
+[node name="ClickGridWrapper" type="Control" parent="Content/Right/MapContainer"]
 layout_mode = 2
-theme_override_constants/h_separation = 4
-theme_override_constants/v_separation = 4
+
+[node name="ClickGrid" type="GridContainer" parent="Content/Right/MapContainer/ClickGridWrapper"]
+layout_mode = 1
+anchors_preset = 15
+anchor_left = 0.0348837
+anchor_top = 0.0348837
+anchor_right = 0.9651163
+anchor_bottom = 0.9651163
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 columns = 5
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
 
-[node name="ContentSpacer" type="Control" parent="Overlay/Center/Card/VBox" unique_id=224063936]
-custom_minimum_size = Vector2(0, 24)
+[node name="EntranceLbl" type="Label" parent="Content/Right"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.63, 0.63, 0.69, 1)
+theme_override_font_sizes/font_size = 16
+text = "Eingangsseite: Oben"
+horizontal_alignment = 1
 
-[node name="BottomSep" type="HSeparator" parent="Overlay/Center/Card/VBox" unique_id=500723879]
+[node name="BottomSep" type="HSeparator" parent="."]
 modulate = Color(1, 1, 1, 0.12)
 layout_mode = 2
 
-[node name="SaveSpacer" type="Control" parent="Overlay/Center/Card/VBox" unique_id=2006094697]
-custom_minimum_size = Vector2(0, 16)
+[node name="BtnRow" type="HBoxContainer" parent="."]
 layout_mode = 2
+alignment = 2
+theme_override_constants/separation = 16
 
-[node name="BtnRow" type="CenterContainer" parent="Overlay/Center/Card/VBox" unique_id=951672702]
-layout_mode = 2
-
-[node name="BtnCreate" type="Button" parent="Overlay/Center/Card/VBox/BtnRow" unique_id=10525404]
+[node name="BtnCancel" type="Button" parent="BtnRow"]
+custom_minimum_size = Vector2(160, 48)
 layout_mode = 2
 mouse_default_cursor_shape = 2
 theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_colors/font_pressed_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_colors/font_hover_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = ExtResource("5_red")
+theme_override_styles/pressed = ExtResource("6_red_p")
+theme_override_styles/hover = ExtResource("7_red_h")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+text = "Abbrechen"
+
+[node name="BtnCreate" type="Button" parent="BtnRow"]
+custom_minimum_size = Vector2(200, 48)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
 theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = ExtResource("2_fqr2f")
 theme_override_styles/pressed = ExtResource("3_2c80o")
 theme_override_styles/hover = ExtResource("4_poabs")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
-text = "Anlegen"
+text = "Hotel gründen"

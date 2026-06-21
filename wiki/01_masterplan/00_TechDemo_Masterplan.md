@@ -11,6 +11,7 @@ Das Hauptmenü und die Settings sehen bereits AAA aus. Die alten Menüs müssen 
   - [x] Altes UI entfernen/deaktivieren.
   - [x] Neues Design konsistent zu den Modal-Designs implementieren.
   - [x] Thumbnails der Savegames korrekt einbinden (Der `SaveManager` speichert sie bereits!).
+  - [x] "Neues Hotel" Modal-Dialog komplett überarbeitet inkl. interaktiver Map-Vorschau.
 - [x] **Charakter-Editor:** 
   - [x] Optisches Upgrade durchgeführt. (Nur noch individuelles Polishing durch den Dev nötig).
 - [x] **Settings - Keybindings:** 

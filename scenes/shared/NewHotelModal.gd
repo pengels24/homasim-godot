@@ -227,3 +227,19 @@ func _on_create_pressed() -> void:
 	
 	SaveManager.set_plot_built(hotel_id, _selected_x, _selected_y, _derive_entrance_dir(_selected_x, _selected_y))
 	confirmed.emit(hotel_id)
+
+func _apply_translations() -> void:
+	$Content/Left/NameBox/Label.text = GameState.T("dashboard.new_hotel.title", "Hotelname")
+	_name_field.placeholder_text = GameState.T("dashboard.new_hotel.title", "Hotelname")
+	$Content/Left/SettingsBox/Label.text = GameState.T("dashboard.new_hotel.difficulty", "Schwierigkeitsgrad")
+	_btn_easy.text = GameState.T("dashboard.new_hotel.diff.easy", "Einfach")
+	_btn_normal.text = GameState.T("dashboard.new_hotel.diff.normal", "Standard")
+	_btn_hard.text = GameState.T("dashboard.new_hotel.diff.hard", "Hart")
+	_btn_custom.text = GameState.T("dashboard.new_hotel.diff.custom", "Angepasst")
+	$Content/Left/SettingsBox/ParamGrid/LblMoney.text = GameState.T("dashboard.new_hotel.start_money", "Startkapital:")
+	$Content/Left/SettingsBox/ParamGrid/LblRefund.text = GameState.T("dashboard.new_hotel.refund", "Baukosten-Rückerstattung:")
+	$Content/Left/SettingsBox/ParamGrid/LblExp.text = GameState.T("dashboard.new_hotel.exp", "EXP-Boost:")
+	$Content/Left/SettingsBox/NoticeLbl.text = GameState.T("dashboard.new_hotel.notice", "Einige Settings sind in der TechDemo noch ohne Effekt.")
+	$Content/Right/Label.text = GameState.T("dashboard.new_hotel.start_plot", "Startparzelle")
+	_btn_cancel.text = GameState.T("dashboard.new_hotel.btn.cancel", "Abbrechen")
+	_btn_create.text = GameState.T("dashboard.new_hotel.btn.create", "Hotel gründen")

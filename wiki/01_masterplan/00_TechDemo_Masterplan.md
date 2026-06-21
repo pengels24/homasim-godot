@@ -10,8 +10,14 @@ Das Hauptmenü und die Settings sehen bereits AAA aus. Die alten Menüs müssen 
 - [x] **Dashboard / Hotelliste:** 
   - [x] Altes UI entfernen/deaktivieren.
   - [x] Neues Design konsistent zu den Modal-Designs implementieren.
+  - [x] **Neues Hotel Modal:** 
+    - [x] "Neues Hotel" Modal-Dialog komplett überarbeitet inkl. interaktiver Map-Vorschau.
+    - [x] Schwierigkeitsgrade und korrekter Fokus.
+  - [x] **Management Listen & Kamera:**
+    - [x] Staff Tooltip implementiert.
+    - [x] Gästeliste Modal inkl. PiP Kamera eingebaut (F10).
+    - [x] Raumliste Modal mit "Gehe zu" Button eingebaut (F11).
   - [x] Thumbnails der Savegames korrekt einbinden (Der `SaveManager` speichert sie bereits!).
-  - [x] "Neues Hotel" Modal-Dialog komplett überarbeitet inkl. interaktiver Map-Vorschau.
 - [x] **Charakter-Editor:** 
   - [x] Optisches Upgrade durchgeführt. (Nur noch individuelles Polishing durch den Dev nötig).
 - [x] **Settings - Keybindings:** 

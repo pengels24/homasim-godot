@@ -34,6 +34,8 @@ signal sig_hotkey_tech_tree_requested
 signal sig_hotkey_sim_browser_requested
 signal sig_hotkey_quest_book_requested
 signal sig_hotkey_tutorial_requested
+signal sig_hotkey_guest_list_requested
+signal sig_hotkey_room_list_requested
 signal sig_hotkey_escape_pressed
 signal sig_hotkey_quicksave_requested
 signal sig_hotkey_quickload_requested
@@ -163,6 +165,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("ui_tutorial"):
 		if current_mode == InputMode.NORMAL or current_mode == InputMode.MODAL:
 			sig_hotkey_tutorial_requested.emit()
+		return
+	elif event.is_action_pressed("ui_guest_list"):
+		if current_mode == InputMode.NORMAL or current_mode == InputMode.MODAL:
+			sig_hotkey_guest_list_requested.emit()
+		return
+	elif event.is_action_pressed("ui_room_list"):
+		if current_mode == InputMode.NORMAL or current_mode == InputMode.MODAL:
+			sig_hotkey_room_list_requested.emit()
 		return
 
 	if event.is_action_pressed("ui_quickload"):

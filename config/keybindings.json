@@ -116,6 +116,18 @@
         "order": 7,
         "default": "J",
         "default_alt": ""
+      },
+      "ui_guest_list": {
+        "label": "settings.controls.ui.guest_list",
+        "order": 8,
+        "default": "F10",
+        "default_alt": ""
+      },
+      "ui_room_list": {
+        "label": "settings.controls.ui.room_list",
+        "order": 9,
+        "default": "F11",
+        "default_alt": ""
       }
     }
   }

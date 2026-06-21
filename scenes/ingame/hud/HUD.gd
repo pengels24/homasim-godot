@@ -45,6 +45,7 @@ func _ready() -> void:
 	GameState.sig_hotel_rep_changed.connect(_on_hotel_rep_changed)
 	GameState.sig_hotel_time_changed.connect(_on_hotel_time_changed)
 	GameState.sig_guest_clicked.connect(_on_guest_clicked)
+	GameState.sig_staff_clicked.connect(_on_staff_clicked)
 
 	TimeManager.sig_speed_changed.connect(_on_time_speed_changed)
 
@@ -87,6 +88,18 @@ func _on_guest_clicked(guest: Node2D) -> void:
 	var t = tooltip_scene.instantiate()
 	add_child(t)
 	t.setup(guest)
+
+
+# =============================================================================
+func _on_staff_clicked(staff: Node2D) -> void:
+	for child in get_children():
+		if child.name == "StaffFollowTooltip" or child.name == "GuestFollowTooltip" or child.has_method("_update_target_text"):
+			child.queue_free()
+			
+	var tooltip_scene = load("res://scenes/ingame/hud/StaffFollowTooltip.tscn")
+	var t = tooltip_scene.instantiate()
+	add_child(t)
+	t.setup(staff)
 
 
 # =============================================================================

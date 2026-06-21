@@ -28,13 +28,18 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	_guest_mgr = guest_mgr
 	_schedule_mgr = schedule_mgr # <--- NEUE ZEILE
 
-	# UI Signale
+	if not is_instance_valid(_bottom_bar):
+		return
+
 	_bottom_bar.sig_build_menu_toggled.connect(toggle_build_menu)
 	_bottom_bar.sig_reception_toggled.connect(open_reception)
 	_bottom_bar.sig_sim_browser_toggled.connect(open_sim_browser)
 	_bottom_bar.sig_staff_toggled.connect(open_staff)
 	_bottom_bar.sig_tech_tree_toggled.connect(open_tech_tree)
 	_bottom_bar.sig_quest_book_toggled.connect(open_quest_book)
+	_bottom_bar.sig_guest_list_toggled.connect(open_guest_list)
+	_bottom_bar.sig_room_list_toggled.connect(open_room_list)
+	_bottom_bar.sig_tutorials_toggled.connect(open_tutorial_codex)
 
 	_standard_modal.visibility_changed.connect(update_map_grid_mode)
 	_standard_modal.hidden.connect(_on_standard_modal_hidden)
@@ -64,6 +69,12 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	# codex/tutorial
 	if not InputHandler.sig_hotkey_tutorial_requested.is_connected(open_tutorial_codex):
 		InputHandler.sig_hotkey_tutorial_requested.connect(open_tutorial_codex)
+	# guest list
+	if not InputHandler.sig_hotkey_guest_list_requested.is_connected(open_guest_list):
+		InputHandler.sig_hotkey_guest_list_requested.connect(open_guest_list)
+	# room list
+	if not InputHandler.sig_hotkey_room_list_requested.is_connected(open_room_list):
+		InputHandler.sig_hotkey_room_list_requested.connect(open_room_list)
 
 	if OS.is_debug_build() and is_instance_valid(GlobalConsole):
 		if not GlobalConsole.visibility_changed.is_connected(update_map_grid_mode):
@@ -610,3 +621,32 @@ func open_quest_book() -> void:
 	if is_instance_valid(_bottom_bar):
 		_bottom_bar.sync_button_state("quest_book")
 	update_map_grid_mode()
+
+
+func open_guest_list() -> void:
+	if _standard_modal.visible and _standard_modal.get_title() == "Gästeliste":
+		_standard_modal.close()
+		return
+		
+	cleanup_current_states()
+	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentGuestList.tscn")
+	if not is_instance_valid(content): return
+
+	if _standard_modal.visible:
+		_standard_modal.set_title("Gästeliste")
+	else:
+		_standard_modal.open("Gästeliste")
+
+func open_room_list() -> void:
+	if _standard_modal.visible and _standard_modal.get_title() == "Raumliste":
+		_standard_modal.close()
+		return
+		
+	cleanup_current_states()
+	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentRoomList.tscn")
+	if not is_instance_valid(content): return
+
+	if _standard_modal.visible:
+		_standard_modal.set_title("Raumliste")
+	else:
+		_standard_modal.open("Raumliste")

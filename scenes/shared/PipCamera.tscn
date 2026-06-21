@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://cxp1abc2def3g"]
+
+[ext_resource type="Script" path="res://scenes/shared/PipCamera.gd" id="1_script"]
+[ext_resource type="Material" uid="uid://bv_tvnoise1" path="res://assets/shaders/tv_noise.tres" id="2_tv_noise"]
+
+[node name="PipCamera" type="MarginContainer"]
+custom_minimum_size = Vector2(256, 256)
+script = ExtResource("1_script")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 2
+color = Color(0, 0, 0, 1)
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+texture_filter = 1
+layout_mode = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+handle_input_locally = false
+size = Vector2i(256, 256)
+render_target_update_mode = 0
+
+[node name="Camera2D" type="Camera2D" parent="SubViewportContainer/SubViewport"]
+zoom = Vector2(4, 4)
+
+[node name="NoSignalRect" type="ColorRect" parent="."]
+unique_name_in_owner = true
+material = ExtResource("2_tv_noise")
+layout_mode = 2
+
+[node name="NoSignalLabel" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "NO SIGNAL"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -6,6 +6,9 @@ signal sig_staff_toggled
 signal sig_tech_tree_toggled
 signal sig_sim_browser_toggled
 signal sig_quest_book_toggled
+signal sig_guest_list_toggled
+signal sig_room_list_toggled
+signal sig_tutorials_toggled
 
 @onready var build_menu: Button = %BuildMenu
 @onready var reception: Button = %Reception
@@ -13,6 +16,9 @@ signal sig_quest_book_toggled
 @onready var tech_tree: Button = %TechTree
 @onready var sim_browser: Button = %SimBrowser
 @onready var quest_book: Button = %QuestBook
+@onready var guest_list: Button = %GuestList
+@onready var room_list: Button = %RoomList
+@onready var tutorials: Button = %Tutorials
 @onready var ind_reception: Panel = %IndReception
 @onready var ind_sim_browser: Panel = %IndSimBrowser
 @onready var ind_quest_book: Panel = %IndQuestBook
@@ -44,6 +50,18 @@ func _ready() -> void:
 		sig_quest_book_toggled.emit()
 	)
 
+	guest_list.pressed.connect(func():
+		sig_guest_list_toggled.emit()
+	)
+
+	room_list.pressed.connect(func():
+		sig_room_list_toggled.emit()
+	)
+
+	tutorials.pressed.connect(func():
+		sig_tutorials_toggled.emit()
+	)
+
 	_update_quest_book_indicator()
 	
 	# Events
@@ -60,6 +78,9 @@ func _ready() -> void:
 	tech_tree.tooltip_text  = GameState.T("hud.bottom.tech_tree_tt", "F6")
 	sim_browser.tooltip_text = GameState.T("hud.bottom.sim_browser_tt", "F7")
 	quest_book.tooltip_text = GameState.T("hud.bottom.quest_book_tt", "Aufgaben (J)")
+	guest_list.tooltip_text = GameState.T("hud.bottom.guest_list_tt", "Gästeliste (F10)")
+	room_list.tooltip_text = GameState.T("hud.bottom.room_list_tt", "Raumliste (F11)")
+	tutorials.tooltip_text = GameState.T("hud.bottom.tutorials_tt", "Tutorials (F1)")
 
 	ind_reception.hide()
 	ind_sim_browser.modulate = Color.GREEN
@@ -125,7 +146,7 @@ func update_build_menu_position() -> void:
 # Synchronisiert die visuelle Anzeige der Buttons mit dem aktuellen Menü-Status
 func sync_button_state(active_menu: String = "") -> void:
 	# Alle Buttons sicherheitshalber ausschalten und Fokus entfernen
-	for btn in [build_menu, reception, staff, tech_tree, sim_browser, quest_book]:
+	for btn in [build_menu, reception, staff, tech_tree, sim_browser, quest_book, guest_list, room_list, tutorials]:
 		btn.set_pressed_no_signal(false)
 		btn.release_focus()
 
@@ -143,6 +164,12 @@ func sync_button_state(active_menu: String = "") -> void:
 			staff.set_pressed_no_signal(true)
 		"tech_tree":
 			tech_tree.set_pressed_no_signal(true)
+		"guest_list":
+			guest_list.set_pressed_no_signal(true)
+		"room_list":
+			room_list.set_pressed_no_signal(true)
+		"tutorials":
+			tutorials.set_pressed_no_signal(true)
 
 
 # =============================================================================

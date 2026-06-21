@@ -23,13 +23,14 @@ var _debug_line: Line2D
 const SPEED := 40.0
 
 func _ready() -> void:
-	pass
-	#_debug_line = Line2D.new()
-	#_debug_line.top_level = true
-	#_debug_line.width = 4.0
-	#_debug_line.default_color = Color(1, 0, 0, 0.5)
-	#_debug_line.z_index = 100
-	#add_child(_debug_line)
+	if has_node("ClickArea"):
+		var ca = get_node("ClickArea")
+		if not ca.input_event.is_connected(_on_click_area_input_event):
+			ca.input_event.connect(_on_click_area_input_event)
+
+func _on_click_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		GameState.sig_staff_clicked.emit(self)
 
 func configure(staff_data: Dictionary, map_grid: Node2D, controller: Node) -> void:
 	_staff_data = staff_data

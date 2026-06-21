@@ -17,11 +17,13 @@ signal closed
 @onready var _confirm_modal:    ConfirmModal  = $ConfirmModal
 
 const NEW_HOTEL_SCENE    := preload("res://scenes/shared/NewHotelModal.tscn")
+const STANDARD_MODAL     := preload("res://scenes/ingame/hud/modals/StandardModal.tscn")
 const HOTEL_CARD_SCENE   := preload("res://scenes/dashboard/DashboardHotelCard.tscn")
 
-var _new_hotel_modal:  NewHotelModal  = null
-var _hotels:           Array          = []
-var _pending_delete_id: int           = -1
+var _new_hotel_modal_wrapper: StandardModal = null
+var _new_hotel_modal:         NewHotelModal = null
+var _hotels:                  Array         = []
+var _pending_delete_id:       int           = -1
 
 const SKIN_COLORS := {
 	"hell":   Color(0.95, 0.82, 0.70),
@@ -99,14 +101,18 @@ func _create_hotel_card(_hotel: Dictionary, _index: int) -> Control:
 	return card
 
 func _on_new_hotel_pressed() -> void:
-	if not is_instance_valid(_new_hotel_modal):
-		_new_hotel_modal = NEW_HOTEL_SCENE.instantiate() as NewHotelModal
-		add_child(_new_hotel_modal)
+	if not is_instance_valid(_new_hotel_modal_wrapper):
+		_new_hotel_modal_wrapper = STANDARD_MODAL.instantiate() as StandardModal
+		add_child(_new_hotel_modal_wrapper)
+		_new_hotel_modal = _new_hotel_modal_wrapper.set_content(NEW_HOTEL_SCENE.instantiate()) as NewHotelModal
 		_new_hotel_modal.confirmed.connect(_on_new_hotel_confirmed)
+		_new_hotel_modal.cancelled.connect(_new_hotel_modal_wrapper.close)
 	_new_hotel_modal.open()
+	_new_hotel_modal_wrapper.open(GameState.T("dashboard.new_hotel.title"))
 
 
 func _on_new_hotel_confirmed(_hotel_id: int) -> void:
+	_new_hotel_modal_wrapper.close()
 	_load_hotels()
 
 

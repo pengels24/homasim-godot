@@ -1,7 +1,7 @@
 extends PanelContainer
 
 var _target_guest: GuestActor
-var _timer: float = 3.0
+var _timer: float = 5.0
 
 @onready var label_name: Label = %NameLabel
 @onready var label_target: Label = %TargetLabel

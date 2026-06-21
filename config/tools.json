@@ -1,0 +1,15 @@
+{
+  "tools": [
+    {
+      "id": "demolish",
+      "name": "Abrissbirne",
+      "icon": "res://assets/icons/HUDBottom/hammer.svg",
+      "category": "werkzeuge",
+      "action": "demolish",
+      "is_system": true,
+      "req_level": 1,
+      "build_cost": 0,
+      "in_build_menu": true
+    }
+  ]
+}

@@ -3,6 +3,11 @@
 _Planungsdokument – Basis-Design & Systemarchitektur_
 _Stand: 15.06.2026_
 
+> [!NOTE]
+> **Aktueller Implementierungs-Status:**
+> - ✅ **System-Architektur:** `StaffManager.gd` und `TaskManager.gd` (Task Queue) sind voll funktional.
+> - ✅ **Visuelle KI:** Der "Staff-Flow" mit automatischem Zuweisen vom schwarzen Brett und visueller Ausführung im Raum (inkl. Progressbar) ist implementiert!
+
 _Hinweis: Alle Berufsbezeichnungen sind bewusst geschlechtsneutral gehalten._
 
 ## 1. Grundprinzip
@@ -126,6 +131,7 @@ Räume erhalten in ihrer Registry neue Metadaten:
 - Teilt Aufgaben dynamisch an die nächste freie Servicekraft zu. Status wechselt auf "In Bearbeitung".
 
 ### 6.4 Die Mitarbeiter-KI (State Machine)
+_Status: Implementiert! Mitarbeiter holen sich Tasks vom schwarzen Brett und arbeiten diese visuell ab._
 
 Mitarbeiter befinden sich stets in einem von drei Zuständen:
 1. `IDLE`: Warten im Personalraum, fragen den Task-Manager regelmäßig nach Jobs.

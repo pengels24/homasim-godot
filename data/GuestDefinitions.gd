@@ -12,7 +12,7 @@ const ALL: Dictionary = {
 		"min_base_price":  30,
 		"max_base_price":  60,
 		"icon":            "res://assets/icons/guests/user.svg",
-		"base_exp": 10,
+		"base_exp": 20,
 		"rep_penalty": 5
 	},
 	"couple": {
@@ -26,7 +26,7 @@ const ALL: Dictionary = {
 		"min_base_price":  50,
 		"max_base_price":  100,
 		"icon":            "res://assets/icons/guests/users.svg",
-		"base_exp": 15,
+		"base_exp": 30,
 		"rep_penalty": 5
 	},
 	"business": {
@@ -40,7 +40,7 @@ const ALL: Dictionary = {
 		"min_base_price":  60,
 		"max_base_price":  120,
 		"icon":            "res://assets/icons/guests/briefcase.svg",
-		"base_exp": 20,
+		"base_exp": 40,
 		"rep_penalty": 10
 	},
 	"family": {
@@ -54,7 +54,7 @@ const ALL: Dictionary = {
 		"min_base_price":  80,
 		"max_base_price":  150,
 		"icon":            "res://assets/icons/guests/van.svg",
-		"base_exp": 15,
+		"base_exp": 30,
 		"rep_penalty": 5
 	},
 	"budget": {
@@ -68,7 +68,7 @@ const ALL: Dictionary = {
 		"min_base_price":  20,
 		"max_base_price":  40,
 		"icon":            "res://assets/icons/guests/wallet-minimal.svg",
-		"base_exp": 5,
+		"base_exp": 10,
 		"rep_penalty": 2,
 	},
 	"nomad": {
@@ -82,7 +82,7 @@ const ALL: Dictionary = {
 		"min_base_price":  35,
 		"max_base_price":  70,
 		"icon":            "res://assets/icons/guests/laptop-minimal.svg",
-		"base_exp": 10,
+		"base_exp": 20,
 		"rep_penalty": 5
 	},
 	"event": {
@@ -96,7 +96,7 @@ const ALL: Dictionary = {
 		"min_base_price":  45,
 		"max_base_price":  90,
 		"icon":            "res://assets/icons/guests/sunset.svg",
-		"base_exp": 10,
+		"base_exp": 20,
 		"rep_penalty": 5
 	},
 	"luxury": {
@@ -110,7 +110,7 @@ const ALL: Dictionary = {
 		"min_base_price":  150,
 		"max_base_price":  300,
 		"icon":            "res://assets/icons/guests/user-star.svg",
-		"base_exp": 25,
+		"base_exp": 50,
 		"rep_penalty": 15
 	},
 }

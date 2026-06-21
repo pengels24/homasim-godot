@@ -16,7 +16,7 @@ static func get_definition() -> Dictionary:
 		"nightly_price": 250,
 		"locked": false,
 		"in_build_menu": true,
-		"req_level": 5,
+		"req_level": 3,
 		"req_tech": "Z1.2",
 		"max_beds": 5,
 		"open_from": 0,

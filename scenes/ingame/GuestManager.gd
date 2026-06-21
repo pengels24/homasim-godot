@@ -113,6 +113,10 @@ func get_free_rooms() -> Array:
 
 	for room in all_rooms:
 		var type_id: String = str(room.get("room_type_id"))
+		
+		# Neu: Wenn Zimmer zum Abriss markiert ist, darf es nicht belegt werden
+		if room.get("is_pending_demolish"):
+			continue
 
 		# Falls wir die Def noch nicht im Cache haben, hier kurz holen (Lazy Loading)
 		if not _room_definitions.has(type_id):
@@ -476,6 +480,10 @@ func clear_waiting_guests_with_penalty() -> void:
 func do_checkout(party: GuestParty) -> float:
 	var payout := _calculate_payout(party)
 	_finalize_checkout(party, int(payout), false)
+	
+	var exp_gain = GameState.calc_checkout_exp(party)
+	if exp_gain > 0:
+		GameState.add_exp(exp_gain)
 
 	return payout
 
@@ -642,9 +650,13 @@ func process_midnight_penalties(day: int) -> void:
 
 		if forgotten_count > 0:
 			checkout_forgotten.emit(forgotten_count)
-			Toast.show("%d Gäste sind wütend abgereist! (0 €)" % forgotten_count)
-
 	parties_changed.emit()
+
+
+# =============================================================================
+func demolish_pending_rooms(silent: bool = false) -> void:
+	if is_instance_valid(_map_grid) and _map_grid.has_method("demolish_marked_rooms"):
+		_map_grid.demolish_marked_rooms(silent)
 
 
 # =============================================================================

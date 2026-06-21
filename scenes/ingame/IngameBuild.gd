@@ -55,6 +55,34 @@ func start_building(room_scene: PackedScene) -> void:
 	if is_instance_valid(_hud_canvas) and _hud_canvas.has_method("set_build_mode_visuals"):
 		_hud_canvas.set_build_mode_visuals(true)
 
+# =============================================================================
+func start_demolish() -> void:
+	if is_instance_valid(_build_cursor):
+		_build_cursor.queue_free()
+
+	var cursor := Node2D.new()
+	cursor.set_script(load("res://scenes/ingame/build/DemolishCursor.gd"))
+	_map_grid.get_world_root().add_child(cursor)
+
+	cursor.sig_cancelled.connect(_on_build_cursor_done)
+
+	cursor.tree_exited.connect(func() -> void:
+		if _build_cursor == cursor:
+			_build_cursor = null
+	)
+
+	_build_cursor = cursor
+	cursor.activate(_map_grid)
+
+	if is_instance_valid(_hud_canvas) and _hud_canvas.has_method("set_build_mode_visuals"):
+		_hud_canvas.set_build_mode_visuals(true)
+
+
+# =============================================================================
+func _on_tool_selected(action: String) -> void:
+	if action == "demolish":
+		start_demolish()
+
 
 # =============================================================================
 func _on_room_placed(room_scene: PackedScene, px: int, py: int, tx: int, ty: int, dr: int, doff: int, rrot: int, world_center: Vector2) -> void:
@@ -94,9 +122,15 @@ func _apply_build_costs(def: Dictionary, world_center: Vector2) -> void:
 # =============================================================================
 func _apply_build_rewards(def: Dictionary, world_center: Vector2) -> void:
 	var xp: int = def.get("exp_reward", 0)
-	if xp > 0:
-		GameState.add_exp(xp)
-		EffectManager.spawn_exp_text(xp, world_center)
+	var room_id: String = def.get("id", "")
+	
+	if xp > 0 and room_id != "":
+		var built_types: Array = _hotel.get("built_room_types", [])
+		if not built_types.has(room_id):
+			built_types.append(room_id)
+			_hotel["built_room_types"] = built_types
+			GameState.add_exp(xp)
+			EffectManager.spawn_exp_text(xp, world_center)
 
 
 # =============================================================================

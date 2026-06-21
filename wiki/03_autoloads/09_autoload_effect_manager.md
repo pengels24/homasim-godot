@@ -17,6 +17,7 @@ Der visuelle Zeremonienmeister für Feedback. Der `EffectManager` steuert die "J
 - `ui_exp_node` _(Control)_: Das Ziel für fliegende Erfahrungspunkte.
 - `ui_fp_node` _(Control)_: Das Ziel für fliegende Forschungspunkte.
 - **Wichtig:** Da das HUD beim Starten des Spiels oft neu gebaut wird, starten diese Variablen als `null`. Sie müssen vom UI-System (z.B. `HUD.gd` oder `IngameUIManager`) bei Initialisierung explizit zugewiesen werden!
+- `process_mode` _(Enum)_: Wird in `_ready()` hart auf `Node.PROCESS_MODE_ALWAYS` gesetzt. Das macht den EffectManager immun gegen die Godot-Pause (z.B. wenn das PauseMenu offen ist).
 
 ### 📡 Wichtige Signale
 

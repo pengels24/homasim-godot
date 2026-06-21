@@ -33,6 +33,11 @@ var floor_num: int = 1
 var cleanliness_level: int = 100
 var maintenance_level: int = 100
 var is_service_requested: bool = false
+var is_pending_demolish: bool = false:
+	set(value):
+		is_pending_demolish = value
+		if is_inside_tree():
+			_update_indicator()
 var is_repair_requested: bool = false
 
 # ── Tür / Orientierung ────────────────────────────────────────────────────────
@@ -172,6 +177,9 @@ func _on_hour_passed(_hour: int) -> void:
 	if TimeManager.is_paused():
 		return
 		
+	if is_pending_demolish:
+		return
+		
 	# Werte langsam senken
 	cleanliness_level = clampi(cleanliness_level - 3, 0, 100)
 	maintenance_level = clampi(maintenance_level - 2, 0, 100)
@@ -207,6 +215,7 @@ func configure(data: Dictionary) -> void:
 	cleanliness_level = data.get("cleanliness_level", data.get("cleanliness", cleanliness_level))
 	is_service_requested = data.get("is_service_requested", is_service_requested)
 	is_repair_requested = data.get("is_repair_requested", is_repair_requested)
+	is_pending_demolish = data.get("is_pending_demolish", is_pending_demolish)
 	door_rotation = data.get("door_rotation", door_rotation)
 	door_offset   = data.get("door_offset",   door_offset)
 	room_rotation = data.get("room_rotation", room_rotation)
@@ -234,6 +243,7 @@ func to_dict() -> Dictionary:
 		"cleanliness_level": cleanliness_level,
 		"is_service_requested": is_service_requested,
 		"is_repair_requested": is_repair_requested,
+		"is_pending_demolish": is_pending_demolish,
 		"door_rotation": door_rotation,
 		"door_offset": door_offset,
 		"room_rotation": room_rotation,
@@ -265,25 +275,33 @@ func set_service_requested(requested: bool) -> void:
 var _highlight_rect: ReferenceRect
 
 # =============================================================================
-func set_highlight(active: bool) -> void:
+func set_highlight(active: bool, custom_color: Color = Color(1.0, 0.8, 0.1, 0.9)) -> void:
 	if active:
 		if not is_instance_valid(_highlight_rect):
 			_highlight_rect = ReferenceRect.new()
 			_highlight_rect.editor_only = false
-			_highlight_rect.border_color = Color(1.0, 0.8, 0.1, 0.9) # Vibrant Yellow border
 			_highlight_rect.border_width = 3.0
 			_highlight_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			
 			var bg = ColorRect.new()
-			bg.color = Color(1.0, 0.8, 0.1, 0.2) # Light Yellow fill
+			bg.name = "HighlightBG"
 			bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 			bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			_highlight_rect.add_child(bg)
 			
 			var sz = get_tile_size()
 			_highlight_rect.size = Vector2(sz.x * TILE_PX, sz.y * TILE_PX)
+			_highlight_rect.z_index = 50
 			
 			add_child(_highlight_rect)
+			
+		_highlight_rect.border_color = custom_color
+		var bg_color = custom_color
+		bg_color.a = 0.2
+		var bg_node = _highlight_rect.get_node_or_null("HighlightBG")
+		if bg_node:
+			bg_node.color = bg_color
+			
 		_highlight_rect.show()
 	else:
 		if is_instance_valid(_highlight_rect):
@@ -466,4 +484,4 @@ func _update_indicator() -> void:
 
 	_status_indicator.visible = true
 
-	_status_indicator.set_status(is_service_requested, is_repair_requested)
+	_status_indicator.set_status(is_service_requested, is_repair_requested, is_pending_demolish)

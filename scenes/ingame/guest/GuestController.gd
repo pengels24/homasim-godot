@@ -26,6 +26,16 @@ func spawn_active_guests() -> void:
 			var guest_id = member.id  # Stabile ID aus dem Savegame
 			if not _actors.has(guest_id):
 				_create_actor(member, party.room_id, room)
+				
+	# Auch Gäste spawnen, die bereits im Checkout sind (nach Reload)
+	for party in _guest_manager._checkout:
+		var room = _find_room_by_id(party.room_id)
+		for member in party.members:
+			var guest_id = member.id
+			if not _actors.has(guest_id):
+				var actor = _create_actor(member, party.room_id, room)
+				# Da sie schon im Checkout sind, müssen sie direkt loslaufen
+				actor.start_checkout()
 
 
 # =============================================================================
@@ -74,6 +84,10 @@ func _on_party_checked_out_physically(party: GuestParty) -> void:
 	for member in party.members:
 		var guest_id = member.id
 		var actor = _actors.get(guest_id, null)
+		if not is_instance_valid(actor):
+			# Gast hatte keinen Actor (z.B. nach Reload und er stand im Checkout)
+			actor = _create_actor(member, party.room_id, null)
+		
 		if is_instance_valid(actor):
 			actor.complete_checkout(spawn_pos)
 

@@ -17,6 +17,7 @@ Die Fabrik für fliegendes Feedback. Dieses Skript spawnt animierte Text-Labels 
 - `SCENE` _(PackedScene)_: Vorgeladene Referenz auf die physische Text-Szene, um beim Spawnen keine Ladezeiten zu erzeugen.
 - `COLOR_POS` / `COLOR_NEG` _(Color)_: Zentral definierte Godot-Farbwerte (Grün/Rot) für ein einheitliches visuelles Design im ganzen Spiel.
 - `layer` _(int)_: Wird in `_ready()` hart auf 99 gesetzt, um Clipping-Fehler mit anderen CanvasLayers zu verhindern.
+- `process_mode` _(Enum)_: Wird in `_ready()` auf `Node.PROCESS_MODE_ALWAYS` gesetzt. Dadurch fliegen die Zahlen weiter, selbst wenn das Hauptspiel pausiert ist.
 
 ### 📡 Wichtige Signale
 

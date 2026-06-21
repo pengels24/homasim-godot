@@ -6,7 +6,7 @@ Die absolute Festplatten-Instanz. Der `SaveManager` ist das Rückgrat der Persis
 
 ### 🛡️ Zuständigkeiten
 
-- **Profil- & Hotel-Verwaltung:** Legt neue Manager-Profile an und verknüpft sie mit Hotel-Instanzen.
+- **Profil- & Hotel-Verwaltung:** Legt neue Manager-Profile an und verknüpft sie mit Hotel-Instanzen. Speichert und lädt sogar Vorschaubilder (Thumbnails) der Hotels.
 - **Slot-Management:** Verwaltet das Speichern in verschiedene Slots (Quick, Manual, Auto) inkl. einer automatischen Datei-Rotation für Autosaves.
 - **Snapshot-Generierung:** Bündelt den aktuellen Hotelzustand (inkl. dynamischer Zähler, Raster/Plots und Gästedaten) in ein speicherbares Paket und entpackt es beim Laden wieder.
 - **Migration:** Erkennt alte Speicherstände (z.B. veraltete EXP-Max-Werte) und aktualisiert sie beim Laden automatisch auf die neuen Balancing-Kurven.
@@ -15,9 +15,11 @@ Die absolute Festplatten-Instanz. Der `SaveManager` ist das Rückgrat der Persis
 ### 💾 Zentrale Variablen (State)
 
 - **Pfade & Konstanten:** `PROFILES_PATH` (`.cfg`), `HOTELS_DIR`, `SAVES_DIR`. Alle arbeiten im sicheren Godot-Appdata-Verzeichnis (`user://`).
-- **Limits:** `MAX_AUTOSAVES (5)`, `MAX_HOTELS (5)`, `MANUAL_SLOTS (5)`.
+- **Limits:** `MAX_AUTOSAVES (5)`, `MAX_HOTELS (10)`, `MANUAL_SLOTS (5)`.
 - `_profiles` / `_hotels` _(Array)_: Hält beim Spielstart alle Metadaten im RAM bereit, damit das Hauptmenü sie schnell anzeigen kann, ohne ständig die Festplatte lesen zu müssen.
 - `_next_profile_id` / `_next_hotel_id` _(int)_: Globale Auto-Inkrement-Zähler zur Vergabe eindeutiger IDs.
+- `_temp_thumbnail` _(Image)_: Zwischenspeicher für den Screenshot beim Speichern, der in `.png` umgewandelt wird.
+- `process_mode` _(Enum)_: Wird in `_ready()` auf `Node.PROCESS_MODE_ALWAYS` gesetzt, damit auch beim Pausieren des Spiels gespeichert werden kann.
 
 ### 📡 Wichtige Signale
 

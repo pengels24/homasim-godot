@@ -3,7 +3,7 @@
     "1": {
       "gate": {
         "cost_fp": 0,
-        "req_level": 5,
+        "req_level": 3,
         "req_stars": 0,
         "req_items_unlocked": 0
       },

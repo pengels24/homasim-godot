@@ -12,13 +12,19 @@ _Stand: 15.06.2026_
 ## 2. Die Datenstruktur (Tech-Registry)
 
 Das System nutzt ein zentrales Register (Dictionary), das alle Technologien starr definiert.
-Jeder Eintrag benötigt zwingend:
+Jeder Eintrag in der JSON nutzt folgende Felder:
 - `id` (z. B. "Z1.1")
-- `name` (z. B. "Familienzimmer")
+- `name` (Translation-Key, z. B. "techtree.zimmer.z11")
 - `category` (z. B. "zimmer" / "gastronomie")
+- `col` & `row` (Grid-Koordinaten für die Darstellung im UI)
 - `cost_fp` (z. B. 100)
+- `cost_money` (z. B. 1000 - Zusätzliche monetäre Kosten für Forschung)
 - `dependencies` (Array aus IDs der zwingenden Vorgänger, z.B. `["Z1.1"]` oder leer `[]`)
-- `unlocks` (Array von Raum-IDs oder globalen Flags, die dadurch für das Bausystem freigegeben werden)
+- `unlocks_emojis` (Optischer Indikator für das UI, z. B. "🛏️ 🚿")
+- `demo_locked` (Boolean-Flag, ob die Forschung in der Demo gesperrt ist)
+
+**Wichtig zur Freischaltung (Inverted Dependency):** 
+Im Gegensatz zu früheren Planungen gibt es im Techtree **kein `unlocks`-Array**. Stattdessen prüfen die Räume selbst ihre Vorbedingungen. In den Basis-Daten der Raum-Skripte (z.B. `BedFamily.gd`) wird dafür die Eigenschaft `"req_tech": "Z1.2"` definiert.
 
 ## 3. Der Progression-Manager (Hintergrund-Logik)
 

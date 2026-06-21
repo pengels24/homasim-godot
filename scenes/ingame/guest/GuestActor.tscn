@@ -1,9 +1,17 @@
 [gd_scene format=3 uid="uid://cx6i1234567"]
 
 [ext_resource type="Script" path="res://scenes/ingame/guest/GuestActor.gd" id="1_act"]
-[ext_resource type="PackedScene" uid="uid://dpsa8rts2s465" path="res://scenes/ingame/guest/guestavatar/GuestAvatar.tscn" id="2_ava"]
+[ext_resource type="PackedScene" uid="uid://dvwf0ma4rn7ns" path="res://scenes/ingame/guest/guestavatar/GuestAvatar.tscn" id="2_ava"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_click"]
+radius = 16.0
 
 [node name="GuestActor" type="Node2D"]
 script = ExtResource("1_act")
 
 [node name="GuestAvatar" parent="." instance=ExtResource("2_ava")]
+
+[node name="ClickArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea"]
+shape = SubResource("CircleShape2D_click")

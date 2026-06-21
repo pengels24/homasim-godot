@@ -43,8 +43,8 @@ func _ready() -> void:
 	GameState.sig_hotel_guests_checkout_changed.connect(_on_hotel_guests_checkout_changed)
 	GameState.sig_hotel_exp_changed.connect(_on_hotel_exp_changed)
 	GameState.sig_hotel_rep_changed.connect(_on_hotel_rep_changed)
-	GameState.sig_hotel_day_changed.connect(_on_hotel_day_changed)
 	GameState.sig_hotel_time_changed.connect(_on_hotel_time_changed)
+	GameState.sig_guest_clicked.connect(_on_guest_clicked)
 
 	TimeManager.sig_speed_changed.connect(_on_time_speed_changed)
 
@@ -77,6 +77,19 @@ func _ready() -> void:
 
 
 # =============================================================================
+func _on_guest_clicked(guest: Node2D) -> void:
+	# Wenn es schon einen laufenden Tooltip gibt, löschen wir ihn am besten
+	for child in get_children():
+		if child.name == "GuestFollowTooltip" or child.has_method("_update_target_text"):
+			child.queue_free()
+			
+	var tooltip_scene = load("res://scenes/ingame/hud/GuestFollowTooltip.tscn")
+	var t = tooltip_scene.instantiate()
+	add_child(t)
+	t.setup(guest)
+
+
+# =============================================================================
 func _on_hotel_name_changed(new_name: String) -> void:
 	label_name.text = new_name
 
@@ -86,9 +99,9 @@ func _on_hotel_level_changed(new_level: int) -> void:
 	label_level.text = str(new_level)
 	if is_instance_valid(bottom_bar):
 		if bottom_bar.has_method("set_staff_locked"):
-			bottom_bar.set_staff_locked(new_level < 2)
+			bottom_bar.set_staff_locked(new_level < GameState.UNLOCK_LEVELS.staff)
 		if bottom_bar.has_method("set_techtree_locked"):
-			bottom_bar.set_techtree_locked(new_level < 5)
+			bottom_bar.set_techtree_locked(new_level < GameState.UNLOCK_LEVELS.techtree)
 
 
 # =============================================================================
@@ -169,18 +182,17 @@ func _on_hotel_level_up(new_level: int) -> void:
 	var reward_fp = 250
 	var unlock_text = ""
 	
-	match new_level:
-		2:
-			unlock_text = "Personalverwaltung"
-			reward_money = 1500
-			reward_fp = 250
-		5:
-			unlock_text = "Forschung & Technologie"
-			reward_money = 2500
-			reward_fp = 500
-		_:
-			reward_money = 1000 * new_level
-			reward_fp = 100 * new_level
+	if new_level == GameState.UNLOCK_LEVELS.staff:
+		unlock_text = "Personalverwaltung"
+		reward_money = 1500
+		reward_fp = 250
+	elif new_level == GameState.UNLOCK_LEVELS.techtree:
+		unlock_text = "Forschung & Technologie"
+		reward_money = 2500
+		reward_fp = 500
+	else:
+		reward_money = 1000 * new_level
+		reward_fp = 100 * new_level
 
 	%LevelUpModal.setup(new_level, reward_money, reward_fp, unlock_text)
 	%LevelUpModal.open()

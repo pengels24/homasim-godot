@@ -22,6 +22,7 @@ var _hotel: Dictionary = {}
 
 # =============================================================================
 func _ready() -> void:
+	TaskManager.clear_all_tasks()
 	InputHandler.current_mode = InputHandler.InputMode.NORMAL
 
 	MusicManager.play_ingame()
@@ -42,8 +43,22 @@ func _ready() -> void:
 	# DEBUG-Verbindung
 	InputHandler.sig_debug_action_requested.connect(_on_debug_action_requested)
 
+	_do_fade_in()
 
 # ── Map-Start ─────────────────────────────────────────────────────────────────
+
+# =============================================================================
+func _do_fade_in() -> void:
+	var fade_rect = ColorRect.new()
+	fade_rect.color = Color.BLACK
+	fade_rect.set_anchors_preset(Control.PRESET_FULL_RECT)
+	fade_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	hud_canvas.add_child(fade_rect)
+	
+	var tween = create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.tween_property(fade_rect, "modulate:a", 0.0, 1.0).set_trans(Tween.TRANS_SINE)
+	tween.tween_callback(fade_rect.queue_free)
 
 # =============================================================================
 func _start_map() -> void:
@@ -157,6 +172,7 @@ func _setup_subsystems() -> void:
 	_build.configure(_hotel, map_grid, $HUD/BottomBarContainer/HUDBottom, $HUD)
 	_build.sig_room_built.connect(_on_room_built)
 	$HUD/BottomBarContainer/HUDBottom/BuildMenu.sig_room_selected.connect(_build.start_building)
+	$HUD/BottomBarContainer/HUDBottom/BuildMenu.sig_tool_selected.connect(_build._on_tool_selected)
 	$HUD/BottomBarContainer/HUDBottom/BuildMenu.sig_build_cancelled.connect(_build.close_all)
 
 	# Signale vom TimeManager fangen

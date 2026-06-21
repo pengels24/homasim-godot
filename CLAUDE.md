@@ -2,12 +2,24 @@
 
 ## Projekt
 Hotel-Management-Simulationsspiel. Godot 4.6 GDScript Desktop-Client.
-PHP-Backend unter `localhost:8848` bleibt API-Quelle (wird nicht angefasst).
+Das Spiel arbeitet aktuell komplett lokal. Daten kommen aus Savegames (siehe `SaveManager` Autoload) und JSON-Dateien im Ordner `/config`. 
+Ein PHP-Backend für Multiplayer/Leaderboards wird erst später in der Zukunft angebunden.
 Linear-Projekt: **Angelus2010 / ANG-** für alle Issues.
+
+## Aktueller Stand (TechDemo)
+- Die TechDemo ist fast fertig.
+- **EXP-Balancing / Unlocks**: Wurden kürzlich überarbeitet. Core-Features haben harte Level-Voraussetzungen, die jetzt zentral in `GameState.UNLOCK_LEVELS` (Level 2 = Personal, Level 3 = Techtree) gesteuert werden.
+- Gäste generieren EXP beim Check-In und Check-Out. Zimmer geben einen Erst-Bau-EXP-Bonus.
+- Savegame & Load System wurde stark stabilisiert (Tween-Bugs gefixt).
+- **Nächste Schritte**: 
+  1. Keybindings (InputMap) in den Settings interaktiv machen.
+  2. Tutorial-JSON-Texte vervollständigen und Ingame-Trigger implementieren.
 
 ## Kommunikation
 - **Du**-Form, entspannt aber zielorientiert
-- Kleine Dinge direkt umsetzen, große Dinge zuerst besprechen
+- ausschliesslich in deutsch antworten
+- Kleine Dinge direkt umsetzen (Typos, etc.)
+- Sonst immer zuerst besprechen -> lösen -> coden
 - Kein Corporate-Sprech
 - Peter liest langsamer – nicht zu viel auf einmal
 
@@ -16,7 +28,6 @@ Linear-Projekt: **Angelus2010 / ANG-** für alle Issues.
 - Ziel: Peter soll den Code selbst verstehen und validieren können, nicht nur ausführen lassen
 - Erklärungen in einfacher Sprache, mit Analogien wenn hilfreich
 - Nicht überladen – ein kurzer Satz pro Konzept reicht oft
-- Wenn dein Sohn (Webentwickler, Godot-Erfahrung) Fragen stellt: gerne einbeziehen und aus Webentwickler-Perspektive erklären
 - **Ehrliche Meinung:** Sag Peter nicht einfach nach dem Mund. Wenn eine Idee aus Game-Design- oder Architektur-Sicht "Blödsinn" ist oder überladen wirkt, lege dein Veto ein und mach einen besseren Vorschlag.
 
 ## Godot-Direktiven
@@ -40,11 +51,12 @@ Linear-Projekt: **Angelus2010 / ANG-** für alle Issues.
 - Kommentare erklären das *Warum*, nicht das *Was*
 - Keine Fehlerbehandlung für unmögliche Szenarien
 - Keine ungenutzten Parameter ohne `_`-Prefix
+- Keine Brücken um Fehler zu umgehen
 
 ## Projektstruktur
 ```
 res://
-├── autoload/       # Singletons: Api, GameState (SessionManager kommt noch)
+├── autoload/       # Singletons: Api, GameState
 ├── scenes/         # Feature-basiert: main_menu/, login/, dashboard/, ingame/
 ├── assets/         # fonts/, images/
 ├── translations/   # de.csv + kompilierte .translation Dateien
@@ -52,10 +64,11 @@ res://
 ```
 
 ## Autoloads
-- **`Api`** – alle HTTP-Requests, Cookie-Persistenz (`user://session.cfg`)
-- **`GameState`** – User/Hotel-State, `T()` Translation-Helper, `check_session()`
+- **`SaveManager`** – Zentrale Schnittstelle für lokales Speichern/Laden von Spielständen und Lesen der `/config` JSONs.
+- **`GameState`** – User/Hotel-State, `T()` Translation-Helper.
+- **`Api`** – (Zukünftig) für HTTP-Requests, Cookie-Persistenz (`user://session.cfg`).
 
-## API-Konventionen
+## Zukünftige API-Konventionen (aktuell ungenutzt)
 - Login: `POST /api/auth/login` (Form-Data)
 - Session-Check: `GET /api/auth/me`
 - Hotels: `GET /api/hotels`, `POST /api/hotels`, `POST /api/hotel/delete`
@@ -67,13 +80,6 @@ res://
 - **Style-Guide**: `_dev/docs/ui-style-guide.md` – **verbindliche Referenz** für alle Modal-Panels, Buttons, Titel, Close-Button, Slot-Zeilen. Exakte Color-Werte und StyleBox-Definitionen dort nachschlagen, nicht aus dem Kopf schreiben.
 - **Style-Guide pflegen**: Jede neue reusable UI-Komponente die als `.tscn` gebaut wird → Muster sofort im Style-Guide dokumentieren. Nur so bleibt Konsistenz über alle Szenen.
 
-## Assets
-- **Kenney – Roguelike Modern City** – `external-assets/roguelike-modern-city/` (gitignored)
-  - 1036 Einzel-PNGs in `Tiles/` (tile_0000.png … tile_1035.png), Topdown 2D, Public Domain
-  - **Primäre Grafik-Quelle für die Ingame-Szene** – Boden, Wände, Möbel, Straßen, Gebäude
-  - Verwendete Tiles nach `res://assets/tiles/` kopieren (nur was wirklich benutzt wird)
-  - Austauschbar durch eigene Grafiken – Kenney ist Platzhalter bis Custom-Art verfügbar
-
 ## Workflow
 - **Issues vor der Umsetzung anlegen** – Linear-Issue (ANG-xxx) anlegen bevor mit der Implementierung begonnen wird
 - ANG-xxx Referenz im Code (Kommentare), Commits und Changelog verwenden
@@ -84,4 +90,4 @@ res://
 2. Git commit + Tag
 3. Linear Issues aktualisieren
 4. Memory + CLAUDE.md updaten
-5. Version in `version.txt` erhöhen (letzte Ziffer)
+5. NUR WENN EXPLIZIT GENANNT - Version in `version.txt` erhöhen (letzte Ziffer)

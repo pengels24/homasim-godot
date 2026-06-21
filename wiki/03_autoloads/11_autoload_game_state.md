@@ -9,17 +9,20 @@ Das globale Gedächtnis des Spiels. Der `GameState` speichert sitzungsübergreif
 - **Session-Handling:** Speichert den aktiven User, das Manager-Profil und das geladene Hotel.
 - **Ressourcen-Verwaltung:** Manipuliert die Hotel-Werte (Geld, Erfahrung, Ruf, Forschungspunkte) zentral und feuert Signale, wenn sich diese ändern.
 - **Level-Up-Logik:** Berechnet benötigte EXP und wickelt Level-Ups (inkl. Übertrag von Rest-EXP) ab.
+- **Config- & Registry-Loader:** Lädt beim Spielstart die globalen Konfigurationen (`rooms.json`, `room_categories.json`, `daily_schedule.json`) und hält sie im Speicher (`room_registry`, etc.).
 - **Globale Formatierer:** Stellt projektweit nützliche Text-Konverter (Zeit, Datum, Währung) zur Verfügung.
 - **Lokalisierung:** Stellt die zentrale Übersetzungsfunktion `T()` bereit.
-- _(Nicht zuständig für: Reales Speichern auf der Festplatte (macht der `SaveManager`) oder detaillierte Spiellogik wie das Spawnen von Gästen)._
+- _(Nicht zuständig für: Reales Speichern auf der Festplatte (macht der `SaveManager`))._
 
 ### 💾 Zentrale Variablen (State)
 
-- `current_user` / `current_manager` _(Dictionary)_: Authentifizierungs- und Pofildaten des Spielers.
+- `current_user` / `current_manager` _(Dictionary)_: Authentifizierungs- und Profildaten des Spielers.
 - `active_profile` / `active_profile_id`: Das aktuell bespielte Manager-Profil (Savegame-Slot).
-- `selected_hotel` _(Dictionary)_: Alle Live-Daten des laufenden Hotels. **Achtung: Dient aktuell noch teilweise als Legacy-Datenbehälter (aus PHP-API-Zeiten).**
-- `active_hotel_id` _(int)_: Die ID des Hotels für den neuen SaveManager (-1, falls keines gewählt).
+- `selected_hotel` _(Dictionary)_: Alle Live-Daten des laufenden Hotels. **Achtung: Dient aktuell noch teilweise als Legacy-Datenbehälter.**
+- `active_hotel_id` _(int)_: Die ID des Hotels für den SaveManager (-1, falls keines gewählt).
 - `snap_to_grid` _(bool)_: Globale Einstellung für das Bausystem.
+- **Registries:** `room_registry`, `room_category_registry`, `daily_schedule_registry` (Beinhalten alle geparsten Spieldaten).
+- `process_mode` _(Enum)_: Wird in `_ready()` hart auf `Node.PROCESS_MODE_ALWAYS` gesetzt, um den GameState vor der Engine-Pause zu schützen.
 
 ### 📡 Wichtige Signale
 
@@ -29,11 +32,14 @@ Das globale Gedächtnis des Spiels. Der `GameState` speichert sitzungsübergreif
 
 ### ⚙️ Kern-Funktionen
 
-- **`select_hotel(hotel_data)`:** Lädt die Hotel-Daten in den Speicher und "feuert" sofort für jede einzelne Ressource ein Update-Signal ab, damit das HUD beim Spielstart synchronisiert wird.
-- **`add_exp(amount)`:** Fügt Erfahrungspunkte hinzu. **Besonderheit:** Besitzt eine `while`-Schleife, um automatische (auch mehrfache!) Level-Ups sauber abzuwickeln und Rest-EXP in das nächste Level zu übertragen.
-- **`add_money()`, `add_rep()`, `add_fp()`:** Kapseln die simple Addition, schützen vor Überläufen (Ruf sinkt nicht unter 0, steigt nicht über Max) und alarmieren automatisch das UI.
-- **`format_money()`, `format_game_time()`, `format_timestamp()`:** Globale Helfer, die u.a. 44900 zu "44.900" machen oder Unix-Timestamps automatisch an die PC-Zeitzone des Spielers anpassen.
-- **`T(key, val1, val2)`:** Holt Strings aus dem `TranslationServer` und ersetzt Platzhalter (`###`, `***`) mit dynamischen Werten.
+- **`select_hotel(hotel_data)`:** Lädt die Hotel-Daten und triggert sofort Signale (`sig_hotel_money_changed`, `sig_hotel_exp_changed`, etc.), um das HUD zu synchronisieren. Löst auch das Laden der anderen Manager (Techtree, Tutorial, Quests) aus.
+- **`add_exp(amount)`:** Fügt Erfahrungspunkte hinzu inkl. `while`-Schleife für Mehrfach-Level-Ups.
+- **`add_money()`, `add_rep()`, `add_fp()`:** Manipulieren die Ressourcen und alarmieren das UI.
+- **`load_room_config()`, `load_daily_schedule_config()`:** Lesen die JSON-Dateien aus `/config/` in die Registries.
+- **`format_money()`, `format_game_time()`, `format_timestamp()`:** Globale Helfer.
+- **`is_facility_open(def)`:** Prüft anhand der Raum-Definition, ob ein Raum zu der aktuellen Ingame-Zeit geöffnet hat.
+- **`calc_checkin_exp()`, `calc_reject_rep_penalty()`:** Balancing-Funktionen für Interaktionen mit Gästen.
+- **`T(key, val1, val2)`:** Holt Strings aus dem `TranslationServer` und ersetzt Platzhalter (`###`, `***`).
 
 ### ⚠️ Architektur-Hinweise (Gotchas)
 

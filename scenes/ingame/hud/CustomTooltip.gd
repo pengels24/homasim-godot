@@ -59,8 +59,8 @@ func _update_content() -> void:
 	
 	var def = _target_room.call("get_definition")
 	var room_name = def.get("name", "Raum")
-	if _target_room.room_number != "":
-		room_name += " " + _target_room.room_number
+	if _target_room.get("room_number") != null and str(_target_room.get("room_number")) != "":
+		room_name += " " + str(_target_room.get("room_number"))
 	title_label.text = "🏨 " + room_name
 	
 	# Status
@@ -102,5 +102,12 @@ func _update_content() -> void:
 				guests_label.text = "\n".join(names)
 				guests_label.show()
 				
-	status += "\nSauberkeit: %d%% | Zustand: %d%%" % [_target_room.cleanliness_level, _target_room.maintenance_level]
-	status_label.text = status
+	var final_status = ""
+	if _target_room.get("is_pending_demolish"):
+		final_status += "🔨 Raum zum Löschen vorgemerkt\n"
+		
+	final_status += status + "\nSauberkeit: %d%% | Zustand: %d%%" % [_target_room.cleanliness_level, _target_room.maintenance_level]
+	status_label.text = final_status
+	
+	# Zwingt das Tooltip-Panel zum Schrumpfen, falls vorher mehr Text da war
+	size = Vector2.ZERO

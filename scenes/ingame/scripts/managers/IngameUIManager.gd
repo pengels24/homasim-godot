@@ -323,6 +323,7 @@ func _on_end_of_day_continue() -> void:
 		# Strafen austeilen
 		if is_instance_valid(_guest_mgr):
 			_guest_mgr.process_midnight_penalties(current_day)
+			_guest_mgr.demolish_pending_rooms(true)
 			
 		# Nächsten Tag starten (Zeit wird intern auf 06:00 gesetzt)
 		TimeManager.start_next_day()
@@ -360,6 +361,13 @@ func _unlock_reception() -> void:
 	if is_instance_valid(_bottom_bar):
 		_bottom_bar.set_reception_locked(false)
 		_bottom_bar.reception.tooltip_text = GameState.T("hud.bottom.reception_tt", "F3")
+		
+		# 2. Prüfen, ob schon Leute warten
+		if is_instance_valid(_guest_mgr) and is_instance_valid(_hud):
+			var w = _guest_mgr.get_waiting().size()
+			var c = _guest_mgr.get_checkout().size()
+			if _hud.has_method("set_reception_alert"):
+				_hud.set_reception_alert(w > 0 or c > 0)
 
 
 # =============================================================================
@@ -514,8 +522,8 @@ func _sync_guest_ui() -> void:
 func open_staff() -> void:
 	var level = GameState.selected_hotel.get("level", 1)
 	
-	if level < 2:
-		Toast.show(GameState.T("toast.hr.locked"))
+	if level < GameState.UNLOCK_LEVELS.staff:
+		Toast.show(GameState.T("toast.hr.locked") % GameState.UNLOCK_LEVELS.staff)
 		return
 		
 	if TutorialManager:
@@ -537,8 +545,8 @@ func open_staff() -> void:
 
 # =============================================================================
 func open_tech_tree() -> void:
-	if GameState.selected_hotel.get("level", 1) < 5:
-		Toast.show(GameState.T("toast.techtree.locked", "Forschung benötigt Hotel-Level 5!"))
+	if GameState.selected_hotel.get("level", 1) < GameState.UNLOCK_LEVELS.techtree:
+		Toast.show(GameState.T("toast.techtree.locked") % GameState.UNLOCK_LEVELS.techtree)
 		return
 
 	cleanup_current_states()

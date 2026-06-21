@@ -564,6 +564,55 @@ func _occ_mark_clearance(gx: int, gy: int, w: int, h: int) -> void:
 
 
 # =============================================================================
+func remove_room(room: Node2D) -> void:
+	if not active_rooms.has(room):
+		return
+		
+	var sz: Vector2i = room.get_tile_size()
+	var door_rot: int = room.get("door_rotation")
+	var door_off: int = room.get("door_offset")
+	var tile_x: int = int(room.position.x / TILE_PX)
+	var tile_y: int = int(room.position.y / TILE_PX)
+	var parcel_name = room.get_parent().name
+	var px: int = int(parcel_name.split("_")[1])
+	var py: int = int(parcel_name.split("_")[2])
+	
+	unmark_placement(px, py, tile_x, tile_y, sz.x, sz.y, door_rot, door_off)
+	
+	active_rooms.erase(room)
+	room.queue_free()
+	
+	_update_all_floor_neighbors()
+	save_all_rooms_to_db(GameState.active_hotel_id)
+
+
+# =============================================================================
+func demolish_marked_rooms(silent: bool = false) -> void:
+	var to_remove = []
+	for room in active_rooms:
+		if is_instance_valid(room) and room.get("is_pending_demolish"):
+			# Nur abreißen, wenn der Raum aktuell leer ist (nicht von Gästen belegt)
+			if guest_manager and guest_manager.get_party_in_room(room) == null:
+				to_remove.append(room)
+				
+	for room in to_remove:
+		var def = {}
+		if room.has_method("get_definition"):
+			def = room.get_definition()
+		var cost = def.get("build_cost", 0)
+		var refund = int(cost * 0.5)
+		
+		# Feedback
+		var refund_pos = room.global_position + Vector2(16, 16)
+		if refund > 0:
+			FinanceManager.add_transaction(refund, "construction", "Auto-Abriss: " + def.get("name", "Raum"))
+			if not silent:
+				EffectManager.spawn_money_text(refund, refund_pos)
+			
+		remove_room(room)
+
+
+# =============================================================================
 func save_all_rooms_to_db(hotel_id: int) -> void:
 	for row_idx in range(_grid.size()):
 		var row = _grid[row_idx]

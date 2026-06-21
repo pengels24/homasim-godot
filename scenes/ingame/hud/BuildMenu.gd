@@ -3,6 +3,7 @@ extends Control
 
 # Signal an deinen Baumodus/Manager, wenn ein Raum final ausgewählt wird
 signal sig_room_selected(room_scene: PackedScene)
+signal sig_tool_selected(action_id: String)
 signal sig_build_cancelled()
 
 @export_group("Vorlagen & Daten")
@@ -79,7 +80,27 @@ func _sort_rooms_into_categories() -> void:
 
 		# Wir speichern nur noch den Pfad zur Szene, nicht die geladene Szene
 		_categories[cat_name].append({
+			"is_tool": false,
 			"scene_path": scene_path,
+			"def": def
+		})
+
+	# --- NEU: Werkzeuge (Tools) laden ---
+	for tool_id in GameState.tool_registry:
+		var registry_entry: Dictionary = GameState.tool_registry[tool_id]
+		var def: Dictionary = registry_entry.get("def", {})
+
+		# Nur Tools aufnehmen, die auch im Baumenü sichtbar sein sollen
+		if not def.get("in_build_menu", true):
+			continue
+
+		var cat_name: String = def.get("category", "werkzeuge").to_lower()
+
+		if not _categories.has(cat_name):
+			_categories[cat_name] = []
+
+		_categories[cat_name].append({
+			"is_tool": true,
 			"def": def
 		})
 
@@ -196,7 +217,8 @@ func _show_category(cat_name: String) -> void:
 
 	for room_data in _categories[cat_name]:
 		var def: Dictionary = room_data["def"]
-		var scene_path: String = room_data["scene_path"] # Pfad statt Szene
+		var is_tool: bool = room_data.get("is_tool", false)
+		var scene_path: String = room_data.get("scene_path", "") # Pfad statt Szene
 
 		var new_instance = button_template.instantiate()
 		item_grid.add_child(new_instance)
@@ -221,8 +243,11 @@ func _show_category(cat_name: String) -> void:
 						_set_btn_active(rb, rb == btn)
 					_breadcrumb.text = cat_label + " / " + GameState.T(def.get("name", "Raum"))
 					
-					var loaded_scene = load(scene_path) as PackedScene
-					if loaded_scene:
+					if is_tool:
+						sig_tool_selected.emit(def.get("action", ""))
+					else:
+						var loaded_scene = load(scene_path) as PackedScene
+						if loaded_scene:
 							sig_room_selected.emit(loaded_scene)
 			)
 

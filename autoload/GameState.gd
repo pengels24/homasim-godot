@@ -14,6 +14,7 @@ signal user_logged_out()
 signal sig_room_needs_cleaning(room_node: Node2D)
 @warning_ignore("unused_signal")
 signal sig_room_needs_repair(room_node: Node2D)
+signal sig_guest_clicked(guest_node: Node2D)
 signal sig_hotel_name_changed(new_name: String)
 signal sig_hotel_level_changed(new_level: int)
 signal sig_hotel_stars_changed(stars: int)
@@ -22,7 +23,14 @@ signal sig_hotel_guests_active_changed(guests_active: int)
 signal sig_hotel_guests_checkin_changed(guests_checkin: int)
 signal sig_hotel_guests_checkout_changed(guests_checkout: int)
 signal sig_hotel_exp_changed(exp: int, exp_max: int)
+
 signal sig_hotel_rep_changed(rep: int, rep_max: int)
+
+# Globale Level-Voraussetzungen für Core-Module
+const UNLOCK_LEVELS = {
+	"staff": 2,
+	"techtree": 3
+}
 signal sig_hotel_fp_changed(new_fp: String)
 signal sig_hotel_day_changed(day_number: int)
 signal sig_hotel_time_changed(time_string: String)
@@ -46,6 +54,8 @@ signal sig_configs_reloaded()
 var room_registry: Dictionary = {}
 ## Zentrales Verzeichnis aller Bau-Kategorien.
 var room_category_registry: Dictionary = {}
+## Zentrales Verzeichnis aller Bau-Werkzeuge.
+var tool_registry: Dictionary = {}
 ## Zentrales Verzeichnis für den Master-Tagesplan.
 var daily_schedule_registry: Array = []
 
@@ -65,6 +75,7 @@ var open_dashboard_next: bool     = false # Flag um Dashboard aus MainMenu direk
 func _ready() -> void:
 	load_room_category_config()
 	load_room_config()
+	load_tool_config()
 	load_daily_schedule_config()
 	# Das macht diesen Autoload immun gegen die Godot-Pause!
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -130,6 +141,38 @@ func load_room_config() -> void:
 			}
 
 	print("GameState: Room Registry geladen. ", room_registry.size(), " Räume registriert.")
+
+
+# =============================================================================
+## Lädt die tools.json und baut das tool_registry auf.
+func load_tool_config() -> void:
+	var config_path := "res://config/tools.json"
+
+	if not FileAccess.file_exists(config_path):
+		push_error("GameState: config/tools.json nicht gefunden!")
+		return
+
+	var file := FileAccess.open(config_path, FileAccess.READ)
+	var json_string := file.get_as_text()
+	var parsed_data = JSON.parse_string(json_string)
+
+	if type_string(typeof(parsed_data)) != "Dictionary" or not parsed_data.has("tools"):
+		push_error("GameState: Fehler beim Parsen der tools.json!")
+		return
+
+	tool_registry.clear()
+
+	for tool_entry in parsed_data["tools"]:
+		var t_id: String = tool_entry.get("id", "")
+
+		if t_id.is_empty():
+			continue
+
+		tool_registry[t_id] = {
+			"def": tool_entry
+		}
+
+	print("GameState: Tool Registry geladen. ", tool_registry.size(), " Werkzeuge registriert.")
 
 
 # =============================================================================
@@ -346,7 +389,7 @@ func add_fp(amount: int) -> void:
 # =============================================================================
 ## Berechnet die benötigte EXP für ein bestimmtes Level basierend auf dem Modell.
 func get_xp_needed_for_level(level: int) -> int:
-	var base_exp = 500 # <--- NEU: Vorher 100. Das erste Level dauert nun 5x so lang.
+	var base_exp = 150 # <--- NEU: Abgeflachte Kurve für TechDemo
 
 	if level <= 1:
 		return base_exp
@@ -416,8 +459,19 @@ func calc_checkin_exp(party: GuestParty) -> int:
 
 	# Wir geben fürs Erste NUR den flachen Basiswert aus der Definition.
 	# Eine Familie gibt also genau 15 EXP, ein Single genau 10.
-	# (Die Nächte belohnen wir später lieber separat beim Check-out!)
+	# (Die Nächte belohnen wir separat beim Check-out!)
 	return base_exp
+
+
+# =============================================================================
+## Berechnet die EXP beim Check-out.
+func calc_checkout_exp(party: GuestParty) -> int:
+	var def: Dictionary = GuestDefinitions.ALL.get(party.type, {})
+	var base_exp: int = def.get("base_exp", 10)
+	
+	# Base * Nächte * Zufriedenheit
+	var sat_mod: float = party.satisfaction / 100.0
+	return int(base_exp * party.total_stay_days * sat_mod)
 
 
 # =============================================================================
@@ -443,5 +497,6 @@ func get_room_scene_path(room_type_id: String) -> String:
 func reload_all_configs() -> void:
 	load_room_category_config()
 	load_room_config()
+	load_tool_config()
 	load_daily_schedule_config()
 	sig_configs_reloaded.emit()

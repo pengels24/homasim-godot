@@ -19,6 +19,10 @@
     "sonstiges": {
       "label": "Sonstiges",
       "icon": "res://assets/icons/HUDBottom/wrench.svg"
+    },
+    "werkzeuge": {
+      "label": "Werkzeuge",
+      "icon": "res://assets/icons/HUDBottom/tool-case.svg"
     }
   }
 }

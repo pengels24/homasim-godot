@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://cgft2hjj6klyx"]
+
+[ext_resource type="Script" path="res://scenes/ingame/hud/GuestFollowTooltip.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="2_theme"]
+
+[node name="GuestFollowTooltip" type="PanelContainer"]
+process_mode = 3
+mouse_filter = 2
+theme = ExtResource("2_theme")
+theme_type_variation = &"TooltipPanel"
+script = ExtResource("1_script")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="NameLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Name"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TargetLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Ziel: Bar"
+
+[node name="SatisfactionLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Zufriedenheit: 100%"

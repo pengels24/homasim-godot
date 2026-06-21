@@ -46,6 +46,16 @@ func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null) -> vo
 		
 	TimeManager.sig_speed_changed.connect(_on_time_speed_changed)
 	TimeManager.sig_morning_struck.connect(wake_up)
+	
+	if has_node("ClickArea"):
+		var ca = get_node("ClickArea")
+		if not ca.input_event.is_connected(_on_click_area_input_event):
+			ca.input_event.connect(_on_click_area_input_event)
+
+# =============================================================================
+func _on_click_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		GameState.sig_guest_clicked.emit(self)
 
 
 # =============================================================================
@@ -121,9 +131,9 @@ func _decide_next_action() -> void:
 	
 	var open_pois := _get_open_pois()
 	
-	# Kein offener POI? Gast ruht bis zum nächsten wake_up()
+	# Kein offener POI? Gast wartet etwas und probiert es später wieder
 	if open_pois.is_empty():
-		_action_timer = 0.0 # Timer auf 0 = ruhen (kein Countdown)
+		_action_timer = randf_range(15.0, 45.0)
 		return
 	
 	# Mögliche Ziele: Zimmer + alle offenen POIs
@@ -269,6 +279,9 @@ func _walk_to_room(room: Node2D, finish_state: State) -> void:
 		return
 		
 	_change_state(State.WALKING)
+	if finish_state == State.IN_ROOM:
+		_current_poi_id = "" # Ziel ist das Zimmer, nicht mehr der alte POI
+		
 	var door_world = _map_grid.tile_to_world(exit_tile)
 	# Tür-Position fürs Zielzimmer cachen (erstmalig oder bei Zimmerwechsel)
 	if finish_state == State.IN_ROOM:
@@ -386,8 +399,11 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 		
 	_active_tween = create_tween()
 	
-	if TimeManager and not TimeManager._game_paused:
-		_active_tween.set_speed_scale(TimeManager._game_speed)
+	if TimeManager:
+		if not TimeManager._game_paused:
+			_active_tween.set_speed_scale(TimeManager._game_speed)
+		else:
+			_active_tween.set_speed_scale(0.0)
 		
 	var current_pos = global_position
 	
@@ -417,6 +433,8 @@ func _on_time_speed_changed(is_paused: bool, speed: float) -> void:
 	if _active_tween and _active_tween.is_valid():
 		if not is_paused:
 			_active_tween.set_speed_scale(speed)
+		else:
+			_active_tween.set_speed_scale(0.0)
 
 
 # =============================================================================

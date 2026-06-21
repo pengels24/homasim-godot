@@ -70,9 +70,15 @@ func clear_all_tasks() -> void:
 
 
 func _on_room_needs_cleaning(room: Node2D) -> void:
+	for task in _tasks:
+		if task.type == "clean_room" and task.target == room:
+			return
 	add_task("clean_room", room)
 
 func _on_room_needs_repair(room: Node2D) -> void:
+	for task in _tasks:
+		if task.type == "repair_room" and task.target == room:
+			return
 	add_task("repair_room", room)
 
 

@@ -13,9 +13,9 @@ Das Hauptmenü und die Settings sehen bereits AAA aus. Die alten Menüs müssen 
   - [x] Thumbnails der Savegames korrekt einbinden (Der `SaveManager` speichert sie bereits!).
 - [x] **Charakter-Editor:** 
   - [x] Optisches Upgrade durchgeführt. (Nur noch individuelles Polishing durch den Dev nötig).
-- [ ] **Settings - Keybindings:** 
-  - [ ] Fake-Buttons im UI durch interaktive Input-Listener ersetzen.
-  - [ ] Godots `InputMap` anbinden (Speichern & Laden der Tastenbelegungen).
+- [x] **Settings - Keybindings:** 
+  - [x] Fake-Buttons im UI durch interaktive Input-Listener ersetzen.
+  - [x] Godots `InputMap` anbinden (Speichern & Laden der Tastenbelegungen).
 
 ## 🎓 2. Onboarding & Spielfluss (Der Streamer darf nicht feststecken)
 Die Systeme dafür haben wir gebaut, jetzt müssen die Inhalte rein.

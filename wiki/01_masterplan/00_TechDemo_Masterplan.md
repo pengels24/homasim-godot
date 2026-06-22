@@ -56,9 +56,9 @@ Die Systeme dafür haben wir gebaut, jetzt müssen die Inhalte rein.
 
 ## 🐞 4. QA & Polishing (Die Kirsche auf der Torte)
 - [x] **Bug-Reporter:** Globaler Ingame-Button mit Discord-Webhook-Anbindung. *(Erledigt!)*
-- [ ] **Sound & Feedback:** 
-  - [ ] "Kaching"-Sound beim Check-Out / Geldeingang einbauen.
-  - [ ] Klick-Sounds für die wichtigsten UI-Buttons.
+- [x] **Sound & Feedback:** 
+  - [x] "Kaching"-Sound beim Check-Out / Geldeingang einbauen.
+  - [x] Klick-Sounds für die wichtigsten UI-Buttons.
   - [ ] Atmosphärischer Background-Loop (leises Murmeln in der Lobby).
 - [ ] **Balancing Feinschliff:** 
   - [ ] Test-Run: Kann der Streamer in 45 Minuten ein ordentliches Hotel mit 3-4 Zimmertypen und erster Forschung aufbauen?

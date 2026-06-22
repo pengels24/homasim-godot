@@ -176,7 +176,7 @@ func center_on_entry(entry_plot: Vector2i) -> void:
 	var parcel: Node2D = _grid[entry_plot.y][entry_plot.x]
 	var target := parcel.global_position + Vector2(PARCEL_SZ * TILE_PX, PARCEL_SZ * TILE_PX) * (SCALE / 2.0)
 	camera.global_position = target
-	camera.zoom = Vector2(1.5, 1.5)
+	camera.zoom = Vector2(1.7, 1.7)
 	_set_camera_limits()
 
 
@@ -857,8 +857,10 @@ func get_room_exit_tile(room: Node2D) -> Vector2i:
  	 	 	 v a r   p a r c e l :   N o d e 2 D   =   r o w [ c o l _ i d x ] 
  	 	 	 i f   n o t   p a r c e l . v i s i b l e :   c o n t i n u e 
  	 	 	 f o r   c h i l d :   N o d e   i n   p a r c e l . g e t _ c h i l d r e n ( ) : 
- 	 	 	 	 i f   c h i l d . h a s _ m e t h o d ( \  
+ 	 	 	 	 i f   c h i l d . h a s _ m e t h o d ( \ 
+ 
  t o _ d i c t \ ) : 
  	 	 	 	 	 S a v e M a n a g e r . s a v e _ r o o m _ t o _ p l o t ( h o t e l _ i d ,   c o l _ i d x ,   r o w _ i d x ,   c h i l d . c a l l ( \ t o _ d i c t \ ) ) 
-  
+ 
+ 
  

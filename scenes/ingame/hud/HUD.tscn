@@ -21,6 +21,7 @@
 [ext_resource type="PackedScene" uid="uid://2l7rq0krey8f" path="res://scenes/ingame/hud/BuildMenu.tscn" id="17_8e3pd"]
 [ext_resource type="PackedScene" uid="uid://dnlttoshpxisb" path="res://scenes/ingame/hud/modals/LevelUpModal.tscn" id="24_6iy1x"]
 [ext_resource type="PackedScene" uid="uid://bcweu4cs7d73x" path="res://scenes/ingame/hud/modals/StandardModal.tscn" id="25_fiam6"]
+[ext_resource type="PackedScene" uid="uid://df2m4b8v7e1q" path="res://scenes/ingame/hud/TechOverlay.tscn" id="50_tech"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_gfles"]
 content_margin_left = 0.0
@@ -574,6 +575,9 @@ offset_top = -30.0
 offset_right = 170.0
 offset_bottom = 30.0
 
+[node name="Tutorials" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel0/MarginContainer" index="0"]
+button_group = SubResource("ButtonGroup_7mtkd")
+
 [node name="BuildMenu" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel1/MarginContainer" parent_id_path=PackedInt32Array(491735265, 566754857) index="0" unique_id=1033111495]
 button_group = SubResource("ButtonGroup_7mtkd")
 
@@ -587,6 +591,15 @@ button_group = SubResource("ButtonGroup_7mtkd")
 button_group = SubResource("ButtonGroup_7mtkd")
 
 [node name="SimBrowser" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel5/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1000552068) index="0" unique_id=103433776]
+button_group = SubResource("ButtonGroup_7mtkd")
+
+[node name="QuestBook" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel6/MarginContainer" index="0"]
+button_group = SubResource("ButtonGroup_7mtkd")
+
+[node name="GuestList" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel7/MarginContainer" index="0"]
+button_group = SubResource("ButtonGroup_7mtkd")
+
+[node name="RoomList" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel8/MarginContainer" index="0"]
 button_group = SubResource("ButtonGroup_7mtkd")
 
 [node name="BuildMenu" parent="BottomBarContainer/HUDBottom" unique_id=1714912306 instance=ExtResource("17_8e3pd")]
@@ -631,10 +644,10 @@ offset_bottom = 120.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.6)
+theme_override_colors/font_outline_color = Color(0.1, 0.1, 0.1, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 3
-theme_override_colors/font_outline_color = Color(0.1, 0.1, 0.1, 1)
 theme_override_font_sizes/font_size = 28
 text = "*** Spiel pausiert ***"
 horizontal_alignment = 1
@@ -649,6 +662,16 @@ scale_amount_max = 3.0
 
 [node name="StandardModal" parent="." unique_id=979018255 instance=ExtResource("25_fiam6")]
 unique_name_in_owner = true
+
+[node name="TechOverlay" parent="." instance=ExtResource("50_tech")]
+layout_mode = 1
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 30.0
+offset_top = 80.0
+offset_right = 180.0
+offset_bottom = 160.0
 
 [editable path="TopBar/MarginContainer/HBoxContainer/HotelName"]
 [editable path="TopBar/MarginContainer/HBoxContainer/Level"]

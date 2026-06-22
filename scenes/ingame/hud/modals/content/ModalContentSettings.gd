@@ -38,6 +38,10 @@ const KEYBINDING_ROW = preload("res://scenes/ingame/hud/modals/content/Keybindin
 @onready var btn_hud_right: Button = %ButtonPosHUDBottomRight
 @onready var lbl_hud: Label        = %LabelPosHUDBottomValue
 
+@onready var btn_tech_left: Button  = %ButtonTechInfoLeft
+@onready var btn_tech_right: Button = %ButtonTechInfoRight
+@onready var lbl_tech: Label        = %LabelTechInfoValue
+
 # Interne Speicherstruktur für die Left/Right-Logik
 var _sel_data: Dictionary = {}
 
@@ -87,15 +91,17 @@ func _init_ui_tab() -> void:
 		SettingsManager.UI_SCALES,
 		SettingsManager.ui_scale, _on_scale_changed)
 
-	_setup_selector("toast", btn_toast_left, btn_toast_right, lbl_toast,
-		SettingsManager.ui_toast_pos_labels,
-	SettingsManager.UI_TOAST_POS,
-		SettingsManager.toast_position, _on_toast_changed)
-
-	_setup_selector("hud", btn_hud_left, btn_hud_right, lbl_hud,
-		SettingsManager.ui_hudbottom_pos_labels,
-		SettingsManager.UI_HUDBOTTOM_POS,
-		SettingsManager.hud_side, _on_hud_changed)
+	_setup_selector("toast", btn_toast_left, btn_toast_right, lbl_toast, 
+			SettingsManager.ui_toast_pos_labels, SettingsManager.UI_TOAST_POS, 
+			SettingsManager.toast_position, _on_toast_changed)
+			
+	_setup_selector("hud", btn_hud_left, btn_hud_right, lbl_hud, 
+			SettingsManager.ui_hudbottom_pos_labels, SettingsManager.UI_HUDBOTTOM_POS, 
+			SettingsManager.hud_side, _on_hud_changed)
+			
+	_setup_selector("tech", btn_tech_left, btn_tech_right, lbl_tech,
+			["Aus", "An"], [false, true],
+			SettingsManager.show_tech_info, _on_tech_info_changed)
 
 
 # =============================================================================
@@ -214,6 +220,9 @@ func _on_scale_changed(val: float) -> void:
 	SettingsManager.ui_scale = val
 	SettingsManager.save()
 	get_tree().root.content_scale_factor = val
+
+func _on_tech_info_changed(val: bool) -> void:
+	SettingsManager.set_tech_info(val)
 
 
 # =============================================================================

@@ -14,7 +14,7 @@ signal sig_time_jumped(new_time: int) # <--- NEU: Signal für den DevConsole Zei
 signal sig_midnight_struck(day: int) # <--- NEU: Für den Kassensturz (23:59)
 signal sig_morning_struck()          # <--- NEU: Fürs Aufstehen (06:00)
 
-const SECONDS_PER_GAME_MINUTE := 6.0
+const SECONDS_PER_GAME_MINUTE := 4.0
 
 var _hotel_ref: Dictionary # Merken wir uns, um Tag/Zeit beim Tageswechsel ins Savegame zu schreiben
 

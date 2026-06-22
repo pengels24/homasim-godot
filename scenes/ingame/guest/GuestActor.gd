@@ -186,7 +186,14 @@ func wake_up() -> void:
 
 # =============================================================================
 func _change_state(new_state: State) -> void:
+	var old_state = current_state
 	current_state = new_state
+	
+	if old_state == State.IN_ROOM and (current_state == State.WALKING or current_state == State.LEAVING):
+		SoundManager.play("door_close")
+	elif current_state == State.IN_ROOM and (old_state == State.WALKING or old_state == State.IDLE):
+		SoundManager.play("door_close")
+	
 	match current_state:
 		State.IN_ROOM, State.IN_POI:
 			_action_timer = randf_range(45.0, 120.0)

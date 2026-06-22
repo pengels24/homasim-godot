@@ -3,6 +3,30 @@
 [ext_resource type="Script" uid="uid://b7fs8rb6tv8ib" path="res://scenes/ingame/hud/CustomTooltip.gd" id="1_script"]
 [ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="2_theme"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a4dcd"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.043137256, 0.05882353, 0.09019608, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pal1l"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(3.4774469e-06, 0.42007992, 0.11451676, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
 [node name="CustomTooltip" type="PanelContainer" unique_id=2132460247]
 process_mode = 3
 mouse_filter = 2
@@ -39,3 +63,10 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Gast 1
 Gast 2"
+
+[node name="StayProgress" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=978903627]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+theme_override_styles/background = SubResource("StyleBoxFlat_a4dcd")
+theme_override_styles/fill = SubResource("StyleBoxFlat_pal1l")

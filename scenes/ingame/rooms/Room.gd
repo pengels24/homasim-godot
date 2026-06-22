@@ -177,9 +177,6 @@ func _on_hour_passed(_hour: int) -> void:
 	if TimeManager.is_paused():
 		return
 		
-	if is_pending_demolish:
-		return
-		
 	# Werte langsam senken
 	cleanliness_level = clampi(cleanliness_level - 3, 0, 100)
 	maintenance_level = clampi(maintenance_level - 2, 0, 100)
@@ -336,17 +333,6 @@ func _on_interaction_area_input(_viewport: Node, event: InputEvent, _shape_idx: 
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if InputHandler.current_mode == InputHandler.InputMode.NORMAL:
 			get_viewport().set_input_as_handled()
-			
-			# Debug: Wenn der Raum schmutzig ist, manuell reinigen!
-			if is_service_requested:
-				if has_node("/root/TaskManager"):
-					# We assume TaskManager.complete_task accepts a room_id or we can just send the signal
-					# But wait, we can just call TaskManager directly since it's an Autoload
-					var TaskManager = get_node("/root/TaskManager")
-					if TaskManager.has_method("debug_complete_room_clean"):
-						TaskManager.debug_complete_room_clean(self)
-				return
-				
 			GameState.sig_room_clicked.emit(self)
 
 

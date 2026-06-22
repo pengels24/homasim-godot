@@ -58,11 +58,13 @@ func _ready() -> void:
 	_load_hotels()
 
 func open() -> void:
+	SoundManager.play("modal_open")
 	visible = true
 	_setup_manager_panel()
 	_load_hotels()
 
 func close() -> void:
+	SoundManager.play("modal_close")
 	visible = false
 	closed.emit()
 	if get_parent() == get_tree().root:

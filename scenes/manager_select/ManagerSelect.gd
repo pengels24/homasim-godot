@@ -48,6 +48,7 @@ func _ready() -> void:
 # ── Öffentliche API ───────────────────────────────────────────────────────────
 
 func open() -> void:
+	SoundManager.play("modal_open")
 	refresh()
 	visible = true
 
@@ -85,6 +86,7 @@ func _update_slot(i: int, profile: Dictionary) -> void:
 func _on_select_slot(i: int) -> void:
 	if i < _profiles.size():
 		GameState.select_profile(_profiles[i])
+	SoundManager.play("modal_close")
 	closed.emit()
 
 
@@ -127,4 +129,5 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _on_back() -> void:
+	SoundManager.play("modal_close")
 	closed.emit()

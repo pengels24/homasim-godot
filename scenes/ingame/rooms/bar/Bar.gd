@@ -18,6 +18,8 @@ static func get_definition() -> Dictionary:
 		"req_tech": "G1.1",
 		"max_beds": 0,
 		"is_poi": true,
+		"min_staff": 1,
+		"max_staff": 2,
 		"open_from": 720,
 		"open_to": 1410,
 		"valid_door_slots": ["R1"],

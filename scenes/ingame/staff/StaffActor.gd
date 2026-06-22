@@ -12,6 +12,7 @@ var _state: String = "idle" # idle, walking, working, returning
 var _work_timer: float = 0.0
 var _work_timer_max: float = 20.0
 var _think_timer: float = 0.0
+var _work_audio: AudioStreamPlayer
 
 var _path: Array[Vector2i] = []
 var _target_world_pos: Vector2 = Vector2.ZERO
@@ -23,6 +24,10 @@ var _debug_line: Line2D
 const SPEED := 40.0
 
 func _ready() -> void:
+	_work_audio = AudioStreamPlayer.new()
+	_work_audio.bus = "Sound"
+	add_child(_work_audio)
+	
 	if has_node("ClickArea"):
 		var ca = get_node("ClickArea")
 		if not ca.input_event.is_connected(_on_click_area_input_event):
@@ -36,7 +41,16 @@ func configure(staff_data: Dictionary, map_grid: Node2D, controller: Node) -> vo
 	_staff_data = staff_data
 	_map_grid = map_grid
 	_controller = controller
+	_update_visuals()
+	_sprite.visible = false
 	
+	var job = get_job_type()
+	if job == "housekeeping":
+		_work_audio.stream = load("res://assets/sounds/broom.mp3")
+	elif job == "maintenance":
+		_work_audio.stream = load("res://assets/sounds/wrench.mp3")
+
+func _update_visuals() -> void:
 	# Grafiken setzen basierend auf Beruf und Geschlecht
 	var job = _staff_data.get("role", "housekeeping")
 	var gender = _staff_data.get("gender", "female")
@@ -238,6 +252,17 @@ func _process_working(delta: float, speed_mult: float) -> void:
 	if is_instance_valid(_debug_line): _debug_line.points = []
 	_work_timer -= delta * speed_mult
 	
+	if _work_audio.stream != null:
+		var cam = get_viewport().get_camera_2d()
+		if cam and cam.zoom.x < 1.4:
+			_work_audio.volume_db = -80.0
+		else:
+			_work_audio.volume_db = 0.0
+			
+		if not _work_audio.playing:
+			_work_audio.play()
+		_work_audio.pitch_scale = max(0.5, speed_mult) # Bei Fast-Forward schneller hämmern!
+	
 	# Fortschrittsbalken im Raum aktualisieren
 	if is_instance_valid(_current_room) and _current_room.has_node("RoomStatusIndicator"):
 		var indicator = _current_room.get_node("RoomStatusIndicator")
@@ -249,6 +274,7 @@ func _process_working(delta: float, speed_mult: float) -> void:
 	_sprite.scale.x = 1.0 + cos(_work_timer * 10.0) * 0.05
 	
 	if _work_timer <= 0.0:
+		_work_audio.stop()
 		_sprite.scale = Vector2.ONE
 		# Fortschrittsbalken wieder verstecken
 		if is_instance_valid(_current_room) and _current_room.has_node("RoomStatusIndicator"):

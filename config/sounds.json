@@ -1,0 +1,11 @@
+{
+  "button_click": "res://assets/sounds/button_click.mp3",
+  "cash": "res://assets/sounds/cash.mp3",
+  "modal_open": "res://assets/sounds/modal_open.mp3",
+  "modal_close": "res://assets/sounds/modal_close.mp3",
+  "reception_checkin": "res://assets/sounds/reception_checkin.mp3",
+  "reception_checkout": "res://assets/sounds/reception_checkout.mp3",
+  "door_close": "res://assets/sounds/door_close.wav",
+  "broom": "res://assets/sounds/broom.mp3",
+  "wrench": "res://assets/sounds/wrench.mp3"
+}

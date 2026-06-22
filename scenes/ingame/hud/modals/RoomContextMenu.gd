@@ -198,7 +198,7 @@ func _on_demolish_pressed() -> void:
 			confirm.queue_free()
 		)
 		confirm.cancelled.connect(func(): confirm.queue_free())
-		confirm.ask("Abriss vormerken?", "%s ist aktuell belegt!\nFür automatischen Abriss beim Tagesabschluss vormerken?" % room_name, "Vormerken")
+		confirm.ask("Abriss vormerken?", "%s ist aktuell belegt!\nFür automatischen Abriss nach Abreise der Gäste vormerken?" % room_name, "Vormerken")
 	else:
 		confirm.confirmed.connect(func():
 			var refund_pos = room.global_position + Vector2(16, 16)

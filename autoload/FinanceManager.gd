@@ -41,3 +41,6 @@ func add_transaction(amount: int, category: String, description: String) -> void
   # 6. Das Geld über deine bestehende GameState-Logik aktualisieren
   # (Das feuert auch automatisch dein sig_hotel_money_changed Signal!)
   GameState.add_money(amount)
+  
+  if amount != 0:
+      SoundManager.play("cash")

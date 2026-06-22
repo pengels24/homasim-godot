@@ -391,6 +391,7 @@ func _execute_checkin_logic(surcharge: bool) -> void:
 	GameState.add_exp(exp_gain)
 
 	_guest_mgr.do_checkin(_sel_party, _sel_room)
+	SoundManager.play("reception_checkin")
 	Toast.show(GameState.T("toast.reception.checkin.success"))
 
 	_clear_selection()
@@ -402,6 +403,7 @@ func _on_checkout_pressed() -> void:
 	if _sel_checkout_party == null: return
 
 	var payout = _guest_mgr.do_checkout(_sel_checkout_party)
+	SoundManager.play("reception_checkout")
 
 	if has_node("/root/Toast"):
 		Toast.show("Checkout: %.0f € erhalten" % payout)

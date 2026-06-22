@@ -4,6 +4,10 @@
 [ext_resource type="Script" uid="uid://c52p86vmpmrik" path="res://scenes/ingame/hud/HUDBottom.gd" id="2_l5yvd"]
 [ext_resource type="StyleBox" uid="uid://brk7dwg72hmhm" path="res://assets/UI/hud_button_pressed_gold_bgt.tres" id="3_jm8q0"]
 [ext_resource type="ButtonGroup" uid="uid://bsedvtka3eabc" path="res://assets/UI/hud_bottom_button_group.tres" id="4_hq4tq"]
+[ext_resource type="Texture2D" uid="uid://7a1om1op5iuj" path="res://assets/icons/ic_help.svg" id="5_77a3o"]
+[ext_resource type="Texture2D" uid="uid://l03im2xt8qka" path="res://assets/icons/ic_staff.svg" id="6_8opbb"]
+[ext_resource type="Texture2D" uid="uid://cinr8i5m6p0w4" path="res://assets/icons/rooms/users.svg" id="7_chacj"]
+[ext_resource type="Texture2D" uid="uid://blpkvo0uaidss" path="res://assets/icons/HUDBottom/bed.svg" id="8_ibm0m"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_5kvvh"]
 load_path = "res://.godot/imported/drill.svg-bbefe30ad831414eee3045fcaed6c1c3.ctex"
@@ -22,9 +26,6 @@ corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_jm8q0"]
-load_path = "res://.godot/imported/users.svg-c3aa041cf3cbd0537f3ce7633221d22b.ctex"
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_hq4tq"]
 load_path = "res://.godot/imported/flask-conical.svg-59064ced8b7d2397bf99eb8f261f3e14.ctex"
@@ -62,14 +63,14 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 10
 
-[node name="Panel0" type="Panel" parent="HBoxContainer"]
+[node name="Panel0" type="Panel" parent="HBoxContainer" unique_id=583967304]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel0"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel0" unique_id=148448121]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -81,14 +82,14 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="Tutorials" type="Button" parent="HBoxContainer/Panel0/MarginContainer"]
+[node name="Tutorials" type="Button" parent="HBoxContainer/Panel0/MarginContainer" unique_id=330520415]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 theme_override_styles/pressed = ExtResource("3_jm8q0")
 toggle_mode = true
 button_group = ExtResource("4_hq4tq")
-text = "T"
+icon = ExtResource("5_77a3o")
 icon_alignment = 1
 
 [node name="Panel1" type="Panel" parent="HBoxContainer" unique_id=1153240142]
@@ -190,7 +191,7 @@ theme_override_styles/pressed = ExtResource("3_jm8q0")
 disabled = true
 toggle_mode = true
 button_group = ExtResource("4_hq4tq")
-icon = SubResource("CompressedTexture2D_jm8q0")
+icon = ExtResource("6_8opbb")
 icon_alignment = 1
 
 [node name="Panel4" type="Panel" parent="HBoxContainer" unique_id=979953461]
@@ -266,14 +267,14 @@ offset_bottom = 10.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_jm8q0")
 
-[node name="Panel6" type="Panel" parent="HBoxContainer"]
+[node name="Panel6" type="Panel" parent="HBoxContainer" unique_id=2118753879]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel6"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel6" unique_id=244124741]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -285,7 +286,7 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="QuestBook" type="Button" parent="HBoxContainer/Panel6/MarginContainer"]
+[node name="QuestBook" type="Button" parent="HBoxContainer/Panel6/MarginContainer" unique_id=969239424]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
@@ -295,7 +296,7 @@ button_group = ExtResource("4_hq4tq")
 icon = SubResource("CompressedTexture2D_l5yvd")
 icon_alignment = 1
 
-[node name="IndQuestBook" type="Panel" parent="HBoxContainer/Panel6/MarginContainer/QuestBook"]
+[node name="IndQuestBook" type="Panel" parent="HBoxContainer/Panel6/MarginContainer/QuestBook" unique_id=995958333]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(10, 10)
@@ -308,14 +309,14 @@ offset_bottom = 10.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_jm8q0")
 
-[node name="Panel7" type="Panel" parent="HBoxContainer"]
+[node name="Panel7" type="Panel" parent="HBoxContainer" unique_id=1865373646]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel7"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel7" unique_id=1564498093]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -327,24 +328,24 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="GuestList" type="Button" parent="HBoxContainer/Panel7/MarginContainer"]
+[node name="GuestList" type="Button" parent="HBoxContainer/Panel7/MarginContainer" unique_id=1602170882]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 theme_override_styles/pressed = ExtResource("3_jm8q0")
 toggle_mode = true
 button_group = ExtResource("4_hq4tq")
-text = "G"
+icon = ExtResource("7_chacj")
 icon_alignment = 1
 
-[node name="Panel8" type="Panel" parent="HBoxContainer"]
+[node name="Panel8" type="Panel" parent="HBoxContainer" unique_id=572321918]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel8"]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel8" unique_id=1190011345]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -356,13 +357,12 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="RoomList" type="Button" parent="HBoxContainer/Panel8/MarginContainer"]
+[node name="RoomList" type="Button" parent="HBoxContainer/Panel8/MarginContainer" unique_id=790306827]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 theme_override_styles/pressed = ExtResource("3_jm8q0")
 toggle_mode = true
 button_group = ExtResource("4_hq4tq")
-text = "R"
+icon = ExtResource("8_ibm0m")
 icon_alignment = 1
-

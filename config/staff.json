@@ -3,7 +3,7 @@
         "housekeeping": {
             "name": "Housekeeping",
             "desc": "Reinigt Zimmer und sorgt für Hygiene.",
-            "daily_wage": 80,
+            "daily_wage": 60,
             "hire_cost": 200,
             "base_skills": {
                 "cleaning_efficiency": [
@@ -23,7 +23,7 @@
         "maintenance": {
             "name": "Haustechnik",
             "desc": "Repariert defekte Zimmer und hält alles in Schuss.",
-            "daily_wage": 80,
+            "daily_wage": 60,
             "hire_cost": 250,
             "base_skills": {
                 "repair_knowledge": [

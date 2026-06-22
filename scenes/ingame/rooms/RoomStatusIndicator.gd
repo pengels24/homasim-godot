@@ -9,6 +9,15 @@ class_name RoomStatusIndicator
 func _ready() -> void:
 	hide()
 	progress_bar.hide()
+	
+	icon_clean.tooltip_text = "Reinigung angefordert"
+	icon_clean.mouse_filter = Control.MOUSE_FILTER_PASS
+	
+	icon_repair.tooltip_text = "Wartung angefordert"
+	icon_repair.mouse_filter = Control.MOUSE_FILTER_PASS
+	
+	icon_demolish.tooltip_text = "Zum Abriss markiert"
+	icon_demolish.mouse_filter = Control.MOUSE_FILTER_PASS
 
 func set_status(needs_cleaning: bool, needs_repair: bool, pending_demolish: bool = false) -> void:
 	if not is_node_ready():

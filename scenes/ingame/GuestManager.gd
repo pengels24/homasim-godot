@@ -492,18 +492,24 @@ func do_checkout(party: GuestParty) -> float:
 func _finalize_checkout(party: GuestParty, payout: int, auto: bool) -> void:
 	_checkout.erase(party)
 	
-	# Raum wird schmutzig und blockiert
-	_room_assign[party.room_id] = "DIRTY"
-	
-	if TimeManager.is_paused:
-		_pending_dirty_rooms.append(party.room_id)
-	else:
-		var room = _get_room_node(party.room_id)
-		if room:
-			room.set_service_requested(true)
-			GameState.sig_room_needs_cleaning.emit(room)
-	
 	party.state = "gone"
+	
+	var is_demolish_pending = false
+	var room = _get_room_node(party.room_id)
+	if room and room.get("is_pending_demolish"):
+		is_demolish_pending = true
+		if _room_assign.has(party.room_id):
+			_room_assign.erase(party.room_id)
+	else:
+		# Raum wird schmutzig und blockiert
+		_room_assign[party.room_id] = "DIRTY"
+		
+		if TimeManager.is_paused:
+			_pending_dirty_rooms.append(party.room_id)
+		else:
+			if room:
+				room.set_service_requested(true)
+				GameState.sig_room_needs_cleaning.emit(room)
 	
 	if not auto:
 		sig_party_checked_out_physically.emit(party)
@@ -540,6 +546,9 @@ func _finalize_checkout(party: GuestParty, payout: int, auto: bool) -> void:
 		FinanceManager.add_transaction(payout, category, desc)
 
 	parties_changed.emit()
+	
+	if is_demolish_pending:
+		demolish_pending_rooms(false)
 
 
 # =============================================================================

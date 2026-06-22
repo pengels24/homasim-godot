@@ -1,6 +1,8 @@
 extends Node
 ## Persistente Spieleinstellungen via ConfigFile (user://settings.cfg).
 
+signal sig_tech_info_toggled(is_visible: bool)
+
 signal sig_hud_side_changed
 
 const SETTINGS_PATH := "user://settings.cfg"
@@ -21,12 +23,20 @@ var sound_volume: float = 0.5  # 0.0 – 1.0
 var ui_scale: float  = 1.0       # 0.75 / 1.0 / 1.25 / 1.5
 var toast_position: String = "bottom"  # "top" / "middle" / "bottom"
 var hud_side: String = "center"    # "left" / "center" / "right"
+var show_tech_info: bool = false   # Ingame Performance Overlay
 
 # ── Session ───────────────────────────────────────────────────────────────────
 var last_profile_id: int = -1   # Zuletzt gewählter Manager – für Auto-Restore
 
 # ── Tastaturbelegung ──────────────────────────────────────────────────────────
 var custom_keybindings: Dictionary = {} # Speichert [primary_keycode, alt_keycode] pro Action
+
+func set_tech_info(visible: bool) -> void:
+	if show_tech_info != visible:
+		show_tech_info = visible
+		save()
+		sig_tech_info_toggled.emit(show_tech_info)
+
 var keybindings_config: Dictionary = {}
 const KEYBINDINGS_CONFIG_PATH := "res://config/keybindings.json"
 
@@ -77,6 +87,7 @@ func save() -> void:
 	cfg.set_value("ui", "scale", ui_scale)
 	cfg.set_value("ui", "toast_position", toast_position)
 	cfg.set_value("ui", "hud_side", hud_side)
+	cfg.set_value("ui", "show_tech_info", show_tech_info)
 	cfg.set_value("session", "last_profile_id", last_profile_id)
 	
 	for action in custom_keybindings:
@@ -108,8 +119,9 @@ func _load() -> void:
 	menu_music_volume = cfg.get_value("audio",    "menu_music_volume",         menu_music_volume)
 	sound_volume = cfg.get_value("audio",    "sound_volume",              sound_volume)
 	ui_scale = cfg.get_value("ui",       "scale",          ui_scale)
-	toast_position = cfg.get_value("ui",       "toast_position", toast_position)
-	hud_side = cfg.get_value("ui",       "hud_side",       hud_side)
+	toast_position = cfg.get_value("ui", "toast_position", "bottom")
+	hud_side = cfg.get_value("ui", "hud_side", "center")
+	show_tech_info = cfg.get_value("ui", "show_tech_info", false)
 	last_profile_id = cfg.get_value("session",  "last_profile_id",           last_profile_id)
 	
 	custom_keybindings.clear()

@@ -87,7 +87,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Card" type="PanelContainer" parent="Center" unique_id=1450180343]
-custom_minimum_size = Vector2(1700, 970)
+custom_minimum_size = Vector2(1700, 980)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_dashboard_modal")
 

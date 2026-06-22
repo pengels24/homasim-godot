@@ -41,6 +41,8 @@ func open(title_text: String = "") -> void:
 		return
 
 	set_title(title_text)
+	
+	SoundManager.play("modal_open")
 	_previous_input_mode = InputHandler.current_mode
 	InputHandler.current_mode = modal_input_mode
 	visible = true
@@ -49,6 +51,7 @@ func open(title_text: String = "") -> void:
 
 # =============================================================================
 func close() -> void:
+	SoundManager.play("modal_close")
 	$AnimationPlayer.play("fade_out")
 	await $AnimationPlayer.animation_finished
 	visible = false

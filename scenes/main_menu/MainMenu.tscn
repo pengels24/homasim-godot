@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b3x1qmainmenu"]
 
 [ext_resource type="Script" uid="uid://nflkh3eqs3tr" path="res://scenes/main_menu/MainMenu.gd" id="1_mainmenu"]
+[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_wckin"]
 [ext_resource type="PackedScene" uid="uid://c1managersel" path="res://scenes/manager_select/ManagerSelect.tscn" id="2_mgsel"]
 [ext_resource type="Texture2D" uid="uid://dwnfttdpcsskc" path="res://assets/images/logo.png" id="2_qmweu"]
 [ext_resource type="PackedScene" uid="uid://bcweu4cs7d73x" path="res://scenes/ingame/hud/modals/StandardModal.tscn" id="3_settings"]
@@ -161,6 +162,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_wckin")
 script = ExtResource("1_mainmenu")
 
 [node name="BgSlideshow" type="Control" parent="." unique_id=2028861907]

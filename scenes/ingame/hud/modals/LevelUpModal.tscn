@@ -42,7 +42,6 @@ layout_mode = 2
 
 [node name="Titel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" index="0" unique_id=2012609103]
 layout_mode = 2
-theme_override_font_sizes/font_size = 60
 text = "LEVEL UP !"
 horizontal_alignment = 1
 uppercase = true
@@ -50,8 +49,6 @@ uppercase = true
 [node name="Level" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" index="1" unique_id=484188599]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(2.454227, 1.8946, 0.16910705, 1)
-theme_override_font_sizes/font_size = 500
 text = "3"
 horizontal_alignment = 1
 
@@ -112,14 +109,12 @@ theme_override_constants/margin_bottom = 20
 [node name="Unlock" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/MarginContainer/VBoxContainer/MarginContainer3" index="0" unique_id=1931046857]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.91764706, 0.7019608, 0.03137255, 1)
 text = "XXX ist nun verfügbar"
 horizontal_alignment = 1
 
 [node name="ButtonOK" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" index="3" unique_id=1141093485]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
 text = "Weiter"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="3" unique_id=1391309661]

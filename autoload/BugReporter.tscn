@@ -1,36 +1,39 @@
 [gd_scene format=3 uid="uid://cx6y8b2a3d4e5"]
 
-[ext_resource type="Script" path="res://autoload/BugReporter.gd" id="1_a2b3c"]
+[ext_resource type="Script" uid="uid://6rboj6i772xh" path="res://autoload/BugReporter.gd" id="1_a2b3c"]
+[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="2_theme"]
+[ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="3_2afny"]
+[ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="4_a8tqv"]
+[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="5_h6h06"]
+[ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://assets/UI/menu_button_green.tres" id="6_r6lre"]
+[ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://assets/UI/menu_button_green_pressed.tres" id="7_or64d"]
+[ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://assets/UI/menu_button_green_hover.tres" id="8_464fd"]
 
-[node name="BugReporter" type="CanvasLayer"]
+[node name="BugReporter" type="CanvasLayer" unique_id=1238631575]
 layer = 100
 script = ExtResource("1_a2b3c")
 
-[node name="BtnReport" type="Button" parent="."]
+[node name="BtnReport" type="Button" parent="." unique_id=1084930574]
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -30.0
-offset_top = -120.0
+offset_left = -65.0
+offset_top = -30.0
 offset_right = -5.0
-offset_bottom = 120.0
+offset_bottom = 30.0
 grow_horizontal = 0
 grow_vertical = 2
-text = "🐞
-B
-u
-g
+tooltip_text = "Bug melden"
+theme = ExtResource("2_theme")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = ExtResource("3_2afny")
+theme_override_styles/pressed = ExtResource("4_a8tqv")
+theme_override_styles/hover = ExtResource("5_h6h06")
+text = "🐞"
 
-M
-e
-l
-d
-e
-n"
-
-[node name="Dim" type="ColorRect" parent="."]
+[node name="Dim" type="ColorRect" parent="." unique_id=639552058]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -38,9 +41,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.7)
-mouse_filter = 0
 
-[node name="Modal" type="PanelContainer" parent="."]
+[node name="Modal" type="PanelContainer" parent="." unique_id=959475018]
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
@@ -53,62 +55,76 @@ offset_right = 300.0
 offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_type_variation = &"ModalPanel"
 
-[node name="Margin" type="MarginContainer" parent="Modal"]
+[node name="Margin" type="MarginContainer" parent="Modal" unique_id=406496943]
 layout_mode = 2
-theme_override_constants/margin_left = 20
-theme_override_constants/margin_top = 20
-theme_override_constants/margin_right = 20
-theme_override_constants/margin_bottom = 20
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
 
-[node name="VBox" type="VBoxContainer" parent="Modal/Margin"]
+[node name="VBox" type="VBoxContainer" parent="Modal/Margin" unique_id=207458966]
 layout_mode = 2
 theme_override_constants/separation = 15
 
-[node name="Title" type="Label" parent="Modal/Margin/VBox"]
+[node name="Title" type="Label" parent="Modal/Margin/VBox" unique_id=1450672806]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_type_variation = &"HeaderLarge"
 text = "Bug Report senden"
 horizontal_alignment = 1
 
-[node name="Label" type="Label" parent="Modal/Margin/VBox"]
+[node name="Label" type="Label" parent="Modal/Margin/VBox" unique_id=1886113484]
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
-text = "Was ist passiert? (Ein Screenshot & Systemdaten werden automatisch angehängt)"
+theme_type_variation = &"DescLabel"
+text = "Was ist passiert?
+(Ein Screenshot & Systemdaten werden automatisch angehängt)"
 autowrap_mode = 2
 
-[node name="EmailInput" type="LineEdit" parent="Modal/Margin/VBox"]
+[node name="EmailInput" type="LineEdit" parent="Modal/Margin/VBox" unique_id=1179231702]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Deine E-Mail (Optional für Rückfragen)"
 
-[node name="Input" type="TextEdit" parent="Modal/Margin/VBox"]
+[node name="Input" type="TextEdit" parent="Modal/Margin/VBox" unique_id=1062576026]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
 size_flags_vertical = 3
 placeholder_text = "Beschreibe den Fehler..."
 wrap_mode = 1
 
-[node name="Status" type="Label" parent="Modal/Margin/VBox"]
+[node name="Status" type="Label" parent="Modal/Margin/VBox" unique_id=1065028966]
 unique_name_in_owner = true
 layout_mode = 2
 horizontal_alignment = 1
 
-[node name="HBox" type="HBoxContainer" parent="Modal/Margin/VBox"]
+[node name="HBox" type="HBoxContainer" parent="Modal/Margin/VBox" unique_id=1278253658]
 layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="BtnCancel" type="Button" parent="Modal/Margin/VBox/HBox"]
+[node name="BtnCancel" type="Button" parent="Modal/Margin/VBox/HBox" unique_id=333367781]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
+custom_minimum_size = Vector2(150, 45)
 layout_mode = 2
+theme_type_variation = &"SecondaryButton"
+theme_override_styles/normal = ExtResource("3_2afny")
+theme_override_styles/pressed = ExtResource("4_a8tqv")
+theme_override_styles/hover = ExtResource("5_h6h06")
 text = "Abbrechen"
 
-[node name="BtnSend" type="Button" parent="Modal/Margin/VBox/HBox"]
+[node name="BtnSend" type="Button" parent="Modal/Margin/VBox/HBox" unique_id=662836025]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
+custom_minimum_size = Vector2(150, 45)
 layout_mode = 2
+theme_type_variation = &"PrimaryButton"
+theme_override_styles/normal = ExtResource("6_r6lre")
+theme_override_styles/pressed = ExtResource("7_or64d")
+theme_override_styles/hover = ExtResource("8_464fd")
 text = "Senden"
 
-[node name="HTTPRequest" type="HTTPRequest" parent="."]
+[node name="HTTPRequest" type="HTTPRequest" parent="." unique_id=480687029]
 unique_name_in_owner = true

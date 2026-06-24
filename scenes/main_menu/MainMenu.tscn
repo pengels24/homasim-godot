@@ -297,6 +297,7 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 disabled = true
+theme_override_font_sizes/font_size = 48
 text = "Spiel starten"
 
 [node name="BtnSettings" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=2137549259]
@@ -315,6 +316,7 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_font_sizes/font_size = 48
 text = "Einstellungen"
 
 [node name="BtnLogin" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=362375200]
@@ -336,6 +338,7 @@ theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_font_sizes/font_size = 48
 text = "Login / Register"
 
 [node name="BtnManager" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=1714649453]
@@ -354,6 +357,7 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_font_sizes/font_size = 48
 text = "Manager wählen"
 
 [node name="BtnTutorial" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=1385949115]
@@ -373,6 +377,7 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_font_sizes/font_size = 48
 text = "Tutorial"
 
 [node name="BtnCredits" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=1852897334]
@@ -392,6 +397,7 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_font_sizes/font_size = 48
 text = "Info"
 
 [node name="BtnQuit" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox" unique_id=1864160667]
@@ -409,6 +415,7 @@ theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+theme_override_font_sizes/font_size = 48
 text = "Beenden"
 
 [node name="Footer" type="HBoxContainer" parent="." unique_id=637569252]
@@ -422,9 +429,6 @@ theme_override_constants/separation = 8
 [node name="VersionLbl" type="Label" parent="Footer" unique_id=2070749987]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.75, 0.75, 0.8, 0.9)
-theme_override_fonts/font = ExtResource("3_wckin")
-theme_override_font_sizes/font_size = 20
 text = "v0.0.0"
 
 [node name="Spacer" type="Control" parent="Footer" unique_id=46122791]
@@ -444,9 +448,6 @@ stretch_mode = 5
 [node name="MadeWithLbl" type="Label" parent="Footer" unique_id=2145226987]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.75, 0.75, 0.8, 0.9)
-theme_override_fonts/font = ExtResource("3_wckin")
-theme_override_font_sizes/font_size = 20
 text = "Made with Godot 4"
 
 [node name="CopyrightLbl" type="Label" parent="." unique_id=543462729]
@@ -454,9 +455,6 @@ layout_mode = 0
 offset_top = 1042.0
 offset_right = 1920.0
 offset_bottom = 1070.0
-theme_override_colors/font_color = Color(0.75, 0.75, 0.8, 0.9)
-theme_override_fonts/font = ExtResource("3_wckin")
-theme_override_font_sizes/font_size = 20
 text = "© 2026 – Angelus2010"
 horizontal_alignment = 1
 vertical_alignment = 1

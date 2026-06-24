@@ -130,5 +130,23 @@
         "default_alt": ""
       }
     }
+  },
+  "build_mode": {
+    "label": "Baumodus",
+    "order": 4,
+    "actions": {
+      "rotate_room": {
+        "label": "Raum rotieren",
+        "order": 1,
+        "default": "R",
+        "default_alt": ""
+      },
+      "cycle_door": {
+        "label": "Türposition durchschalten",
+        "order": 2,
+        "default": "Period",
+        "default_alt": ""
+      }
+    }
   }
 }

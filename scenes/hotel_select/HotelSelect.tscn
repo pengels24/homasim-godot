@@ -18,6 +18,7 @@ theme_override_constants/separation = 12
 custom_minimum_size = Vector2(400, 0)
 
 [node name="Title" type="Label" parent="CenterContainer/VBoxContainer"]
+theme_type_variation = &"HeaderLarge"
 layout_mode = 2
 text = "Deine Hotels"
 horizontal_alignment = 1

@@ -1,6 +1,7 @@
 [gd_resource type="Theme" format=3 uid="uid://m7vvlxrl4xfq"]
 
 [ext_resource type="FontFile" uid="uid://bs3xl562plyi2" path="res://assets/fonts/Jersey25-Regular.ttf" id="1_vos2p"]
+[ext_resource type="StyleBox" uid="uid://cg2q7w0wqska8" path="res://assets/UI/modal_panel_glow.tres" id="2_modal"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gp7cf"]
 bg_color = Color(0.101960786, 0.11764706, 0.14117648, 1)
@@ -72,24 +73,80 @@ shadow_color = Color(0, 0, 0, 0.5882353)
 shadow_size = 5
 shadow_offset = Vector2(5, 5)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TooltipProgressBg"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.043137256, 0.05882353, 0.09019608, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_TooltipProgressFill"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0, 0.42008, 0.114517, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
 [resource]
 default_base_scale = 1.0
 default_font = ExtResource("1_vos2p")
-default_font_size = 26
+default_font_size = 20
+Button/colors/font_color = Color(0.8, 0.8, 0.8, 1)
 Button/font_sizes/font_size = 24
 CheckBox/font_sizes/font_size = 24
 CheckBox/styles/normal = SubResource("StyleBoxFlat_gp7cf")
 CheckButton/colors/button_checked_color = Color(0.21176471, 0.43137255, 0.3019608, 1)
 CheckButton/colors/button_unchecked_color = Color(0.87058824, 0.23529412, 0.19215687, 1)
 CheckButton/font_sizes/font_size = 19
-Label/font_sizes/font_size = 24
+DescLabel/base_type = &"Label"
+DescLabel/colors/font_color = Color(0.631373, 0.631373, 0.670588, 1)
+DescLabel/font_sizes/font_size = 22
+HeaderLarge/base_type = &"Label"
+HeaderLarge/colors/font_color = Color(0.917647, 0.701961, 0.0313726, 1)
+HeaderLarge/font_sizes/font_size = 32
+HeaderMedium/base_type = &"Label"
+HeaderMedium/colors/font_color = Color(0.917647, 0.701961, 0.0313726, 1)
+HeaderMedium/font_sizes/font_size = 28
+InnerPanel/base_type = &"PanelContainer"
+InnerPanel/styles/panel = SubResource("StyleBoxFlat_4ek52")
+Label/colors/font_color = Color(0.701961, 0.701961, 0.74902, 1)
+Label/font_sizes/font_size = 22
 LineEdit/font_sizes/font_size = 24
+ModalPanel/base_type = &"PanelContainer"
+ModalPanel/styles/panel = ExtResource("2_modal")
 Panel/styles/panel = SubResource("StyleBoxFlat_4ek52")
 TabContainer/font_sizes/font_size = 32
 TabContainer/styles/panel = SubResource("StyleBoxFlat_1y6f5")
 TabContainer/styles/tab_hovered = SubResource("StyleBoxFlat_n1ha2")
 TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_0a7r7")
 TabContainer/styles/tab_unselected = SubResource("StyleBoxFlat_is7be")
+TooltipHeader/base_type = &"Label"
+TooltipHeader/colors/font_color = Color(0.917647, 0.701961, 0.0313726, 1)
+TooltipHeader/font_sizes/font_size = 24
 TooltipLabel/colors/font_color = Color(0.8, 0.8, 0.8, 1)
 TooltipLabel/font_sizes/font_size = 20
 TooltipPanel/styles/panel = SubResource("StyleBoxFlat_qx8ka")
+TooltipProgressBar/base_type = &"ProgressBar"
+TooltipProgressBar/styles/background = SubResource("StyleBoxFlat_TooltipProgressBg")
+TooltipProgressBar/styles/fill = SubResource("StyleBoxFlat_TooltipProgressFill")
+TooltipText/base_type = &"Label"
+TooltipText/colors/font_color = Color(0.8, 0.8, 0.8, 1)
+TooltipText/font_sizes/font_size = 20
+TutorialDesc/base_type = &"RichTextLabel"
+TutorialDesc/font_sizes/normal_font_size = 24
+ValueLabel/base_type = &"Label"
+ValueLabel/colors/font_color = Color(0.917647, 0.701961, 0.0313726, 1)
+ValueLabel/font_sizes/font_size = 22
+ValueLabelRed/base_type = &"Label"
+ValueLabelRed/colors/font_color = Color(0.862745, 0.14902, 0.14902, 1)
+ValueLabelRed/font_sizes/font_size = 22

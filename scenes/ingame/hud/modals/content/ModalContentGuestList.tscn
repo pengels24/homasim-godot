@@ -2,23 +2,12 @@
 
 [ext_resource type="Script" path="res://scenes/ingame/hud/modals/content/ModalContentGuestList.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://cxp1abc2def3g" path="res://scenes/shared/PipCamera.tscn" id="2_pip"]
+[ext_resource type="Theme" uid="uid://cmfawpylw6m6x" path="res://assets/UI/menu_button_blue.tres" id="3_theme"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Header"]
-bg_color = Color(0.2, 0.2, 0.22, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Detail"]
-bg_color = Color(0.12, 0.12, 0.14, 0)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
 
 [node name="ModalContentGuestList" type="MarginContainer"]
-custom_minimum_size = Vector2(1300, 600)
+custom_minimum_size = Vector2(1600, 600)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -37,11 +26,11 @@ theme_override_constants/separation = 40
 [node name="LeftCol" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 1.6
+size_flags_stretch_ratio = 2.5
 
 [node name="TableHeaderPanel" type="PanelContainer" parent="HBoxContainer/LeftCol"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_Header")
+theme_type_variation = &"InnerPanel"
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LeftCol/TableHeaderPanel"]
 layout_mode = 2
@@ -56,42 +45,46 @@ theme_override_constants/separation = 10
 
 [node name="LblName" type="Label" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
+mouse_filter = 1
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 2.5
-theme_override_colors/font_color = Color(0.9, 0.7, 0.1, 1)
+size_flags_stretch_ratio = 2.0
 text = "Name"
 
 [node name="LblRoom" type="Label" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
+mouse_filter = 1
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 1.5
-theme_override_colors/font_color = Color(0.9, 0.7, 0.1, 1)
+size_flags_stretch_ratio = 1.0
 text = "Zimmer"
-horizontal_alignment = 1
+
+[node name="LblBudget" type="Label" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
+layout_mode = 2
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.0
+text = "Budget"
 
 [node name="LblGoal" type="Label" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
+mouse_filter = 1
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 2.0
-theme_override_colors/font_color = Color(0.9, 0.7, 0.1, 1)
-text = "Ziel"
-horizontal_alignment = 1
+size_flags_stretch_ratio = 1.5
+text = "Status"
 
 [node name="LblEnergy" type="Label" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.0
-theme_override_colors/font_color = Color(0.9, 0.7, 0.1, 1)
 text = "Energie"
-horizontal_alignment = 2
 
 [node name="LblSatisfaction" type="Label" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
+mouse_filter = 1
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 1.5
-theme_override_colors/font_color = Color(0.9, 0.7, 0.1, 1)
-text = "Zufriedenheit"
-horizontal_alignment = 2
+size_flags_stretch_ratio = 1.0
+text = "Zufr."
+tooltip_text = "Zufriedenheit"
 
 [node name="ScrollSpacer" type="Control" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(12, 0)
@@ -111,7 +104,7 @@ size_flags_horizontal = 3
 [node name="DetailPanel" type="PanelContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_Detail")
+theme_type_variation = &"InnerPanel"
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/DetailPanel"]
 layout_mode = 2
@@ -135,22 +128,83 @@ theme_override_constants/separation = 10
 [node name="DetailNameLabel" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9, 0.7, 0.1, 1)
-theme_override_font_sizes/font_size = 28
+theme_type_variation = &"HeaderLarge"
 text = "Bitte wähle..."
 horizontal_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox"]
 layout_mode = 2
 
-[node name="DetailRoomLabel" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox"]
-unique_name_in_owner = true
+[node name="DetailRoom" type="HBoxContainer" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "Raum: "
 
-[node name="DetailSatisfactionLabel" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox"]
+[node name="DetailRoomLabel" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox/DetailRoom"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
-text = "Zufriedenheit: "
+size_flags_horizontal = 3
+theme_type_variation = &"DescLabel"
+text = "Raum:"
+
+[node name="DetailRoomValue" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox/DetailRoom"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ValueLabel"
+text = "---"
+
+[node name="DetailSatisfaction" type="HBoxContainer" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox"]
+layout_mode = 2
+
+[node name="DetailSatisfactionLabel" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox/DetailSatisfaction"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"DescLabel"
+text = "Zufriedenheit:"
+
+[node name="DetailSatisfactionValue" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox/DetailSatisfaction"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ValueLabel"
+text = "---"
+
+[node name="DetailStatus" type="HBoxContainer" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox"]
+layout_mode = 2
+
+[node name="DetailStatusLabel" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox/DetailStatus"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"DescLabel"
+text = "Status:"
+
+[node name="DetailStatusValue" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox/DetailStatus"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ValueLabel"
+text = "---"
+
+[node name="DetailBudget" type="HBoxContainer" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox"]
+layout_mode = 2
+
+[node name="DetailBudgetLabel" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox/DetailBudget"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"DescLabel"
+text = "Budget:"
+
+[node name="DetailBudgetValue" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox/DetailBudget"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ValueLabel"
+text = "---"
+
+[node name="Spacer" type="Control" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BtnGoto" type="Button" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Gehe zu Gast"

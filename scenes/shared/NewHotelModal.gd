@@ -47,9 +47,17 @@ var _refund_idx := 3
 var _exp_labels := ["+25 %", "+10 %", "+5 %", "0 %"]
 var _exp_idx := 3
 
+var _golden_pressed = preload("res://assets/UI/menu_button_golden_pressed.tres")
+var _dark_normal: StyleBox
+
 # ── Lifecycle ─────────────────────────────────────────────────────────────────
 func _ready() -> void:
-	_btn_cancel.pressed.connect(_on_close_pressed)
+	_dark_normal = _btn_easy.get_theme_stylebox("normal")
+	
+	_btn_cancel.pressed.connect(func() -> void:
+		SoundManager.play("button_click")
+		cancelled.emit()
+	)
 	_btn_create.pressed.connect(_on_create_pressed)
 	_name_field.text_submitted.connect(func(_t: String) -> void: _on_create_pressed())
 	
@@ -67,7 +75,6 @@ func _ready() -> void:
 	open()
 
 func open() -> void:
-	_name_field.text = ""
 	_error_lbl.text  = ""
 	_selected_x = 2
 	_selected_y = 0
@@ -86,10 +93,15 @@ func _update_labels() -> void:
 	_lbl_exp.text = _exp_labels[_exp_idx]
 
 func _set_difficulty(level: int) -> void:
-	_btn_easy.modulate = Color(1.2, 1.2, 0.4) if level == 0 else Color(1, 1, 1)
-	_btn_normal.modulate = Color(1.2, 1.2, 0.4) if level == 1 else Color(1, 1, 1)
-	_btn_hard.modulate = Color(1.2, 1.2, 0.4) if level == 2 else Color(1, 1, 1)
-	_btn_custom.modulate = Color(1.2, 1.2, 0.4) if level == 3 else Color(1, 1, 1)
+	_btn_easy.modulate = Color(1, 1, 1)
+	_btn_normal.modulate = Color(1, 1, 1)
+	_btn_hard.modulate = Color(1, 1, 1)
+	_btn_custom.modulate = Color(1, 1, 1)
+	
+	_btn_easy.add_theme_stylebox_override("normal", _golden_pressed if level == 0 else _dark_normal)
+	_btn_normal.add_theme_stylebox_override("normal", _golden_pressed if level == 1 else _dark_normal)
+	_btn_hard.add_theme_stylebox_override("normal", _golden_pressed if level == 2 else _dark_normal)
+	_btn_custom.add_theme_stylebox_override("normal", _golden_pressed if level == 3 else _dark_normal)
 	
 	# Inputs nur in "Angepasst" aktivieren
 	_btn_money_l.disabled = (level != 3)
@@ -155,16 +167,26 @@ func _update_grid() -> void:
 		_map_grid.setup_as_miniature(_selected_x, _selected_y)
 	
 	# Update borders and arrows on click grid
+	var door_icon = preload("res://assets/icons/door-open.svg")
 	for py in GRID_ROWS:
 		for px in GRID_COLS:
 			var btn := _click_grid.get_child(_cell_index(px, py)) as Button
 			
 			if px == _selected_x and py == _selected_y:
-				btn.text = _get_arrow_for_dir(dir)
-				btn.add_theme_font_size_override("font_size", 48)
-				btn.add_theme_color_override("font_color", Color(0.9, 0.7, 0.1)) # Gelb
+				btn.text = ""
+				btn.icon = door_icon
+				btn.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+				btn.expand_icon = true
+				btn.add_theme_constant_override("icon_max_width", 40)
+				
+				btn.add_theme_color_override("icon_normal_color", Color(0.9, 0.7, 0.1))
+				btn.add_theme_color_override("icon_pressed_color", Color(0.9, 0.7, 0.1))
+				btn.add_theme_color_override("icon_hover_color", Color(0.9, 0.7, 0.1))
+				btn.add_theme_color_override("icon_disabled_color", Color(0.9, 0.7, 0.1))
+				btn.add_theme_color_override("icon_focus_color", Color(0.9, 0.7, 0.1))
 			else:
 				btn.text = ""
+				btn.icon = null
 
 func _get_empty_style() -> StyleBoxEmpty:
 	return StyleBoxEmpty.new()

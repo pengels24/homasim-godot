@@ -5,6 +5,8 @@ class_name CustomTooltip
 @onready var status_label: Label = %StatusLabel
 @onready var guests_label: Label = %GuestsLabel
 @onready var stay_progress: ProgressBar = %StayProgress
+@onready var stay_progress_label: Label = %StayProgressLabel
+@onready var stay_spacer: Control = %StaySpacer
 
 var _target_room: Node2D = null
 
@@ -70,6 +72,7 @@ func _update_content() -> void:
 	guests_label.hide()
 	if is_instance_valid(stay_progress):
 		stay_progress.hide()
+		if stay_spacer: stay_spacer.hide()
 	
 	if _target_room.is_service_requested or _target_room.maintenance_level < 50:
 		status = "🧹 Service benötigt"
@@ -97,7 +100,7 @@ func _update_content() -> void:
 							elif actor.current_state == actor.State.LEAVING or actor.current_state == actor.State.AWAITING_CHECKOUT or (actor.current_state == actor.State.WALKING and actor._is_checkout_walk):
 								presence = "🧳 Abreisend"
 								break
-				status = "👥 Belegt – " + presence
+				status = "👥 Belegt: " + presence
 				var names = ["Gäste im Zimmer:"]
 				for m in party.members:
 					var display_role = GameState.T("guest.member.type." + str(m.role))
@@ -107,9 +110,13 @@ func _update_content() -> void:
 				if is_instance_valid(stay_progress):
 					stay_progress.max_value = party.total_stay_days
 					stay_progress.value = party.stay_days
-					# Optional: Zeige "3 / 7 Tage" statt %
-					# Aber der User hat "progressbar(resttage)" gewünscht, das reicht so.
+					
+					if party.stay_days <= 0:
+						stay_progress_label.text = "Abreise"
+					else:
+						stay_progress_label.text = "Übrige Nächte: %d / %d" % [party.stay_days, party.total_stay_days]
 					stay_progress.show()
+					if stay_spacer: stay_spacer.show()
 				
 	var final_status = ""
 	if _target_room.get("is_pending_demolish"):

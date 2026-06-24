@@ -28,6 +28,11 @@ func _ready() -> void:
 	btn_send.pressed.connect(_send_report)
 	http_request.request_completed.connect(_on_request_completed)
 
+func _input(event: InputEvent) -> void:
+	if dim.visible and event.is_action_pressed("ui_cancel"):
+		_close_modal()
+		get_viewport().set_input_as_handled()
+
 func _unhandled_input(event: InputEvent) -> void:
 	if dim.visible and (event is InputEventKey or event is InputEventMouseButton):
 		get_viewport().set_input_as_handled()

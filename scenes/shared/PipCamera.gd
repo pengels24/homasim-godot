@@ -26,10 +26,18 @@ func set_target(target_node: Node2D) -> void:
 		_target.tree_exiting.connect(_on_target_exiting)
 		no_signal_lbl.visible = false
 		no_signal_rect.visible = false
-		camera.global_position = _target.global_position
+		camera.global_position = _get_target_center()
 	else:
 		no_signal_lbl.visible = true
 		no_signal_rect.visible = true
+
+func _get_target_center() -> Vector2:
+	if not is_instance_valid(_target): return Vector2.ZERO
+	var center = _target.global_position
+	if _target.has_method("get_tile_size"):
+		var size = _target.get_tile_size()
+		center += Vector2(size.x, size.y) * 16.0 * 0.5 * _target.global_scale
+	return center
 
 func _process(delta: float) -> void:
 	if not is_visible_in_tree():
@@ -46,7 +54,7 @@ func _process(delta: float) -> void:
 			if no_signal_lbl.visible:
 				no_signal_lbl.visible = false
 				no_signal_rect.visible = false
-			camera.global_position = camera.global_position.lerp(_target.global_position, 5.0 * delta)
+			camera.global_position = camera.global_position.lerp(_get_target_center(), 5.0 * delta)
 		else:
 			if not no_signal_lbl.visible:
 				no_signal_lbl.visible = true

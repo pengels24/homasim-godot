@@ -320,11 +320,5 @@ func _on_event_reception_last_call() -> void:
 # TEMP TEST: Debug-Trigger (STRG + T)
 # =============================================================================
 func _on_debug_action_requested() -> void:
-	var transition_scene = preload("res://scenes/ingame/hud/modals/DayTransitionModal.tscn")
-	var transition = transition_scene.instantiate()
-
-	transition.sig_midnight_hidden.connect(
-		func(): print("--- MITTERNACHT! (Genau hier feuert das Backend-Update) ---")
-	)
-
-	get_tree().root.add_child(transition)
+	if is_instance_valid(_ui_mgr) and is_instance_valid(_guest_mgr):
+		_ui_mgr.show_end_of_day(_guest_mgr)

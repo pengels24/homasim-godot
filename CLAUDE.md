@@ -12,8 +12,9 @@ Linear-Projekt: **Angelus2010 / ANG-** für alle Issues.
 - Gäste generieren EXP beim Check-In und Check-Out. Zimmer geben einen Erst-Bau-EXP-Bonus.
 - Savegame & Load System wurde stark stabilisiert (Tween-Bugs gefixt).
 - **Nächste Schritte**: 
-  1. Keybindings (InputMap) in den Settings interaktiv machen.
-  2. Tutorial-JSON-Texte vervollständigen und Ingame-Trigger implementieren.
+  1. Letztes UI-Refactoring: Die Rezeption (F2/Rezeption) an das neue UI-System (PipCamera, InnerPanel, etc.) anpassen.
+  2. Keybindings (InputMap) in den Settings interaktiv machen.
+  3. Tutorial-JSON-Texte vervollständigen und Ingame-Trigger implementieren.
 
 ## Kommunikation
 - **Du**-Form, entspannt aber zielorientiert

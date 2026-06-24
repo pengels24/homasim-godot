@@ -63,16 +63,12 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.6745098, 0.5137255, 0.02745098, 1)
-theme_override_fonts/font = ExtResource("3_eqh8p")
-theme_override_font_sizes/font_size = 18
 text = "  ::: Aktionen"
 vertical_alignment = 1
 
 [node name="BtnClose" type="Button" parent="MenuPanel/VBoxContainer/Header" unique_id=940631296]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.2, 0.2, 1)
 theme_override_constants/icon_max_width = 16
 theme_override_styles/normal = ExtResource("3_l0jnf")
 theme_override_styles/pressed = ExtResource("4_knild")
@@ -93,8 +89,6 @@ theme_override_constants/separation = 8
 [node name="BtnDetails" type="Button" parent="MenuPanel/VBoxContainer/MarginContainer/VBoxButtons" unique_id=1228970060]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_eqh8p")
-theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = ExtResource("8_8tpl6")
 theme_override_styles/pressed = ExtResource("9_40ws1")
 theme_override_styles/hover = ExtResource("10_f715c")
@@ -103,8 +97,6 @@ text = "Details anzeigen"
 [node name="BtnService" type="Button" parent="MenuPanel/VBoxContainer/MarginContainer/VBoxButtons" unique_id=748987802]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_eqh8p")
-theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = ExtResource("8_8tpl6")
 theme_override_styles/pressed = ExtResource("9_40ws1")
 theme_override_styles/hover = ExtResource("10_f715c")
@@ -116,8 +108,6 @@ layout_mode = 2
 [node name="BtnDemolish" type="Button" parent="MenuPanel/VBoxContainer/MarginContainer/VBoxButtons" unique_id=453521187]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_eqh8p")
-theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = ExtResource("3_l0jnf")
 theme_override_styles/pressed = ExtResource("4_knild")
 theme_override_styles/hover = ExtResource("5_0t5g4")

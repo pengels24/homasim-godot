@@ -8,7 +8,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Breadcrumb"]
 content_margin_left = 10.0
 content_margin_right = 10.0
-bg_color = Color(0, 0, 0, 0.501961)
+bg_color = Color(0.043137, 0.058824, 0.090196, 1)
 corner_radius_top_left = 5
 corner_radius_top_right = 5
 corner_radius_bottom_right = 5

@@ -171,41 +171,25 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="HotelName" parent="TopBar/MarginContainer/HBoxContainer" unique_id=2061315483 instance=ExtResource("3_unqwd")]
-layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/HotelName/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(2061315483, 994132176) index="0" unique_id=2010144105]
-modulate = Color(0.8039216, 0.61960787, 0.039215688, 1)
-custom_minimum_size = Vector2(24, 0)
-layout_mode = 2
-texture = ExtResource("4_1a3cs")
-expand_mode = 4
-stretch_mode = 5
-
-[node name="Hotelname" type="Label" parent="TopBar/MarginContainer/HBoxContainer/HotelName/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(2061315483, 994132176) index="1" unique_id=1895348508]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
-text = "Hotel Name XYZ"
-horizontal_alignment = 2
-vertical_alignment = 1
-
 [node name="Level" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1708982499 instance=ExtResource("3_unqwd")]
+tooltip_text = "hud.top.tooltip.level"
 custom_minimum_size = Vector2(85, 0)
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/Level/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1708982499, 994132176) index="0" unique_id=545323053]
 modulate = Color(0.96862745, 0.5372549, 0.32156864, 1)
-custom_minimum_size = Vector2(24, 0)
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 texture = ExtResource("5_s3kxq")
 stretch_mode = 5
+expand_mode = 1
 
 [node name="Level" type="Label" parent="TopBar/MarginContainer/HBoxContainer/Level/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1708982499, 994132176) index="1" unique_id=2076223888]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
+theme_override_font_sizes/font_size = 30
 text = "999"
 horizontal_alignment = 2
 
@@ -228,25 +212,28 @@ size_flags_horizontal = 3
 theme_override_constants/margin_left = 40
 
 [node name="Money" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1249543363 instance=ExtResource("3_unqwd")]
+tooltip_text = "hud.top.tooltip.capital"
 custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/Money/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1249543363, 994132176) index="0" unique_id=1717310057]
 modulate = Color(0.24705882, 0.56078434, 0.30980393, 1)
-custom_minimum_size = Vector2(24, 0)
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 texture = ExtResource("8_grv02")
 stretch_mode = 5
+expand_mode = 1
 
 [node name="Capital" type="Label" parent="TopBar/MarginContainer/HBoxContainer/Money/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1249543363, 994132176) index="1" unique_id=1081669663]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
+theme_override_font_sizes/font_size = 30
 text = "999.999.999"
 horizontal_alignment = 2
 
 [node name="Guests" type="Panel" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1747277186]
+tooltip_text = "hud.top.tooltip.guests"
 clip_children = 2
 custom_minimum_size = Vector2(182, 0)
 layout_mode = 2
@@ -267,10 +254,11 @@ theme_override_constants/margin_right = 10
 
 [node name="TextureRect" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/Guests/HBoxContainer/MarginContainer" unique_id=1598537975]
 modulate = Color(0.31764707, 0.6509804, 0.9411765, 1)
-custom_minimum_size = Vector2(24, 0)
+custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 texture = ExtResource("9_dhj4j")
 stretch_mode = 5
+expand_mode = 1
 
 [node name="VSeparator" type="VSeparator" parent="TopBar/MarginContainer/HBoxContainer/Guests/HBoxContainer" unique_id=2020579649]
 layout_mode = 2
@@ -288,6 +276,7 @@ theme_override_constants/margin_right = 3
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5254902, 0.83137256, 0.40784314, 1)
+theme_override_font_sizes/font_size = 30
 text = "1"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -308,6 +297,7 @@ theme_override_constants/margin_right = 3
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8392157, 0.7176471, 0.31764707, 1)
+theme_override_font_sizes/font_size = 30
 text = "11"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -328,6 +318,7 @@ theme_override_constants/margin_right = 3
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.87058824, 0.23529412, 0.19215687, 1)
+theme_override_font_sizes/font_size = 30
 text = "789"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -338,6 +329,7 @@ size_flags_horizontal = 3
 theme_override_constants/margin_left = 20
 
 [node name="Exp" type="VBoxContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=2054724630]
+tooltip_text = "hud.top.tooltip.exp"
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 alignment = 1
@@ -370,6 +362,7 @@ layout_mode = 2
 theme_override_constants/margin_left = 10
 
 [node name="Reputation" type="VBoxContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1618042155]
+tooltip_text = "hud.top.tooltip.rep"
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 alignment = 1
@@ -412,10 +405,11 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/FP/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1608358203, 994132176) index="0" unique_id=308361789]
 modulate = Color(0.92941177, 0.9411765, 0.40392157, 1)
-custom_minimum_size = Vector2(24, 0)
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 texture = ExtResource("10_f542l")
 stretch_mode = 5
+expand_mode = 1
 
 [node name="FP" type="Label" parent="TopBar/MarginContainer/HBoxContainer/FP/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1608358203, 994132176) index="1" unique_id=1502268624]
 unique_name_in_owner = true
@@ -430,30 +424,34 @@ layout_mode = 2
 theme_override_constants/margin_left = 80
 
 [node name="Day" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1055048167 instance=ExtResource("3_unqwd")]
+tooltip_text = "hud.top.tooltip.day"
 custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/Day/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1055048167, 994132176) index="0" unique_id=819640250]
 modulate = Color(0.9411765, 0.7294118, 0.6392157, 1)
-custom_minimum_size = Vector2(24, 0)
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 texture = ExtResource("11_l8bek")
 stretch_mode = 5
+expand_mode = 1
 
 [node name="Day" type="Label" parent="TopBar/MarginContainer/HBoxContainer/Day/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1055048167, 994132176) index="1" unique_id=44184594]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
+theme_override_font_sizes/font_size = 30
 text = "9.999"
 horizontal_alignment = 2
 
 [node name="Time" type="Label" parent="TopBar/MarginContainer/HBoxContainer" unique_id=576294517]
+tooltip_text = "hud.top.tooltip.time"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(95, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 36
 text = "23:59"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -642,13 +640,13 @@ offset_top = 80.0
 offset_right = 200.0
 offset_bottom = 120.0
 grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.6)
 theme_override_colors/font_outline_color = Color(0.1, 0.1, 0.1, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 3
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 48
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "*** Spiel pausiert ***"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -673,7 +671,6 @@ offset_top = 80.0
 offset_right = 180.0
 offset_bottom = 160.0
 
-[editable path="TopBar/MarginContainer/HBoxContainer/HotelName"]
 [editable path="TopBar/MarginContainer/HBoxContainer/Level"]
 [editable path="TopBar/MarginContainer/HBoxContainer/Money"]
 [editable path="TopBar/MarginContainer/HBoxContainer/FP"]

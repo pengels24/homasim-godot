@@ -46,15 +46,11 @@ layout_mode = 2
 
 [node name="FPIcon" type="Label" parent="Wrapper/FPContainer/Margin/HBox" unique_id=876860777]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.803922, 0.619608, 0.0392157, 1)
-theme_override_fonts/font = ExtResource("2_dyrqm")
-theme_override_font_sizes/font_size = 40
+theme_type_variation = &"HeaderMedium"
 text = "Aktuelle FP: "
 
 [node name="FPLabel" type="Label" parent="Wrapper/FPContainer/Margin/HBox" unique_id=2119658467]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("2_dyrqm")
-theme_override_font_sizes/font_size = 40
+theme_type_variation = &"HeaderMedium"
 text = "0"

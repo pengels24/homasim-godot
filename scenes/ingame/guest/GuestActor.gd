@@ -49,6 +49,7 @@ func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null) -> vo
 	
 	if has_node("ClickArea"):
 		var ca = get_node("ClickArea")
+		ca.process_mode = Node.PROCESS_MODE_ALWAYS
 		if not ca.input_event.is_connected(_on_click_area_input_event):
 			ca.input_event.connect(_on_click_area_input_event)
 

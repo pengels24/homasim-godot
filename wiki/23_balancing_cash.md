@@ -28,7 +28,7 @@ Das Gehalt von 60 € ist absichtlich so gewählt, dass ein einziges voll belegt
 
 ### 4. Forschungskosten
 Forschungstechnologien im Techtree kosten neben FP (Forschungspunkten) auch viel Bargeld. 
-- *Beispiel:* Die Erforschung von Doppelzimmern (`Z1.2`) kostet 2.500 €. 
+- *Beispiel:* Die Erforschung von Familienzimmern (`Z1.2`) kostet 2.500 €. 
 Diese Kosten dienen als zusätzlicher Kapitalschlucker in der Mid-Game-Phase.
 
 ### 5. Das Questbook

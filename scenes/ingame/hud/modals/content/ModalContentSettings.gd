@@ -258,7 +258,7 @@ func _build_keybindings_ui() -> void:
 		# Group Header
 		var header = Label.new()
 		header.text = group.get("label", group_id)
-		header.add_theme_color_override("font_color", Color("f0a800")) # Yellow-ish
+		header.theme_type_variation = &"HeaderMedium"
 		kb_container.add_child(header)
 		
 		# Sort actions by order

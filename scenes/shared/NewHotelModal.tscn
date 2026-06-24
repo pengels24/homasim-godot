@@ -1,14 +1,20 @@
 [gd_scene format=3 uid="uid://bsouwnmtw2p0b"]
 
 [ext_resource type="Script" uid="uid://b6yp2pa1i28bw" path="res://scenes/shared/NewHotelModal.gd" id="1_script"]
+[ext_resource type="StyleBox" uid="uid://cna2b35jrscs7" path="res://assets/UI/menu_button_darkblue.tres" id="2_4edmf"]
 [ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://assets/UI/menu_button_green.tres" id="2_fqr2f"]
 [ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://assets/UI/menu_button_green_pressed.tres" id="3_2c80o"]
+[ext_resource type="StyleBox" uid="uid://b0jlf6ry834tk" path="res://assets/UI/menu_button_darkblue_pressed.tres" id="3_ru43o"]
 [ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://assets/UI/menu_button_green_hover.tres" id="4_poabs"]
+[ext_resource type="StyleBox" uid="uid://ctu17tayaclq4" path="res://assets/UI/menu_button_darkblue_hover.tres" id="4_xblji"]
 [ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="5_red"]
 [ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="6_red_p"]
 [ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="7_red_h"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+[ext_resource type="Texture2D" uid="uid://dd62aim03wf0t" path="res://assets/icons/Modals/arrow-left.svg" id="8_arrow_l"]
+[ext_resource type="StyleBox" uid="uid://byn5sg5pqc4ux" path="res://assets/UI/menu_button_blue.tres" id="9_blue"]
+[ext_resource type="StyleBox" uid="uid://bxdxryd4oglat" path="res://assets/UI/menu_button_blue_pressed.tres" id="10_blue_p"]
+[ext_resource type="Texture2D" uid="uid://c4qeeryni0rp6" path="res://assets/icons/Modals/arrow-right.svg" id="11_arrow_r"]
+[ext_resource type="StyleBox" uid="uid://bc0pipuhgp5c7" path="res://assets/UI/menu_button_blue_hover.tres" id="12_blue_h"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input_normal"]
 content_margin_left = 12.0
@@ -44,17 +50,19 @@ corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_grid_bg"]
 bg_color = Color(0.2, 0.22, 0.25, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.15, 0.15, 0.2, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
-[node name="NewHotelModal" type="VBoxContainer"]
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+
+[node name="NewHotelModal" type="VBoxContainer" unique_id=1874069123]
 custom_minimum_size = Vector2(960, 0)
 anchors_preset = 15
 anchor_right = 1.0
@@ -64,242 +72,254 @@ grow_vertical = 2
 theme_override_constants/separation = 24
 script = ExtResource("1_script")
 
-[node name="Content" type="HBoxContainer" parent="."]
+[node name="Content" type="HBoxContainer" parent="." unique_id=264030885]
 layout_mode = 2
 theme_override_constants/separation = 40
 
-[node name="Left" type="VBoxContainer" parent="Content"]
+[node name="Left" type="VBoxContainer" parent="Content" unique_id=1066192664]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 16
 
-[node name="NameBox" type="VBoxContainer" parent="Content/Left"]
+[node name="NameBox" type="VBoxContainer" parent="Content/Left" unique_id=884267510]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="NameLabel" type="Label" parent="Content/Left/NameBox"]
+[node name="NameLabel" type="Label" parent="Content/Left/NameBox" unique_id=1943196537]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.63, 0.63, 0.69, 1)
-theme_override_font_sizes/font_size = 20
+theme_type_variation = &"HeaderMedium"
 text = "Hotelname"
 
-[node name="HotelNameField" type="LineEdit" parent="Content/Left/NameBox"]
+[node name="HotelNameField" type="LineEdit" parent="Content/Left/NameBox" unique_id=1042507903]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.92, 0.92, 0.94, 1)
-theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_input_normal")
 theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
-placeholder_text = "Hotelname"
+placeholder_text = "Hier Namen eintragen..."
 
-[node name="ErrorLbl" type="Label" parent="Content/Left/NameBox"]
+[node name="ErrorLbl" type="Label" parent="Content/Left/NameBox" unique_id=979839257]
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.937, 0.267, 0.267, 1)
-theme_override_font_sizes/font_size = 18
 autowrap_mode = 3
 
-[node name="SettingsBox" type="VBoxContainer" parent="Content/Left"]
+[node name="SettingsBox" type="VBoxContainer" parent="Content/Left" unique_id=48367025]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="SettingsTitle" type="Label" parent="Content/Left/SettingsBox"]
+[node name="SettingsTitle" type="Label" parent="Content/Left/SettingsBox" unique_id=229603545]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.63, 0.63, 0.69, 1)
-theme_override_font_sizes/font_size = 20
+theme_type_variation = &"HeaderMedium"
 text = "Schwierigkeitsgrad"
 
-[node name="DiffButtons" type="HBoxContainer" parent="Content/Left/SettingsBox"]
+[node name="DiffButtons" type="HBoxContainer" parent="Content/Left/SettingsBox" unique_id=1738804045]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="BtnEasy" type="Button" parent="Content/Left/SettingsBox/DiffButtons"]
+[node name="BtnEasy" type="Button" parent="Content/Left/SettingsBox/DiffButtons" unique_id=1425493617]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("2_4edmf")
+theme_override_styles/pressed = ExtResource("3_ru43o")
+theme_override_styles/hover = ExtResource("4_xblji")
 text = "Einfach"
 
-[node name="BtnNormal" type="Button" parent="Content/Left/SettingsBox/DiffButtons"]
+[node name="BtnNormal" type="Button" parent="Content/Left/SettingsBox/DiffButtons" unique_id=321605339]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("2_4edmf")
+theme_override_styles/pressed = ExtResource("3_ru43o")
+theme_override_styles/hover = ExtResource("4_xblji")
 text = "Standard"
 
-[node name="BtnHard" type="Button" parent="Content/Left/SettingsBox/DiffButtons"]
+[node name="BtnHard" type="Button" parent="Content/Left/SettingsBox/DiffButtons" unique_id=1133708636]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("2_4edmf")
+theme_override_styles/pressed = ExtResource("3_ru43o")
+theme_override_styles/hover = ExtResource("4_xblji")
 text = "Hart"
 
-[node name="BtnCustom" type="Button" parent="Content/Left/SettingsBox/DiffButtons"]
+[node name="BtnCustom" type="Button" parent="Content/Left/SettingsBox/DiffButtons" unique_id=1804372344]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/normal = ExtResource("2_4edmf")
+theme_override_styles/pressed = ExtResource("3_ru43o")
+theme_override_styles/hover = ExtResource("4_xblji")
 text = "Angepasst"
 
-[node name="Spacer" type="Control" parent="Content/Left/SettingsBox"]
+[node name="Spacer" type="Control" parent="Content/Left/SettingsBox" unique_id=111690867]
 custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 
-[node name="ParamGrid" type="GridContainer" parent="Content/Left/SettingsBox"]
+[node name="ParamGrid" type="GridContainer" parent="Content/Left/SettingsBox" unique_id=314080947]
 layout_mode = 2
 theme_override_constants/h_separation = 16
 theme_override_constants/v_separation = 12
 columns = 2
 
-[node name="LblMoney" type="Label" parent="Content/Left/SettingsBox/ParamGrid"]
+[node name="LblMoney" type="Label" parent="Content/Left/SettingsBox/ParamGrid" unique_id=1135253268]
 layout_mode = 2
 text = "Startkapital:"
 
-[node name="OptMoney" type="HBoxContainer" parent="Content/Left/SettingsBox/ParamGrid"]
+[node name="OptMoney" type="HBoxContainer" parent="Content/Left/SettingsBox/ParamGrid" unique_id=758685076]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="LeftBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptMoney"]
+[node name="LeftBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptMoney" unique_id=1186179913]
 layout_mode = 2
-text = " ◀ "
+theme_override_styles/normal = ExtResource("9_blue")
+theme_override_styles/pressed = ExtResource("10_blue_p")
+theme_override_styles/hover = ExtResource("12_blue_h")
+icon = ExtResource("8_arrow_l")
 
-[node name="ValueLbl" type="Label" parent="Content/Left/SettingsBox/ParamGrid/OptMoney"]
+[node name="ValueLbl" type="Label" parent="Content/Left/SettingsBox/ParamGrid/OptMoney" unique_id=1244460869]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.917647, 0.701961, 0.0313726, 1)
+theme_type_variation = &"ValueLabel"
 text = "50.000 €"
 horizontal_alignment = 1
 
-[node name="RightBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptMoney"]
+[node name="RightBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptMoney" unique_id=242690361]
 layout_mode = 2
-text = " ▶ "
+theme_override_styles/normal = ExtResource("9_blue")
+theme_override_styles/pressed = ExtResource("10_blue_p")
+theme_override_styles/hover = ExtResource("12_blue_h")
+icon = ExtResource("11_arrow_r")
 
-[node name="LblRefund" type="Label" parent="Content/Left/SettingsBox/ParamGrid"]
+[node name="LblRefund" type="Label" parent="Content/Left/SettingsBox/ParamGrid" unique_id=1521719807]
 layout_mode = 2
 text = "Baukosten-Rückerstattung:"
 
-[node name="OptRefund" type="HBoxContainer" parent="Content/Left/SettingsBox/ParamGrid"]
+[node name="OptRefund" type="HBoxContainer" parent="Content/Left/SettingsBox/ParamGrid" unique_id=2041416317]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="LeftBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptRefund"]
+[node name="LeftBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptRefund" unique_id=1037662079]
 layout_mode = 2
+theme_override_styles/normal = ExtResource("9_blue")
+theme_override_styles/pressed = ExtResource("10_blue_p")
+theme_override_styles/hover = ExtResource("12_blue_h")
 disabled = true
-text = " ◀ "
+icon = ExtResource("8_arrow_l")
 
-[node name="ValueLbl" type="Label" parent="Content/Left/SettingsBox/ParamGrid/OptRefund"]
+[node name="ValueLbl" type="Label" parent="Content/Left/SettingsBox/ParamGrid/OptRefund" unique_id=1374605582]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.917647, 0.701961, 0.0313726, 1)
+theme_type_variation = &"ValueLabel"
 text = "25 %"
 horizontal_alignment = 1
 
-[node name="RightBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptRefund"]
+[node name="RightBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptRefund" unique_id=788567552]
 layout_mode = 2
+theme_override_styles/normal = ExtResource("9_blue")
+theme_override_styles/pressed = ExtResource("10_blue_p")
+theme_override_styles/hover = ExtResource("12_blue_h")
 disabled = true
-text = " ▶ "
+icon = ExtResource("11_arrow_r")
 
-[node name="LblExp" type="Label" parent="Content/Left/SettingsBox/ParamGrid"]
+[node name="LblExp" type="Label" parent="Content/Left/SettingsBox/ParamGrid" unique_id=1202461197]
 layout_mode = 2
 text = "EXP-Boost:"
 
-[node name="OptExp" type="HBoxContainer" parent="Content/Left/SettingsBox/ParamGrid"]
+[node name="OptExp" type="HBoxContainer" parent="Content/Left/SettingsBox/ParamGrid" unique_id=1602108622]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="LeftBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptExp"]
+[node name="LeftBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptExp" unique_id=1055041421]
 layout_mode = 2
+theme_override_styles/normal = ExtResource("9_blue")
+theme_override_styles/pressed = ExtResource("10_blue_p")
+theme_override_styles/hover = ExtResource("12_blue_h")
 disabled = true
-text = " ◀ "
+icon = ExtResource("8_arrow_l")
 
-[node name="ValueLbl" type="Label" parent="Content/Left/SettingsBox/ParamGrid/OptExp"]
+[node name="ValueLbl" type="Label" parent="Content/Left/SettingsBox/ParamGrid/OptExp" unique_id=1206867195]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.917647, 0.701961, 0.0313726, 1)
+theme_type_variation = &"ValueLabel"
 text = "0 %"
 horizontal_alignment = 1
 
-[node name="RightBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptExp"]
+[node name="RightBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptExp" unique_id=484319805]
 layout_mode = 2
+theme_override_styles/normal = ExtResource("9_blue")
+theme_override_styles/pressed = ExtResource("10_blue_p")
+theme_override_styles/hover = ExtResource("12_blue_h")
 disabled = true
-text = " ▶ "
+icon = ExtResource("11_arrow_r")
 
-[node name="WipLabel" type="Label" parent="Content/Left/SettingsBox"]
+[node name="WipLabel" type="Label" parent="Content/Left/SettingsBox" unique_id=1763451321]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.5, 0.5, 0.5, 1)
-theme_override_font_sizes/font_size = 14
 text = "🔒 Einige Settings sind in der TechDemo noch ohne Effekt."
 
-[node name="Right" type="VBoxContainer" parent="Content"]
+[node name="Right" type="VBoxContainer" parent="Content" unique_id=1062204764]
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/separation = 8
 
-[node name="GridLabel" type="Label" parent="Content/Right"]
+[node name="GridLabel" type="Label" parent="Content/Right" unique_id=258688123]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.63, 0.63, 0.69, 1)
-theme_override_font_sizes/font_size = 20
+theme_type_variation = &"HeaderMedium"
 text = "Startparzelle"
 
-[node name="MapContainer" type="PanelContainer" parent="Content/Right"]
+[node name="MapContainer" type="PanelContainer" parent="Content/Right" unique_id=738528379]
 custom_minimum_size = Vector2(400, 400)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_grid_bg")
 
-[node name="SubViewportContainer" type="SubViewportContainer" parent="Content/Right/MapContainer"]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Content/Right/MapContainer" unique_id=2006078378]
 layout_mode = 2
 stretch = true
 
-[node name="SubViewport" type="SubViewport" parent="Content/Right/MapContainer/SubViewportContainer"]
+[node name="SubViewport" type="SubViewport" parent="Content/Right/MapContainer/SubViewportContainer" unique_id=271192573]
 handle_input_locally = false
 size = Vector2i(396, 396)
 render_target_update_mode = 4
 
-[node name="ClickGridWrapper" type="Control" parent="Content/Right/MapContainer"]
+[node name="ClickGridWrapper" type="Control" parent="Content/Right/MapContainer" unique_id=882164561]
 layout_mode = 2
 
-[node name="ClickGrid" type="GridContainer" parent="Content/Right/MapContainer/ClickGridWrapper"]
+[node name="ClickGrid" type="GridContainer" parent="Content/Right/MapContainer/ClickGridWrapper" unique_id=352727357]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = -1
 anchor_left = 0.0348837
 anchor_top = 0.0348837
 anchor_right = 0.9651163
 anchor_bottom = 0.9651163
-offset_left = 0.0
-offset_top = 0.0
-offset_right = 0.0
-offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
-columns = 5
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
+columns = 5
 
-[node name="EntranceLbl" type="Label" parent="Content/Right"]
+[node name="EntranceLbl" type="Label" parent="Content/Right" unique_id=1637198029]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.63, 0.63, 0.69, 1)
-theme_override_font_sizes/font_size = 16
 text = "Eingangsseite: Oben"
 horizontal_alignment = 1
 
-[node name="BottomSep" type="HSeparator" parent="."]
+[node name="BottomSep" type="HSeparator" parent="." unique_id=1567126111]
 modulate = Color(1, 1, 1, 0.12)
 layout_mode = 2
 
-[node name="BtnRow" type="HBoxContainer" parent="."]
+[node name="BtnRow" type="HBoxContainer" parent="." unique_id=1951080170]
 layout_mode = 2
-alignment = 2
 theme_override_constants/separation = 16
+alignment = 2
 
-[node name="BtnCancel" type="Button" parent="BtnRow"]
+[node name="BtnCancel" type="Button" parent="BtnRow" unique_id=1314984277]
 custom_minimum_size = Vector2(160, 48)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = ExtResource("5_red")
 theme_override_styles/pressed = ExtResource("6_red_p")
 theme_override_styles/hover = ExtResource("7_red_h")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Abbrechen"
 
-[node name="BtnCreate" type="Button" parent="BtnRow"]
+[node name="BtnCreate" type="Button" parent="BtnRow" unique_id=1827589188]
 custom_minimum_size = Vector2(200, 48)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = ExtResource("2_fqr2f")
 theme_override_styles/pressed = ExtResource("3_2c80o")
 theme_override_styles/hover = ExtResource("4_poabs")

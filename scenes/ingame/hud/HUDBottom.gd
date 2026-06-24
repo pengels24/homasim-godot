@@ -71,16 +71,15 @@ func _ready() -> void:
 		QuestManager.sig_rank_claimable.connect(func(_id): _update_quest_book_indicator())
 		QuestManager.sig_rank_claimed.connect(func(_id): _update_quest_book_indicator())
 
-	# todo - zugewiesene tasten aus settings in den ttoltip setzen
-	build_menu.tooltip_text = GameState.T("hud.bottom.build_menu_tt", "F2")
-	reception.tooltip_text  = GameState.T("hud.bottom.reception_tt", "F3")
-	staff.tooltip_text      = GameState.T("hud.bottom.staff_tt", "F4")
-	tech_tree.tooltip_text  = GameState.T("hud.bottom.tech_tree_tt", "F6")
-	sim_browser.tooltip_text = GameState.T("hud.bottom.sim_browser_tt", "F7")
-	quest_book.tooltip_text = GameState.T("hud.bottom.quest_book_tt", "Aufgaben (J)")
-	guest_list.tooltip_text = GameState.T("hud.bottom.guest_list_tt", "Gästeliste (F10)")
-	room_list.tooltip_text = GameState.T("hud.bottom.room_list_tt", "Raumliste (F11)")
-	tutorials.tooltip_text = GameState.T("hud.bottom.tutorials_tt", "Tutorials (F1)")
+	build_menu.tooltip_text = GameState.T("hud.bottom.build_menu_tt", _get_action_key_string("ui_build_menu"))
+	reception.tooltip_text  = GameState.T("hud.bottom.reception_tt", _get_action_key_string("ui_reception"))
+	staff.tooltip_text      = GameState.T("hud.bottom.staff_tt", _get_action_key_string("ui_staff"))
+	tech_tree.tooltip_text  = GameState.T("hud.bottom.tech_tree_tt", _get_action_key_string("ui_tech_tree"))
+	sim_browser.tooltip_text = GameState.T("hud.bottom.sim_browser_tt", _get_action_key_string("ui_sim_browser"))
+	quest_book.tooltip_text = GameState.T("hud.bottom.quest_book_tt", _get_action_key_string("ui_quest_book"))
+	guest_list.tooltip_text = GameState.T("hud.bottom.guest_list_tt", _get_action_key_string("ui_guest_list"))
+	room_list.tooltip_text = GameState.T("hud.bottom.room_list_tt", _get_action_key_string("ui_room_list"))
+	tutorials.tooltip_text = GameState.T("hud.bottom.tutorials_tt", _get_action_key_string("ui_tutorial"))
 
 	ind_reception.hide()
 	ind_sim_browser.modulate = Color.GREEN
@@ -173,6 +172,18 @@ func sync_button_state(active_menu: String = "") -> void:
 
 
 # =============================================================================
+
+# =============================================================================
+func _get_action_key_string(action_name: String) -> String:
+	var events = InputMap.action_get_events(action_name)
+	if events.size() > 0:
+		var event = events[0]
+		if event is InputEventKey:
+			var code = event.get_physical_keycode_with_modifiers() if event.physical_keycode != 0 else event.get_keycode_with_modifiers()
+			var txt = OS.get_keycode_string(code)
+			return "(" + txt + ")"
+	return ""
+
 func _update_quest_book_indicator() -> void:
 	if QuestManager and QuestManager.has_any_claimable():
 		ind_quest_book.show()

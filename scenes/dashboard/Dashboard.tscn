@@ -7,6 +7,7 @@
 [ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="5_red"]
 [ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="red_hover"]
 [ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="red_normal"]
+[ext_resource type="Texture2D" uid="uid://chug26ioff260" path="res://assets/icons/x.svg" id="icon_x"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dashboard_modal"]
 content_margin_left = 40.0
@@ -101,21 +102,19 @@ layout_mode = 2
 theme_override_constants/separation = 16
 
 [node name="TitleLabel" type="Label" parent="Center/Card/VBox/Header" unique_id=368797512]
+theme_type_variation = &"HeaderLarge"
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5882353)
-theme_override_font_sizes/font_size = 32
 
 [node name="BtnCloseModal" type="Button" parent="Center/Card/VBox/Header" unique_id=232836150]
 custom_minimum_size = Vector2(44, 44)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = ExtResource("red_normal")
 theme_override_styles/pressed = ExtResource("5_red")
 theme_override_styles/hover = ExtResource("red_hover")
-text = "X"
+icon = ExtResource("icon_x")
 
 [node name="HSeparator" type="HSeparator" parent="Center/Card/VBox" unique_id=127615890]
 layout_mode = 2
@@ -141,15 +140,12 @@ layout_mode = 2
 size_flags_horizontal = 4
 
 [node name="ManagerName" type="Label" parent="Center/Card/VBox/MainArea/ManagerPanel/PanelVBox" unique_id=2135766328]
+theme_type_variation = &"HeaderMedium"
 layout_mode = 2
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-theme_override_font_sizes/font_size = 22
 horizontal_alignment = 1
 
 [node name="ManagerRole" type="Label" parent="Center/Card/VBox/MainArea/ManagerPanel/PanelVBox" unique_id=1256935426]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
-theme_override_font_sizes/font_size = 13
 horizontal_alignment = 1
 
 [node name="ManagerSep" type="HSeparator" parent="Center/Card/VBox/MainArea/ManagerPanel/PanelVBox" unique_id=406694784]
@@ -158,8 +154,6 @@ layout_mode = 2
 
 [node name="HotelCount" type="Label" parent="Center/Card/VBox/MainArea/ManagerPanel/PanelVBox" unique_id=1264490744]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.65, 0.65, 0.65, 1)
-theme_override_font_sizes/font_size = 16
 horizontal_alignment = 1
 
 [node name="HotelSection" type="VBoxContainer" parent="Center/Card/VBox/MainArea" unique_id=1962919628]
@@ -170,8 +164,6 @@ theme_override_constants/separation = 8
 [node name="StatusLabel" type="Label" parent="Center/Card/VBox/MainArea/HotelSection" unique_id=1178035239]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.65, 0.65, 0.65, 1)
-theme_override_font_sizes/font_size = 18
 vertical_alignment = 2
 autowrap_mode = 3
 
@@ -215,7 +207,6 @@ mouse_filter = 2
 
 [node name="Label" type="Label" parent="Center/Card/VBox/MainArea/HotelSection/Scroll/HotelMargin/HotelContainer/BtnNewHotelCard/Center" unique_id=1634212476]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
 theme_override_font_sizes/font_size = 120
 text = "+"
 

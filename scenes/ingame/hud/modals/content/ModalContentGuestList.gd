@@ -5,7 +5,14 @@ class_name ModalContentGuestList
 @onready var pip_camera: PipCamera = %PipCamera
 @onready var detail_name_lbl: Label = %DetailNameLabel
 @onready var detail_room_lbl: Label = %DetailRoomLabel
+@onready var detail_room_val: Label = %DetailRoomValue
 @onready var detail_satisfaction_lbl: Label = %DetailSatisfactionLabel
+@onready var detail_satisfaction_val: Label = %DetailSatisfactionValue
+@onready var detail_status_lbl: Label = %DetailStatusLabel
+@onready var detail_status_val: Label = %DetailStatusValue
+@onready var detail_budget_lbl: Label = %DetailBudgetLabel
+@onready var detail_budget_val: Label = %DetailBudgetValue
+@onready var btn_goto: Button = %BtnGoto
 
 var _selected_guest: GuestActor = null
 var _guest_controller: GuestController = null
@@ -23,6 +30,14 @@ func _ready() -> void:
 		_guest_manager = ingame.get("_guest_mgr")
 		
 	_btn_group = ButtonGroup.new()
+	btn_goto.pressed.connect(_on_goto_pressed)
+	
+	# Set static localized labels
+	detail_room_lbl.text = GameState.T("room", "Zimmer") + ":"
+	detail_satisfaction_lbl.text = GameState.T("satisfaction", "Zufriedenheit") + ":"
+	detail_budget_lbl.text = GameState.T("budget", "Budget") + ":"
+	detail_status_lbl.text = GameState.T("status", "Status") + ":"
+	
 	_populate_list()
 	_clear_details()
 
@@ -74,16 +89,24 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 	var lbl_name = Label.new()
 	lbl_name.text = member.name
 	lbl_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	lbl_name.size_flags_stretch_ratio = 2.5
+	lbl_name.size_flags_stretch_ratio = 2.0
 	lbl_name.add_theme_color_override("font_color", font_color)
 	
 	# Room
 	var lbl_room = Label.new()
 	lbl_room.text = party.room_id if party.room_id else GameState.T("guest.state.waiting")
-	lbl_room.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl_room.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	lbl_room.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	lbl_room.size_flags_stretch_ratio = 1.5
+	lbl_room.size_flags_stretch_ratio = 1.0
 	lbl_room.add_theme_color_override("font_color", font_color)
+	
+	# Budget
+	var lbl_budget = Label.new()
+	lbl_budget.text = "%d %s" % [party.base_price, GameState.T("currency.symbol", "$")]
+	lbl_budget.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	lbl_budget.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lbl_budget.size_flags_stretch_ratio = 1.0
+	lbl_budget.add_theme_color_override("font_color", font_color)
 	
 	# Gather live data from actor if spawned
 	var actor = null
@@ -117,18 +140,18 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 		else:
 			goal_text = "-"
 			
-	# Goal
+	# Goal (Status)
 	var lbl_goal = Label.new()
 	lbl_goal.text = goal_text
-	lbl_goal.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl_goal.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	lbl_goal.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	lbl_goal.size_flags_stretch_ratio = 2.0
+	lbl_goal.size_flags_stretch_ratio = 1.5
 	lbl_goal.add_theme_color_override("font_color", font_color)
 	
 	# Energy
 	var lbl_energy = Label.new()
 	lbl_energy.text = "%d%%" % int(energy_val)
-	lbl_energy.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	lbl_energy.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	lbl_energy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lbl_energy.size_flags_stretch_ratio = 1.0
 	if energy_val < 30:
@@ -139,9 +162,9 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 	# Satisfaction
 	var lbl_sat = Label.new()
 	lbl_sat.text = "%d%%" % int(party.satisfaction)
-	lbl_sat.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	lbl_sat.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	lbl_sat.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	lbl_sat.size_flags_stretch_ratio = 1.5
+	lbl_sat.size_flags_stretch_ratio = 1.0
 	if party.satisfaction < 30:
 		lbl_sat.add_theme_color_override("font_color", Color.RED)
 	elif party.satisfaction > 80:
@@ -151,6 +174,7 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 		
 	hbox.add_child(lbl_name)
 	hbox.add_child(lbl_room)
+	hbox.add_child(lbl_budget)
 	hbox.add_child(lbl_goal)
 	hbox.add_child(lbl_energy)
 	hbox.add_child(lbl_sat)
@@ -175,19 +199,38 @@ func _on_guest_selected(party: GuestParty, member: GuestMember, btn: Button) -> 
 	if _guest_controller._actors.has(guest_id):
 		_selected_guest = _guest_controller._actors[guest_id]
 		pip_camera.set_target(_selected_guest)
+		btn_goto.disabled = false
+		btn_goto.add_theme_stylebox_override("normal", load("res://assets/UI/menu_button_blue.tres"))
+		btn_goto.add_theme_stylebox_override("hover", load("res://assets/UI/menu_button_blue_hover.tres"))
+		btn_goto.add_theme_stylebox_override("pressed", load("res://assets/UI/menu_button_blue_pressed.tres"))
 		
 		detail_name_lbl.text = member.name
-		detail_room_lbl.text = "%s: %s" % [GameState.T("room"), (party.room_id if party.room_id else GameState.T("none"))]
-		detail_satisfaction_lbl.text = "%s: %d%%" % [GameState.T("satisfaction"), party.satisfaction]
+		detail_room_val.text = party.room_id if party.room_id else GameState.T("none", "Keins")
+		detail_satisfaction_val.text = "%d%%" % party.satisfaction
+		detail_budget_val.text = "%d %s" % [party.base_price, GameState.T("currency.symbol", "$")]
+		
+		var goal_text = "---"
+		var state = _selected_guest.get("current_state")
+		if state == 2: goal_text = "Zimmer"
+		elif state == 3: goal_text = "Aktivität"
+		elif state == 4: goal_text = "Rezeption"
+		elif state == 1: goal_text = "Unterwegs"
+		elif state == 5: goal_text = "Abreise"
+		detail_status_val.text = goal_text
 	else:
 		_clear_details()
 
 func _clear_details() -> void:
 	_selected_guest = null
 	pip_camera.set_target(null)
+	btn_goto.disabled = true
+	btn_goto.add_theme_stylebox_override("disabled", load("res://assets/UI/menu_button_darkblue_disabled.tres"))
+	
 	detail_name_lbl.text = GameState.T("ui.guest_list.please_select", "Bitte wählen...")
-	detail_room_lbl.text = ""
-	detail_satisfaction_lbl.text = ""
+	detail_room_val.text = "---"
+	detail_satisfaction_val.text = "---"
+	detail_budget_val.text = "---"
+	detail_status_val.text = "---"
 
 func _process(delta: float) -> void:
 	if not is_visible_in_tree():
@@ -250,4 +293,26 @@ func _refresh_live_data() -> void:
 			row.lbl_sat.add_theme_color_override("font_color", Color("#CCCCCC"))
 			
 		if _selected_guest and member.id == (_selected_guest.get("id") if "id" in _selected_guest else ""):
-			detail_satisfaction_lbl.text = "%s: %d%%" % [GameState.T("satisfaction"), party.satisfaction]
+			detail_satisfaction_val.text = "%d%%" % party.satisfaction
+			detail_status_val.text = goal_text
+
+func _on_goto_pressed() -> void:
+	if not is_instance_valid(_selected_guest):
+		return
+		
+	var ingame = get_tree().get_root().get_node_or_null("Ingame")
+	var map_grid = ingame.get("map_grid") if ingame else null
+	var cam = map_grid.get_node_or_null("Camera2D") if map_grid else get_viewport().get_camera_2d()
+	
+	if cam:
+		var target_pos = _selected_guest.global_position
+			
+		var tween = get_tree().create_tween()
+		tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+		tween.set_parallel(true)
+		tween.tween_property(cam, "global_position", target_pos, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_property(cam, "zoom", Vector2(4, 4), 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		
+	var modal = find_parent("StandardModal")
+	if modal and modal.has_method("close"):
+		modal.close()

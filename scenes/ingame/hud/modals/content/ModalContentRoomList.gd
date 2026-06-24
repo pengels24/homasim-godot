@@ -2,10 +2,16 @@ extends MarginContainer
 class_name ModalContentRoomList
 
 @onready var room_list_container: VBoxContainer = %RoomListContainer
+@onready var pip_camera: PipCamera = %PipCamera
 @onready var detail_name_lbl: Label = %DetailNameLabel
-@onready var detail_status_lbl: Label = %DetailStatusLabel
+@onready var detail_id_lbl: Label = %DetailIdLabel
+@onready var detail_id_val: Label = %DetailIdValue
+@onready var detail_guest_lbl: Label = %DetailGuestLabel
+@onready var detail_guest_val: Label = %DetailGuestValue
 @onready var detail_clean_lbl: Label = %DetailCleanLabel
+@onready var detail_clean_val: Label = %DetailCleanValue
 @onready var detail_maint_lbl: Label = %DetailMaintLabel
+@onready var detail_maint_val: Label = %DetailMaintValue
 @onready var btn_goto: Button = %BtnGoto
 
 var _selected_room: Node2D = null
@@ -17,12 +23,21 @@ var _active_rows: Array[Dictionary] = []
 var _update_timer: float = 0.0
 
 func _ready() -> void:
+	btn_goto.add_theme_stylebox_override("normal", load("res://assets/UI/menu_button_blue.tres"))
+	btn_goto.add_theme_stylebox_override("hover", load("res://assets/UI/menu_button_blue_hover.tres"))
+	btn_goto.add_theme_stylebox_override("pressed", load("res://assets/UI/menu_button_blue_pressed.tres"))
+	
 	var ingame = get_tree().get_root().get_node_or_null("Ingame")
 	if ingame:
 		_map_grid = ingame.get("map_grid")
 		_guest_manager = ingame.get("_guest_mgr")
 		
 	btn_goto.pressed.connect(_on_goto_pressed)
+	
+	detail_id_lbl.text = GameState.T("room", "Zimmer") + ":"
+	detail_guest_lbl.text = GameState.T("guest", "Gast") + ":"
+	detail_clean_lbl.text = GameState.T("cleanliness", "Sauberkeit") + ":"
+	detail_maint_lbl.text = GameState.T("maintenance", "Zustand") + ":"
 	
 	_btn_group = ButtonGroup.new()
 	_populate_list()
@@ -71,7 +86,8 @@ func _create_list_item(room: Node2D) -> void:
 	
 	var font_color = Color("#CCCCCC")
 	
-	var r_id = room.get("id") if "id" in room else "Unbekannt"
+	var r_num = room.get("room_number")
+	var r_id = str(r_num) if r_num != null and str(r_num) != "" else "-"
 	var r_def = room.get_definition() if room.has_method("get_definition") else {}
 	var r_name = r_def.get("name", GameState.T("room", "Raum"))
 	
@@ -85,25 +101,25 @@ func _create_list_item(room: Node2D) -> void:
 	# ID
 	var lbl_id = Label.new()
 	lbl_id.text = r_id
-	lbl_id.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	lbl_id.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lbl_id.size_flags_stretch_ratio = 1.0
 	lbl_id.add_theme_color_override("font_color", font_color)
 	
 	# Guest
-	var guest_name = _get_guest_name_for_room(r_id)
+	var guest_info = _get_guest_name_for_room(r_id)
 	var lbl_guest = Label.new()
-	lbl_guest.text = guest_name
-	lbl_guest.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl_guest.text = guest_info[0]
+	if guest_info[1] != "":
+		lbl_guest.tooltip_text = guest_info[1]
+	lbl_guest.mouse_filter = Control.MOUSE_FILTER_PASS
 	lbl_guest.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	lbl_guest.size_flags_stretch_ratio = 2.0
+	lbl_guest.size_flags_stretch_ratio = 1.5
 	lbl_guest.add_theme_color_override("font_color", font_color)
 	
 	# Cleanliness
 	var clean = room.get("cleanliness_level") if "cleanliness_level" in room else 100
 	var lbl_clean = Label.new()
 	lbl_clean.text = "%d%%" % clean
-	lbl_clean.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	lbl_clean.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lbl_clean.size_flags_stretch_ratio = 1.0
 	_set_status_color(lbl_clean, clean)
@@ -112,7 +128,6 @@ func _create_list_item(room: Node2D) -> void:
 	var maint = room.get("maintenance_level") if "maintenance_level" in room else 100
 	var lbl_maint = Label.new()
 	lbl_maint.text = "%d%%" % maint
-	lbl_maint.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	lbl_maint.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lbl_maint.size_flags_stretch_ratio = 1.0
 	_set_status_color(lbl_maint, maint)
@@ -134,18 +149,30 @@ func _create_list_item(room: Node2D) -> void:
 		"lbl_maint": lbl_maint
 	})
 
-func _get_guest_name_for_room(room_id: String) -> String:
-	if not _guest_manager: return "-"
+func _get_guest_name_for_room(room_id: String) -> Array:
+	if not _guest_manager: return ["-", ""]
 	# We only care about active parties
 	for party in _guest_manager.get("_active"):
 		if party.get("room_id") == room_id:
 			var members = party.get("members")
 			if members and members.size() > 0:
+				var primary_name = ""
+				var tooltip = ""
 				for m in members:
-					if m.has_method("is_primary") and m.is_primary():
-						return m.get("name")
-				return members[0].get("name")
-	return "-"
+					var m_name = m.get("name")
+					if tooltip != "": tooltip += "\n"
+					tooltip += m_name
+					if m.has_method("is_primary") and m.is_primary() and primary_name == "":
+						primary_name = m_name
+				
+				if primary_name == "":
+					primary_name = members[0].get("name")
+				
+				if members.size() > 1:
+					primary_name += " [+%d]" % (members.size() - 1)
+					
+				return [primary_name, tooltip]
+	return ["-", ""]
 
 func _set_status_color(lbl: Label, value: int) -> void:
 	if value < 30:
@@ -169,8 +196,14 @@ func _refresh_live_data() -> void:
 		var room = row.room
 		if not is_instance_valid(room): continue
 		
-		var r_id = room.get("id") if "id" in room else "Unbekannt"
-		row.lbl_guest.text = _get_guest_name_for_room(r_id)
+		var r_num = room.get("room_number")
+		var r_id = str(r_num) if r_num != null and str(r_num) != "" else "-"
+		var guest_info = _get_guest_name_for_room(r_id)
+		row.lbl_guest.text = guest_info[0]
+		if guest_info[1] != "":
+			row.lbl_guest.tooltip_text = guest_info[1]
+		else:
+			row.lbl_guest.tooltip_text = ""
 		
 		var clean = room.get("cleanliness_level") if "cleanliness_level" in room else 100
 		row.lbl_clean.text = "%d%%" % clean
@@ -184,37 +217,49 @@ func _refresh_live_data() -> void:
 	if is_instance_valid(_selected_room):
 		var clean = _selected_room.get("cleanliness_level") if "cleanliness_level" in _selected_room else 100
 		var maint = _selected_room.get("maintenance_level") if "maintenance_level" in _selected_room else 100
-		var is_service = _selected_room.get("is_service_requested") if "is_service_requested" in _selected_room else false
 		
-		detail_clean_lbl.text = "%s: %d%%" % [GameState.T("cleanliness", "Sauberkeit"), clean]
-		detail_maint_lbl.text = "%s: %d%%" % [GameState.T("maintenance", "Zustand"), maint]
+		detail_clean_val.text = "%d%%" % clean
+		detail_maint_val.text = "%d%%" % maint
 		
-		if is_service:
-			detail_status_lbl.text = "%s: %s" % [GameState.T("status", "Status"), GameState.T("service_needed", "Service benötigt")]
-			detail_status_lbl.add_theme_color_override("font_color", Color.YELLOW)
+		var r_num = _selected_room.get("room_number")
+		var r_id = str(r_num) if r_num != null and str(r_num) != "" else "-"
+		var guest_info = _get_guest_name_for_room(r_id)
+		detail_guest_val.text = guest_info[0]
+		detail_guest_val.mouse_filter = Control.MOUSE_FILTER_PASS
+		if guest_info[1] != "":
+			detail_guest_val.tooltip_text = guest_info[1]
 		else:
-			detail_status_lbl.text = "%s: OK" % GameState.T("status", "Status")
-			detail_status_lbl.add_theme_color_override("font_color", Color.GREEN)
+			detail_guest_val.tooltip_text = ""
 
 func _on_room_selected(room: Node2D, btn: Button) -> void:
 	_selected_room = room
+	pip_camera.set_target(room)
 	
-	var r_id = room.get("id") if "id" in room else GameState.T("unknown", "Unbekannt")
+	btn_goto.add_theme_stylebox_override("normal", load("res://assets/UI/menu_button_blue.tres"))
+	btn_goto.add_theme_stylebox_override("hover", load("res://assets/UI/menu_button_blue_hover.tres"))
+	btn_goto.add_theme_stylebox_override("pressed", load("res://assets/UI/menu_button_blue_pressed.tres"))
+	
+	var r_num = room.get("room_number")
+	var r_id = str(r_num) if r_num != null and str(r_num) != "" else "-"
 	var r_def = room.get_definition() if room.has_method("get_definition") else {}
 	var r_name = r_def.get("name", GameState.T("room", "Raum"))
 	
-	detail_name_lbl.text = "%s (%s)" % [r_name, r_id]
+	detail_name_lbl.text = r_name
+	detail_id_val.text = r_id
 	
 	btn_goto.disabled = false
 	_refresh_live_data()
 
 func _clear_details() -> void:
 	_selected_room = null
-	detail_name_lbl.text = GameState.T("please_select", "Bitte wählen...")
-	detail_status_lbl.text = ""
-	detail_clean_lbl.text = ""
-	detail_maint_lbl.text = ""
+	pip_camera.set_target(null)
+	detail_name_lbl.text = GameState.T("ui.room_list.please_select", "Bitte wählen...")
+	detail_id_val.text = "---"
+	detail_guest_val.text = "---"
+	detail_clean_val.text = "---"
+	detail_maint_val.text = "---"
 	btn_goto.disabled = true
+	btn_goto.add_theme_stylebox_override("disabled", load("res://assets/UI/menu_button_darkblue_disabled.tres"))
 
 func _on_goto_pressed() -> void:
 	if not is_instance_valid(_selected_room):

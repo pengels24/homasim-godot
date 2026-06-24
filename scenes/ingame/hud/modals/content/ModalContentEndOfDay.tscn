@@ -1,97 +1,361 @@
 [gd_scene format=3 uid="uid://cone0bkotycuj"]
 
 [ext_resource type="Script" uid="uid://dgd3ydm2odxlc" path="res://scenes/ingame/hud/modals/content/ModalContentEndOfDay.gd" id="1_1tvma"]
+[ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://assets/UI/menu_button_green.tres" id="2_dag8o"]
+[ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://assets/UI/menu_button_green_pressed.tres" id="3_xi502"]
+[ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://assets/UI/menu_button_green_hover.tres" id="4_v8voy"]
 
-[node name="ModalContentEndOfDay" type="VBoxContainer"]
-offset_right = 400.0
-offset_bottom = 300.0
+[node name="ModalContentEndOfDay" type="MarginContainer" unique_id=2121624404]
+custom_minimum_size = Vector2(900, 500)
+offset_right = 900.0
+offset_bottom = 500.0
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 20
 script = ExtResource("1_1tvma")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="VBoxMain" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 25
+
+[node name="HBoxColumns" type="HBoxContainer" parent="VBoxMain"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 100
+
+[node name="VBoxFinance" type="VBoxContainer" parent="VBoxMain/HBoxColumns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="LblFinTitle" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance"]
+theme_type_variation = &"HeaderLarge"
+theme_type_variation = &"HeaderLarge"
+layout_mode = 2
+text = "Finanzen"
+horizontal_alignment = 0
+
+[node name="HSepFin1" type="Panel" parent="VBoxMain/HBoxColumns/VBoxFinance"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="RowRoom" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxFinance"]
 layout_mode = 2
 
-[node name="VBoxFinance" type="VBoxContainer" parent="HBoxContainer"]
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowRoom"]
+theme_type_variation = &"DescLabel"
 layout_mode = 2
+size_flags_horizontal = 3
+text = "Übernachtungen"
 
-[node name="LblRoomIncome" type="Label" parent="HBoxContainer/VBoxFinance"]
+[node name="LblRoomIncome" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowRoom" unique_id=1139280722]
+theme_type_variation = &"ValueLabel"
 unique_name_in_owner = true
 layout_mode = 2
-text = "0"
+text = "0 €"
+horizontal_alignment = 2
 
-[node name="LblRestaurant" type="Label" parent="HBoxContainer/VBoxFinance"]
+[node name="RowRest" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxFinance"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowRest"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Restaurant"
+
+[node name="LblRestaurant" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowRest" unique_id=138170585]
+theme_type_variation = &"ValueLabel"
 unique_name_in_owner = true
 layout_mode = 2
-text = "0"
+text = "0 €"
+horizontal_alignment = 2
 
-[node name="LblServices" type="Label" parent="HBoxContainer/VBoxFinance"]
+[node name="RowServ" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxFinance"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowServ"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Services"
+
+[node name="LblServices" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowServ" unique_id=1098477535]
+theme_type_variation = &"ValueLabel"
 unique_name_in_owner = true
 layout_mode = 2
-text = "0"
+text = "0 €"
+horizontal_alignment = 2
 
-[node name="LblTotalIncome" type="Label" parent="HBoxContainer/VBoxFinance"]
+[node name="HSepFin2" type="Panel" parent="VBoxMain/HBoxColumns/VBoxFinance"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="RowTotalInc" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxFinance"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowTotalInc"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Einnahmen gesamt"
+
+[node name="LblTotalIncome" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowTotalInc" unique_id=1146728186]
+theme_type_variation = &"ValueLabel"
 unique_name_in_owner = true
 layout_mode = 2
-text = "0"
+text = "0 €"
+horizontal_alignment = 2
 
-[node name="LblStaff" type="Label" parent="HBoxContainer/VBoxFinance"]
+[node name="Spacer" type="Control" parent="VBoxMain/HBoxColumns/VBoxFinance"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
+[node name="RowStaff" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxFinance"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowStaff"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Personalkosten"
+
+[node name="LblStaff" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowStaff" unique_id=319833960]
+theme_type_variation = &"ValueLabel"
 unique_name_in_owner = true
 layout_mode = 2
-text = "0"
+text = "0 €"
+horizontal_alignment = 2
 
-[node name="LblTotalExpenses" type="Label" parent="HBoxContainer/VBoxFinance"]
+[node name="RowOther" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxFinance"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowOther"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Sonstige Ausgaben"
+
+[node name="LblOtherExpenses" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowOther"]
+theme_type_variation = &"ValueLabel"
 unique_name_in_owner = true
 layout_mode = 2
-text = "0"
+text = "0 €"
+horizontal_alignment = 2
 
-[node name="LblProfit" type="Label" parent="HBoxContainer/VBoxFinance"]
+[node name="HSepFin3" type="Panel" parent="VBoxMain/HBoxColumns/VBoxFinance"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="RowTotalExp" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxFinance"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowTotalExp"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Ausgaben gesamt"
+
+[node name="LblTotalExpenses" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowTotalExp" unique_id=31802238]
+theme_type_variation = &"ValueLabel"
 unique_name_in_owner = true
 layout_mode = 2
-text = "0"
+text = "0 €"
+horizontal_alignment = 2
 
-[node name="VBoxGuests" type="VBoxContainer" parent="HBoxContainer"]
+[node name="Spacer2" type="Control" parent="VBoxMain/HBoxColumns/VBoxFinance"]
+custom_minimum_size = Vector2(0, 15)
 layout_mode = 2
 
-[node name="LblCheckins" type="Label" parent="HBoxContainer/VBoxGuests"]
+[node name="RowProfit" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxFinance"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowProfit"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Tagesergebnis"
+
+[node name="LblProfit" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowProfit" unique_id=690754018]
+theme_type_variation = &"ValueLabel"
 unique_name_in_owner = true
 layout_mode = 2
-text = "0"
+text = "0 €"
+horizontal_alignment = 2
 
-[node name="LblCheckouts" type="Label" parent="HBoxContainer/VBoxGuests"]
+
+[node name="VSep" type="Panel" parent="VBoxMain/HBoxColumns"]
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="VBoxGuests" type="VBoxContainer" parent="VBoxMain/HBoxColumns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 12
+
+[node name="LblGuestTitle" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests"]
+theme_type_variation = &"HeaderLarge"
+theme_type_variation = &"HeaderLarge"
+layout_mode = 2
+text = "Gäste & Ruf"
+horizontal_alignment = 0
+
+[node name="HSepGuest1" type="Panel" parent="VBoxMain/HBoxColumns/VBoxGuests"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="RowCheckin" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxGuests"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests/RowCheckin"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Check-ins"
+
+[node name="LblCheckins" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests/RowCheckin" unique_id=664107217]
+theme_type_variation = &"ValueLabel"
 unique_name_in_owner = true
 layout_mode = 2
-text = "0"
+text = "0 / 0"
+horizontal_alignment = 2
 
-[node name="LblRageQuits" type="Label" parent="HBoxContainer/VBoxGuests"]
+[node name="RowCheckout" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxGuests"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests/RowCheckout"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Check-outs"
+
+[node name="LblCheckouts" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests/RowCheckout" unique_id=516655473]
+theme_type_variation = &"ValueLabel"
 unique_name_in_owner = true
 layout_mode = 2
-text = "0"
+text = "0 / 0"
+horizontal_alignment = 2
 
-[node name="LblTimeouts" type="Label" parent="HBoxContainer/VBoxGuests"]
+[node name="SpacerG" type="Control" parent="VBoxMain/HBoxColumns/VBoxGuests"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
+[node name="RowRage" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxGuests"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests/RowRage"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Wütend abgereist"
+
+[node name="LblRageQuits" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests/RowRage" unique_id=1478184541]
+theme_type_variation = &"ValueLabelRed"
 unique_name_in_owner = true
 layout_mode = 2
-text = "0"
+text = "0 / 0"
+horizontal_alignment = 2
 
-[node name="LblRejected" type="Label" parent="HBoxContainer/VBoxGuests"]
+[node name="RowTimeouts" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxGuests"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests/RowTimeouts"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Vor Check-in gegangen"
+
+[node name="LblTimeouts" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests/RowTimeouts" unique_id=1154028939]
+theme_type_variation = &"ValueLabelRed"
 unique_name_in_owner = true
 layout_mode = 2
-text = "0"
+text = "0 / 0"
+horizontal_alignment = 2
 
-[node name="LblDeclined" type="Label" parent="HBoxContainer/VBoxGuests"]
+[node name="RowRejected" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxGuests"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests/RowRejected"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Abgewiesen"
+
+[node name="LblRejected" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests/RowRejected" unique_id=1440975954]
+theme_type_variation = &"ValueLabelRed"
 unique_name_in_owner = true
 layout_mode = 2
-text = "0"
+text = "0 / 0"
+horizontal_alignment = 2
 
-[node name="LblInHouse" type="Label" parent="HBoxContainer/VBoxGuests"]
+[node name="RowDeclined" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxGuests"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests/RowDeclined"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Angebot abgelehnt"
+
+[node name="LblDeclined" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests/RowDeclined" unique_id=479691034]
+theme_type_variation = &"ValueLabelRed"
 unique_name_in_owner = true
 layout_mode = 2
-text = "0"
+text = "0 / 0"
+horizontal_alignment = 2
 
-[node name="LblLeavingTomorrow" type="Label" parent="HBoxContainer/VBoxGuests"]
+[node name="SpacerG2" type="Control" parent="VBoxMain/HBoxColumns/VBoxGuests"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
+[node name="HSepGuest2" type="Panel" parent="VBoxMain/HBoxColumns/VBoxGuests"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="RowInHouse" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxGuests"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests/RowInHouse"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Aktuell im Hotel"
+
+[node name="LblInHouse" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests/RowInHouse" unique_id=919599784]
+theme_type_variation = &"ValueLabel"
 unique_name_in_owner = true
 layout_mode = 2
-text = "0"
+text = "0 / 0"
+horizontal_alignment = 2
 
-[node name="BtnNextDay" type="Button" parent="."]
+[node name="RowLeaving" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxGuests"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests/RowLeaving"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Abreise morgen"
+
+[node name="LblLeavingTomorrow" type="Label" parent="VBoxMain/HBoxColumns/VBoxGuests/RowLeaving" unique_id=758291307]
+theme_type_variation = &"ValueLabel"
 unique_name_in_owner = true
 layout_mode = 2
-text = "WEITER ZU TAG 12"
+text = "0 / 0"
+horizontal_alignment = 2
+
+[node name="BtnNextDay" type="Button" parent="VBoxMain" unique_id=1519480724]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_dag8o")
+theme_override_styles/pressed = ExtResource("3_xi502")
+theme_override_styles/hover = ExtResource("4_v8voy")
+text = "WEITER ZU TAG X"

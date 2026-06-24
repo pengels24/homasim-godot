@@ -23,23 +23,22 @@ layer = 200
 script = ExtResource("1_toastnoti")
 
 [node name="Panel" type="PanelContainer" parent="." unique_id=43765415]
-offset_left = 660.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
 offset_top = 930.0
-offset_right = 1260.0
-offset_bottom = 1018.0
+grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
 [node name="Margin" type="MarginContainer" parent="Panel" unique_id=1597472381]
 layout_mode = 2
-theme_override_constants/margin_left = 28
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 28
-theme_override_constants/margin_bottom = 16
+	theme_override_constants/margin_left = 32
+	theme_override_constants/margin_top = 12
+	theme_override_constants/margin_right = 32
+	theme_override_constants/margin_bottom = 12
 
 [node name="MessageLbl" type="Label" parent="Panel/Margin" unique_id=888936303]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
-theme_override_font_sizes/font_size = 17
 text = "-"
 horizontal_alignment = 1
 vertical_alignment = 1

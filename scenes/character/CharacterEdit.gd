@@ -10,7 +10,7 @@ const BG_IMAGE := "res://assets/images/home/home-background-002.png"
 @onready var btn_save:           Button      = $Center/Card/Margin/VBox/BtnSave
 @onready var btn_back:           Button      = $Center/Card/Margin/VBox/Header/BtnBack
 @onready var error_label:        Label       = $Center/Card/Margin/VBox/ErrorLabel
-@onready var character_display:  Control     = $Center/Card/Margin/VBox/HBox/Preview/CharacterDisplay
+@onready var character_display:  Control     = $Center/Card/Margin/VBox/HBox/Preview/PreviewBg/CharacterDisplay
 @onready var preview_name:       Label       = $Center/Card/Margin/VBox/HBox/Preview/PreviewName
 @onready var preview_sub:        Label       = $Center/Card/Margin/VBox/HBox/Preview/PreviewSub
 @onready var bg_image:           TextureRect = $Bg
@@ -45,7 +45,7 @@ const HAIR_COLORS := {
 }
 
 const OUTFIT_COLORS := {
-	"anzug_schwarz": Color(0.12, 0.12, 0.16),
+	"anzug_schwarz": Color(0.08, 0.08, 0.08),
 	"anzug_grau":    Color(0.42, 0.42, 0.46),
 	"casual":        Color(0.22, 0.45, 0.72),
 	"uniform":       Color(0.10, 0.38, 0.22),

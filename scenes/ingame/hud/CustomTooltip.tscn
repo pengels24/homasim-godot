@@ -3,29 +3,6 @@
 [ext_resource type="Script" uid="uid://b7fs8rb6tv8ib" path="res://scenes/ingame/hud/CustomTooltip.gd" id="1_script"]
 [ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="2_theme"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a4dcd"]
-content_margin_left = 2.0
-content_margin_top = 2.0
-content_margin_right = 2.0
-content_margin_bottom = 2.0
-bg_color = Color(0.043137256, 0.05882353, 0.09019608, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-corner_detail = 6
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pal1l"]
-content_margin_left = 2.0
-content_margin_top = 2.0
-content_margin_right = 2.0
-content_margin_bottom = 2.0
-bg_color = Color(3.4774469e-06, 0.42007992, 0.11451676, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-corner_detail = 6
 
 [node name="CustomTooltip" type="PanelContainer" unique_id=2132460247]
 process_mode = 3
@@ -42,31 +19,49 @@ layout_mode = 2
 theme_override_constants/separation = 4
 
 [node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=910056609]
+theme_type_variation = &"TooltipHeader"
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
 text = "Raum"
 
 [node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=105410091]
 layout_mode = 2
 
 [node name="StatusLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=690110380]
+theme_type_variation = &"TooltipText"
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 text = "Status: Frei"
 
 [node name="GuestsLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1031577067]
+theme_type_variation = &"TooltipText"
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 text = "Gast 1
 Gast 2"
 
+[node name="StaySpacer" type="Control" parent="MarginContainer/VBoxContainer" unique_id=987654322]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 8)
+layout_mode = 2
+
 [node name="StayProgress" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=978903627]
+custom_minimum_size = Vector2(0, 24)
+theme_type_variation = &"TooltipProgressBar"
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
-theme_override_styles/background = SubResource("StyleBoxFlat_a4dcd")
-theme_override_styles/fill = SubResource("StyleBoxFlat_pal1l")
+show_percentage = false
+
+[node name="StayProgressLabel" type="Label" parent="MarginContainer/VBoxContainer/StayProgress" unique_id=987654321]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"TooltipText"
+text = "2 / 3 Tage"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -10,6 +10,7 @@ signal sig_continue_requested
 
 @onready var _lbl_total_income: Label = %LblTotalIncome
 @onready var _lbl_staff: Label = %LblStaff
+@onready var _lbl_other_expenses: Label = %LblOtherExpenses
 @onready var _lbl_total_expenses: Label = %LblTotalExpenses
 @onready var _lbl_profit: Label = %LblProfit
 
@@ -35,11 +36,22 @@ func _ready() -> void:
 	var today: int = GameState.selected_hotel.get("day", 1)
 
 	_fill_finance_data(today)
-	_fill_guest_data()
+	if is_instance_valid(_guest_mgr):
+		_fill_guest_data()
 
 	if is_instance_valid(_btn_next_day):
 		_btn_next_day.text = "WEITER ZU TAG %d" % (today + 1)
 		_btn_next_day.pressed.connect(_on_next_day_pressed)
+
+# =============================================================================
+func _format_money(amount: int, show_plus: bool = false) -> String:
+	if amount > 0 and show_plus:
+		return "+ %d €" % amount
+	elif amount < 0:
+		# amount ist ohnehin negativ, also z.B. -150
+		return "- %d €" % abs(amount)
+	else:
+		return "%d €" % amount
 
 # =============================================================================
 func _fill_finance_data(day: int) -> void:
@@ -49,6 +61,7 @@ func _fill_finance_data(day: int) -> void:
 	var other_inc := 0
 	var expenses := 0
 	var staff_exp := 0
+	var other_exp := 0
 
 	var transactions: Array = GameState.selected_hotel.get("transactions", [])
 
@@ -68,41 +81,52 @@ func _fill_finance_data(day: int) -> void:
 				expenses += amount # Ausgaben sind bereits negativ
 				if category == "Personal":
 					staff_exp += amount
+				else:
+					other_exp += amount
 
 	var total_inc := room_inc + rest_inc + serv_inc + other_inc
 	var profit := total_inc + expenses # expenses ist negativ, also + (-) = -
 
 	# UI befüllen
-	if is_instance_valid(_lbl_room_income): _lbl_room_income.text = "Übernachtungen: %d €" % room_inc
-	if is_instance_valid(_lbl_restaurant): _lbl_restaurant.text = "Restaurant: %d €" % rest_inc
-	if is_instance_valid(_lbl_services): _lbl_services.text = "Services: %d €" % serv_inc
+	if is_instance_valid(_lbl_room_income): _lbl_room_income.text = _format_money(room_inc, true)
+	if is_instance_valid(_lbl_restaurant): _lbl_restaurant.text = _format_money(rest_inc, true)
+	if is_instance_valid(_lbl_services): _lbl_services.text = _format_money(serv_inc, true)
 
-	if is_instance_valid(_lbl_total_income): _lbl_total_income.text = "Einnahmen gesamt: %d €" % total_inc
-	if is_instance_valid(_lbl_staff): _lbl_staff.text = "Personal: %d €" % staff_exp
-	if is_instance_valid(_lbl_total_expenses): _lbl_total_expenses.text = "Ausgaben gesamt: %d €" % expenses
-	if is_instance_valid(_lbl_profit): _lbl_profit.text = "Tagesgewinn: %d €" % profit
+	if is_instance_valid(_lbl_total_income): _lbl_total_income.text = _format_money(total_inc, true)
+	if is_instance_valid(_lbl_staff): _lbl_staff.text = _format_money(staff_exp)
+	if is_instance_valid(_lbl_other_expenses): _lbl_other_expenses.text = _format_money(other_exp)
+	if is_instance_valid(_lbl_total_expenses): _lbl_total_expenses.text = _format_money(expenses)
+	
+	if is_instance_valid(_lbl_profit): 
+		_lbl_profit.text = _format_money(profit, true)
+		if profit > 0:
+			_lbl_profit.add_theme_color_override("font_color", Color("16a34a")) # Grün
+		elif profit < 0:
+			_lbl_profit.add_theme_color_override("font_color", Color("dc2626")) # Rot
+		else:
+			_lbl_profit.add_theme_color_override("font_color", Color(0.7, 0.7, 0.75, 1)) # Grau
 
 # =============================================================================
 func _fill_guest_data() -> void:
 	# Erfolge: Format "Partien / Köpfe"
 	if is_instance_valid(_lbl_checkins):
-		_lbl_checkins.text = "Check-ins: %d / %d" % [_guest_mgr.daily_checkin_parties, _guest_mgr.daily_checkin_heads]
+		_lbl_checkins.text = "%d / %d" % [_guest_mgr.daily_checkin_parties, _guest_mgr.daily_checkin_heads]
 
 	if is_instance_valid(_lbl_checkouts):
-		_lbl_checkouts.text = "Check-outs: %d / %d" % [_guest_mgr.daily_checkout_parties, _guest_mgr.daily_checkout_heads]
+		_lbl_checkouts.text = "%d / %d" % [_guest_mgr.daily_checkout_parties, _guest_mgr.daily_checkout_heads]
 
 	# Verluste / Abbrüche
 	if is_instance_valid(_lbl_rage_quits):
-		_lbl_rage_quits.text = "Wütend abgereist (Wartezeit): %d / %d" % [_guest_mgr.daily_rage_parties, _guest_mgr.daily_rage_heads]
+		_lbl_rage_quits.text = "%d / %d" % [_guest_mgr.daily_rage_parties, _guest_mgr.daily_rage_heads]
 
 	if is_instance_valid(_lbl_timeouts):
-		_lbl_timeouts.text = "Vor Check-in gegangen: %d / %d" % [_guest_mgr.daily_timeout_parties, _guest_mgr.daily_timeout_heads]
+		_lbl_timeouts.text = "%d / %d" % [_guest_mgr.daily_timeout_parties, _guest_mgr.daily_timeout_heads]
 
 	if is_instance_valid(_lbl_rejected):
-		_lbl_rejected.text = "An der Tür abgewiesen: %d / %d" % [_guest_mgr.daily_reject_parties, _guest_mgr.daily_reject_heads]
+		_lbl_rejected.text = "%d / %d" % [_guest_mgr.daily_reject_parties, _guest_mgr.daily_reject_heads]
 
 	if is_instance_valid(_lbl_declined):
-		_lbl_declined.text = "Angebot abgelehnt: %d / %d" % [_guest_mgr.daily_declined_parties, _guest_mgr.daily_declined_heads]
+		_lbl_declined.text = "%d / %d" % [_guest_mgr.daily_declined_parties, _guest_mgr.daily_declined_heads]
 
 	var total_parties := _guest_mgr._active.size()
 	var total_heads := 0
@@ -117,10 +141,10 @@ func _fill_guest_data() -> void:
 			leaving_heads += p.members.size()
 
 	if is_instance_valid(_lbl_in_house):
-		_lbl_in_house.text = "Aktuell im Hotel: %d / %d" % [total_parties, total_heads]
+		_lbl_in_house.text = "%d / %d" % [total_parties, total_heads]
 
 	if is_instance_valid(_lbl_leaving_tomorrow):
-		_lbl_leaving_tomorrow.text = "Abreise morgen: %d / %d" % [leaving_parties, leaving_heads]
+		_lbl_leaving_tomorrow.text = "%d / %d" % [leaving_parties, leaving_heads]
 
 # =============================================================================
 func _on_next_day_pressed() -> void:

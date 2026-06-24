@@ -1,19 +1,9 @@
 [gd_scene format=3 uid="uid://t1tutp0p1u1"]
 
 [ext_resource type="Script" uid="uid://cxeaxb6t4x8se" path="res://scenes/ingame/hud/TutorialPopup.gd" id="1_scpt"]
-[ext_resource type="FontFile" uid="uid://bs3xl562plyi2" path="res://assets/fonts/Jersey25-Regular.ttf" id="2_font"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
-bg_color = Color(0.12, 0.1, 0.08, 0.98)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.51, 0.4, 0.28, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+[ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://assets/UI/menu_button_green.tres" id="2_sb_normal"]
+[ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://assets/UI/menu_button_green_hover.tres" id="3_sb_hover"]
+[ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://assets/UI/menu_button_green_pressed.tres" id="4_sb_pressed"]
 
 [node name="TutorialPopup" type="CanvasLayer" unique_id=155188488]
 process_mode = 3
@@ -36,9 +26,9 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=496478910]
-custom_minimum_size = Vector2(700, 400)
+custom_minimum_size = Vector2(800, 500)
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_bg")
+theme_type_variation = &"ModalPanel"
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer" unique_id=1813129806]
 layout_mode = 2
@@ -52,11 +42,9 @@ layout_mode = 2
 theme_override_constants/separation = 20
 
 [node name="Title" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1412544084]
+theme_type_variation = &"HeaderLarge"
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.92, 0.7, 0.04, 1)
-theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 48
 text = "Tutorial Title"
 horizontal_alignment = 1
 
@@ -65,7 +53,7 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=419221935]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 300)
+custom_minimum_size = Vector2(0, 350)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
@@ -80,8 +68,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_fonts/normal_font = ExtResource("2_font")
-theme_override_font_sizes/normal_font_size = 28
+theme_override_font_sizes/normal_font_size = 22
 text = "Tutorial description goes here..."
 fit_content = true
 
@@ -90,6 +77,8 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = ExtResource("2_sb_normal")
+theme_override_styles/hover = ExtResource("3_sb_hover")
+theme_override_styles/pressed = ExtResource("4_sb_pressed")
+theme_override_styles/focus = ExtResource("2_sb_normal")
 text = "Verstanden"

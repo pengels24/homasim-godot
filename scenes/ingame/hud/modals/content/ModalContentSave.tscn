@@ -12,6 +12,7 @@ theme = ExtResource("1_3p06j")
 script = ExtResource("2_03gl7")
 
 [node name="Subtitle" type="Label" parent="." unique_id=1097180975]
+theme_type_variation = &"HeaderLarge"
 unique_name_in_owner = true
 layout_mode = 2
 text = "Manuelle Spielstände"

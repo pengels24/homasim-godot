@@ -1,7 +1,6 @@
 extends CanvasLayer
 
 # Referenzen
-@onready var label_name: Label = %Hotelname
 @onready var label_level: Label = %Level
 @onready var hotel_stars: TextureProgressBar = %GourmetStars
 @onready var label_money: Label = %Capital
@@ -34,7 +33,6 @@ var _is_paused: bool = false
 
 # =============================================================================
 func _ready() -> void:
-	GameState.sig_hotel_name_changed.connect(_on_hotel_name_changed)
 	GameState.sig_hotel_level_changed.connect(_on_hotel_level_changed)
 	GameState.sig_hotel_stars_changed.connect(_on_hotel_stars_changed)
 	GameState.sig_hotel_money_changed.connect(_on_hotel_money_changed)
@@ -43,6 +41,7 @@ func _ready() -> void:
 	GameState.sig_hotel_guests_checkout_changed.connect(_on_hotel_guests_checkout_changed)
 	GameState.sig_hotel_exp_changed.connect(_on_hotel_exp_changed)
 	GameState.sig_hotel_rep_changed.connect(_on_hotel_rep_changed)
+	GameState.sig_hotel_day_changed.connect(_on_hotel_day_changed)
 	GameState.sig_hotel_time_changed.connect(_on_hotel_time_changed)
 	GameState.sig_guest_clicked.connect(_on_guest_clicked)
 	GameState.sig_staff_clicked.connect(_on_staff_clicked)
@@ -100,11 +99,6 @@ func _on_staff_clicked(staff: Node2D) -> void:
 	var t = tooltip_scene.instantiate()
 	add_child(t)
 	t.setup(staff)
-
-
-# =============================================================================
-func _on_hotel_name_changed(new_name: String) -> void:
-	label_name.text = new_name
 
 
 # =============================================================================

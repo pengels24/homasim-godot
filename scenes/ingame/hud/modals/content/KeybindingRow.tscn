@@ -46,7 +46,6 @@ text = "Alt"
 
 [node name="BtnDelete" type="Button" parent="." unique_id=1974518263]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.803922, 0.360784, 0.360784, 1)
 theme_override_styles/normal = ExtResource("6_6oela")
 theme_override_styles/pressed = ExtResource("7_cg8ph")
 theme_override_styles/hover = ExtResource("8_7ay1e")

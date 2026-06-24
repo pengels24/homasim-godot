@@ -1,23 +1,13 @@
 [gd_scene load_steps=4 format=3 uid="uid://croomlist456"]
 
 [ext_resource type="Script" path="res://scenes/ingame/hud/modals/content/ModalContentRoomList.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://cxp1abc2def3g" path="res://scenes/shared/PipCamera.tscn" id="2_pip"]
+[ext_resource type="Theme" uid="uid://cmfawpylw6m6x" path="res://assets/UI/menu_button_blue.tres" id="3_theme"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Header"]
-bg_color = Color(0.2, 0.2, 0.22, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Detail"]
-bg_color = Color(0.12, 0.12, 0.14, 0)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
 
 [node name="ModalContentRoomList" type="MarginContainer"]
-custom_minimum_size = Vector2(1300, 600)
+custom_minimum_size = Vector2(1600, 600)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -36,12 +26,12 @@ theme_override_constants/separation = 32
 [node name="LeftCol" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 1.6
+size_flags_stretch_ratio = 2.5
 theme_override_constants/separation = 16
 
 [node name="TableHeaderPanel" type="PanelContainer" parent="HBoxContainer/LeftCol"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_Header")
+theme_type_variation = &"InnerPanel"
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/LeftCol/TableHeaderPanel"]
 layout_mode = 2
@@ -56,42 +46,39 @@ theme_override_constants/separation = 10
 
 [node name="LblColName" type="Label" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
-theme_override_colors/font_color = Color(0.9, 0.7, 0.2, 1)
 text = "Name / Typ"
 
 [node name="LblColId" type="Label" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.0
-theme_override_colors/font_color = Color(0.9, 0.7, 0.2, 1)
-text = "ID"
-horizontal_alignment = 1
+text = "Zimmer"
 
 [node name="LblColGuest" type="Label" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
+mouse_filter = 1
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 2.0
-theme_override_colors/font_color = Color(0.9, 0.7, 0.2, 1)
+size_flags_stretch_ratio = 1.5
 text = "Gast"
-horizontal_alignment = 1
 
 [node name="LblColClean" type="Label" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.0
-theme_override_colors/font_color = Color(0.9, 0.7, 0.2, 1)
-text = "Sauberkeit"
-horizontal_alignment = 2
+text = "Sauber"
+tooltip_text = "Sauberkeit"
 
 [node name="LblColMaint" type="Label" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
+mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.0
-theme_override_colors/font_color = Color(0.9, 0.7, 0.2, 1)
 text = "Zustand"
-horizontal_alignment = 2
 
 [node name="ScrollSpacer" type="Control" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(12, 0)
@@ -112,7 +99,7 @@ theme_override_constants/separation = 4
 [node name="DetailPanel" type="PanelContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_Detail")
+theme_type_variation = &"InnerPanel"
 
 [node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/DetailPanel"]
 layout_mode = 2
@@ -125,28 +112,84 @@ theme_override_constants/margin_bottom = 24
 layout_mode = 2
 theme_override_constants/separation = 16
 
+[node name="PipCamera" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer" instance=ExtResource("2_pip")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
 [node name="DetailNameLabel" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.9, 0.7, 0.2, 1)
-theme_override_font_sizes/font_size = 24
+theme_type_variation = &"HeaderLarge"
 text = "Bitte wählen..."
 horizontal_alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="DetailStatusLabel" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer"]
-unique_name_in_owner = true
+[node name="DetailId" type="HBoxContainer" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="DetailCleanLabel" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer"]
+[node name="DetailIdLabel" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailId"]
 unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"DescLabel"
+text = "Zimmer:"
+
+[node name="DetailIdValue" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailId"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ValueLabel"
+text = "---"
+
+[node name="DetailGuest" type="HBoxContainer" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="DetailMaintLabel" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer"]
+[node name="DetailGuestLabel" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailGuest"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"DescLabel"
+text = "Gast:"
+
+[node name="DetailGuestValue" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailGuest"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ValueLabel"
+text = "---"
+
+[node name="DetailClean" type="HBoxContainer" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="DetailCleanLabel" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailClean"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"DescLabel"
+text = "Sauberkeit:"
+
+[node name="DetailCleanValue" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailClean"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ValueLabel"
+text = "---"
+
+[node name="DetailMaint" type="HBoxContainer" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="DetailMaintLabel" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailMaint"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"DescLabel"
+text = "Zustand:"
+
+[node name="DetailMaintValue" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailMaint"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"ValueLabel"
+text = "---"
 
 [node name="Spacer" type="Control" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2

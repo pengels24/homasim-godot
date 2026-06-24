@@ -7,9 +7,6 @@ const FADE_IN_SEC  : float = 0.25
 const HOLD_SEC     : float = 3.50
 const FADE_OUT_SEC : float = 0.40
 
-const PANEL_LEFT   : float = 660.0
-const PANEL_RIGHT  : float = 1260.0
-const PANEL_HEIGHT : float = 88.0
 const POS_TOP_Y    : float = 80.0
 const POS_MIDDLE_Y : float = 496.0
 const POS_BOTTOM_Y : float = 930.0
@@ -42,5 +39,4 @@ func _apply_position() -> void:
 		"top":    top_y = POS_TOP_Y
 		"middle": top_y = POS_MIDDLE_Y
 		_:        top_y = POS_BOTTOM_Y
-	_panel.offset_top    = top_y
-	_panel.offset_bottom = top_y + PANEL_HEIGHT
+	_panel.position.y = top_y

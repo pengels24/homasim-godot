@@ -4,7 +4,7 @@
 [ext_resource type="FontFile" uid="uid://bs3xl562plyi2" path="res://assets/fonts/Jersey25-Regular.ttf" id="2_font"]
 
 [node name="ModalContentTutorials" type="HBoxContainer"]
-custom_minimum_size = Vector2(1000, 600)
+custom_minimum_size = Vector2(1200, 600)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -16,6 +16,7 @@ script = ExtResource("1_scpt")
 [node name="LeftPanel" type="PanelContainer" parent="."]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
+theme_type_variation = &"InnerPanel"
 
 [node name="Margin" type="MarginContainer" parent="LeftPanel"]
 layout_mode = 2
@@ -24,15 +25,15 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="TutorialList" type="ItemList" parent="LeftPanel/Margin"]
+[node name="TutorialList" type="VBoxContainer" parent="LeftPanel/Margin"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 28
+theme_override_constants/separation = 10
 
 [node name="RightPanel" type="PanelContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"InnerPanel"
 
 [node name="Margin" type="MarginContainer" parent="RightPanel"]
 layout_mode = 2
@@ -46,11 +47,9 @@ layout_mode = 2
 theme_override_constants/separation = 20
 
 [node name="Title" type="Label" parent="RightPanel/Margin/VBoxContainer"]
+theme_type_variation = &"HeaderLarge"
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.92, 0.7, 0.04, 1)
-theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 40
 text = "Tutorial Title"
 horizontal_alignment = 1
 
@@ -65,6 +64,5 @@ stretch_mode = 5
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_fonts/normal_font = ExtResource("2_font")
-theme_override_font_sizes/normal_font_size = 28
+theme_type_variation = &"TutorialDesc"
 text = "Tutorial content goes here..."

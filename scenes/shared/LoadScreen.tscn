@@ -27,6 +27,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Overlay_Card_VBox_Header#TitleLbl" type="Label" parent="." unique_id=1706783038]
+theme_type_variation = &"HeaderLarge"
 custom_minimum_size = Vector2(0, 460)
 layout_mode = 0
 size_flags_horizontal = 3

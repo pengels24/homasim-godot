@@ -101,16 +101,13 @@ layout_mode = 2
 theme_override_constants/separation = 20
 
 [node name="Title" type="Label" parent="Center/Card/Margin/VBox" unique_id=1594271500]
+theme_type_variation = &"HeaderLarge"
 layout_mode = 2
-theme_override_colors/font_color = Color(0.918, 0.702, 0.031, 1)
-theme_override_font_sizes/font_size = 26
 horizontal_alignment = 1
 
 [node name="Message" type="Label" parent="Center/Card/Margin/VBox" unique_id=1744394825]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.78, 0.8, 0.86, 1)
-theme_override_font_sizes/font_size = 20
 horizontal_alignment = 1
 autowrap_mode = 3
 
@@ -118,10 +115,8 @@ autowrap_mode = 3
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.65, 0.65, 0.7, 1)
 theme_override_colors/font_pressed_color = Color(0.3, 0.9, 0.45, 1)
 theme_override_colors/font_hover_color = Color(0.8, 0.8, 0.86, 1)
-theme_override_font_sizes/font_size = 14
 theme_override_styles/normal = SubResource("StyleBoxFlat_ack_off")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_ack_on")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ack_off")
@@ -138,8 +133,6 @@ alignment = 1
 custom_minimum_size = Vector2(140, 48)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.85, 0.85, 0.85, 1)
-theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = ExtResource("2_8yud2")
 theme_override_styles/pressed = ExtResource("3_pryyi")
 theme_override_styles/hover = ExtResource("4_3ns2m")
@@ -150,8 +143,6 @@ text = "Abbrechen"
 custom_minimum_size = Vector2(140, 48)
 layout_mode = 2
 mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = ExtResource("6_vhg18")
 theme_override_styles/pressed = ExtResource("7_apjfa")
 theme_override_styles/hover = ExtResource("8_xru5x")

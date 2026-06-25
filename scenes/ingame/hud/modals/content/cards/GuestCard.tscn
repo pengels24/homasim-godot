@@ -79,6 +79,7 @@ layout_mode = 2
 [node name="GuestName" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/NameContainer" unique_id=472972342]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 21
 text = "Max Mustermann"
 vertical_alignment = 1
 
@@ -95,6 +96,7 @@ stretch_mode = 5
 [node name="GuestDetails" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1730271360]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 19
 text = "2 Nächte | Paar"
 
 [node name="RejectButton" type="TextureButton" parent="MarginContainer/HBoxContainer" unique_id=2042891413]

@@ -143,10 +143,10 @@ func _add_empty_state_label(list: VBoxContainer, text: String) -> void:
 	var lbl := Label.new()
 	lbl.text = text
 	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	lbl.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 0.7))
-	lbl.add_theme_font_size_override("font_size", 14)
-	lbl.set("custom_minimum_size", Vector2(0, 40))
 	lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	lbl.theme_type_variation = &"DescLabel"
+	lbl.set("custom_minimum_size", Vector2(0, 40))
+	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	list.add_child(lbl)
 
 
@@ -167,6 +167,7 @@ func _clear_selection() -> void:
 
 	_btn_checkout.disabled = true
 	_btn_checkout.text = "Check-out bestätigen"
+	_apply_btn_styles(_btn_checkout, style_rec_normal, style_rec_normal, style_rec_normal, style_rec_disabled)
 
 
 # =============================================================================
@@ -221,7 +222,12 @@ func _on_room_clicked(room: Node2D) -> void:
 func _on_checkout_guest_clicked(party: GuestParty) -> void:
 	_sel_checkout_party = party
 	_highlight_cards(_list_checkout, _sel_checkout_party)
-	_btn_checkout.disabled = (_sel_checkout_party == null)
+	if _sel_checkout_party == null:
+		_btn_checkout.disabled = true
+		_apply_btn_styles(_btn_checkout, style_rec_normal, style_rec_normal, style_rec_normal, style_rec_disabled)
+	else:
+		_btn_checkout.disabled = false
+		_apply_btn_styles(_btn_checkout, style_green_normal, style_green_hover, style_green_pressed, style_rec_disabled)
 
 
 # =============================================================================
@@ -333,7 +339,7 @@ func _update_checkin_button() -> void:
 		_btn_checkin.disabled = true
 		_btn_checkin.text = GameState.T("checkin.btn.confirm")
 		# Setzt den Button auf den Standard-Rezeptions-Look zurück
-		_apply_btn_styles(style_rec_normal, style_rec_normal, style_rec_normal, style_rec_disabled)
+		_apply_btn_styles(_btn_checkin, style_rec_normal, style_rec_normal, style_rec_normal, style_rec_disabled)
 		return
 
 	_btn_checkin.disabled = false
@@ -342,17 +348,17 @@ func _update_checkin_button() -> void:
 	match _match_type:
 		"perfect":
 			_btn_checkin.text = GameState.T("checkin.btn.confirm")
-			_apply_btn_styles(style_green_normal, style_green_hover, style_green_pressed, style_rec_disabled)
+			_apply_btn_styles(_btn_checkin, style_green_normal, style_green_hover, style_green_pressed, style_rec_disabled)
 
 		"ask_price", "ask_requirements":
 			# NEU: Kein Zwischenzustand mehr. Es ist immer der goldene Würfel-Button!
 			_btn_checkin.text = GameState.T("checkin.btn.roll")
-			_apply_btn_styles(style_gold_normal, style_gold_hover, style_gold_pressed, style_rec_disabled)
+			_apply_btn_styles(_btn_checkin, style_gold_normal, style_gold_hover, style_gold_pressed, style_rec_disabled)
 
 		"disabled", _:
 			_btn_checkin.disabled = true
 			_btn_checkin.text = GameState.T("checkin.btn.other_room")
-			_apply_btn_styles(style_rec_normal, style_rec_normal, style_rec_normal, style_rec_disabled)
+			_apply_btn_styles(_btn_checkin, style_rec_normal, style_rec_normal, style_rec_normal, style_rec_disabled)
 
 
 # =============================================================================
@@ -431,14 +437,14 @@ func _highlight_cards(list: VBoxContainer, selected_target) -> void:
 
 
 # =============================================================================
-func _apply_btn_styles(normal: StyleBox, hover: StyleBox, pressed: StyleBox, disabled: StyleBox) -> void:
+func _apply_btn_styles(btn: Button, normal: StyleBox, hover: StyleBox, pressed: StyleBox, disabled: StyleBox) -> void:
 	# Entfernt zuerst den unschönen modulate-Filter, falls noch einer aktiv ist
-	_btn_checkin.modulate = Color.WHITE
+	btn.modulate = Color.WHITE
 
-	_btn_checkin.add_theme_stylebox_override("normal", normal)
-	_btn_checkin.add_theme_stylebox_override("hover", hover)
-	_btn_checkin.add_theme_stylebox_override("pressed", pressed)
-	_btn_checkin.add_theme_stylebox_override("disabled", disabled)
+	btn.add_theme_stylebox_override("normal", normal)
+	btn.add_theme_stylebox_override("hover", hover)
+	btn.add_theme_stylebox_override("pressed", pressed)
+	btn.add_theme_stylebox_override("disabled", disabled)
 
 	# Optional: Fokus-Style gleichsetzen, damit nach dem Klicken kein Rand bleibt
-	_btn_checkin.add_theme_stylebox_override("focus", normal)
+	btn.add_theme_stylebox_override("focus", normal)

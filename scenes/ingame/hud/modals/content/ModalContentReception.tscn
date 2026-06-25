@@ -9,17 +9,20 @@
 [ext_resource type="StyleBox" uid="uid://3p1dn200tb0v" path="res://assets/UI/menu_button_darkblue_disabled.tres" id="5_he4xl"]
 [ext_resource type="StyleBox" uid="uid://7k18tvhnqcx0" path="res://assets/UI/reception_button_disabled.tres" id="5_se0ik"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_trans"]
+
 [node name="ModalContentReception" type="PanelContainer" unique_id=496388672]
 custom_minimum_size = Vector2(1500, 700)
 theme = ExtResource("1_ymb64")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_trans")
 script = ExtResource("1_u0ww5")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=923651622]
 layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=2044783595]
 layout_mode = 2
@@ -30,7 +33,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="LabelVBCWaiting" type="Label" parent="MarginContainer/HBoxContainer/VBCWaiting" unique_id=1057108035]
-theme_type_variation = &"HeaderMedium"
 unique_name_in_owner = true
 layout_mode = 2
 text = "Wartende Gäste"
@@ -38,11 +40,12 @@ text = "Wartende Gäste"
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBCWaiting" unique_id=707196567]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = ExtResource("3_6b2ih")
+theme_type_variation = &"InnerPanel"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer/VBCWaiting/PanelContainer" unique_id=1227122065]
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
 theme_override_constants/scrollbar_h_separation = 5
 
 [node name="ListWaiting" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBCWaiting/PanelContainer/ScrollContainer" unique_id=1620952553]
@@ -56,7 +59,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="LabelVBCRooms" type="Label" parent="MarginContainer/HBoxContainer/VBCRooms" unique_id=1264259987]
-theme_type_variation = &"HeaderMedium"
 unique_name_in_owner = true
 layout_mode = 2
 text = "Verfügbare Zimmer"
@@ -64,11 +66,12 @@ text = "Verfügbare Zimmer"
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBCRooms" unique_id=1170349064]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = ExtResource("3_6b2ih")
+theme_type_variation = &"InnerPanel"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer/VBCRooms/PanelContainer" unique_id=832076783]
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
 theme_override_constants/scrollbar_h_separation = 5
 
 [node name="ListRooms" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBCRooms/PanelContainer/ScrollContainer" unique_id=239768574]
@@ -80,10 +83,10 @@ theme_override_constants/separation = 10
 [node name="BtnCheckIn" type="Button" parent="MarginContainer/HBoxContainer/VBCRooms" unique_id=446207807]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_disabled_color = Color(0.33333334, 0.33333334, 0.33333334, 1)
 theme_override_styles/normal = ExtResource("4_he4xl")
 theme_override_styles/hover = ExtResource("5_d0t3y")
 theme_override_styles/disabled = ExtResource("5_he4xl")
+disabled = true
 text = "CHECK-IN"
 
 [node name="VBCActive" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1541278321]
@@ -91,7 +94,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="LabelVBCActive" type="Label" parent="MarginContainer/HBoxContainer/VBCActive" unique_id=310490731]
-theme_type_variation = &"HeaderMedium"
 unique_name_in_owner = true
 layout_mode = 2
 text = "Eingecheckt"
@@ -99,11 +101,12 @@ text = "Eingecheckt"
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBCActive" unique_id=1913258255]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = ExtResource("3_6b2ih")
+theme_type_variation = &"InnerPanel"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer/VBCActive/PanelContainer" unique_id=575732144]
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
 theme_override_constants/scrollbar_h_separation = 5
 
 [node name="ListActive" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBCActive/PanelContainer/ScrollContainer" unique_id=848098278]
@@ -117,7 +120,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="LabelVBCCheckout" type="Label" parent="MarginContainer/HBoxContainer/VBCCheckout" unique_id=730519156]
-theme_type_variation = &"HeaderMedium"
 unique_name_in_owner = true
 layout_mode = 2
 text = "Abreise"
@@ -125,11 +127,12 @@ text = "Abreise"
 [node name="PanelContainer" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBCCheckout" unique_id=1021589775]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = ExtResource("3_6b2ih")
+theme_type_variation = &"InnerPanel"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer/VBCCheckout/PanelContainer" unique_id=1245453170]
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
 theme_override_constants/scrollbar_h_separation = 5
 
 [node name="ListCheckout" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBCCheckout/PanelContainer/ScrollContainer" unique_id=1554927487]
@@ -139,8 +142,7 @@ layout_mode = 2
 [node name="BtnCheckout" type="Button" parent="MarginContainer/HBoxContainer/VBCCheckout" unique_id=620508583]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_disabled_color = Color(0.33333334, 0.33333334, 0.33333334, 1)
-theme_override_styles/normal = ExtResource("4_q5uso")
-theme_override_styles/disabled = ExtResource("5_se0ik")
+theme_override_styles/normal = ExtResource("4_he4xl")
+theme_override_styles/disabled = ExtResource("5_he4xl")
 disabled = true
 text = "CHECK-OUT"

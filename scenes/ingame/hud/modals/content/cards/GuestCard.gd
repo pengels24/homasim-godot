@@ -59,14 +59,16 @@ func populate(party: GuestParty, mode: Mode, is_new: bool = false) -> void:
 
 	match current_mode:
 		Mode.WAITING:
-			_details_label.text = str(party.stay_days) + " Nächte | " + party.get_type_name()
+			var night_str = "1 Nacht" if party.stay_days == 1 else str(party.stay_days) + " Nächte"
+			_details_label.text = night_str + " | " + party.get_type_name()
 			_build_waiting_tooltip(def)
 
 			if _is_new:
 				_start_golden_pulse()
 
 		Mode.ACTIVE:
-			_details_label.text = "Noch " + str(party.stay_days) + " Nacht(e)"
+			var night_str = "1 Nacht" if party.stay_days == 1 else str(party.stay_days) + " Nächte"
+			_details_label.text = "Noch " + night_str
 			mouse_filter = Control.MOUSE_FILTER_IGNORE
 			_build_active_tooltip()
 

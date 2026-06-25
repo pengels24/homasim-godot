@@ -111,7 +111,12 @@ func _create_actor(member: GuestMember, room_id: String, start_room: Node2D) -> 
 	if start_room == null and _map_grid != null:
 		start_room = _find_room_by_id(room_id)
 		
-	actor.setup(member, _map_grid, start_room)
+	actor.setup(member, _map_grid, start_room, _guest_manager)
+	
+	# FloatingValues: POI-Einnahmen via EffectManager visualisieren
+	actor.sig_poi_income.connect(func(amount: int, world_pos: Vector2):
+		EffectManager.spawn_money_text(amount, world_pos)
+	)
 	
 	var guest_id = member.id  # Stabile ID – überlebt Save/Load!
 	_actors[guest_id] = actor

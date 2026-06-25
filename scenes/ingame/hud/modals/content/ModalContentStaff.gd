@@ -4,7 +4,11 @@ var _selected_staff = null
 var _current_tab = 0 # 0 = Team, 1 = Bewerber
 var _map_grid: Node2D = null
 
-var _active_rows: Array[Dictionary] = []
+var _list_hired: VBoxContainer = null
+var _list_applicants: VBoxContainer = null
+var _active_rows: Array = []
+var _selected_room_id: String = ""
+var _selected_staff_id: String = ""
 var _update_timer: float = 0.0
 
 @onready var tab_hbox: HBoxContainer = %TabHBox
@@ -72,6 +76,7 @@ func _ready() -> void:
 	if StaffManager:
 		StaffManager.sig_staff_hired.connect(_on_staff_changed)
 		StaffManager.sig_staff_fired.connect(_on_staff_changed)
+		StaffManager.sig_assignments_changed.connect(_on_assignments_changed)
 		
 	_refresh_list()
 
@@ -79,14 +84,19 @@ func _build_tabs() -> void:
 	for c in tab_hbox.get_children():
 		c.queue_free()
 		
-	var tabs = ["Dein Team", "Bewerber"]
+	var tabs = [
+		GameState.T("ui.staff.tab_team", "Dein Team"),
+		GameState.T("ui.staff.tab_applicants", "Bewerber"),
+		GameState.T("ui.staff.tab_assign", "Zuweisung")
+	]
 	for i in range(tabs.size()):
 		var btn = Button.new()
 		btn.text = tabs[i]
 		btn.custom_minimum_size = Vector2(200, 50)
 		btn.toggle_mode = true
 		_style_toggle_btn(btn)
-		btn.pressed.connect(func(): _on_tab_changed(i))
+		var idx = i
+		btn.pressed.connect(func(): _on_tab_changed(idx))
 		btn.set_meta("tab_idx", i)
 		tab_hbox.add_child(btn)
 		
@@ -106,16 +116,36 @@ func _on_staff_changed(_dummy = null) -> void:
 	_selected_staff = null
 	_refresh_list()
 
+func _on_assignments_changed() -> void:
+	if _current_tab == 2:
+		_refresh_list()
+
 func _refresh_list() -> void:
 	_active_rows.clear()
 	for child in list_container.get_children():
 		if child != empty_label:
 			child.queue_free()
 		
+	var th = find_child("TableHeaderPanel", true, false)
+	if th:
+		th.visible = (_current_tab != 2)
+		
+	var lbl_status_header = get_node_or_null("%LblStatus")
+	if lbl_status_header:
+		lbl_status_header.visible = (_current_tab == 0)
+		
+	if detail_panel:
+		detail_panel.visible = (_current_tab != 2)
+		
+	if _current_tab == 2:
+		empty_label.visible = false
+		_build_assignment_ui()
+		return
+		
 	var items = []
 	if _current_tab == 0:
 		if StaffManager:
-			items = StaffManager.get_state().values()
+			items = StaffManager.get_state().get("hired", {}).values()
 	else:
 		if StaffManager:
 			items = StaffManager.daily_applicants
@@ -217,11 +247,39 @@ func _refresh_list() -> void:
 			else:
 				lbl_morale.add_theme_color_override("font_color", list_font_color)
 			
+			# Status (Stretch 2.0)
+			var lbl_status = Label.new()
+			lbl_status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			lbl_status.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+			lbl_status.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			lbl_status.size_flags_stretch_ratio = 2.0
+			
+			if _current_tab == 0:
+				var role = item.get("role", "")
+				var assigned = StaffManager.room_assignments.get(item.get("id", ""), "")
+				if role == "bartender" or role == "receptionist":
+					if assigned == "":
+						lbl_status.text = "Ohne Aufgabe"
+						lbl_status.add_theme_color_override("font_color", Color.GRAY)
+					else:
+						lbl_status.text = "Zugeordnet"
+						lbl_status.add_theme_color_override("font_color", Color.GREEN)
+				else:
+					if item.get("busy", false):
+						lbl_status.text = "Im Einsatz"
+						lbl_status.add_theme_color_override("font_color", Color.ORANGE)
+					else:
+						lbl_status.text = "Wartend"
+						lbl_status.add_theme_color_override("font_color", Color.GRAY)
+			else:
+				lbl_status.visible = false
+			
 			hbox_inner.add_child(lbl_name)
 			hbox_inner.add_child(lbl_role)
 			hbox_inner.add_child(lbl_age)
 			hbox_inner.add_child(lbl_wage)
 			hbox_inner.add_child(lbl_morale)
+			hbox_inner.add_child(lbl_status)
 			
 			btn.add_child(margin)
 			btn.pressed.connect(func(): _select_item(item))
@@ -386,7 +444,8 @@ func _update_details() -> void:
 	if s.has("morale"):
 		_create_2col_row(GameState.T("ui.staff.morale", "Moral"), str(s.get("morale", 100)) + "%", detail_stats, false)
 
-var _pending_action: int = 0 # 0=none, 1=hire, 2=fire
+var _pending_action: int = 0 # 0=none, 1=hire, 2=fire, 3=unassign
+var _pending_unassign_sid: String = ""
 var _confirm_modal: Node = null
 
 func _get_confirm_modal() -> Node:
@@ -425,7 +484,30 @@ func _on_action_btn_pressed() -> void:
 			false # Green button
 		)
 
+func _on_unassign_requested(sid: String) -> void:
+	_pending_unassign_sid = sid
+	_pending_action = 3
+	var staff_data = StaffManager.hired_staff.get(sid, {})
+	var staff_name = staff_data.get("first_name", "") + " " + staff_data.get("last_name", "")
+	var modal = _get_confirm_modal()
+	modal.ask(
+		"Zuweisung aufheben",
+		"Möchtest du " + staff_name + " wirklich aus diesem Raum entfernen?",
+		"Entfernen",
+		"Abbrechen",
+		"",
+		true # Destructive (Red button)
+	)
+
 func _on_confirm_accepted() -> void:
+	if _pending_action == 3:
+		if StaffManager:
+			StaffManager.unassign_from_room(_pending_unassign_sid)
+			_pending_unassign_sid = ""
+			_refresh_list()
+		_pending_action = 0
+		return
+		
 	if _selected_staff == null:
 		return
 		
@@ -454,3 +536,249 @@ func _on_goto_pressed() -> void:
 		var modal = find_parent("StandardModal")
 		if modal and modal.has_method("close"):
 			modal.close()
+
+
+# =============================================================================
+# TAB 3 – ZUWEISUNG
+# =============================================================================
+
+func _build_assignment_ui() -> void:
+	# Zweispaltiges Layout
+	list_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	var hbox = HBoxContainer.new()
+	hbox.set_anchors_preset(Control.PRESET_FULL_RECT)
+	hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	hbox.add_theme_constant_override("separation", 16)
+	list_container.add_child(hbox)
+
+	# --- Linke Spalte: POI-Räume ---
+	var left_panel = PanelContainer.new()
+	left_panel.theme_type_variation = "InnerPanel"
+	left_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	left_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	hbox.add_child(left_panel)
+	
+	var left_margin = MarginContainer.new()
+	left_margin.add_theme_constant_override("margin_left", 12)
+	left_margin.add_theme_constant_override("margin_right", 12)
+	left_margin.add_theme_constant_override("margin_top", 12)
+	left_margin.add_theme_constant_override("margin_bottom", 12)
+	left_panel.add_child(left_margin)
+	
+	var left_vbox = VBoxContainer.new()
+	left_vbox.name = "LeftVBox"
+	left_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	left_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	left_margin.add_child(left_vbox)
+
+	var left_header = Label.new()
+	left_header.text = GameState.T("ui.staff.assign_poi", "POI-Räume")
+	left_header.theme_type_variation = "HeaderMedium"
+	left_vbox.add_child(left_header)
+
+	var sep_left = HSeparator.new()
+	left_vbox.add_child(sep_left)
+
+	# --- Rechte Spalte: Personal ---
+	var right_panel = PanelContainer.new()
+	right_panel.theme_type_variation = "InnerPanel"
+	right_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	right_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	hbox.add_child(right_panel)
+	
+	var right_margin = MarginContainer.new()
+	right_margin.add_theme_constant_override("margin_left", 12)
+	right_margin.add_theme_constant_override("margin_right", 12)
+	right_margin.add_theme_constant_override("margin_top", 12)
+	right_margin.add_theme_constant_override("margin_bottom", 12)
+	right_panel.add_child(right_margin)
+	
+	var right_vbox = VBoxContainer.new()
+	right_vbox.name = "RightVBox"
+	right_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	right_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	right_margin.add_child(right_vbox)
+
+	var right_header = Label.new()
+	right_header.text = GameState.T("ui.staff.assign_staff", "Verfügbares Personal")
+	right_header.theme_type_variation = "HeaderMedium"
+	right_vbox.add_child(right_header)
+
+	var sep_right = HSeparator.new()
+	right_vbox.add_child(sep_right)
+
+	# POI-Räume aus MapGrid holen
+	var poi_rooms: Array = []
+	if is_instance_valid(_map_grid) and _map_grid.has_method("get_placed_rooms"):
+		for room in _map_grid.get_placed_rooms():
+			if not is_instance_valid(room): continue
+			var def = room.call("get_definition")
+			if def.get("is_poi", false) and def.get("in_build_menu", true):
+				poi_rooms.append(room)
+
+	if poi_rooms.is_empty():
+		var no_poi_lbl = Label.new()
+		no_poi_lbl.text = GameState.T("ui.staff.no_pois", "Keine POI-Räume gebaut.")
+		no_poi_lbl.add_theme_color_override("font_color", Color("#888888"))
+		left_vbox.add_child(no_poi_lbl)
+	else:
+		const CARD_ROOM = preload("res://scenes/ingame/hud/modals/content/cards/CardAssignRoom.tscn")
+		for room in poi_rooms:
+			var def = room.call("get_definition")
+			var room_id = GuestManager._room_key(room)
+			var min_s: int = def.get("min_staff", 1)
+			var max_s: int = def.get("max_staff", 1)
+			
+			var label_text: String = def.get("label", "Raum")
+			var prefix: String = def.get("prefix", "")
+			var r_num: String = room.room_number if "room_number" in room else "????"
+			var display_id: String = prefix + r_num if prefix != "" and not r_num.begins_with(prefix) else r_num
+			var formatted_name = label_text + " [" + display_id + "]"
+			
+			var assigned: Array = StaffManager.get_staff_for_room(room_id)
+
+			var card = CARD_ROOM.instantiate()
+			left_vbox.add_child(card)
+			card.populate(formatted_name, room_id, min_s, max_s, assigned)
+			card.sig_unassign_staff.connect(_on_unassign_requested)
+			card.sig_clicked.connect(_on_assign_room_clicked)
+			
+	# Rechte Spalte: Personal mit passender Rolle
+	var hired = StaffManager.get_state().get("hired", {}).values()
+	# Alle POI required_roles sammeln
+	var poi_roles: Array = []
+	for room in poi_rooms:
+		var r = room.call("get_definition").get("required_role", "")
+		if r != "" and not poi_roles.has(r):
+			poi_roles.append(r)
+
+	var matching_staff: Array = []
+	for s in hired:
+		var sid = s.get("id", "")
+		var assigned_room = StaffManager.room_assignments.get(sid, "")
+		if assigned_room.is_empty():
+			if poi_roles.is_empty() or poi_roles.has(s.get("role", "")):
+				matching_staff.append(s)
+
+	if matching_staff.is_empty():
+		var no_staff_lbl = Label.new()
+		no_staff_lbl.text = GameState.T("ui.staff.no_matching_staff", "Kein passendes Personal eingestellt.")
+		no_staff_lbl.add_theme_color_override("font_color", Color("#888888"))
+		right_vbox.add_child(no_staff_lbl)
+	else:
+		const CARD_STAFF = preload("res://scenes/ingame/hud/modals/content/cards/CardAssignStaff.tscn")
+		for staff in matching_staff:
+			var card = CARD_STAFF.instantiate()
+			right_vbox.add_child(card)
+			card.populate(staff)
+			card.sig_clicked.connect(_on_assign_staff_clicked)
+			
+	var btn_margin = MarginContainer.new()
+	btn_margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	btn_margin.add_theme_constant_override("margin_top", 16)
+	var btn_assign = Button.new()
+	btn_assign.size_flags_vertical = Control.SIZE_SHRINK_END
+	btn_assign.name = "BtnAssign"
+	btn_assign.text = "Kein Ziel / Personal gewählt"
+	btn_assign.custom_minimum_size = Vector2(0, 48)
+	btn_assign.disabled = true
+	btn_assign.pressed.connect(_on_assign_btn_pressed)
+	btn_margin.add_child(btn_assign)
+	right_vbox.add_child(btn_margin)
+			
+	_update_assignment_matching()
+
+func _on_assign_room_clicked(rid: String) -> void:
+	_selected_room_id = rid
+	_update_assignment_matching()
+
+func _on_assign_staff_clicked(sid: String) -> void:
+	_selected_staff_id = sid
+	_update_assignment_matching()
+
+func _on_assign_btn_pressed() -> void:
+	if _selected_room_id != "" and _selected_staff_id != "":
+		StaffManager.assign_to_room(_selected_staff_id, _selected_room_id)
+		_selected_staff_id = "" # Reset staff selection, keep room selection
+		_refresh_list()
+
+func _update_assignment_matching() -> void:
+	if not is_instance_valid(list_container): return
+	# WICHTIG: Da queue_free() verzögert ist, müssen wir das LETZTE Kind nehmen!
+	var child_count = list_container.get_child_count()
+	var hbox = list_container.get_child(child_count - 1) if child_count > 0 else null
+	if not is_instance_valid(hbox) or hbox.is_queued_for_deletion():
+		# Fallback: Suche nach dem HBoxContainer, der nicht gelöscht wird
+		for c in list_container.get_children():
+			if not c.is_queued_for_deletion() and c is HBoxContainer:
+				hbox = c
+				break
+	if not hbox: return
+	var left_vbox = hbox.find_child("LeftVBox", true, false)
+	var right_vbox = hbox.find_child("RightVBox", true, false)
+	if not left_vbox or not right_vbox: return
+	
+	var sel_room_def = {}
+	var sel_room_name = ""
+	var sel_req_role = ""
+	var has_sel_room = _selected_room_id != ""
+	
+	if has_sel_room and is_instance_valid(_map_grid) and _map_grid.has_method("get_placed_rooms"):
+		for room in _map_grid.get_placed_rooms():
+			if not is_instance_valid(room): continue
+			var rid = GuestManager._room_key(room)
+			if rid == _selected_room_id:
+				sel_room_def = room.call("get_definition")
+				sel_room_name = sel_room_def.get("name", rid)
+				sel_req_role = sel_room_def.get("required_role", "")
+				break
+	
+	# Update left side (selection borders)
+	for card in left_vbox.get_children():
+		if card.has_method("set_selected") and "_room_id" in card:
+			card.set_selected(card._room_id == _selected_room_id)
+			
+	# Update right side (buttons)
+	var has_valid_match = false
+	for card in right_vbox.get_children():
+		if card.has_method("set_selected") and "_staff_role" in card:
+			var role_matches = (sel_req_role == "" or sel_req_role == card._staff_role)
+			card.set_matching(role_matches)
+			card.set_selected(card._staff_id == _selected_staff_id)
+			if card._staff_id == _selected_staff_id and role_matches:
+				has_valid_match = true
+				
+	var btn_assign = right_vbox.get_node_or_null("MarginContainer/BtnAssign")
+	if not btn_assign:
+		# Fallback falls MarginContainer den Standardnamen hat
+		for child in right_vbox.get_children():
+			if child is MarginContainer:
+				btn_assign = child.get_node_or_null("BtnAssign")
+				if btn_assign: break
+				
+	if btn_assign:
+		var SB_GREEN = preload("res://assets/UI/menu_button_green.tres")
+		var SB_GREEN_HOVER = preload("res://assets/UI/menu_button_green_hover.tres")
+		var SB_GREEN_PRESSED = preload("res://assets/UI/menu_button_green_pressed.tres")
+		var SB_DISABLED = preload("res://assets/UI/menu_button_darkblue_disabled.tres")
+		
+		if not has_sel_room:
+			btn_assign.text = "Ziel wählen"
+			btn_assign.disabled = true
+			btn_assign.add_theme_stylebox_override("disabled", SB_DISABLED)
+		elif _selected_staff_id == "":
+			btn_assign.text = "Personal wählen"
+			btn_assign.disabled = true
+			btn_assign.add_theme_stylebox_override("disabled", SB_DISABLED)
+		elif not has_valid_match:
+			btn_assign.text = "Falsche Rolle"
+			btn_assign.disabled = true
+			btn_assign.add_theme_stylebox_override("disabled", SB_DISABLED)
+		else:
+			btn_assign.text = "Zuordnen"
+			btn_assign.disabled = false
+			btn_assign.add_theme_stylebox_override("normal", SB_GREEN)
+			btn_assign.add_theme_stylebox_override("hover", SB_GREEN_HOVER)
+			btn_assign.add_theme_stylebox_override("pressed", SB_GREEN_PRESSED)
+			btn_assign.add_theme_stylebox_override("focus", SB_GREEN)

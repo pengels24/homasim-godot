@@ -1,0 +1,58 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scenes/ingame/hud/modals/content/cards/RowAssignedStaff.gd" id="1_1"]
+[ext_resource type="Texture2D" path="res://assets/icons/x.svg" id="2_2"]
+[ext_resource type="StyleBox" path="res://assets/UI/menu_button_red.tres" id="3_3"]
+[ext_resource type="StyleBox" path="res://assets/UI/menu_button_red_hover.tres" id="4_4"]
+[ext_resource type="StyleBox" path="res://assets/UI/menu_button_red_pressed.tres" id="5_5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
+content_margin_left = 8.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.043137256, 0.05882353, 0.09019608, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.19215687, 0.20784314, 0.27450982, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="RowAssignedStaff" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_1")
+script = ExtResource("1_1")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LblName" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Name"
+clip_text = true
+text_overrun_behavior = 3
+
+[node name="BtnRemove" type="Button" parent="HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+theme_override_styles/focus = ExtResource("3_3")
+theme_override_styles/disabled = ExtResource("3_3")
+theme_override_styles/hover = ExtResource("4_4")
+theme_override_styles/pressed = ExtResource("5_5")
+theme_override_styles/normal = ExtResource("3_3")
+icon = ExtResource("2_2")
+expand_icon = true

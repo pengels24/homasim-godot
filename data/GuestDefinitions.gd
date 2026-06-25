@@ -11,6 +11,8 @@ const ALL: Dictionary = {
 		"max_stay":        3,
 		"min_base_price":  30,
 		"max_base_price":  60,
+		"min_daily_budget": 10,
+		"max_daily_budget": 30,
 		"icon":            "res://assets/icons/guests/user.svg",
 		"base_exp": 20,
 		"rep_penalty": 5
@@ -25,6 +27,8 @@ const ALL: Dictionary = {
 		"max_stay":        4,
 		"min_base_price":  50,
 		"max_base_price":  100,
+		"min_daily_budget": 20,
+		"max_daily_budget": 50,
 		"icon":            "res://assets/icons/guests/users.svg",
 		"base_exp": 30,
 		"rep_penalty": 5
@@ -39,6 +43,8 @@ const ALL: Dictionary = {
 		"max_stay":        3,
 		"min_base_price":  60,
 		"max_base_price":  120,
+		"min_daily_budget": 30,
+		"max_daily_budget": 80,
 		"icon":            "res://assets/icons/guests/briefcase.svg",
 		"base_exp": 40,
 		"rep_penalty": 10
@@ -53,6 +59,8 @@ const ALL: Dictionary = {
 		"max_stay":        5,
 		"min_base_price":  80,
 		"max_base_price":  150,
+		"min_daily_budget": 15,
+		"max_daily_budget": 40,
 		"icon":            "res://assets/icons/guests/van.svg",
 		"base_exp": 30,
 		"rep_penalty": 5
@@ -67,6 +75,8 @@ const ALL: Dictionary = {
 		"max_stay":        2,
 		"min_base_price":  20,
 		"max_base_price":  40,
+		"min_daily_budget": 2,
+		"max_daily_budget": 10,
 		"icon":            "res://assets/icons/guests/wallet-minimal.svg",
 		"base_exp": 10,
 		"rep_penalty": 2,
@@ -81,6 +91,8 @@ const ALL: Dictionary = {
 		"max_stay":        14,
 		"min_base_price":  35,
 		"max_base_price":  70,
+		"min_daily_budget": 8,
+		"max_daily_budget": 20,
 		"icon":            "res://assets/icons/guests/laptop-minimal.svg",
 		"base_exp": 20,
 		"rep_penalty": 5
@@ -95,6 +107,8 @@ const ALL: Dictionary = {
 		"max_stay":        2,
 		"min_base_price":  45,
 		"max_base_price":  90,
+		"min_daily_budget": 15,
+		"max_daily_budget": 40,
 		"icon":            "res://assets/icons/guests/sunset.svg",
 		"base_exp": 20,
 		"rep_penalty": 5
@@ -109,6 +123,8 @@ const ALL: Dictionary = {
 		"max_stay":        5,
 		"min_base_price":  150,
 		"max_base_price":  300,
+		"min_daily_budget": 60,
+		"max_daily_budget": 150,
 		"icon":            "res://assets/icons/guests/user-star.svg",
 		"base_exp": 50,
 		"rep_penalty": 15

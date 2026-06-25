@@ -4,18 +4,16 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
 bg_color = Color(0.078, 0.078, 0.098, 0.96)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.918, 0.702, 0.031, 0.45)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.83, 0.68, 0.21, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-shadow_color = Color(0, 0, 0, 0.55)
-shadow_size = 14
-shadow_offset = Vector2(0, 3)
+shadow_size = 0
 
 [node name="ToastNotification" type="CanvasLayer" unique_id=835612784]
 process_mode = 3
@@ -32,10 +30,10 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
 [node name="Margin" type="MarginContainer" parent="Panel" unique_id=1597472381]
 layout_mode = 2
-	theme_override_constants/margin_left = 32
-	theme_override_constants/margin_top = 12
-	theme_override_constants/margin_right = 32
-	theme_override_constants/margin_bottom = 12
+	theme_override_constants/margin_left = 64
+	theme_override_constants/margin_top = 20
+	theme_override_constants/margin_right = 64
+	theme_override_constants/margin_bottom = 20
 
 [node name="MessageLbl" type="Label" parent="Panel/Margin" unique_id=888936303]
 layout_mode = 2

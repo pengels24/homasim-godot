@@ -632,6 +632,9 @@ func open_guest_list() -> void:
 	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentGuestList.tscn")
 	if not is_instance_valid(content): return
 
+	if TutorialManager:
+		TutorialManager.trigger("guest_list")
+
 	if _standard_modal.visible:
 		_standard_modal.set_title("Gästeliste")
 	else:
@@ -645,6 +648,9 @@ func open_room_list() -> void:
 	cleanup_current_states()
 	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentRoomList.tscn")
 	if not is_instance_valid(content): return
+
+	if TutorialManager:
+		TutorialManager.trigger("room_list")
 
 	if _standard_modal.visible:
 		_standard_modal.set_title("Raumliste")

@@ -16,6 +16,7 @@ var _waiting:  Array = []   # Array[GuestParty]
 var _active:   Array = []   # Array[GuestParty]
 var _checkout: Array = []   # Array[GuestParty]
 var _pending_dirty_rooms: Array[String] = [] # NEU: Räume, die auf das Unpause warten
+var _daily_poi_visits: Dictionary = {}  # poi_room_id → visit_count (Reset jeden Morgen)
 
 
 # --- Tages-Statistiken ---
@@ -416,6 +417,14 @@ func do_checkin(party: GuestParty, room: Node2D) -> void:
 	daily_checkin_parties += 1
 	daily_checkin_heads += party.members.size()
 
+	# Budget beim Check-in setzen
+	var def = GuestDefinitions.ALL.get(party.type, {})
+	party.daily_budget = randi_range(
+		def.get("min_daily_budget", 10),
+		def.get("max_daily_budget", 30)
+	)
+	party.spending_budget = party.daily_budget
+
 	ActivityLog.add(
 		"check_in",
 		"Check-in: %s → %s" % [party.get_display_name(), str(room.get("room_number"))],
@@ -659,7 +668,35 @@ func process_midnight_penalties(day: int) -> void:
 
 		if forgotten_count > 0:
 			checkout_forgotten.emit(forgotten_count)
+
+	# 3. Warenverbrauch der POIs abrechnen
+	_process_poi_supply_costs()
+
 	parties_changed.emit()
+
+
+# =============================================================================
+## Wird aufgerufen wenn ein Gast einen POI betritt – zählt Besuche für Warenverbrauch.
+func on_poi_visited(room_id: String) -> void:
+	_daily_poi_visits[room_id] = _daily_poi_visits.get(room_id, 0) + 1
+
+
+# =============================================================================
+## Rechnet am Tagesende den Warenverbrauch aller besuchten POIs ab.
+func _process_poi_supply_costs() -> void:
+	for room_id in _daily_poi_visits:
+		var visits: int = _daily_poi_visits[room_id]
+		var room = _get_room_node(room_id)
+		if not is_instance_valid(room):
+			continue
+		var supply_cost: int = room.get_definition().get("supply_cost_per_visit", 0)
+		var total: int = visits * supply_cost
+		if total > 0:
+			FinanceManager.add_transaction(
+				-total, "betrieb",
+				"%s – Warenverbrauch (%d Besuche)" % [room.get_definition().get("name", room_id), visits]
+			)
+	_daily_poi_visits.clear()
 
 
 # =============================================================================
@@ -690,6 +727,7 @@ func process_morning_routine() -> void:
 	# Aktive Gäste: stay_days verringern
 	for party: GuestParty in _active:
 		party.stay_days -= 1
+		party.spending_budget = party.daily_budget  # Neues Taschengeld für den neuen Tag
 
 		if party.stay_days <= 0:
 			moving.append(party)

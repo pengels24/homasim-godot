@@ -39,6 +39,26 @@
                     8
                 ]
             }
+        },
+        "bartender": {
+            "name": "Barkeeper",
+            "desc": "Betreut die Bar, mixt Getränke und sorgt für gute Stimmung.",
+            "daily_wage": 70,
+            "hire_cost": 220,
+            "base_skills": {
+                "service": [
+                    4,
+                    9
+                ],
+                "mixology": [
+                    3,
+                    8
+                ],
+                "motivation": [
+                    4,
+                    8
+                ]
+            }
         }
     },
     "names": {

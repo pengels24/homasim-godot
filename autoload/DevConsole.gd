@@ -19,9 +19,12 @@ const CLR_ERR  := Color(0.95, 0.25, 0.20, 1.0)
 const CLR_INFO := Color(0.55, 0.75, 0.55, 1.0)
 const CLR_CMD  := Color(0.90, 0.90, 0.90, 1.0)
 
+var _dev_font := SystemFont.new()
+
 
 # =============================================================================
 func _ready() -> void:
+	_dev_font.font_names = ["Arial", "sans-serif"]
 	_close_btn.pressed.connect(_close)
 	_input_field.text_submitted.connect(_on_input_submitted)
 	_header.gui_input.connect(_on_header_gui_input)
@@ -281,7 +284,8 @@ func _log(text: String, color: Color = CLR_OK) -> void:
 	var lbl := Label.new()
 	lbl.text             = text
 	lbl.autowrap_mode    = TextServer.AUTOWRAP_WORD_SMART
-	lbl.add_theme_font_size_override("font_size", 16)
+	lbl.add_theme_font_override("font", _dev_font)
+	lbl.add_theme_font_size_override("font_size", 24)
 	lbl.add_theme_color_override("font_color", color)
 	_log_vbox.add_child(lbl)
 	call_deferred("_scroll_to_bottom")

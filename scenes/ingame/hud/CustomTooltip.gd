@@ -76,6 +76,25 @@ func _update_content() -> void:
 	
 	if _target_room.is_service_requested or _target_room.maintenance_level < 50:
 		status = "🧹 Service benötigt"
+	elif def.get("is_poi", false):
+		var room_id = GuestManager._room_key(_target_room)
+		var is_staffed = StaffManager.is_poi_staffed(def, room_id)
+		if is_staffed:
+			status = "🍺 Geöffnet"
+		else:
+			status = "🔴 Unterbesetzt (Geschlossen)"
+			
+		var current_visitors = 0
+		var ingame = get_tree().get_root().get_node_or_null("Ingame")
+		if is_instance_valid(ingame):
+			var ctrl = ingame.get("_guest_controller")
+			if ctrl:
+				for actor in ctrl._actors.values():
+					if actor.current_state == actor.State.IN_POI and actor._current_poi_id == room_id:
+						current_visitors += 1
+			
+		guests_label.text = "Aktuelle Gäste: %d" % current_visitors
+		guests_label.show()
 	else:
 		# GuestManager direkt befragen (nicht mehr über room._guest_mgr)
 		var ingame = get_tree().get_root().get_node_or_null("Ingame")

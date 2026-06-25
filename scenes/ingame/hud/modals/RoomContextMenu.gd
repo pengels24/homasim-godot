@@ -87,7 +87,12 @@ func open(room: Node2D) -> void:
 	if start_x < 0:
 		start_x = pos_on_screen.x + width_on_screen + 20
 		
-	panel.position = Vector2(start_x, pos_on_screen.y)
+	var p_height = max(panel.size.y, 250.0)
+	var final_y = pos_on_screen.y
+	if final_y + p_height > size.y - 20:
+		final_y = size.y - p_height - 20
+		
+	panel.position = Vector2(start_x, final_y)
 	
 	show()
 	# Blockiere andere Inputs

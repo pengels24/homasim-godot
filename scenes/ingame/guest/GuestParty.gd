@@ -11,6 +11,8 @@ var total_stay_days: int = 1 # Speichert die ursprünglichen Nächte für die Ab
 var base_price: int  = 0
 var satisfaction: int = 100 # 0–100
 var patience: float = 1.0 # 0.0–1.0; startet bei 1.0
+var daily_budget: int = 0    # Einmalig beim Spawn gewürfelt, bleibt konstant
+var spending_budget: int = 0 # Aktuelles Tagesbudget – jeden Morgen auf daily_budget gesetzt
 var arrived_day: int = 1
 var arrived_time: int = 0 # Spielminuten
 var state: String = "waiting" # "waiting"|"active"|"checkout"|"gone"
@@ -64,6 +66,8 @@ func to_dict() -> Dictionary:
 		"base_price": base_price,
 		"satisfaction": satisfaction,
 		"patience": patience,
+		"daily_budget": daily_budget,
+		"spending_budget": spending_budget,
 		"arrived_day": arrived_day,
 		"arrived_time": arrived_time,
 		"state": state,
@@ -82,6 +86,8 @@ static func from_dict(d: Dictionary) -> GuestParty:
 	p.base_price = int(d.get("base_price", 0))
 	p.satisfaction = int(d.get("satisfaction", 100))
 	p.patience = float(d.get("patience", 1.0))
+	p.daily_budget = int(d.get("daily_budget", 0))
+	p.spending_budget = int(d.get("spending_budget", 0))
 	p.arrived_day = d.get("arrived_day", 1)
 	p.arrived_time = d.get("arrived_time", 0)
 	p.state = d.get("state", "waiting")

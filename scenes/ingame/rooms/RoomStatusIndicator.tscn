@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://beixwxl2kauq7" path="res://assets/icons/HUDBottom/wrench.svg" id="3_flo4l"]
 [ext_resource type="FontFile" uid="uid://bs3xl562plyi2" path="res://assets/fonts/Jersey25-Regular.ttf" id="4_flo4l"]
 [ext_resource type="Texture2D" uid="uid://2q5bvvjnsmj0" path="res://assets/icons/HUDBottom/hammer.svg" id="5_hammer"]
+[ext_resource type="Texture2D" uid="uid://cqfthg7sym21o" path="res://assets/icons/HUDBottom/users.svg" id="6_users"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_box"]
 content_margin_left = 5.0
@@ -75,6 +76,15 @@ modulate = Color(0.89, 0.1, 0.1, 1)
 custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 texture = ExtResource("5_hammer")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="IconUnstaffed" type="TextureRect" parent="VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+modulate = Color(0.89, 0.1, 0.1, 1)
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+texture = ExtResource("6_users")
 expand_mode = 1
 stretch_mode = 5
 

@@ -464,10 +464,17 @@ func _update_indicator() -> void:
 
 	# 2. HOLEN DER DATEN:
 	var def = get_definition()
-	if def.get("max_beds", 0) == 0:
+	if def.get("max_beds", 0) == 0 and not def.get("is_poi", false):
 		_status_indicator.visible = false
 		return
 
 	_status_indicator.visible = true
 
-	_status_indicator.set_status(is_service_requested, is_repair_requested, is_pending_demolish)
+	var unstaffed = false
+	if def.get("is_poi", false):
+		if StaffManager:
+			var rnum = str(get("room_number"))
+			var room_id = rnum if (rnum != "" and rnum != "null") else ("%s_%d_%d" % [str(get("room_type_id")), int(get("x_pos")), int(get("y_pos"))])
+			unstaffed = not StaffManager.is_poi_staffed(def, room_id)
+
+	_status_indicator.set_status(is_service_requested, is_repair_requested, is_pending_demolish, unstaffed)

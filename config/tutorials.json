@@ -23,6 +23,24 @@
       "title_key": "tutorial.questbook.title",
       "desc_key": "tutorial.questbook.desc",
       "image": "res://assets/images/tutorials/tutorial_questbook.png"
+    },
+    {
+      "id": "reception",
+      "title_key": "tutorial.reception.title",
+      "desc_key": "tutorial.reception.desc",
+      "image": "res://assets/images/tutorials/tutorial_build_mode.png"
+    },
+    {
+      "id": "guest_list",
+      "title_key": "tutorial.guest_list.title",
+      "desc_key": "tutorial.guest_list.desc",
+      "image": "res://assets/images/tutorials/tutorial_build_mode.png"
+    },
+    {
+      "id": "room_list",
+      "title_key": "tutorial.room_list.title",
+      "desc_key": "tutorial.room_list.desc",
+      "image": "res://assets/images/tutorials/tutorial_build_mode.png"
     }
   ]
 }

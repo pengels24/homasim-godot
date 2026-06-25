@@ -3,12 +3,14 @@ extends Node
 signal sig_staff_hired(staff_data: Dictionary)
 signal sig_staff_fired(staff_id: String)
 signal sig_applicants_generated()
+signal sig_assignments_changed()
 
 const STAFF_CONFIG_PATH = "res://config/staff.json"
 
 var staff_config: Dictionary = {}
 var hired_staff: Dictionary = {}
 var daily_applicants: Array = []
+var room_assignments: Dictionary = {}  # staff_id → room_id
 
 var _last_generated_day: int = -1
 
@@ -39,13 +41,17 @@ func _load_config() -> void:
 
 # =============================================================================
 func load_state(saved_state: Dictionary) -> void:
-	hired_staff = saved_state.duplicate()
+	hired_staff = saved_state.get("hired", saved_state).duplicate()
+	room_assignments = saved_state.get("assignments", {}).duplicate()
 	print("[StaffManager] Gespeichertes Personal geladen: ", hired_staff.size())
 	_ensure_daily_applicants()
 
 # =============================================================================
 func get_state() -> Dictionary:
-	return hired_staff
+	return {
+		"hired": hired_staff,
+		"assignments": room_assignments
+	}
 
 # =============================================================================
 func _ensure_daily_applicants() -> void:
@@ -108,6 +114,42 @@ func _generate_single_applicant(role_key: String) -> Dictionary:
 			applicant["skills"][skill_name] = 5
 			
 	return applicant
+
+# =============================================================================
+## Weist einen Mitarbeiter einem Raum zu. Hebt eine evtl. vorhandene Zuweisung des Mitarbeiters auf.
+func assign_to_room(staff_id: String, room_id: String) -> void:
+	if not hired_staff.has(staff_id):
+		return
+	# Alte Zuweisung des Mitarbeiters aufheben
+	if room_assignments.has(staff_id):
+		room_assignments.erase(staff_id)
+	room_assignments[staff_id] = room_id
+	_save_to_hotel()
+	sig_assignments_changed.emit()
+
+# =============================================================================
+## Hebt die Raum-Zuweisung eines Mitarbeiters auf.
+func unassign_from_room(staff_id: String) -> void:
+	if room_assignments.has(staff_id):
+		room_assignments.erase(staff_id)
+		_save_to_hotel()
+		sig_assignments_changed.emit()
+
+# =============================================================================
+## Gibt alle Mitarbeiter zurück, die einem bestimmten Raum zugewiesen sind.
+func get_staff_for_room(room_id: String) -> Array:
+	var result: Array = []
+	for sid in room_assignments:
+		if room_assignments[sid] == room_id:
+			if hired_staff.has(sid):
+				result.append(hired_staff[sid])
+	return result
+
+# =============================================================================
+## Prüft, ob ein POI genügend Personal hat, um als geöffnet zu gelten.
+func is_poi_staffed(room_def: Dictionary, room_id: String) -> bool:
+	var min_s: int = room_def.get("min_staff", 1)
+	return get_staff_for_room(room_id).size() >= min_s
 
 # =============================================================================
 func hire_staff(applicant_id: String) -> bool:

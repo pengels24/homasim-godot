@@ -7,6 +7,7 @@ enum State { IDLE, WALKING, IN_ROOM, IN_POI, AWAITING_CHECKOUT, LEAVING }
 var current_state: State = State.IDLE
 var _guest_member: GuestMember
 var _map_grid: Node # MapGrid Referenz
+var _guest_manager: GuestManager = null  # Referenz für Budget & POI-Tracking
 var _target_room: Node2D = null
 
 var _room_door_world: Vector2 = Vector2.INF
@@ -23,12 +24,15 @@ var _base_speed: float = 40.0
 var _current_path: Array[Vector2i] = []
 var _active_tween: Tween
 
+signal sig_poi_income(amount: int, world_pos: Vector2)
+
 @onready var avatar: Node2D = $GuestAvatar
 
 # =============================================================================
-func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null) -> void:
+func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null, guest_manager: GuestManager = null) -> void:
 	_guest_member = member
 	_map_grid = map_grid
+	_guest_manager = guest_manager
 	
 	avatar.setup(member)
 	_base_speed = max(10.0, 40.0 + member.speed_offset)
@@ -77,7 +81,9 @@ func _process_waiting(delta: float) -> void:
 		return
 		
 	var speed = 1.0
-	if TimeManager and not TimeManager._game_paused:
+	if TimeManager:
+		if TimeManager.is_paused():
+			return # NEU: Nicht ticken, wenn pausiert!
 		speed = TimeManager._game_speed
 		
 	_action_timer -= delta * speed
@@ -104,15 +110,25 @@ func _get_open_pois() -> Array[String]:
 		var def = room.call("get_definition")
 		if not def.get("is_poi", false): continue
 		
+		# Kinder dürfen nicht in adults_only POIs
+		if def.get("adults_only", false) and _guest_member.is_child:
+			continue
+		
 		var from: int = def.get("open_from", 0)
 		var to: int = def.get("open_to", 0)
 		var room_id: String = def.get("id", "")
 		
-		# Prüfen ob geöffnet. Wenn to < from (über Mitternacht), wird es komplexer,
-		# aber für den Anfang reicht diese einfache Logik.
-		if now >= from and now < to:
-			if not open_pois.has(room_id):
-				open_pois.append(room_id)
+		# Geöffnungszeiten prüfen
+		if not (now >= from and now < to):
+			continue
+		
+		# min_staff Check: Nur geöffnet wenn genügend Personal zugewiesen ist
+		var room_node_id = GuestManager._room_key(room)
+		if not StaffManager.is_poi_staffed(def, room_node_id):
+			continue
+			
+		if not open_pois.has(room_id):
+			open_pois.append(room_id)
 	
 	return open_pois
 
@@ -195,6 +211,10 @@ func _change_state(new_state: State) -> void:
 	elif current_state == State.IN_ROOM and (old_state == State.WALKING or old_state == State.IDLE):
 		SoundManager.play("door_close")
 	
+	# POI-Ankunft: Einnahmen & Boost verarbeiten
+	if new_state == State.IN_POI:
+		_on_poi_arrived()
+	
 	match current_state:
 		State.IN_ROOM, State.IN_POI:
 			_action_timer = randf_range(45.0, 120.0)
@@ -205,6 +225,69 @@ func _change_state(new_state: State) -> void:
 			avatar.visible = false
 		State.WALKING, State.LEAVING:
 			avatar.visible = true
+
+
+# =============================================================================
+## Verarbeitet die Ankunft in einem POI: Einnahmen buchen, Budget abziehen, Zufriedenheit boosten.
+func _on_poi_arrived() -> void:
+	if _current_poi_id.is_empty() or _current_poi_id == "lobby":
+		return
+	
+	var poi_def = _get_poi_def(_current_poi_id)
+	var income: int = poi_def.get("visit_income", 0)
+	if income <= 0:
+		return
+	
+	# Budget abziehen
+	var party := _get_my_party()
+	if is_instance_valid(party):
+		party.spending_budget = max(0, party.spending_budget - income)
+		# Zufriedenheits-Boost für diesen Member
+		party.satisfaction = min(100, party.satisfaction + 5)
+	
+	# Einnahme buchen
+	var room_id = _get_poi_room_id(_current_poi_id)
+	FinanceManager.add_transaction(
+		income, "gastro",
+		"%s – Besuch: %s" % [poi_def.get("name", _current_poi_id), _guest_member.name]
+	)
+	
+	# FloatingValue Signal senden (GuestController leitet weiter)
+	sig_poi_income.emit(income, global_position)
+	
+	# GuestManager über Besuch informieren (für Warenverbrauch-Tracking)
+	if is_instance_valid(_guest_manager):
+		_guest_manager.on_poi_visited(room_id)
+
+
+# =============================================================================
+## Gibt die Definition eines POIs anhand seiner ID zurück.
+func _get_poi_def(poi_id: String) -> Dictionary:
+	for room in _map_grid.active_rooms:
+		if not is_instance_valid(room): continue
+		var def = room.call("get_definition")
+		if def.get("id", "") == poi_id:
+			return def
+	return {}
+
+
+# =============================================================================
+## Gibt den room_key eines POIs anhand seiner Definition-ID zurück.
+func _get_poi_room_id(poi_id: String) -> String:
+	for room in _map_grid.active_rooms:
+		if not is_instance_valid(room): continue
+		var def = room.call("get_definition")
+		if def.get("id", "") == poi_id:
+			return GuestManager._room_key(room)
+	return ""
+
+
+# =============================================================================
+## Gibt die eigene GuestParty zurück (via GuestManager).
+func _get_my_party() -> GuestParty:
+	if not is_instance_valid(_guest_manager):
+		return null
+	return _guest_manager.get_party(_guest_member.party_id)
 
 
 # =============================================================================
@@ -305,6 +388,17 @@ func _walk_to_room(room: Node2D, finish_state: State) -> void:
 ## Generischer Walk zu einem beliebigen POI (Bar, Spa, Restaurant, Lobby ...)
 ## poi_id muss mit der "id" in der Raumdefinition übereinstimmen (oder "lobby")
 func _walk_to_poi(poi_id: String) -> void:
+	# Budget-Check: Hat der Gast genügend Taschengeld für diesen Besuch?
+	if poi_id != "lobby":
+		var poi_def = _get_poi_def(poi_id)
+		var income: int = poi_def.get("visit_income", 0)
+		if income > 0:
+			var party := _get_my_party()
+			if is_instance_valid(party) and party.spending_budget < income:
+				# Kein Geld mehr für diesen POI – andere Aktion wählen
+				_decide_next_action()
+				return
+	
 	var exit_tile: Vector2i
 	
 	if poi_id == "lobby":

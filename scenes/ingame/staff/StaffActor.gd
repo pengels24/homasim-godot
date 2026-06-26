@@ -44,6 +44,8 @@ func configure(staff_data: Dictionary, map_grid: Node2D, controller: Node) -> vo
 	_update_visuals()
 	_sprite.visible = false
 	
+
+
 	var job = get_job_type()
 	if job == "housekeeping":
 		_work_audio.stream = load("res://assets/sounds/broom.mp3")
@@ -61,7 +63,7 @@ func _update_visuals() -> void:
 		if tex and tex is Texture2D:
 			_sprite.texture = tex
 	else:
-		print("[StaffActor] Warnung: Aseprite %s nicht gefunden!" % texture_path)
+		push_warning("[StaffActor] Aseprite %s nicht gefunden!" % texture_path)
 	
 	# Solange kein Personalraum, warten MA unsichtbar in der Lobby
 	_sprite.visible = false
@@ -77,7 +79,7 @@ func despawn() -> void:
 		# Ticket zurückgeben ans Schwarze Brett
 		_current_task["status"] = "open"
 		_current_task["assigned_to"] = null
-		print("[StaffActor] %s hat Ticket %s abgebrochen wegen Kündigung." % [_staff_data.get("name"), _current_task.get("id")])
+
 	queue_free()
 
 func _physics_process(delta: float) -> void:
@@ -118,7 +120,7 @@ func _process_idle() -> void:
 			if my_job == "maintenance" and t.type == "repair_room": is_match = true
 			
 			if is_match:
-				print("[StaffActor ", name, "] found task: ", t.id)
+
 				t.status = "assigned"
 				t.assigned_to = get_staff_id()
 				_current_task = t
@@ -241,11 +243,11 @@ func _process_walking(delta: float, speed: float) -> void:
 func _update_debug_line() -> void:
 	if not is_instance_valid(_debug_line): return
 	var pts: PackedVector2Array = []
-	pts.append(global_position)
+	pts.append(Vector2.ZERO) # Actor-Position = lokal (0,0)
 	if _target_world_pos != Vector2.ZERO and _target_world_pos != global_position:
-		pts.append(_target_world_pos)
+		pts.append(to_local(_target_world_pos))
 	for p in _path:
-		pts.append(_map_grid.call("tile_to_world", p))
+		pts.append(to_local(_map_grid.call("tile_to_world", p)))
 	_debug_line.points = pts
 
 func _process_working(delta: float, speed_mult: float) -> void:

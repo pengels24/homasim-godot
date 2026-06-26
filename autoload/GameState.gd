@@ -101,7 +101,7 @@ func load_room_category_config() -> void:
 		return
 
 	room_category_registry = parsed_data["room_categories"]
-	print("GameState: Room Category Registry geladen. ", room_category_registry.size(), " Kategorien registriert.")
+
 
 
 # =============================================================================
@@ -143,7 +143,7 @@ func load_room_config() -> void:
 				"def": def
 			}
 
-	print("GameState: Room Registry geladen. ", room_registry.size(), " Räume registriert.")
+
 
 
 # =============================================================================
@@ -175,7 +175,7 @@ func load_tool_config() -> void:
 			"def": tool_entry
 		}
 
-	print("GameState: Tool Registry geladen. ", tool_registry.size(), " Werkzeuge registriert.")
+
 
 
 # =============================================================================
@@ -209,7 +209,7 @@ func load_daily_schedule_config() -> void:
 				push_error("GameState: Ungültiges Event-Format in daily_schedule.json.")
 
 		daily_schedule_registry.sort_custom(func(a, b): return a["trigger_time"] < b["trigger_time"])
-		print("GameState: Daily Schedule geladen. ", daily_schedule_registry.size(), " Events registriert.")
+
 
 	else:
 		push_error("GameState: Ungültiges JSON-Format (kein Array) in: " + config_path)

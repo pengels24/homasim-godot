@@ -75,12 +75,12 @@ func _update_target_text() -> void:
 	if state == GuestActor.State.IN_ROOM:
 		t += "Zimmer"
 	elif state == GuestActor.State.IN_POI:
-		t += GameState.T("room." + _target_guest._current_poi_id + ".name", _target_guest._current_poi_id.capitalize())
+		t += _target_guest._current_poi_id.capitalize()
 	elif state == GuestActor.State.WALKING:
 		if _target_guest.get("_is_checkout_walk"):
 			t += "Unterwegs (Rezeption)"
 		elif _target_guest._current_poi_id != "" and _target_guest._current_poi_id != "room":
-			t += "Unterwegs (%s)" % GameState.T("room." + _target_guest._current_poi_id + ".name", _target_guest._current_poi_id.capitalize())
+			t += "Unterwegs (%s)" % _target_guest._current_poi_id.capitalize()
 		else:
 			t += "Unterwegs (Zimmer)"
 	elif state == GuestActor.State.AWAITING_CHECKOUT:
@@ -91,3 +91,8 @@ func _update_target_text() -> void:
 		t += "Warten"
 		
 	label_target.text = t
+	
+	# Budget des Members anzeigen
+	var member = _target_guest.get("_guest_member")
+	if member and member.daily_budget > 0:
+		label_target.text += "\n💰 Budget: %d € / %d €" % [member.spending_budget, member.daily_budget]

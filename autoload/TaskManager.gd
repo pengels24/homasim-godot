@@ -29,7 +29,7 @@ func add_task(type: String, target: Variant) -> Dictionary:
 	}
 	_next_task_id += 1
 	_tasks.append(task)
-	print("[TaskManager] Ticket an schwarzes Brett gepinnt: %s (%s)" % [task.id, type])
+
 	sig_task_added.emit(task)
 	return task
 
@@ -44,7 +44,7 @@ func complete_task(task_id: String) -> void:
 	if task_idx != -1:
 		var task = _tasks[task_idx]
 		_tasks.remove_at(task_idx)
-		print("[TaskManager] Ticket erledigt und entfernt: %s" % task.id)
+
 		sig_task_completed.emit(task)
 		
 		# Wenn es ein Raum war, den Raum auf "clean" setzen und wieder freigeben
@@ -66,7 +66,7 @@ func complete_task(task_id: String) -> void:
 func clear_all_tasks() -> void:
 	_tasks.clear()
 	_next_task_id = 1
-	print("[TaskManager] Schwarzes Brett geleert.")
+
 
 
 func _on_room_needs_cleaning(room: Node2D) -> void:
@@ -88,4 +88,4 @@ func debug_complete_room_clean(room: Node2D) -> void:
 		if task.type == "clean_room" and task.target == room:
 			complete_task(task.id)
 			return
-	print("[TaskManager] Warnung: Kein Clean-Ticket für diesen Raum gefunden!")
+	push_warning("[TaskManager] Warnung: Kein Clean-Ticket für diesen Raum gefunden!")

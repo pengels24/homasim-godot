@@ -269,8 +269,8 @@ func _on_goto_pressed() -> void:
 	if cam:
 		var target_pos = _selected_room.global_position
 		if _selected_room.has_method("get_tile_size"):
-			var size = _selected_room.get_tile_size()
-			target_pos += Vector2(size.x, size.y) * 16.0 * 0.5 * _selected_room.global_scale
+			var tile_size = _selected_room.get_tile_size()
+			target_pos += Vector2(tile_size.x, tile_size.y) * 16.0 * 0.5 * _selected_room.global_scale
 			
 		var tween = get_tree().create_tween()
 		tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)

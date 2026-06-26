@@ -166,7 +166,7 @@ func build_map(built_plots: Array, entry_plot: Vector2i, enter_dir: String) -> v
 	var start_p: Node2D = _grid[entry_plot.y][entry_plot.x]
 	start_p.set_entrance(enter_dir)
 	_mark_parcel_walls(entry_plot.x, entry_plot.y)
-	_mark_lobby_on_parcel(entry_plot.x, entry_plot.y)
+	call_deferred("_mark_lobby_on_parcel", entry_plot.x, entry_plot.y)
 	_restore_rooms(built_plots)
 	center_on_entry(entry_plot)
 
@@ -261,7 +261,7 @@ func is_placement_valid(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 ## Markiert Room-Body (Wert 4) + Obstacles (Wert 1) + Exit-Tile (Wert 2) im Grid.
 ## Wert 2 = Exit: darf von anderen Exit-Tiles überlappt werden (Tür-zu-Tür OK).
 func mark_placement(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
-		room_w: int, room_h: int, door_rot: int, door_off: int, room: Node2D = null) -> void:
+		room_w: int, room_h: int, door_rot: int, door_off: int, _room: Node2D = null) -> void:
 	var gx := parcel_x * PARCEL_SZ + tile_x
 	var gy := parcel_y * PARCEL_SZ + tile_y
 	
@@ -688,7 +688,7 @@ func _mark_lobby_on_parcel(parcel_x: int, parcel_y: int) -> void:
 		# Grundfläche der Lobby ist freizuhalten (4), damit das Pathfinding durchkommt
 		_occ_mark_clearance(gx + lobby_rect.position.x, gy + lobby_rect.position.y,
 			lobby_rect.size.x, lobby_rect.size.y)
-			
+		
 		var lobby = parcel.get_lobby()
 		if lobby and lobby.has_method("get_solid_tiles"):
 			var solid_tiles = lobby.get_solid_tiles()
@@ -698,6 +698,15 @@ func _mark_lobby_on_parcel(parcel_x: int, parcel_y: int) -> void:
 				var ax = gx + tile_offset_x + t.x
 				var ay = gy + tile_offset_y + t.y
 				_occ_mark(ax, ay, 1, 1)
+		
+		# Lobby-Innenraum teuer machen: AStar bevorzugt Umwege durch Korridore.
+		# weight_scale=8 → 4 Lobby-Tiles (4×8=32) kosten mehr als Umweg außen herum.
+		const LOBBY_WEIGHT := 8.0
+		for dy in lobby_rect.size.y:
+			for dx in lobby_rect.size.x:
+				var ax = gx + lobby_rect.position.x + dx
+				var ay = gy + lobby_rect.position.y + dy
+				astar.set_point_weight_scale(Vector2i(ax, ay), LOBBY_WEIGHT)
 
 	var clearance: Rect2i = parcel.get_lobby_clearance_rect()
 	if clearance.has_area():

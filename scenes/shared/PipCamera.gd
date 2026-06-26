@@ -35,8 +35,8 @@ func _get_target_center() -> Vector2:
 	if not is_instance_valid(_target): return Vector2.ZERO
 	var center = _target.global_position
 	if _target.has_method("get_tile_size"):
-		var size = _target.get_tile_size()
-		center += Vector2(size.x, size.y) * 16.0 * 0.5 * _target.global_scale
+		var tile_size = _target.get_tile_size()
+		center += Vector2(tile_size.x, tile_size.y) * 16.0 * 0.5 * _target.global_scale
 	return center
 
 func _process(delta: float) -> void:

@@ -100,9 +100,12 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 	lbl_room.size_flags_stretch_ratio = 1.0
 	lbl_room.add_theme_color_override("font_color", font_color)
 	
-	# Budget
+	# Budget (individuell pro Member)
 	var lbl_budget = Label.new()
-	lbl_budget.text = "%d %s" % [party.base_price, GameState.T("currency.symbol", "$")]
+	if member.daily_budget > 0:
+		lbl_budget.text = "%d %s" % [member.spending_budget, GameState.T("currency.symbol", "€")]
+	else:
+		lbl_budget.text = "---"
 	lbl_budget.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	lbl_budget.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lbl_budget.size_flags_stretch_ratio = 1.0
@@ -207,7 +210,10 @@ func _on_guest_selected(party: GuestParty, member: GuestMember, btn: Button) -> 
 		detail_name_lbl.text = member.name
 		detail_room_val.text = party.room_id if party.room_id else GameState.T("none", "Keins")
 		detail_satisfaction_val.text = "%d%%" % party.satisfaction
-		detail_budget_val.text = "%d %s" % [party.base_price, GameState.T("currency.symbol", "$")]
+		if member.daily_budget > 0:
+			detail_budget_val.text = "%d / %d %s" % [member.spending_budget, member.daily_budget, GameState.T("currency.symbol", "€")]
+		else:
+			detail_budget_val.text = "---"
 		
 		var goal_text = "---"
 		var state = _selected_guest.get("current_state")

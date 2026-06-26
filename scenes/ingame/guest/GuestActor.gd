@@ -21,7 +21,7 @@ var _current_poi_id: String = ""
 # Interner Timer für Aufenthaltsdauer
 var _action_timer: float = 0.0
 var _base_speed: float = 40.0
-var _current_path: Array[Vector2i] = []
+
 var _active_tween: Tween
 
 signal sig_poi_income(amount: int, world_pos: Vector2)
@@ -165,7 +165,7 @@ func _decide_next_action() -> void:
 	elif current_state == State.IN_POI and chosen == _current_poi_id:
 		chosen = "room"
 	
-	print("[GuestActor] Action Timer abgelaufen! Wähle neues Ziel: ", chosen, " (Aktueller Zustand: ", current_state, ")")
+
 	
 	if chosen == "room" and is_instance_valid(_target_room):
 		_walk_to_room(_target_room, State.IN_ROOM)
@@ -238,11 +238,11 @@ func _on_poi_arrived() -> void:
 	if income <= 0:
 		return
 	
-	# Budget abziehen
+	# Budget abziehen (per Member – jeder hat seinen eigenen Geldbeutel)
+	_guest_member.spending_budget = max(0, _guest_member.spending_budget - income)
+	# Zufriedenheits-Boost für diesen Member
 	var party := _get_my_party()
 	if is_instance_valid(party):
-		party.spending_budget = max(0, party.spending_budget - income)
-		# Zufriedenheits-Boost für diesen Member
 		party.satisfaction = min(100, party.satisfaction + 5)
 	
 	# Einnahme buchen
@@ -312,7 +312,7 @@ func start_checkout() -> void:
 		var lobby_tile = _get_lobby_tile()
 		var path_tiles = _map_grid.get_path_between_tiles(start_tile, lobby_tile)
 		if path_tiles.is_empty():
-			print("[GuestActor] Kein Pfad zur Lobby für Checkout!")
+			push_warning("[GuestActor] Kein Pfad zur Lobby für Checkout!")
 			queue_free()
 			return
 		var lobby_world = _map_grid.tile_to_world(lobby_tile)
@@ -363,7 +363,7 @@ func _walk_to_room(room: Node2D, finish_state: State) -> void:
 	
 	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
 	if path_tiles.is_empty():
-		print("GuestActor: Check-In Pfad nicht gefunden! Start: ", start_tile, " Exit: ", exit_tile)
+		push_warning("[GuestActor] Check-In Pfad nicht gefunden! Start: %s Exit: %s" % [str(start_tile), str(exit_tile)])
 		# Notfall-Teleport zur Tür, damit der nächste Pfad-Versuch funktioniert
 		global_position = _map_grid.tile_to_world(exit_tile)
 		_change_state(finish_state)
@@ -392,12 +392,10 @@ func _walk_to_poi(poi_id: String) -> void:
 	if poi_id != "lobby":
 		var poi_def = _get_poi_def(poi_id)
 		var income: int = poi_def.get("visit_income", 0)
-		if income > 0:
-			var party := _get_my_party()
-			if is_instance_valid(party) and party.spending_budget < income:
-				# Kein Geld mehr für diesen POI – andere Aktion wählen
-				_decide_next_action()
-				return
+		if income > 0 and _guest_member.spending_budget < income:
+			# Kein Geld mehr für diesen POI – andere Aktion wählen
+			_decide_next_action()
+			return
 	
 	var exit_tile: Vector2i
 	
@@ -413,7 +411,7 @@ func _walk_to_poi(poi_id: String) -> void:
 				break
 		
 		if not is_instance_valid(poi_room):
-			print("[GuestActor] POI '", poi_id, "' nicht gefunden!")
+			push_warning("[GuestActor] POI '%s' nicht gefunden!" % poi_id)
 			_decide_next_action()
 			return
 			
@@ -437,7 +435,7 @@ func _walk_to_poi(poi_id: String) -> void:
 	
 	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
 	if path_tiles.is_empty():
-		print("[GuestActor] Pfad zu POI '", poi_id, "' nicht gefunden!")
+		push_warning("[GuestActor] Pfad zu POI '%s' nicht gefunden!" % poi_id)
 		_decide_next_action()
 		return
 	

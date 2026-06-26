@@ -188,7 +188,7 @@ func _on_room_cleaned(room: Node2D) -> void:
 	if _room_assign.has(room_key) and _room_assign[room_key] == "DIRTY":
 		_room_assign.erase(room_key)
 		parties_changed.emit()
-		print("[GuestManager] Zimmer '%s' ist wieder sauber und buchbar!" % room_key)
+
 
 
 # ── Spawn ─────────────────────────────────────────────────────────────────────
@@ -417,12 +417,18 @@ func do_checkin(party: GuestParty, room: Node2D) -> void:
 	daily_checkin_parties += 1
 	daily_checkin_heads += party.members.size()
 
-	# Budget beim Check-in setzen
+	# Budget beim Check-in: jeder Member bekommt sein eigenes Tagesbudget
 	var def = GuestDefinitions.ALL.get(party.type, {})
-	party.daily_budget = randi_range(
-		def.get("min_daily_budget", 10),
-		def.get("max_daily_budget", 30)
-	)
+	var budget_min: int = def.get("min_daily_budget", 10)
+	var budget_max: int = def.get("max_daily_budget", 30)
+	for member: GuestMember in party.members:
+		var b: int = randi_range(budget_min, budget_max)
+		if member.is_child:
+			b = int(b * randf_range(0.2, 0.4)) # Kinder: 20–40% des Erwachsenen-Budgets
+		member.daily_budget    = b
+		member.spending_budget = b
+	# Party-Budget als Summe (für Anzeige/Savegame-Kompatibilität)
+	party.daily_budget    = party.members.reduce(func(acc, m): return acc + m.daily_budget, 0)
 	party.spending_budget = party.daily_budget
 
 	ActivityLog.add(
@@ -727,7 +733,10 @@ func process_morning_routine() -> void:
 	# Aktive Gäste: stay_days verringern
 	for party: GuestParty in _active:
 		party.stay_days -= 1
-		party.spending_budget = party.daily_budget  # Neues Taschengeld für den neuen Tag
+		# Neues Taschengeld für jeden Member individuell
+		for member: GuestMember in party.members:
+			member.spending_budget = member.daily_budget
+		party.spending_budget = party.daily_budget  # Party-Summe auch zurücksetzen
 
 		if party.stay_days <= 0:
 			moving.append(party)

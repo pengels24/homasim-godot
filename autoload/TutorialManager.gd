@@ -33,7 +33,7 @@ func _load_config() -> void:
 				var t_id = tut.get("id", "")
 				if t_id != "":
 					tutorial_registry[t_id] = tut
-			print("[TutorialManager] %d Tutorials geladen." % tutorial_registry.size())
+
 		else:
 			push_error("[TutorialManager] Ungültiges Format in tutorials.json")
 	else:
@@ -42,7 +42,7 @@ func _load_config() -> void:
 # =============================================================================
 func load_state(saved_state: Array) -> void:
 	unlocked_tutorials = saved_state.duplicate()
-	print("[TutorialManager] Gespeicherte Tutorials geladen: ", unlocked_tutorials.size())
+
 
 # =============================================================================
 func get_state() -> Array:
@@ -54,7 +54,7 @@ func reset_all() -> void:
 	if GameState.selected_hotel != null and not GameState.selected_hotel.is_empty():
 		GameState.selected_hotel["tutorials"] = []
 		SaveManager.update_hotel(GameState.active_hotel_id, GameState.selected_hotel)
-	print("[TutorialManager] Alle Tutorials wurden zurückgesetzt.")
+
 
 # =============================================================================
 func trigger(tutorial_id: String) -> void:

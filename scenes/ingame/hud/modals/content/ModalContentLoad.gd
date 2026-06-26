@@ -116,5 +116,5 @@ func _on_load_button_pressed() -> void:
 	if loaded:
 		sig_load_completed.emit(active_hotel_id)
 	else:
-		print("=> [ModalContentLoad] Fehler beim Laden des Spielstands!")
+		push_error("[ModalContentLoad] Fehler beim Laden des Spielstands!")
 

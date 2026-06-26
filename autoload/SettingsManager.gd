@@ -175,8 +175,8 @@ func _apply_keybindings() -> void:
 			if custom_keybindings.has(action):
 				var custom_arr = custom_keybindings[action]
 				if custom_arr is Array and custom_arr.size() >= 2:
-					current_primary = int(custom_arr[0])
-					current_alt = int(custom_arr[1])
+					current_primary = int(custom_arr[0]) as Key
+					current_alt = int(custom_arr[1]) as Key
 			
 			if not InputMap.has_action(action):
 				InputMap.add_action(action)
@@ -209,4 +209,3 @@ func reset_all_keybindings() -> void:
 	custom_keybindings.clear()
 	save()
 	_apply_keybindings()
-

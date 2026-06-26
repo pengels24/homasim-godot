@@ -79,8 +79,13 @@ func _update_content() -> void:
 	elif def.get("is_poi", false):
 		var room_id = GuestManager._room_key(_target_room)
 		var is_staffed = StaffManager.is_poi_staffed(def, room_id)
-		if is_staffed:
+		var is_open_now = GameState.is_facility_open(def)
+		if is_staffed and is_open_now:
 			status = "🍺 Geöffnet"
+		elif is_staffed and not is_open_now:
+			var open_from: int = def.get("open_from", 0)
+			var opens_at := GameState.format_game_time(open_from) if open_from > 0 else "?"
+			status = "🔒 Geschlossen (öffnet um %s)" % opens_at
 		else:
 			status = "🔴 Unterbesetzt (Geschlossen)"
 			

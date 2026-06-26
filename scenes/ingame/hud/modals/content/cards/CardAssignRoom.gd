@@ -30,7 +30,7 @@ func _gui_input(event: InputEvent) -> void:
 		Toast.show("Room Clicked: " + _room_id)
 		sig_clicked.emit(_room_id)
 
-func populate(formatted_name: String, room_id: String, min_staff: int, max_staff: int, assigned_staff: Array) -> void:
+func populate(formatted_name: String, room_id: String, _min_staff: int, max_staff: int, assigned_staff: Array) -> void:
 	_room_id = room_id
 	lbl_room_name.text = formatted_name
 	

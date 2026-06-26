@@ -42,7 +42,7 @@ func _load_config() -> void:
 						node["tier"] = tier_id
 						tech_registry[tech_id] = node
 			
-			print("[TechtreeManager] %d Tech-Nodes geladen." % tech_registry.size())
+
 			sig_techtree_loaded.emit()
 		else:
 			push_error("[TechtreeManager] Ungültiges Format in techtree.json")
@@ -54,7 +54,7 @@ func load_state(saved_state: Dictionary) -> void:
 	unlocked_techs = saved_state.get("techs", []).duplicate()
 	unlocked_tiers = saved_state.get("tiers", ["1"]).duplicate()
 	if unlocked_tiers.is_empty(): unlocked_tiers.append("1")
-	print("[TechtreeManager] Gespeicherte Techs geladen: ", unlocked_techs.size())
+
 
 # =============================================================================
 func get_state() -> Dictionary:

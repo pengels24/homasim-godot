@@ -4,8 +4,6 @@ var _selected_staff = null
 var _current_tab = 0 # 0 = Team, 1 = Bewerber
 var _map_grid: Node2D = null
 
-var _list_hired: VBoxContainer = null
-var _list_applicants: VBoxContainer = null
 var _active_rows: Array = []
 var _selected_room_id: String = ""
 var _selected_staff_id: String = ""
@@ -719,8 +717,6 @@ func _update_assignment_matching() -> void:
 	var right_vbox = hbox.find_child("RightVBox", true, false)
 	if not left_vbox or not right_vbox: return
 	
-	var sel_room_def = {}
-	var sel_room_name = ""
 	var sel_req_role = ""
 	var has_sel_room = _selected_room_id != ""
 	
@@ -729,9 +725,7 @@ func _update_assignment_matching() -> void:
 			if not is_instance_valid(room): continue
 			var rid = GuestManager._room_key(room)
 			if rid == _selected_room_id:
-				sel_room_def = room.call("get_definition")
-				sel_room_name = sel_room_def.get("name", rid)
-				sel_req_role = sel_room_def.get("required_role", "")
+				sel_req_role = room.call("get_definition").get("required_role", "")
 				break
 	
 	# Update left side (selection borders)
@@ -758,9 +752,6 @@ func _update_assignment_matching() -> void:
 				if btn_assign: break
 				
 	if btn_assign:
-		var SB_GREEN = preload("res://assets/UI/menu_button_green.tres")
-		var SB_GREEN_HOVER = preload("res://assets/UI/menu_button_green_hover.tres")
-		var SB_GREEN_PRESSED = preload("res://assets/UI/menu_button_green_pressed.tres")
 		var SB_DISABLED = preload("res://assets/UI/menu_button_darkblue_disabled.tres")
 		
 		if not has_sel_room:

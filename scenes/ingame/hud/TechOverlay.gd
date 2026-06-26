@@ -9,10 +9,10 @@ func _ready() -> void:
 	visible = SettingsManager.show_tech_info
 	set_process(visible)
 
-func _on_tech_info_toggled(is_visible: bool) -> void:
-	visible = is_visible
-	set_process(is_visible)
-	if is_visible:
+func _on_tech_info_toggled(show_tech: bool) -> void:
+	visible = show_tech
+	set_process(show_tech)
+	if show_tech:
 		_update_stats()
 
 func _process(delta: float) -> void:

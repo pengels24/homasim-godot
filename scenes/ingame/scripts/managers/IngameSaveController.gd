@@ -36,7 +36,9 @@ func save_progress(game_time_min: int) -> void:
 	var save_data := {
 		"day": _hotel.get("day", 1),
 		"money": _hotel.get("money", 0),
-		"xp": _hotel.get("xp", 0),
+		"exp": _hotel.get("exp", 0),        # ANG-fix: war fälschlicherweise "xp"
+		"exp_max": _hotel.get("exp_max", 0), # ANG-fix: fehlte komplett
+		"rep": _hotel.get("rep", 500),       # ANG-fix: fehlte komplett
 		"game_time": game_time_min,
 		"guest_data": _guest_mgr.to_save_dict()
 	}

@@ -35,7 +35,7 @@ func _load_config() -> void:
 	var error = json.parse(content)
 	if error == OK:
 		staff_config = json.data
-		print("[StaffManager] Staff Config geladen.")
+
 	else:
 		push_error("[StaffManager] JSON Parse Error in staff.json")
 
@@ -43,7 +43,7 @@ func _load_config() -> void:
 func load_state(saved_state: Dictionary) -> void:
 	hired_staff = saved_state.get("hired", saved_state).duplicate()
 	room_assignments = saved_state.get("assignments", {}).duplicate()
-	print("[StaffManager] Gespeichertes Personal geladen: ", hired_staff.size())
+
 	_ensure_daily_applicants()
 
 # =============================================================================
@@ -73,7 +73,7 @@ func _generate_daily_applicants() -> void:
 			daily_applicants.append(_generate_single_applicant(role_key))
 			
 	sig_applicants_generated.emit()
-	print("[StaffManager] Bewerber für den Tag generiert.")
+
 
 # =============================================================================
 func _generate_single_applicant(role_key: String) -> Dictionary:
@@ -147,7 +147,10 @@ func get_staff_for_room(room_id: String) -> Array:
 
 # =============================================================================
 ## Prüft, ob ein POI genügend Personal hat, um als geöffnet zu gelten.
+## POIs ohne required_role (z.B. Lobby) gelten immer als besetzt.
 func is_poi_staffed(room_def: Dictionary, room_id: String) -> bool:
+	if room_def.get("required_role", "") == "":
+		return true
 	var min_s: int = room_def.get("min_staff", 1)
 	return get_staff_for_room(room_id).size() >= min_s
 
@@ -213,7 +216,7 @@ func _process_wages() -> void:
 			FinanceManager.add_transaction(-int(total_wages), "Personal", "Tagesgehälter")
 		else:
 			GameState.add_money(-int(total_wages))
-		print("[StaffManager] Gehälter in Höhe von ", total_wages, " € gezahlt.")
+
 
 # =============================================================================
 func _on_midnight_struck(_day: int) -> void:

@@ -12,17 +12,16 @@ Linear-Projekt: **Angelus2010 / ANG-** für alle Issues.
 - Gäste generieren EXP beim Check-In und Check-Out. Zimmer geben einen Erst-Bau-EXP-Bonus.
 - Savegame & Load System wurde stark stabilisiert (Tween-Bugs gefixt).
 - **Nächste Schritte**: 
-  1. Letztes UI-Refactoring: Die Rezeption (F3/Rezeption) an das neue UI-System (PipCamera, InnerPanel, etc.) anpassen.
-  2. Keybindings (InputMap) in den Settings interaktiv machen.
-  3. Tutorial-JSON-Texte vervollständigen und Ingame-Trigger implementieren.
-
+  1. Das POI-Cash-System final testen (Werte, Abrechnung, Kassenbuch, etc.) siehe /wiki/24_balancing_poi_cash.md
+  2. Letztes UI-Refactoring: Die Rezeption (F3/Rezeption) prüfen und ggf. an das neue UI-System (InnerPanel, etc.) anpassen.
+  
 ## Kommunikation
 - **Du**-Form, entspannt aber zielorientiert
 - ausschliesslich in deutsch antworten
 - Kleine Dinge direkt umsetzen (Typos, etc.)
 - Sonst immer zuerst besprechen -> lösen -> coden
 - Kein Corporate-Sprech
-- Peter liest langsamer – nicht zu viel auf einmal
+- Peter liest genauer um zu verstehen – nicht zu viel auf einmal - einzelne Schritte
 
 ## Erklärbär-Modus (immer aktiv)
 - Bei jeder Umsetzung kurz erklären **was** gemacht wird und **warum** – nicht erst auf Nachfrage
@@ -61,6 +60,7 @@ res://
 ├── scenes/         # Feature-basiert: main_menu/, login/, dashboard/, ingame/
 ├── assets/         # fonts/, images/
 ├── translations/   # de.csv + kompilierte .translation Dateien
+├── wiki/           # aktuelle konzepte und grundlageen
 └── _dev/           # Arbeitsdateien, Docs, nicht im Build
 ```
 
@@ -68,6 +68,7 @@ res://
 - **`SaveManager`** – Zentrale Schnittstelle für lokales Speichern/Laden von Spielständen und Lesen der `/config` JSONs.
 - **`GameState`** – User/Hotel-State, `T()` Translation-Helper.
 - **`Api`** – (Zukünftig) für HTTP-Requests, Cookie-Persistenz (`user://session.cfg`).
+- vo dem coden neuer dinge zuerst schauen ob es schon lösungen via autoload gibt
 
 ## Zukünftige API-Konventionen (aktuell ungenutzt)
 - Login: `POST /api/auth/login` (Form-Data)
@@ -78,7 +79,7 @@ res://
 ## Design
 - **Farben**: Gold `#EAB308`, Dark Background `#0f172a`/`#141416`, Weiß `#fafafa`
 - **Fonts**: Outfit-Bold (Headlines/Buttons), Inter Regular (Fließtext)
-- **Style-Guide**: `_dev/docs/ui-style-guide.md` – **verbindliche Referenz** für alle Modal-Panels, Buttons, Titel, Close-Button, Slot-Zeilen. Exakte Color-Werte und StyleBox-Definitionen dort nachschlagen, nicht aus dem Kopf schreiben.
+- **Style-Guide**: `wiki\06_ui_style_guide.md` – **verbindliche Referenz** für alle Modal-Panels, Buttons, Titel, Close-Button, Slot-Zeilen. Exakte Color-Werte und StyleBox-Definitionen dort nachschlagen, nicht aus dem Kopf schreiben.
 - **Style-Guide pflegen**: Jede neue reusable UI-Komponente die als `.tscn` gebaut wird → Muster sofort im Style-Guide dokumentieren. Nur so bleibt Konsistenz über alle Szenen.
 
 ## Workflow

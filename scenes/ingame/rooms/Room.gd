@@ -132,7 +132,6 @@ func get_solid_tiles() -> Array[Vector2i]:
 			var final_pos = Vector2i(game_x, game_y) + parent_offset
 			if not solid_tiles.has(final_pos):
 				solid_tiles.append(final_pos)
-		print("[Room ", name, "] Obstacles '", obstacles.name, "' (size:", obs_tile_size, ") generiert ", solid_tiles.size(), " Game-Tiles. (aus ", obstacles.get_used_cells().size(), " Cells)")
 	return solid_tiles
 
 

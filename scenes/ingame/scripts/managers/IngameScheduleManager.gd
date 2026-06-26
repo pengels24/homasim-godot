@@ -29,7 +29,7 @@ func _build_daily_queue(start_time: int = 0) -> void:
 
   # Wir iterieren jetzt über die zentrale Registry im GameState
   for event in GameState.daily_schedule_registry:
-    if event["trigger_time"] >= start_time:
+    if event["trigger_time"] > start_time:
       _daily_queue.append(event.duplicate())
 
 

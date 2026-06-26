@@ -320,5 +320,5 @@ func _on_event_reception_last_call() -> void:
 # TEMP TEST: Debug-Trigger (STRG + T)
 # =============================================================================
 func _on_debug_action_requested() -> void:
-	if is_instance_valid(_ui_mgr) and is_instance_valid(_guest_mgr):
-		_ui_mgr.show_end_of_day(_guest_mgr)
+	if is_instance_valid(map_grid):
+		map_grid._show_debug_grid = not map_grid._show_debug_grid

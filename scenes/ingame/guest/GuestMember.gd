@@ -30,6 +30,8 @@ var sprite:   Node2D = null        # animierter Charakter, wird bei Spawn gesetz
 var hair_color: String = ""
 var shirt_color: String = ""
 var speed_offset: float = 0.0
+var daily_budget: int = 0    # Einmalig bei Check-in gewürfelt
+var spending_budget: int = 0 # Aktuelles Tagesbudget (jeden Morgen reset)
 
 
 # =============================================================================
@@ -62,13 +64,15 @@ func to_dict() -> Dictionary:
 		"is_child": is_child,
 		"hair_color": hair_color,
 		"shirt_color": shirt_color,
-		"speed_offset": speed_offset
+		"speed_offset": speed_offset,
+		"daily_budget": daily_budget,
+		"spending_budget": spending_budget,
 	}
 
 
 # =============================================================================
 static func from_dict(d: Dictionary) -> GuestMember:
-	return GuestMember.new(
+	var m := GuestMember.new(
 		d.get("id",       ""),
 		d.get("party_id", ""),
 		d.get("name",     ""),
@@ -79,6 +83,9 @@ static func from_dict(d: Dictionary) -> GuestMember:
 		d.get("shirt_color", ""),
 		d.get("speed_offset", -999.0)
 	)
+	m.daily_budget    = int(d.get("daily_budget",    0))
+	m.spending_budget = int(d.get("spending_budget", 0))
+	return m
 
 
 

@@ -111,6 +111,13 @@ func _init_ui_tab() -> void:
 			SettingsManager.LANGUAGES_LABELS, SettingsManager.LANGUAGES,
 			SettingsManager.language, _on_language_changed)
 
+	# Sprache nur im Hauptmenü änderbar
+	var ingame := GameState.active_hotel_id != -1
+	btn_lang_left.disabled  = ingame
+	btn_lang_right.disabled = ingame
+	if ingame:
+		lbl_lang.text = lbl_lang.text + "  ·  (nur im Hauptmenü)"
+
 
 # =============================================================================
 # ── HELPER-FUNKTIONEN (Magie unter der Haube) ────────────────────────────────
@@ -239,7 +246,11 @@ func _on_language_changed(val: String) -> void:
 	TranslationServer.set_locale(val)
 	SettingsManager.save()
 	SettingsManager.sig_language_changed.emit(val)
-	_refresh_translated_labels()
+	# Nur im Hauptmenü → Szene neu laden damit alle Labels sofort übersetzt sind
+	if GameState.active_hotel_id == -1:
+		get_tree().reload_current_scene()
+	else:
+		_refresh_translated_labels()
 
 
 ## Aktualisiert alle Labels im Modal die über GameState.T() befüllt wurden.

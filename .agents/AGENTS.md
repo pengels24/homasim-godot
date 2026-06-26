@@ -11,12 +11,13 @@ Bevor du UI-Änderungen durchführst, musst du zwingend das Dokument `wiki/06_ui
 
 **Am Ende jeder Session oder auf explizite Aufforderung** einen Changelog erstellen:
 
-- Datei: `changelog/gd-0.1.XX.md` (nächste freie Versionsnummer)
+- Datei: `changelog/gd-0.1.XX.md` – Versionsnummer **immer aus `/version.txt` lesen** (nie raten, nie selbst erhöhen – es sei denn Peter sagt explizit „Version erhöhen")
+- Changelog-Nummer = aktuelle Version + 1 (z.B. `v0.1.28gd` → `gd-0.1.29.md`)
 - Format: wie `changelog/gd-0.1.10.md` – Abschnitte: `Features & Verbesserungen`, `Bugfixes`, `Technische Änderungen`
 - **Kein Abschnitt „Offene Backlog-Issues"** – der bleibt weg
 - Datum im Format `YYYY-MM-DD` (tagesbezogen)
 - Der Changelog dient als Grundlage für Social Media Posts → prägnant, auf Deutsch, spielernah formulieren
-- Nach dem Changelog: `git add -A && git commit -m "chore: gd-0.1.XX changelog + session changes" && git push`
+- Nach dem Changelog: `git add -A; git commit -m "chore: gd-0.1.XX changelog + session changes"; git push`
 
 ---
 

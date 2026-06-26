@@ -14,18 +14,30 @@ var hotel_id: int = -1
 @onready var label_rep: Label = %LabelRep
 @onready var btn_delete: Button = %BtnDelete
 
+@onready var lbl_hdr_level:   Label = $CardMargin/VBox/CenterStats/StatsGrid/Lbl1
+@onready var lbl_hdr_day:     Label = $CardMargin/VBox/CenterStats/StatsGrid/Lbl2
+@onready var lbl_hdr_guests:  Label = $CardMargin/VBox/CenterStats/StatsGrid/Lbl3
+@onready var lbl_hdr_rep:     Label = $CardMargin/VBox/CenterStats/StatsGrid/Lbl4
+@onready var lbl_hdr_capital: Label = $CardMargin/VBox/CenterStats/StatsGrid/Lbl5
+
 func _ready() -> void:
 	self.pressed.connect(func(): sig_play_requested.emit(hotel_id))
 	btn_delete.pressed.connect(func(): sig_delete_requested.emit(hotel_id, self))
 
 func setup(hotel: Dictionary) -> void:
 	hotel_id = hotel.get("id", -1)
-	label_name.text = hotel.get("name", "Unbekannt")
-	label_level.text = str(int(hotel.get("level", 1)))
-	label_day.text = str(int(hotel.get("day", 1)))
-	label_guests.text = str(int(hotel.get("guests_active", 0)))
-	label_money.text = "€ " + _format_money(int(hotel.get("money", 0)))
-	label_rep.text = str(int(hotel.get("rep", 0)))
+	label_name.text    = hotel.get("name", "Unbekannt")
+	label_level.text   = str(int(hotel.get("level", 1)))
+	label_day.text     = str(int(hotel.get("day", 1)))
+	label_guests.text  = str(int(hotel.get("guests_active", 0)))
+	label_money.text   = GameState.T("currency.symbol") + " " + _format_money(int(hotel.get("money", 0)))
+	label_rep.text     = str(int(hotel.get("rep", 0)))
+	# Header-Labels übersetzen
+	lbl_hdr_level.text   = GameState.T("dashboard.card.level")
+	lbl_hdr_day.text     = GameState.T("dashboard.card.day")
+	lbl_hdr_guests.text  = GameState.T("dashboard.card.guests")
+	lbl_hdr_rep.text     = GameState.T("dashboard.card.rep")
+	lbl_hdr_capital.text = GameState.T("dashboard.card.capital")
 	
 	var thumb = SaveManager.load_thumbnail(hotel_id)
 	if thumb:

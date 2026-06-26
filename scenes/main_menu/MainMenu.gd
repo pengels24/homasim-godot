@@ -84,8 +84,8 @@ func _load_assets() -> void:
 		if tex:
 			bg_nodes[i].texture = tex
 
-	title_label.text = GameState.T("home.hero.title")
-	subtitle.text    = GameState.T("home.hero.subtitle")
+	title_label.text = GameState.T("menu.hero.title")
+	subtitle.text    = GameState.T("menu.hero.subtitle")
 	btn_settings.text  = GameState.T("menu.btn.settings")
 	btn_play.text      = GameState.T("menu.btn.play")
 	btn_quit.text      = GameState.T("menu.btn.quit")

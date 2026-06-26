@@ -24,6 +24,7 @@ var ui_scale: float  = 1.0       # 0.75 / 1.0 / 1.25 / 1.5
 var toast_position: String = "bottom"  # "top" / "middle" / "bottom"
 var hud_side: String = "center"    # "left" / "center" / "right"
 var show_tech_info: bool = false   # Ingame Performance Overlay
+var language: String = "de"        # "de" / "en" (erweiterbar)
 
 # ── Session ───────────────────────────────────────────────────────────────────
 var last_profile_id: int = -1   # Zuletzt gewählter Manager – für Auto-Restore
@@ -55,6 +56,9 @@ var ui_toast_pos_labels: Array[String] = [GameState.T("settings.ui.toast.top"), 
 
 const UI_HUDBOTTOM_POS: Array[String] = ["left", "center", "right"]
 var ui_hudbottom_pos_labels: Array[String] = [GameState.T("settings.ui.hud_side.left"), 	GameState.T("settings.ui.hud_side.center"), GameState.T("settings.ui.hud_side.right")]
+
+const LANGUAGES: Array[String] = ["de", "en"]
+const LANGUAGES_LABELS: Array[String] = ["Deutsch", "English"]
 
 
 # =============================================================================
@@ -88,6 +92,7 @@ func save() -> void:
 	cfg.set_value("ui", "toast_position", toast_position)
 	cfg.set_value("ui", "hud_side", hud_side)
 	cfg.set_value("ui", "show_tech_info", show_tech_info)
+	cfg.set_value("ui", "language", language)
 	cfg.set_value("session", "last_profile_id", last_profile_id)
 	
 	for action in custom_keybindings:
@@ -122,6 +127,8 @@ func _load() -> void:
 	toast_position = cfg.get_value("ui", "toast_position", "bottom")
 	hud_side = cfg.get_value("ui", "hud_side", "center")
 	show_tech_info = cfg.get_value("ui", "show_tech_info", false)
+	language = cfg.get_value("ui", "language", "de")
+	TranslationServer.set_locale(language)
 	last_profile_id = cfg.get_value("session",  "last_profile_id",           last_profile_id)
 	
 	custom_keybindings.clear()

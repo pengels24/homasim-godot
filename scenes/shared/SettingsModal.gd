@@ -210,6 +210,11 @@ func _build_audio_tab() -> void:
 func _build_oberflaeche_tab() -> void:
 	var panel := _tab_oberflaeche
 
+	# Sprache
+	panel.add_child(_make_language_row())
+
+	panel.add_child(_make_separator())
+
 	var scale_labels := PackedStringArray(["75%", "100%", "125%", "150%"])
 	var scale_idx: int = SettingsManager.UI_SCALES.find(SettingsManager.ui_scale)
 	var scale_row := _make_slider_row(
@@ -456,6 +461,48 @@ func _make_hud_side_row() -> HBoxContainer:
 		btns[i].pressed.connect(func() -> void:
 			SettingsManager.hud_side = val
 			SettingsManager.sig_hud_side_changed.emit()
+			refresh.call()
+		)
+
+	refresh.call()
+	return hbox
+
+
+## Button-Gruppe für Sprachauswahl (Deutsch / English).
+func _make_language_row() -> HBoxContainer:
+	var hbox := HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 20)
+
+	var lbl := Label.new()
+	lbl.text = GameState.T("settings.ui.language")
+	lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	lbl.add_theme_font_size_override("font_size", 16)
+	lbl.add_theme_color_override("font_color", Color(0.85, 0.85, 0.85))
+	hbox.add_child(lbl)
+
+	var btn_row := HBoxContainer.new()
+	btn_row.add_theme_constant_override("separation", 8)
+	hbox.add_child(btn_row)
+
+	var btns: Array[Button] = []
+	for i in SettingsManager.LANGUAGES.size():
+		var btn := Button.new()
+		btn.text = SettingsManager.LANGUAGES_LABELS[i]
+		btn.custom_minimum_size = Vector2(90, 36)
+		btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+		btns.append(btn)
+		btn_row.add_child(btn)
+
+	var refresh := func() -> void:
+		for i in btns.size():
+			_style_pos_btn(btns[i], SettingsManager.LANGUAGES[i] == SettingsManager.language)
+
+	for i in SettingsManager.LANGUAGES.size():
+		var lang: String = SettingsManager.LANGUAGES[i]
+		btns[i].pressed.connect(func() -> void:
+			SettingsManager.language = lang
+			TranslationServer.set_locale(lang)
 			refresh.call()
 		)
 

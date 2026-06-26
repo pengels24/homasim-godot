@@ -238,6 +238,27 @@ func _on_language_changed(val: String) -> void:
 	SettingsManager.language = val
 	TranslationServer.set_locale(val)
 	SettingsManager.save()
+	SettingsManager.sig_language_changed.emit(val)
+	_refresh_translated_labels()
+
+
+## Aktualisiert alle Labels im Modal die über GameState.T() befüllt wurden.
+func _refresh_translated_labels() -> void:
+	# Tab-Namen
+	set_tab_title(0, GameState.T("settings.tab.gameplay"))
+	set_tab_title(1, GameState.T("settings.tab.audio"))
+	set_tab_title(2, GameState.T("settings.tab.ui"))
+	set_tab_title(3, GameState.T("settings.tab.controls"))
+	# Zeilen-Labels im Oberfläche-Tab
+	if is_instance_valid(%LabelLanguage):
+		%LabelLanguage.text = GameState.T("settings.ui.language")
+	if is_instance_valid(%LabelUIScale):
+		%LabelUIScale.text = GameState.T("settings.ui.scale")
+	if is_instance_valid(%LabelToastPos):
+		%LabelToastPos.text = GameState.T("settings.ui.toast_position")
+	if is_instance_valid(%LabelPosHUDBottom):
+		%LabelPosHUDBottom.text = GameState.T("settings.ui.hud_side")
+
 
 
 # =============================================================================

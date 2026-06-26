@@ -5,6 +5,8 @@ signal sig_tech_info_toggled(is_visible: bool)
 
 signal sig_hud_side_changed
 
+signal sig_language_changed(locale: String)
+
 const SETTINGS_PATH := "user://settings.cfg"
 
 # ── Gameplay ──────────────────────────────────────────────────────────────────

@@ -135,9 +135,9 @@ ui_room_list={
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://translations/language.de.translation","res://translations/language.en.translation")
+locale/translations=PackedStringArray("res://translations/language.de.translation", "res://translations/language.en.translation")
 locale/locale_filter_mode=1
-locale/language_filter=PackedStringArray("de","en")
+locale/language_filter=PackedStringArray("de", "en")
 
 [physics]
 

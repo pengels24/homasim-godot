@@ -42,6 +42,10 @@ const KEYBINDING_ROW = preload("res://scenes/ingame/hud/modals/content/Keybindin
 @onready var btn_tech_right: Button = %ButtonTechInfoRight
 @onready var lbl_tech: Label        = %LabelTechInfoValue
 
+@onready var btn_lang_left: Button  = %ButtonLanguageLeft
+@onready var btn_lang_right: Button = %ButtonLanguageRight
+@onready var lbl_lang: Label        = %LabelLanguageValue
+
 # Interne Speicherstruktur für die Left/Right-Logik
 var _sel_data: Dictionary = {}
 
@@ -102,6 +106,10 @@ func _init_ui_tab() -> void:
 	_setup_selector("tech", btn_tech_left, btn_tech_right, lbl_tech,
 			["Aus", "An"], [false, true],
 			SettingsManager.show_tech_info, _on_tech_info_changed)
+
+	_setup_selector("lang", btn_lang_left, btn_lang_right, lbl_lang,
+			SettingsManager.LANGUAGES_LABELS, SettingsManager.LANGUAGES,
+			SettingsManager.language, _on_language_changed)
 
 
 # =============================================================================
@@ -223,6 +231,13 @@ func _on_scale_changed(val: float) -> void:
 
 func _on_tech_info_changed(val: bool) -> void:
 	SettingsManager.set_tech_info(val)
+
+
+# =============================================================================
+func _on_language_changed(val: String) -> void:
+	SettingsManager.language = val
+	TranslationServer.set_locale(val)
+	SettingsManager.save()
 
 
 # =============================================================================

@@ -192,11 +192,11 @@ func _on_hotel_level_up(new_level: int) -> void:
 	var unlock_text = ""
 	
 	if new_level == GameState.UNLOCK_LEVELS.staff:
-		unlock_text = "Personalverwaltung"
+		unlock_text = GameState.T("modal.staff.title")
 		reward_money = 1500
 		reward_fp = 250
 	elif new_level == GameState.UNLOCK_LEVELS.techtree:
-		unlock_text = "Forschung & Technologie"
+		unlock_text = GameState.T("modal.techtree.title")
 		reward_money = 2500
 		reward_fp = 500
 	else:

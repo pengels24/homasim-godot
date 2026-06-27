@@ -172,9 +172,9 @@ func open_tutorial_codex() -> void:
 	_pause_time_for_ui()
 
 	if _standard_modal.visible:
-		_standard_modal.set_title("Tutorials & Codex")
+		_standard_modal.set_title(GameState.T("modal.tutorial.title"))
 	else:
-		_standard_modal.open("Tutorials & Codex")
+		_standard_modal.open(GameState.T("modal.tutorial.title"))
 
 	update_map_grid_mode()
 
@@ -547,9 +547,9 @@ func open_staff() -> void:
 	_pause_time_for_ui()
 
 	if _standard_modal.visible:
-		_standard_modal.set_title("Personalverwaltung")
+		_standard_modal.set_title(GameState.T("modal.staff.title"))
 	else:
-		_standard_modal.open("Personalverwaltung")
+		_standard_modal.open(GameState.T("modal.staff.title"))
 
 
 # ── Forschung & Techtree (F6) ──────────────────────────────────────────────────
@@ -567,9 +567,9 @@ func open_tech_tree() -> void:
 	_pause_time_for_ui()
 
 	if _standard_modal.visible:
-		_standard_modal.set_title("Forschung & Technologie")
+		_standard_modal.set_title(GameState.T("modal.techtree.title"))
 	else:
-		_standard_modal.open("Forschung & Technologie")
+		_standard_modal.open(GameState.T("modal.techtree.title"))
 
 	if is_instance_valid(_bottom_bar):
 		_bottom_bar.sync_button_state("tech_tree")
@@ -600,7 +600,7 @@ func close_sim_browser() -> void:
 
 # =============================================================================
 func open_quest_book() -> void:
-	if _standard_modal.visible and _standard_modal.get_title() == "Aufgabenbuch":
+	if _standard_modal.visible and _standard_modal.get_title() == GameState.T("modal.questbook.title"):
 		_standard_modal.close()
 		return
 	
@@ -614,9 +614,9 @@ func open_quest_book() -> void:
 	_pause_time_for_ui()
 	
 	if _standard_modal.visible:
-		_standard_modal.set_title("Aufgabenbuch")
+		_standard_modal.set_title(GameState.T("modal.questbook.title"))
 	else:
-		_standard_modal.open("Aufgabenbuch")
+		_standard_modal.open(GameState.T("modal.questbook.title"))
 		
 	if is_instance_valid(_bottom_bar):
 		_bottom_bar.sync_button_state("quest_book")
@@ -624,7 +624,7 @@ func open_quest_book() -> void:
 
 
 func open_guest_list() -> void:
-	if _standard_modal.visible and _standard_modal.get_title() == "Gästeliste":
+	if _standard_modal.visible and _standard_modal.get_title() == GameState.T("modal.guestlist.title"):
 		_standard_modal.close()
 		return
 		
@@ -636,12 +636,12 @@ func open_guest_list() -> void:
 		TutorialManager.trigger("guest_list")
 
 	if _standard_modal.visible:
-		_standard_modal.set_title("Gästeliste")
+		_standard_modal.set_title(GameState.T("modal.guestlist.title"))
 	else:
-		_standard_modal.open("Gästeliste")
+		_standard_modal.open(GameState.T("modal.guestlist.title"))
 
 func open_room_list() -> void:
-	if _standard_modal.visible and _standard_modal.get_title() == "Raumliste":
+	if _standard_modal.visible and _standard_modal.get_title() == GameState.T("modal.roomlist.title"):
 		_standard_modal.close()
 		return
 		
@@ -653,6 +653,6 @@ func open_room_list() -> void:
 		TutorialManager.trigger("room_list")
 
 	if _standard_modal.visible:
-		_standard_modal.set_title("Raumliste")
+		_standard_modal.set_title(GameState.T("modal.roomlist.title"))
 	else:
-		_standard_modal.open("Raumliste")
+		_standard_modal.open(GameState.T("modal.roomlist.title"))

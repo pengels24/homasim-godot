@@ -500,7 +500,7 @@ func _make_language_row() -> HBoxContainer:
 
 	var ingame := GameState.active_hotel_id != -1
 	if ingame:
-		lbl.text = lbl.text + "  ·  (nur im Hauptmenü)"
+		lbl.text = lbl.text + "  ·  " + GameState.T("settings.language.main_menu_only")
 
 	for i in SettingsManager.LANGUAGES.size():
 		var lang: String = SettingsManager.LANGUAGES[i]

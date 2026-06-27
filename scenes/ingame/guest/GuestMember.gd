@@ -83,8 +83,8 @@ static func from_dict(d: Dictionary) -> GuestMember:
 		d.get("shirt_color", ""),
 		d.get("speed_offset", -999.0)
 	)
-	m.daily_budget    = int(d.get("daily_budget",    0))
-	m.spending_budget = int(d.get("spending_budget", 0))
+	m.daily_budget    = int(d.get("daily_budget",    20))
+	m.spending_budget = int(d.get("spending_budget", m.daily_budget))
 	return m
 
 

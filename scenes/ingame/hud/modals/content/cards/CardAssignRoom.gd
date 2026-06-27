@@ -36,13 +36,13 @@ func populate(formatted_name: String, room_id: String, _min_staff: int, max_staf
 	
 	var current = assigned_staff.size()
 	if current == 0:
-		lbl_status.text = "Kein Personal (%d/%d MitarbeiterInnen)" % [current, max_staff]
+		lbl_status.text = GameState.T("ui.staff.assign.status.empty", current, max_staff)
 		lbl_status.add_theme_color_override("font_color", Color(1.0, 0.4, 0.4)) # Rot
 	elif current < max_staff:
-		lbl_status.text = "Teilbesetzt (%d/%d MitarbeiterInnen)" % [current, max_staff]
+		lbl_status.text = GameState.T("ui.staff.assign.status.partial", current, max_staff)
 		lbl_status.add_theme_color_override("font_color", Color(1.0, 0.8, 0.2)) # Gelb
 	else:
-		lbl_status.text = "Vollbesetzt (%d MitarbeiterInnen)" % [current]
+		lbl_status.text = GameState.T("ui.staff.assign.status.full", current)
 		lbl_status.add_theme_color_override("font_color", Color(0.4, 1.0, 0.4)) # Grün
 		
 	for child in grid_staff.get_children():

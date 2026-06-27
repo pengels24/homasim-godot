@@ -119,7 +119,7 @@ func _init_ui_tab() -> void:
 	btn_lang_left.disabled  = ingame
 	btn_lang_right.disabled = ingame
 	if ingame:
-		lbl_lang.text = lbl_lang.text + "  ·  (nur im Hauptmenü)"
+		lbl_lang.text = lbl_lang.text + "  ·  " + GameState.T("settings.language.main_menu_only")
 
 
 # =============================================================================

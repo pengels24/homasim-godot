@@ -34,6 +34,9 @@ func _ready() -> void:
 # =============================================================================
 func _on_fp_changed(new_fp: int) -> void:
 	if fp_label:
+		var icon_lbl = fp_label.get_parent().get_node_or_null("FPIcon")
+		if icon_lbl:
+			icon_lbl.text = GameState.T("ui.techtree.current_fp") + ": "
 		fp_label.text = str(new_fp)
 	update_button_states()
 

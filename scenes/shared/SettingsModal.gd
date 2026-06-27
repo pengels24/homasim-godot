@@ -498,12 +498,22 @@ func _make_language_row() -> HBoxContainer:
 		for i in btns.size():
 			_style_pos_btn(btns[i], SettingsManager.LANGUAGES[i] == SettingsManager.language)
 
+	var ingame := GameState.active_hotel_id != -1
+	if ingame:
+		lbl.text = lbl.text + "  ·  (nur im Hauptmenü)"
+
 	for i in SettingsManager.LANGUAGES.size():
 		var lang: String = SettingsManager.LANGUAGES[i]
+		btns[i].disabled = ingame
 		btns[i].pressed.connect(func() -> void:
 			SettingsManager.language = lang
 			TranslationServer.set_locale(lang)
+			SettingsManager.save()
+			SettingsManager.sig_language_changed.emit(lang)
 			refresh.call()
+			
+			if GameState.active_hotel_id == -1:
+				get_tree().reload_current_scene()
 		)
 
 	refresh.call()

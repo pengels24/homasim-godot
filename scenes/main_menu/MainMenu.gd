@@ -40,6 +40,7 @@ const FADE_DURATION  := 1.2
 @onready var _manager_modal:    Control      = $ManagerModal
 @onready var _settings_modal:   StandardModal = $SettingsModal
 @onready var _dashboard_modal:  Control      = $DashboardModal
+@onready var _disclaimer_modal: StandardModal = $DisclaimerModal
 
 var _current_bg := 0
 var _slide_timer := 0.0

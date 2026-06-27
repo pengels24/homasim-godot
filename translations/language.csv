@@ -590,6 +590,8 @@
 "settings.controls.group.build","Baumodus","Build Mode"
 "settings.controls.build.rotate","Raum rotieren","Rotate Room"
 "settings.controls.build.door","Türposition durchschalten","Cycle Door Position"
+"label.on","An","On"
+"label.off","Aus","Off"
 "staff.skill.stress_resistance","Stressresistenz","Stress Resistance"
 "staff.skill.service","Service","Service"
 "staff.skill.mixology","Mixen","Mixology"

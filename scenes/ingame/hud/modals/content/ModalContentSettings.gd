@@ -107,7 +107,7 @@ func _init_ui_tab() -> void:
 			SettingsManager.hud_side, _on_hud_changed)
 			
 	_setup_selector("tech", btn_tech_left, btn_tech_right, lbl_tech,
-			["Aus", "An"], [false, true],
+			[GameState.T("label.off"), GameState.T("label.on")], [false, true],
 			SettingsManager.show_tech_info, _on_tech_info_changed)
 
 	_setup_selector("lang", btn_lang_left, btn_lang_right, lbl_lang,

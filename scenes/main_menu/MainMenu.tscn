@@ -578,3 +578,32 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+[node name="Watermark" type="Label" parent="." unique_id=987654321]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -330.0
+offset_top = -260.0
+offset_right = 21.0
+offset_bottom = -160.0
+grow_horizontal = 0
+grow_vertical = 0
+rotation = -0.785398
+theme_override_colors/font_color = Color(1, 1, 1, 0.08)
+theme_override_font_sizes/font_size = 64
+text = "TECHDEMO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DisclaimerModal" parent="." unique_id=987654322 instance=ExtResource("3_settings")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+grow_horizontal = 1
+grow_vertical = 1

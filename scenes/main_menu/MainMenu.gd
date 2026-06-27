@@ -67,6 +67,8 @@ func _ready() -> void:
 	if GameState.open_dashboard_next:
 		GameState.open_dashboard_next = false
 		_on_play_pressed()
+	else:
+		_check_disclaimer()
 
 
 # =============================================================================
@@ -249,3 +251,10 @@ func _on_credits_pressed() -> void:
 # =============================================================================
 func _on_to_register_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/register/Register.tscn")
+
+
+# =============================================================================
+func _check_disclaimer() -> void:
+	if not SettingsManager.dont_show_disclaimer:
+		_disclaimer_modal.set_content("res://scenes/main_menu/ModalContentDisclaimer.tscn")
+		_disclaimer_modal.open(GameState.T("ui.disclaimer.title"))

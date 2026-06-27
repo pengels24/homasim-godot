@@ -1,17 +1,24 @@
-import re
+import os
 
-with open(r'd:\game-dev\homasim-godot\scenes\main_menu\MainMenu.tscn', 'r', encoding='utf8') as f:
+file_path = r'd:\game-dev\homasim-godot\scenes\main_menu\MainMenu.gd'
+
+with open(file_path, 'r', encoding='utf-8') as f:
     content = f.read()
 
-buttons = ["BtnPlay", "BtnSettings", "BtnLogin", "BtnManager", "BtnTutorial", "BtnCredits", "BtnQuit"]
-for btn in buttons:
-    pattern = r'(\[node name="' + btn + r'".*?\n(?:.*?\n)*?)(text = ".*?")'
-    content = re.sub(pattern, r'theme_override_font_sizes/font_size = 56\n\2', content)
+old_code = '''func _check_disclaimer() -> void:
+\tvar config = SaveManager.load_global_config()
+\tif not config.get("dont_show_disclaimer", false):
+\t\t_disclaimer_modal.set_content("res://scenes/main_menu/ModalContentDisclaimer.tscn")
+\t\t_disclaimer_modal.open(GameState.T("ui.disclaimer.title"))'''
 
-labels = ["VersionLbl", "MadeWithLbl", "CopyrightLbl"]
-for lbl in labels:
-    pattern = r'(\[node name="' + lbl + r'".*?\n(?:.*?\n)*?)(text = ".*?")'
-    content = re.sub(pattern, r'theme_override_font_sizes/font_size = 24\n\2', content)
+new_code = '''func _check_disclaimer() -> void:
+\tif not SettingsManager.dont_show_disclaimer:
+\t\t_disclaimer_modal.set_content("res://scenes/main_menu/ModalContentDisclaimer.tscn")
+\t\t_disclaimer_modal.open(GameState.T("ui.disclaimer.title"))'''
 
-with open(r'd:\game-dev\homasim-godot\scenes\main_menu\MainMenu.tscn', 'w', encoding='utf8') as f:
+content = content.replace(old_code, new_code)
+
+with open(file_path, 'w', encoding='utf-8') as f:
     f.write(content)
+
+print("Fixed MainMenu.gd disclaimer logic")

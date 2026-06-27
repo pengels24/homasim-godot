@@ -27,6 +27,7 @@ var toast_position: String = "bottom"  # "top" / "middle" / "bottom"
 var hud_side: String = "center"    # "left" / "center" / "right"
 var show_tech_info: bool = false   # Ingame Performance Overlay
 var language: String = "de"        # "de" / "en" (erweiterbar)
+var dont_show_disclaimer: bool = false
 
 # ── Session ───────────────────────────────────────────────────────────────────
 var last_profile_id: int = -1   # Zuletzt gewählter Manager – für Auto-Restore

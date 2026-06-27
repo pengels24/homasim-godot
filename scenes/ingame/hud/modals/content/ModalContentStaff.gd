@@ -76,16 +76,35 @@ func _ready() -> void:
 		StaffManager.sig_staff_fired.connect(_on_staff_changed)
 		StaffManager.sig_assignments_changed.connect(_on_assignments_changed)
 		
+	_apply_translations()
 	_refresh_list()
+
+func _apply_translations() -> void:
+	btn_goto.text = GameState.T("ui.staff.goto")
+	
+	var header_hbox = find_child("TableHeaderPanel", true, false).get_child(0).get_child(0)
+	if header_hbox:
+		var lbl_name = header_hbox.get_node_or_null("LblName")
+		if lbl_name: lbl_name.text = GameState.T("ui.staff.col.name")
+		var lbl_role = header_hbox.get_node_or_null("LblRole")
+		if lbl_role: lbl_role.text = GameState.T("ui.staff.col.role")
+		var lbl_age = header_hbox.get_node_or_null("LblAge")
+		if lbl_age: lbl_age.text = GameState.T("ui.staff.col.age")
+		var lbl_wage = header_hbox.get_node_or_null("LblWage")
+		if lbl_wage: lbl_wage.text = GameState.T("ui.staff.col.wage")
+		var lbl_morale = header_hbox.get_node_or_null("LblMorale")
+		if lbl_morale: lbl_morale.text = GameState.T("ui.staff.col.morale")
+		var lbl_status = header_hbox.get_node_or_null("LblStatus")
+		if lbl_status: lbl_status.text = GameState.T("ui.staff.col.status")
 
 func _build_tabs() -> void:
 	for c in tab_hbox.get_children():
 		c.queue_free()
 		
 	var tabs = [
-		GameState.T("ui.staff.tab_team", "Dein Team"),
-		GameState.T("ui.staff.tab_applicants", "Bewerber"),
-		GameState.T("ui.staff.tab_assign", "Zuweisung")
+		GameState.T("ui.staff.tab_team"),
+		GameState.T("ui.staff.tab_applicants"),
+		GameState.T("ui.staff.tab_assign")
 	]
 	for i in range(tabs.size()):
 		var btn = Button.new()
@@ -161,9 +180,9 @@ func _refresh_list() -> void:
 	if items.is_empty():
 		empty_label.visible = true
 		if _current_tab == 0:
-			empty_label.text = GameState.T("ui.staff.no_team", "Du hast noch kein Personal eingestellt.")
+			empty_label.text = GameState.T("ui.staff.no_team")
 		else:
-			empty_label.text = GameState.T("ui.staff.no_applicants", "Keine Bewerber heute.")
+			empty_label.text = GameState.T("ui.staff.no_applicants")
 	else:
 		empty_label.visible = false
 		var first_new_btn = null
@@ -257,17 +276,17 @@ func _refresh_list() -> void:
 				var assigned = StaffManager.room_assignments.get(item.get("id", ""), "")
 				if role == "bartender" or role == "receptionist":
 					if assigned == "":
-						lbl_status.text = "Ohne Aufgabe"
+						lbl_status.text = GameState.T("ui.staff.status.unassigned", "Ohne Aufgabe")
 						lbl_status.add_theme_color_override("font_color", Color.GRAY)
 					else:
-						lbl_status.text = "Zugeordnet"
+						lbl_status.text = GameState.T("ui.staff.status.assigned", "Zugeordnet")
 						lbl_status.add_theme_color_override("font_color", Color.GREEN)
 				else:
 					if item.get("busy", false):
-						lbl_status.text = "Im Einsatz"
+						lbl_status.text = GameState.T("ui.staff.status.busy", "Im Einsatz")
 						lbl_status.add_theme_color_override("font_color", Color.ORANGE)
 					else:
-						lbl_status.text = "Wartend"
+						lbl_status.text = GameState.T("ui.staff.status.waiting", "Wartend")
 						lbl_status.add_theme_color_override("font_color", Color.GRAY)
 			else:
 				lbl_status.visible = false
@@ -369,7 +388,7 @@ func _update_details() -> void:
 		
 	if _selected_staff == null:
 		detail_name.text = ""
-		detail_role.text = GameState.T("ui.staff.select_prompt", "Bitte wähle einen Mitarbeiter aus")
+		detail_role.text = GameState.T("ui.staff.select_prompt")
 		action_btn.visible = false
 		btn_goto.visible = false
 		image_rect.visible = false
@@ -379,7 +398,7 @@ func _update_details() -> void:
 		
 	var s = _selected_staff
 	detail_name.text = s.get("first_name", "") + " " + s.get("last_name", "") + " (" + str(s.get("age", 30)) + " J.)"
-	detail_role.text = GameState.T("ui.staff.job", "Beruf: ") + GameState.T("staff.role." + s.get("role", ""))
+	detail_role.text = GameState.T("ui.staff.job") + GameState.T("staff.role." + s.get("role", ""))
 	action_btn.visible = true
 	
 	var job = s.get("role", "housekeeping")
@@ -416,8 +435,8 @@ func _update_details() -> void:
 		pip_camera.set_target(s_actor)
 		btn_goto.disabled = (s_actor == null)
 		
-		_create_2col_row(GameState.T("ui.staff.daily_wage", "Tagesgehalt"), "%d €" % int(s.get("daily_wage", 0)), detail_costs, false)
-		action_btn.text = GameState.T("ui.staff.fire", "Kündigen")
+		_create_2col_row(GameState.T("ui.staff.daily_wage"), "%d €" % int(s.get("daily_wage", 0)), detail_costs, false)
+		action_btn.text = GameState.T("ui.staff.fire")
 		action_btn.remove_theme_color_override("font_color")
 		_style_action_btn(action_btn, "red")
 	else:
@@ -426,9 +445,9 @@ func _update_details() -> void:
 		btn_goto.visible = false
 		pip_camera.set_target(null)
 		
-		_create_2col_row(GameState.T("ui.staff.hire_cost", "Einstellungsgebühr"), "%d €" % int(s.get("hire_cost", 0)), detail_costs, false)
-		_create_2col_row(GameState.T("ui.staff.daily_wage", "Tagesgehalt"), "%d €" % int(s.get("daily_wage", 0)), detail_costs, false)
-		action_btn.text = GameState.T("ui.staff.hire", "Einstellen")
+		_create_2col_row(GameState.T("ui.staff.hire_cost"), "%d €" % int(s.get("hire_cost", 0)), detail_costs, false)
+		_create_2col_row(GameState.T("ui.staff.daily_wage"), "%d €" % int(s.get("daily_wage", 0)), detail_costs, false)
+		action_btn.text = GameState.T("ui.staff.hire")
 		action_btn.remove_theme_color_override("font_color")
 		_style_action_btn(action_btn, "green")
 		
@@ -440,7 +459,7 @@ func _update_details() -> void:
 		_create_2col_row(translated_skill, str(skills[skill_name]), detail_stats, false)
 		
 	if s.has("morale"):
-		_create_2col_row(GameState.T("ui.staff.morale", "Moral"), str(s.get("morale", 100)) + "%", detail_stats, false)
+		_create_2col_row(GameState.T("ui.staff.morale"), str(s.get("morale", 100)) + "%", detail_stats, false)
 
 var _pending_action: int = 0 # 0=none, 1=hire, 2=fire, 3=unassign
 var _pending_unassign_sid: String = ""
@@ -464,20 +483,20 @@ func _on_action_btn_pressed() -> void:
 	if _current_tab == 0:
 		_pending_action = 2
 		modal.ask(
-			"Kündigung",
-			"Möchtest du " + staff_name + " wirklich kündigen?",
-			"Kündigen",
-			"Abbrechen",
+			GameState.T("ui.staff.confirm.fire.title"),
+			GameState.T("ui.staff.confirm.fire.desc") % staff_name,
+			GameState.T("ui.staff.confirm.btn.fire"),
+			GameState.T("ui.staff.confirm.btn.cancel"),
 			"",
 			true # Destructive (Red button)
 		)
 	else:
 		_pending_action = 1
 		modal.ask(
-			"Arbeitsvertrag",
-			"Möchtest du " + staff_name + " für " + str(s.get("hire_cost", 0)) + " € einstellen?",
-			"Einstellen",
-			"Abbrechen",
+			GameState.T("ui.staff.confirm.hire.title"),
+			GameState.T("ui.staff.confirm.hire.desc") % [staff_name, s.get("hire_cost", 0)],
+			GameState.T("ui.staff.confirm.btn.hire"),
+			GameState.T("ui.staff.confirm.btn.cancel"),
 			"",
 			false # Green button
 		)
@@ -489,10 +508,10 @@ func _on_unassign_requested(sid: String) -> void:
 	var staff_name = staff_data.get("first_name", "") + " " + staff_data.get("last_name", "")
 	var modal = _get_confirm_modal()
 	modal.ask(
-		"Zuweisung aufheben",
-		"Möchtest du " + staff_name + " wirklich aus diesem Raum entfernen?",
-		"Entfernen",
-		"Abbrechen",
+		GameState.T("ui.staff.confirm.unassign.title"),
+		GameState.T("ui.staff.confirm.unassign.desc") % staff_name,
+		GameState.T("ui.staff.confirm.btn.unassign"),
+		GameState.T("ui.staff.confirm.btn.cancel"),
 		"",
 		true # Destructive (Red button)
 	)
@@ -678,7 +697,7 @@ func _build_assignment_ui() -> void:
 	var btn_assign = Button.new()
 	btn_assign.size_flags_vertical = Control.SIZE_SHRINK_END
 	btn_assign.name = "BtnAssign"
-	btn_assign.text = "Kein Ziel / Personal gewählt"
+	btn_assign.text = GameState.T("ui.staff.assign.no_target")
 	btn_assign.custom_minimum_size = Vector2(0, 48)
 	btn_assign.disabled = true
 	btn_assign.pressed.connect(_on_assign_btn_pressed)
@@ -755,19 +774,19 @@ func _update_assignment_matching() -> void:
 		var SB_DISABLED = preload("res://assets/UI/menu_button_darkblue_disabled.tres")
 		
 		if not has_sel_room:
-			btn_assign.text = "Ziel wählen"
+			btn_assign.text = GameState.T("ui.staff.assign.select_target")
 			btn_assign.disabled = true
 			btn_assign.add_theme_stylebox_override("disabled", SB_DISABLED)
 		elif _selected_staff_id == "":
-			btn_assign.text = "Personal wählen"
+			btn_assign.text = GameState.T("ui.staff.assign.select_staff")
 			btn_assign.disabled = true
 			btn_assign.add_theme_stylebox_override("disabled", SB_DISABLED)
 		elif not has_valid_match:
-			btn_assign.text = "Falsche Rolle"
+			btn_assign.text = GameState.T("ui.staff.assign.wrong_role")
 			btn_assign.disabled = true
 			btn_assign.add_theme_stylebox_override("disabled", SB_DISABLED)
 		else:
-			btn_assign.text = "Zuordnen"
+			btn_assign.text = GameState.T("ui.staff.assign.assign")
 			btn_assign.disabled = false
 			btn_assign.add_theme_stylebox_override("normal", SB_GREEN)
 			btn_assign.add_theme_stylebox_override("hover", SB_GREEN_HOVER)

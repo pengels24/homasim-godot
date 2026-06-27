@@ -1,28 +1,16 @@
-## Version: 0.1.29
-**Datum: 2026-06-27**
+# Changelog gd-0.1.29
+Datum: 2026-06-27
 
-### Features & Verbesserungen
+## Features & Verbesserungen
+- **Lokalisierung abgeschlossen:** Zahlreiche harte, deutsche Strings in den UI-Komponenten (Techtree, Questbook, BuildMenu, Staff, GuestCard, GuestList, RoomList) wurden durch GameState.T()-Aufrufe ersetzt.
+- **Techtree-Bestätigung:** Die Strings im Tech-Tree Pop-Up wurden vollständig übersetzt und Fehler mit zu vielen Parametern beim GameState.T() Aufruf gefixt.
+- **Personalverwaltung übersetzt:** Alle Buttons, Tabs ("Dein Team", "Bewerber", "Zuweisung"), Attribute ("Beruf", "Gehalt", "Status") und Skills im Staff-Panel unterstützen nun die Sprachauswahl.
+- **Language CSV erweitert:** Zahlreiche neue Keys und Fallbacks in die language.csv hinzugefügt und bestehende UTF-8 Fehler behoben, um eine korrekte Darstellung (insbesondere von Umlauten) zu gewährleisten.
 
-- **Mehrsprachigkeit eingeführt**: `de.csv` (1009 Zeilen, aufgebläht, voller Duplikate) ersetzt durch saubere `language.csv` mit 400 Zeilen – Spalten `keys | de | en`.
-- **Vollständige Englisch-Übersetzung**: Alle in-game sichtbaren Strings wurden ins Englische übersetzt. Spätere Sprachen (ES, FR …) kommen einfach als neue Spalte dazu.
-- **Sprachumschalter in den Settings** (Oberfläche-Tab, erste Zeile): Deutsch | English – wie alle anderen Toggles mit ← → Pfeiltasten.
-- **Sprachwechsel im Hauptmenü** lädt die Szene sofort neu → alles ist direkt in der neuen Sprache sichtbar.
-- **In-Game ist der Sprachumschalter gesperrt** (mit Hinweis „nur im Hauptmenü") – sauber und branchenüblich.
-- **Dashboard-Hotelkarten**: Beschriftungen `LEVEL`, `TAG`, `GÄSTE`, `RUF`, `KAPITAL` werden jetzt übersetzt statt hardcoded.
+## Bugfixes
+- **Crash Fix (Techtree):** Behoben, dass das Spiel abstürzte, weil die Translation-Funktion mit zu vielen Parametern aufgerufen wurde.
+- **Übersetzung-Fallbacks entfernt:** Unerwartetes Verhalten von GameState.T() (die TranslationServer ignorierte) behoben, indem hartcodierte Fallbacks aus den Argumenten der GD-Skripte entfernt wurden.
+- **CSV Formatierung:** Fehler mit fehlerhaft kodierten Rechten/Zeichen (z.B. Euro-Zeichen und Umlaute) durch korrekte UTF-8 Append-Methodik in der language.csv behoben.
 
-### Bugfixes
-
-- **Typo behoben**: `"Bitte whlen..."` → `"Bitte wählen..."` (fehlte das `ä`).
-- **Doppelter Block entfernt**: Zeilen 785–893 der alten `de.csv` waren ein exakter Klon von Zeilen 554–698 – jetzt weg.
-- **Malformed CSV-Zeilen gefixt**: `room.lobby.name` und `room.lobby.desc` hatten keine dritte Spalte.
-- **7 fehlende Translation-Keys ergänzt**: u.a. `guest.state.waiting`, `hud.bottom.reception_closed_tt`, `tooltip.surcharge`, `tt.build.room.locked_both`.
-- **`home.hero.*` → `menu.hero.*`**: Keys im Hauptmenü semantisch korrekt benannt (war Überbleibsel der alten Web-Codebase).
-
-### Technische Änderungen
-
-- `translations/de.csv` gelöscht, ersetzt durch `translations/language.csv`
-- `project.godot`: beide Locales `de` + `en` registriert (`language.de.translation`, `language.en.translation`)
-- `SettingsManager.gd`: neues Feld `language: String = "de"`, `TranslationServer.set_locale()` beim Laden, Signal `sig_language_changed`
-- `SettingsModal.gd` (Hauptmenü): Sprach-Toggle via `_make_language_row()` (für spätere Nutzung)
-- `ModalContentSettings.gd` + `.tscn`: Sprach-Toggle als erste Zeile im Oberfläche-Tab; in-game deaktiviert, Hauptmenü lädt Szene neu
-- `DashboardHotelCard.gd`: Header-Labels über `GameState.T()` statt hardcoded Strings
+## Technische Änderungen
+- **GameState Translation Updates:** Anpassung fast aller ModalContent- und Karten-Scripts (GuestCard, Staff, etc.), um einheitlich die korrekte Signatur von GameState.T() (4 Parameter ohne reinen Fallback) zu nutzen.

@@ -60,6 +60,25 @@ func _ready() -> void:
 	_connect_signals()
 	_prefill_from_manager()
 	_update_preview()
+	_translate_ui()
+
+func _translate_ui() -> void:
+	field_manager_name.placeholder_text = GameState.T("register.character.field.name")
+	var opts = $Center/Card/Margin/VBox/HBox/Options
+	(opts.get_node("LabelGender") as Label).text = GameState.T("register.character.label.gender")
+	(opts.get_node("LabelSkin") as Label).text = GameState.T("register.character.label.skin")
+	(opts.get_node("LabelHair") as Label).text = GameState.T("register.character.label.hair")
+	(opts.get_node("LabelOutfit") as Label).text = GameState.T("register.character.label.outfit")
+	($Center/Card/Margin/VBox/HBox/Preview/PreviewLabel as Label).text = GameState.T("register.character.label.preview")
+	
+	for btn in gender_buttons:
+		btn.text = GameState.T("register.character.gender." + btn.get_meta("value", ""))
+	for btn in skin_buttons:
+		btn.text = GameState.T("register.character.skin." + btn.get_meta("value", ""))
+	for btn in hair_buttons:
+		btn.text = GameState.T("register.character.hair." + btn.get_meta("value", ""))
+	for btn in outfit_buttons:
+		btn.text = GameState.T("register.character.outfit." + btn.get_meta("value", ""))
 
 
 func _collect_option_buttons() -> void:
@@ -102,6 +121,7 @@ func _prefill_from_manager() -> void:
 	if not GameState.has_manager():
 		_mode = "create"
 		title_label.text = GameState.T("register.character.title")
+		btn_save.text = GameState.T("register.character.btn.submit")
 		btn_back.visible = true
 		return
 
@@ -156,7 +176,7 @@ func _on_outfit_selected(btn: Button) -> void:
 func _update_preview() -> void:
 	var name_text := field_manager_name.text.strip_edges()
 	preview_name.text = name_text if name_text != "" else "—"
-	preview_sub.text  = "MANAGER · LEVEL 1"
+	preview_sub.text  = GameState.T("manager.level.subtitle").replace("%d", "1")
 	if is_instance_valid(character_display) and character_display.has_method("update_appearance"):
 		character_display.update_appearance(
 			_gender,

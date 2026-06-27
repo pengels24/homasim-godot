@@ -61,6 +61,8 @@ func _ready() -> void:
 	# Initialen Pause-Status setzen (falls wir direkt pausiert ins Spiel starten)
 	set_pause_visuals(TimeManager.is_paused())
 	
+	pause_label.text = GameState.T("hud.label.paused")
+	
 	# FP-Anzeige verstecken (wird jetzt im Techtree geregelt)
 	if has_node("TopBar/MarginContainer/HBoxContainer/FP"):
 		get_node("TopBar/MarginContainer/HBoxContainer/FP").hide()

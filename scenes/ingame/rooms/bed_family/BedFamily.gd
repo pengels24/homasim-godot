@@ -10,7 +10,7 @@ static func get_definition() -> Dictionary:
 		"exp_reward": 150,
 		"prefix": "Z",
 		"label": "FZ",
-		"name": "Familienzimmer",
+		"name": GameState.T("roomdef.name.long.bed_family", "Familienzimmer"),
 		"category": "zimmer",
 		"icon": "res://assets/icons/rooms/van.svg",
 		"nightly_price": 200,
@@ -43,3 +43,4 @@ func set_floor_neighbors(top: bool, right: bool, bottom: bool, left: bool) -> vo
 	if f:
 		f.scale    = Vector2((FLOOR_BASE_SIZE + ext_l + ext_r) / FLOOR_TEX_W, FLOOR_BASE_SIZE + ext_t + ext_b)
 		f.position = Vector2(24.0 + (ext_r - ext_l) * 0.5, 24.0 + (ext_b - ext_t) * 0.5)
+

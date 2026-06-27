@@ -33,13 +33,35 @@ func _ready() -> void:
 	btn_goto.pressed.connect(_on_goto_pressed)
 	
 	# Set static localized labels
-	detail_room_lbl.text = GameState.T("room", "Zimmer") + ":"
-	detail_satisfaction_lbl.text = GameState.T("satisfaction", "Zufriedenheit") + ":"
-	detail_budget_lbl.text = GameState.T("budget", "Budget") + ":"
-	detail_status_lbl.text = GameState.T("status", "Status") + ":"
+	detail_room_lbl.text = GameState.T(\"room\") + ":"
+	detail_satisfaction_lbl.text = GameState.T(\"satisfaction\") + ":"
+	detail_budget_lbl.text = GameState.T(\"budget\") + ":"
+	detail_status_lbl.text = GameState.T(\"status\") + ":"
+	
+	_apply_translations()
 	
 	_populate_list()
 	_clear_details()
+
+func _apply_translations() -> void:
+	btn_goto.text = GameState.T("ui.guest_list.goto")
+	
+	var header_hbox = find_child("TableHeaderPanel", true, false).get_child(0).get_child(0)
+	if header_hbox:
+		var lbl_name = header_hbox.get_node_or_null("LblName")
+		if lbl_name: lbl_name.text = GameState.T(\"ui.guest_list.col.name\")
+		var lbl_room = header_hbox.get_node_or_null("LblRoom")
+		if lbl_room: lbl_room.text = GameState.T(\"ui.guest_list.col.room\")
+		var lbl_budget = header_hbox.get_node_or_null("LblBudget")
+		if lbl_budget: lbl_budget.text = GameState.T(\"ui.guest_list.col.budget\")
+		var lbl_goal = header_hbox.get_node_or_null("LblGoal")
+		if lbl_goal: lbl_goal.text = GameState.T(\"ui.guest_list.col.status\")
+		var lbl_energy = header_hbox.get_node_or_null("LblEnergy")
+		if lbl_energy: lbl_energy.text = GameState.T(\"ui.guest_list.col.energy\")
+		var lbl_sat = header_hbox.get_node_or_null("LblSatisfaction")
+		if lbl_sat:
+			lbl_sat.text = GameState.T(\"ui.guest_list.col.satisfaction\")
+			lbl_sat.tooltip_text = GameState.T(\"ui.guest_list.tooltip.satisfaction\")
 
 func _populate_list() -> void:
 	_active_rows.clear()
@@ -103,7 +125,7 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 	# Budget (individuell pro Member)
 	var lbl_budget = Label.new()
 	if member.daily_budget > 0:
-		lbl_budget.text = "%d %s" % [member.spending_budget, GameState.T("currency.symbol", "€")]
+		lbl_budget.text = "%d %s" % [member.spending_budget, GameState.T(\"currency.symbol\")]
 	else:
 		lbl_budget.text = "---"
 	lbl_budget.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -125,21 +147,21 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 		if state == 2: # IN_ROOM
 			var target_room = actor.get("_target_room")
 			if is_instance_valid(target_room) and target_room.has_method("get_definition"):
-				goal_text = target_room.get_definition().get("name", "Zimmer")
+				goal_text = target_room.get_definition().get("name", GameState.T("guest.tooltip.room"))
 			else:
-				goal_text = "Zimmer"
+				goal_text = GameState.T("guest.tooltip.room")
 		elif state == 3: # IN_POI
 			var poi_id = actor.get("_current_poi_id")
 			goal_text = "Aktivität" if poi_id != "" else "POI"
 		elif state == 4: # AWAITING_CHECKOUT
-			goal_text = "Rezeption"
+			goal_text = GameState.T("guest.tooltip.reception")
 		elif state == 1: # WALKING
 			if actor.get("_is_checkout_walk"):
-				goal_text = "Zur Lobby"
+				goal_text = GameState.T("guest.tooltip.walking_reception")
 			else:
-				goal_text = "Unterwegs"
+				goal_text = GameState.T("guest.tooltip.walking_room").replace(" (Zimmer)", "") # "Unterwegs"
 		elif state == 5: # LEAVING
-			goal_text = "Abreise"
+			goal_text = GameState.T("guest.tooltip.leaving")
 		else:
 			goal_text = "-"
 			
@@ -208,20 +230,20 @@ func _on_guest_selected(party: GuestParty, member: GuestMember, btn: Button) -> 
 		btn_goto.add_theme_stylebox_override("pressed", load("res://assets/UI/menu_button_blue_pressed.tres"))
 		
 		detail_name_lbl.text = member.name
-		detail_room_val.text = party.room_id if party.room_id else GameState.T("none", "Keins")
+		detail_room_val.text = party.room_id if party.room_id else GameState.T(\"none\")
 		detail_satisfaction_val.text = "%d%%" % party.satisfaction
 		if member.daily_budget > 0:
-			detail_budget_val.text = "%d / %d %s" % [member.spending_budget, member.daily_budget, GameState.T("currency.symbol", "€")]
+			detail_budget_val.text = "%d / %d %s" % [member.spending_budget, member.daily_budget, GameState.T(\"currency.symbol\")]
 		else:
 			detail_budget_val.text = "---"
 		
 		var goal_text = "---"
 		var state = _selected_guest.get("current_state")
-		if state == 2: goal_text = "Zimmer"
+		if state == 2: goal_text = GameState.T("guest.tooltip.room")
 		elif state == 3: goal_text = "Aktivität"
-		elif state == 4: goal_text = "Rezeption"
-		elif state == 1: goal_text = "Unterwegs"
-		elif state == 5: goal_text = "Abreise"
+		elif state == 4: goal_text = GameState.T("guest.tooltip.reception")
+		elif state == 1: goal_text = GameState.T("guest.tooltip.walking_room").replace(" (Zimmer)", "")
+		elif state == 5: goal_text = GameState.T("guest.tooltip.leaving")
 		detail_status_val.text = goal_text
 	else:
 		_clear_details()
@@ -232,7 +254,7 @@ func _clear_details() -> void:
 	btn_goto.disabled = true
 	btn_goto.add_theme_stylebox_override("disabled", load("res://assets/UI/menu_button_darkblue_disabled.tres"))
 	
-	detail_name_lbl.text = GameState.T("ui.guest_list.please_select", "Bitte wählen...")
+	detail_name_lbl.text = GameState.T(\"ui.guest_list.please_select\")
 	detail_room_val.text = "---"
 	detail_satisfaction_val.text = "---"
 	detail_budget_val.text = "---"
@@ -265,21 +287,21 @@ func _refresh_live_data() -> void:
 			if state == 2: # IN_ROOM
 				var target_room = actor.get("_target_room")
 				if is_instance_valid(target_room) and target_room.has_method("get_definition"):
-					goal_text = target_room.get_definition().get("name", "Zimmer")
+					goal_text = target_room.get_definition().get("name", GameState.T("guest.tooltip.room"))
 				else:
-					goal_text = "Zimmer"
+					goal_text = GameState.T("guest.tooltip.room")
 			elif state == 3: # IN_POI
 				var poi_id = actor.get("_current_poi_id")
 				goal_text = "Aktivität" if poi_id != "" else "POI"
 			elif state == 4: # AWAITING_CHECKOUT
-				goal_text = "Rezeption"
+				goal_text = GameState.T("guest.tooltip.reception")
 			elif state == 1: # WALKING
 				if actor.get("_is_checkout_walk"):
-					goal_text = "Zur Lobby"
+					goal_text = GameState.T("guest.tooltip.walking_reception")
 				else:
-					goal_text = "Unterwegs"
+					goal_text = GameState.T("guest.tooltip.walking_room").replace(" (Zimmer)", "")
 			elif state == 5: # LEAVING
-				goal_text = "Abreise"
+				goal_text = GameState.T("guest.tooltip.leaving")
 			else:
 				goal_text = "-"
 				

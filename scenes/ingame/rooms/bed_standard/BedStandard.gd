@@ -14,7 +14,7 @@ static func get_definition() -> Dictionary:
 		"exp_reward": 50,
 		"prefix": "Z",
 		"label": "EZ",
-		"name": "Einzelzimmer",
+		"name": GameState.T("roomdef.name.long.bed_standard", "Einzelzimmer"),
 		"category": "zimmer",
 		"icon": "res://assets/icons/rooms/bed-single.svg",
 		"nightly_price": 80,
@@ -49,3 +49,4 @@ func set_floor_neighbors(top: bool, right: bool, bottom: bool, left: bool) -> vo
 	var floor_node := $Interior/Floor as Sprite2D
 	floor_node.scale = Vector2((FLOOR_BASE_SIZE + ext_l + ext_r) / FLOOR_TEX_W,FLOOR_BASE_SIZE + ext_t + ext_b)
 	floor_node.position = Vector2(16.0 + (ext_r - ext_l) * 0.5, 16.0 + (ext_b - ext_t) * 0.5)
+

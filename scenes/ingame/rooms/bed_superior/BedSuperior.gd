@@ -2,7 +2,7 @@ extends "res://scenes/ingame/rooms/Room.gd"
 
 static func get_definition() -> Dictionary:
 	return {
-		"name": "Superior-Zimmer",
+		"name": GameState.T("roomdef.name.long.bed_superior", "Superior-Zimmer"),
 		"category": "Zimmer",
 		"size_x": 3,
 		"size_y": 3,

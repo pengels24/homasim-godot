@@ -9,7 +9,7 @@ static func get_definition() -> Dictionary:
 		"exp_reward": 120,
 		"prefix": "V",
 		"label": "FB",
-		"name": "Forschungsbüro",
+		"name": GameState.T("roomdef.name.long.sc_office", "Forschungsbüro"),
 		"category": "management",
 		"icon": "res://assets/icons/rooms/flask-conical.svg",
 		"nightly_price": 0,
@@ -25,3 +25,4 @@ static func get_definition() -> Dictionary:
 		"maintenance_level": 100,
 		"is_service_requested": false
 	}
+

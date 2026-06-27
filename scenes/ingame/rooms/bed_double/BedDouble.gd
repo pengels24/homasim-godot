@@ -8,7 +8,7 @@ static func get_definition() -> Dictionary:
     "exp_reward": 80,
     "prefix": "Z",
     "label": "DZ",
-    "name": "Doppelzimmer",
+    "name": GameState.T("roomdef.name.long.bed_double", "Doppelzimmer"),
     "category": "zimmer",
     "icon": "res://assets/icons/rooms/bed-double.svg",
     "nightly_price": 130,
@@ -80,3 +80,4 @@ func _apply_visuals() -> void:
 
   # Hier übergeben wir den "Tür-Job" an die Master-Klasse!
   super._apply_visuals()
+

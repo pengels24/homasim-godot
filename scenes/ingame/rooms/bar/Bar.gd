@@ -8,7 +8,7 @@ static func get_definition() -> Dictionary:
 		"exp_reward": 180,
 		"prefix": "B",
 		"label": "BA",
-		"name": "Bar",
+		"name": GameState.T("roomdef.name.long.bar", "Bar"),
 		"category": "gastro",
 		"icon": "res://assets/icons/rooms/wine.svg",
 		"nightly_price": 0,
@@ -31,3 +31,4 @@ static func get_definition() -> Dictionary:
 		"maintenance_level": 100,
 		"is_service_requested": false
 	}
+

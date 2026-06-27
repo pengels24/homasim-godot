@@ -28,6 +28,18 @@ func _ready() -> void:
 	btn_send.pressed.connect(_send_report)
 	http_request.request_completed.connect(_on_request_completed)
 
+	_apply_translations()
+
+func _apply_translations() -> void:
+	btn_report.tooltip_text = GameState.T("bugreporter.tooltip")
+	var vbox = $Modal/Margin/VBox
+	(vbox.get_node("Title") as Label).text = GameState.T("bugreporter.title")
+	(vbox.get_node("Label") as Label).text = GameState.T("bugreporter.description.label")
+	email_input.placeholder_text = GameState.T("bugreporter.email.placeholder")
+	input_field.placeholder_text = GameState.T("bugreporter.desc.placeholder")
+	btn_cancel.text = GameState.T("bugreporter.btn.cancel")
+	btn_send.text = GameState.T("bugreporter.btn.send")
+
 func _input(event: InputEvent) -> void:
 	if dim.visible and event.is_action_pressed("ui_cancel"):
 		_close_modal()

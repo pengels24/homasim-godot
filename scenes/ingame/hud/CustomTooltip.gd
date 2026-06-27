@@ -67,7 +67,7 @@ func _update_content() -> void:
 	title_label.text = "🏨 " + room_name
 	
 	# Status
-	var status = "Frei"
+	var status = GameState.T("room.tooltip.free")
 	guests_label.text = ""
 	guests_label.hide()
 	if is_instance_valid(stay_progress):
@@ -75,19 +75,19 @@ func _update_content() -> void:
 		if stay_spacer: stay_spacer.hide()
 	
 	if _target_room.is_service_requested or _target_room.maintenance_level < 50:
-		status = "🧹 Service benötigt"
+		status = GameState.T("room.tooltip.service_needed")
 	elif def.get("is_poi", false):
 		var room_id = GuestManager._room_key(_target_room)
 		var is_staffed = StaffManager.is_poi_staffed(def, room_id)
 		var is_open_now = GameState.is_facility_open(def)
 		if is_staffed and is_open_now:
-			status = "🍺 Geöffnet"
+			status = GameState.T("room.tooltip.open")
 		elif is_staffed and not is_open_now:
 			var open_from: int = def.get("open_from", 0)
 			var opens_at := GameState.format_game_time(open_from) if open_from > 0 else "?"
-			status = "🔒 Geschlossen (öffnet um %s)" % opens_at
+			status = GameState.T("room.tooltip.closed_until") % opens_at
 		else:
-			status = "🔴 Unterbesetzt (Geschlossen)"
+			status = GameState.T("room.tooltip.understaffed")
 			
 		var current_visitors = 0
 		var ingame = get_tree().get_root().get_node_or_null("Ingame")
@@ -98,7 +98,7 @@ func _update_content() -> void:
 					if actor.current_state == actor.State.IN_POI and actor._current_poi_id == room_id:
 						current_visitors += 1
 			
-		guests_label.text = "Aktuelle Gäste: %d" % current_visitors
+		guests_label.text = GameState.T("room.tooltip.current_visitors") % current_visitors
 		guests_label.show()
 	else:
 		# GuestManager direkt befragen (nicht mehr über room._guest_mgr)
@@ -109,23 +109,23 @@ func _update_content() -> void:
 			if party:
 				# Präsenz prüfen via GuestController
 				var ctrl = ingame.get("_guest_controller") if is_instance_valid(ingame) else null
-				var presence = "🚶 Gast unterwegs"
+				var presence = GameState.T("room.tooltip.guest_walking")
 				if ctrl:
 					for member in party.members:
 						var guest_id = member.id  # Stabile ID – überlebt Save/Load!
 						var actor = ctrl._actors.get(guest_id, null)
 						if is_instance_valid(actor):
 							if actor.current_state == actor.State.IN_ROOM:
-								presence = "📍 Gast anwesend"
+								presence = GameState.T("room.tooltip.guest_present")
 								break
 							elif actor.current_state == actor.State.IN_POI:
-								presence = "📍 Gast in der " + actor._current_poi_id.capitalize()
+								presence = GameState.T("room.tooltip.guest_in_poi") % actor._current_poi_id.capitalize()
 								break
 							elif actor.current_state == actor.State.LEAVING or actor.current_state == actor.State.AWAITING_CHECKOUT or (actor.current_state == actor.State.WALKING and actor._is_checkout_walk):
-								presence = "🧳 Abreisend"
+								presence = GameState.T("room.tooltip.guest_leaving")
 								break
-				status = "👥 Belegt: " + presence
-				var names = ["Gäste im Zimmer:"]
+				status = GameState.T("room.tooltip.occupied") % presence
+				var names = [GameState.T("room.tooltip.guests_in_room")]
 				for m in party.members:
 					var display_role = GameState.T("guest.member.type." + str(m.role))
 					names.append("👤 " + m.name + " (" + display_role + ")")
@@ -136,17 +136,17 @@ func _update_content() -> void:
 					stay_progress.value = party.stay_days
 					
 					if party.stay_days <= 0:
-						stay_progress_label.text = "Abreise"
+						stay_progress_label.text = GameState.T("room.tooltip.departure")
 					else:
-						stay_progress_label.text = "Übrige Nächte: %d / %d" % [party.stay_days, party.total_stay_days]
+						stay_progress_label.text = GameState.T("room.tooltip.nights_left") % [party.stay_days, party.total_stay_days]
 					stay_progress.show()
 					if stay_spacer: stay_spacer.show()
 				
 	var final_status = ""
 	if _target_room.get("is_pending_demolish"):
-		final_status += "🔨 Raum zum Löschen vorgemerkt\n"
+		final_status += GameState.T("room.tooltip.pending_demolish")
 		
-	final_status += status + "\nSauberkeit: %d%% | Zustand: %d%%" % [_target_room.cleanliness_level, _target_room.maintenance_level]
+	final_status += status + GameState.T("room.tooltip.stats") % [_target_room.cleanliness_level, _target_room.maintenance_level]
 	status_label.text = final_status
 	
 	# Zwingt das Tooltip-Panel zum Schrumpfen, falls vorher mehr Text da war

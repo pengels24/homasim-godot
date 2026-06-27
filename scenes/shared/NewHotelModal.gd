@@ -71,6 +71,7 @@ func _ready() -> void:
 	
 	_setup_map_grid()
 	_build_click_grid()
+	_apply_translations()
 	
 	open()
 
@@ -161,7 +162,7 @@ func _build_click_grid() -> void:
 
 func _update_grid() -> void:
 	var dir := _derive_entrance_dir(_selected_x, _selected_y)
-	_entrance_lbl.text = "Eingangsseite: " + GameState.T("dashboard.new_hotel.dir." + dir)
+	_entrance_lbl.text = GameState.T("dashboard.new_hotel.grid.label") + " " + GameState.T("dashboard.new_hotel.dir." + dir)
 	
 	if _map_grid and _map_grid.has_method("setup_as_miniature"):
 		_map_grid.setup_as_miniature(_selected_x, _selected_y)
@@ -251,17 +252,17 @@ func _on_create_pressed() -> void:
 	confirmed.emit(hotel_id)
 
 func _apply_translations() -> void:
-	$Content/Left/NameBox/Label.text = GameState.T("dashboard.new_hotel.title", "Hotelname")
-	_name_field.placeholder_text = GameState.T("dashboard.new_hotel.title", "Hotelname")
-	$Content/Left/SettingsBox/Label.text = GameState.T("dashboard.new_hotel.difficulty", "Schwierigkeitsgrad")
-	_btn_easy.text = GameState.T("dashboard.new_hotel.diff.easy", "Einfach")
-	_btn_normal.text = GameState.T("dashboard.new_hotel.diff.normal", "Standard")
-	_btn_hard.text = GameState.T("dashboard.new_hotel.diff.hard", "Hart")
-	_btn_custom.text = GameState.T("dashboard.new_hotel.diff.custom", "Angepasst")
-	$Content/Left/SettingsBox/ParamGrid/LblMoney.text = GameState.T("dashboard.new_hotel.start_money", "Startkapital:")
-	$Content/Left/SettingsBox/ParamGrid/LblRefund.text = GameState.T("dashboard.new_hotel.refund", "Baukosten-Rückerstattung:")
-	$Content/Left/SettingsBox/ParamGrid/LblExp.text = GameState.T("dashboard.new_hotel.exp", "EXP-Boost:")
-	$Content/Left/SettingsBox/NoticeLbl.text = GameState.T("dashboard.new_hotel.notice", "Einige Settings sind in der TechDemo noch ohne Effekt.")
-	$Content/Right/Label.text = GameState.T("dashboard.new_hotel.start_plot", "Startparzelle")
-	_btn_cancel.text = GameState.T("dashboard.new_hotel.btn.cancel", "Abbrechen")
-	_btn_create.text = GameState.T("dashboard.new_hotel.btn.create", "Hotel gründen")
+	$Content/Left/NameBox/NameLabel.text = GameState.T("dashboard.new_hotel.name.label")
+	_name_field.placeholder_text = GameState.T("dashboard.new_hotel.placeholder")
+	$Content/Left/SettingsBox/SettingsTitle.text = GameState.T("dashboard.new_hotel.difficulty")
+	_btn_easy.text = GameState.T("dashboard.new_hotel.diff.easy")
+	_btn_normal.text = GameState.T("dashboard.new_hotel.diff.normal")
+	_btn_hard.text = GameState.T("dashboard.new_hotel.diff.hard")
+	_btn_custom.text = GameState.T("dashboard.new_hotel.diff.custom")
+	$Content/Left/SettingsBox/ParamGrid/LblMoney.text = GameState.T("dashboard.new_hotel.start_money")
+	$Content/Left/SettingsBox/ParamGrid/LblRefund.text = GameState.T("dashboard.new_hotel.refund")
+	$Content/Left/SettingsBox/ParamGrid/LblExp.text = GameState.T("dashboard.new_hotel.exp")
+	$Content/Left/SettingsBox/WipLabel.text = GameState.T("dashboard.new_hotel.notice")
+	$Content/Right/GridLabel.text = GameState.T("dashboard.new_hotel.start_plot")
+	_btn_cancel.text = GameState.T("dashboard.new_hotel.btn.cancel")
+	_btn_create.text = GameState.T("dashboard.new_hotel.btn.create")

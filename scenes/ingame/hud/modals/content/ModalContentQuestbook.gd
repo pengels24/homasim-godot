@@ -72,7 +72,7 @@ func _build_categories() -> void:
 	var cats = QuestManager.quests_db.get("categories", {})
 	for cat_id in cats:
 		var btn = Button.new()
-		var cat_name = cat_id.capitalize()
+		var cat_name = GameState.T("room_category." + cat_id)
 		btn.text = cat_name
 		btn.custom_minimum_size = Vector2(0, 50)
 		btn.toggle_mode = true
@@ -144,24 +144,26 @@ func _populate_quests() -> void:
 	if cat_state == null: return
 	
 	var current_rank = cat_state.get("current_rank", 1)
-	rank_label.text = "Rang " + _active_rank_id
+	rank_label.text = GameState.T("ui.quests.rank", _active_rank_id)
 	
 	var ranks_def = QuestManager.quests_db["categories"][_active_cat].get("ranks", {})
 	var r_def = ranks_def.get(_active_rank_id)
 	
 	if r_def == null:
-		rank_reward_label.text = "Alle Ränge abgeschlossen!"
+		rank_reward_label.text = GameState.T("ui.quests.all_done")
 		rank_claim_btn.hide()
 		return
-		
-	var r_fp = r_def.get("reward_fp", 0)
-	var r_money = r_def.get("reward_money", 0)
-	rank_reward_label.text = "Vergütung: %d FP | %s €" % [r_fp, GameState.format_money(r_money)]
+	else:
+		var curr_rank = ranks_def[_active_rank_id]
+		var r_fp = curr_rank.get("reward_fp", 0)
+		var r_money = curr_rank.get("reward_money", 0)
+		rank_reward_label.text = GameState.T("ui.quests.reward_rank", r_fp, GameState.format_money(r_money))
 	
 	if cat_state.get("rank_claimable", false) and str(current_rank) == _active_rank_id:
 		rank_claim_btn.show()
 		rank_claim_btn.disabled = false
 		rank_claim_btn.remove_theme_color_override("font_color")
+		rank_claim_btn.text = GameState.T("ui.quests.btn.complete_rank")
 		_style_action_btn(rank_claim_btn, "green")
 		if not rank_claim_btn.pressed.is_connected(_on_rank_claim):
 			rank_claim_btn.pressed.connect(_on_rank_claim)
@@ -206,7 +208,7 @@ func _populate_quests() -> void:
 		title.theme_type_variation = &"HeaderMedium"
 		
 		if is_locked:
-			title.text = "🔒 ??? (Benötigt Forschung)"
+			title.text = GameState.T("ui.quests.locked_tech")
 			title.add_theme_color_override("font_color", Color.DIM_GRAY)
 			vbox.add_child(title)
 		else:
@@ -226,12 +228,12 @@ func _populate_quests() -> void:
 			prog_lbl.theme_type_variation = &"DescLabel"
 			var max_val = t_def.get("target_count", 1)
 			var prog_val = max_val if is_past_rank else (0 if is_future_rank else t_state["progress"])
-			prog_lbl.text = "Fortschritt: %d / %d" % [prog_val, max_val]
+			prog_lbl.text = GameState.T("ui.quests.progress", prog_val, max_val)
 			vbox.add_child(prog_lbl)
 			
 			var reward_lbl = Label.new()
 			reward_lbl.theme_type_variation = &"ValueLabel"
-			reward_lbl.text = "Belohnung: %d FP | %s €" % [int(t_def.get("reward_fp", 0)), GameState.format_money(t_def.get("reward_money", 0))]
+			reward_lbl.text = GameState.T("ui.quests.reward_quest", int(t_def.get("reward_fp", 0)), GameState.format_money(t_def.get("reward_money", 0)))
 			reward_lbl.add_theme_color_override("font_color", Color.PALE_GREEN)
 			vbox.add_child(reward_lbl)
 		
@@ -241,26 +243,26 @@ func _populate_quests() -> void:
 		btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		
 		if is_locked:
-			btn.text = "Gesperrt"
+			btn.text = GameState.T("ui.quests.btn.locked")
 			btn.disabled = true
 			_style_action_btn(btn, "disabled")
 			btn.add_theme_color_override("font_color", Color.DARK_GRAY)
 		elif is_future_rank:
-			btn.text = "Rang noch nicht erreicht"
+			btn.text = GameState.T("ui.quests.btn.future")
 			btn.disabled = true
 			_style_action_btn(btn, "disabled")
 		elif is_past_rank or t_state["state"] == "claimed":
-			btn.text = "Erledigt"
+			btn.text = GameState.T("ui.quests.btn.done")
 			btn.disabled = true
 			_style_action_btn(btn, "disabled")
 			btn.add_theme_color_override("font_color", Color.DIM_GRAY)
 		elif t_state["state"] == "claimable":
-			btn.text = "Belohnung abholen"
+			btn.text = GameState.T("ui.quests.btn.claim")
 			_style_action_btn(btn, "green")
 			btn.add_theme_color_override("font_color", Color.WHITE)
 			btn.pressed.connect(func(): _on_claim_pressed(t_id))
 		else:
-			btn.text = "In Bearbeitung..."
+			btn.text = GameState.T("ui.quests.btn.working")
 			btn.disabled = true
 			_style_action_btn(btn, "disabled")
 			btn.add_theme_color_override("font_color", Color.LIGHT_GRAY)

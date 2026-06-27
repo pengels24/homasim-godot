@@ -8,11 +8,11 @@ var _glow_tweens: Dictionary = {}
 
 const CATEGORIES = ["zimmer", "gastronomie", "wellness", "management", "prestige"]
 const CAT_NAMES = {
-	"zimmer": "Zimmer",
-	"gastronomie": "Gastronomie",
-	"wellness": "Wellness",
-	"management": "Management",
-	"prestige": "Prestige"
+	"zimmer": "room_category.zimmer",
+	"gastronomie": "room_category.gastronomie",
+	"wellness": "room_category.wellness",
+	"management": "room_category.management",
+	"prestige": "room_category.prestige"
 }
 
 var btn_scene = preload("res://scenes/ingame/hud/modals/content/TechNodeButton.tscn")
@@ -84,7 +84,7 @@ func _build_tier_gate(parent: Control, tier_id: String, tier_data: Dictionary) -
 	parent.add_child(vbox)
 	
 	var title = Label.new()
-	title.text = "🔒 Tier %s Gesperrt" % tier_id
+	title.text = GameState.T("ui.techtree.tier_locked", tier_id)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 32)
 	vbox.add_child(title)
@@ -93,7 +93,7 @@ func _build_tier_gate(parent: Control, tier_id: String, tier_data: Dictionary) -
 	vbox.add_child(hs)
 	
 	var lbl_req = Label.new()
-	lbl_req.text = "Freischaltbedingungen:"
+	lbl_req.text = GameState.T("ui.techtree.unlock_reqs")
 	lbl_req.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(lbl_req)
 	
@@ -103,7 +103,7 @@ func _build_tier_gate(parent: Control, tier_id: String, tier_data: Dictionary) -
 	if req_level > 0:
 		var ok = GameState.selected_hotel.get("level", 1) >= req_level
 		var l = Label.new()
-		l.text = ("✔" if ok else "✖") + " Hotel Level %d" % req_level
+		l.text = ("✔" if ok else "✖") + GameState.T("ui.techtree.req.level", req_level)
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		l.add_theme_color_override("font_color", Color.GREEN if ok else Color.RED)
 		vbox.add_child(l)
@@ -113,7 +113,7 @@ func _build_tier_gate(parent: Control, tier_id: String, tier_data: Dictionary) -
 	if req_stars > 0:
 		var ok = GameState.selected_hotel.get("stars", 0) >= req_stars
 		var l = Label.new()
-		l.text = ("✔" if ok else "✖") + " Gourmet Sterne: %d" % req_stars
+		l.text = ("✔" if ok else "✖") + GameState.T("ui.techtree.req.stars", req_stars)
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		l.add_theme_color_override("font_color", Color.GREEN if ok else Color.RED)
 		vbox.add_child(l)
@@ -123,7 +123,7 @@ func _build_tier_gate(parent: Control, tier_id: String, tier_data: Dictionary) -
 	if cost_fp > 0:
 		var ok = GameState.selected_hotel.get("fp", 0) >= cost_fp
 		var l = Label.new()
-		l.text = ("✔" if ok else "✖") + " %d FP" % cost_fp
+		l.text = ("✔" if ok else "✖") + GameState.T("ui.techtree.req.fp", cost_fp)
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		l.add_theme_color_override("font_color", Color.GREEN if ok else Color.RED)
 		vbox.add_child(l)
@@ -141,7 +141,7 @@ func _build_tier_gate(parent: Control, tier_id: String, tier_data: Dictionary) -
 		
 		var ok = unlocked_in_prev_tier >= req_items
 		var l = Label.new()
-		l.text = ("✔" if ok else "✖") + " Vorheriges Tier %d/%d" % [unlocked_in_prev_tier, req_items]
+		l.text = ("✔" if ok else "✖") + GameState.T("ui.techtree.req.prev_tier", unlocked_in_prev_tier, req_items)
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		l.add_theme_color_override("font_color", Color.GREEN if ok else Color.RED)
 		vbox.add_child(l)
@@ -151,11 +151,11 @@ func _build_tier_gate(parent: Control, tier_id: String, tier_data: Dictionary) -
 	var btn = Button.new()
 	btn.custom_minimum_size = Vector2(300, 60)
 	btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	btn.text = "Tier %s Freischalten" % tier_id
+	btn.text = GameState.T("ui.techtree.btn.unlock_tier", tier_id)
 	btn.disabled = not can_unlock
 	btn.pressed.connect(func():
 		if TechtreeManager.unlock_tier(tier_id):
-			Toast.show("Tier %s freigeschaltet!" % tier_id)
+			Toast.show(GameState.T("toast.techtree.tier_unlocked", tier_id))
 	)
 	vbox.add_child(btn)
 
@@ -184,7 +184,7 @@ func _build_tier_content(parent: Control, _tier_id: String, tier_data: Dictionar
 		# Kategorie Label
 		var cat_lbl = Label.new()
 		cat_lbl.custom_minimum_size = Vector2(150, 0)
-		cat_lbl.text = CAT_NAMES.get(cat, cat)
+		cat_lbl.text = GameState.T(CAT_NAMES.get(cat, cat))
 		cat_lbl.add_theme_color_override("font_color", Color.LIGHT_STEEL_BLUE)
 		cat_lbl.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		hbox.add_child(cat_lbl)
@@ -233,7 +233,7 @@ func _build_tier_content(parent: Control, _tier_id: String, tier_data: Dictionar
 				
 				btn.pressed.connect(func():
 					if is_demo_locked:
-						Toast.show("Dieser Inhalt ist in der Techdemo nicht verfügbar.")
+						Toast.show(GameState.T("ui.techtree.tooltip.demo_alert"))
 						return
 						
 					if TechtreeManager.is_tech_available(tech_id):
@@ -241,14 +241,10 @@ func _build_tier_content(parent: Control, _tier_id: String, tier_data: Dictionar
 						confirm.top_level = true
 						add_child(confirm)
 						
-						var title = "Technologie freischalten"
-						var msg = "Möchtest du '%s' wirklich freischalten?\nKosten: %d FP | %d €" % [
-							display_name, 
-							n.get("cost_fp", 0), 
-							n.get("cost_money", 0)
-						]
+						var title = GameState.T("ui.techtree.confirm.title")
+						var msg = GameState.T("ui.techtree.confirm.desc", display_name, n.get("cost_fp", 0), n.get("cost_money", 0))
 						
-						confirm.ask(title, msg, "Freischalten", "Abbrechen")
+						confirm.ask(title, msg, GameState.T("ui.techtree.btn.unlock"), GameState.T("ui.techtree.btn.cancel"))
 						confirm.confirmed.connect(func():
 							if TechtreeManager.unlock_tech(tech_id):
 								Toast.show(GameState.T("toast.techtree.unlocked", GameState.T(n.get("name", "Unknown"))))
@@ -348,7 +344,7 @@ func _generate_tooltip(tech_id: String) -> String:
 	
 	var tt = ""
 	if is_demo_locked:
-		tt += "🔒 NICHT IN DER TECHDEMO VERFÜGBAR\n\n"
+		tt += GameState.T("ui.techtree.demo_locked") + "\n\n"
 		
 	if n.has("desc") and n["desc"] != "":
 		tt += GameState.T(n["desc"]) + "\n\n"
@@ -356,17 +352,18 @@ func _generate_tooltip(tech_id: String) -> String:
 		var unlocks = []
 		for t in TechtreeManager.tech_registry.values():
 			if tech_id in t.get("dependencies", []):
-				unlocks.append("Forschung: " + GameState.T(t.get("name", t.get("id", ""))))
+				unlocks.append(GameState.T("ui.techtree.tooltip.unlocks.tech", GameState.T(t.get("name", t.get("id", "")))))
 		
 		for r in GameState.room_registry.values():
 			var r_def = r.get("def", {})
 			if r_def.get("req_tech", "") == tech_id:
-				unlocks.append("Raum: " + GameState.T(r_def.get("name", "Raum")))
+				unlocks.append(GameState.T("ui.techtree.tooltip.unlocks.room", GameState.T(r_def.get("name", "Raum"))))
 				
 		if unlocks.size() > 0:
-			tt += "Schaltet frei:\n- " + "\n- ".join(unlocks) + "\n\n"
+			var joined = "\n- ".join(unlocks)
+			tt += GameState.T("ui.techtree.tooltip.unlocks.desc", joined)
 		else:
-			tt += "Schaltet neue Inhalte frei.\n\n"
+			tt += GameState.T("ui.techtree.tooltip.unlocks.empty")
 	
 	tt += ("✅ " if has_fp else "❌ ") + "%d / %d FP\n" % [cur_fp, cost_fp]
 	tt += ("✅ " if has_money else "❌ ") + "%d / %d €\n" % [cur_money, cost_money]
@@ -374,7 +371,7 @@ func _generate_tooltip(tech_id: String) -> String:
 	for d in deps:
 		var dep_name = d + " " + GameState.T(TechtreeManager.get_tech_node(d).get("name", d))
 		var is_dep_unlocked = TechtreeManager.is_tech_unlocked(d)
-		tt += ("✅ " if is_dep_unlocked else "❌ ") + "Benötigt: %s\n" % dep_name
+		tt += ("✅ " if is_dep_unlocked else "❌ ") + GameState.T("ui.techtree.tooltip.requires", dep_name)
 		
 	return tt.strip_edges()
 

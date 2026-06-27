@@ -23,7 +23,7 @@ static func get_definition() -> Dictionary:
 		"xp_reward": 0,
 		"prefix": "R",
 		"label": "Lobby",
-		"name": "Lobby / Rezeption",
+		"name": GameState.T("roomdef.name.long.lobby", "Lobby / Rezeption"),
 		"category": "management",
 		"icon": "",
 		"nightly_price": 0,
@@ -60,3 +60,4 @@ func _apply_visuals() -> void:
 	_wall_bottom.visible = (entrance_dir == "bottom")
 	_wall_left.visible   = (entrance_dir == "left")
 	_wall_right.visible  = (entrance_dir == "right")
+

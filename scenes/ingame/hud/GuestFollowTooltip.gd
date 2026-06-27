@@ -34,14 +34,14 @@ func setup(guest: GuestActor) -> void:
 			elif sat > 50: emoji = "🙂"
 			elif sat > 25: emoji = "😐"
 			else: emoji = "😠"
-			label_satisfaction.text = "Zufriedenheit: %d%% %s" % [sat, emoji]
+			label_satisfaction.text = GameState.T("guest.tooltip.satisfaction") % [sat, emoji]
 			var c = Color.GREEN
 			if sat < 25: c = Color.RED
 			elif sat < 50: c = Color.ORANGE
 			elif sat < 80: c = Color.YELLOW
 			label_satisfaction.add_theme_color_override("font_color", c)
 	else:
-		label_name.text = "Unbekannt"
+		label_name.text = GameState.T("guest.tooltip.unknown")
 		
 	_update_target_text()
 	_update_pos()
@@ -71,28 +71,28 @@ func _update_target_text() -> void:
 	if not is_instance_valid(_target_guest):
 		return
 	var state = _target_guest.current_state
-	var t = "Ziel: "
+	var t = GameState.T("guest.tooltip.target")
 	if state == GuestActor.State.IN_ROOM:
-		t += "Zimmer"
+		t += GameState.T("guest.tooltip.room")
 	elif state == GuestActor.State.IN_POI:
 		t += _target_guest._current_poi_id.capitalize()
 	elif state == GuestActor.State.WALKING:
 		if _target_guest.get("_is_checkout_walk"):
-			t += "Unterwegs (Rezeption)"
+			t += GameState.T("guest.tooltip.walking_reception")
 		elif _target_guest._current_poi_id != "" and _target_guest._current_poi_id != "room":
-			t += "Unterwegs (%s)" % _target_guest._current_poi_id.capitalize()
+			t += GameState.T("guest.tooltip.walking_poi") % _target_guest._current_poi_id.capitalize()
 		else:
-			t += "Unterwegs (Zimmer)"
+			t += GameState.T("guest.tooltip.walking_room")
 	elif state == GuestActor.State.AWAITING_CHECKOUT:
-		t += "Rezeption"
+		t += GameState.T("guest.tooltip.reception")
 	elif state == GuestActor.State.LEAVING:
-		t += "Abreise"
+		t += GameState.T("guest.tooltip.leaving")
 	else:
-		t += "Warten"
+		t += GameState.T("guest.tooltip.waiting")
 		
 	label_target.text = t
 	
 	# Budget des Members anzeigen
 	var member = _target_guest.get("_guest_member")
 	if member and member.daily_budget > 0:
-		label_target.text += "\n💰 Budget: %d € / %d €" % [member.spending_budget, member.daily_budget]
+		label_target.text += GameState.T("guest.tooltip.budget") % [member.spending_budget, member.daily_budget]

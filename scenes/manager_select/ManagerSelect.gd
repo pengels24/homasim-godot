@@ -35,11 +35,22 @@ const OUTFIT_COLORS := {
 @onready var _confirm_modal: ConfirmModal = $ConfirmModal
 
 
+@onready var _lbl_title:     Label       = $Center/Card/Margin/VBox/Header/Title
+
 func _ready() -> void:
+	_lbl_title.text = GameState.T("manager_select.title")
 	for i in MAX_SLOTS:
 		var base := SLOT_PATH_TPL % i
-		(get_node(base + "/Empty/BtnCreate") as Button).pressed.connect(_on_create_slot)
-		(get_node(base + "/Filled/ActionRow/BtnSelect") as Button).pressed.connect(_on_select_slot.bind(i))
+		var btn_create = get_node(base + "/Empty/BtnCreate") as Button
+		var hint_lbl   = get_node(base + "/Empty/Hint") as Label
+		var btn_select = get_node(base + "/Filled/ActionRow/BtnSelect") as Button
+		
+		btn_create.text = GameState.T("manager_select.btn.create")
+		hint_lbl.text   = GameState.T("manager_select.hint.empty")
+		btn_select.text = GameState.T("manager_select.btn.select")
+		
+		btn_create.pressed.connect(_on_create_slot)
+		btn_select.pressed.connect(_on_select_slot.bind(i))
 		(get_node(base + "/Filled/ActionRow/BtnDelete") as Button).pressed.connect(_on_delete_slot.bind(i))
 	_btn_close.pressed.connect(_on_back)
 	_confirm_modal.confirmed.connect(_on_delete_confirmed)
@@ -93,10 +104,10 @@ func _on_select_slot(i: int) -> void:
 func _on_delete_slot(i: int) -> void:
 	_pending_delete_slot = i
 	_confirm_modal.ask(
-		"Manager löschen?",
-		"Alle Hotels dieses Managers werden\nebenfalls entfernt.",
-		"Löschen",
-		"Abbrechen",
+		GameState.T("manager_select.delete.title"),
+		GameState.T("manager_select.delete.text"),
+		GameState.T("manager_select.delete.btn_delete"),
+		GameState.T("manager_select.delete.btn_cancel"),
 		GameState.T("manager_select.delete.ack"),
 		true
 	)

@@ -146,11 +146,12 @@ func _display_category_buttons() -> void:
 		# Daten aus dem GameState holen (mit Fallback-Werten zur Sicherheit)
 		var cat_data: Dictionary = GameState.room_category_registry.get(cat_name.to_lower(), {})
 		var icon_path: String = cat_data.get("icon", "res://assets/icons/HUDTop/house.svg")
-		var label_text: String = cat_data.get("label", cat_name.capitalize())
+		var raw_label: String = cat_data.get("label", cat_name.capitalize())
+		var label_text: String = GameState.T("room_category." + cat_name.to_lower(), raw_label)
 
 		btn.icon = load(icon_path)
 		btn.text = "" # Text weg, Fokus auf Icon
-		btn.tooltip_text = "Kategorie: " + label_text
+		btn.tooltip_text = GameState.T("ui.buildmenu.category", "Kategorie: ###", label_text)
 
 		_category_btns[cat_name] = btn
 
@@ -209,8 +210,9 @@ func _show_category(cat_name: String) -> void:
 	for c_name in _category_btns.keys():
 		_set_btn_active(_category_btns[c_name], c_name == cat_name)
 		
-	var cat_label = GameState.room_category_registry.get(cat_name.to_lower(), {}).get("label", cat_name.capitalize())
-	_breadcrumb.text = "Kategorie: " + cat_label
+	var raw_cat_label = GameState.room_category_registry.get(cat_name.to_lower(), {}).get("label", cat_name.capitalize())
+	var cat_label = GameState.T("room_category." + cat_name.to_lower(), raw_cat_label)
+	_breadcrumb.text = GameState.T("ui.buildmenu.category", "Kategorie: ###", cat_label)
 
 	# Aktuelles Hotel-Level abfragen (Fallback auf 1, falls noch nichts geladen ist)
 	var current_level: int = GameState.selected_hotel.get("level", 1)
@@ -235,7 +237,8 @@ func _show_category(cat_name: String) -> void:
 
 		if level_ok and tech_ok:
 			btn.disabled = false
-			btn.tooltip_text = GameState.T("tt.build.room.cost", def.get("name", "Raum"), def.get("build_cost", 0))
+			var item_name = GameState.T(def.get("name", "Raum"))
+			btn.tooltip_text = GameState.T("tt.build.room.cost", item_name, def.get("build_cost", 0))
 
 			# Die Szene wird erst per load() geladen, wenn der Button geklickt wird
 			btn.pressed.connect(func():
@@ -253,7 +256,7 @@ func _show_category(cat_name: String) -> void:
 
 		else:
 			btn.disabled = true
-			var room_name = def.get("name", "Raum")
+			var room_name = GameState.T(def.get("name", "Raum"))
 			
 			if not level_ok and not tech_ok:
 				btn.tooltip_text = GameState.T("tt.build.room.locked_both", room_name, req_level)

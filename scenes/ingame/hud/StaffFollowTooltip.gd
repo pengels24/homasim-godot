@@ -17,27 +17,27 @@ func setup(staff: StaffActor) -> void:
 		
 	var data = staff.get("_staff_data")
 	if data:
-		var fn = data.get("first_name", "Unbekannt")
+		var fn = data.get("first_name", GameState.T("guest.tooltip.unknown"))
 		var ln = data.get("last_name", "")
 		label_name.text = fn + (" " + ln if ln != "" else "")
 		
 		var role = data.get("role", "housekeeping")
 		if role == "housekeeping":
-			label_role.text = "Beruf: Reinigungskraft"
+			label_role.text = GameState.T("staff.tooltip.role.housekeeping")
 		elif role == "maintenance":
-			label_role.text = "Beruf: Haustechnik"
+			label_role.text = GameState.T("staff.tooltip.role.maintenance")
 		elif role == "reception":
-			label_role.text = "Beruf: Rezeption"
+			label_role.text = GameState.T("staff.tooltip.role.reception")
 		else:
-			label_role.text = "Beruf: " + role.capitalize()
+			label_role.text = GameState.T("staff.tooltip.role.prefix") + role.capitalize()
 			
 		var skills = data.get("skills", {})
 		var motivation = skills.get("motivation", 5)
-		label_stats.text = "Motivation: %d / 10" % motivation
+		label_stats.text = GameState.T("staff.tooltip.motivation") % motivation
 	else:
-		label_name.text = "Unbekannt"
-		label_role.text = "Beruf: Unbekannt"
-		label_stats.text = "Motivation: Unbekannt"
+		label_name.text = GameState.T("guest.tooltip.unknown")
+		label_role.text = GameState.T("staff.tooltip.role.prefix") + GameState.T("guest.tooltip.unknown")
+		label_stats.text = GameState.T("staff.tooltip.motivation_unknown")
 		
 	_update_target_text()
 	_update_pos()
@@ -68,21 +68,21 @@ func _update_target_text() -> void:
 		return
 	
 	var state = _target_staff.get("_state")
-	var s_text = "Status: "
-	var t_text = "Ziel: "
+	var s_text = GameState.T("staff.tooltip.status")
+	var t_text = GameState.T("staff.tooltip.target")
 	
 	match state:
 		"idle":
-			s_text += "Bereit (Wartet)"
-			t_text += "Personalraum"
+			s_text += GameState.T("staff.tooltip.state.idle")
+			t_text += GameState.T("staff.tooltip.target.staffroom")
 		"returning":
-			s_text += "Rückkehr"
-			t_text += "Personalraum"
+			s_text += GameState.T("staff.tooltip.state.returning")
+			t_text += GameState.T("staff.tooltip.target.staffroom")
 		"walking":
-			s_text += "Unterwegs"
+			s_text += GameState.T("staff.tooltip.state.walking")
 			t_text += _format_task_target()
 		"working":
-			s_text += "Arbeitet"
+			s_text += GameState.T("staff.tooltip.state.working")
 			t_text += _format_task_target()
 		_:
 			s_text += str(state)
@@ -100,7 +100,7 @@ func _format_task_target() -> String:
 			var r_id = t.get("id") if "id" in t else ""
 			return "%s (%s)" % [r_name, r_id] if r_id != "" else r_name
 		elif typeof(t) == TYPE_VECTOR2 or typeof(t) == TYPE_VECTOR2I:
-			return "Position " + str(t)
+			return GameState.T("staff.tooltip.target.position") % str(t)
 		else:
-			return "Raum/Arbeit"
-	return "Arbeit"
+			return GameState.T("staff.tooltip.target.room_work")
+	return GameState.T("staff.tooltip.target.work")

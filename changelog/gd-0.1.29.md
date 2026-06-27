@@ -3,6 +3,8 @@
 
 ### Features & Verbesserungen
 
+- **Erklärbär-Popup (Disclaimer)**: Beim Start des Spiels wird nun ein Popup eingeblendet, das den Spieler darüber aufklärt, dass es sich um eine frühe Tech-Demo handelt (Bugs, fehlendes Balancing, Platzhalter etc. zu erwarten). Eine "Nicht mehr anzeigen"-Option speichert die Entscheidung dauerhaft im Profil.
+- **TechDemo-Wasserzeichen**: Das Hauptmenü zeigt nun ein rotierendes, halbtransparentes "TECHDEMO"-Wasserzeichen unten rechts an.
 - **Vollständige Ingame-Lokalisierung**: Das Übersetzungssystem wurde massiv überarbeitet. Raumnamen, Beschreibungen und Tooltips greifen nun dynamisch auf GameState.T() zu, anstatt beim Laden der Skripte fest übersetzt zu werden. Dadurch wird ein Sprachwechsel im Hauptmenü sofort und überall im Spiel fehlerfrei übernommen.
 - **Konsistente Raumnamen**: Das veraltete Feld label in Raum-Definitionen wurde komplett durch 
 ame ersetzt, um eine einheitliche Namensgebung im MapGrid, Baumenü und in den Tooltips sicherzustellen.

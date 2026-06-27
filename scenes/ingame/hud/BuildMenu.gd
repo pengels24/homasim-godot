@@ -147,11 +147,11 @@ func _display_category_buttons() -> void:
 		var cat_data: Dictionary = GameState.room_category_registry.get(cat_name.to_lower(), {})
 		var icon_path: String = cat_data.get("icon", "res://assets/icons/HUDTop/house.svg")
 		var raw_label: String = cat_data.get("label", cat_name.capitalize())
-		var label_text: String = GameState.T("room_category." + cat_name.to_lower(), raw_label)
+		var label_text: String = GameState.T("room_category." + cat_name.to_lower())
 
 		btn.icon = load(icon_path)
 		btn.text = "" # Text weg, Fokus auf Icon
-		btn.tooltip_text = GameState.T("ui.buildmenu.category", "Kategorie: ###", label_text)
+		btn.tooltip_text = GameState.T("ui.buildmenu.category", label_text)
 
 		_category_btns[cat_name] = btn
 
@@ -211,8 +211,8 @@ func _show_category(cat_name: String) -> void:
 		_set_btn_active(_category_btns[c_name], c_name == cat_name)
 		
 	var raw_cat_label = GameState.room_category_registry.get(cat_name.to_lower(), {}).get("label", cat_name.capitalize())
-	var cat_label = GameState.T("room_category." + cat_name.to_lower(), raw_cat_label)
-	_breadcrumb.text = GameState.T("ui.buildmenu.category", "Kategorie: ###", cat_label)
+	var cat_label = GameState.T("room_category." + cat_name.to_lower())
+	_breadcrumb.text = GameState.T("ui.buildmenu.category", cat_label)
 
 	# Aktuelles Hotel-Level abfragen (Fallback auf 1, falls noch nichts geladen ist)
 	var current_level: int = GameState.selected_hotel.get("level", 1)

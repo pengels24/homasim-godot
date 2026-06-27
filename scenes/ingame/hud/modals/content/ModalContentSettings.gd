@@ -328,7 +328,7 @@ func _build_keybindings_ui() -> void:
 		
 		# Group Header
 		var header = Label.new()
-		header.text = group.get("label", group_id)
+		header.text = GameState.T(group.get("label", group_id))
 		header.theme_type_variation = &"HeaderMedium"
 		kb_container.add_child(header)
 		

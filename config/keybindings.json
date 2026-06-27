@@ -132,17 +132,17 @@
     }
   },
   "build_mode": {
-    "label": "Baumodus",
+    "label": "settings.controls.group.build",
     "order": 4,
     "actions": {
       "rotate_room": {
-        "label": "Raum rotieren",
+        "label": "settings.controls.build.rotate",
         "order": 1,
         "default": "R",
         "default_alt": ""
       },
       "cycle_door": {
-        "label": "Türposition durchschalten",
+        "label": "settings.controls.build.door",
         "order": 2,
         "default": "Period",
         "default_alt": ""

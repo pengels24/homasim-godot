@@ -61,7 +61,7 @@ func _update_content() -> void:
 	if not is_instance_valid(_target_room): return
 	
 	var def = _target_room.call("get_definition")
-	var room_name = def.get("name", "Raum")
+	var room_name = GameState.T(def.get("name", "Raum"))
 	if _target_room.get("room_number") != null and str(_target_room.get("room_number")) != "":
 		room_name += " " + str(_target_room.get("room_number"))
 	title_label.text = "🏨 " + room_name

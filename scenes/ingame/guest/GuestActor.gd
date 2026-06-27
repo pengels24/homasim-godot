@@ -249,7 +249,7 @@ func _on_poi_arrived() -> void:
 	var room_id = _get_poi_room_id(_current_poi_id)
 	FinanceManager.add_transaction(
 		income, "gastro",
-		"%s – Besuch: %s" % [poi_def.get("name", _current_poi_id), _guest_member.name]
+		"%s – Besuch: %s" % [GameState.T(poi_def.get("name", _current_poi_id)), _guest_member.name]
 	)
 	
 	# FloatingValue Signal senden (GuestController leitet weiter)

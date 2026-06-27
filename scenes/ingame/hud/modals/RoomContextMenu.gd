@@ -184,7 +184,7 @@ func _on_demolish_pressed() -> void:
 	var def = {}
 	if room.has_method("get_definition"):
 		def = room.get_definition()
-	var room_name = def.get("name", "Zimmer")
+	var room_name = GameState.T(def.get("name", "Zimmer"))
 	var room_number = room.get("room_number")
 	if room_number and str(room_number) != "":
 		room_name += " " + str(room_number)
@@ -208,7 +208,7 @@ func _on_demolish_pressed() -> void:
 		confirm.confirmed.connect(func():
 			var refund_pos = room.global_position + Vector2(16, 16)
 			if refund > 0:
-				if FinanceManager: FinanceManager.add_transaction(refund, "construction", "Abriss: " + def.get("name", "Raum"))
+				if FinanceManager: FinanceManager.add_transaction(refund, "construction", "Abriss: " + GameState.T(def.get("name", "Raum")))
 				if EffectManager: EffectManager.spawn_money_text(refund, refund_pos)
 				
 			map_grid.remove_room(room)

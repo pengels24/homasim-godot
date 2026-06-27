@@ -8,7 +8,7 @@ static func get_definition() -> Dictionary:
 		"exp_reward": 180,
 		"prefix": "B",
 		"label": "BA",
-		"name": GameState.T("roomdef.name.long.bar", "Bar"),
+		"name": "roomdef.name.long.bar",
 		"category": "gastro",
 		"icon": "res://assets/icons/rooms/wine.svg",
 		"nightly_price": 0,

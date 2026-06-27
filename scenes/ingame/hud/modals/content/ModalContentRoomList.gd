@@ -107,7 +107,7 @@ func _create_list_item(room: Node2D) -> void:
 	var r_num = room.get("room_number")
 	var r_id = str(r_num) if r_num != null and str(r_num) != "" else "-"
 	var r_def = room.get_definition() if room.has_method("get_definition") else {}
-	var r_name = r_def.get("name", GameState.T(\"room\"))
+	var r_name = GameState.T(r_def.get("name", GameState.T(\"room\")))
 	
 	# Name
 	var lbl_name = Label.new()
@@ -260,7 +260,7 @@ func _on_room_selected(room: Node2D, btn: Button) -> void:
 	var r_num = room.get("room_number")
 	var r_id = str(r_num) if r_num != null and str(r_num) != "" else "-"
 	var r_def = room.get_definition() if room.has_method("get_definition") else {}
-	var r_name = r_def.get("name", GameState.T(\"room\"))
+	var r_name = GameState.T(r_def.get("name", GameState.T(\"room\")))
 	
 	detail_name_lbl.text = r_name
 	detail_id_val.text = r_id

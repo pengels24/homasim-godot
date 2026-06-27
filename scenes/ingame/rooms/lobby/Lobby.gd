@@ -23,7 +23,7 @@ static func get_definition() -> Dictionary:
 		"xp_reward": 0,
 		"prefix": "R",
 		"label": "Lobby",
-		"name": GameState.T("roomdef.name.long.lobby", "Lobby / Rezeption"),
+		"name": "roomdef.name.long.lobby",
 		"category": "management",
 		"icon": "",
 		"nightly_price": 0,

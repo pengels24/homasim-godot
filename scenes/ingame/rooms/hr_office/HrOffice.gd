@@ -9,7 +9,7 @@ static func get_definition() -> Dictionary:
 		"exp_reward": 80,
 		"prefix": "V",
 		"label": "PB",
-		"name": GameState.T("roomdef.name.long.hr_office", "Personalbüro"),
+		"name": "roomdef.name.long.hr_office",
 		"category": "management",
 		"icon": "res://assets/icons/rooms/users.svg",
 		"nightly_price": 0,

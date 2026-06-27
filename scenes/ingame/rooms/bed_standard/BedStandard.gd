@@ -14,7 +14,7 @@ static func get_definition() -> Dictionary:
 		"exp_reward": 50,
 		"prefix": "Z",
 		"label": "EZ",
-		"name": GameState.T("roomdef.name.long.bed_standard", "Einzelzimmer"),
+		"name": "roomdef.name.long.bed_standard",
 		"category": "zimmer",
 		"icon": "res://assets/icons/rooms/bed-single.svg",
 		"nightly_price": 80,

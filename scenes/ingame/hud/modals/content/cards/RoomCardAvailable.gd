@@ -42,7 +42,7 @@ func populate(room: Node2D) -> void:
 	_name_label.text = label + " | " + display_id
 
 	# 2. Details zusammenbauen (z.B. "Einzelzimmer | 60 € / Nacht")
-	var full_name: String = def.get("name", "Raum")
+	var full_name: String = GameState.T(def.get("name", "Raum"))
 	var price: int = def.get("nightly_price", 0)
 	_details_label.text = full_name + " | " + str(price) + " € / Nacht"
 

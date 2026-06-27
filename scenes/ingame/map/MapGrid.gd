@@ -625,7 +625,7 @@ func demolish_marked_rooms(silent: bool = false) -> void:
 		# Feedback
 		var refund_pos = room.global_position + Vector2(16, 16)
 		if refund > 0:
-			FinanceManager.add_transaction(refund, "construction", "Auto-Abriss: " + def.get("name", "Raum"))
+			FinanceManager.add_transaction(refund, "construction", "Auto-Abriss: " + GameState.T(def.get("name", "Raum")))
 			if not silent:
 				EffectManager.spawn_money_text(refund, refund_pos)
 			

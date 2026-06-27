@@ -1,0 +1,85 @@
+import os
+
+tscn = """[gd_scene format=3 uid="uid://ciintro"]
+
+[ext_resource type="Script" uid="uid://dintroscript" path="res://scenes/intro/Intro.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://dbasegrid" path="res://assets/images/intro/base_grid.png" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://dlogo" path="res://assets/images/logo.png" id="3_logo"]
+
+[node name="Intro" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Background" type="TextureRect" parent="."]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -600.0
+offset_top = -500.0
+offset_right = 600.0
+offset_bottom = 500.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bg")
+
+[node name="Blocks" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Camera" type="Camera2D" parent="."]
+unique_name_in_owner = true
+zoom = Vector2(1.2, 1.2)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Fader" type="ColorRect" parent="CanvasLayer"]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Logo" type="TextureRect" parent="CanvasLayer/CenterContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("3_logo")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="LblSkip" type="Label" parent="CanvasLayer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+text = "Beliebige Taste zum Überspringen"
+horizontal_alignment = 2
+
+[node name="Timer" type="Timer" parent="."]
+unique_name_in_owner = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+"""
+
+file_path = r'd:\game-dev\homasim-godot\scenes\intro\Intro.tscn'
+with open(file_path, 'w', encoding='utf-8') as f:
+    f.write(tscn)
+
+print("Fixed encoding of Intro.tscn")

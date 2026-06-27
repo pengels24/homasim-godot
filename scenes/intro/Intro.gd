@@ -1,4 +1,4 @@
-extends Node2D
+﻿extends Node2D
 
 @onready var blocks_node = %Blocks
 @onready var camera = %Camera
@@ -10,9 +10,14 @@ var sequence = []
 var is_skipping = false
 var avatar_rect: TextureRect
 var lbl_presents: Label
+var lbl_techdemo: Label
 var music_player: AudioStreamPlayer
 
 func _ready() -> void:
+    Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+    if has_node("/root/BugReporter"):
+        get_node("/root/BugReporter").visible = false
+        
     for i in range(1, 23):
         var tex = load("res://assets/images/intro/sequence/seq_%02d.png" % i)
         
@@ -77,6 +82,18 @@ func _ready() -> void:
     fader.modulate.a = 1.0 # Start fully black
     logo.modulate.a = 0.0
     
+    lbl_techdemo = Label.new()
+    lbl_techdemo.text = "TECHDEMO"
+    lbl_techdemo.add_theme_font_size_override("font_size", 30)
+    lbl_techdemo.add_theme_color_override("font_color", Color(0.8, 0.4, 0.1))
+    lbl_techdemo.set_anchors_preset(Control.PRESET_CENTER)
+    lbl_techdemo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+    lbl_techdemo.grow_horizontal = Control.GROW_DIRECTION_BOTH
+    lbl_techdemo.grow_vertical = Control.GROW_DIRECTION_BOTH
+    lbl_techdemo.position.y += 100
+    lbl_techdemo.modulate.a = 0
+    canvas.add_child(lbl_techdemo)
+    
     if sequence.size() > 0:
         sequence[0].visible = true
         sequence[0].modulate.a = 1.0
@@ -116,7 +133,7 @@ func _play_intro_sequence() -> void:
     await tw3.finished
     if is_skipping: return
     
-    # 4. Erste HÃ¤lfte des Aufbaus (01-11)
+    # 4. Erste HÃƒÂ¤lfte des Aufbaus (01-11)
     for i in range(1, 11):
         if is_skipping: return
         _show_frame(i)
@@ -132,16 +149,18 @@ func _play_intro_sequence() -> void:
     if is_skipping: return
     
     # 6. Homasim Logo fade in & out
-    var tw5 = create_tween()
+        var tw5 = create_tween().set_parallel(true)
     tw5.tween_property(logo, "modulate:a", 1.0, 1.5)
+    tw5.tween_property(lbl_techdemo, "modulate:a", 1.0, 1.5)
     await tw5.finished
     if is_skipping: return
     
     await get_tree().create_timer(2.0).timeout
     if is_skipping: return
     
-    var tw6 = create_tween()
+        var tw6 = create_tween().set_parallel(true)
     tw6.tween_property(logo, "modulate:a", 0.0, 1.0)
+    tw6.tween_property(lbl_techdemo, "modulate:a", 0.0, 1.0)
     await tw6.finished
     if is_skipping: return
     
@@ -200,6 +219,10 @@ func _skip() -> void:
     _finish_intro()
 
 func _finish_intro() -> void:
+    Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+    if has_node("/root/BugReporter"):
+        get_node("/root/BugReporter").visible = true
     get_tree().change_scene_to_file("res://scenes/main_menu/MainMenu.tscn")
+
 
 

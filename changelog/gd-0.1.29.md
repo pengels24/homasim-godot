@@ -1,16 +1,23 @@
-# Changelog gd-0.1.29
-Datum: 2026-06-27
+## Version: 0.1.29
+**Datum: 2026-06-27**
 
-## Features & Verbesserungen
-- **Lokalisierung abgeschlossen:** Zahlreiche harte, deutsche Strings in den UI-Komponenten (Techtree, Questbook, BuildMenu, Staff, GuestCard, GuestList, RoomList) wurden durch GameState.T()-Aufrufe ersetzt.
-- **Techtree-Bestätigung:** Die Strings im Tech-Tree Pop-Up wurden vollständig übersetzt und Fehler mit zu vielen Parametern beim GameState.T() Aufruf gefixt.
-- **Personalverwaltung übersetzt:** Alle Buttons, Tabs ("Dein Team", "Bewerber", "Zuweisung"), Attribute ("Beruf", "Gehalt", "Status") und Skills im Staff-Panel unterstützen nun die Sprachauswahl.
-- **Language CSV erweitert:** Zahlreiche neue Keys und Fallbacks in die language.csv hinzugefügt und bestehende UTF-8 Fehler behoben, um eine korrekte Darstellung (insbesondere von Umlauten) zu gewährleisten.
+### Features & Verbesserungen
 
-## Bugfixes
-- **Crash Fix (Techtree):** Behoben, dass das Spiel abstürzte, weil die Translation-Funktion mit zu vielen Parametern aufgerufen wurde.
-- **Übersetzung-Fallbacks entfernt:** Unerwartetes Verhalten von GameState.T() (die TranslationServer ignorierte) behoben, indem hartcodierte Fallbacks aus den Argumenten der GD-Skripte entfernt wurden.
-- **CSV Formatierung:** Fehler mit fehlerhaft kodierten Rechten/Zeichen (z.B. Euro-Zeichen und Umlaute) durch korrekte UTF-8 Append-Methodik in der language.csv behoben.
+- **Vollständige Ingame-Lokalisierung**: Das Übersetzungssystem wurde massiv überarbeitet. Raumnamen, Beschreibungen und Tooltips greifen nun dynamisch auf GameState.T() zu, anstatt beim Laden der Skripte fest übersetzt zu werden. Dadurch wird ein Sprachwechsel im Hauptmenü sofort und überall im Spiel fehlerfrei übernommen.
+- **Konsistente Raumnamen**: Das veraltete Feld label in Raum-Definitionen wurde komplett durch 
+ame ersetzt, um eine einheitliche Namensgebung im MapGrid, Baumenü und in den Tooltips sicherzustellen.
+- **Neue Übersetzungen & UI-Strings**: Fehlende Texte wie "Aktuelle FP" (Forschungsbaum), "nur im Hauptmenü" (Einstellungen) sowie die Personal-Besetzungszustände ("Kein Personal", "Teilbesetzt", "Vollbesetzt") wurden ins Übersetzungssystem (language.csv) aufgenommen.
 
-## Technische Änderungen
-- **GameState Translation Updates:** Anpassung fast aller ModalContent- und Karten-Scripts (GuestCard, Staff, etc.), um einheitlich die korrekte Signatur von GameState.T() (4 Parameter ohne reinen Fallback) zu nutzen.
+### Bugfixes
+
+- **Platzhalter-Fehler in CSV**: Falsche Platzhalter (*** und +++) in der Übersetzungsdatei (language.csv) korrigiert. Questbook- und Techtree-Texte zeigen nun korrekte Werte für Forschungspunkte, Geld und Ränge an (statt kryptischer Sonderzeichen).
+- **Alte Spielstände & Budget (---)**: Ein Kompatibilitätsfix sorgt dafür, dass alte Spielstände (die vor Einführung des individuellen Budgets erstellt wurden) nun korrekt geladen werden. Gäste ohne definiertes Budget erhalten beim Laden automatisch ein Standardbudget von 20, damit sie Geld ausgeben können und in der Gästeliste nicht mehr --- angezeigt wird.
+- **Backslash-Korruption**: Literale Backslashes in GameState.T()-Aufrufen in diversen UI-Skripten, die einen Syntax-Fehler auslösten, wurden behoben.
+
+### Technische Änderungen
+
+- BedStandard.gd & Co.: Alle get_definition()-Funktionen der Räume geben unübersetzte Keys für 
+ame und description zurück. Die Übersetzung passiert erst in den UI-Klassen (BuildMenu.gd, GuestActor.gd, CustomTooltip.gd).
+- ModalContentTechtree.gd & SettingsModal.gd: Hardcodierte Texte aus den .tscn-Szenen extrahiert und als übersetzbare Strings per Code (_ready) zugewiesen.
+- language.csv: Über 10 Zeilen bereinigt (Encoding, Platzhalter, Währungssymbole).
+- GuestMember.gd / GuestParty.gd: _from_dict() weist nun beim Fehlen von daily_budget im Savegame den Wert 20 als Fallback zu.

@@ -33,10 +33,10 @@ func _ready() -> void:
 	btn_goto.pressed.connect(_on_goto_pressed)
 	
 	# Set static localized labels
-	detail_room_lbl.text = GameState.T(\"room\") + ":"
-	detail_satisfaction_lbl.text = GameState.T(\"satisfaction\") + ":"
-	detail_budget_lbl.text = GameState.T(\"budget\") + ":"
-	detail_status_lbl.text = GameState.T(\"status\") + ":"
+	detail_room_lbl.text = GameState.T("room") + ":"
+	detail_satisfaction_lbl.text = GameState.T("satisfaction") + ":"
+	detail_budget_lbl.text = GameState.T("budget") + ":"
+	detail_status_lbl.text = GameState.T("status") + ":"
 	
 	_apply_translations()
 	
@@ -49,19 +49,19 @@ func _apply_translations() -> void:
 	var header_hbox = find_child("TableHeaderPanel", true, false).get_child(0).get_child(0)
 	if header_hbox:
 		var lbl_name = header_hbox.get_node_or_null("LblName")
-		if lbl_name: lbl_name.text = GameState.T(\"ui.guest_list.col.name\")
+		if lbl_name: lbl_name.text = GameState.T("ui.guest_list.col.name")
 		var lbl_room = header_hbox.get_node_or_null("LblRoom")
-		if lbl_room: lbl_room.text = GameState.T(\"ui.guest_list.col.room\")
+		if lbl_room: lbl_room.text = GameState.T("ui.guest_list.col.room")
 		var lbl_budget = header_hbox.get_node_or_null("LblBudget")
-		if lbl_budget: lbl_budget.text = GameState.T(\"ui.guest_list.col.budget\")
+		if lbl_budget: lbl_budget.text = GameState.T("ui.guest_list.col.budget")
 		var lbl_goal = header_hbox.get_node_or_null("LblGoal")
-		if lbl_goal: lbl_goal.text = GameState.T(\"ui.guest_list.col.status\")
+		if lbl_goal: lbl_goal.text = GameState.T("ui.guest_list.col.status")
 		var lbl_energy = header_hbox.get_node_or_null("LblEnergy")
-		if lbl_energy: lbl_energy.text = GameState.T(\"ui.guest_list.col.energy\")
+		if lbl_energy: lbl_energy.text = GameState.T("ui.guest_list.col.energy")
 		var lbl_sat = header_hbox.get_node_or_null("LblSatisfaction")
 		if lbl_sat:
-			lbl_sat.text = GameState.T(\"ui.guest_list.col.satisfaction\")
-			lbl_sat.tooltip_text = GameState.T(\"ui.guest_list.tooltip.satisfaction\")
+			lbl_sat.text = GameState.T("ui.guest_list.col.satisfaction")
+			lbl_sat.tooltip_text = GameState.T("ui.guest_list.tooltip.satisfaction")
 
 func _populate_list() -> void:
 	_active_rows.clear()
@@ -125,7 +125,7 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 	# Budget (individuell pro Member)
 	var lbl_budget = Label.new()
 	if member.daily_budget > 0:
-		lbl_budget.text = "%d %s" % [member.spending_budget, GameState.T(\"currency.symbol\")]
+		lbl_budget.text = "%d %s" % [member.spending_budget, GameState.T("currency.symbol")]
 	else:
 		lbl_budget.text = "---"
 	lbl_budget.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
@@ -230,10 +230,10 @@ func _on_guest_selected(party: GuestParty, member: GuestMember, btn: Button) -> 
 		btn_goto.add_theme_stylebox_override("pressed", load("res://assets/UI/menu_button_blue_pressed.tres"))
 		
 		detail_name_lbl.text = member.name
-		detail_room_val.text = party.room_id if party.room_id else GameState.T(\"none\")
+		detail_room_val.text = party.room_id if party.room_id else GameState.T("none")
 		detail_satisfaction_val.text = "%d%%" % party.satisfaction
 		if member.daily_budget > 0:
-			detail_budget_val.text = "%d / %d %s" % [member.spending_budget, member.daily_budget, GameState.T(\"currency.symbol\")]
+			detail_budget_val.text = "%d / %d %s" % [member.spending_budget, member.daily_budget, GameState.T("currency.symbol")]
 		else:
 			detail_budget_val.text = "---"
 		
@@ -254,7 +254,7 @@ func _clear_details() -> void:
 	btn_goto.disabled = true
 	btn_goto.add_theme_stylebox_override("disabled", load("res://assets/UI/menu_button_darkblue_disabled.tres"))
 	
-	detail_name_lbl.text = GameState.T(\"ui.guest_list.please_select\")
+	detail_name_lbl.text = GameState.T("ui.guest_list.please_select")
 	detail_room_val.text = "---"
 	detail_satisfaction_val.text = "---"
 	detail_budget_val.text = "---"

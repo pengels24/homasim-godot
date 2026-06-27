@@ -34,10 +34,10 @@ func _ready() -> void:
 		
 	btn_goto.pressed.connect(_on_goto_pressed)
 	
-	detail_id_lbl.text = GameState.T(\"room\") + ":"
-	detail_guest_lbl.text = GameState.T(\"guest\") + ":"
-	detail_clean_lbl.text = GameState.T(\"cleanliness\") + ":"
-	detail_maint_lbl.text = GameState.T(\"maintenance\") + ":"
+	detail_id_lbl.text = GameState.T("room") + ":"
+	detail_guest_lbl.text = GameState.T("guest") + ":"
+	detail_clean_lbl.text = GameState.T("cleanliness") + ":"
+	detail_maint_lbl.text = GameState.T("maintenance") + ":"
 	
 	_apply_translations()
 	
@@ -51,15 +51,15 @@ func _apply_translations() -> void:
 	var header_hbox = find_child("TableHeaderPanel", true, false).get_child(0).get_child(0)
 	if header_hbox:
 		var lbl_name = header_hbox.get_node_or_null("LblColName")
-		if lbl_name: lbl_name.text = GameState.T(\"ui.room_list.col.name_type\")
+		if lbl_name: lbl_name.text = GameState.T("ui.room_list.col.name_type")
 		var lbl_id = header_hbox.get_node_or_null("LblColId")
-		if lbl_id: lbl_id.text = GameState.T(\"ui.room_list.col.room\")
+		if lbl_id: lbl_id.text = GameState.T("ui.room_list.col.room")
 		var lbl_guest = header_hbox.get_node_or_null("LblColGuest")
-		if lbl_guest: lbl_guest.text = GameState.T(\"ui.room_list.col.guest\")
+		if lbl_guest: lbl_guest.text = GameState.T("ui.room_list.col.guest")
 		var lbl_clean = header_hbox.get_node_or_null("LblColClean")
-		if lbl_clean: lbl_clean.text = GameState.T(\"ui.room_list.col.clean\")
+		if lbl_clean: lbl_clean.text = GameState.T("ui.room_list.col.clean")
 		var lbl_maint = header_hbox.get_node_or_null("LblColMaint")
-		if lbl_maint: lbl_maint.text = GameState.T(\"ui.room_list.col.condition\")
+		if lbl_maint: lbl_maint.text = GameState.T("ui.room_list.col.condition")
 
 func _populate_list() -> void:
 	_active_rows.clear()
@@ -107,7 +107,7 @@ func _create_list_item(room: Node2D) -> void:
 	var r_num = room.get("room_number")
 	var r_id = str(r_num) if r_num != null and str(r_num) != "" else "-"
 	var r_def = room.get_definition() if room.has_method("get_definition") else {}
-	var r_name = GameState.T(r_def.get("name", GameState.T(\"room\")))
+	var r_name = GameState.T(r_def.get("name", GameState.T("room")))
 	
 	# Name
 	var lbl_name = Label.new()
@@ -260,7 +260,7 @@ func _on_room_selected(room: Node2D, btn: Button) -> void:
 	var r_num = room.get("room_number")
 	var r_id = str(r_num) if r_num != null and str(r_num) != "" else "-"
 	var r_def = room.get_definition() if room.has_method("get_definition") else {}
-	var r_name = GameState.T(r_def.get("name", GameState.T(\"room\")))
+	var r_name = GameState.T(r_def.get("name", GameState.T("room")))
 	
 	detail_name_lbl.text = r_name
 	detail_id_val.text = r_id
@@ -271,7 +271,7 @@ func _on_room_selected(room: Node2D, btn: Button) -> void:
 func _clear_details() -> void:
 	_selected_room = null
 	pip_camera.set_target(null)
-	detail_name_lbl.text = GameState.T(\"ui.room_list.please_select\")
+	detail_name_lbl.text = GameState.T("ui.room_list.please_select")
 	detail_id_val.text = "---"
 	detail_guest_val.text = "---"
 	detail_clean_val.text = "---"

@@ -58,6 +58,9 @@ func _ready() -> void:
 
 	get_tree().root.content_scale_factor = SettingsManager.ui_scale
 
+	# Alle Labels initial einmal in der aktuellen Sprache befüllen
+	_refresh_translated_labels()
+
 
 # =============================================================================
 # ── INITIALISIERUNG DER TABS ─────────────────────────────────────────────────
@@ -260,6 +263,23 @@ func _refresh_translated_labels() -> void:
 	set_tab_title(1, GameState.T("settings.tab.audio"))
 	set_tab_title(2, GameState.T("settings.tab.ui"))
 	set_tab_title(3, GameState.T("settings.tab.controls"))
+	
+	# Zeilen-Labels im Gameplay-Tab
+	if is_instance_valid(lbl_autosave):
+		lbl_autosave.text = GameState.T("settings.gameplay.autosave")
+	if is_instance_valid(lbl_ff):
+		lbl_ff.text = GameState.T("settings.gameplay.ff_speed")
+		
+	# Zeilen-Labels im Audio-Tab
+	if is_instance_valid(lbl_master):
+		lbl_master.text = GameState.T("settings.audio.master")
+	if is_instance_valid(lbl_bg):
+		lbl_bg.text = GameState.T("settings.audio.music")
+	if is_instance_valid(lbl_menu):
+		lbl_menu.text = GameState.T("settings.audio.menu_music")
+	if is_instance_valid(lbl_sounds):
+		lbl_sounds.text = GameState.T("settings.audio.sound")
+
 	# Zeilen-Labels im Oberfläche-Tab
 	if is_instance_valid(%LabelLanguage):
 		%LabelLanguage.text = GameState.T("settings.ui.language")
@@ -269,6 +289,8 @@ func _refresh_translated_labels() -> void:
 		%LabelToastPos.text = GameState.T("settings.ui.toast_position")
 	if is_instance_valid(%LabelPosHUDBottom):
 		%LabelPosHUDBottom.text = GameState.T("settings.ui.hud_side")
+	if is_instance_valid(lbl_tech):
+		lbl_tech.text = GameState.T("settings.ui.tech_info")
 
 
 

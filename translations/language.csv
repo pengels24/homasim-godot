@@ -312,6 +312,7 @@
 "settings.ui.hud_side.left","Links","Left"
 "settings.ui.hud_side.center","Mitte","Center"
 "settings.ui.hud_side.right","Rechts","Right"
+"settings.ui.tech_info","Technische Infos (FPS, etc.)","Tech Info (FPS, etc.)"
 "settings.controls.coming_soon","Tastenbelegung – kommt in einer der nächsten Versionen.","Key bindings – coming in a future version."
 "settings.controls.group.camera","Kamera-Steuerung","Camera Controls"
 "settings.controls.camera.up","Nach oben","Up"

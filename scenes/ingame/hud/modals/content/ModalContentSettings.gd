@@ -265,20 +265,20 @@ func _refresh_translated_labels() -> void:
 	set_tab_title(3, GameState.T("settings.tab.controls"))
 	
 	# Zeilen-Labels im Gameplay-Tab
-	if is_instance_valid(lbl_autosave):
-		lbl_autosave.text = GameState.T("settings.gameplay.autosave")
-	if is_instance_valid(lbl_ff):
-		lbl_ff.text = GameState.T("settings.gameplay.ff_speed")
+	if is_instance_valid(%LabelAutosave):
+		%LabelAutosave.text = GameState.T("settings.gameplay.autosave")
+	if is_instance_valid(%LabelFastForward):
+		%LabelFastForward.text = GameState.T("settings.gameplay.ff_speed")
 		
 	# Zeilen-Labels im Audio-Tab
-	if is_instance_valid(lbl_master):
-		lbl_master.text = GameState.T("settings.audio.master")
-	if is_instance_valid(lbl_bg):
-		lbl_bg.text = GameState.T("settings.audio.music")
-	if is_instance_valid(lbl_menu):
-		lbl_menu.text = GameState.T("settings.audio.menu_music")
-	if is_instance_valid(lbl_sounds):
-		lbl_sounds.text = GameState.T("settings.audio.sound")
+	if is_instance_valid(%LabelVolMaster):
+		%LabelVolMaster.text = GameState.T("settings.audio.master")
+	if is_instance_valid(%LabelVolBG):
+		%LabelVolBG.text = GameState.T("settings.audio.music")
+	if is_instance_valid(%LabelVolMenu):
+		%LabelVolMenu.text = GameState.T("settings.audio.menu_music")
+	if is_instance_valid(%LabelVolSounds):
+		%LabelVolSounds.text = GameState.T("settings.audio.sound")
 
 	# Zeilen-Labels im Oberfläche-Tab
 	if is_instance_valid(%LabelLanguage):
@@ -289,8 +289,8 @@ func _refresh_translated_labels() -> void:
 		%LabelToastPos.text = GameState.T("settings.ui.toast_position")
 	if is_instance_valid(%LabelPosHUDBottom):
 		%LabelPosHUDBottom.text = GameState.T("settings.ui.hud_side")
-	if is_instance_valid(lbl_tech):
-		lbl_tech.text = GameState.T("settings.ui.tech_info")
+	if is_instance_valid(%LabelTechInfo):
+		%LabelTechInfo.text = GameState.T("settings.ui.tech_info")
 
 
 
@@ -307,6 +307,8 @@ func _init_keybindings_tab() -> void:
 	
 	if not btn_reset_all_keys.pressed.is_connected(_on_reset_all_keys_pressed):
 		btn_reset_all_keys.pressed.connect(_on_reset_all_keys_pressed)
+	
+	btn_reset_all_keys.text = GameState.T("settings.controls.reset_all")
 	_build_keybindings_ui()
 
 

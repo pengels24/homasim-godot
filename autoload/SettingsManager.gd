@@ -45,7 +45,9 @@ const KEYBINDINGS_CONFIG_PATH := "res://config/keybindings.json"
 
 # ── Werte-Listen (für Slider-Positionen) ──────────────────────────────────────
 const AUTOSAVE_INTERVALS: Array[int]   = [5, 10, 15, 30]
-var autosave_intervals_labels: Array[String] = [GameState.T("settings.gameplay.autosave_interval.off"), GameState.T("settings.gameplay.autosave_interval.on", 5), GameState.T("settings.gameplay.autosave_interval.on", 10), GameState.T("settings.gameplay.autosave_interval.on", 15), GameState.T("settings.gameplay.autosave_interval.on", 30)]
+var autosave_intervals_labels: Array[String]:
+	get:
+		return [GameState.T("settings.gameplay.autosave_interval.off"), GameState.T("settings.gameplay.autosave_interval.on", 5), GameState.T("settings.gameplay.autosave_interval.on", 10), GameState.T("settings.gameplay.autosave_interval.on", 15), GameState.T("settings.gameplay.autosave_interval.on", 30)]
 
 const FF_SPEEDS: Array[float] = [5.0, 10.0, 20.0]
 const FF_SPEEDS_LABELS: Array[String] = ["x5", "x10", "x20"]
@@ -54,10 +56,14 @@ const UI_SCALES: Array[float] = [0.8, 0.9, 1.0, 1.1, 1.2, 1.3]
 const UI_SCALES_LABELS: Array[String] = ["80 %", "90 %", "100 %", "110 %", "120 %", "130 %"]
 
 const UI_TOAST_POS: Array[String] =	["top", "middle", "bottom"]
-var ui_toast_pos_labels: Array[String] = [GameState.T("settings.ui.toast.top"), GameState.T("settings.ui.toast.middle"), GameState.T("settings.ui.toast.bottom")]
+var ui_toast_pos_labels: Array[String]:
+	get:
+		return [GameState.T("settings.ui.toast.top"), GameState.T("settings.ui.toast.middle"), GameState.T("settings.ui.toast.bottom")]
 
 const UI_HUDBOTTOM_POS: Array[String] = ["left", "center", "right"]
-var ui_hudbottom_pos_labels: Array[String] = [GameState.T("settings.ui.hud_side.left"), 	GameState.T("settings.ui.hud_side.center"), GameState.T("settings.ui.hud_side.right")]
+var ui_hudbottom_pos_labels: Array[String]:
+	get:
+		return [GameState.T("settings.ui.hud_side.left"), GameState.T("settings.ui.hud_side.center"), GameState.T("settings.ui.hud_side.right")]
 
 const LANGUAGES: Array[String] = ["de", "en"]
 const LANGUAGES_LABELS: Array[String] = ["Deutsch", "English"]

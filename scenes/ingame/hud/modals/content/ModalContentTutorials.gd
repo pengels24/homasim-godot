@@ -94,4 +94,5 @@ func _on_item_selected(index: int) -> void:
 func _clear_display() -> void:
 	title_label.text = GameState.T("ui.tutorial.empty", "Noch keine Einträge freigeschaltet.")
 	desc_label.text = ""
-	texture_rect.hide()
+	texture_rect.hide()
+

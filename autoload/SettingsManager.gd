@@ -26,6 +26,7 @@ var ui_scale: float  = 1.0       # 0.75 / 1.0 / 1.25 / 1.5
 var toast_position: String = "bottom"  # "top" / "middle" / "bottom"
 var hud_side: String = "center"    # "left" / "center" / "right"
 var show_tech_info: bool = false   # Ingame Performance Overlay
+var tutorial_tips: bool = true     # Tutorial-Tipps im Spiel anzeigen
 var language: String = "de"        # "de" / "en" (erweiterbar)
 var dont_show_disclaimer: bool = false
 
@@ -101,6 +102,7 @@ func save() -> void:
 	cfg.set_value("ui", "toast_position", toast_position)
 	cfg.set_value("ui", "hud_side", hud_side)
 	cfg.set_value("ui", "show_tech_info", show_tech_info)
+	cfg.set_value("ui", "tutorial_tips", tutorial_tips)
 	cfg.set_value("ui", "language", language)
 	cfg.set_value("session", "last_profile_id", last_profile_id)
 	
@@ -136,6 +138,7 @@ func _load() -> void:
 	toast_position = cfg.get_value("ui", "toast_position", "bottom")
 	hud_side = cfg.get_value("ui", "hud_side", "center")
 	show_tech_info = cfg.get_value("ui", "show_tech_info", false)
+	tutorial_tips = cfg.get_value("ui", "tutorial_tips", true)
 	language = cfg.get_value("ui", "language", "de")
 	TranslationServer.set_locale(language)
 	last_profile_id = cfg.get_value("session",  "last_profile_id",           last_profile_id)

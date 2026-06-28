@@ -24,6 +24,9 @@ var _game_paused: bool = true
 var _game_speed: float = 1.0
 var _time_accum: float = 0.0
 
+var _ff_tip_shown: bool = false
+var _ff_used: bool = false
+
 
 # =============================================================================
 func _ready() -> void:
@@ -78,6 +81,7 @@ func resume() -> void:
 
 # =============================================================================
 func fast_forward(ff_speed: float) -> void:
+  _ff_used = true
   _game_paused = false
   _game_speed = ff_speed
   get_tree().paused = false # <--- NEU: Spielwelt läuft weiter (schneller)
@@ -127,6 +131,11 @@ func _tick_game_clock(delta: float) -> void:
 
   _update_time_ui()
   sig_minute_passed.emit(get_game_time())
+
+  if not _ff_tip_shown and not _ff_used and _game_hour == 6 and _game_minute == 15 and SettingsManager.tutorial_tips:
+      if TutorialManager:
+          TutorialManager.trigger("tip_fast_forward")
+      _ff_tip_shown = true
 
 
 # =============================================================================

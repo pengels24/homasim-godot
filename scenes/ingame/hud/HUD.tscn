@@ -475,6 +475,7 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 10
 
 [node name="Pause" type="Button" parent="TopBar/MarginContainer/HBoxContainer/Button/MarginContainer" unique_id=1024382007]
+focus_mode = 0
 unique_name_in_owner = true
 modulate = Color(0.9411765, 0.7294118, 0.6392157, 1)
 custom_minimum_size = Vector2(24, 0)
@@ -504,6 +505,7 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 10
 
 [node name="Play" type="Button" parent="TopBar/MarginContainer/HBoxContainer/Button2/MarginContainer" unique_id=1527988184]
+focus_mode = 0
 unique_name_in_owner = true
 modulate = Color(0.9411765, 0.7294118, 0.6392157, 1)
 custom_minimum_size = Vector2(24, 0)
@@ -532,6 +534,7 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 10
 
 [node name="Forward" type="Button" parent="TopBar/MarginContainer/HBoxContainer/Button3/MarginContainer" unique_id=164350172]
+focus_mode = 0
 unique_name_in_owner = true
 modulate = Color(0.9411765, 0.7294118, 0.6392157, 1)
 custom_minimum_size = Vector2(24, 0)

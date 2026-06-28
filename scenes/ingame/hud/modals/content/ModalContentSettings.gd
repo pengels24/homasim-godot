@@ -15,6 +15,10 @@ const KEYBINDING_ROW = preload("res://scenes/ingame/hud/modals/content/Keybindin
 @onready var btn_ff_right: Button = %ButtonFastForwardRight
 @onready var lbl_ff: Label        = %LabelFastForwardValue
 
+@onready var btn_tutorial_left: Button  = %ButtonTutorialTipsLeft
+@onready var btn_tutorial_right: Button = %ButtonTutorialTipsRight
+@onready var lbl_tutorial: Label        = %LabelTutorialTipsValue
+
 # -- AUDIO --
 @onready var slider_master: HSlider = %HSliderVolMaster
 @onready var lbl_master: Label      = %LabelVolMasterValue
@@ -80,6 +84,10 @@ func _init_gameplay_tab() -> void:
 		SettingsManager.FF_SPEEDS_LABELS,
 		SettingsManager.FF_SPEEDS,
 		SettingsManager.ff_speed, _on_ff_changed)
+
+	_setup_selector("tutorial", btn_tutorial_left, btn_tutorial_right, lbl_tutorial,
+		[GameState.T("label.off"), GameState.T("label.on")], [false, true],
+		SettingsManager.tutorial_tips, _on_tutorial_tips_changed)
 
 
 # =============================================================================
@@ -198,6 +206,12 @@ func _on_ff_changed(val: float) -> void:
 
 
 # =============================================================================
+func _on_tutorial_tips_changed(val: bool) -> void:
+	SettingsManager.tutorial_tips = val
+	SettingsManager.save()
+
+
+# =============================================================================
 func _on_master_vol_changed(val: float) -> void:
 	SettingsManager.master_volume = val
 	SettingsManager.save()
@@ -269,6 +283,8 @@ func _refresh_translated_labels() -> void:
 		%LabelAutosave.text = GameState.T("settings.gameplay.autosave")
 	if is_instance_valid(%LabelFastForward):
 		%LabelFastForward.text = GameState.T("settings.gameplay.ff_speed")
+	if is_instance_valid(%LabelTutorialTips):
+		%LabelTutorialTips.text = GameState.T("settings.gameplay.tutorial_tips")
 		
 	# Zeilen-Labels im Audio-Tab
 	if is_instance_valid(%LabelVolMaster):

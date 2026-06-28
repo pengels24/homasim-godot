@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scenes/ingame/hud/modals/content/ModalContentTutorials.gd" id="1_scpt"]
 [ext_resource type="FontFile" uid="uid://bs3xl562plyi2" path="res://assets/fonts/Jersey25-Regular.ttf" id="2_font"]
 
-[node name="ModalContentTutorials" type="HBoxContainer"]
+[node name="ModalContentTutorials" type="VBoxContainer"]
 custom_minimum_size = Vector2(1200, 600)
 anchors_preset = 15
 anchor_right = 1.0
@@ -13,7 +13,18 @@ grow_vertical = 2
 theme_override_constants/separation = 20
 script = ExtResource("1_scpt")
 
-[node name="LeftPanel" type="PanelContainer" parent="."]
+[node name="TabBar" type="HBoxContainer" parent="MainHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="MainHBox" type="HBoxContainer" parent="MainHBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="LeftPanel" type="PanelContainer" parent="MainHBox"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 theme_type_variation = &"InnerPanel"
@@ -30,7 +41,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="RightPanel" type="PanelContainer" parent="."]
+[node name="RightPanel" type="PanelContainer" parent="MainHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"InnerPanel"
@@ -60,9 +71,16 @@ layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Desc" type="RichTextLabel" parent="RightPanel/Margin/VBoxContainer"]
-unique_name_in_owner = true
+[node name="ScrollContainer" type="ScrollContainer" parent="MainHBox/RightPanel/Margin/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Desc" type="RichTextLabel" parent="MainHBox/RightPanel/Margin/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+fit_content = true
 theme_type_variation = &"TutorialDesc"
 text = "Tutorial content goes here..."

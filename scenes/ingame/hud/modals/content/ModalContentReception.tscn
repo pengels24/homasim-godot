@@ -52,6 +52,7 @@ theme_override_constants/scrollbar_h_separation = 5
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_horizontal = 3
 theme_override_constants/separation = 10
 
 [node name="VBCRooms" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1807936734]
@@ -77,6 +78,7 @@ theme_override_constants/scrollbar_h_separation = 5
 [node name="ListRooms" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBCRooms/PanelContainer/ScrollContainer" unique_id=239768574]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_horizontal = 3
 theme_override_constants/separation = 10
 
@@ -113,6 +115,7 @@ theme_override_constants/scrollbar_h_separation = 5
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_horizontal = 3
 theme_override_constants/separation = 10
 
 [node name="VBCCheckout" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=326781189]
@@ -138,6 +141,7 @@ theme_override_constants/scrollbar_h_separation = 5
 [node name="ListCheckout" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBCCheckout/PanelContainer/ScrollContainer" unique_id=1554927487]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="BtnCheckout" type="Button" parent="MarginContainer/HBoxContainer/VBCCheckout" unique_id=620508583]
 unique_name_in_owner = true

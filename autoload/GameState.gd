@@ -431,6 +431,10 @@ func add_exp(amount: int) -> void:
 	selected_hotel["exp"] = current_exp
 	sig_hotel_exp_changed.emit(current_exp, exp_max)
 	sig_hotel_level_changed.emit(current_level)
+	
+	if current_level >= 2 and current_exp >= 30 and TimeManager != null and TimeManager.is_paused() and SettingsManager.tutorial_tips:
+		if TutorialManager:
+			TutorialManager.trigger("tip_130_exp")
 
 @warning_ignore("unused_signal")
 signal sig_room_built(room_id: String)

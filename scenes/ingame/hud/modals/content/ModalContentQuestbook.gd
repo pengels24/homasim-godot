@@ -228,7 +228,7 @@ func _populate_quests() -> void:
 			prog_lbl.theme_type_variation = &"DescLabel"
 			var max_val = t_def.get("target_count", 1)
 			var prog_val = max_val if is_past_rank else (0 if is_future_rank else t_state["progress"])
-			prog_lbl.text = GameState.T("ui.quests.progress", prog_val, max_val)
+			prog_lbl.text = GameState.T("ui.quests.progress", int(prog_val), int(max_val))
 			vbox.add_child(prog_lbl)
 			
 			var reward_lbl = Label.new()

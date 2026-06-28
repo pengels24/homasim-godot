@@ -84,9 +84,11 @@ func trigger(tutorial_id: String) -> void:
 	popup.set_content(data)
 
 # =============================================================================
-func get_unlocked_data() -> Array:
+func get_unlocked_data(category: String = "") -> Array:
 	var result = []
 	for t_id in unlocked_tutorials:
 		if tutorial_registry.has(t_id):
-			result.append(tutorial_registry[t_id])
+			var tut = tutorial_registry[t_id]
+			if category == "" or tut.get("category", "tutorial") == category:
+				result.append(tut)
 	return result

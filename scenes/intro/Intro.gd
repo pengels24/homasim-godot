@@ -1,4 +1,4 @@
-﻿extends Node2D
+extends Node2D
 
 @onready var blocks_node = %Blocks
 @onready var camera = %Camera
@@ -149,7 +149,7 @@ func _play_intro_sequence() -> void:
     if is_skipping: return
     
     # 6. Homasim Logo fade in & out
-        var tw5 = create_tween().set_parallel(true)
+    var tw5 = create_tween().set_parallel(true)
     tw5.tween_property(logo, "modulate:a", 1.0, 1.5)
     tw5.tween_property(lbl_techdemo, "modulate:a", 1.0, 1.5)
     await tw5.finished
@@ -158,7 +158,7 @@ func _play_intro_sequence() -> void:
     await get_tree().create_timer(2.0).timeout
     if is_skipping: return
     
-        var tw6 = create_tween().set_parallel(true)
+    var tw6 = create_tween().set_parallel(true)
     tw6.tween_property(logo, "modulate:a", 0.0, 1.0)
     tw6.tween_property(lbl_techdemo, "modulate:a", 0.0, 1.0)
     await tw6.finished

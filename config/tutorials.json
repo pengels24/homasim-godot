@@ -1,52 +1,64 @@
 {
-  "tutorials": [
-    {
-      "id": "welcome",
-      "title_key": "tutorial.welcome.title",
-      "desc_key": "tutorial.welcome.desc",
-      "image": "res://assets/images/tutorials/tutorial_build_mode.png"
-    },
-    {
-      "id": "build_mode",
-      "title_key": "tutorial.build_mode.title",
-      "desc_key": "tutorial.build_mode.desc",
-      "image": "res://assets/images/tutorials/tutorial_build_mode.png"
-    },
-    {
-      "id": "tech_tree",
-      "title_key": "tutorial.tech_tree.title",
-      "desc_key": "tutorial.tech_tree.desc",
-      "image": "res://assets/images/tutorials/tutorial_tech_tree.png"
-    },
-    {
-      "id": "staff",
-      "title_key": "tutorial.staff.title",
-      "desc_key": "tutorial.staff.desc",
-      "image": "res://assets/images/tutorials/tutorial_staff.png"
-    },
-    {
-      "id": "quest_book",
-      "title_key": "tutorial.questbook.title",
-      "desc_key": "tutorial.questbook.desc",
-      "image": "res://assets/images/tutorials/tutorial_questbook.png"
-    },
-    {
-      "id": "reception",
-      "title_key": "tutorial.reception.title",
-      "desc_key": "tutorial.reception.desc",
-      "image": "res://assets/images/tutorials/tutorial_build_mode.png"
-    },
-    {
-      "id": "guest_list",
-      "title_key": "tutorial.guest_list.title",
-      "desc_key": "tutorial.guest_list.desc",
-      "image": "res://assets/images/tutorials/tutorial_build_mode.png"
-    },
-    {
-      "id": "room_list",
-      "title_key": "tutorial.room_list.title",
-      "desc_key": "tutorial.room_list.desc",
-      "image": "res://assets/images/tutorials/tutorial_build_mode.png"
-    }
-  ]
+    "tutorials": [
+        {
+            "id": "welcome",
+            "title_key": "tutorial.welcome.title",
+            "desc_key": "tutorial.welcome.desc",
+            "image": "res://assets/images/tutorials/tutorial_build_mode.png"
+        },
+        {
+            "id": "build_mode",
+            "title_key": "tutorial.build_mode.title",
+            "desc_key": "tutorial.build_mode.desc",
+            "image": "res://assets/images/tutorials/tutorial_build_mode.png"
+        },
+        {
+            "id": "tech_tree",
+            "title_key": "tutorial.tech_tree.title",
+            "desc_key": "tutorial.tech_tree.desc",
+            "image": "res://assets/images/tutorials/tutorial_tech_tree.png"
+        },
+        {
+            "id": "staff",
+            "title_key": "tutorial.staff.title",
+            "desc_key": "tutorial.staff.desc",
+            "image": "res://assets/images/tutorials/tutorial_staff.png"
+        },
+        {
+            "id": "quest_book",
+            "title_key": "tutorial.questbook.title",
+            "desc_key": "tutorial.questbook.desc",
+            "image": "res://assets/images/tutorials/tutorial_questbook.png"
+        },
+        {
+            "id": "reception",
+            "title_key": "tutorial.reception.title",
+            "desc_key": "tutorial.reception.desc",
+            "image": "res://assets/images/tutorials/tutorial_build_mode.png"
+        },
+        {
+            "id": "guest_list",
+            "title_key": "tutorial.guest_list.title",
+            "desc_key": "tutorial.guest_list.desc",
+            "image": "res://assets/images/tutorials/tutorial_build_mode.png"
+        },
+        {
+            "id": "room_list",
+            "title_key": "tutorial.room_list.title",
+            "desc_key": "tutorial.room_list.desc",
+            "image": "res://assets/images/tutorials/tutorial_build_mode.png"
+        },
+        {
+            "id": "tip_130_exp",
+            "category": "tipps",
+            "title_key": "tutorial.tip_130_exp.title",
+            "desc_key": "tutorial.tip_130_exp.desc"
+        },
+        {
+            "id": "tip_fast_forward",
+            "category": "tipps",
+            "title_key": "tutorial.tip_fast_forward.title",
+            "desc_key": "tutorial.tip_fast_forward.desc"
+        }
+    ]
 }

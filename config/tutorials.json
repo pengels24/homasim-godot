@@ -1,6 +1,12 @@
 {
   "tutorials": [
     {
+      "id": "welcome",
+      "title_key": "tutorial.welcome.title",
+      "desc_key": "tutorial.welcome.desc",
+      "image": "res://assets/images/tutorials/tutorial_build_mode.png"
+    },
+    {
       "id": "build_mode",
       "title_key": "tutorial.build_mode.title",
       "desc_key": "tutorial.build_mode.desc",

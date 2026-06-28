@@ -59,6 +59,7 @@ func _do_fade_in() -> void:
 	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tween.tween_property(fade_rect, "modulate:a", 0.0, 1.0).set_trans(Tween.TRANS_SINE)
 	tween.tween_callback(fade_rect.queue_free)
+	tween.tween_callback(func(): TutorialManager.trigger("welcome"))
 
 # =============================================================================
 func _start_map() -> void:

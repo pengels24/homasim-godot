@@ -827,7 +827,7 @@
 "ui.disclaimer.dont_show","Beim nächsten Mal nicht mehr anzeigen","Do not show this again"
 "ui.disclaimer.ok","Verstanden!","Got it!"
 "tutorial.welcome.title","Willkommen","Welcome"
-"tutorial.welcome.desc","Willkommen in deinem neuen Hotel! Hier ein kurzer Überblick:`nOben (TopHUD): Deine wichtigsten Laufdaten wie Finanzen und Gäste.`nUnten rechts: Die Steuerung für die Musik.`nUnten mittig (BottomHUD): Die zentralen Hauptfunktionen (Bauen, Personal, etc.).`nUnten links: Der Ansichtsmerker zum Speichern und Laden von Kamerapositionen.","Welcome to your new hotel! Here is a brief overview:`nTop (TopHUD): Your key running data like finances and guests.`nBottom right: The music controls.`nBottom center (BottomHUD): The main functions (Building, Staff, etc.).`nBottom left: The view indicator to save and load camera positions."
+"tutorial.welcome.desc","Willkommen in deinem neuen Hotel! Hier ein kurzer Überblick:\nOben (TopHUD): Deine wichtigsten Laufdaten wie Finanzen und Gäste.\nUnten rechts: Die Steuerung für die Musik.\nUnten mittig (BottomHUD): Die zentralen Hauptfunktionen (Bauen, Personal, etc.).\nUnten links: Der Ansichtsmerker zum Speichern und Laden von Kamerapositionen.","Welcome to your new hotel! Here is a brief overview:\nTop (TopHUD): Your key running data like finances and guests.\nBottom right: The music controls.\nBottom center (BottomHUD): The main functions (Building, Staff, etc.).\nBottom left: The view indicator to save and load camera positions."
 
 "ingame.quit.message","Bist du sicher, dass du das Spiel verlassen möchtest?","Are you sure you want to leave the game?"
 "ingame.quit.cancel","Abbrechen","Cancel"

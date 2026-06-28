@@ -56,6 +56,9 @@ func reset_all() -> void:
 		SaveManager.update_hotel(GameState.active_hotel_id, GameState.selected_hotel)
 
 
+var _popup_queue: Array = []
+var _is_popup_active: bool = false
+
 # =============================================================================
 func trigger(tutorial_id: String) -> void:
 	if not tutorial_registry.has(tutorial_id):
@@ -74,15 +77,30 @@ func trigger(tutorial_id: String) -> void:
 		
 	sig_tutorial_unlocked.emit(tutorial_id)
 	
-	# Trigger UI Popup
 	var data = tutorial_registry[tutorial_id]
 	sig_tutorial_triggered.emit(data)
 	
+	if _is_popup_active:
+		_popup_queue.append(data)
+	else:
+		_show_popup(data)
+
+func _show_popup(data: Dictionary) -> void:
+	_is_popup_active = true
 	var popup_scene = load("res://scenes/ingame/hud/TutorialPopup.tscn")
 	var popup = popup_scene.instantiate()
 	get_tree().current_scene.add_child(popup)
 	popup.set_content(data)
+	popup.tree_exited.connect(_on_popup_closed)
 
+func _on_popup_closed() -> void:
+	if _popup_queue.size() > 0:
+		var next_data = _popup_queue.pop_front()
+		# We use call_deferred to avoid instantiating while the previous is still in tree_exited
+		call_deferred("_show_popup", next_data)
+	else:
+		_is_popup_active = false
+		
 # =============================================================================
 func get_unlocked_data(category: String = "") -> Array:
 	var result = []

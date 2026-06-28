@@ -59,6 +59,62 @@
             "category": "tipps",
             "title_key": "tutorial.tip_fast_forward.title",
             "desc_key": "tutorial.tip_fast_forward.desc"
+        },
+        {
+            "id": "guest_single",
+            "category": "codex",
+            "title_key": "codex.guest_single.title",
+            "desc_key": "codex.guest_single.desc",
+            "image": "res://assets/icons/guests/user.svg"
+        },
+        {
+            "id": "guest_couple",
+            "category": "codex",
+            "title_key": "codex.guest_couple.title",
+            "desc_key": "codex.guest_couple.desc",
+            "image": "res://assets/icons/guests/users.svg"
+        },
+        {
+            "id": "guest_business",
+            "category": "codex",
+            "title_key": "codex.guest_business.title",
+            "desc_key": "codex.guest_business.desc",
+            "image": "res://assets/icons/guests/briefcase.svg"
+        },
+        {
+            "id": "guest_family",
+            "category": "codex",
+            "title_key": "codex.guest_family.title",
+            "desc_key": "codex.guest_family.desc",
+            "image": "res://assets/icons/guests/van.svg"
+        },
+        {
+            "id": "guest_budget",
+            "category": "codex",
+            "title_key": "codex.guest_budget.title",
+            "desc_key": "codex.guest_budget.desc",
+            "image": "res://assets/icons/guests/wallet-minimal.svg"
+        },
+        {
+            "id": "guest_nomad",
+            "category": "codex",
+            "title_key": "codex.guest_nomad.title",
+            "desc_key": "codex.guest_nomad.desc",
+            "image": "res://assets/icons/guests/laptop-minimal.svg"
+        },
+        {
+            "id": "guest_event",
+            "category": "codex",
+            "title_key": "codex.guest_event.title",
+            "desc_key": "codex.guest_event.desc",
+            "image": "res://assets/icons/guests/sunset.svg"
+        },
+        {
+            "id": "guest_luxury",
+            "category": "codex",
+            "title_key": "codex.guest_luxury.title",
+            "desc_key": "codex.guest_luxury.desc",
+            "image": "res://assets/icons/guests/user-star.svg"
         }
     ]
 }

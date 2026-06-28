@@ -98,12 +98,14 @@ func _on_item_selected(index: int) -> void:
 		
 	var i = 0
 	for c in item_list.get_children():
+		if c.is_queued_for_deletion():
+			continue
 		if c is Button:
 			if i == index:
 				_set_btn_style(c, SB_BLUE, SB_BLUE_HOVER, SB_BLUE_PRESSED)
 			else:
 				_set_btn_style(c, SB_DARK, SB_DARK_HOVER, SB_DARK_PRESSED)
-		i += 1
+			i += 1
 
 func _clear_display() -> void:
 	title_label.text = GameState.T("ui.tutorial.empty", "Noch keine Einträge freigeschaltet.")

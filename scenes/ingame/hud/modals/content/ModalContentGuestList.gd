@@ -152,7 +152,23 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 				goal_text = GameState.T("guest.tooltip.room")
 		elif state == 3: # IN_POI
 			var poi_id = actor.get("_current_poi_id")
-			goal_text = "Aktivität" if poi_id != "" else "POI"
+			if poi_id != "":
+				var poi_name = poi_id.capitalize()
+				if actor.has_method("_get_poi_def"):
+					var def = actor.call("_get_poi_def", poi_id)
+					if typeof(def) == TYPE_DICTIONARY and def.has("name"):
+						poi_name = GameState.T(def.get("name"))
+				
+				var room_key = ""
+				if actor.has_method("_get_poi_room_id"):
+					room_key = actor.call("_get_poi_room_id", poi_id)
+					
+				if room_key != "" and room_key != "null":
+					goal_text = "in %s %s" % [poi_name, room_key]
+				else:
+					goal_text = "in %s" % poi_name
+			else:
+				goal_text = "POI"
 		elif state == 4: # AWAITING_CHECKOUT
 			goal_text = GameState.T("guest.tooltip.reception")
 		elif state == 1: # WALKING
@@ -240,7 +256,25 @@ func _on_guest_selected(party: GuestParty, member: GuestMember, btn: Button) -> 
 		var goal_text = "---"
 		var state = _selected_guest.get("current_state")
 		if state == 2: goal_text = GameState.T("guest.tooltip.room")
-		elif state == 3: goal_text = "Aktivität"
+		elif state == 3:
+			var poi_id = _selected_guest.get("_current_poi_id")
+			if poi_id != "":
+				var poi_name = poi_id.capitalize()
+				if _selected_guest.has_method("_get_poi_def"):
+					var def = _selected_guest.call("_get_poi_def", poi_id)
+					if typeof(def) == TYPE_DICTIONARY and def.has("name"):
+						poi_name = GameState.T(def.get("name"))
+				
+				var room_key = ""
+				if _selected_guest.has_method("_get_poi_room_id"):
+					room_key = _selected_guest.call("_get_poi_room_id", poi_id)
+					
+				if room_key != "" and room_key != "null":
+					goal_text = "in %s %s" % [poi_name, room_key]
+				else:
+					goal_text = "in %s" % poi_name
+			else:
+				goal_text = "Aktivität"
 		elif state == 4: goal_text = GameState.T("guest.tooltip.reception")
 		elif state == 1: goal_text = GameState.T("guest.tooltip.walking_room").replace(" (Zimmer)", "")
 		elif state == 5: goal_text = GameState.T("guest.tooltip.leaving")
@@ -292,7 +326,23 @@ func _refresh_live_data() -> void:
 					goal_text = GameState.T("guest.tooltip.room")
 			elif state == 3: # IN_POI
 				var poi_id = actor.get("_current_poi_id")
-				goal_text = "Aktivität" if poi_id != "" else "POI"
+				if poi_id != "":
+					var poi_name = poi_id.capitalize()
+					if actor.has_method("_get_poi_def"):
+						var def = actor.call("_get_poi_def", poi_id)
+						if typeof(def) == TYPE_DICTIONARY and def.has("name"):
+							poi_name = GameState.T(def.get("name"))
+					
+					var room_key = ""
+					if actor.has_method("_get_poi_room_id"):
+						room_key = actor.call("_get_poi_room_id", poi_id)
+						
+					if room_key != "" and room_key != "null":
+						goal_text = "in %s %s" % [poi_name, room_key]
+					else:
+						goal_text = "in %s" % poi_name
+				else:
+					goal_text = "POI"
 			elif state == 4: # AWAITING_CHECKOUT
 				goal_text = GameState.T("guest.tooltip.reception")
 			elif state == 1: # WALKING

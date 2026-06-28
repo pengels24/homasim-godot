@@ -127,17 +127,12 @@ func tile_to_world(tile_coord: Vector2i) -> Vector2:
 func get_path_between_tiles(start_tile: Vector2i, end_tile: Vector2i) -> Array[Vector2i]:
 	if not astar.is_in_boundsv(start_tile) or not astar.is_in_boundsv(end_tile):
 		return []
-	if astar.is_point_solid(start_tile):
-		var val = _occ[start_tile.y * _occ_w + start_tile.x]
-		print("ASTAR FAILED: Start tile ", start_tile, " is SOLID! (occ val: ", val, ")")
-	if astar.is_point_solid(end_tile):
-		var val = _occ[end_tile.y * _occ_w + end_tile.x]
-		print("ASTAR FAILED: End tile ", end_tile, " is SOLID! (occ val: ", val, ")")
+		
+	# Kein Spam im Debug-Log: Leere Pfade werden ohnehin von den Aufrufern abgefangen!
+	if astar.is_point_solid(start_tile) or astar.is_point_solid(end_tile):
+		return []
+		
 	var path = astar.get_id_path(start_tile, end_tile)
-	for tile in path:
-		if astar.is_point_solid(tile):
-			var val = _occ[tile.y * _occ_w + tile.x]
-			print("CRITICAL: ASTAR RETURNED SOLID TILE ", tile, " with occ ", val)
 	return path
 
 

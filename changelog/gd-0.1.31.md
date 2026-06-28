@@ -1,22 +1,19 @@
-# Changelog v0.1.31gd
-Datum: 2026-06-28
+## Version: 0.1.31
+**Datum: 2026-06-28**
 
-## Features & Verbesserungen
-- **Neues Interaktives Handbuch**: Das Tutorial-System wurde massiv überarbeitet! Es gibt nun ein dreiteiliges Tab-Layout für Tutorials, Tipps und den Codex. So hast du alle wichtigen Infos zur Hotel-Leitung auf einen Blick.
-- **Smarte Gameplay-Tipps**: Das Spiel denkt jetzt mit und gibt dir an strategisch sinnvollen Punkten Hinweise:
-  - **EXP-Cap Warnung**: Erreichst du in der Pause das Bau-EXP-Limit von 130 Punkten, erinnert dich das Spiel freundlich daran, den Hotelbetrieb zu starten, um weiter zu leveln.
-  - **Schnellvorlauf**: Verstreicht die morgendliche Zeit (bis 06:15 Uhr) ungenutzt im Schneckentempo, ploppt der Tipp auf, dass man mit der "Vorlauf"-Taste auch mal Gas geben kann.
-- **Tipps in den Settings**: Alle Gameplay-Tipps lassen sich auf Wunsch im Gameplay-Tab der Einstellungen abschalten.
-- **Game-Balancing (Gäste)**: Der Check-in wurde entzerrt. Gäste treffen jetzt verlässlicher in drei großen Schwüngen am Tag ein (08:00, 12:00 und 16:00 Uhr).
-- **UI-Polishing an der Rezeption**: Die leere Liste der abreisenden Gäste ("Keine abreisenden Gäste") sitzt nun endlich perfekt zentriert in ihrer Spalte.
+### Features & Verbesserungen
 
-## Bugfixes
-- **Doppelter Pause-Klick**: Ein nerviger Fehler, bei dem die Leertaste zum Pausieren oft direkt wieder "Play" drückte (weil der Button noch markiert war), wurde durch das Entfernen des Fokus-Status (ocus_mode = 0) der Zeitsteuerungs-Buttons behoben.
-- **Unscharfe Mini-Bilder**: Die Profil- und Raumbilder (Picture-in-Picture) in der Rezeption wurden durch die Umstellung des Texturfilters auf Nearest wieder auf "pixel-perfect" getrimmt.
-- **Abgeschnittene Texte**: Längere Einträge im neuen Codex-Menü scrollen nun ordentlich, anstatt unsichtbar über den Rand hinauszuschießen.
-- **Alte Dateileichen**: Das nicht mehr benötigte SettingsModal aus den Shared-Szenen wurde komplett entfernt und die letzten Reste in das neue ModalContentSettings migriert.
-- **Encoding-Fehler behoben**: Ein versteckter Unicode-Fehler (verursacht durch deutsche Umlaute in einer Datei), der im Hintergrund zu "Byte 67" Parse Errors in Godot führte, wurde sauber auf UTF-8 umgestellt und eliminiert.
+- **GÃ¤steliste (F2)**: Der Aufenthaltsort von GÃ¤sten, die sich gerade in einer AktivitÃ¤t befinden, wird nun detaillierter angezeigt (z.B. "in Bar/Lounge B0001" statt nur "AktivitÃ¤t" oder "POI").
+- **POI-Tooltips**: Beim Hovern Ã¼ber einen POI (z.B. Bar) wird nun die korrekte Anzahl der anwesenden GÃ¤ste sowie deren Namen aufgelistet. Der Bug, dass der ZÃ¤hler trotz anwesender GÃ¤ste auf 0 blieb, wurde behoben.
+- **Forschung & Technologie (F5)**: Bereits freigeschaltete Technologien zeigen in ihrem Tooltip nun Ã¼bersichtlich den Text "- Bereits erforscht -" an, anstatt weiterhin die (bereits erfÃ¼llten) Kosten und AbhÃ¤ngigkeiten aufzulisten.
 
-## Technische Änderungen
-- **Code-Aufräumarbeiten**: Die alte SettingsModal-Szene (.tscn & .gd) wurde gelöscht. Das Spiel verlässt sich jetzt vollständig auf das neue ModalContentSettings-System innerhalb des StandardModal.
-- Das Aufgabenbuch castet nun Float-Werte zu sauberen Integern, um Kommazahlen beim Quest-Fortschritt (z.B. "5.0") zu vermeiden.
+### Bugfixes
+
+- `CustomTooltip.gd`: Fix fÃ¼r den POI-GÃ¤stezÃ¤hler. Dieser suchte fÃ¤lschlicherweise nach GÃ¤sten, deren Ziel-POI-ID der Raum-ID entsprach. Der Abgleich erfolgt nun korrekt Ã¼ber die ID der Raum-Definition.
+- `ModalContentTechtree.gd`: Fallback fÃ¼r den `- Bereits erforscht -`-String implementiert, um Caching-Probleme der Godot-Ãœbersetzungsengine beim Live-Reload abzufangen.
+
+### Technische Ã„nderungen
+
+- `ModalContentGuestList.gd`: Anpassung der Status-Strings in `_refresh_live_data` und der initialen Listen-Generierung zur dynamischen NamensauflÃ¶sung der POIs.
+- `translations/de.csv`: Neuer ÃœbersetzungsschlÃ¼ssel `ui.techtree.tooltip.already_unlocked` hinzugefÃ¼gt.
+- Agenten-Regelwerk (`AGENTS.md`) bereinigt und von veralteten `NÃ¤chste Schritte`-EintrÃ¤gen befreit, um saubere Folge-Sessions zu gewÃ¤hrleisten.

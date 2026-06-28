@@ -129,7 +129,7 @@ func _apply_build_rewards(def: Dictionary, world_center: Vector2) -> void:
 		if not built_types.has(room_id):
 			built_types.append(room_id)
 			_hotel["built_room_types"] = built_types
-			GameState.add_exp(xp)
+			GameState.add_exp(xp, "Bau: " + room_id + " (IngameBuild)")
 			EffectManager.spawn_exp_text(xp, world_center)
 
 

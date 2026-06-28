@@ -1,841 +1,863 @@
-"keys","de","en"
-"game.title","HO·MA·SIM - Hotel Manager Simulation","HO·MA·SIM - Hotel Manager Simulation"
-"game.textlogo","HO·MA·SIM","HO·MA·SIM"
-"currency.symbol","€","€"
-"dashboard.card.level","LEVEL","LEVEL"
-"dashboard.card.day","TAG","DAY"
-"dashboard.card.guests","GÄSTE","GUESTS"
-"dashboard.card.rep","RUF","REP"
-"dashboard.card.capital","KAPITAL","CAPITAL"
-"none","Keins","None"
-"room","Zimmer","Room"
-"guest","Gast","Guest"
-"satisfaction","Zufriedenheit","Satisfaction"
-"budget","Budget","Budget"
-"status","Status","Status"
-"cleanliness","Sauberkeit","Cleanliness"
-"maintenance","Zustand","Condition"
-"label.night","Nacht","Night"
-"label.nights","Nächte","Nights"
-"label.bed","Bett","Bed"
-"label.beds","Betten","Beds"
-"label.guest","Gast","Guest"
-"label.guests","Gäste","Guests"
-"label.day","Tag","Day"
-"label.days","Tage","Days"
-"label.level_w_value","Level: ###","Level: ###"
-"label.close","Schliessen","Close"
-"label.budget","Budget","Budget"
-"button.cancel","Abbrechen","Cancel"
-"button.buy","Kaufen","Buy"
-"hud.locked","Gesperrt","Locked"
-"roomdef.name.long.unknown","Unbekannt","Unknown"
-"roomdef.name.short.unknown","X","X"
-"roomdef.name.long.bed_standard","Einzelzimmer","Single Room"
-"roomdef.name.short.bed_standard","EZ","SR"
-"roomdef.name.long.bed_double","Doppelzimmer","Double Room"
-"roomdef.name.short.bed_double","DZ","DR"
-"roomdef.name.long.bed_family","Familienzimmer","Family Room"
-"roomdef.name.short.bed_family","FZ","FR"
-"roomdef.name.long.bed_superior","Superiorzimmer","Superior Room"
-"roomdef.name.short.bed_superior","SZ","SR+"
-"roomdef.name.long.corridor","Flur","Corridor"
-"roomdef.name.short.corridor","FL","CO"
-"roomdef.name.long.bathroom","Gäste-WC","Guest WC"
-"roomdef.name.short.bathroom","WC","WC"
-"roomdef.name.long.foundation","Lobby","Lobby"
-"roomdef.name.short.foundation","LB","LB"
-"roomdef.name.long.restaurant","Restaurant","Restaurant"
-"roomdef.name.short.restaurant","RS","RS"
-"roomdef.name.long.bar","Bar/Lounge","Bar/Lounge"
-"roomdef.name.short.bar","BA","BA"
-"roomdef.name.long.fitness","Fitnessstudio","Fitness Studio"
-"roomdef.name.short.fitness","FT","FT"
-"roomdef.name.long.conference","Konferenzraum","Conference Room"
-"roomdef.name.short.conference","KR","CR"
-"roomdef.name.long.kitchen","Küche","Kitchen"
-"roomdef.name.short.kitchen","KU","KT"
-"roomdef.name.long.management","Planungsbüro","Planning Office"
-"roomdef.name.short.management","PB","PO"
-"roomdef.name.long.sidewalk","Gehweg","Sidewalk"
-"roomdef.name.short.sidewalk","GW","SW"
-"roomdef.name.long.hr_office","Personalbüro","HR Office"
-"roomdef.name.short.hr_office","PV","HR"
-"roomdef.tooltip.foundation","Gäste betreten hier das Hotel","Guests enter the hotel here"
-"roomdef.tooltip.management","Generiert täglich Forschungspunkte","Generates research points daily"
-"roomdef.tooltip.hr_office","Ermöglicht das Verwalten von Mitarbeitern","Enables staff management"
-"roomdef.tooltip.kitchen","Voraussetzung für Restaurant und Bar","Required for Restaurant and Bar"
-"roomdef.tooltip.restaurant","Erhöht Gästezufriedenheit","Increases guest satisfaction"
-"roomdef.tooltip.bar","Generiert zusätzliche Einnahmen durch Getränkeverkauf","Generates additional income through drink sales"
-"roomdef.tooltip.fitness","Steigert Attraktivität für Businessgäste","Increases appeal for business guests"
-"roomdef.tooltip.conference","Ermöglicht Tagungsbuchungen","Enables conference bookings"
-"roomdef.tooltip.bathroom","Steigert Gästekomfort","Increases guest comfort"
-"roomdef.tooltip.corridor","Verbindet Zimmer und Bereiche","Connects rooms and areas"
-"room.lobby.name","Lobby","Lobby"
-"room.lobby.desc","Eingangsbereich","Entrance Area"
-"room.type.bar","Bar","Bar"
-"room.type.bed_double","Doppelzimmer","Double Room"
-"room.type.bed_standard","Einzelzimmer","Single Room"
-"room.type.hr_office","Personalbüro","HR Office"
-"room.type.sc_office","Forschungsbüro","Research Office"
-"menu.hero.title","Deine Hotel-Legende beginnt hier","Your Hotel Legend Starts Here"
-"menu.hero.subtitle","Erlebe die ultimative Hotel-Management-Simulation.\nPlane, baue und verwalte dein Imperium.","Experience the ultimate hotel management simulation.\nPlan, build and manage your empire."
-"hud.top.middle.label.hotel","HOTEL","HOTEL"
-"hud.top.middle.label.lvl","LVL","LVL"
-"hud.top.middle.label.capital","KAPITAL","CAPITAL"
-"hud.top.middle.label.exp","EXP","EXP"
-"hud.top.middle.label.rep","Ruf","Rep"
-"hud.top.middle.label.fp","FP","RP"
-"hud.top.right.label.day","Tag","Day"
-"hud.top.right.tooltip.pause","Pause: Spielzeit anhalten","Pause: Stop game time"
-"hud.top.right.tooltip.play","Abspielen: Normale Geschwindigkeit","Play: Normal speed"
-"hud.top.right.tooltip.forward","Vorspulen: Zeit beschleunigen","Fast forward: Speed up time"
-"hud.top.tooltip.hotelname","Dein aktuelles Hotel","Your current hotel"
-"hud.top.tooltip.level","Hotel Level\nSteigt durch gesammelte Erfahrung (EXP).","Hotel Level\nIncreases through collected experience (EXP)."
-"hud.top.tooltip.capital","Kapital\nDein aktuell verfügbares Geld.","Capital\nYour currently available funds."
-"hud.top.tooltip.guests","Gäste (Aktiv | Wartend | Abreisebereit)\nZeigt die Anzahl der Gäste im jeweiligen Status.","Guests (Active | Waiting | Departing)\nShows the number of guests in each status."
-"hud.top.tooltip.day","Aktueller Spieltag\nEin Tag endet um 24:00 Uhr.","Current game day\nA day ends at midnight."
-"hud.top.tooltip.time","Uhrzeit\nZeigt die aktuelle Tageszeit an.","Time\nShows the current time of day."
-"hud.top.tooltip.exp","Erfahrungspunkte (EXP)\nFortschritt bis zum nächsten Hotel-Level.","Experience Points (EXP)\nProgress toward the next hotel level."
-"hud.top.tooltip.rep","Ruf (Reputation)\nSpiegelt die aktuelle Zufriedenheit der Gäste wider.","Reputation\nReflects current guest satisfaction."
-"hud.bottom.build_menu_tt","Baumenü ###","Build Menu ###"
-"hud.bottom.reception_tt","Rezeption ###","Reception ###"
-"hud.bottom.reception_closed_tt","Rezeption geschlossen ###","Reception closed ###"
-"hud.bottom.staff_tt","Personal ###","Staff ###"
-"hud.bottom.tech_tree_tt","Forschung ###","Research ###"
-"hud.bottom.sim_browser_tt","SimBrowser ###","SimBrowser ###"
-"hud.bottom.quest_book_tt","Aufgaben ###","Quests ###"
-"hud.bottom.guest_list_tt","Gästeliste ###","Guest List ###"
-"hud.bottom.room_list_tt","Raumliste ###","Room List ###"
-"hud.bottom.tutorials_tt","Tutorials ###","Tutorials ###"
-"hud.button.reset_view.restore_tt","Ansicht zurücksetzen","Reset View"
-"hud.button.reset_view.restore_toast","Ansicht wurde zurückgesetzt","View has been reset"
-"hud.button.reset_view.save_tt","Ansicht speichern","Save View"
-"hud.button.reset_view.save_toast","Ansicht wurde gespeichert","View has been saved"
-"hud.music.play_stop.tooltip","Musik abspielen / anhalten","Play / Pause Music"
-"hud.music.next.tooltip","Nächster Titel","Next Track"
-"menu.btn.login_register","Login / Register","Login / Register"
-"menu.btn.account_bind","Kontobindung","Account Binding"
-"menu.btn.play","Spiel starten","Start Game"
-"menu.btn.quit","Beenden","Quit"
-"menu.btn.settings","Einstellungen","Settings"
-"menu.btn.logout","Abmelden","Log Out"
-"menu.btn.main_menu","Hauptmenü","Main Menu"
-"menu.btn.manager","Manager wählen","Select Manager"
-"menu.btn.manager_change","Manager wechseln","Change Manager"
-"menu.btn.back","Zurück","Back"
-"dashboard.title","Deine Hotels","Your Hotels"
-"dashboard.status.no_hotels","Noch keine Hotels – leg dein erstes an!","No hotels yet – create your first one!"
-"dashboard.new_hotel.title","Neues Hotel anlegen","Create New Hotel"
-"dashboard.new_hotel.placeholder","bitte Namen eingeben","please enter a name"
-"dashboard.new_hotel.btn.create","Anlegen","Create"
-"dashboard.new_hotel.btn.cancel","Abbrechen","Cancel"
-"dashboard.new_hotel.name.label","Hotelname","Hotel Name"
-"dashboard.new_hotel.grid.section","Startparzelle","Starting Plot"
-"dashboard.new_hotel.grid.label","Eingangsseite:","Entrance Side:"
-"dashboard.new_hotel.dir.top","Oben","Top"
-"dashboard.new_hotel.dir.bottom","Unten","Bottom"
-"dashboard.new_hotel.dir.left","Links","Left"
-"dashboard.new_hotel.dir.right","Rechts","Right"
-"dashboard.new_hotel.error.name_empty","Bitte gib einen Hotelnamen ein.","Please enter a hotel name."
-"dashboard.new_hotel.error.limit_reached","Maximale Anzahl Hotels (5) erreicht.","Maximum number of hotels (5) reached."
-"dashboard.new_hotel.difficulty","Schwierigkeitsgrad","Difficulty"
-"dashboard.new_hotel.diff.easy","Einfach","Easy"
-"dashboard.new_hotel.diff.normal","Standard","Standard"
-"dashboard.new_hotel.diff.hard","Hart","Hard"
-"dashboard.new_hotel.diff.custom","Angepasst","Custom"
-"dashboard.new_hotel.start_money","Startkapital:","Starting Capital:"
-"dashboard.new_hotel.refund","Baukosten-Rückerstattung:","Build Cost Refund:"
-"dashboard.new_hotel.exp","EXP-Boost:","EXP Boost:"
-"dashboard.new_hotel.notice","Einige Settings sind in der TechDemo noch ohne Effekt.","Some settings have no effect in the Tech Demo yet."
-"dashboard.new_hotel.start_plot","Startparzelle","Starting Plot"
-"dashboard.delete_hotel.title","Hotel löschen?","Delete Hotel?"
-"dashboard.delete_hotel.message","Das Hotel und alle Spielstände werden unwiderruflich entfernt.","The hotel and all save files will be permanently deleted."
-"dashboard.delete_hotel.confirm","Löschen","Delete"
-"dashboard.delete_hotel.ack","Wirklich löschen?","Really delete?"
-"dashboard.cancel","Abbrechen","Cancel"
-"hotel_select.title","Deine Hotels","Your Hotels"
-"hotel_select.status.loading","Lade Hotels...","Loading hotels..."
-"hotel_select.status.empty","Keine Hotels gefunden.","No hotels found."
-"hotel_select.btn.select","Hotel auswählen","Select Hotel"
-"hotel.create.title","Neues Hotel gründen","Found a New Hotel"
-"hotel.create.form.label.name","Hotel-Name","Hotel Name"
-"hotel.create.form.placeholder.name","z.B. Grand Hotel","e.g. Grand Hotel"
-"manager.setup.title","Deinen Manager erstellen","Create Your Manager"
-"manager.setup.intro","Bevor es losgeht â wer bist du? Erstelle deinen persönlichen Manager-Charakter.","Before we begin â who are you? Create your personal manager character."
-"manager.setup.label.name","Manager-Name","Manager Name"
-"manager.setup.placeholder.name","z.B. Alexandra Berger","e.g. Alexandra Berger"
-"manager.setup.label.gender","Geschlecht","Gender"
-"manager.setup.gender.m","Männlich","Male"
-"manager.setup.gender.f","Weiblich","Female"
-"manager.setup.gender.d","Divers","Non-binary"
-"manager.setup.label.skin","Hautfarbe","Skin Tone"
-"manager.setup.skin.default","Hell","Light"
-"manager.setup.skin.medium","Mittel","Medium"
-"manager.setup.skin.dark","Dunkel","Dark"
-"manager.setup.label.hair","Haarfarbe","Hair Color"
-"manager.setup.hair.default","Blond","Blonde"
-"manager.setup.hair.brown","Braun","Brown"
-"manager.setup.hair.black","Schwarz","Black"
-"manager.setup.hair.blonde","Hellblond","Light Blonde"
-"manager.setup.hair.red","Rot","Red"
-"manager.setup.hair.grey","Grau","Grey"
-"manager.setup.label.outfit","Outfit","Outfit"
-"manager.setup.outfit.suit_black","Anzug Schwarz","Black Suit"
-"manager.setup.outfit.suit_grey","Anzug Grau","Grey Suit"
-"manager.setup.outfit.casual","Casual","Casual"
-"manager.setup.outfit.uniform","Uniform","Uniform"
-"manager.setup.button.save","Manager erstellen","Create Manager"
-"manager.setup.preview.label","Vorschau","Preview"
-"manager_select.title","Manager wählen","Select Manager"
-"manager_select.empty_slot","Freier Slot","Empty Slot"
-"manager_select.btn.create","Neu erstellen","Create New"
-"manager_select.btn.select","Auswählen","Select"
-"manager_select.delete.ack","Wirklich löschen?","Really delete?"
-"register.character.title","Deinen Manager erstellen","Create Your Manager"
-"register.character.subtitle","Erstelle deinen persönlichen Manager-Charakter.","Create your personal manager character."
-"register.character.field.name","Manager-Name","Manager Name"
-"register.character.label.gender","Geschlecht","Gender"
-"register.character.label.skin","Hautfarbe","Skin Tone"
-"register.character.label.hair","Haarfarbe","Hair Color"
-"register.character.label.outfit","Outfit","Outfit"
-"register.character.label.preview","VORSCHAU","PREVIEW"
-"register.character.gender.m","Männlich","Male"
-"register.character.gender.w","Weiblich","Female"
-"register.character.gender.d","Divers","Non-binary"
-"register.character.skin.hell","Hell","Light"
-"register.character.skin.mittel","Mittel","Medium"
-"register.character.skin.dunkel","Dunkel","Dark"
-"register.character.hair.blond","Blond","Blonde"
-"register.character.hair.braun","Braun","Brown"
-"register.character.hair.schwarz","Schwarz","Black"
-"register.character.hair.hellblond","Hellblond","Light Blonde"
-"register.character.hair.rot","Rot","Red"
-"register.character.hair.grau","Grau","Grey"
-"register.character.outfit.anzug_schwarz","Anzug Schwarz","Black Suit"
-"register.character.outfit.anzug_grau","Anzug Grau","Grey Suit"
-"register.character.outfit.casual","Casual","Casual"
-"register.character.outfit.uniform","Uniform","Uniform"
-"register.character.btn.submit","Manager erstellen","Create Manager"
-"character.edit.title","Charakter bearbeiten","Edit Character"
-"character.edit.btn.save","Änderungen speichern","Save Changes"
-"login.btn.submit","Anmelden","Log In"
-"login.error.data_invalid","Ungültige Login-Daten","Invalid login credentials"
-"register.btn.submit","Account erstellen","Create Account"
-"register.field.username","Benutzername","Username"
-"register.field.email","E-Mail-Adresse","Email Address"
-"register.field.password","Passwort","Password"
-"register.field.password_confirm","Passwort bestätigen","Confirm Password"
-"register.link.login","Bereits registriert? Jetzt anmelden","Already registered? Log in now"
-"register.error.passwords_mismatch","Passwörter stimmen nicht überein.","Passwords do not match."
-"register.error.username_in_use","Benutzername bereits vergeben.","Username already taken."
-"register.verify.title","E-Mail bestätigen","Confirm Email"
-"register.verify.info","Wir haben dir einen 6-stelligen Code per E-Mail geschickt.","We sent you a 6-digit code by email."
-"register.verify.field.code","Bestätigungscode","Confirmation Code"
-"register.verify.btn.submit","Code bestätigen","Confirm Code"
-"register.verify.error.code_invalid","Code ungültig oder abgelaufen.","Code invalid or expired."
-"ingame.btn.help","Hilfe","Help"
-"ingame.btn.build","Bauen","Build"
-"ingame.btn.reception","Rezeption","Reception"
-"ingame.btn.staff","Personal","Staff"
-"ingame.btn.empty","–","–"
-"ingame.btn.research","Forschung","Research"
-"ingame.btn.events","Events","Events"
-"ingame.btn.simbrowser","SIM-Browser","SIM Browser"
-"ingame.btn.settings","Einstellungen","Settings"
-"ingame.btn.reset_view","Ansicht zurücksetzen","Reset View"
-"ingame.ctx.rotate_door","Tür rotieren","Rotate Door"
-"ingame.ctx.move_door","Tür verschieben","Move Door"
-"ingame.ctx.flip_room","Raum drehen","Flip Room"
-"ingame.quit.title","Spiel verlassen?","Leave Game?"
-"ingame.quit.confirm","Ja, verlassen","Yes, leave"
-"ingame.submenu.coming_soon","(kommt mit dem Feature)","(coming with the feature)"
-"modal.pause.title","Pause","Pause"
-"modal.pause.button.continue","Fortsetzen","Continue"
-"modal.pause.button.save","Speichern","Save"
-"modal.pause.button.load","Laden","Load"
-"modal.pause.button.settings","Einstellungen","Settings"
-"modal.pause.button.mainmenu","Hauptmenü","Main Menu"
-"modal.save.title","Spielstand speichern","Save Game"
-"modal.save.subtitle","Manuelle Spielstände","Manual Saves"
-"modal.save.input_label","Name:","Name:"
-"modal.save.input_placeholder","Spielstand benennen...","Name your save..."
-"modal.save.button.save","Spielstand speichern","Save Game"
-"modal.save.slot.empty","Leer","Empty"
-"modal.save.slot.new","Neu","New"
-"modal.save.save_name.empty","Spielstand","Save"
-"modal.load.title","Spielstand laden","Load Game"
-"modal.load.manual.title","Manuelle Spielstände","Manual Saves"
-"modal.load.auto.title","Autosaves","Autosaves"
-"modal.load.button.load","Spielstand laden","Load Game"
-"modal.reception.title","Rezeption","Reception"
-"modal.settings.title","Einstellungen","Settings"
-"saveslots.title","Spielstand laden","Load Game"
-"saveslots.quick.title","Quicksave","Quicksave"
-"saveslots.manual.slot","Slot","Slot"
-"saveslots.auto.slot","Autosave","Autosave"
-"saveslots.empty","Leer","Empty"
-"saveslots.btn.load","Laden","Load"
-"saveslots.btn.delete","Löschen","Delete"
-"saveslots.save.title","Spiel speichern","Save Game"
-"saveslots.save.btn.save","Speichern","Save"
-"saveslots.load.title","Spiel laden","Load Game"
-"saveslots.slot.empty","— Leer —","— Empty —"
-"saveslots.slot.new","Neu","New"
-"saveslots.auto.empty","Noch keine Autosaves vorhanden.","No autosaves yet."
-"settings.title","Einstellungen","Settings"
-"settings.btn.save","Speichern","Save"
-"settings.tab.gameplay","Gameplay","Gameplay"
-"settings.tab.audio","Audio","Audio"
-"settings.tab.ui","Oberfläche","Interface"
-"settings.tab.controls","Steuerung","Controls"
-"settings.discard.title","Ãnderungen verwerfen?","Discard Changes?"
-"settings.discard.message","Die Einstellungen wurden nicht gespeichert.","The settings were not saved."
-"settings.discard.confirm","Verwerfen","Discard"
-"settings.discard.cancel","Weiter bearbeiten","Keep Editing"
-"settings.gameplay.autosave","Autosave","Autosave"
-"settings.gameplay.autosave_interval","Autosave-Intervall","Autosave Interval"
-"settings.gameplay.autosave_interval.off","Aus","Off"
-"settings.gameplay.autosave_interval.on","### Minuten","### Minutes"
-"settings.gameplay.ff_speed","Schnellvorlauf","Fast Forward"
-"settings.audio.master","Gesamtlautstärke","Master Volume"
-"settings.audio.music","Hintergrundmusik","Background Music"
-"settings.audio.menu_music","Menü-Musik","Menu Music"
-"settings.audio.sound","Sound","Sound"
-"settings.ui.language","Sprache","Language"
-"settings.ui.scale","UI-Skalierung","UI Scale"
-"settings.ui.toast_position","Toast-Position","Toast Position"
-"settings.ui.toast.top","Oben","Top"
-"settings.ui.toast.middle","Mitte","Middle"
-"settings.ui.toast.bottom","Unten","Bottom"
-"settings.ui.hud_side","Menüleiste Position","Menu Bar Position"
-"settings.ui.hud_side.left","Links","Left"
-"settings.ui.hud_side.center","Mitte","Center"
-"settings.ui.hud_side.right","Rechts","Right"
-"settings.ui.tech_info","Technische Infos (FPS, etc.)","Tech Info (FPS, etc.)"
-"settings.controls.coming_soon","Tastenbelegung – kommt in einer der nächsten Versionen.","Key bindings – coming in a future version."
-"settings.controls.group.camera","Kamera-Steuerung","Camera Controls"
-"settings.controls.camera.up","Nach oben","Up"
-"settings.controls.camera.down","Nach unten","Down"
-"settings.controls.camera.left","Nach links","Left"
-"settings.controls.camera.right","Nach rechts","Right"
-"settings.controls.camera.zoom_in","Hineinzoomen","Zoom In"
-"settings.controls.camera.zoom_out","Herauszoomen","Zoom Out"
-"settings.controls.camera.reset","Ansicht zentrieren","Center View"
-"settings.controls.group.gameplay","Spielsteuerung","Game Controls"
-"settings.controls.gameplay.pause","Spiel pausieren","Pause Game"
-"settings.controls.gameplay.quicksave","Schnellspeichern","Quick Save"
-"settings.controls.gameplay.quickload","Schnellladen","Quick Load"
-"settings.controls.group.ui","Benutzeroberfläche","User Interface"
-"settings.controls.ui.build","Baumenü","Build Menu"
-"settings.controls.ui.reception","Rezeption","Reception"
-"settings.controls.ui.staff","Personalverwaltung","Staff Management"
-"settings.controls.ui.tech","Forschung & Technologie","Research & Technology"
-"settings.controls.ui.sim_browser","Simulations-Browser","Simulation Browser"
-"settings.controls.ui.quests","Aufgaben","Quests"
-"settings.controls.ui.guest_list","Gästeliste","Guest List"
-"settings.controls.ui.room_list","Raumliste","Room List"
-"settings.controls.ui.tutorial","Hilfe / Tutorials","Help / Tutorials"
-"settings.toast.saved","Einstellungen gespeichert","Settings saved"
-"key.space","Leertaste","Space"
-"key.kp_add","Numpad +","Numpad +"
-"key.kp_subtract","Numpad -","Numpad -"
-"key.up","Pfeil hoch","Arrow Up"
-"key.down","Pfeil runter","Arrow Down"
-"key.left","Pfeil links","Arrow Left"
-"key.right","Pfeil rechts","Arrow Right"
-"key.home","Pos1","Home"
-"key.escape","ESC","ESC"
-"key.equal","=","="
-"key.minus","-","-"
-"key.period",".","."
-"reception.title","REZEPTION & GÄSTE","RECEPTION & GUESTS"
-"reception.list.title.waiting","Wartende Gäste","Waiting Guests"
-"reception.list.title.rooms","Verfügbare Zimmer","Available Rooms"
-"reception.list.title.active","Aktive Gäste","Active Guests"
-"reception.list.title.checkout","Abreisende Gäste","Departing Guests"
-"reception.list.waiting.empty","Keine wartenden Gäste","No waiting guests"
-"reception.list.rooms.empty","Keine freien Zimmer","No available rooms"
-"reception.list.active.empty","Keine aktiven Gäste","No active guests"
-"reception.list.checkout.empty","Keine abreisenden Gäste","No departing guests"
-"reception.btn.decline","Gast ablehnen","Decline Guest"
-"reception.mismatch.tooltip","Dieses Zimmer ist nicht geeignet","This room is not suitable"
-"reception.checkin.success","Check-In erfolgreich!","Check-In successful!"
-"reception.checkout.success","Gast ausgecheckt. Gute Reise!","Guest checked out. Safe travels!"
-"checkin.btn.confirm","Check-In bestätigen","Confirm Check-In"
-"checkin.btn.roll","Aufpreis – Gast fragen","Surcharge – Ask Guest"
-"checkin.btn.other_room","Anderes Zimmer wählen","Choose Different Room"
-"toast.reception.checkin.success","Check-In erfolgreich!","Check-In successful!"
-"toast.reception.open","Rezeption geöffnet – Gäste empfangen (F3)","Reception open – accepting guests (F3)"
-"toast.reception.too_early","Rezeption öffnet erst um 07:00 Uhr","Reception opens at 07:00"
-"toast.reception.no_rooms","Erst Zimmer bauen bevor Gäste empfangen werden können","Build rooms before accepting guests"
-"toast.reception.closed","Die Rezeption ist heute geschlossen.","The reception is closed today."
-"toast.reception.auto_pause","Rezeption automatisch pausiert","Reception automatically paused"
-"toast.reception.force_close","Rezeption geschlossen","Reception closed"
-"toast.reception.guests_arrived","Neue Gäste sind eingetroffen – Rezeption öffnen (F3)","New guests have arrived – open reception (F3)"
-"toast.guest.arrival.single","1 neuer Gast ist eingetroffen","1 new guest has arrived"
-"toast.guest.arrival.multi","### neue Gäste sind eingetroffen","### new guests have arrived"
-"toast.guest.arrival.full","Keine weiteren Gäste – Warteliste voll","No more guests – waiting list full"
-"toast.guest.declined","Gast abgelehnt (### Ruf)","Guest declined (### rep)"
-"toast.surcharge.accepted","Gast akzeptiert! (Würfel: ### – max. ### nötig)","Guest accepted! (Roll: ### – max. ### needed)"
-"toast.surcharge.rejected","Gast lehnt ab. (Würfel: ### – max. ### nötig)","Guest declined. (Roll: ### – max. ### needed)"
-"toast.build.no_money","Nicht genug Kapital!","Not enough capital!"
-"toast.hr.locked","Personalverwaltung benötigt Hotel-Level %d!","Staff management requires hotel level %d!"
-"toast.hr.unlocked","Personalverwaltung freigeschaltet!","Staff management unlocked!"
-"toast.hr.coming_soon","Personalverwaltung – coming soon","Staff Management – coming soon"
-"toast.research.unlocked","Forschungsbüro gebaut! FP sind jetzt aktiv.","Research office built! RP are now active."
-"toast.system.autosave","Spielstand gespeichert","Game saved"
-"toast.system.autosave.error","Speichern fehlgeschlagen","Save failed"
-"toast.quicksave","Spielstand gespeichert","Game saved"
-"toast.quickload.ok","Spielstand geladen","Game loaded"
-"toast.quickload.empty","Kein Quicksave vorhanden","No quicksave available"
-"toast.manualsave","Spielstand gespeichert.","Game saved."
-"toast.manualload.ok","Spielstand geladen.","Game loaded."
-"toast.manualload.empty","Spielstand leer.","Save slot empty."
-"toast.event.day_start","Tag beginnt","Day starts"
-"toast.event.guest_arrival","Neue Gäste treffen ein","New guests arriving"
-"toast.event.day_soft_end","Hotelbetrieb endet für heute","Hotel operations end for today"
-"toast.event.day_hard_end","Tagesabschluss","End of Day"
-"toast.unlockplot.buy.ok","Grundstück erfolgreich gekauft!","Plot purchased successfully!"
-"toast.unlockplot.buy.nok","Fehler! Grundstückskauf fehlgeschlagen.","Error! Plot purchase failed."
-"toast.build.room_placed","### ausgewählt","### selected"
-"toast.techtree.locked","Forschung benötigt Hotel-Level %d!","Research requires hotel level %d!"
-"toast.techtree.unlocked","Freigeschaltet: ###","Unlocked: ###"
-"toast.techtree.failed","Bedingungen nicht erfüllt!","Requirements not met!"
-"toast.quest.completed","Quest abgeschlossen: ###","Quest completed: ###"
-"toast.quest.new","Neue Quest verfügbar: ###","New quest available: ###"
-"toast.quest.reward","Belohnung: ###","Reward: ###"
-"toast.quest.rank_complete","Rang ### abgeschlossen!","Rank ### completed!"
-"toast.quest.rank_reward","Belohnung für Rang ###","Reward for rank ###"
-"label.pays.surcharge","Zahlt Aufpreis – besonders zuvorkommend behandeln!","Pays surcharge – treat with extra care!"
-"tooltip.surcharge","Zahlt Aufpreis","Pays Surcharge"
-"tt.build.room.cost","###\nKosten: *** €","###\nCost: *** €"
-"tt.build.room.locked","###\n🔒 GESPERRT\nBenötigt Hotel-Level ***","###\n🔒 LOCKED\nRequires Hotel Level ***"
-"tt.build.room.locked_tech","###\n🔒 GESPERRT\nBenötigt Forschung","###\n🔒 LOCKED\nRequires Research"
-"tt.build.room.locked_both","###\n🔒 GESPERRT\nBenötigt Level *** und Forschung","###\n🔒 LOCKED\nRequires Level *** and Research"
-"build.isvalidpos.error.collision","Hier steht bereits etwas!","Something is already here!"
-"build.isvalidpos.error.hasneighbor","Muss an bestehende Räume angrenzen!","Must be adjacent to existing rooms!"
-"build.isvalidpos.error.doorcheck","Tür muss zu Flur/Lobby zeigen!","Door must face a corridor or lobby!"
-"build.isvalidpos.error.plot_locked","Du musst dieses Grundstück erst kaufen!","You must purchase this plot first!"
-"build.showroomtooltip.status.occupied","Belegt","Occupied"
-"build.showroomtooltip.status.checkout","Abreisebereit","Checking Out"
-"build.showroomtooltip.status.free","Frei","Free"
-"build.tooltip.max_reached","Bereits gebaut","Already built"
-"build.demolish.label","Abriss","Demolish"
-"build.demolish.tooltip","Abriss-Modus","Demolish Mode"
-"build.demolish.error.foundation","Die Lobby kann nicht abgerissen werden.","The lobby cannot be demolished."
-"build.demolish.error.occupied","Dieser Raum ist belegt und kann nicht abgerissen werden.","This room is occupied and cannot be demolished."
-"build.demolish.error.has_dependents","Zuerst alle angrenzenden Räume entfernen.","Remove all adjacent rooms first."
-"build.demolish.error.server","Server-Fehler beim Abriss.","Server error during demolition."
-"build.demolish.dialog.title","Raum abreißen","Demolish Room"
-"build.demolish.dialog.text","### abreiÃen? Du erhältst *** zurück.","Demolish ###? You will receive *** back."
-"build.demolish.dialog.confirm","Abreißen","Demolish"
-"build.demolish.dialog.cancel","Abbrechen","Cancel"
-"build.demolish.success","### abgerissen. *** erstattet.","### demolished. *** refunded."
-"dialog.confirm.unlockplot.buy.title","Grundstück kaufen","Purchase Plot"
-"dialog.confirm.unlockplot.buy.text","Möchtest du das Grundstück ### für *** kaufen?","Do you want to purchase plot ### for ***?"
-"activitylog.title","Ereignisse","Events"
-"activitylog.msg.nodata","Keine neuen Meldungen...","No new messages..."
-"activitylog.filter.all","Alle","All"
-"activitylog.filter.system","System","System"
-"activitylog.filter.guest","Gäste","Guests"
-"activitylog.filter.build","Bau","Build"
-"activitylog.filter.research","Forschung","Research"
-"log.guest.auto_checkout","Auto-Checkout: ### – Keine Einnahmen (vergessen)","Auto-Checkout: ### – No income (forgotten)"
-"log.reputation.auto_checkout","Vergessener Checkout: ###","Forgotten checkout: ###"
-"log.guest.declined","Gast ### wurde abgelehnt","Guest ### was declined"
-"log.reputation.decline","Gast ### abgelehnt","Guest ### declined"
-"log.reputation.checkin","Check-In","Check-In"
-"log.reputation.checkout","Check-Out","Check-Out"
-"log.guest.arrival","### neue Gäste sind eingetroffen","### new guests have arrived"
-"log.levelup","Level Up! Dein Hotel hat jetzt Level ###","Level Up! Your hotel is now level ###"
-"dayend.title","Tagesabschluss","End of Day"
-"dayend.subtitle","Tag ### abgeschlossen","Day ### completed"
-"dayend.new_day","Willkommen zu Tag ###!","Welcome to Day ###!"
-"dayend.section.finance","Finanzen","Finances"
-"dayend.section.guests","Gäste","Guests"
-"dayend.section.xp","Erfahrung","Experience"
-"dayend.stat.income","Einnahmen","Income"
-"dayend.stat.expenses","Ausgaben","Expenses"
-"dayend.stat.profit","Gewinn / Verlust","Profit / Loss"
-"dayend.stat.checkins","Check-ins","Check-ins"
-"dayend.stat.checkouts","Check-outs","Check-outs"
-"dayend.stat.inhouse","Im Haus","In House"
-"dayend.stat.xp_earned","XP verdient","XP Earned"
-"dayend.stat.level","Level","Level"
-"dayend.stat.departures_tomorrow","Abreisend morgen","Departing Tomorrow"
-"dayend.btn.next_day","Weiter zu Tag ###","Continue to Day ###"
-"dayend.income.rooms","Zimmereinnahmen","Room Income"
-"dayend.income.restaurant","Restaurant","Restaurant"
-"dayend.income.service","Services","Services"
-"dayend.guests.single","Einzelreisende","Solo Travelers"
-"dayend.guests.couple","Paare","Couples"
-"dayend.guests.family","Familien","Families"
-"dayend.xp.rooms","XP aus Vermietung","XP from Rentals"
-"dayend.xp.build","XP aus Bau","XP from Building"
-"dayend.warning.forgotten_checkouts","⚠ ### Gast/Gäste warten noch auf Checkout – Einnahmen ausstehend!","⚠ ### guest(s) still waiting for checkout – income pending!"
-"daystart.title","Heutige Aufgaben","Today's Tasks"
-"daystart.subtitle","Tag ###","Day ###"
-"daystart.pending_checkouts","⚠ ### Gast/Gäste warten auf Checkout","⚠ ### guest(s) waiting for checkout"
-"daystart.auto_checked_out","### Gast/Gäste automatisch ausgecheckt (keine Einnahmen, Ruf-Malus)","### guest(s) auto checked out (no income, reputation penalty)"
-"daystart.btn.ok","Verstanden","Got it"
-"levelup.label","Level Up!","Level Up!"
-"levelup.btn.continue","Weiter","Continue"
-"levelup.unlock.plot_available","Neue Grundstücke verfügbar","New plots available"
-"levelup.unlock.new_roomtypes","Neue Raumtypen freigeschaltet","New room types unlocked"
-"levelup.unlock.more_plots","Weitere Grundstücke kaufbar","More plots available for purchase"
-"levelup.unlock.restaurant","Restaurant baubar","Restaurant can be built"
-"levelup.unlock.research_hint","Büro bauen schaltet das Forschungssystem frei","Building an office unlocks the research system"
-"levelup.unlock.hr_hint","Vertrag mit Personaldienstleister freigeschaltet!","Contract with staffing agency unlocked!"
-"levelup.unlock.no_unlocks","Neue Freischaltungen kommen über den Forschungsbaum","New unlocks come through the research tree"
-"techtree.title","Technologiebaum","Technology Tree"
-"techtree.branch.zimmer","Zimmer & Unterbringung","Rooms & Accommodation"
-"techtree.branch.gastronomie","Gastronomie & Service","Gastronomy & Service"
-"techtree.branch.wellness","Wellness & Freizeit","Wellness & Leisure"
-"techtree.branch.management","Management & Betrieb","Management & Operations"
-"techtree.branch.prestige","Prestige & Extras","Prestige & Extras"
-"techtree.loading","Wird geladen...","Loading..."
-"techtree.error","Fehler beim Laden","Error loading"
-"techtree.level","Stufe","Level"
-"techtree.btn.unlock","Erforschen","Research"
-"techtree.locked.title","Forschung gesperrt","Research Locked"
-"techtree.locked.text","Baue zuerst ein Büro um den Technologiebaum freizuschalten.","Build an office first to unlock the technology tree."
-"techtree.condition.current","aktuell","current"
-"techtree.condition.requires","Benötigt","Requires"
-"techtree.condition.cross_requires","Quer-Voraussetzung","Cross-Requirement"
-"techtree.condition.management","Forschungsbüro vorhanden","Research office present"
-"techtree.confirm.title","Technologie erforschen","Research Technology"
-"techtree.confirm.text","### für *** FP erforschen?","Research ### for *** RP?"
-"techtree.confirm.ok","Erforschen","Research"
-"techtree.confirm.cancel","Abbrechen","Cancel"
-"techtree.node.tooltip.unlock","Klicken zum Erforschen","Click to Research"
-"techtree.gastro.bar.name","Bar","Bar"
-"techtree.gastro.bar.desc","Eine kleine Bar für Gäste die noch nicht müde sind.","A cozy bar for guests who aren't tired yet."
-"techtree.zimmer.z11","Komfort-Grundlagen","Comfort Basics"
-"techtree.zimmer.z12","Familienzimmer","Family Rooms"
-"techtree.zimmer.z13","Superior-Zimmer","Superior Rooms"
-"techtree.zimmer.z14","Premium-Upgrade","Premium Upgrade"
-"techtree.zimmer.z15","Luxus Suite","Luxury Suite"
-"techtree.gastro.g11","Basis-Gastronomie","Basic Gastronomy"
-"techtree.gastro.g12","Erweiterte Gastronomie","Extended Gastronomy"
-"techtree.gastro.g13","Gehobene Küche","Fine Dining"
-"techtree.gastro.g14","Kulinarische Exzellenz","Culinary Excellence"
-"techtree.wellness.w11","Basis-Wellness","Basic Wellness"
-"techtree.wellness.w12","Außenbereich","Outdoor Area"
-"techtree.wellness.w13","Premium-Spa","Premium Spa"
-"techtree.management.m11","Betriebsgrundlagen","Operations Basics"
-"techtree.management.m12","Personalverwaltung","Staff Management"
-"techtree.management.m13","Prozessoptimierung","Process Optimization"
-"techtree.management.m14","Konzern-Management","Corporate Management"
-"techtree.prestige.p11","Veranstaltungen","Events"
-"techtree.prestige.p12","Großveranstaltungen","Large Events"
-"techtree.prestige.p13","Unterhaltung","Entertainment"
-"ui.techtree.researched"," (Erforscht)"," (Researched)"
-"ui.techtree.cost.tt","FP: ### | €: ***","RP: ### | €: ***"
-"quest.single.1.name","Kleine Schritte","Small Steps"
-"quest.single.1.desc","Baue 5 Standard-Zimmer","Build 5 Single Rooms"
-"quest.double.1.name","Doppelter Spaß","Double the Fun"
-"quest.double.1.desc","Baue 5 Doppelzimmer","Build 5 Double Rooms"
-"quest.family.1.name","Familienbande","Family Ties"
-"quest.family.1.desc","Baue 5 Familienzimmer","Build 5 Family Rooms"
-"quest.superior.1.name","Ein Hauch von Luxus","A Touch of Luxury"
-"quest.superior.1.desc","Baue 5 Superior-Zimmer","Build 5 Superior Rooms"
-"quest.single.2.name","Wachstum","Growth"
-"quest.single.2.desc","Baue 10 Standard-Zimmer","Build 10 Single Rooms"
-"quest.double.2.name","Mehr Platz für Zwei","More Room for Two"
-"quest.double.2.desc","Baue 10 Doppelzimmer","Build 10 Double Rooms"
-"quest.family.2.name","Kinderlachen","Children's Laughter"
-"quest.family.2.desc","Baue 10 Familienzimmer","Build 10 Family Rooms"
-"quest.superior.2.name","Premium-Ausbau","Premium Expansion"
-"quest.superior.2.desc","Baue 10 Superior-Zimmer","Build 10 Superior Rooms"
-"quest.single.3.name","Hotel-Imperium","Hotel Empire"
-"quest.single.3.desc","Baue 25 Standard-Zimmer","Build 25 Single Rooms"
-"quest.double.3.name","Doppel-Imperium","Double Empire"
-"quest.double.3.desc","Baue 25 Doppelzimmer","Build 25 Double Rooms"
-"quest.family.3.name","Familien-Paradies","Family Paradise"
-"quest.family.3.desc","Baue 25 Familienzimmer","Build 25 Family Rooms"
-"quest.superior.3.name","Superior-Resort","Superior Resort"
-"quest.superior.3.desc","Baue 25 Superior-Zimmer","Build 25 Superior Rooms"
-"quest.bar.1.name","Bar errichten","Open a Bar"
-"quest.bar.1.desc","Baue 1 Bar","Build 1 Bar"
-"ui.questbook.empty","Aktuell keine Aufgaben verfügbar.","No tasks available right now."
-"ui.questbook.progress","Fortschritt: ### / ***","Progress: ### / ***"
-"ui.questbook.reward","Belohnung: ### FP | *** €","Reward: ### RP | *** €"
-"ui.questbook.claim","Belohnung abholen","Claim Reward"
-"ui.questbook.in_progress","In Bearbeitung...","In Progress..."
-"tutorial.build_mode.title","Bau-Modus","Build Mode"
-"tutorial.build_mode.desc","Klicke auf einen Raum um ihn zu bauen. Manche Räume müssen erst erforscht werden! Mit [R] rotieren, mit [.] Tür verschieben.","Click a room to build it. Some rooms need research first! Use [R] to rotate, [.] to move the door."
-"tutorial.tech_tree.title","Forschung & Technologie","Research & Technology"
-"tutorial.tech_tree.desc","Neue Räume und Upgrades mit Forschungspunkten (FP) freischalten.","Unlock new rooms and upgrades with research points (RP)."
-"tutorial.staff.title","Die Personal-Agentur","The Staffing Agency"
-"tutorial.staff.desc","Stelle Personal ein und kündige es über die Agentur. Jeder Mitarbeiter erledigt Aufgaben automatisch.","Hire and dismiss staff through the agency. Each employee handles tasks automatically."
-"tutorial.questbook.title","Das Aufgabenbuch","The Quest Book"
-"tutorial.questbook.desc","Erfülle Quests für Belohnungen wie EXP, FP und Geld.","Complete quests for rewards like EXP, RP and money."
-"tutorial.reception.title","Die Rezeption","The Reception"
-"tutorial.reception.desc","Check-in wartender Gäste, Abreisen bearbeiten und Statistiken ansehen.","Check in waiting guests, handle departures and view statistics."
-"tutorial.guest_list.title","Die Gästeliste","The Guest List"
-"tutorial.guest_list.desc","Übersicht aller Gäste – Zufriedenheit, Aufenthaltsort und Budget auf einen Blick.","Overview of all guests – satisfaction, location and budget at a glance."
-"tutorial.room_list.title","Die Raumliste","The Room List"
-"tutorial.room_list.desc","Status aller Zimmer: Sauberkeit, Belegung und Zustand.","Status of all rooms: cleanliness, occupancy and condition."
-"ui.tutorial.empty","Noch keine Tutorials freigeschaltet.","No tutorials unlocked yet."
-"staff.role.housekeeping","Housekeeping","Housekeeping"
-"staff.role.maintenance","Haustechnik","Maintenance"
-"staff.role.bartender","Barkeeper","Bartender"
-"staff.skill.cleaning_efficiency","Reinigungstempo","Cleaning Speed"
-"staff.skill.detail_focus","Detailfokus","Attention to Detail"
-"staff.skill.motivation","Motivation","Motivation"
-"staff.skill.repair_knowledge","Reparaturwissen","Repair Knowledge"
-"staff.stat.stress","Stress","Stress"
-"settings.controls.reset_all","Standard wiederherstellen","Restore Defaults"
-"settings.controls.group.build","Baumodus","Build Mode"
-"settings.controls.build.rotate","Raum rotieren","Rotate Room"
-"settings.controls.build.door","Türposition durchschalten","Cycle Door Position"
-"label.on","An","On"
-"label.off","Aus","Off"
-"manager_select.hint.empty","Freier Slot","Empty Slot"
-"manager.level.subtitle","MANAGER · LEVEL %d","MANAGER · LEVEL %d"
-"manager_select.delete.title","Manager löschen?","Delete Manager?"
-"manager_select.delete.text","Alle Hotels dieses Managers werden\nebenfalls entfernt.","All hotels of this manager will\nalso be removed."
-"manager_select.delete.btn_delete","Löschen","Delete"
-"manager_select.delete.btn_cancel","Abbrechen","Cancel"
-"hud.label.paused","### Spiel pausiert ###","### Game Paused ###"
-"bugreporter.tooltip","Bug melden","Report Bug"
-"bugreporter.title","Bug Report senden","Send Bug Report"
-"bugreporter.description.label","Was ist passiert?\n(Ein Screenshot & Systemdaten werden automatisch angehängt)","What happened?\n(A screenshot & system data will be attached automatically)"
-"bugreporter.email.placeholder","Deine E-Mail (Optional fr Rckfragen)","Your Email (Optional for questions)"
-"bugreporter.desc.placeholder","Beschreibe den Fehler...","Describe the bug..."
-"bugreporter.btn.cancel","Abbrechen","Cancel"
-"bugreporter.btn.send","Senden","Send"
-"bugreporter.status.error.empty","Bitte gib eine Beschreibung ein!","Please enter a description!"
-"bugreporter.status.error.webhook","Webhook URL nicht konfiguriert (secrets.cfg fehlt)!","Webhook URL not configured (secrets.cfg missing)!"
-"bugreporter.status.sending","Sende...","Sending..."
-"bugreporter.status.success","Erfolgreich gesendet! Danke!","Sent successfully! Thank you!"
-"bugreporter.status.error.send","Fehler beim Senden! (Code %d)","Error sending! (Code %d)"
-"room.tooltip.free","Frei","Free"
-"room.tooltip.service_needed","🧹 Service benötigt","🧹 Service Needed"
-"room.tooltip.open","🍺 Geöffnet","🍺 Open"
-"room.tooltip.closed_until","🔒 Geschlossen (öffnet um %s)","🔒 Closed (opens at %s)"
-"room.tooltip.understaffed","🔴 Unterbesetzt (Geschlossen)","🔴 Understaffed (Closed)"
-"room.tooltip.current_visitors","Aktuelle Gäste: %d","Current Visitors: %d"
-"room.tooltip.guest_walking","🚶 Gast unterwegs","🚶 Guest Walking"
-"room.tooltip.guest_present","📍 Gast anwesend","📍 Guest Present"
-"room.tooltip.guest_in_poi","📍 Gast in der %s","📍 Guest in %s"
-"room.tooltip.guest_leaving","🧳 Abreisend","🧳 Leaving"
-"room.tooltip.occupied","👥 Belegt: %s","👥 Occupied: %s"
-"room.tooltip.guests_in_room","Gäste im Zimmer:","Guests in Room:"
-"room.tooltip.departure","Abreise","Departure"
-"room.tooltip.nights_left","Übrige Nächte: %d / %d","Nights Left: %d / %d"
-"room.tooltip.pending_demolish","🔨 Raum zum Löschen vorgemerkt\n","🔨 Room scheduled for demolition\n"
-"room.tooltip.stats","\nSauberkeit: %d%% | Zustand: %d%%","\nCleanliness: %d%% | Condition: %d%%"
-"guest.tooltip.unknown","Unbekannt","Unknown"
-"guest.tooltip.satisfaction","Zufriedenheit: %d%% %s","Satisfaction: %d%% %s"
-"guest.tooltip.target","Ziel: ","Target: "
-"guest.tooltip.room","Zimmer","Room"
-"guest.tooltip.walking_reception","Unterwegs (Rezeption)","Walking (Reception)"
-"guest.tooltip.walking_poi","Unterwegs (%s)","Walking (%s)"
-"guest.tooltip.walking_room","Unterwegs (Zimmer)","Walking (Room)"
-"guest.tooltip.reception","Rezeption","Reception"
-"guest.tooltip.leaving","Abreise","Leaving"
-"guest.tooltip.waiting","Warten","Waiting"
-"guest.tooltip.budget","\n💰 Budget: %d € / %d €","\n💰 Budget: %d € / %d €"
-"staff.tooltip.role.housekeeping","Beruf: Reinigungskraft","Role: Housekeeping"
-"staff.tooltip.role.maintenance","Beruf: Haustechnik","Role: Maintenance"
-"staff.tooltip.role.reception","Beruf: Rezeption","Role: Reception"
-"staff.tooltip.role.prefix","Beruf: ","Role: "
-"staff.tooltip.motivation","Motivation: %d / 10","Motivation: %d / 10"
-"staff.tooltip.motivation_unknown","Motivation: Unbekannt","Motivation: Unknown"
-"staff.tooltip.status","Status: ","Status: "
-"staff.tooltip.target","Ziel: ","Target: "
-"staff.tooltip.state.idle","Bereit (Wartet)","Ready (Waiting)"
-"staff.tooltip.target.staffroom","Personalraum","Staff Room"
-"staff.tooltip.state.returning","Rückkehr","Returning"
-"staff.tooltip.state.walking","Unterwegs","Walking"
-"staff.tooltip.state.working","Arbeitet","Working"
-"staff.tooltip.target.room_work","Raum/Arbeit","Room/Work"
-"staff.tooltip.target.work","Arbeit","Work"
-"staff.tooltip.target.position","Position %s","Position %s"
-"staff.skill.stress_resistance","Stressresistenz","Stress Resistance"
-"staff.skill.service","Service","Service"
-"staff.skill.mixology","Mixen","Mixology"
-"ui.staff.no_team","Du hast noch kein Personal eingestellt.","You haven't hired any staff yet."
-"ui.staff.no_applicants","Keine Bewerber heute.","No applicants today."
-"ui.staff.select_prompt","Bitte wähle einen Mitarbeiter aus","Please select a staff member"
-"ui.staff.job","Beruf: ","Job: "
-"ui.staff.daily_wage","Tagesgehalt","Daily Wage"
-"ui.staff.hire_cost","Einstellungsgebühr","Hiring Fee"
-"ui.staff.fire","Kündigen","Dismiss"
-"ui.staff.hire","Einstellen","Hire"
-"ui.staff.morale","Moral","Morale"
-"ui.staff.tab_team","Dein Team","Your Team"
-"ui.staff.tab_applicants","Bewerber","Applicants"
-"ui.staff.tab_assign","Zuweisung","Assignment"
-"ui.staff.assign_poi","POI-Räume","POI Rooms"
-"ui.staff.assign_staff","Verfügbares Personal","Available Staff"
-"ui.staff.no_pois","Keine POI-Räume gebaut.","No POI rooms built."
-"ui.staff.poi_staffed","  ✅ Besetzt (%d Personal)","  ✅ Staffed (%d staff)"
-"ui.staff.poi_understaffed","  🔴 Unterbesetzt (%d/%d)","  🔴 Understaffed (%d/%d)"
-"ui.staff.no_matching_staff","Kein passendes Personal eingestellt.","No matching staff hired."
-"guest.member.type.primary","Hauptgast","Primary Guest"
-"guest.member.type.partner","Begleitung","Companion"
-"guest.member.type.child","Kind","Child"
-"guest.state.waiting","Wartet","Waiting"
-"ui.guest_list.please_select","Bitte wählen...","Please select..."
-"ui.room_list.please_select","Bitte wählen...","Please select..."
-"ui.guest_list.col.name","Name","Name"
-"ui.guest_list.col.room","Zimmer","Room"
-"ui.guest_list.col.budget","Budget","Budget"
-"ui.guest_list.col.status","Status","Status"
-"ui.guest_list.col.energy","Energie","Energy"
-"ui.guest_list.col.satisfaction","Zufr.","Sat."
-"ui.guest_list.tooltip.satisfaction","Zufriedenheit","Satisfaction"
-"ui.guest_list.goto","Gehe zu Gast","Go to Guest"
-"ui.room_list.col.name_type","Name / Typ","Name / Type"
-"ui.room_list.col.room","Zimmer","Room"
-"ui.room_list.col.guest","Gast","Guest"
-"ui.room_list.col.clean","Sauber","Clean"
-"ui.room_list.col.condition","Zustand","Condition"
-"ui.room_list.goto","Gehe zu Raum","Go to Room"
-"ui.staff.col.name","NAME","NAME"
-"ui.staff.col.role","BERUF","ROLE"
-"ui.staff.col.age","ALTER","AGE"
-"ui.staff.col.wage","GEHALT","WAGE"
-"ui.staff.col.morale","MORAL","MORALE"
-"ui.staff.col.status","STATUS","STATUS"
-"ui.staff.goto","Gehe zu Personal","Go to Staff"
-"ui.staff.lbl_motivation","Motivation","Motivation"
-"ui.staff.lbl_repair","Reparaturwissen","Repair Knowledge"
-"ui.staff.lbl_stress","Stressresistenz","Stress Resistance"
-"credits.title","Credits","Credits"
-"credits.section.dev","Entwicklung","Development"
-"credits.section.engine","Engine & Tools","Engine & Tools"
-"credits.section.assets","Assets & Grafiken","Assets & Graphics"
-"credits.section.fonts","Schriften","Fonts"
-"credits.section.backend","Backend","Backend"
-"credits.btn.back","← Zurück","← Back"
-"api.error.network","Netzwerkfehler. Bitte versuche es erneut.","Network error. Please try again."
-"api.error.invalid_json","Ungültige Serverantwort.","Invalid server response."
-"ui.staff.status.unassigned","Ohne Aufgabe","Unassigned"
-"ui.staff.status.assigned","Zugeordnet","Assigned"
-"ui.staff.status.busy","Im Einsatz","Busy"
-"ui.staff.status.waiting","Wartend","Waiting"
-"ui.staff.assign.no_target","Kein Ziel / Personal gewählt","No target / staff selected"
-"ui.staff.assign.select_target","Ziel wählen","Select target"
-"ui.staff.assign.select_staff","Personal wählen","Select staff"
-"ui.staff.assign.wrong_role","Falsche Rolle","Wrong role"
-"ui.staff.assign.assign","Zuordnen","Assign"
-"ui.staff.confirm.fire.title","Kündigung","Dismissal"
-"ui.staff.confirm.fire.desc","Möchtest du %s wirklich kündigen?","Do you really want to dismiss %s?"
-"ui.staff.confirm.hire.title","Arbeitsvertrag","Employment Contract"
-"ui.staff.confirm.hire.desc","Möchtest du %s für %d â¬ einstellen?","Do you want to hire %s for %d â¬?"
-"ui.staff.confirm.unassign.title","Zuweisung aufheben","Unassign"
-"ui.staff.confirm.unassign.desc","Möchtest du %s wirklich aus diesem Raum entfernen?","Do you really want to remove %s from this room?"
-"ui.staff.confirm.btn.fire","Kündigen","Dismiss"
-"ui.staff.confirm.btn.hire","Einstellen","Hire"
-"ui.staff.confirm.btn.unassign","Entfernen","Remove"
-"ui.staff.confirm.btn.cancel","Abbrechen","Cancel"
-"reception.tooltip.room","Zimmer","Room"
-"reception.tooltip.group","Gruppe: ### Person(en)","Group: ### Person(s)"
-"reception.tooltip.nights","Noch ### Nacht(e)","### Night(s) left"
-"reception.tooltip.satisfaction","Zufriedenheit: ###%","Satisfaction: ###%"
-"reception.tooltip.surcharge","Zahlt Aufpreis","Pays surcharge"
-"reception.tooltip.guests","Gäste im Zimmer:","Guests in room:"
-"ui.techtree.tier_locked","🔒 Tier ### Gesperrt","🔒 Tier ### Locked"
-"ui.techtree.unlock_reqs","Freischaltbedingungen:","Unlock requirements:"
-"ui.techtree.req.level"," Hotel Level ###"," Hotel Level ###"
-"ui.techtree.req.stars"," Gourmet Sterne: ###"," Gourmet Stars: ###"
-"ui.techtree.req.fp"," ### FP"," ### RP"
-"ui.techtree.req.prev_tier"," Vorheriges Tier ###/***"," Previous Tier ###/***"
-"ui.techtree.btn.unlock_tier","Tier ### Freischalten","Unlock Tier ###"
-"ui.techtree.demo_locked","🔒 NICHT IN DER TECHDEMO VERFÜGBAR","🔒 NOT AVAILABLE IN TECHDEMO"
-"ui.techtree.confirm.title","Technologie freischalten","Unlock Technology"
-"ui.techtree.confirm.desc","Möchtest du '###' wirklich freischalten?\nKosten: *** FP | +++ ","Do you really want to unlock '###'?\nCost: *** RP | +++ "
-"ui.techtree.btn.unlock","Freischalten","Unlock"
-"ui.techtree.btn.cancel","Abbrechen","Cancel"
-"ui.techtree.tooltip.unlocks.tech","Forschung: ###","Research: ###"
-"ui.techtree.tooltip.unlocks.room","Raum: ###","Room: ###"
-"ui.techtree.tooltip.unlocks.desc","Schaltet frei:\n- ###\n\n","Unlocks:\n- ###\n\n"
-"ui.techtree.tooltip.unlocks.empty","Schaltet neue Inhalte frei.\n\n","Unlocks new content.\n\n"
-"ui.techtree.tooltip.requires","Benötigt: ###\n","Requires: ###\n"
-"ui.techtree.tooltip.demo_alert","Dieser Inhalt ist in der Techdemo nicht verfügbar.","This content is not available in the techdemo."
-"room_category.zimmer","Zimmer","Rooms"
-"room_category.gastronomie","Gastronomie","Gastronomy"
-"room_category.wellness","Wellness","Wellness"
-"room_category.management","Management","Management"
-"room_category.prestige","Prestige","Prestige"
-"ui.quests.rank","Rang ###","Rank ###"
-"ui.quests.all_done","Alle Ränge abgeschlossen!","All ranks completed!"
-"ui.quests.reward_rank","Vergütung: ### FP | *** €","Reward: ### RP | *** €"
-"ui.quests.btn.complete_rank","Rang abschließen","Complete Rank"
-"ui.quests.locked_tech","🔒 ??? (Benötigt Forschung)","🔒 ??? (Requires Research)"
-"ui.quests.progress","Fortschritt: ### / ***","Progress: ### / ***"
-"ui.quests.reward_quest","Belohnung: ### FP | *** €","Reward: ### RP | *** €"
-"ui.quests.btn.locked","Gesperrt","Locked"
-"ui.quests.btn.future","Rang noch nicht erreicht","Rank not reached yet"
-"ui.quests.btn.done","Erledigt","Done"
-"ui.quests.btn.claim","Belohnung abholen","Claim Reward"
-"ui.quests.btn.working","In Bearbeitung...","In Progress..."
-"room_category.gastro","Gastronomie","Gastronomy"
-"room_category.service","Service","Service"
-"room_category.sonstiges","Sonstiges","Misc"
-"room_category.werkzeuge","Werkzeuge","Tools"
-"ui.buildmenu.category","Kategorie: ###","Category: ###"
-"Abrissbirne","Abrissbirne","Demolish"
-"ui.staff.col.name","NAME","NAME"
-"ui.staff.col.role","BERUF","ROLE"
-"ui.staff.col.age","ALTER","AGE"
-"ui.staff.col.wage","GEHALT","WAGE"
-"ui.staff.col.morale","MORAL","MORALE"
-"ui.staff.col.status","STATUS","STATUS"
-"ui.staff.tab_team","Dein Team","Your Team"
-"ui.staff.tab_applicants","Bewerber","Applicants"
-"ui.staff.tab_assign","Zuweisung","Assignment"
-"ui.staff.status.unassigned","Ohne Aufgabe","Unassigned"
-"ui.staff.status.assigned","Zugeordnet","Assigned"
-"ui.staff.status.busy","Im Einsatz","Busy"
-"ui.staff.status.waiting","Wartend","Waiting"
-"ui.staff.no_team","Du hast noch kein Personal eingestellt.","You haven't hired any staff yet."
-"ui.staff.no_applicants","Keine Bewerber heute.","No applicants today."
-"ui.staff.select_prompt","Bitte wähle einen Mitarbeiter aus","Please select a staff member"
-"ui.staff.job","Beruf: ","Job: "
-"ui.staff.daily_wage","Tagesgehalt","Daily Wage"
-"ui.staff.hire_cost","Einstellungsgebühr","Hire Cost"
-"ui.staff.fire","Kündigen","Dismiss"
-"ui.staff.hire","Einstellen","Hire"
-"ui.staff.morale","Moral","Morale"
-"ui.staff.assign.select_target","Ziel wählen","Select Target"
-"ui.staff.assign.select_staff","Personal wählen","Select Staff"
-"ui.staff.assign.wrong_role","Falsche Rolle","Wrong Role"
-"ui.staff.assign.assign","Zuordnen","Assign"
-"ui.staff.goto","Gehe zu Personal","Go to Staff"
-"staff.skill.motivation","Motivation","Motivation"
-"staff.skill.repair_knowledge","Reparaturwissen","Repair Knowledge"
-"staff.skill.stress_resistance","Stressresistenz","Stress Resistance"
-"modal.tutorial.title","Tutorials & Codex","Tutorials & Codex"
-"modal.staff.title","Personalverwaltung","Staff Management"
-"modal.techtree.title","Forschung & Technologie","Research & Technology"
-"modal.questbook.title","Aufgabenbuch","Questbook"
-"modal.guestlist.title","Gästeliste","Guest List"
-"modal.roomlist.title","Raumliste","Room List"
-"ui.staff.assign.status.empty","Kein Personal (###/*** MitarbeiterInnen)","No Staff (###/*** Staff)"
-"ui.staff.assign.status.partial","Teilbesetzt (###/*** MitarbeiterInnen)","Partially Staffed (###/*** Staff)"
-"ui.staff.assign.status.full","Vollbesetzt (### MitarbeiterInnen)","Fully Staffed (### Staff)"
-
-"ui.techtree.current_fp","Aktuelle FP","Current RP"
-"settings.language.main_menu_only","(nur im Hauptmenü)","(Main Menu only)"
-"ui.disclaimer.title","Willkommen bei der HO·MA·SIM Tech-Demo!","Welcome to the HO·MA·SIM Tech Demo!"
-"ui.disclaimer.text","Schön, dass du dabei bist! Bevor du dein erstes Hotel baust, ein kleiner Hinweis vorab: Du spielst hier eine frühe Tech-Demo (also vom Entwicklungsstand noch weit vor einer ersten Alpha-Version). Das bedeutet, das Fundament steht, aber der Putz trocknet noch.\n\nBitte behalte während des Spielens folgende Dinge im Hinterkopf:\n\n[b]Ecken und Kanten:[/b] Du wirst mit Sicherheit auf Bugs, Glitches oder noch nicht ganz ausbalancierte Mechaniken stoßen.\n\n[b]Work in Progress:[/b] Viele Grafiken, Animationen und UI-Elemente sind noch Platzhalter und spiegeln nicht die finale Qualität wider.\n\n[b]Dein Feedback ist Gold wert:[/b] Auf der rechten Bildschirmseite findest du einen ""Bug melden""-Button. Bitte nutze ihn ausgiebig! Egal ob du einen Fehler gefunden hast, Kritik äußern möchtest oder eine coole Idee für ein Feature hast – lass es mich wissen.\n\nVielen Dank, dass du meine Solo-Entwicklung spielst und dieses Projekt mit deiner Zeit und deinem Feedback unterstützt. Viel Spaß beim Bauen!","Great to have you here! Before you build your first hotel, a quick heads-up: You are playing an early tech demo (which means the development state is still well before a first Alpha version). This means the foundation is laid, but the paint is still drying.\n\nPlease keep the following things in mind while playing:\n\n[b]Rough Edges:[/b] You will definitely encounter bugs, glitches, or mechanics that are not fully balanced yet.\n\n[b]Work in Progress:[/b] Many graphics, animations, and UI elements are still placeholders and do not reflect the final quality.\n\n[b]Your Feedback is Gold:[/b] On the right side of the screen, you will find a ""Report Bug"" button. Please use it extensively! Whether you've found a bug, have some constructive criticism, or a cool idea for a feature – let me know.\n\nThank you so much for playing my solo-developed game and supporting this project with your time and feedback. Have fun building!"
-"ui.disclaimer.dont_show","Beim nächsten Mal nicht mehr anzeigen","Do not show this again"
-"ui.disclaimer.ok","Verstanden!","Got it!"
-"tutorial.welcome.title","Die Benutzeroberfläche HUD","Userinterface HUD"
-"tutorial.welcome.desc","Willkommen in deinem neuen Hotel! Hier ein kurzer Überblick:\nOben (TopHUD): Deine wichtigsten Laufdaten wie Finanzen und Gäste, sowie die Zeitsteuerung.\nUnten rechts: Die Steuerung für die Musik.\nUnten mittig (BottomHUD): Die zentralen Hauptfunktionen (Bauen, Rezeption, Personal, etc.).\nUnten links: Der Ansichtsmerker zum Zwischenspeichern der Kameraposition.\nKamera-Steuerung: Mit WASD bewegst du die Kamera und mit dem Mausrad steuerst du den Zoom.","Welcome to your new hotel! Here is a brief overview:\nTop (TopHUD): Your key running data like finances, guests and time-control.\nBottom right: The music controls.\nBottom center (BottomHUD): The main functions (Building, Staff, etc.).\nBottom left: The view indicator to save and load camera positions.\nCamera controls: Use WASD to move the camera and the mouse wheel to zoom."
-
-"ingame.quit.message","Bist du sicher, dass du das Spiel verlassen möchtest?","Are you sure you want to leave the game?"
-"ingame.quit.cancel","Abbrechen","Cancel"
-"settings.gameplay.tutorial_tips","Tipps (Tutorial)","Tutorial Tips"
-"ui.tutorial.tab.tutorial","Tutorials","Tutorials"
-"ui.tutorial.tab.tipps","Tipps","Tips"
-"ui.tutorial.tab.codex","Codex","Codex"
-"tutorial.tip_130_exp.title","Tipp: Erfahrung gesammelt","Tip: Experience gathered"
-"tutorial.tip_130_exp.desc","Du hast die maximalen EXP erreicht, die du ohne die Zeit laufen lassen zu muessen erreichen kannst. Nun solltest du den Hotelbetrieb starten und die Zeit laufen lassen.","You have reached the maximum EXP you can earn while the game is paused. You should now start the hotel and let the time run."
-"tutorial.tip_fast_forward.title","Tipp: Zeit beschleunigen","Tip: Fast Forward"
-"tutorial.tip_fast_forward.desc","Du kannst die Zeit ueber den Schnellvorlauf-Button beschleunigen. Bei wichtigen Ereignissen pausiert das Spiel ohnehin automatisch.","You can speed up time using the fast forward button. The game will automatically pause for important events anyway."
+€"€k€e€y€s€"€,€"€d€e€"€,€"€e€n€"€€
+€"€g€a€m€e€.€t€i€t€l€e€"€,€"€H€O€·€M€A€·€S€I€M€ €-€ €H€o€t€e€l€ €M€a€n€a€g€e€r€ €S€i€m€u€l€a€t€i€o€n€"€,€"€H€O€·€M€A€·€S€I€M€ €-€ €H€o€t€e€l€ €M€a€n€a€g€e€r€ €S€i€m€u€l€a€t€i€o€n€"€€
+€"€g€a€m€e€.€t€e€x€t€l€o€g€o€"€,€"€H€O€·€M€A€·€S€I€M€"€,€"€H€O€·€M€A€·€S€I€M€"€€
+€"€c€u€r€r€e€n€c€y€.€s€y€m€b€o€l€"€,€"€€€"€,€"€€€"€€
+€"€d€a€s€h€b€o€a€r€d€.€c€a€r€d€.€l€e€v€e€l€"€,€"€L€E€V€E€L€"€,€"€L€E€V€E€L€"€€
+€"€d€a€s€h€b€o€a€r€d€.€c€a€r€d€.€d€a€y€"€,€"€T€A€G€"€,€"€D€A€Y€"€€
+€"€d€a€s€h€b€o€a€r€d€.€c€a€r€d€.€g€u€e€s€t€s€"€,€"€G€Ä€S€T€E€"€,€"€G€U€E€S€T€S€"€€
+€"€d€a€s€h€b€o€a€r€d€.€c€a€r€d€.€r€e€p€"€,€"€R€U€F€"€,€"€R€E€P€"€€
+€"€d€a€s€h€b€o€a€r€d€.€c€a€r€d€.€c€a€p€i€t€a€l€"€,€"€K€A€P€I€T€A€L€"€,€"€C€A€P€I€T€A€L€"€€
+€"€n€o€n€e€"€,€"€K€e€i€n€s€"€,€"€N€o€n€e€"€€
+€"€r€o€o€m€"€,€"€Z€i€m€m€e€r€"€,€"€R€o€o€m€"€€
+€"€g€u€e€s€t€"€,€"€G€a€s€t€"€,€"€G€u€e€s€t€"€€
+€"€s€a€t€i€s€f€a€c€t€i€o€n€"€,€"€Z€u€f€r€i€e€d€e€n€h€e€i€t€"€,€"€S€a€t€i€s€f€a€c€t€i€o€n€"€€
+€"€b€u€d€g€e€t€"€,€"€B€u€d€g€e€t€"€,€"€B€u€d€g€e€t€"€€
+€"€s€t€a€t€u€s€"€,€"€S€t€a€t€u€s€"€,€"€S€t€a€t€u€s€"€€
+€"€c€l€e€a€n€l€i€n€e€s€s€"€,€"€S€a€u€b€e€r€k€e€i€t€"€,€"€C€l€e€a€n€l€i€n€e€s€s€"€€
+€"€m€a€i€n€t€e€n€a€n€c€e€"€,€"€Z€u€s€t€a€n€d€"€,€"€C€o€n€d€i€t€i€o€n€"€€
+€"€l€a€b€e€l€.€n€i€g€h€t€"€,€"€N€a€c€h€t€"€,€"€N€i€g€h€t€"€€
+€"€l€a€b€e€l€.€n€i€g€h€t€s€"€,€"€N€ä€c€h€t€e€"€,€"€N€i€g€h€t€s€"€€
+€"€l€a€b€e€l€.€b€e€d€"€,€"€B€e€t€t€"€,€"€B€e€d€"€€
+€"€l€a€b€e€l€.€b€e€d€s€"€,€"€B€e€t€t€e€n€"€,€"€B€e€d€s€"€€
+€"€l€a€b€e€l€.€g€u€e€s€t€"€,€"€G€a€s€t€"€,€"€G€u€e€s€t€"€€
+€"€l€a€b€e€l€.€g€u€e€s€t€s€"€,€"€G€ä€s€t€e€"€,€"€G€u€e€s€t€s€"€€
+€"€l€a€b€e€l€.€d€a€y€"€,€"€T€a€g€"€,€"€D€a€y€"€€
+€"€l€a€b€e€l€.€d€a€y€s€"€,€"€T€a€g€e€"€,€"€D€a€y€s€"€€
+€"€l€a€b€e€l€.€l€e€v€e€l€_€w€_€v€a€l€u€e€"€,€"€L€e€v€e€l€:€ €#€#€#€"€,€"€L€e€v€e€l€:€ €#€#€#€"€€
+€"€l€a€b€e€l€.€c€l€o€s€e€"€,€"€S€c€h€l€i€e€s€s€e€n€"€,€"€C€l€o€s€e€"€€
+€"€l€a€b€e€l€.€b€u€d€g€e€t€"€,€"€B€u€d€g€e€t€"€,€"€B€u€d€g€e€t€"€€
+€"€b€u€t€t€o€n€.€c€a€n€c€e€l€"€,€"€A€b€b€r€e€c€h€e€n€"€,€"€C€a€n€c€e€l€"€€
+€"€b€u€t€t€o€n€.€b€u€y€"€,€"€K€a€u€f€e€n€"€,€"€B€u€y€"€€
+€"€h€u€d€.€l€o€c€k€e€d€"€,€"€G€e€s€p€e€r€r€t€"€,€"€L€o€c€k€e€d€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€l€o€n€g€.€u€n€k€n€o€w€n€"€,€"€U€n€b€e€k€a€n€n€t€"€,€"€U€n€k€n€o€w€n€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€s€h€o€r€t€.€u€n€k€n€o€w€n€"€,€"€X€"€,€"€X€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€l€o€n€g€.€b€e€d€_€s€t€a€n€d€a€r€d€"€,€"€E€i€n€z€e€l€z€i€m€m€e€r€"€,€"€S€i€n€g€l€e€ €R€o€o€m€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€s€h€o€r€t€.€b€e€d€_€s€t€a€n€d€a€r€d€"€,€"€E€Z€"€,€"€S€R€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€l€o€n€g€.€b€e€d€_€d€o€u€b€l€e€"€,€"€D€o€p€p€e€l€z€i€m€m€e€r€"€,€"€D€o€u€b€l€e€ €R€o€o€m€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€s€h€o€r€t€.€b€e€d€_€d€o€u€b€l€e€"€,€"€D€Z€"€,€"€D€R€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€l€o€n€g€.€b€e€d€_€f€a€m€i€l€y€"€,€"€F€a€m€i€l€i€e€n€z€i€m€m€e€r€"€,€"€F€a€m€i€l€y€ €R€o€o€m€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€s€h€o€r€t€.€b€e€d€_€f€a€m€i€l€y€"€,€"€F€Z€"€,€"€F€R€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€l€o€n€g€.€b€e€d€_€s€u€p€e€r€i€o€r€"€,€"€S€u€p€e€r€i€o€r€z€i€m€m€e€r€"€,€"€S€u€p€e€r€i€o€r€ €R€o€o€m€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€s€h€o€r€t€.€b€e€d€_€s€u€p€e€r€i€o€r€"€,€"€S€Z€"€,€"€S€R€+€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€l€o€n€g€.€c€o€r€r€i€d€o€r€"€,€"€F€l€u€r€"€,€"€C€o€r€r€i€d€o€r€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€s€h€o€r€t€.€c€o€r€r€i€d€o€r€"€,€"€F€L€"€,€"€C€O€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€l€o€n€g€.€b€a€t€h€r€o€o€m€"€,€"€G€ä€s€t€e€-€W€C€"€,€"€G€u€e€s€t€ €W€C€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€s€h€o€r€t€.€b€a€t€h€r€o€o€m€"€,€"€W€C€"€,€"€W€C€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€l€o€n€g€.€f€o€u€n€d€a€t€i€o€n€"€,€"€L€o€b€b€y€"€,€"€L€o€b€b€y€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€s€h€o€r€t€.€f€o€u€n€d€a€t€i€o€n€"€,€"€L€B€"€,€"€L€B€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€l€o€n€g€.€r€e€s€t€a€u€r€a€n€t€"€,€"€R€e€s€t€a€u€r€a€n€t€"€,€"€R€e€s€t€a€u€r€a€n€t€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€s€h€o€r€t€.€r€e€s€t€a€u€r€a€n€t€"€,€"€R€S€"€,€"€R€S€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€l€o€n€g€.€b€a€r€"€,€"€B€a€r€/€L€o€u€n€g€e€"€,€"€B€a€r€/€L€o€u€n€g€e€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€s€h€o€r€t€.€b€a€r€"€,€"€B€A€"€,€"€B€A€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€l€o€n€g€.€f€i€t€n€e€s€s€"€,€"€F€i€t€n€e€s€s€s€t€u€d€i€o€"€,€"€F€i€t€n€e€s€s€ €S€t€u€d€i€o€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€s€h€o€r€t€.€f€i€t€n€e€s€s€"€,€"€F€T€"€,€"€F€T€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€l€o€n€g€.€c€o€n€f€e€r€e€n€c€e€"€,€"€K€o€n€f€e€r€e€n€z€r€a€u€m€"€,€"€C€o€n€f€e€r€e€n€c€e€ €R€o€o€m€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€s€h€o€r€t€.€c€o€n€f€e€r€e€n€c€e€"€,€"€K€R€"€,€"€C€R€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€l€o€n€g€.€k€i€t€c€h€e€n€"€,€"€K€ü€c€h€e€"€,€"€K€i€t€c€h€e€n€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€s€h€o€r€t€.€k€i€t€c€h€e€n€"€,€"€K€U€"€,€"€K€T€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€l€o€n€g€.€m€a€n€a€g€e€m€e€n€t€"€,€"€P€l€a€n€u€n€g€s€b€ü€r€o€"€,€"€P€l€a€n€n€i€n€g€ €O€f€f€i€c€e€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€s€h€o€r€t€.€m€a€n€a€g€e€m€e€n€t€"€,€"€P€B€"€,€"€P€O€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€l€o€n€g€.€s€i€d€e€w€a€l€k€"€,€"€G€e€h€w€e€g€"€,€"€S€i€d€e€w€a€l€k€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€s€h€o€r€t€.€s€i€d€e€w€a€l€k€"€,€"€G€W€"€,€"€S€W€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€l€o€n€g€.€h€r€_€o€f€f€i€c€e€"€,€"€P€e€r€s€o€n€a€l€b€ü€r€o€"€,€"€H€R€ €O€f€f€i€c€e€"€€
+€"€r€o€o€m€d€e€f€.€n€a€m€e€.€s€h€o€r€t€.€h€r€_€o€f€f€i€c€e€"€,€"€P€V€"€,€"€H€R€"€€
+€"€r€o€o€m€d€e€f€.€t€o€o€l€t€i€p€.€f€o€u€n€d€a€t€i€o€n€"€,€"€G€ä€s€t€e€ €b€e€t€r€e€t€e€n€ €h€i€e€r€ €d€a€s€ €H€o€t€e€l€"€,€"€G€u€e€s€t€s€ €e€n€t€e€r€ €t€h€e€ €h€o€t€e€l€ €h€e€r€e€"€€
+€"€r€o€o€m€d€e€f€.€t€o€o€l€t€i€p€.€m€a€n€a€g€e€m€e€n€t€"€,€"€G€e€n€e€r€i€e€r€t€ €t€ä€g€l€i€c€h€ €F€o€r€s€c€h€u€n€g€s€p€u€n€k€t€e€"€,€"€G€e€n€e€r€a€t€e€s€ €r€e€s€e€a€r€c€h€ €p€o€i€n€t€s€ €d€a€i€l€y€"€€
+€"€r€o€o€m€d€e€f€.€t€o€o€l€t€i€p€.€h€r€_€o€f€f€i€c€e€"€,€"€E€r€m€ö€g€l€i€c€h€t€ €d€a€s€ €V€e€r€w€a€l€t€e€n€ €v€o€n€ €M€i€t€a€r€b€e€i€t€e€r€n€"€,€"€E€n€a€b€l€e€s€ €s€t€a€f€f€ €m€a€n€a€g€e€m€e€n€t€"€€
+€"€r€o€o€m€d€e€f€.€t€o€o€l€t€i€p€.€k€i€t€c€h€e€n€"€,€"€V€o€r€a€u€s€s€e€t€z€u€n€g€ €f€ü€r€ €R€e€s€t€a€u€r€a€n€t€ €u€n€d€ €B€a€r€"€,€"€R€e€q€u€i€r€e€d€ €f€o€r€ €R€e€s€t€a€u€r€a€n€t€ €a€n€d€ €B€a€r€"€€
+€"€r€o€o€m€d€e€f€.€t€o€o€l€t€i€p€.€r€e€s€t€a€u€r€a€n€t€"€,€"€E€r€h€ö€h€t€ €G€ä€s€t€e€z€u€f€r€i€e€d€e€n€h€e€i€t€"€,€"€I€n€c€r€e€a€s€e€s€ €g€u€e€s€t€ €s€a€t€i€s€f€a€c€t€i€o€n€"€€
+€"€r€o€o€m€d€e€f€.€t€o€o€l€t€i€p€.€b€a€r€"€,€"€G€e€n€e€r€i€e€r€t€ €z€u€s€ä€t€z€l€i€c€h€e€ €E€i€n€n€a€h€m€e€n€ €d€u€r€c€h€ €G€e€t€r€ä€n€k€e€v€e€r€k€a€u€f€"€,€"€G€e€n€e€r€a€t€e€s€ €a€d€d€i€t€i€o€n€a€l€ €i€n€c€o€m€e€ €t€h€r€o€u€g€h€ €d€r€i€n€k€ €s€a€l€e€s€"€€
+€"€r€o€o€m€d€e€f€.€t€o€o€l€t€i€p€.€f€i€t€n€e€s€s€"€,€"€S€t€e€i€g€e€r€t€ €A€t€t€r€a€k€t€i€v€i€t€ä€t€ €f€ü€r€ €B€u€s€i€n€e€s€s€g€ä€s€t€e€"€,€"€I€n€c€r€e€a€s€e€s€ €a€p€p€e€a€l€ €f€o€r€ €b€u€s€i€n€e€s€s€ €g€u€e€s€t€s€"€€
+€"€r€o€o€m€d€e€f€.€t€o€o€l€t€i€p€.€c€o€n€f€e€r€e€n€c€e€"€,€"€E€r€m€ö€g€l€i€c€h€t€ €T€a€g€u€n€g€s€b€u€c€h€u€n€g€e€n€"€,€"€E€n€a€b€l€e€s€ €c€o€n€f€e€r€e€n€c€e€ €b€o€o€k€i€n€g€s€"€€
+€"€r€o€o€m€d€e€f€.€t€o€o€l€t€i€p€.€b€a€t€h€r€o€o€m€"€,€"€S€t€e€i€g€e€r€t€ €G€ä€s€t€e€k€o€m€f€o€r€t€"€,€"€I€n€c€r€e€a€s€e€s€ €g€u€e€s€t€ €c€o€m€f€o€r€t€"€€
+€"€r€o€o€m€d€e€f€.€t€o€o€l€t€i€p€.€c€o€r€r€i€d€o€r€"€,€"€V€e€r€b€i€n€d€e€t€ €Z€i€m€m€e€r€ €u€n€d€ €B€e€r€e€i€c€h€e€"€,€"€C€o€n€n€e€c€t€s€ €r€o€o€m€s€ €a€n€d€ €a€r€e€a€s€"€€
+€"€r€o€o€m€.€l€o€b€b€y€.€n€a€m€e€"€,€"€L€o€b€b€y€"€,€"€L€o€b€b€y€"€€
+€"€r€o€o€m€.€l€o€b€b€y€.€d€e€s€c€"€,€"€E€i€n€g€a€n€g€s€b€e€r€e€i€c€h€"€,€"€E€n€t€r€a€n€c€e€ €A€r€e€a€"€€
+€"€r€o€o€m€.€t€y€p€e€.€b€a€r€"€,€"€B€a€r€"€,€"€B€a€r€"€€
+€"€r€o€o€m€.€t€y€p€e€.€b€e€d€_€d€o€u€b€l€e€"€,€"€D€o€p€p€e€l€z€i€m€m€e€r€"€,€"€D€o€u€b€l€e€ €R€o€o€m€"€€
+€"€r€o€o€m€.€t€y€p€e€.€b€e€d€_€s€t€a€n€d€a€r€d€"€,€"€E€i€n€z€e€l€z€i€m€m€e€r€"€,€"€S€i€n€g€l€e€ €R€o€o€m€"€€
+€"€r€o€o€m€.€t€y€p€e€.€h€r€_€o€f€f€i€c€e€"€,€"€P€e€r€s€o€n€a€l€b€ü€r€o€"€,€"€H€R€ €O€f€f€i€c€e€"€€
+€"€r€o€o€m€.€t€y€p€e€.€s€c€_€o€f€f€i€c€e€"€,€"€F€o€r€s€c€h€u€n€g€s€b€ü€r€o€"€,€"€R€e€s€e€a€r€c€h€ €O€f€f€i€c€e€"€€
+€"€m€e€n€u€.€h€e€r€o€.€t€i€t€l€e€"€,€"€D€e€i€n€e€ €H€o€t€e€l€-€L€e€g€e€n€d€e€ €b€e€g€i€n€n€t€ €h€i€e€r€"€,€"€Y€o€u€r€ €H€o€t€e€l€ €L€e€g€e€n€d€ €S€t€a€r€t€s€ €H€e€r€e€"€€
+€"€m€e€n€u€.€h€e€r€o€.€s€u€b€t€i€t€l€e€"€,€"€E€r€l€e€b€e€ €d€i€e€ €u€l€t€i€m€a€t€i€v€e€ €H€o€t€e€l€-€M€a€n€a€g€e€m€e€n€t€-€S€i€m€u€l€a€t€i€o€n€.€\€n€P€l€a€n€e€,€ €b€a€u€e€ €u€n€d€ €v€e€r€w€a€l€t€e€ €d€e€i€n€ €I€m€p€e€r€i€u€m€.€"€,€"€E€x€p€e€r€i€e€n€c€e€ €t€h€e€ €u€l€t€i€m€a€t€e€ €h€o€t€e€l€ €m€a€n€a€g€e€m€e€n€t€ €s€i€m€u€l€a€t€i€o€n€.€\€n€P€l€a€n€,€ €b€u€i€l€d€ €a€n€d€ €m€a€n€a€g€e€ €y€o€u€r€ €e€m€p€i€r€e€.€"€€
+€"€h€u€d€.€t€o€p€.€m€i€d€d€l€e€.€l€a€b€e€l€.€h€o€t€e€l€"€,€"€H€O€T€E€L€"€,€"€H€O€T€E€L€"€€
+€"€h€u€d€.€t€o€p€.€m€i€d€d€l€e€.€l€a€b€e€l€.€l€v€l€"€,€"€L€V€L€"€,€"€L€V€L€"€€
+€"€h€u€d€.€t€o€p€.€m€i€d€d€l€e€.€l€a€b€e€l€.€c€a€p€i€t€a€l€"€,€"€K€A€P€I€T€A€L€"€,€"€C€A€P€I€T€A€L€"€€
+€"€h€u€d€.€t€o€p€.€m€i€d€d€l€e€.€l€a€b€e€l€.€e€x€p€"€,€"€E€X€P€"€,€"€E€X€P€"€€
+€"€h€u€d€.€t€o€p€.€m€i€d€d€l€e€.€l€a€b€e€l€.€r€e€p€"€,€"€R€u€f€"€,€"€R€e€p€"€€
+€"€h€u€d€.€t€o€p€.€m€i€d€d€l€e€.€l€a€b€e€l€.€f€p€"€,€"€F€P€"€,€"€R€P€"€€
+€"€h€u€d€.€t€o€p€.€r€i€g€h€t€.€l€a€b€e€l€.€d€a€y€"€,€"€T€a€g€"€,€"€D€a€y€"€€
+€"€h€u€d€.€t€o€p€.€r€i€g€h€t€.€t€o€o€l€t€i€p€.€p€a€u€s€e€"€,€"€P€a€u€s€e€:€ €S€p€i€e€l€z€e€i€t€ €a€n€h€a€l€t€e€n€"€,€"€P€a€u€s€e€:€ €S€t€o€p€ €g€a€m€e€ €t€i€m€e€"€€
+€"€h€u€d€.€t€o€p€.€r€i€g€h€t€.€t€o€o€l€t€i€p€.€p€l€a€y€"€,€"€A€b€s€p€i€e€l€e€n€:€ €N€o€r€m€a€l€e€ €G€e€s€c€h€w€i€n€d€i€g€k€e€i€t€"€,€"€P€l€a€y€:€ €N€o€r€m€a€l€ €s€p€e€e€d€"€€
+€"€h€u€d€.€t€o€p€.€r€i€g€h€t€.€t€o€o€l€t€i€p€.€f€o€r€w€a€r€d€"€,€"€V€o€r€s€p€u€l€e€n€:€ €Z€e€i€t€ €b€e€s€c€h€l€e€u€n€i€g€e€n€"€,€"€F€a€s€t€ €f€o€r€w€a€r€d€:€ €S€p€e€e€d€ €u€p€ €t€i€m€e€"€€
+€"€h€u€d€.€t€o€p€.€t€o€o€l€t€i€p€.€h€o€t€e€l€n€a€m€e€"€,€"€D€e€i€n€ €a€k€t€u€e€l€l€e€s€ €H€o€t€e€l€"€,€"€Y€o€u€r€ €c€u€r€r€e€n€t€ €h€o€t€e€l€"€€
+€"€h€u€d€.€t€o€p€.€t€o€o€l€t€i€p€.€l€e€v€e€l€"€,€"€H€o€t€e€l€ €L€e€v€e€l€\€n€S€t€e€i€g€t€ €d€u€r€c€h€ €g€e€s€a€m€m€e€l€t€e€ €E€r€f€a€h€r€u€n€g€ €(€E€X€P€)€.€"€,€"€H€o€t€e€l€ €L€e€v€e€l€\€n€I€n€c€r€e€a€s€e€s€ €t€h€r€o€u€g€h€ €c€o€l€l€e€c€t€e€d€ €e€x€p€e€r€i€e€n€c€e€ €(€E€X€P€)€.€"€€
+€"€h€u€d€.€t€o€p€.€t€o€o€l€t€i€p€.€c€a€p€i€t€a€l€"€,€"€K€a€p€i€t€a€l€\€n€D€e€i€n€ €a€k€t€u€e€l€l€ €v€e€r€f€ü€g€b€a€r€e€s€ €G€e€l€d€.€"€,€"€C€a€p€i€t€a€l€\€n€Y€o€u€r€ €c€u€r€r€e€n€t€l€y€ €a€v€a€i€l€a€b€l€e€ €f€u€n€d€s€.€"€€
+€"€h€u€d€.€t€o€p€.€t€o€o€l€t€i€p€.€g€u€e€s€t€s€"€,€"€G€ä€s€t€e€ €(€A€k€t€i€v€ €|€ €W€a€r€t€e€n€d€ €|€ €A€b€r€e€i€s€e€b€e€r€e€i€t€)€\€n€Z€e€i€g€t€ €d€i€e€ €A€n€z€a€h€l€ €d€e€r€ €G€ä€s€t€e€ €i€m€ €j€e€w€e€i€l€i€g€e€n€ €S€t€a€t€u€s€.€"€,€"€G€u€e€s€t€s€ €(€A€c€t€i€v€e€ €|€ €W€a€i€t€i€n€g€ €|€ €D€e€p€a€r€t€i€n€g€)€\€n€S€h€o€w€s€ €t€h€e€ €n€u€m€b€e€r€ €o€f€ €g€u€e€s€t€s€ €i€n€ €e€a€c€h€ €s€t€a€t€u€s€.€"€€
+€"€h€u€d€.€t€o€p€.€t€o€o€l€t€i€p€.€d€a€y€"€,€"€A€k€t€u€e€l€l€e€r€ €S€p€i€e€l€t€a€g€\€n€E€i€n€ €T€a€g€ €e€n€d€e€t€ €u€m€ €2€4€:€0€0€ €U€h€r€.€"€,€"€C€u€r€r€e€n€t€ €g€a€m€e€ €d€a€y€\€n€A€ €d€a€y€ €e€n€d€s€ €a€t€ €m€i€d€n€i€g€h€t€.€"€€
+€"€h€u€d€.€t€o€p€.€t€o€o€l€t€i€p€.€t€i€m€e€"€,€"€U€h€r€z€e€i€t€\€n€Z€e€i€g€t€ €d€i€e€ €a€k€t€u€e€l€l€e€ €T€a€g€e€s€z€e€i€t€ €a€n€.€"€,€"€T€i€m€e€\€n€S€h€o€w€s€ €t€h€e€ €c€u€r€r€e€n€t€ €t€i€m€e€ €o€f€ €d€a€y€.€"€€
+€"€h€u€d€.€t€o€p€.€t€o€o€l€t€i€p€.€e€x€p€"€,€"€E€r€f€a€h€r€u€n€g€s€p€u€n€k€t€e€ €(€E€X€P€)€\€n€F€o€r€t€s€c€h€r€i€t€t€ €b€i€s€ €z€u€m€ €n€ä€c€h€s€t€e€n€ €H€o€t€e€l€-€L€e€v€e€l€.€"€,€"€E€x€p€e€r€i€e€n€c€e€ €P€o€i€n€t€s€ €(€E€X€P€)€\€n€P€r€o€g€r€e€s€s€ €t€o€w€a€r€d€ €t€h€e€ €n€e€x€t€ €h€o€t€e€l€ €l€e€v€e€l€.€"€€
+€"€h€u€d€.€t€o€p€.€t€o€o€l€t€i€p€.€r€e€p€"€,€"€R€u€f€ €(€R€e€p€u€t€a€t€i€o€n€)€\€n€S€p€i€e€g€e€l€t€ €d€i€e€ €a€k€t€u€e€l€l€e€ €Z€u€f€r€i€e€d€e€n€h€e€i€t€ €d€e€r€ €G€ä€s€t€e€ €w€i€d€e€r€.€"€,€"€R€e€p€u€t€a€t€i€o€n€\€n€R€e€f€l€e€c€t€s€ €c€u€r€r€e€n€t€ €g€u€e€s€t€ €s€a€t€i€s€f€a€c€t€i€o€n€.€"€€
+€"€h€u€d€.€b€o€t€t€o€m€.€b€u€i€l€d€_€m€e€n€u€_€t€t€"€,€"€B€a€u€m€e€n€ü€ €#€#€#€"€,€"€B€u€i€l€d€ €M€e€n€u€ €#€#€#€"€€
+€"€h€u€d€.€b€o€t€t€o€m€.€r€e€c€e€p€t€i€o€n€_€t€t€"€,€"€R€e€z€e€p€t€i€o€n€ €#€#€#€"€,€"€R€e€c€e€p€t€i€o€n€ €#€#€#€"€€
+€"€h€u€d€.€b€o€t€t€o€m€.€r€e€c€e€p€t€i€o€n€_€c€l€o€s€e€d€_€t€t€"€,€"€R€e€z€e€p€t€i€o€n€ €g€e€s€c€h€l€o€s€s€e€n€ €#€#€#€"€,€"€R€e€c€e€p€t€i€o€n€ €c€l€o€s€e€d€ €#€#€#€"€€
+€"€h€u€d€.€b€o€t€t€o€m€.€s€t€a€f€f€_€t€t€"€,€"€P€e€r€s€o€n€a€l€ €#€#€#€"€,€"€S€t€a€f€f€ €#€#€#€"€€
+€"€h€u€d€.€b€o€t€t€o€m€.€t€e€c€h€_€t€r€e€e€_€t€t€"€,€"€F€o€r€s€c€h€u€n€g€ €#€#€#€"€,€"€R€e€s€e€a€r€c€h€ €#€#€#€"€€
+€"€h€u€d€.€b€o€t€t€o€m€.€s€i€m€_€b€r€o€w€s€e€r€_€t€t€"€,€"€S€i€m€B€r€o€w€s€e€r€ €#€#€#€"€,€"€S€i€m€B€r€o€w€s€e€r€ €#€#€#€"€€
+€"€h€u€d€.€b€o€t€t€o€m€.€q€u€e€s€t€_€b€o€o€k€_€t€t€"€,€"€A€u€f€g€a€b€e€n€ €#€#€#€"€,€"€Q€u€e€s€t€s€ €#€#€#€"€€
+€"€h€u€d€.€b€o€t€t€o€m€.€g€u€e€s€t€_€l€i€s€t€_€t€t€"€,€"€G€ä€s€t€e€l€i€s€t€e€ €#€#€#€"€,€"€G€u€e€s€t€ €L€i€s€t€ €#€#€#€"€€
+€"€h€u€d€.€b€o€t€t€o€m€.€r€o€o€m€_€l€i€s€t€_€t€t€"€,€"€R€a€u€m€l€i€s€t€e€ €#€#€#€"€,€"€R€o€o€m€ €L€i€s€t€ €#€#€#€"€€
+€"€h€u€d€.€b€o€t€t€o€m€.€t€u€t€o€r€i€a€l€s€_€t€t€"€,€"€T€u€t€o€r€i€a€l€s€ €#€#€#€"€,€"€T€u€t€o€r€i€a€l€s€ €#€#€#€"€€
+€"€h€u€d€.€b€u€t€t€o€n€.€r€e€s€e€t€_€v€i€e€w€.€r€e€s€t€o€r€e€_€t€t€"€,€"€A€n€s€i€c€h€t€ €z€u€r€ü€c€k€s€e€t€z€e€n€"€,€"€R€e€s€e€t€ €V€i€e€w€"€€
+€"€h€u€d€.€b€u€t€t€o€n€.€r€e€s€e€t€_€v€i€e€w€.€r€e€s€t€o€r€e€_€t€o€a€s€t€"€,€"€A€n€s€i€c€h€t€ €w€u€r€d€e€ €z€u€r€ü€c€k€g€e€s€e€t€z€t€"€,€"€V€i€e€w€ €h€a€s€ €b€e€e€n€ €r€e€s€e€t€"€€
+€"€h€u€d€.€b€u€t€t€o€n€.€r€e€s€e€t€_€v€i€e€w€.€s€a€v€e€_€t€t€"€,€"€A€n€s€i€c€h€t€ €s€p€e€i€c€h€e€r€n€"€,€"€S€a€v€e€ €V€i€e€w€"€€
+€"€h€u€d€.€b€u€t€t€o€n€.€r€e€s€e€t€_€v€i€e€w€.€s€a€v€e€_€t€o€a€s€t€"€,€"€A€n€s€i€c€h€t€ €w€u€r€d€e€ €g€e€s€p€e€i€c€h€e€r€t€"€,€"€V€i€e€w€ €h€a€s€ €b€e€e€n€ €s€a€v€e€d€"€€
+€"€h€u€d€.€m€u€s€i€c€.€p€l€a€y€_€s€t€o€p€.€t€o€o€l€t€i€p€"€,€"€M€u€s€i€k€ €a€b€s€p€i€e€l€e€n€ €/€ €a€n€h€a€l€t€e€n€"€,€"€P€l€a€y€ €/€ €P€a€u€s€e€ €M€u€s€i€c€"€€
+€"€h€u€d€.€m€u€s€i€c€.€n€e€x€t€.€t€o€o€l€t€i€p€"€,€"€N€ä€c€h€s€t€e€r€ €T€i€t€e€l€"€,€"€N€e€x€t€ €T€r€a€c€k€"€€
+€"€m€e€n€u€.€b€t€n€.€l€o€g€i€n€_€r€e€g€i€s€t€e€r€"€,€"€L€o€g€i€n€ €/€ €R€e€g€i€s€t€e€r€"€,€"€L€o€g€i€n€ €/€ €R€e€g€i€s€t€e€r€"€€
+€"€m€e€n€u€.€b€t€n€.€a€c€c€o€u€n€t€_€b€i€n€d€"€,€"€K€o€n€t€o€b€i€n€d€u€n€g€"€,€"€A€c€c€o€u€n€t€ €B€i€n€d€i€n€g€"€€
+€"€m€e€n€u€.€b€t€n€.€p€l€a€y€"€,€"€S€p€i€e€l€ €s€t€a€r€t€e€n€"€,€"€S€t€a€r€t€ €G€a€m€e€"€€
+€"€m€e€n€u€.€b€t€n€.€q€u€i€t€"€,€"€B€e€e€n€d€e€n€"€,€"€Q€u€i€t€"€€
+€"€m€e€n€u€.€b€t€n€.€s€e€t€t€i€n€g€s€"€,€"€E€i€n€s€t€e€l€l€u€n€g€e€n€"€,€"€S€e€t€t€i€n€g€s€"€€
+€"€m€e€n€u€.€b€t€n€.€l€o€g€o€u€t€"€,€"€A€b€m€e€l€d€e€n€"€,€"€L€o€g€ €O€u€t€"€€
+€"€m€e€n€u€.€b€t€n€.€m€a€i€n€_€m€e€n€u€"€,€"€H€a€u€p€t€m€e€n€ü€"€,€"€M€a€i€n€ €M€e€n€u€"€€
+€"€m€e€n€u€.€b€t€n€.€m€a€n€a€g€e€r€"€,€"€M€a€n€a€g€e€r€ €w€ä€h€l€e€n€"€,€"€S€e€l€e€c€t€ €M€a€n€a€g€e€r€"€€
+€"€m€e€n€u€.€b€t€n€.€m€a€n€a€g€e€r€_€c€h€a€n€g€e€"€,€"€M€a€n€a€g€e€r€ €w€e€c€h€s€e€l€n€"€,€"€C€h€a€n€g€e€ €M€a€n€a€g€e€r€"€€
+€"€m€e€n€u€.€b€t€n€.€b€a€c€k€"€,€"€Z€u€r€ü€c€k€"€,€"€B€a€c€k€"€€
+€"€d€a€s€h€b€o€a€r€d€.€t€i€t€l€e€"€,€"€D€e€i€n€e€ €H€o€t€e€l€s€"€,€"€Y€o€u€r€ €H€o€t€e€l€s€"€€
+€"€d€a€s€h€b€o€a€r€d€.€s€t€a€t€u€s€.€n€o€_€h€o€t€e€l€s€"€,€"€N€o€c€h€ €k€e€i€n€e€ €H€o€t€e€l€s€ €–€ €l€e€g€ €d€e€i€n€ €e€r€s€t€e€s€ €a€n€!€"€,€"€N€o€ €h€o€t€e€l€s€ €y€e€t€ €–€ €c€r€e€a€t€e€ €y€o€u€r€ €f€i€r€s€t€ €o€n€e€!€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€t€i€t€l€e€"€,€"€N€e€u€e€s€ €H€o€t€e€l€ €a€n€l€e€g€e€n€"€,€"€C€r€e€a€t€e€ €N€e€w€ €H€o€t€e€l€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€p€l€a€c€e€h€o€l€d€e€r€"€,€"€b€i€t€t€e€ €N€a€m€e€n€ €e€i€n€g€e€b€e€n€"€,€"€p€l€e€a€s€e€ €e€n€t€e€r€ €a€ €n€a€m€e€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€b€t€n€.€c€r€e€a€t€e€"€,€"€A€n€l€e€g€e€n€"€,€"€C€r€e€a€t€e€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€b€t€n€.€c€a€n€c€e€l€"€,€"€A€b€b€r€e€c€h€e€n€"€,€"€C€a€n€c€e€l€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€n€a€m€e€.€l€a€b€e€l€"€,€"€H€o€t€e€l€n€a€m€e€"€,€"€H€o€t€e€l€ €N€a€m€e€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€g€r€i€d€.€s€e€c€t€i€o€n€"€,€"€S€t€a€r€t€p€a€r€z€e€l€l€e€"€,€"€S€t€a€r€t€i€n€g€ €P€l€o€t€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€g€r€i€d€.€l€a€b€e€l€"€,€"€E€i€n€g€a€n€g€s€s€e€i€t€e€:€"€,€"€E€n€t€r€a€n€c€e€ €S€i€d€e€:€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€d€i€r€.€t€o€p€"€,€"€O€b€e€n€"€,€"€T€o€p€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€d€i€r€.€b€o€t€t€o€m€"€,€"€U€n€t€e€n€"€,€"€B€o€t€t€o€m€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€d€i€r€.€l€e€f€t€"€,€"€L€i€n€k€s€"€,€"€L€e€f€t€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€d€i€r€.€r€i€g€h€t€"€,€"€R€e€c€h€t€s€"€,€"€R€i€g€h€t€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€e€r€r€o€r€.€n€a€m€e€_€e€m€p€t€y€"€,€"€B€i€t€t€e€ €g€i€b€ €e€i€n€e€n€ €H€o€t€e€l€n€a€m€e€n€ €e€i€n€.€"€,€"€P€l€e€a€s€e€ €e€n€t€e€r€ €a€ €h€o€t€e€l€ €n€a€m€e€.€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€e€r€r€o€r€.€l€i€m€i€t€_€r€e€a€c€h€e€d€"€,€"€M€a€x€i€m€a€l€e€ €A€n€z€a€h€l€ €H€o€t€e€l€s€ €(€5€)€ €e€r€r€e€i€c€h€t€.€"€,€"€M€a€x€i€m€u€m€ €n€u€m€b€e€r€ €o€f€ €h€o€t€e€l€s€ €(€5€)€ €r€e€a€c€h€e€d€.€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€d€i€f€f€i€c€u€l€t€y€"€,€"€S€c€h€w€i€e€r€i€g€k€e€i€t€s€g€r€a€d€"€,€"€D€i€f€f€i€c€u€l€t€y€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€d€i€f€f€.€e€a€s€y€"€,€"€E€i€n€f€a€c€h€"€,€"€E€a€s€y€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€d€i€f€f€.€n€o€r€m€a€l€"€,€"€S€t€a€n€d€a€r€d€"€,€"€S€t€a€n€d€a€r€d€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€d€i€f€f€.€h€a€r€d€"€,€"€H€a€r€t€"€,€"€H€a€r€d€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€d€i€f€f€.€c€u€s€t€o€m€"€,€"€A€n€g€e€p€a€s€s€t€"€,€"€C€u€s€t€o€m€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€s€t€a€r€t€_€m€o€n€e€y€"€,€"€S€t€a€r€t€k€a€p€i€t€a€l€:€"€,€"€S€t€a€r€t€i€n€g€ €C€a€p€i€t€a€l€:€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€r€e€f€u€n€d€"€,€"€B€a€u€k€o€s€t€e€n€-€R€ü€c€k€e€r€s€t€a€t€t€u€n€g€:€"€,€"€B€u€i€l€d€ €C€o€s€t€ €R€e€f€u€n€d€:€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€e€x€p€"€,€"€E€X€P€-€B€o€o€s€t€:€"€,€"€E€X€P€ €B€o€o€s€t€:€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€n€o€t€i€c€e€"€,€"€E€i€n€i€g€e€ €S€e€t€t€i€n€g€s€ €s€i€n€d€ €i€n€ €d€e€r€ €T€e€c€h€D€e€m€o€ €n€o€c€h€ €o€h€n€e€ €E€f€f€e€k€t€.€"€,€"€S€o€m€e€ €s€e€t€t€i€n€g€s€ €h€a€v€e€ €n€o€ €e€f€f€e€c€t€ €i€n€ €t€h€e€ €T€e€c€h€ €D€e€m€o€ €y€e€t€.€"€€
+€"€d€a€s€h€b€o€a€r€d€.€n€e€w€_€h€o€t€e€l€.€s€t€a€r€t€_€p€l€o€t€"€,€"€S€t€a€r€t€p€a€r€z€e€l€l€e€"€,€"€S€t€a€r€t€i€n€g€ €P€l€o€t€"€€
+€"€d€a€s€h€b€o€a€r€d€.€d€e€l€e€t€e€_€h€o€t€e€l€.€t€i€t€l€e€"€,€"€H€o€t€e€l€ €l€ö€s€c€h€e€n€?€"€,€"€D€e€l€e€t€e€ €H€o€t€e€l€?€"€€
+€"€d€a€s€h€b€o€a€r€d€.€d€e€l€e€t€e€_€h€o€t€e€l€.€m€e€s€s€a€g€e€"€,€"€D€a€s€ €H€o€t€e€l€ €u€n€d€ €a€l€l€e€ €S€p€i€e€l€s€t€ä€n€d€e€ €w€e€r€d€e€n€ €u€n€w€i€d€e€r€r€u€f€l€i€c€h€ €e€n€t€f€e€r€n€t€.€"€,€"€T€h€e€ €h€o€t€e€l€ €a€n€d€ €a€l€l€ €s€a€v€e€ €f€i€l€e€s€ €w€i€l€l€ €b€e€ €p€e€r€m€a€n€e€n€t€l€y€ €d€e€l€e€t€e€d€.€"€€
+€"€d€a€s€h€b€o€a€r€d€.€d€e€l€e€t€e€_€h€o€t€e€l€.€c€o€n€f€i€r€m€"€,€"€L€ö€s€c€h€e€n€"€,€"€D€e€l€e€t€e€"€€
+€"€d€a€s€h€b€o€a€r€d€.€d€e€l€e€t€e€_€h€o€t€e€l€.€a€c€k€"€,€"€W€i€r€k€l€i€c€h€ €l€ö€s€c€h€e€n€?€"€,€"€R€e€a€l€l€y€ €d€e€l€e€t€e€?€"€€
+€"€d€a€s€h€b€o€a€r€d€.€c€a€n€c€e€l€"€,€"€A€b€b€r€e€c€h€e€n€"€,€"€C€a€n€c€e€l€"€€
+€"€h€o€t€e€l€_€s€e€l€e€c€t€.€t€i€t€l€e€"€,€"€D€e€i€n€e€ €H€o€t€e€l€s€"€,€"€Y€o€u€r€ €H€o€t€e€l€s€"€€
+€"€h€o€t€e€l€_€s€e€l€e€c€t€.€s€t€a€t€u€s€.€l€o€a€d€i€n€g€"€,€"€L€a€d€e€ €H€o€t€e€l€s€.€.€.€"€,€"€L€o€a€d€i€n€g€ €h€o€t€e€l€s€.€.€.€"€€
+€"€h€o€t€e€l€_€s€e€l€e€c€t€.€s€t€a€t€u€s€.€e€m€p€t€y€"€,€"€K€e€i€n€e€ €H€o€t€e€l€s€ €g€e€f€u€n€d€e€n€.€"€,€"€N€o€ €h€o€t€e€l€s€ €f€o€u€n€d€.€"€€
+€"€h€o€t€e€l€_€s€e€l€e€c€t€.€b€t€n€.€s€e€l€e€c€t€"€,€"€H€o€t€e€l€ €a€u€s€w€ä€h€l€e€n€"€,€"€S€e€l€e€c€t€ €H€o€t€e€l€"€€
+€"€h€o€t€e€l€.€c€r€e€a€t€e€.€t€i€t€l€e€"€,€"€N€e€u€e€s€ €H€o€t€e€l€ €g€r€ü€n€d€e€n€"€,€"€F€o€u€n€d€ €a€ €N€e€w€ €H€o€t€e€l€"€€
+€"€h€o€t€e€l€.€c€r€e€a€t€e€.€f€o€r€m€.€l€a€b€e€l€.€n€a€m€e€"€,€"€H€o€t€e€l€-€N€a€m€e€"€,€"€H€o€t€e€l€ €N€a€m€e€"€€
+€"€h€o€t€e€l€.€c€r€e€a€t€e€.€f€o€r€m€.€p€l€a€c€e€h€o€l€d€e€r€.€n€a€m€e€"€,€"€z€.€B€.€ €G€r€a€n€d€ €H€o€t€e€l€"€,€"€e€.€g€.€ €G€r€a€n€d€ €H€o€t€e€l€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€t€i€t€l€e€"€,€"€D€e€i€n€e€n€ €M€a€n€a€g€e€r€ €e€r€s€t€e€l€l€e€n€"€,€"€C€r€e€a€t€e€ €Y€o€u€r€ €M€a€n€a€g€e€r€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€i€n€t€r€o€"€,€"€B€e€v€o€r€ €e€s€ €l€o€s€g€e€h€t€ €â€€€ €w€e€r€ €b€i€s€t€ €d€u€?€ €E€r€s€t€e€l€l€e€ €d€e€i€n€e€n€ €p€e€r€s€ö€n€l€i€c€h€e€n€ €M€a€n€a€g€e€r€-€C€h€a€r€a€k€t€e€r€.€"€,€"€B€e€f€o€r€e€ €w€e€ €b€e€g€i€n€ €â€€€ €w€h€o€ €a€r€e€ €y€o€u€?€ €C€r€e€a€t€e€ €y€o€u€r€ €p€e€r€s€o€n€a€l€ €m€a€n€a€g€e€r€ €c€h€a€r€a€c€t€e€r€.€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€l€a€b€e€l€.€n€a€m€e€"€,€"€M€a€n€a€g€e€r€-€N€a€m€e€"€,€"€M€a€n€a€g€e€r€ €N€a€m€e€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€p€l€a€c€e€h€o€l€d€e€r€.€n€a€m€e€"€,€"€z€.€B€.€ €A€l€e€x€a€n€d€r€a€ €B€e€r€g€e€r€"€,€"€e€.€g€.€ €A€l€e€x€a€n€d€r€a€ €B€e€r€g€e€r€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€l€a€b€e€l€.€g€e€n€d€e€r€"€,€"€G€e€s€c€h€l€e€c€h€t€"€,€"€G€e€n€d€e€r€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€g€e€n€d€e€r€.€m€"€,€"€M€ä€n€n€l€i€c€h€"€,€"€M€a€l€e€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€g€e€n€d€e€r€.€f€"€,€"€W€e€i€b€l€i€c€h€"€,€"€F€e€m€a€l€e€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€g€e€n€d€e€r€.€d€"€,€"€D€i€v€e€r€s€"€,€"€N€o€n€-€b€i€n€a€r€y€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€l€a€b€e€l€.€s€k€i€n€"€,€"€H€a€u€t€f€a€r€b€e€"€,€"€S€k€i€n€ €T€o€n€e€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€s€k€i€n€.€d€e€f€a€u€l€t€"€,€"€H€e€l€l€"€,€"€L€i€g€h€t€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€s€k€i€n€.€m€e€d€i€u€m€"€,€"€M€i€t€t€e€l€"€,€"€M€e€d€i€u€m€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€s€k€i€n€.€d€a€r€k€"€,€"€D€u€n€k€e€l€"€,€"€D€a€r€k€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€l€a€b€e€l€.€h€a€i€r€"€,€"€H€a€a€r€f€a€r€b€e€"€,€"€H€a€i€r€ €C€o€l€o€r€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€h€a€i€r€.€d€e€f€a€u€l€t€"€,€"€B€l€o€n€d€"€,€"€B€l€o€n€d€e€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€h€a€i€r€.€b€r€o€w€n€"€,€"€B€r€a€u€n€"€,€"€B€r€o€w€n€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€h€a€i€r€.€b€l€a€c€k€"€,€"€S€c€h€w€a€r€z€"€,€"€B€l€a€c€k€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€h€a€i€r€.€b€l€o€n€d€e€"€,€"€H€e€l€l€b€l€o€n€d€"€,€"€L€i€g€h€t€ €B€l€o€n€d€e€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€h€a€i€r€.€r€e€d€"€,€"€R€o€t€"€,€"€R€e€d€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€h€a€i€r€.€g€r€e€y€"€,€"€G€r€a€u€"€,€"€G€r€e€y€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€l€a€b€e€l€.€o€u€t€f€i€t€"€,€"€O€u€t€f€i€t€"€,€"€O€u€t€f€i€t€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€o€u€t€f€i€t€.€s€u€i€t€_€b€l€a€c€k€"€,€"€A€n€z€u€g€ €S€c€h€w€a€r€z€"€,€"€B€l€a€c€k€ €S€u€i€t€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€o€u€t€f€i€t€.€s€u€i€t€_€g€r€e€y€"€,€"€A€n€z€u€g€ €G€r€a€u€"€,€"€G€r€e€y€ €S€u€i€t€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€o€u€t€f€i€t€.€c€a€s€u€a€l€"€,€"€C€a€s€u€a€l€"€,€"€C€a€s€u€a€l€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€o€u€t€f€i€t€.€u€n€i€f€o€r€m€"€,€"€U€n€i€f€o€r€m€"€,€"€U€n€i€f€o€r€m€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€b€u€t€t€o€n€.€s€a€v€e€"€,€"€M€a€n€a€g€e€r€ €e€r€s€t€e€l€l€e€n€"€,€"€C€r€e€a€t€e€ €M€a€n€a€g€e€r€"€€
+€"€m€a€n€a€g€e€r€.€s€e€t€u€p€.€p€r€e€v€i€e€w€.€l€a€b€e€l€"€,€"€V€o€r€s€c€h€a€u€"€,€"€P€r€e€v€i€e€w€"€€
+€"€m€a€n€a€g€e€r€_€s€e€l€e€c€t€.€t€i€t€l€e€"€,€"€M€a€n€a€g€e€r€ €w€ä€h€l€e€n€"€,€"€S€e€l€e€c€t€ €M€a€n€a€g€e€r€"€€
+€"€m€a€n€a€g€e€r€_€s€e€l€e€c€t€.€e€m€p€t€y€_€s€l€o€t€"€,€"€F€r€e€i€e€r€ €S€l€o€t€"€,€"€E€m€p€t€y€ €S€l€o€t€"€€
+€"€m€a€n€a€g€e€r€_€s€e€l€e€c€t€.€b€t€n€.€c€r€e€a€t€e€"€,€"€N€e€u€ €e€r€s€t€e€l€l€e€n€"€,€"€C€r€e€a€t€e€ €N€e€w€"€€
+€"€m€a€n€a€g€e€r€_€s€e€l€e€c€t€.€b€t€n€.€s€e€l€e€c€t€"€,€"€A€u€s€w€ä€h€l€e€n€"€,€"€S€e€l€e€c€t€"€€
+€"€m€a€n€a€g€e€r€_€s€e€l€e€c€t€.€d€e€l€e€t€e€.€a€c€k€"€,€"€W€i€r€k€l€i€c€h€ €l€ö€s€c€h€e€n€?€"€,€"€R€e€a€l€l€y€ €d€e€l€e€t€e€?€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€t€i€t€l€e€"€,€"€D€e€i€n€e€n€ €M€a€n€a€g€e€r€ €e€r€s€t€e€l€l€e€n€"€,€"€C€r€e€a€t€e€ €Y€o€u€r€ €M€a€n€a€g€e€r€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€s€u€b€t€i€t€l€e€"€,€"€E€r€s€t€e€l€l€e€ €d€e€i€n€e€n€ €p€e€r€s€ö€n€l€i€c€h€e€n€ €M€a€n€a€g€e€r€-€C€h€a€r€a€k€t€e€r€.€"€,€"€C€r€e€a€t€e€ €y€o€u€r€ €p€e€r€s€o€n€a€l€ €m€a€n€a€g€e€r€ €c€h€a€r€a€c€t€e€r€.€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€f€i€e€l€d€.€n€a€m€e€"€,€"€M€a€n€a€g€e€r€-€N€a€m€e€"€,€"€M€a€n€a€g€e€r€ €N€a€m€e€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€l€a€b€e€l€.€g€e€n€d€e€r€"€,€"€G€e€s€c€h€l€e€c€h€t€"€,€"€G€e€n€d€e€r€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€l€a€b€e€l€.€s€k€i€n€"€,€"€H€a€u€t€f€a€r€b€e€"€,€"€S€k€i€n€ €T€o€n€e€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€l€a€b€e€l€.€h€a€i€r€"€,€"€H€a€a€r€f€a€r€b€e€"€,€"€H€a€i€r€ €C€o€l€o€r€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€l€a€b€e€l€.€o€u€t€f€i€t€"€,€"€O€u€t€f€i€t€"€,€"€O€u€t€f€i€t€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€l€a€b€e€l€.€p€r€e€v€i€e€w€"€,€"€V€O€R€S€C€H€A€U€"€,€"€P€R€E€V€I€E€W€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€g€e€n€d€e€r€.€m€"€,€"€M€ä€n€n€l€i€c€h€"€,€"€M€a€l€e€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€g€e€n€d€e€r€.€w€"€,€"€W€e€i€b€l€i€c€h€"€,€"€F€e€m€a€l€e€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€g€e€n€d€e€r€.€d€"€,€"€D€i€v€e€r€s€"€,€"€N€o€n€-€b€i€n€a€r€y€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€s€k€i€n€.€h€e€l€l€"€,€"€H€e€l€l€"€,€"€L€i€g€h€t€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€s€k€i€n€.€m€i€t€t€e€l€"€,€"€M€i€t€t€e€l€"€,€"€M€e€d€i€u€m€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€s€k€i€n€.€d€u€n€k€e€l€"€,€"€D€u€n€k€e€l€"€,€"€D€a€r€k€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€h€a€i€r€.€b€l€o€n€d€"€,€"€B€l€o€n€d€"€,€"€B€l€o€n€d€e€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€h€a€i€r€.€b€r€a€u€n€"€,€"€B€r€a€u€n€"€,€"€B€r€o€w€n€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€h€a€i€r€.€s€c€h€w€a€r€z€"€,€"€S€c€h€w€a€r€z€"€,€"€B€l€a€c€k€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€h€a€i€r€.€h€e€l€l€b€l€o€n€d€"€,€"€H€e€l€l€b€l€o€n€d€"€,€"€L€i€g€h€t€ €B€l€o€n€d€e€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€h€a€i€r€.€r€o€t€"€,€"€R€o€t€"€,€"€R€e€d€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€h€a€i€r€.€g€r€a€u€"€,€"€G€r€a€u€"€,€"€G€r€e€y€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€o€u€t€f€i€t€.€a€n€z€u€g€_€s€c€h€w€a€r€z€"€,€"€A€n€z€u€g€ €S€c€h€w€a€r€z€"€,€"€B€l€a€c€k€ €S€u€i€t€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€o€u€t€f€i€t€.€a€n€z€u€g€_€g€r€a€u€"€,€"€A€n€z€u€g€ €G€r€a€u€"€,€"€G€r€e€y€ €S€u€i€t€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€o€u€t€f€i€t€.€c€a€s€u€a€l€"€,€"€C€a€s€u€a€l€"€,€"€C€a€s€u€a€l€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€o€u€t€f€i€t€.€u€n€i€f€o€r€m€"€,€"€U€n€i€f€o€r€m€"€,€"€U€n€i€f€o€r€m€"€€
+€"€r€e€g€i€s€t€e€r€.€c€h€a€r€a€c€t€e€r€.€b€t€n€.€s€u€b€m€i€t€"€,€"€M€a€n€a€g€e€r€ €e€r€s€t€e€l€l€e€n€"€,€"€C€r€e€a€t€e€ €M€a€n€a€g€e€r€"€€
+€"€c€h€a€r€a€c€t€e€r€.€e€d€i€t€.€t€i€t€l€e€"€,€"€C€h€a€r€a€k€t€e€r€ €b€e€a€r€b€e€i€t€e€n€"€,€"€E€d€i€t€ €C€h€a€r€a€c€t€e€r€"€€
+€"€c€h€a€r€a€c€t€e€r€.€e€d€i€t€.€b€t€n€.€s€a€v€e€"€,€"€Ä€n€d€e€r€u€n€g€e€n€ €s€p€e€i€c€h€e€r€n€"€,€"€S€a€v€e€ €C€h€a€n€g€e€s€"€€
+€"€l€o€g€i€n€.€b€t€n€.€s€u€b€m€i€t€"€,€"€A€n€m€e€l€d€e€n€"€,€"€L€o€g€ €I€n€"€€
+€"€l€o€g€i€n€.€e€r€r€o€r€.€d€a€t€a€_€i€n€v€a€l€i€d€"€,€"€U€n€g€ü€l€t€i€g€e€ €L€o€g€i€n€-€D€a€t€e€n€"€,€"€I€n€v€a€l€i€d€ €l€o€g€i€n€ €c€r€e€d€e€n€t€i€a€l€s€"€€
+€"€r€e€g€i€s€t€e€r€.€b€t€n€.€s€u€b€m€i€t€"€,€"€A€c€c€o€u€n€t€ €e€r€s€t€e€l€l€e€n€"€,€"€C€r€e€a€t€e€ €A€c€c€o€u€n€t€"€€
+€"€r€e€g€i€s€t€e€r€.€f€i€e€l€d€.€u€s€e€r€n€a€m€e€"€,€"€B€e€n€u€t€z€e€r€n€a€m€e€"€,€"€U€s€e€r€n€a€m€e€"€€
+€"€r€e€g€i€s€t€e€r€.€f€i€e€l€d€.€e€m€a€i€l€"€,€"€E€-€M€a€i€l€-€A€d€r€e€s€s€e€"€,€"€E€m€a€i€l€ €A€d€d€r€e€s€s€"€€
+€"€r€e€g€i€s€t€e€r€.€f€i€e€l€d€.€p€a€s€s€w€o€r€d€"€,€"€P€a€s€s€w€o€r€t€"€,€"€P€a€s€s€w€o€r€d€"€€
+€"€r€e€g€i€s€t€e€r€.€f€i€e€l€d€.€p€a€s€s€w€o€r€d€_€c€o€n€f€i€r€m€"€,€"€P€a€s€s€w€o€r€t€ €b€e€s€t€ä€t€i€g€e€n€"€,€"€C€o€n€f€i€r€m€ €P€a€s€s€w€o€r€d€"€€
+€"€r€e€g€i€s€t€e€r€.€l€i€n€k€.€l€o€g€i€n€"€,€"€B€e€r€e€i€t€s€ €r€e€g€i€s€t€r€i€e€r€t€?€ €J€e€t€z€t€ €a€n€m€e€l€d€e€n€"€,€"€A€l€r€e€a€d€y€ €r€e€g€i€s€t€e€r€e€d€?€ €L€o€g€ €i€n€ €n€o€w€"€€
+€"€r€e€g€i€s€t€e€r€.€e€r€r€o€r€.€p€a€s€s€w€o€r€d€s€_€m€i€s€m€a€t€c€h€"€,€"€P€a€s€s€w€ö€r€t€e€r€ €s€t€i€m€m€e€n€ €n€i€c€h€t€ €ü€b€e€r€e€i€n€.€"€,€"€P€a€s€s€w€o€r€d€s€ €d€o€ €n€o€t€ €m€a€t€c€h€.€"€€
+€"€r€e€g€i€s€t€e€r€.€e€r€r€o€r€.€u€s€e€r€n€a€m€e€_€i€n€_€u€s€e€"€,€"€B€e€n€u€t€z€e€r€n€a€m€e€ €b€e€r€e€i€t€s€ €v€e€r€g€e€b€e€n€.€"€,€"€U€s€e€r€n€a€m€e€ €a€l€r€e€a€d€y€ €t€a€k€e€n€.€"€€
+€"€r€e€g€i€s€t€e€r€.€v€e€r€i€f€y€.€t€i€t€l€e€"€,€"€E€-€M€a€i€l€ €b€e€s€t€ä€t€i€g€e€n€"€,€"€C€o€n€f€i€r€m€ €E€m€a€i€l€"€€
+€"€r€e€g€i€s€t€e€r€.€v€e€r€i€f€y€.€i€n€f€o€"€,€"€W€i€r€ €h€a€b€e€n€ €d€i€r€ €e€i€n€e€n€ €6€-€s€t€e€l€l€i€g€e€n€ €C€o€d€e€ €p€e€r€ €E€-€M€a€i€l€ €g€e€s€c€h€i€c€k€t€.€"€,€"€W€e€ €s€e€n€t€ €y€o€u€ €a€ €6€-€d€i€g€i€t€ €c€o€d€e€ €b€y€ €e€m€a€i€l€.€"€€
+€"€r€e€g€i€s€t€e€r€.€v€e€r€i€f€y€.€f€i€e€l€d€.€c€o€d€e€"€,€"€B€e€s€t€ä€t€i€g€u€n€g€s€c€o€d€e€"€,€"€C€o€n€f€i€r€m€a€t€i€o€n€ €C€o€d€e€"€€
+€"€r€e€g€i€s€t€e€r€.€v€e€r€i€f€y€.€b€t€n€.€s€u€b€m€i€t€"€,€"€C€o€d€e€ €b€e€s€t€ä€t€i€g€e€n€"€,€"€C€o€n€f€i€r€m€ €C€o€d€e€"€€
+€"€r€e€g€i€s€t€e€r€.€v€e€r€i€f€y€.€e€r€r€o€r€.€c€o€d€e€_€i€n€v€a€l€i€d€"€,€"€C€o€d€e€ €u€n€g€ü€l€t€i€g€ €o€d€e€r€ €a€b€g€e€l€a€u€f€e€n€.€"€,€"€C€o€d€e€ €i€n€v€a€l€i€d€ €o€r€ €e€x€p€i€r€e€d€.€"€€
+€"€i€n€g€a€m€e€.€b€t€n€.€h€e€l€p€"€,€"€H€i€l€f€e€"€,€"€H€e€l€p€"€€
+€"€i€n€g€a€m€e€.€b€t€n€.€b€u€i€l€d€"€,€"€B€a€u€e€n€"€,€"€B€u€i€l€d€"€€
+€"€i€n€g€a€m€e€.€b€t€n€.€r€e€c€e€p€t€i€o€n€"€,€"€R€e€z€e€p€t€i€o€n€"€,€"€R€e€c€e€p€t€i€o€n€"€€
+€"€i€n€g€a€m€e€.€b€t€n€.€s€t€a€f€f€"€,€"€P€e€r€s€o€n€a€l€"€,€"€S€t€a€f€f€"€€
+€"€i€n€g€a€m€e€.€b€t€n€.€e€m€p€t€y€"€,€"€–€"€,€"€–€"€€
+€"€i€n€g€a€m€e€.€b€t€n€.€r€e€s€e€a€r€c€h€"€,€"€F€o€r€s€c€h€u€n€g€"€,€"€R€e€s€e€a€r€c€h€"€€
+€"€i€n€g€a€m€e€.€b€t€n€.€e€v€e€n€t€s€"€,€"€E€v€e€n€t€s€"€,€"€E€v€e€n€t€s€"€€
+€"€i€n€g€a€m€e€.€b€t€n€.€s€i€m€b€r€o€w€s€e€r€"€,€"€S€I€M€-€B€r€o€w€s€e€r€"€,€"€S€I€M€ €B€r€o€w€s€e€r€"€€
+€"€i€n€g€a€m€e€.€b€t€n€.€s€e€t€t€i€n€g€s€"€,€"€E€i€n€s€t€e€l€l€u€n€g€e€n€"€,€"€S€e€t€t€i€n€g€s€"€€
+€"€i€n€g€a€m€e€.€b€t€n€.€r€e€s€e€t€_€v€i€e€w€"€,€"€A€n€s€i€c€h€t€ €z€u€r€ü€c€k€s€e€t€z€e€n€"€,€"€R€e€s€e€t€ €V€i€e€w€"€€
+€"€i€n€g€a€m€e€.€c€t€x€.€r€o€t€a€t€e€_€d€o€o€r€"€,€"€T€ü€r€ €r€o€t€i€e€r€e€n€"€,€"€R€o€t€a€t€e€ €D€o€o€r€"€€
+€"€i€n€g€a€m€e€.€c€t€x€.€m€o€v€e€_€d€o€o€r€"€,€"€T€ü€r€ €v€e€r€s€c€h€i€e€b€e€n€"€,€"€M€o€v€e€ €D€o€o€r€"€€
+€"€i€n€g€a€m€e€.€c€t€x€.€f€l€i€p€_€r€o€o€m€"€,€"€R€a€u€m€ €d€r€e€h€e€n€"€,€"€F€l€i€p€ €R€o€o€m€"€€
+€"€i€n€g€a€m€e€.€q€u€i€t€.€t€i€t€l€e€"€,€"€S€p€i€e€l€ €v€e€r€l€a€s€s€e€n€?€"€,€"€L€e€a€v€e€ €G€a€m€e€?€"€€
+€"€i€n€g€a€m€e€.€q€u€i€t€.€c€o€n€f€i€r€m€"€,€"€J€a€,€ €v€e€r€l€a€s€s€e€n€"€,€"€Y€e€s€,€ €l€e€a€v€e€"€€
+€"€i€n€g€a€m€e€.€s€u€b€m€e€n€u€.€c€o€m€i€n€g€_€s€o€o€n€"€,€"€(€k€o€m€m€t€ €m€i€t€ €d€e€m€ €F€e€a€t€u€r€e€)€"€,€"€(€c€o€m€i€n€g€ €w€i€t€h€ €t€h€e€ €f€e€a€t€u€r€e€)€"€€
+€"€m€o€d€a€l€.€p€a€u€s€e€.€t€i€t€l€e€"€,€"€P€a€u€s€e€"€,€"€P€a€u€s€e€"€€
+€"€m€o€d€a€l€.€p€a€u€s€e€.€b€u€t€t€o€n€.€c€o€n€t€i€n€u€e€"€,€"€F€o€r€t€s€e€t€z€e€n€"€,€"€C€o€n€t€i€n€u€e€"€€
+€"€m€o€d€a€l€.€p€a€u€s€e€.€b€u€t€t€o€n€.€s€a€v€e€"€,€"€S€p€e€i€c€h€e€r€n€"€,€"€S€a€v€e€"€€
+€"€m€o€d€a€l€.€p€a€u€s€e€.€b€u€t€t€o€n€.€l€o€a€d€"€,€"€L€a€d€e€n€"€,€"€L€o€a€d€"€€
+€"€m€o€d€a€l€.€p€a€u€s€e€.€b€u€t€t€o€n€.€s€e€t€t€i€n€g€s€"€,€"€E€i€n€s€t€e€l€l€u€n€g€e€n€"€,€"€S€e€t€t€i€n€g€s€"€€
+€"€m€o€d€a€l€.€p€a€u€s€e€.€b€u€t€t€o€n€.€m€a€i€n€m€e€n€u€"€,€"€H€a€u€p€t€m€e€n€ü€"€,€"€M€a€i€n€ €M€e€n€u€"€€
+€"€m€o€d€a€l€.€s€a€v€e€.€t€i€t€l€e€"€,€"€S€p€i€e€l€s€t€a€n€d€ €s€p€e€i€c€h€e€r€n€"€,€"€S€a€v€e€ €G€a€m€e€"€€
+€"€m€o€d€a€l€.€s€a€v€e€.€s€u€b€t€i€t€l€e€"€,€"€M€a€n€u€e€l€l€e€ €S€p€i€e€l€s€t€ä€n€d€e€"€,€"€M€a€n€u€a€l€ €S€a€v€e€s€"€€
+€"€m€o€d€a€l€.€s€a€v€e€.€i€n€p€u€t€_€l€a€b€e€l€"€,€"€N€a€m€e€:€"€,€"€N€a€m€e€:€"€€
+€"€m€o€d€a€l€.€s€a€v€e€.€i€n€p€u€t€_€p€l€a€c€e€h€o€l€d€e€r€"€,€"€S€p€i€e€l€s€t€a€n€d€ €b€e€n€e€n€n€e€n€.€.€.€"€,€"€N€a€m€e€ €y€o€u€r€ €s€a€v€e€.€.€.€"€€
+€"€m€o€d€a€l€.€s€a€v€e€.€b€u€t€t€o€n€.€s€a€v€e€"€,€"€S€p€i€e€l€s€t€a€n€d€ €s€p€e€i€c€h€e€r€n€"€,€"€S€a€v€e€ €G€a€m€e€"€€
+€"€m€o€d€a€l€.€s€a€v€e€.€s€l€o€t€.€e€m€p€t€y€"€,€"€L€e€e€r€"€,€"€E€m€p€t€y€"€€
+€"€m€o€d€a€l€.€s€a€v€e€.€s€l€o€t€.€n€e€w€"€,€"€N€e€u€"€,€"€N€e€w€"€€
+€"€m€o€d€a€l€.€s€a€v€e€.€s€a€v€e€_€n€a€m€e€.€e€m€p€t€y€"€,€"€S€p€i€e€l€s€t€a€n€d€"€,€"€S€a€v€e€"€€
+€"€m€o€d€a€l€.€l€o€a€d€.€t€i€t€l€e€"€,€"€S€p€i€e€l€s€t€a€n€d€ €l€a€d€e€n€"€,€"€L€o€a€d€ €G€a€m€e€"€€
+€"€m€o€d€a€l€.€l€o€a€d€.€m€a€n€u€a€l€.€t€i€t€l€e€"€,€"€M€a€n€u€e€l€l€e€ €S€p€i€e€l€s€t€ä€n€d€e€"€,€"€M€a€n€u€a€l€ €S€a€v€e€s€"€€
+€"€m€o€d€a€l€.€l€o€a€d€.€a€u€t€o€.€t€i€t€l€e€"€,€"€A€u€t€o€s€a€v€e€s€"€,€"€A€u€t€o€s€a€v€e€s€"€€
+€"€m€o€d€a€l€.€l€o€a€d€.€b€u€t€t€o€n€.€l€o€a€d€"€,€"€S€p€i€e€l€s€t€a€n€d€ €l€a€d€e€n€"€,€"€L€o€a€d€ €G€a€m€e€"€€
+€"€m€o€d€a€l€.€r€e€c€e€p€t€i€o€n€.€t€i€t€l€e€"€,€"€R€e€z€e€p€t€i€o€n€"€,€"€R€e€c€e€p€t€i€o€n€"€€
+€"€m€o€d€a€l€.€s€e€t€t€i€n€g€s€.€t€i€t€l€e€"€,€"€E€i€n€s€t€e€l€l€u€n€g€e€n€"€,€"€S€e€t€t€i€n€g€s€"€€
+€"€s€a€v€e€s€l€o€t€s€.€t€i€t€l€e€"€,€"€S€p€i€e€l€s€t€a€n€d€ €l€a€d€e€n€"€,€"€L€o€a€d€ €G€a€m€e€"€€
+€"€s€a€v€e€s€l€o€t€s€.€q€u€i€c€k€.€t€i€t€l€e€"€,€"€Q€u€i€c€k€s€a€v€e€"€,€"€Q€u€i€c€k€s€a€v€e€"€€
+€"€s€a€v€e€s€l€o€t€s€.€m€a€n€u€a€l€.€s€l€o€t€"€,€"€S€l€o€t€"€,€"€S€l€o€t€"€€
+€"€s€a€v€e€s€l€o€t€s€.€a€u€t€o€.€s€l€o€t€"€,€"€A€u€t€o€s€a€v€e€"€,€"€A€u€t€o€s€a€v€e€"€€
+€"€s€a€v€e€s€l€o€t€s€.€e€m€p€t€y€"€,€"€L€e€e€r€"€,€"€E€m€p€t€y€"€€
+€"€s€a€v€e€s€l€o€t€s€.€b€t€n€.€l€o€a€d€"€,€"€L€a€d€e€n€"€,€"€L€o€a€d€"€€
+€"€s€a€v€e€s€l€o€t€s€.€b€t€n€.€d€e€l€e€t€e€"€,€"€L€ö€s€c€h€e€n€"€,€"€D€e€l€e€t€e€"€€
+€"€s€a€v€e€s€l€o€t€s€.€s€a€v€e€.€t€i€t€l€e€"€,€"€S€p€i€e€l€ €s€p€e€i€c€h€e€r€n€"€,€"€S€a€v€e€ €G€a€m€e€"€€
+€"€s€a€v€e€s€l€o€t€s€.€s€a€v€e€.€b€t€n€.€s€a€v€e€"€,€"€S€p€e€i€c€h€e€r€n€"€,€"€S€a€v€e€"€€
+€"€s€a€v€e€s€l€o€t€s€.€l€o€a€d€.€t€i€t€l€e€"€,€"€S€p€i€e€l€ €l€a€d€e€n€"€,€"€L€o€a€d€ €G€a€m€e€"€€
+€"€s€a€v€e€s€l€o€t€s€.€s€l€o€t€.€e€m€p€t€y€"€,€"€—€ €L€e€e€r€ €—€"€,€"€—€ €E€m€p€t€y€ €—€"€€
+€"€s€a€v€e€s€l€o€t€s€.€s€l€o€t€.€n€e€w€"€,€"€N€e€u€"€,€"€N€e€w€"€€
+€"€s€a€v€e€s€l€o€t€s€.€a€u€t€o€.€e€m€p€t€y€"€,€"€N€o€c€h€ €k€e€i€n€e€ €A€u€t€o€s€a€v€e€s€ €v€o€r€h€a€n€d€e€n€.€"€,€"€N€o€ €a€u€t€o€s€a€v€e€s€ €y€e€t€.€"€€
+€"€s€e€t€t€i€n€g€s€.€t€i€t€l€e€"€,€"€E€i€n€s€t€e€l€l€u€n€g€e€n€"€,€"€S€e€t€t€i€n€g€s€"€€
+€"€s€e€t€t€i€n€g€s€.€b€t€n€.€s€a€v€e€"€,€"€S€p€e€i€c€h€e€r€n€"€,€"€S€a€v€e€"€€
+€"€s€e€t€t€i€n€g€s€.€t€a€b€.€g€a€m€e€p€l€a€y€"€,€"€G€a€m€e€p€l€a€y€"€,€"€G€a€m€e€p€l€a€y€"€€
+€"€s€e€t€t€i€n€g€s€.€t€a€b€.€a€u€d€i€o€"€,€"€A€u€d€i€o€"€,€"€A€u€d€i€o€"€€
+€"€s€e€t€t€i€n€g€s€.€t€a€b€.€u€i€"€,€"€O€b€e€r€f€l€ä€c€h€e€"€,€"€I€n€t€e€r€f€a€c€e€"€€
+€"€s€e€t€t€i€n€g€s€.€t€a€b€.€c€o€n€t€r€o€l€s€"€,€"€S€t€e€u€e€r€u€n€g€"€,€"€C€o€n€t€r€o€l€s€"€€
+€"€s€e€t€t€i€n€g€s€.€d€i€s€c€a€r€d€.€t€i€t€l€e€"€,€"€Ã€€n€d€e€r€u€n€g€e€n€ €v€e€r€w€e€r€f€e€n€?€"€,€"€D€i€s€c€a€r€d€ €C€h€a€n€g€e€s€?€"€€
+€"€s€e€t€t€i€n€g€s€.€d€i€s€c€a€r€d€.€m€e€s€s€a€g€e€"€,€"€D€i€e€ €E€i€n€s€t€e€l€l€u€n€g€e€n€ €w€u€r€d€e€n€ €n€i€c€h€t€ €g€e€s€p€e€i€c€h€e€r€t€.€"€,€"€T€h€e€ €s€e€t€t€i€n€g€s€ €w€e€r€e€ €n€o€t€ €s€a€v€e€d€.€"€€
+€"€s€e€t€t€i€n€g€s€.€d€i€s€c€a€r€d€.€c€o€n€f€i€r€m€"€,€"€V€e€r€w€e€r€f€e€n€"€,€"€D€i€s€c€a€r€d€"€€
+€"€s€e€t€t€i€n€g€s€.€d€i€s€c€a€r€d€.€c€a€n€c€e€l€"€,€"€W€e€i€t€e€r€ €b€e€a€r€b€e€i€t€e€n€"€,€"€K€e€e€p€ €E€d€i€t€i€n€g€"€€
+€"€s€e€t€t€i€n€g€s€.€g€a€m€e€p€l€a€y€.€a€u€t€o€s€a€v€e€"€,€"€A€u€t€o€s€a€v€e€"€,€"€A€u€t€o€s€a€v€e€"€€
+€"€s€e€t€t€i€n€g€s€.€g€a€m€e€p€l€a€y€.€a€u€t€o€s€a€v€e€_€i€n€t€e€r€v€a€l€"€,€"€A€u€t€o€s€a€v€e€-€I€n€t€e€r€v€a€l€l€"€,€"€A€u€t€o€s€a€v€e€ €I€n€t€e€r€v€a€l€"€€
+€"€s€e€t€t€i€n€g€s€.€g€a€m€e€p€l€a€y€.€a€u€t€o€s€a€v€e€_€i€n€t€e€r€v€a€l€.€o€f€f€"€,€"€A€u€s€"€,€"€O€f€f€"€€
+€"€s€e€t€t€i€n€g€s€.€g€a€m€e€p€l€a€y€.€a€u€t€o€s€a€v€e€_€i€n€t€e€r€v€a€l€.€o€n€"€,€"€#€#€#€ €M€i€n€u€t€e€n€"€,€"€#€#€#€ €M€i€n€u€t€e€s€"€€
+€"€s€e€t€t€i€n€g€s€.€g€a€m€e€p€l€a€y€.€f€f€_€s€p€e€e€d€"€,€"€S€c€h€n€e€l€l€v€o€r€l€a€u€f€"€,€"€F€a€s€t€ €F€o€r€w€a€r€d€"€€
+€"€s€e€t€t€i€n€g€s€.€a€u€d€i€o€.€m€a€s€t€e€r€"€,€"€G€e€s€a€m€t€l€a€u€t€s€t€ä€r€k€e€"€,€"€M€a€s€t€e€r€ €V€o€l€u€m€e€"€€
+€"€s€e€t€t€i€n€g€s€.€a€u€d€i€o€.€m€u€s€i€c€"€,€"€H€i€n€t€e€r€g€r€u€n€d€m€u€s€i€k€"€,€"€B€a€c€k€g€r€o€u€n€d€ €M€u€s€i€c€"€€
+€"€s€e€t€t€i€n€g€s€.€a€u€d€i€o€.€m€e€n€u€_€m€u€s€i€c€"€,€"€M€e€n€ü€-€M€u€s€i€k€"€,€"€M€e€n€u€ €M€u€s€i€c€"€€
+€"€s€e€t€t€i€n€g€s€.€a€u€d€i€o€.€s€o€u€n€d€"€,€"€S€o€u€n€d€"€,€"€S€o€u€n€d€"€€
+€"€s€e€t€t€i€n€g€s€.€u€i€.€l€a€n€g€u€a€g€e€"€,€"€S€p€r€a€c€h€e€"€,€"€L€a€n€g€u€a€g€e€"€€
+€"€s€e€t€t€i€n€g€s€.€u€i€.€s€c€a€l€e€"€,€"€U€I€-€S€k€a€l€i€e€r€u€n€g€"€,€"€U€I€ €S€c€a€l€e€"€€
+€"€s€e€t€t€i€n€g€s€.€u€i€.€t€o€a€s€t€_€p€o€s€i€t€i€o€n€"€,€"€T€o€a€s€t€-€P€o€s€i€t€i€o€n€"€,€"€T€o€a€s€t€ €P€o€s€i€t€i€o€n€"€€
+€"€s€e€t€t€i€n€g€s€.€u€i€.€t€o€a€s€t€.€t€o€p€"€,€"€O€b€e€n€"€,€"€T€o€p€"€€
+€"€s€e€t€t€i€n€g€s€.€u€i€.€t€o€a€s€t€.€m€i€d€d€l€e€"€,€"€M€i€t€t€e€"€,€"€M€i€d€d€l€e€"€€
+€"€s€e€t€t€i€n€g€s€.€u€i€.€t€o€a€s€t€.€b€o€t€t€o€m€"€,€"€U€n€t€e€n€"€,€"€B€o€t€t€o€m€"€€
+€"€s€e€t€t€i€n€g€s€.€u€i€.€h€u€d€_€s€i€d€e€"€,€"€M€e€n€ü€l€e€i€s€t€e€ €P€o€s€i€t€i€o€n€"€,€"€M€e€n€u€ €B€a€r€ €P€o€s€i€t€i€o€n€"€€
+€"€s€e€t€t€i€n€g€s€.€u€i€.€h€u€d€_€s€i€d€e€.€l€e€f€t€"€,€"€L€i€n€k€s€"€,€"€L€e€f€t€"€€
+€"€s€e€t€t€i€n€g€s€.€u€i€.€h€u€d€_€s€i€d€e€.€c€e€n€t€e€r€"€,€"€M€i€t€t€e€"€,€"€C€e€n€t€e€r€"€€
+€"€s€e€t€t€i€n€g€s€.€u€i€.€h€u€d€_€s€i€d€e€.€r€i€g€h€t€"€,€"€R€e€c€h€t€s€"€,€"€R€i€g€h€t€"€€
+€"€s€e€t€t€i€n€g€s€.€u€i€.€t€e€c€h€_€i€n€f€o€"€,€"€T€e€c€h€n€i€s€c€h€e€ €I€n€f€o€s€ €(€F€P€S€,€ €e€t€c€.€)€"€,€"€T€e€c€h€ €I€n€f€o€ €(€F€P€S€,€ €e€t€c€.€)€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€c€o€m€i€n€g€_€s€o€o€n€"€,€"€T€a€s€t€e€n€b€e€l€e€g€u€n€g€ €–€ €k€o€m€m€t€ €i€n€ €e€i€n€e€r€ €d€e€r€ €n€ä€c€h€s€t€e€n€ €V€e€r€s€i€o€n€e€n€.€"€,€"€K€e€y€ €b€i€n€d€i€n€g€s€ €–€ €c€o€m€i€n€g€ €i€n€ €a€ €f€u€t€u€r€e€ €v€e€r€s€i€o€n€.€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€g€r€o€u€p€.€c€a€m€e€r€a€"€,€"€K€a€m€e€r€a€-€S€t€e€u€e€r€u€n€g€"€,€"€C€a€m€e€r€a€ €C€o€n€t€r€o€l€s€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€c€a€m€e€r€a€.€u€p€"€,€"€N€a€c€h€ €o€b€e€n€"€,€"€U€p€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€c€a€m€e€r€a€.€d€o€w€n€"€,€"€N€a€c€h€ €u€n€t€e€n€"€,€"€D€o€w€n€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€c€a€m€e€r€a€.€l€e€f€t€"€,€"€N€a€c€h€ €l€i€n€k€s€"€,€"€L€e€f€t€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€c€a€m€e€r€a€.€r€i€g€h€t€"€,€"€N€a€c€h€ €r€e€c€h€t€s€"€,€"€R€i€g€h€t€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€c€a€m€e€r€a€.€z€o€o€m€_€i€n€"€,€"€H€i€n€e€i€n€z€o€o€m€e€n€"€,€"€Z€o€o€m€ €I€n€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€c€a€m€e€r€a€.€z€o€o€m€_€o€u€t€"€,€"€H€e€r€a€u€s€z€o€o€m€e€n€"€,€"€Z€o€o€m€ €O€u€t€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€c€a€m€e€r€a€.€r€e€s€e€t€"€,€"€A€n€s€i€c€h€t€ €z€e€n€t€r€i€e€r€e€n€"€,€"€C€e€n€t€e€r€ €V€i€e€w€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€g€r€o€u€p€.€g€a€m€e€p€l€a€y€"€,€"€S€p€i€e€l€s€t€e€u€e€r€u€n€g€"€,€"€G€a€m€e€ €C€o€n€t€r€o€l€s€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€g€a€m€e€p€l€a€y€.€p€a€u€s€e€"€,€"€S€p€i€e€l€ €p€a€u€s€i€e€r€e€n€"€,€"€P€a€u€s€e€ €G€a€m€e€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€g€a€m€e€p€l€a€y€.€q€u€i€c€k€s€a€v€e€"€,€"€S€c€h€n€e€l€l€s€p€e€i€c€h€e€r€n€"€,€"€Q€u€i€c€k€ €S€a€v€e€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€g€a€m€e€p€l€a€y€.€q€u€i€c€k€l€o€a€d€"€,€"€S€c€h€n€e€l€l€l€a€d€e€n€"€,€"€Q€u€i€c€k€ €L€o€a€d€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€g€r€o€u€p€.€u€i€"€,€"€B€e€n€u€t€z€e€r€o€b€e€r€f€l€ä€c€h€e€"€,€"€U€s€e€r€ €I€n€t€e€r€f€a€c€e€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€u€i€.€b€u€i€l€d€"€,€"€B€a€u€m€e€n€ü€"€,€"€B€u€i€l€d€ €M€e€n€u€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€u€i€.€r€e€c€e€p€t€i€o€n€"€,€"€R€e€z€e€p€t€i€o€n€"€,€"€R€e€c€e€p€t€i€o€n€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€u€i€.€s€t€a€f€f€"€,€"€P€e€r€s€o€n€a€l€v€e€r€w€a€l€t€u€n€g€"€,€"€S€t€a€f€f€ €M€a€n€a€g€e€m€e€n€t€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€u€i€.€t€e€c€h€"€,€"€F€o€r€s€c€h€u€n€g€ €&€ €T€e€c€h€n€o€l€o€g€i€e€"€,€"€R€e€s€e€a€r€c€h€ €&€ €T€e€c€h€n€o€l€o€g€y€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€u€i€.€s€i€m€_€b€r€o€w€s€e€r€"€,€"€S€i€m€u€l€a€t€i€o€n€s€-€B€r€o€w€s€e€r€"€,€"€S€i€m€u€l€a€t€i€o€n€ €B€r€o€w€s€e€r€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€u€i€.€q€u€e€s€t€s€"€,€"€A€u€f€g€a€b€e€n€"€,€"€Q€u€e€s€t€s€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€u€i€.€g€u€e€s€t€_€l€i€s€t€"€,€"€G€ä€s€t€e€l€i€s€t€e€"€,€"€G€u€e€s€t€ €L€i€s€t€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€u€i€.€r€o€o€m€_€l€i€s€t€"€,€"€R€a€u€m€l€i€s€t€e€"€,€"€R€o€o€m€ €L€i€s€t€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€u€i€.€t€u€t€o€r€i€a€l€"€,€"€H€i€l€f€e€ €/€ €T€u€t€o€r€i€a€l€s€"€,€"€H€e€l€p€ €/€ €T€u€t€o€r€i€a€l€s€"€€
+€"€s€e€t€t€i€n€g€s€.€t€o€a€s€t€.€s€a€v€e€d€"€,€"€E€i€n€s€t€e€l€l€u€n€g€e€n€ €g€e€s€p€e€i€c€h€e€r€t€"€,€"€S€e€t€t€i€n€g€s€ €s€a€v€e€d€"€€
+€"€k€e€y€.€s€p€a€c€e€"€,€"€L€e€e€r€t€a€s€t€e€"€,€"€S€p€a€c€e€"€€
+€"€k€e€y€.€k€p€_€a€d€d€"€,€"€N€u€m€p€a€d€ €+€"€,€"€N€u€m€p€a€d€ €+€"€€
+€"€k€e€y€.€k€p€_€s€u€b€t€r€a€c€t€"€,€"€N€u€m€p€a€d€ €-€"€,€"€N€u€m€p€a€d€ €-€"€€
+€"€k€e€y€.€u€p€"€,€"€P€f€e€i€l€ €h€o€c€h€"€,€"€A€r€r€o€w€ €U€p€"€€
+€"€k€e€y€.€d€o€w€n€"€,€"€P€f€e€i€l€ €r€u€n€t€e€r€"€,€"€A€r€r€o€w€ €D€o€w€n€"€€
+€"€k€e€y€.€l€e€f€t€"€,€"€P€f€e€i€l€ €l€i€n€k€s€"€,€"€A€r€r€o€w€ €L€e€f€t€"€€
+€"€k€e€y€.€r€i€g€h€t€"€,€"€P€f€e€i€l€ €r€e€c€h€t€s€"€,€"€A€r€r€o€w€ €R€i€g€h€t€"€€
+€"€k€e€y€.€h€o€m€e€"€,€"€P€o€s€1€"€,€"€H€o€m€e€"€€
+€"€k€e€y€.€e€s€c€a€p€e€"€,€"€E€S€C€"€,€"€E€S€C€"€€
+€"€k€e€y€.€e€q€u€a€l€"€,€"€=€"€,€"€=€"€€
+€"€k€e€y€.€m€i€n€u€s€"€,€"€-€"€,€"€-€"€€
+€"€k€e€y€.€p€e€r€i€o€d€"€,€"€.€"€,€"€.€"€€
+€"€r€e€c€e€p€t€i€o€n€.€t€i€t€l€e€"€,€"€R€E€Z€E€P€T€I€O€N€ €&€ €G€Ä€S€T€E€"€,€"€R€E€C€E€P€T€I€O€N€ €&€ €G€U€E€S€T€S€"€€
+€"€r€e€c€e€p€t€i€o€n€.€l€i€s€t€.€t€i€t€l€e€.€w€a€i€t€i€n€g€"€,€"€W€a€r€t€e€n€d€e€ €G€ä€s€t€e€"€,€"€W€a€i€t€i€n€g€ €G€u€e€s€t€s€"€€
+€"€r€e€c€e€p€t€i€o€n€.€l€i€s€t€.€t€i€t€l€e€.€r€o€o€m€s€"€,€"€V€e€r€f€ü€g€b€a€r€e€ €Z€i€m€m€e€r€"€,€"€A€v€a€i€l€a€b€l€e€ €R€o€o€m€s€"€€
+€"€r€e€c€e€p€t€i€o€n€.€l€i€s€t€.€t€i€t€l€e€.€a€c€t€i€v€e€"€,€"€A€k€t€i€v€e€ €G€ä€s€t€e€"€,€"€A€c€t€i€v€e€ €G€u€e€s€t€s€"€€
+€"€r€e€c€e€p€t€i€o€n€.€l€i€s€t€.€t€i€t€l€e€.€c€h€e€c€k€o€u€t€"€,€"€A€b€r€e€i€s€e€n€d€e€ €G€ä€s€t€e€"€,€"€D€e€p€a€r€t€i€n€g€ €G€u€e€s€t€s€"€€
+€"€r€e€c€e€p€t€i€o€n€.€l€i€s€t€.€w€a€i€t€i€n€g€.€e€m€p€t€y€"€,€"€K€e€i€n€e€ €w€a€r€t€e€n€d€e€n€ €G€ä€s€t€e€"€,€"€N€o€ €w€a€i€t€i€n€g€ €g€u€e€s€t€s€"€€
+€"€r€e€c€e€p€t€i€o€n€.€l€i€s€t€.€r€o€o€m€s€.€e€m€p€t€y€"€,€"€K€e€i€n€e€ €f€r€e€i€e€n€ €Z€i€m€m€e€r€"€,€"€N€o€ €a€v€a€i€l€a€b€l€e€ €r€o€o€m€s€"€€
+€"€r€e€c€e€p€t€i€o€n€.€l€i€s€t€.€a€c€t€i€v€e€.€e€m€p€t€y€"€,€"€K€e€i€n€e€ €a€k€t€i€v€e€n€ €G€ä€s€t€e€"€,€"€N€o€ €a€c€t€i€v€e€ €g€u€e€s€t€s€"€€
+€"€r€e€c€e€p€t€i€o€n€.€l€i€s€t€.€c€h€e€c€k€o€u€t€.€e€m€p€t€y€"€,€"€K€e€i€n€e€ €a€b€r€e€i€s€e€n€d€e€n€ €G€ä€s€t€e€"€,€"€N€o€ €d€e€p€a€r€t€i€n€g€ €g€u€e€s€t€s€"€€
+€"€r€e€c€e€p€t€i€o€n€.€b€t€n€.€d€e€c€l€i€n€e€"€,€"€G€a€s€t€ €a€b€l€e€h€n€e€n€"€,€"€D€e€c€l€i€n€e€ €G€u€e€s€t€"€€
+€"€r€e€c€e€p€t€i€o€n€.€m€i€s€m€a€t€c€h€.€t€o€o€l€t€i€p€"€,€"€D€i€e€s€e€s€ €Z€i€m€m€e€r€ €i€s€t€ €n€i€c€h€t€ €g€e€e€i€g€n€e€t€"€,€"€T€h€i€s€ €r€o€o€m€ €i€s€ €n€o€t€ €s€u€i€t€a€b€l€e€"€€
+€"€r€e€c€e€p€t€i€o€n€.€c€h€e€c€k€i€n€.€s€u€c€c€e€s€s€"€,€"€C€h€e€c€k€-€I€n€ €e€r€f€o€l€g€r€e€i€c€h€!€"€,€"€C€h€e€c€k€-€I€n€ €s€u€c€c€e€s€s€f€u€l€!€"€€
+€"€r€e€c€e€p€t€i€o€n€.€c€h€e€c€k€o€u€t€.€s€u€c€c€e€s€s€"€,€"€G€a€s€t€ €a€u€s€g€e€c€h€e€c€k€t€.€ €G€u€t€e€ €R€e€i€s€e€!€"€,€"€G€u€e€s€t€ €c€h€e€c€k€e€d€ €o€u€t€.€ €S€a€f€e€ €t€r€a€v€e€l€s€!€"€€
+€"€c€h€e€c€k€i€n€.€b€t€n€.€c€o€n€f€i€r€m€"€,€"€C€h€e€c€k€-€I€n€ €b€e€s€t€ä€t€i€g€e€n€"€,€"€C€o€n€f€i€r€m€ €C€h€e€c€k€-€I€n€"€€
+€"€c€h€e€c€k€i€n€.€b€t€n€.€r€o€l€l€"€,€"€A€u€f€p€r€e€i€s€ €–€ €G€a€s€t€ €f€r€a€g€e€n€"€,€"€S€u€r€c€h€a€r€g€e€ €–€ €A€s€k€ €G€u€e€s€t€"€€
+€"€c€h€e€c€k€i€n€.€b€t€n€.€o€t€h€e€r€_€r€o€o€m€"€,€"€A€n€d€e€r€e€s€ €Z€i€m€m€e€r€ €w€ä€h€l€e€n€"€,€"€C€h€o€o€s€e€ €D€i€f€f€e€r€e€n€t€ €R€o€o€m€"€€
+€"€t€o€a€s€t€.€r€e€c€e€p€t€i€o€n€.€c€h€e€c€k€i€n€.€s€u€c€c€e€s€s€"€,€"€C€h€e€c€k€-€I€n€ €e€r€f€o€l€g€r€e€i€c€h€!€"€,€"€C€h€e€c€k€-€I€n€ €s€u€c€c€e€s€s€f€u€l€!€"€€
+€"€t€o€a€s€t€.€r€e€c€e€p€t€i€o€n€.€o€p€e€n€"€,€"€R€e€z€e€p€t€i€o€n€ €g€e€ö€f€f€n€e€t€ €–€ €G€ä€s€t€e€ €e€m€p€f€a€n€g€e€n€ €(€F€3€)€"€,€"€R€e€c€e€p€t€i€o€n€ €o€p€e€n€ €–€ €a€c€c€e€p€t€i€n€g€ €g€u€e€s€t€s€ €(€F€3€)€"€€
+€"€t€o€a€s€t€.€r€e€c€e€p€t€i€o€n€.€t€o€o€_€e€a€r€l€y€"€,€"€R€e€z€e€p€t€i€o€n€ €ö€f€f€n€e€t€ €e€r€s€t€ €u€m€ €0€7€:€0€0€ €U€h€r€"€,€"€R€e€c€e€p€t€i€o€n€ €o€p€e€n€s€ €a€t€ €0€7€:€0€0€"€€
+€"€t€o€a€s€t€.€r€e€c€e€p€t€i€o€n€.€n€o€_€r€o€o€m€s€"€,€"€E€r€s€t€ €Z€i€m€m€e€r€ €b€a€u€e€n€ €b€e€v€o€r€ €G€ä€s€t€e€ €e€m€p€f€a€n€g€e€n€ €w€e€r€d€e€n€ €k€ö€n€n€e€n€"€,€"€B€u€i€l€d€ €r€o€o€m€s€ €b€e€f€o€r€e€ €a€c€c€e€p€t€i€n€g€ €g€u€e€s€t€s€"€€
+€"€t€o€a€s€t€.€r€e€c€e€p€t€i€o€n€.€c€l€o€s€e€d€"€,€"€D€i€e€ €R€e€z€e€p€t€i€o€n€ €i€s€t€ €h€e€u€t€e€ €g€e€s€c€h€l€o€s€s€e€n€.€"€,€"€T€h€e€ €r€e€c€e€p€t€i€o€n€ €i€s€ €c€l€o€s€e€d€ €t€o€d€a€y€.€"€€
+€"€t€o€a€s€t€.€r€e€c€e€p€t€i€o€n€.€a€u€t€o€_€p€a€u€s€e€"€,€"€R€e€z€e€p€t€i€o€n€ €a€u€t€o€m€a€t€i€s€c€h€ €p€a€u€s€i€e€r€t€"€,€"€R€e€c€e€p€t€i€o€n€ €a€u€t€o€m€a€t€i€c€a€l€l€y€ €p€a€u€s€e€d€"€€
+€"€t€o€a€s€t€.€r€e€c€e€p€t€i€o€n€.€f€o€r€c€e€_€c€l€o€s€e€"€,€"€R€e€z€e€p€t€i€o€n€ €g€e€s€c€h€l€o€s€s€e€n€"€,€"€R€e€c€e€p€t€i€o€n€ €c€l€o€s€e€d€"€€
+€"€t€o€a€s€t€.€r€e€c€e€p€t€i€o€n€.€g€u€e€s€t€s€_€a€r€r€i€v€e€d€"€,€"€N€e€u€e€ €G€ä€s€t€e€ €s€i€n€d€ €e€i€n€g€e€t€r€o€f€f€e€n€ €–€ €R€e€z€e€p€t€i€o€n€ €ö€f€f€n€e€n€ €(€F€3€)€"€,€"€N€e€w€ €g€u€e€s€t€s€ €h€a€v€e€ €a€r€r€i€v€e€d€ €–€ €o€p€e€n€ €r€e€c€e€p€t€i€o€n€ €(€F€3€)€"€€
+€"€t€o€a€s€t€.€g€u€e€s€t€.€a€r€r€i€v€a€l€.€s€i€n€g€l€e€"€,€"€1€ €n€e€u€e€r€ €G€a€s€t€ €i€s€t€ €e€i€n€g€e€t€r€o€f€f€e€n€"€,€"€1€ €n€e€w€ €g€u€e€s€t€ €h€a€s€ €a€r€r€i€v€e€d€"€€
+€"€t€o€a€s€t€.€g€u€e€s€t€.€a€r€r€i€v€a€l€.€m€u€l€t€i€"€,€"€#€#€#€ €n€e€u€e€ €G€ä€s€t€e€ €s€i€n€d€ €e€i€n€g€e€t€r€o€f€f€e€n€"€,€"€#€#€#€ €n€e€w€ €g€u€e€s€t€s€ €h€a€v€e€ €a€r€r€i€v€e€d€"€€
+€"€t€o€a€s€t€.€g€u€e€s€t€.€a€r€r€i€v€a€l€.€f€u€l€l€"€,€"€K€e€i€n€e€ €w€e€i€t€e€r€e€n€ €G€ä€s€t€e€ €–€ €W€a€r€t€e€l€i€s€t€e€ €v€o€l€l€"€,€"€N€o€ €m€o€r€e€ €g€u€e€s€t€s€ €–€ €w€a€i€t€i€n€g€ €l€i€s€t€ €f€u€l€l€"€€
+€"€t€o€a€s€t€.€g€u€e€s€t€.€d€e€c€l€i€n€e€d€"€,€"€G€a€s€t€ €a€b€g€e€l€e€h€n€t€ €(€#€#€#€ €R€u€f€)€"€,€"€G€u€e€s€t€ €d€e€c€l€i€n€e€d€ €(€#€#€#€ €r€e€p€)€"€€
+€"€t€o€a€s€t€.€s€u€r€c€h€a€r€g€e€.€a€c€c€e€p€t€e€d€"€,€"€G€a€s€t€ €a€k€z€e€p€t€i€e€r€t€!€ €(€W€ü€r€f€e€l€:€ €#€#€#€ €–€ €m€a€x€.€ €#€#€#€ €n€ö€t€i€g€)€"€,€"€G€u€e€s€t€ €a€c€c€e€p€t€e€d€!€ €(€R€o€l€l€:€ €#€#€#€ €–€ €m€a€x€.€ €#€#€#€ €n€e€e€d€e€d€)€"€€
+€"€t€o€a€s€t€.€s€u€r€c€h€a€r€g€e€.€r€e€j€e€c€t€e€d€"€,€"€G€a€s€t€ €l€e€h€n€t€ €a€b€.€ €(€W€ü€r€f€e€l€:€ €#€#€#€ €–€ €m€a€x€.€ €#€#€#€ €n€ö€t€i€g€)€"€,€"€G€u€e€s€t€ €d€e€c€l€i€n€e€d€.€ €(€R€o€l€l€:€ €#€#€#€ €–€ €m€a€x€.€ €#€#€#€ €n€e€e€d€e€d€)€"€€
+€"€t€o€a€s€t€.€b€u€i€l€d€.€n€o€_€m€o€n€e€y€"€,€"€N€i€c€h€t€ €g€e€n€u€g€ €K€a€p€i€t€a€l€!€"€,€"€N€o€t€ €e€n€o€u€g€h€ €c€a€p€i€t€a€l€!€"€€
+€"€t€o€a€s€t€.€h€r€.€l€o€c€k€e€d€"€,€"€P€e€r€s€o€n€a€l€v€e€r€w€a€l€t€u€n€g€ €b€e€n€ö€t€i€g€t€ €H€o€t€e€l€-€L€e€v€e€l€ €%€d€!€"€,€"€S€t€a€f€f€ €m€a€n€a€g€e€m€e€n€t€ €r€e€q€u€i€r€e€s€ €h€o€t€e€l€ €l€e€v€e€l€ €%€d€!€"€€
+€"€t€o€a€s€t€.€h€r€.€u€n€l€o€c€k€e€d€"€,€"€P€e€r€s€o€n€a€l€v€e€r€w€a€l€t€u€n€g€ €f€r€e€i€g€e€s€c€h€a€l€t€e€t€!€"€,€"€S€t€a€f€f€ €m€a€n€a€g€e€m€e€n€t€ €u€n€l€o€c€k€e€d€!€"€€
+€"€t€o€a€s€t€.€h€r€.€c€o€m€i€n€g€_€s€o€o€n€"€,€"€P€e€r€s€o€n€a€l€v€e€r€w€a€l€t€u€n€g€ €–€ €c€o€m€i€n€g€ €s€o€o€n€"€,€"€S€t€a€f€f€ €M€a€n€a€g€e€m€e€n€t€ €–€ €c€o€m€i€n€g€ €s€o€o€n€"€€
+€"€t€o€a€s€t€.€r€e€s€e€a€r€c€h€.€u€n€l€o€c€k€e€d€"€,€"€F€o€r€s€c€h€u€n€g€s€b€ü€r€o€ €g€e€b€a€u€t€!€ €F€P€ €s€i€n€d€ €j€e€t€z€t€ €a€k€t€i€v€.€"€,€"€R€e€s€e€a€r€c€h€ €o€f€f€i€c€e€ €b€u€i€l€t€!€ €R€P€ €a€r€e€ €n€o€w€ €a€c€t€i€v€e€.€"€€
+€"€t€o€a€s€t€.€s€y€s€t€e€m€.€a€u€t€o€s€a€v€e€"€,€"€S€p€i€e€l€s€t€a€n€d€ €g€e€s€p€e€i€c€h€e€r€t€"€,€"€G€a€m€e€ €s€a€v€e€d€"€€
+€"€t€o€a€s€t€.€s€y€s€t€e€m€.€a€u€t€o€s€a€v€e€.€e€r€r€o€r€"€,€"€S€p€e€i€c€h€e€r€n€ €f€e€h€l€g€e€s€c€h€l€a€g€e€n€"€,€"€S€a€v€e€ €f€a€i€l€e€d€"€€
+€"€t€o€a€s€t€.€q€u€i€c€k€s€a€v€e€"€,€"€S€p€i€e€l€s€t€a€n€d€ €g€e€s€p€e€i€c€h€e€r€t€"€,€"€G€a€m€e€ €s€a€v€e€d€"€€
+€"€t€o€a€s€t€.€q€u€i€c€k€l€o€a€d€.€o€k€"€,€"€S€p€i€e€l€s€t€a€n€d€ €g€e€l€a€d€e€n€"€,€"€G€a€m€e€ €l€o€a€d€e€d€"€€
+€"€t€o€a€s€t€.€q€u€i€c€k€l€o€a€d€.€e€m€p€t€y€"€,€"€K€e€i€n€ €Q€u€i€c€k€s€a€v€e€ €v€o€r€h€a€n€d€e€n€"€,€"€N€o€ €q€u€i€c€k€s€a€v€e€ €a€v€a€i€l€a€b€l€e€"€€
+€"€t€o€a€s€t€.€m€a€n€u€a€l€s€a€v€e€"€,€"€S€p€i€e€l€s€t€a€n€d€ €g€e€s€p€e€i€c€h€e€r€t€.€"€,€"€G€a€m€e€ €s€a€v€e€d€.€"€€
+€"€t€o€a€s€t€.€m€a€n€u€a€l€l€o€a€d€.€o€k€"€,€"€S€p€i€e€l€s€t€a€n€d€ €g€e€l€a€d€e€n€.€"€,€"€G€a€m€e€ €l€o€a€d€e€d€.€"€€
+€"€t€o€a€s€t€.€m€a€n€u€a€l€l€o€a€d€.€e€m€p€t€y€"€,€"€S€p€i€e€l€s€t€a€n€d€ €l€e€e€r€.€"€,€"€S€a€v€e€ €s€l€o€t€ €e€m€p€t€y€.€"€€
+€"€t€o€a€s€t€.€e€v€e€n€t€.€d€a€y€_€s€t€a€r€t€"€,€"€T€a€g€ €b€e€g€i€n€n€t€"€,€"€D€a€y€ €s€t€a€r€t€s€"€€
+€"€t€o€a€s€t€.€e€v€e€n€t€.€g€u€e€s€t€_€a€r€r€i€v€a€l€"€,€"€N€e€u€e€ €G€ä€s€t€e€ €t€r€e€f€f€e€n€ €e€i€n€"€,€"€N€e€w€ €g€u€e€s€t€s€ €a€r€r€i€v€i€n€g€"€€
+€"€t€o€a€s€t€.€e€v€e€n€t€.€d€a€y€_€s€o€f€t€_€e€n€d€"€,€"€H€o€t€e€l€b€e€t€r€i€e€b€ €e€n€d€e€t€ €f€ü€r€ €h€e€u€t€e€"€,€"€H€o€t€e€l€ €o€p€e€r€a€t€i€o€n€s€ €e€n€d€ €f€o€r€ €t€o€d€a€y€"€€
+€"€t€o€a€s€t€.€e€v€e€n€t€.€d€a€y€_€h€a€r€d€_€e€n€d€"€,€"€T€a€g€e€s€a€b€s€c€h€l€u€s€s€"€,€"€E€n€d€ €o€f€ €D€a€y€"€€
+€"€t€o€a€s€t€.€u€n€l€o€c€k€p€l€o€t€.€b€u€y€.€o€k€"€,€"€G€r€u€n€d€s€t€ü€c€k€ €e€r€f€o€l€g€r€e€i€c€h€ €g€e€k€a€u€f€t€!€"€,€"€P€l€o€t€ €p€u€r€c€h€a€s€e€d€ €s€u€c€c€e€s€s€f€u€l€l€y€!€"€€
+€"€t€o€a€s€t€.€u€n€l€o€c€k€p€l€o€t€.€b€u€y€.€n€o€k€"€,€"€F€e€h€l€e€r€!€ €G€r€u€n€d€s€t€ü€c€k€s€k€a€u€f€ €f€e€h€l€g€e€s€c€h€l€a€g€e€n€.€"€,€"€E€r€r€o€r€!€ €P€l€o€t€ €p€u€r€c€h€a€s€e€ €f€a€i€l€e€d€.€"€€
+€"€t€o€a€s€t€.€b€u€i€l€d€.€r€o€o€m€_€p€l€a€c€e€d€"€,€"€#€#€#€ €a€u€s€g€e€w€ä€h€l€t€"€,€"€#€#€#€ €s€e€l€e€c€t€e€d€"€€
+€"€t€o€a€s€t€.€t€e€c€h€t€r€e€e€.€l€o€c€k€e€d€"€,€"€F€o€r€s€c€h€u€n€g€ €b€e€n€ö€t€i€g€t€ €H€o€t€e€l€-€L€e€v€e€l€ €%€d€!€"€,€"€R€e€s€e€a€r€c€h€ €r€e€q€u€i€r€e€s€ €h€o€t€e€l€ €l€e€v€e€l€ €%€d€!€"€€
+€"€t€o€a€s€t€.€t€e€c€h€t€r€e€e€.€u€n€l€o€c€k€e€d€"€,€"€F€r€e€i€g€e€s€c€h€a€l€t€e€t€:€ €#€#€#€"€,€"€U€n€l€o€c€k€e€d€:€ €#€#€#€"€€
+€"€t€o€a€s€t€.€t€e€c€h€t€r€e€e€.€f€a€i€l€e€d€"€,€"€B€e€d€i€n€g€u€n€g€e€n€ €n€i€c€h€t€ €e€r€f€ü€l€l€t€!€"€,€"€R€e€q€u€i€r€e€m€e€n€t€s€ €n€o€t€ €m€e€t€!€"€€
+€"€t€o€a€s€t€.€q€u€e€s€t€.€c€o€m€p€l€e€t€e€d€"€,€"€Q€u€e€s€t€ €a€b€g€e€s€c€h€l€o€s€s€e€n€:€ €#€#€#€"€,€"€Q€u€e€s€t€ €c€o€m€p€l€e€t€e€d€:€ €#€#€#€"€€
+€"€t€o€a€s€t€.€q€u€e€s€t€.€n€e€w€"€,€"€N€e€u€e€ €Q€u€e€s€t€ €v€e€r€f€ü€g€b€a€r€:€ €#€#€#€"€,€"€N€e€w€ €q€u€e€s€t€ €a€v€a€i€l€a€b€l€e€:€ €#€#€#€"€€
+€"€t€o€a€s€t€.€q€u€e€s€t€.€r€e€w€a€r€d€"€,€"€B€e€l€o€h€n€u€n€g€:€ €#€#€#€"€,€"€R€e€w€a€r€d€:€ €#€#€#€"€€
+€"€t€o€a€s€t€.€q€u€e€s€t€.€r€a€n€k€_€c€o€m€p€l€e€t€e€"€,€"€R€a€n€g€ €#€#€#€ €a€b€g€e€s€c€h€l€o€s€s€e€n€!€"€,€"€R€a€n€k€ €#€#€#€ €c€o€m€p€l€e€t€e€d€!€"€€
+€"€t€o€a€s€t€.€q€u€e€s€t€.€r€a€n€k€_€r€e€w€a€r€d€"€,€"€B€e€l€o€h€n€u€n€g€ €f€ü€r€ €R€a€n€g€ €#€#€#€"€,€"€R€e€w€a€r€d€ €f€o€r€ €r€a€n€k€ €#€#€#€"€€
+€"€l€a€b€e€l€.€p€a€y€s€.€s€u€r€c€h€a€r€g€e€"€,€"€Z€a€h€l€t€ €A€u€f€p€r€e€i€s€ €–€ €b€e€s€o€n€d€e€r€s€ €z€u€v€o€r€k€o€m€m€e€n€d€ €b€e€h€a€n€d€e€l€n€!€"€,€"€P€a€y€s€ €s€u€r€c€h€a€r€g€e€ €–€ €t€r€e€a€t€ €w€i€t€h€ €e€x€t€r€a€ €c€a€r€e€!€"€€
+€"€t€o€o€l€t€i€p€.€s€u€r€c€h€a€r€g€e€"€,€"€Z€a€h€l€t€ €A€u€f€p€r€e€i€s€"€,€"€P€a€y€s€ €S€u€r€c€h€a€r€g€e€"€€
+€"€t€t€.€b€u€i€l€d€.€r€o€o€m€.€c€o€s€t€"€,€"€#€#€#€\€n€K€o€s€t€e€n€:€ €*€*€*€ €€€"€,€"€#€#€#€\€n€C€o€s€t€:€ €*€*€*€ €€€"€€
+€"€t€t€.€b€u€i€l€d€.€r€o€o€m€.€l€o€c€k€e€d€"€,€"€#€#€#€\€n€🔒€ €G€E€S€P€E€R€R€T€\€n€B€e€n€ö€t€i€g€t€ €H€o€t€e€l€-€L€e€v€e€l€ €*€*€*€"€,€"€#€#€#€\€n€🔒€ €L€O€C€K€E€D€\€n€R€e€q€u€i€r€e€s€ €H€o€t€e€l€ €L€e€v€e€l€ €*€*€*€"€€
+€"€t€t€.€b€u€i€l€d€.€r€o€o€m€.€l€o€c€k€e€d€_€t€e€c€h€"€,€"€#€#€#€\€n€🔒€ €G€E€S€P€E€R€R€T€\€n€B€e€n€ö€t€i€g€t€ €F€o€r€s€c€h€u€n€g€"€,€"€#€#€#€\€n€🔒€ €L€O€C€K€E€D€\€n€R€e€q€u€i€r€e€s€ €R€e€s€e€a€r€c€h€"€€
+€"€t€t€.€b€u€i€l€d€.€r€o€o€m€.€l€o€c€k€e€d€_€b€o€t€h€"€,€"€#€#€#€\€n€🔒€ €G€E€S€P€E€R€R€T€\€n€B€e€n€ö€t€i€g€t€ €L€e€v€e€l€ €*€*€*€ €u€n€d€ €F€o€r€s€c€h€u€n€g€"€,€"€#€#€#€\€n€🔒€ €L€O€C€K€E€D€\€n€R€e€q€u€i€r€e€s€ €L€e€v€e€l€ €*€*€*€ €a€n€d€ €R€e€s€e€a€r€c€h€"€€
+€"€b€u€i€l€d€.€i€s€v€a€l€i€d€p€o€s€.€e€r€r€o€r€.€c€o€l€l€i€s€i€o€n€"€,€"€H€i€e€r€ €s€t€e€h€t€ €b€e€r€e€i€t€s€ €e€t€w€a€s€!€"€,€"€S€o€m€e€t€h€i€n€g€ €i€s€ €a€l€r€e€a€d€y€ €h€e€r€e€!€"€€
+€"€b€u€i€l€d€.€i€s€v€a€l€i€d€p€o€s€.€e€r€r€o€r€.€h€a€s€n€e€i€g€h€b€o€r€"€,€"€M€u€s€s€ €a€n€ €b€e€s€t€e€h€e€n€d€e€ €R€ä€u€m€e€ €a€n€g€r€e€n€z€e€n€!€"€,€"€M€u€s€t€ €b€e€ €a€d€j€a€c€e€n€t€ €t€o€ €e€x€i€s€t€i€n€g€ €r€o€o€m€s€!€"€€
+€"€b€u€i€l€d€.€i€s€v€a€l€i€d€p€o€s€.€e€r€r€o€r€.€d€o€o€r€c€h€e€c€k€"€,€"€T€ü€r€ €m€u€s€s€ €z€u€ €F€l€u€r€/€L€o€b€b€y€ €z€e€i€g€e€n€!€"€,€"€D€o€o€r€ €m€u€s€t€ €f€a€c€e€ €a€ €c€o€r€r€i€d€o€r€ €o€r€ €l€o€b€b€y€!€"€€
+€"€b€u€i€l€d€.€i€s€v€a€l€i€d€p€o€s€.€e€r€r€o€r€.€p€l€o€t€_€l€o€c€k€e€d€"€,€"€D€u€ €m€u€s€s€t€ €d€i€e€s€e€s€ €G€r€u€n€d€s€t€ü€c€k€ €e€r€s€t€ €k€a€u€f€e€n€!€"€,€"€Y€o€u€ €m€u€s€t€ €p€u€r€c€h€a€s€e€ €t€h€i€s€ €p€l€o€t€ €f€i€r€s€t€!€"€€
+€"€b€u€i€l€d€.€s€h€o€w€r€o€o€m€t€o€o€l€t€i€p€.€s€t€a€t€u€s€.€o€c€c€u€p€i€e€d€"€,€"€B€e€l€e€g€t€"€,€"€O€c€c€u€p€i€e€d€"€€
+€"€b€u€i€l€d€.€s€h€o€w€r€o€o€m€t€o€o€l€t€i€p€.€s€t€a€t€u€s€.€c€h€e€c€k€o€u€t€"€,€"€A€b€r€e€i€s€e€b€e€r€e€i€t€"€,€"€C€h€e€c€k€i€n€g€ €O€u€t€"€€
+€"€b€u€i€l€d€.€s€h€o€w€r€o€o€m€t€o€o€l€t€i€p€.€s€t€a€t€u€s€.€f€r€e€e€"€,€"€F€r€e€i€"€,€"€F€r€e€e€"€€
+€"€b€u€i€l€d€.€t€o€o€l€t€i€p€.€m€a€x€_€r€e€a€c€h€e€d€"€,€"€B€e€r€e€i€t€s€ €g€e€b€a€u€t€"€,€"€A€l€r€e€a€d€y€ €b€u€i€l€t€"€€
+€"€b€u€i€l€d€.€d€e€m€o€l€i€s€h€.€l€a€b€e€l€"€,€"€A€b€r€i€s€s€"€,€"€D€e€m€o€l€i€s€h€"€€
+€"€b€u€i€l€d€.€d€e€m€o€l€i€s€h€.€t€o€o€l€t€i€p€"€,€"€A€b€r€i€s€s€-€M€o€d€u€s€"€,€"€D€e€m€o€l€i€s€h€ €M€o€d€e€"€€
+€"€b€u€i€l€d€.€d€e€m€o€l€i€s€h€.€e€r€r€o€r€.€f€o€u€n€d€a€t€i€o€n€"€,€"€D€i€e€ €L€o€b€b€y€ €k€a€n€n€ €n€i€c€h€t€ €a€b€g€e€r€i€s€s€e€n€ €w€e€r€d€e€n€.€"€,€"€T€h€e€ €l€o€b€b€y€ €c€a€n€n€o€t€ €b€e€ €d€e€m€o€l€i€s€h€e€d€.€"€€
+€"€b€u€i€l€d€.€d€e€m€o€l€i€s€h€.€e€r€r€o€r€.€o€c€c€u€p€i€e€d€"€,€"€D€i€e€s€e€r€ €R€a€u€m€ €i€s€t€ €b€e€l€e€g€t€ €u€n€d€ €k€a€n€n€ €n€i€c€h€t€ €a€b€g€e€r€i€s€s€e€n€ €w€e€r€d€e€n€.€"€,€"€T€h€i€s€ €r€o€o€m€ €i€s€ €o€c€c€u€p€i€e€d€ €a€n€d€ €c€a€n€n€o€t€ €b€e€ €d€e€m€o€l€i€s€h€e€d€.€"€€
+€"€b€u€i€l€d€.€d€e€m€o€l€i€s€h€.€e€r€r€o€r€.€h€a€s€_€d€e€p€e€n€d€e€n€t€s€"€,€"€Z€u€e€r€s€t€ €a€l€l€e€ €a€n€g€r€e€n€z€e€n€d€e€n€ €R€ä€u€m€e€ €e€n€t€f€e€r€n€e€n€.€"€,€"€R€e€m€o€v€e€ €a€l€l€ €a€d€j€a€c€e€n€t€ €r€o€o€m€s€ €f€i€r€s€t€.€"€€
+€"€b€u€i€l€d€.€d€e€m€o€l€i€s€h€.€e€r€r€o€r€.€s€e€r€v€e€r€"€,€"€S€e€r€v€e€r€-€F€e€h€l€e€r€ €b€e€i€m€ €A€b€r€i€s€s€.€"€,€"€S€e€r€v€e€r€ €e€r€r€o€r€ €d€u€r€i€n€g€ €d€e€m€o€l€i€t€i€o€n€.€"€€
+€"€b€u€i€l€d€.€d€e€m€o€l€i€s€h€.€d€i€a€l€o€g€.€t€i€t€l€e€"€,€"€R€a€u€m€ €a€b€r€e€i€ß€e€n€"€,€"€D€e€m€o€l€i€s€h€ €R€o€o€m€"€€
+€"€b€u€i€l€d€.€d€e€m€o€l€i€s€h€.€d€i€a€l€o€g€.€t€e€x€t€"€,€"€#€#€#€ €a€b€r€e€i€Ã€€e€n€?€ €D€u€ €e€r€h€ä€l€t€s€t€ €*€*€*€ €z€u€r€ü€c€k€.€"€,€"€D€e€m€o€l€i€s€h€ €#€#€#€?€ €Y€o€u€ €w€i€l€l€ €r€e€c€e€i€v€e€ €*€*€*€ €b€a€c€k€.€"€€
+€"€b€u€i€l€d€.€d€e€m€o€l€i€s€h€.€d€i€a€l€o€g€.€c€o€n€f€i€r€m€"€,€"€A€b€r€e€i€ß€e€n€"€,€"€D€e€m€o€l€i€s€h€"€€
+€"€b€u€i€l€d€.€d€e€m€o€l€i€s€h€.€d€i€a€l€o€g€.€c€a€n€c€e€l€"€,€"€A€b€b€r€e€c€h€e€n€"€,€"€C€a€n€c€e€l€"€€
+€"€b€u€i€l€d€.€d€e€m€o€l€i€s€h€.€s€u€c€c€e€s€s€"€,€"€#€#€#€ €a€b€g€e€r€i€s€s€e€n€.€ €*€*€*€ €e€r€s€t€a€t€t€e€t€.€"€,€"€#€#€#€ €d€e€m€o€l€i€s€h€e€d€.€ €*€*€*€ €r€e€f€u€n€d€e€d€.€"€€
+€"€d€i€a€l€o€g€.€c€o€n€f€i€r€m€.€u€n€l€o€c€k€p€l€o€t€.€b€u€y€.€t€i€t€l€e€"€,€"€G€r€u€n€d€s€t€ü€c€k€ €k€a€u€f€e€n€"€,€"€P€u€r€c€h€a€s€e€ €P€l€o€t€"€€
+€"€d€i€a€l€o€g€.€c€o€n€f€i€r€m€.€u€n€l€o€c€k€p€l€o€t€.€b€u€y€.€t€e€x€t€"€,€"€M€ö€c€h€t€e€s€t€ €d€u€ €d€a€s€ €G€r€u€n€d€s€t€ü€c€k€ €#€#€#€ €f€ü€r€ €*€*€*€ €k€a€u€f€e€n€?€"€,€"€D€o€ €y€o€u€ €w€a€n€t€ €t€o€ €p€u€r€c€h€a€s€e€ €p€l€o€t€ €#€#€#€ €f€o€r€ €*€*€*€?€"€€
+€"€a€c€t€i€v€i€t€y€l€o€g€.€t€i€t€l€e€"€,€"€E€r€e€i€g€n€i€s€s€e€"€,€"€E€v€e€n€t€s€"€€
+€"€a€c€t€i€v€i€t€y€l€o€g€.€m€s€g€.€n€o€d€a€t€a€"€,€"€K€e€i€n€e€ €n€e€u€e€n€ €M€e€l€d€u€n€g€e€n€.€.€.€"€,€"€N€o€ €n€e€w€ €m€e€s€s€a€g€e€s€.€.€.€"€€
+€"€a€c€t€i€v€i€t€y€l€o€g€.€f€i€l€t€e€r€.€a€l€l€"€,€"€A€l€l€e€"€,€"€A€l€l€"€€
+€"€a€c€t€i€v€i€t€y€l€o€g€.€f€i€l€t€e€r€.€s€y€s€t€e€m€"€,€"€S€y€s€t€e€m€"€,€"€S€y€s€t€e€m€"€€
+€"€a€c€t€i€v€i€t€y€l€o€g€.€f€i€l€t€e€r€.€g€u€e€s€t€"€,€"€G€ä€s€t€e€"€,€"€G€u€e€s€t€s€"€€
+€"€a€c€t€i€v€i€t€y€l€o€g€.€f€i€l€t€e€r€.€b€u€i€l€d€"€,€"€B€a€u€"€,€"€B€u€i€l€d€"€€
+€"€a€c€t€i€v€i€t€y€l€o€g€.€f€i€l€t€e€r€.€r€e€s€e€a€r€c€h€"€,€"€F€o€r€s€c€h€u€n€g€"€,€"€R€e€s€e€a€r€c€h€"€€
+€"€l€o€g€.€g€u€e€s€t€.€a€u€t€o€_€c€h€e€c€k€o€u€t€"€,€"€A€u€t€o€-€C€h€e€c€k€o€u€t€:€ €#€#€#€ €–€ €K€e€i€n€e€ €E€i€n€n€a€h€m€e€n€ €(€v€e€r€g€e€s€s€e€n€)€"€,€"€A€u€t€o€-€C€h€e€c€k€o€u€t€:€ €#€#€#€ €–€ €N€o€ €i€n€c€o€m€e€ €(€f€o€r€g€o€t€t€e€n€)€"€€
+€"€l€o€g€.€r€e€p€u€t€a€t€i€o€n€.€a€u€t€o€_€c€h€e€c€k€o€u€t€"€,€"€V€e€r€g€e€s€s€e€n€e€r€ €C€h€e€c€k€o€u€t€:€ €#€#€#€"€,€"€F€o€r€g€o€t€t€e€n€ €c€h€e€c€k€o€u€t€:€ €#€#€#€"€€
+€"€l€o€g€.€g€u€e€s€t€.€d€e€c€l€i€n€e€d€"€,€"€G€a€s€t€ €#€#€#€ €w€u€r€d€e€ €a€b€g€e€l€e€h€n€t€"€,€"€G€u€e€s€t€ €#€#€#€ €w€a€s€ €d€e€c€l€i€n€e€d€"€€
+€"€l€o€g€.€r€e€p€u€t€a€t€i€o€n€.€d€e€c€l€i€n€e€"€,€"€G€a€s€t€ €#€#€#€ €a€b€g€e€l€e€h€n€t€"€,€"€G€u€e€s€t€ €#€#€#€ €d€e€c€l€i€n€e€d€"€€
+€"€l€o€g€.€r€e€p€u€t€a€t€i€o€n€.€c€h€e€c€k€i€n€"€,€"€C€h€e€c€k€-€I€n€"€,€"€C€h€e€c€k€-€I€n€"€€
+€"€l€o€g€.€r€e€p€u€t€a€t€i€o€n€.€c€h€e€c€k€o€u€t€"€,€"€C€h€e€c€k€-€O€u€t€"€,€"€C€h€e€c€k€-€O€u€t€"€€
+€"€l€o€g€.€g€u€e€s€t€.€a€r€r€i€v€a€l€"€,€"€#€#€#€ €n€e€u€e€ €G€ä€s€t€e€ €s€i€n€d€ €e€i€n€g€e€t€r€o€f€f€e€n€"€,€"€#€#€#€ €n€e€w€ €g€u€e€s€t€s€ €h€a€v€e€ €a€r€r€i€v€e€d€"€€
+€"€l€o€g€.€l€e€v€e€l€u€p€"€,€"€L€e€v€e€l€ €U€p€!€ €D€e€i€n€ €H€o€t€e€l€ €h€a€t€ €j€e€t€z€t€ €L€e€v€e€l€ €#€#€#€"€,€"€L€e€v€e€l€ €U€p€!€ €Y€o€u€r€ €h€o€t€e€l€ €i€s€ €n€o€w€ €l€e€v€e€l€ €#€#€#€"€€
+€"€d€a€y€e€n€d€.€t€i€t€l€e€"€,€"€T€a€g€e€s€a€b€s€c€h€l€u€s€s€"€,€"€E€n€d€ €o€f€ €D€a€y€"€€
+€"€d€a€y€e€n€d€.€s€u€b€t€i€t€l€e€"€,€"€T€a€g€ €#€#€#€ €a€b€g€e€s€c€h€l€o€s€s€e€n€"€,€"€D€a€y€ €#€#€#€ €c€o€m€p€l€e€t€e€d€"€€
+€"€d€a€y€e€n€d€.€n€e€w€_€d€a€y€"€,€"€W€i€l€l€k€o€m€m€e€n€ €z€u€ €T€a€g€ €#€#€#€!€"€,€"€W€e€l€c€o€m€e€ €t€o€ €D€a€y€ €#€#€#€!€"€€
+€"€d€a€y€e€n€d€.€s€e€c€t€i€o€n€.€f€i€n€a€n€c€e€"€,€"€F€i€n€a€n€z€e€n€"€,€"€F€i€n€a€n€c€e€s€"€€
+€"€d€a€y€e€n€d€.€s€e€c€t€i€o€n€.€g€u€e€s€t€s€"€,€"€G€ä€s€t€e€"€,€"€G€u€e€s€t€s€"€€
+€"€d€a€y€e€n€d€.€s€e€c€t€i€o€n€.€x€p€"€,€"€E€r€f€a€h€r€u€n€g€"€,€"€E€x€p€e€r€i€e€n€c€e€"€€
+€"€d€a€y€e€n€d€.€s€t€a€t€.€i€n€c€o€m€e€"€,€"€E€i€n€n€a€h€m€e€n€"€,€"€I€n€c€o€m€e€"€€
+€"€d€a€y€e€n€d€.€s€t€a€t€.€e€x€p€e€n€s€e€s€"€,€"€A€u€s€g€a€b€e€n€"€,€"€E€x€p€e€n€s€e€s€"€€
+€"€d€a€y€e€n€d€.€s€t€a€t€.€p€r€o€f€i€t€"€,€"€G€e€w€i€n€n€ €/€ €V€e€r€l€u€s€t€"€,€"€P€r€o€f€i€t€ €/€ €L€o€s€s€"€€
+€"€d€a€y€e€n€d€.€s€t€a€t€.€c€h€e€c€k€i€n€s€"€,€"€C€h€e€c€k€-€i€n€s€"€,€"€C€h€e€c€k€-€i€n€s€"€€
+€"€d€a€y€e€n€d€.€s€t€a€t€.€c€h€e€c€k€o€u€t€s€"€,€"€C€h€e€c€k€-€o€u€t€s€"€,€"€C€h€e€c€k€-€o€u€t€s€"€€
+€"€d€a€y€e€n€d€.€s€t€a€t€.€i€n€h€o€u€s€e€"€,€"€I€m€ €H€a€u€s€"€,€"€I€n€ €H€o€u€s€e€"€€
+€"€d€a€y€e€n€d€.€s€t€a€t€.€x€p€_€e€a€r€n€e€d€"€,€"€X€P€ €v€e€r€d€i€e€n€t€"€,€"€X€P€ €E€a€r€n€e€d€"€€
+€"€d€a€y€e€n€d€.€s€t€a€t€.€l€e€v€e€l€"€,€"€L€e€v€e€l€"€,€"€L€e€v€e€l€"€€
+€"€d€a€y€e€n€d€.€s€t€a€t€.€d€e€p€a€r€t€u€r€e€s€_€t€o€m€o€r€r€o€w€"€,€"€A€b€r€e€i€s€e€n€d€ €m€o€r€g€e€n€"€,€"€D€e€p€a€r€t€i€n€g€ €T€o€m€o€r€r€o€w€"€€
+€"€d€a€y€e€n€d€.€b€t€n€.€n€e€x€t€_€d€a€y€"€,€"€W€e€i€t€e€r€ €z€u€ €T€a€g€ €#€#€#€"€,€"€C€o€n€t€i€n€u€e€ €t€o€ €D€a€y€ €#€#€#€"€€
+€"€d€a€y€e€n€d€.€i€n€c€o€m€e€.€r€o€o€m€s€"€,€"€Z€i€m€m€e€r€e€i€n€n€a€h€m€e€n€"€,€"€R€o€o€m€ €I€n€c€o€m€e€"€€
+€"€d€a€y€e€n€d€.€i€n€c€o€m€e€.€r€e€s€t€a€u€r€a€n€t€"€,€"€R€e€s€t€a€u€r€a€n€t€"€,€"€R€e€s€t€a€u€r€a€n€t€"€€
+€"€d€a€y€e€n€d€.€i€n€c€o€m€e€.€s€e€r€v€i€c€e€"€,€"€S€e€r€v€i€c€e€s€"€,€"€S€e€r€v€i€c€e€s€"€€
+€"€d€a€y€e€n€d€.€g€u€e€s€t€s€.€s€i€n€g€l€e€"€,€"€E€i€n€z€e€l€r€e€i€s€e€n€d€e€"€,€"€S€o€l€o€ €T€r€a€v€e€l€e€r€s€"€€
+€"€d€a€y€e€n€d€.€g€u€e€s€t€s€.€c€o€u€p€l€e€"€,€"€P€a€a€r€e€"€,€"€C€o€u€p€l€e€s€"€€
+€"€d€a€y€e€n€d€.€g€u€e€s€t€s€.€f€a€m€i€l€y€"€,€"€F€a€m€i€l€i€e€n€"€,€"€F€a€m€i€l€i€e€s€"€€
+€"€d€a€y€e€n€d€.€x€p€.€r€o€o€m€s€"€,€"€X€P€ €a€u€s€ €V€e€r€m€i€e€t€u€n€g€"€,€"€X€P€ €f€r€o€m€ €R€e€n€t€a€l€s€"€€
+€"€d€a€y€e€n€d€.€x€p€.€b€u€i€l€d€"€,€"€X€P€ €a€u€s€ €B€a€u€"€,€"€X€P€ €f€r€o€m€ €B€u€i€l€d€i€n€g€"€€
+€"€d€a€y€e€n€d€.€w€a€r€n€i€n€g€.€f€o€r€g€o€t€t€e€n€_€c€h€e€c€k€o€u€t€s€"€,€"€⚠€ €#€#€#€ €G€a€s€t€/€G€ä€s€t€e€ €w€a€r€t€e€n€ €n€o€c€h€ €a€u€f€ €C€h€e€c€k€o€u€t€ €–€ €E€i€n€n€a€h€m€e€n€ €a€u€s€s€t€e€h€e€n€d€!€"€,€"€⚠€ €#€#€#€ €g€u€e€s€t€(€s€)€ €s€t€i€l€l€ €w€a€i€t€i€n€g€ €f€o€r€ €c€h€e€c€k€o€u€t€ €–€ €i€n€c€o€m€e€ €p€e€n€d€i€n€g€!€"€€
+€"€d€a€y€s€t€a€r€t€.€t€i€t€l€e€"€,€"€H€e€u€t€i€g€e€ €A€u€f€g€a€b€e€n€"€,€"€T€o€d€a€y€'€s€ €T€a€s€k€s€"€€
+€"€d€a€y€s€t€a€r€t€.€s€u€b€t€i€t€l€e€"€,€"€T€a€g€ €#€#€#€"€,€"€D€a€y€ €#€#€#€"€€
+€"€d€a€y€s€t€a€r€t€.€p€e€n€d€i€n€g€_€c€h€e€c€k€o€u€t€s€"€,€"€⚠€ €#€#€#€ €G€a€s€t€/€G€ä€s€t€e€ €w€a€r€t€e€n€ €a€u€f€ €C€h€e€c€k€o€u€t€"€,€"€⚠€ €#€#€#€ €g€u€e€s€t€(€s€)€ €w€a€i€t€i€n€g€ €f€o€r€ €c€h€e€c€k€o€u€t€"€€
+€"€d€a€y€s€t€a€r€t€.€a€u€t€o€_€c€h€e€c€k€e€d€_€o€u€t€"€,€"€#€#€#€ €G€a€s€t€/€G€ä€s€t€e€ €a€u€t€o€m€a€t€i€s€c€h€ €a€u€s€g€e€c€h€e€c€k€t€ €(€k€e€i€n€e€ €E€i€n€n€a€h€m€e€n€,€ €R€u€f€-€M€a€l€u€s€)€"€,€"€#€#€#€ €g€u€e€s€t€(€s€)€ €a€u€t€o€ €c€h€e€c€k€e€d€ €o€u€t€ €(€n€o€ €i€n€c€o€m€e€,€ €r€e€p€u€t€a€t€i€o€n€ €p€e€n€a€l€t€y€)€"€€
+€"€d€a€y€s€t€a€r€t€.€b€t€n€.€o€k€"€,€"€V€e€r€s€t€a€n€d€e€n€"€,€"€G€o€t€ €i€t€"€€
+€"€l€e€v€e€l€u€p€.€l€a€b€e€l€"€,€"€L€e€v€e€l€ €U€p€!€"€,€"€L€e€v€e€l€ €U€p€!€"€€
+€"€l€e€v€e€l€u€p€.€b€t€n€.€c€o€n€t€i€n€u€e€"€,€"€W€e€i€t€e€r€"€,€"€C€o€n€t€i€n€u€e€"€€
+€"€l€e€v€e€l€u€p€.€u€n€l€o€c€k€.€p€l€o€t€_€a€v€a€i€l€a€b€l€e€"€,€"€N€e€u€e€ €G€r€u€n€d€s€t€ü€c€k€e€ €v€e€r€f€ü€g€b€a€r€"€,€"€N€e€w€ €p€l€o€t€s€ €a€v€a€i€l€a€b€l€e€"€€
+€"€l€e€v€e€l€u€p€.€u€n€l€o€c€k€.€n€e€w€_€r€o€o€m€t€y€p€e€s€"€,€"€N€e€u€e€ €R€a€u€m€t€y€p€e€n€ €f€r€e€i€g€e€s€c€h€a€l€t€e€t€"€,€"€N€e€w€ €r€o€o€m€ €t€y€p€e€s€ €u€n€l€o€c€k€e€d€"€€
+€"€l€e€v€e€l€u€p€.€u€n€l€o€c€k€.€m€o€r€e€_€p€l€o€t€s€"€,€"€W€e€i€t€e€r€e€ €G€r€u€n€d€s€t€ü€c€k€e€ €k€a€u€f€b€a€r€"€,€"€M€o€r€e€ €p€l€o€t€s€ €a€v€a€i€l€a€b€l€e€ €f€o€r€ €p€u€r€c€h€a€s€e€"€€
+€"€l€e€v€e€l€u€p€.€u€n€l€o€c€k€.€r€e€s€t€a€u€r€a€n€t€"€,€"€R€e€s€t€a€u€r€a€n€t€ €b€a€u€b€a€r€"€,€"€R€e€s€t€a€u€r€a€n€t€ €c€a€n€ €b€e€ €b€u€i€l€t€"€€
+€"€l€e€v€e€l€u€p€.€u€n€l€o€c€k€.€r€e€s€e€a€r€c€h€_€h€i€n€t€"€,€"€B€ü€r€o€ €b€a€u€e€n€ €s€c€h€a€l€t€e€t€ €d€a€s€ €F€o€r€s€c€h€u€n€g€s€s€y€s€t€e€m€ €f€r€e€i€"€,€"€B€u€i€l€d€i€n€g€ €a€n€ €o€f€f€i€c€e€ €u€n€l€o€c€k€s€ €t€h€e€ €r€e€s€e€a€r€c€h€ €s€y€s€t€e€m€"€€
+€"€l€e€v€e€l€u€p€.€u€n€l€o€c€k€.€h€r€_€h€i€n€t€"€,€"€V€e€r€t€r€a€g€ €m€i€t€ €P€e€r€s€o€n€a€l€d€i€e€n€s€t€l€e€i€s€t€e€r€ €f€r€e€i€g€e€s€c€h€a€l€t€e€t€!€"€,€"€C€o€n€t€r€a€c€t€ €w€i€t€h€ €s€t€a€f€f€i€n€g€ €a€g€e€n€c€y€ €u€n€l€o€c€k€e€d€!€"€€
+€"€l€e€v€e€l€u€p€.€u€n€l€o€c€k€.€n€o€_€u€n€l€o€c€k€s€"€,€"€N€e€u€e€ €F€r€e€i€s€c€h€a€l€t€u€n€g€e€n€ €k€o€m€m€e€n€ €ü€b€e€r€ €d€e€n€ €F€o€r€s€c€h€u€n€g€s€b€a€u€m€"€,€"€N€e€w€ €u€n€l€o€c€k€s€ €c€o€m€e€ €t€h€r€o€u€g€h€ €t€h€e€ €r€e€s€e€a€r€c€h€ €t€r€e€e€"€€
+€"€t€e€c€h€t€r€e€e€.€t€i€t€l€e€"€,€"€T€e€c€h€n€o€l€o€g€i€e€b€a€u€m€"€,€"€T€e€c€h€n€o€l€o€g€y€ €T€r€e€e€"€€
+€"€t€e€c€h€t€r€e€e€.€b€r€a€n€c€h€.€z€i€m€m€e€r€"€,€"€Z€i€m€m€e€r€ €&€ €U€n€t€e€r€b€r€i€n€g€u€n€g€"€,€"€R€o€o€m€s€ €&€ €A€c€c€o€m€m€o€d€a€t€i€o€n€"€€
+€"€t€e€c€h€t€r€e€e€.€b€r€a€n€c€h€.€g€a€s€t€r€o€n€o€m€i€e€"€,€"€G€a€s€t€r€o€n€o€m€i€e€ €&€ €S€e€r€v€i€c€e€"€,€"€G€a€s€t€r€o€n€o€m€y€ €&€ €S€e€r€v€i€c€e€"€€
+€"€t€e€c€h€t€r€e€e€.€b€r€a€n€c€h€.€w€e€l€l€n€e€s€s€"€,€"€W€e€l€l€n€e€s€s€ €&€ €F€r€e€i€z€e€i€t€"€,€"€W€e€l€l€n€e€s€s€ €&€ €L€e€i€s€u€r€e€"€€
+€"€t€e€c€h€t€r€e€e€.€b€r€a€n€c€h€.€m€a€n€a€g€e€m€e€n€t€"€,€"€M€a€n€a€g€e€m€e€n€t€ €&€ €B€e€t€r€i€e€b€"€,€"€M€a€n€a€g€e€m€e€n€t€ €&€ €O€p€e€r€a€t€i€o€n€s€"€€
+€"€t€e€c€h€t€r€e€e€.€b€r€a€n€c€h€.€p€r€e€s€t€i€g€e€"€,€"€P€r€e€s€t€i€g€e€ €&€ €E€x€t€r€a€s€"€,€"€P€r€e€s€t€i€g€e€ €&€ €E€x€t€r€a€s€"€€
+€"€t€e€c€h€t€r€e€e€.€l€o€a€d€i€n€g€"€,€"€W€i€r€d€ €g€e€l€a€d€e€n€.€.€.€"€,€"€L€o€a€d€i€n€g€.€.€.€"€€
+€"€t€e€c€h€t€r€e€e€.€e€r€r€o€r€"€,€"€F€e€h€l€e€r€ €b€e€i€m€ €L€a€d€e€n€"€,€"€E€r€r€o€r€ €l€o€a€d€i€n€g€"€€
+€"€t€e€c€h€t€r€e€e€.€l€e€v€e€l€"€,€"€S€t€u€f€e€"€,€"€L€e€v€e€l€"€€
+€"€t€e€c€h€t€r€e€e€.€b€t€n€.€u€n€l€o€c€k€"€,€"€E€r€f€o€r€s€c€h€e€n€"€,€"€R€e€s€e€a€r€c€h€"€€
+€"€t€e€c€h€t€r€e€e€.€l€o€c€k€e€d€.€t€i€t€l€e€"€,€"€F€o€r€s€c€h€u€n€g€ €g€e€s€p€e€r€r€t€"€,€"€R€e€s€e€a€r€c€h€ €L€o€c€k€e€d€"€€
+€"€t€e€c€h€t€r€e€e€.€l€o€c€k€e€d€.€t€e€x€t€"€,€"€B€a€u€e€ €z€u€e€r€s€t€ €e€i€n€ €B€ü€r€o€ €u€m€ €d€e€n€ €T€e€c€h€n€o€l€o€g€i€e€b€a€u€m€ €f€r€e€i€z€u€s€c€h€a€l€t€e€n€.€"€,€"€B€u€i€l€d€ €a€n€ €o€f€f€i€c€e€ €f€i€r€s€t€ €t€o€ €u€n€l€o€c€k€ €t€h€e€ €t€e€c€h€n€o€l€o€g€y€ €t€r€e€e€.€"€€
+€"€t€e€c€h€t€r€e€e€.€c€o€n€d€i€t€i€o€n€.€c€u€r€r€e€n€t€"€,€"€a€k€t€u€e€l€l€"€,€"€c€u€r€r€e€n€t€"€€
+€"€t€e€c€h€t€r€e€e€.€c€o€n€d€i€t€i€o€n€.€r€e€q€u€i€r€e€s€"€,€"€B€e€n€ö€t€i€g€t€"€,€"€R€e€q€u€i€r€e€s€"€€
+€"€t€e€c€h€t€r€e€e€.€c€o€n€d€i€t€i€o€n€.€c€r€o€s€s€_€r€e€q€u€i€r€e€s€"€,€"€Q€u€e€r€-€V€o€r€a€u€s€s€e€t€z€u€n€g€"€,€"€C€r€o€s€s€-€R€e€q€u€i€r€e€m€e€n€t€"€€
+€"€t€e€c€h€t€r€e€e€.€c€o€n€d€i€t€i€o€n€.€m€a€n€a€g€e€m€e€n€t€"€,€"€F€o€r€s€c€h€u€n€g€s€b€ü€r€o€ €v€o€r€h€a€n€d€e€n€"€,€"€R€e€s€e€a€r€c€h€ €o€f€f€i€c€e€ €p€r€e€s€e€n€t€"€€
+€"€t€e€c€h€t€r€e€e€.€c€o€n€f€i€r€m€.€t€i€t€l€e€"€,€"€T€e€c€h€n€o€l€o€g€i€e€ €e€r€f€o€r€s€c€h€e€n€"€,€"€R€e€s€e€a€r€c€h€ €T€e€c€h€n€o€l€o€g€y€"€€
+€"€t€e€c€h€t€r€e€e€.€c€o€n€f€i€r€m€.€t€e€x€t€"€,€"€#€#€#€ €f€ü€r€ €*€*€*€ €F€P€ €e€r€f€o€r€s€c€h€e€n€?€"€,€"€R€e€s€e€a€r€c€h€ €#€#€#€ €f€o€r€ €*€*€*€ €R€P€?€"€€
+€"€t€e€c€h€t€r€e€e€.€c€o€n€f€i€r€m€.€o€k€"€,€"€E€r€f€o€r€s€c€h€e€n€"€,€"€R€e€s€e€a€r€c€h€"€€
+€"€t€e€c€h€t€r€e€e€.€c€o€n€f€i€r€m€.€c€a€n€c€e€l€"€,€"€A€b€b€r€e€c€h€e€n€"€,€"€C€a€n€c€e€l€"€€
+€"€t€e€c€h€t€r€e€e€.€n€o€d€e€.€t€o€o€l€t€i€p€.€u€n€l€o€c€k€"€,€"€K€l€i€c€k€e€n€ €z€u€m€ €E€r€f€o€r€s€c€h€e€n€"€,€"€C€l€i€c€k€ €t€o€ €R€e€s€e€a€r€c€h€"€€
+€"€t€e€c€h€t€r€e€e€.€g€a€s€t€r€o€.€b€a€r€.€n€a€m€e€"€,€"€B€a€r€"€,€"€B€a€r€"€€
+€"€t€e€c€h€t€r€e€e€.€g€a€s€t€r€o€.€b€a€r€.€d€e€s€c€"€,€"€E€i€n€e€ €k€l€e€i€n€e€ €B€a€r€ €f€ü€r€ €G€ä€s€t€e€ €d€i€e€ €n€o€c€h€ €n€i€c€h€t€ €m€ü€d€e€ €s€i€n€d€.€"€,€"€A€ €c€o€z€y€ €b€a€r€ €f€o€r€ €g€u€e€s€t€s€ €w€h€o€ €a€r€e€n€'€t€ €t€i€r€e€d€ €y€e€t€.€"€€
+€"€t€e€c€h€t€r€e€e€.€z€i€m€m€e€r€.€z€1€1€"€,€"€K€o€m€f€o€r€t€-€G€r€u€n€d€l€a€g€e€n€"€,€"€C€o€m€f€o€r€t€ €B€a€s€i€c€s€"€€
+€"€t€e€c€h€t€r€e€e€.€z€i€m€m€e€r€.€z€1€2€"€,€"€F€a€m€i€l€i€e€n€z€i€m€m€e€r€"€,€"€F€a€m€i€l€y€ €R€o€o€m€s€"€€
+€"€t€e€c€h€t€r€e€e€.€z€i€m€m€e€r€.€z€1€3€"€,€"€S€u€p€e€r€i€o€r€-€Z€i€m€m€e€r€"€,€"€S€u€p€e€r€i€o€r€ €R€o€o€m€s€"€€
+€"€t€e€c€h€t€r€e€e€.€z€i€m€m€e€r€.€z€1€4€"€,€"€P€r€e€m€i€u€m€-€U€p€g€r€a€d€e€"€,€"€P€r€e€m€i€u€m€ €U€p€g€r€a€d€e€"€€
+€"€t€e€c€h€t€r€e€e€.€z€i€m€m€e€r€.€z€1€5€"€,€"€L€u€x€u€s€ €S€u€i€t€e€"€,€"€L€u€x€u€r€y€ €S€u€i€t€e€"€€
+€"€t€e€c€h€t€r€e€e€.€g€a€s€t€r€o€.€g€1€1€"€,€"€B€a€s€i€s€-€G€a€s€t€r€o€n€o€m€i€e€"€,€"€B€a€s€i€c€ €G€a€s€t€r€o€n€o€m€y€"€€
+€"€t€e€c€h€t€r€e€e€.€g€a€s€t€r€o€.€g€1€2€"€,€"€E€r€w€e€i€t€e€r€t€e€ €G€a€s€t€r€o€n€o€m€i€e€"€,€"€E€x€t€e€n€d€e€d€ €G€a€s€t€r€o€n€o€m€y€"€€
+€"€t€e€c€h€t€r€e€e€.€g€a€s€t€r€o€.€g€1€3€"€,€"€G€e€h€o€b€e€n€e€ €K€ü€c€h€e€"€,€"€F€i€n€e€ €D€i€n€i€n€g€"€€
+€"€t€e€c€h€t€r€e€e€.€g€a€s€t€r€o€.€g€1€4€"€,€"€K€u€l€i€n€a€r€i€s€c€h€e€ €E€x€z€e€l€l€e€n€z€"€,€"€C€u€l€i€n€a€r€y€ €E€x€c€e€l€l€e€n€c€e€"€€
+€"€t€e€c€h€t€r€e€e€.€w€e€l€l€n€e€s€s€.€w€1€1€"€,€"€B€a€s€i€s€-€W€e€l€l€n€e€s€s€"€,€"€B€a€s€i€c€ €W€e€l€l€n€e€s€s€"€€
+€"€t€e€c€h€t€r€e€e€.€w€e€l€l€n€e€s€s€.€w€1€2€"€,€"€A€u€ß€e€n€b€e€r€e€i€c€h€"€,€"€O€u€t€d€o€o€r€ €A€r€e€a€"€€
+€"€t€e€c€h€t€r€e€e€.€w€e€l€l€n€e€s€s€.€w€1€3€"€,€"€P€r€e€m€i€u€m€-€S€p€a€"€,€"€P€r€e€m€i€u€m€ €S€p€a€"€€
+€"€t€e€c€h€t€r€e€e€.€m€a€n€a€g€e€m€e€n€t€.€m€1€1€"€,€"€B€e€t€r€i€e€b€s€g€r€u€n€d€l€a€g€e€n€"€,€"€O€p€e€r€a€t€i€o€n€s€ €B€a€s€i€c€s€"€€
+€"€t€e€c€h€t€r€e€e€.€m€a€n€a€g€e€m€e€n€t€.€m€1€2€"€,€"€P€e€r€s€o€n€a€l€v€e€r€w€a€l€t€u€n€g€"€,€"€S€t€a€f€f€ €M€a€n€a€g€e€m€e€n€t€"€€
+€"€t€e€c€h€t€r€e€e€.€m€a€n€a€g€e€m€e€n€t€.€m€1€3€"€,€"€P€r€o€z€e€s€s€o€p€t€i€m€i€e€r€u€n€g€"€,€"€P€r€o€c€e€s€s€ €O€p€t€i€m€i€z€a€t€i€o€n€"€€
+€"€t€e€c€h€t€r€e€e€.€m€a€n€a€g€e€m€e€n€t€.€m€1€4€"€,€"€K€o€n€z€e€r€n€-€M€a€n€a€g€e€m€e€n€t€"€,€"€C€o€r€p€o€r€a€t€e€ €M€a€n€a€g€e€m€e€n€t€"€€
+€"€t€e€c€h€t€r€e€e€.€p€r€e€s€t€i€g€e€.€p€1€1€"€,€"€V€e€r€a€n€s€t€a€l€t€u€n€g€e€n€"€,€"€E€v€e€n€t€s€"€€
+€"€t€e€c€h€t€r€e€e€.€p€r€e€s€t€i€g€e€.€p€1€2€"€,€"€G€r€o€ß€v€e€r€a€n€s€t€a€l€t€u€n€g€e€n€"€,€"€L€a€r€g€e€ €E€v€e€n€t€s€"€€
+€"€t€e€c€h€t€r€e€e€.€p€r€e€s€t€i€g€e€.€p€1€3€"€,€"€U€n€t€e€r€h€a€l€t€u€n€g€"€,€"€E€n€t€e€r€t€a€i€n€m€e€n€t€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€r€e€s€e€a€r€c€h€e€d€"€,€"€ €(€E€r€f€o€r€s€c€h€t€)€"€,€"€ €(€R€e€s€e€a€r€c€h€e€d€)€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€c€o€s€t€.€t€t€"€,€"€F€P€:€ €#€#€#€ €|€ €€€:€ €*€*€*€"€,€"€R€P€:€ €#€#€#€ €|€ €€€:€ €*€*€*€"€€
+€"€q€u€e€s€t€.€s€i€n€g€l€e€.€1€.€n€a€m€e€"€,€"€K€l€e€i€n€e€ €S€c€h€r€i€t€t€e€"€,€"€S€m€a€l€l€ €S€t€e€p€s€"€€
+€"€q€u€e€s€t€.€s€i€n€g€l€e€.€1€.€d€e€s€c€"€,€"€B€a€u€e€ €5€ €S€t€a€n€d€a€r€d€-€Z€i€m€m€e€r€"€,€"€B€u€i€l€d€ €5€ €S€i€n€g€l€e€ €R€o€o€m€s€"€€
+€"€q€u€e€s€t€.€d€o€u€b€l€e€.€1€.€n€a€m€e€"€,€"€D€o€p€p€e€l€t€e€r€ €S€p€a€ß€"€,€"€D€o€u€b€l€e€ €t€h€e€ €F€u€n€"€€
+€"€q€u€e€s€t€.€d€o€u€b€l€e€.€1€.€d€e€s€c€"€,€"€B€a€u€e€ €5€ €D€o€p€p€e€l€z€i€m€m€e€r€"€,€"€B€u€i€l€d€ €5€ €D€o€u€b€l€e€ €R€o€o€m€s€"€€
+€"€q€u€e€s€t€.€f€a€m€i€l€y€.€1€.€n€a€m€e€"€,€"€F€a€m€i€l€i€e€n€b€a€n€d€e€"€,€"€F€a€m€i€l€y€ €T€i€e€s€"€€
+€"€q€u€e€s€t€.€f€a€m€i€l€y€.€1€.€d€e€s€c€"€,€"€B€a€u€e€ €5€ €F€a€m€i€l€i€e€n€z€i€m€m€e€r€"€,€"€B€u€i€l€d€ €5€ €F€a€m€i€l€y€ €R€o€o€m€s€"€€
+€"€q€u€e€s€t€.€s€u€p€e€r€i€o€r€.€1€.€n€a€m€e€"€,€"€E€i€n€ €H€a€u€c€h€ €v€o€n€ €L€u€x€u€s€"€,€"€A€ €T€o€u€c€h€ €o€f€ €L€u€x€u€r€y€"€€
+€"€q€u€e€s€t€.€s€u€p€e€r€i€o€r€.€1€.€d€e€s€c€"€,€"€B€a€u€e€ €5€ €S€u€p€e€r€i€o€r€-€Z€i€m€m€e€r€"€,€"€B€u€i€l€d€ €5€ €S€u€p€e€r€i€o€r€ €R€o€o€m€s€"€€
+€"€q€u€e€s€t€.€s€i€n€g€l€e€.€2€.€n€a€m€e€"€,€"€W€a€c€h€s€t€u€m€"€,€"€G€r€o€w€t€h€"€€
+€"€q€u€e€s€t€.€s€i€n€g€l€e€.€2€.€d€e€s€c€"€,€"€B€a€u€e€ €1€0€ €S€t€a€n€d€a€r€d€-€Z€i€m€m€e€r€"€,€"€B€u€i€l€d€ €1€0€ €S€i€n€g€l€e€ €R€o€o€m€s€"€€
+€"€q€u€e€s€t€.€d€o€u€b€l€e€.€2€.€n€a€m€e€"€,€"€M€e€h€r€ €P€l€a€t€z€ €f€ü€r€ €Z€w€e€i€"€,€"€M€o€r€e€ €R€o€o€m€ €f€o€r€ €T€w€o€"€€
+€"€q€u€e€s€t€.€d€o€u€b€l€e€.€2€.€d€e€s€c€"€,€"€B€a€u€e€ €1€0€ €D€o€p€p€e€l€z€i€m€m€e€r€"€,€"€B€u€i€l€d€ €1€0€ €D€o€u€b€l€e€ €R€o€o€m€s€"€€
+€"€q€u€e€s€t€.€f€a€m€i€l€y€.€2€.€n€a€m€e€"€,€"€K€i€n€d€e€r€l€a€c€h€e€n€"€,€"€C€h€i€l€d€r€e€n€'€s€ €L€a€u€g€h€t€e€r€"€€
+€"€q€u€e€s€t€.€f€a€m€i€l€y€.€2€.€d€e€s€c€"€,€"€B€a€u€e€ €1€0€ €F€a€m€i€l€i€e€n€z€i€m€m€e€r€"€,€"€B€u€i€l€d€ €1€0€ €F€a€m€i€l€y€ €R€o€o€m€s€"€€
+€"€q€u€e€s€t€.€s€u€p€e€r€i€o€r€.€2€.€n€a€m€e€"€,€"€P€r€e€m€i€u€m€-€A€u€s€b€a€u€"€,€"€P€r€e€m€i€u€m€ €E€x€p€a€n€s€i€o€n€"€€
+€"€q€u€e€s€t€.€s€u€p€e€r€i€o€r€.€2€.€d€e€s€c€"€,€"€B€a€u€e€ €1€0€ €S€u€p€e€r€i€o€r€-€Z€i€m€m€e€r€"€,€"€B€u€i€l€d€ €1€0€ €S€u€p€e€r€i€o€r€ €R€o€o€m€s€"€€
+€"€q€u€e€s€t€.€s€i€n€g€l€e€.€3€.€n€a€m€e€"€,€"€H€o€t€e€l€-€I€m€p€e€r€i€u€m€"€,€"€H€o€t€e€l€ €E€m€p€i€r€e€"€€
+€"€q€u€e€s€t€.€s€i€n€g€l€e€.€3€.€d€e€s€c€"€,€"€B€a€u€e€ €2€5€ €S€t€a€n€d€a€r€d€-€Z€i€m€m€e€r€"€,€"€B€u€i€l€d€ €2€5€ €S€i€n€g€l€e€ €R€o€o€m€s€"€€
+€"€q€u€e€s€t€.€d€o€u€b€l€e€.€3€.€n€a€m€e€"€,€"€D€o€p€p€e€l€-€I€m€p€e€r€i€u€m€"€,€"€D€o€u€b€l€e€ €E€m€p€i€r€e€"€€
+€"€q€u€e€s€t€.€d€o€u€b€l€e€.€3€.€d€e€s€c€"€,€"€B€a€u€e€ €2€5€ €D€o€p€p€e€l€z€i€m€m€e€r€"€,€"€B€u€i€l€d€ €2€5€ €D€o€u€b€l€e€ €R€o€o€m€s€"€€
+€"€q€u€e€s€t€.€f€a€m€i€l€y€.€3€.€n€a€m€e€"€,€"€F€a€m€i€l€i€e€n€-€P€a€r€a€d€i€e€s€"€,€"€F€a€m€i€l€y€ €P€a€r€a€d€i€s€e€"€€
+€"€q€u€e€s€t€.€f€a€m€i€l€y€.€3€.€d€e€s€c€"€,€"€B€a€u€e€ €2€5€ €F€a€m€i€l€i€e€n€z€i€m€m€e€r€"€,€"€B€u€i€l€d€ €2€5€ €F€a€m€i€l€y€ €R€o€o€m€s€"€€
+€"€q€u€e€s€t€.€s€u€p€e€r€i€o€r€.€3€.€n€a€m€e€"€,€"€S€u€p€e€r€i€o€r€-€R€e€s€o€r€t€"€,€"€S€u€p€e€r€i€o€r€ €R€e€s€o€r€t€"€€
+€"€q€u€e€s€t€.€s€u€p€e€r€i€o€r€.€3€.€d€e€s€c€"€,€"€B€a€u€e€ €2€5€ €S€u€p€e€r€i€o€r€-€Z€i€m€m€e€r€"€,€"€B€u€i€l€d€ €2€5€ €S€u€p€e€r€i€o€r€ €R€o€o€m€s€"€€
+€"€q€u€e€s€t€.€b€a€r€.€1€.€n€a€m€e€"€,€"€B€a€r€ €e€r€r€i€c€h€t€e€n€"€,€"€O€p€e€n€ €a€ €B€a€r€"€€
+€"€q€u€e€s€t€.€b€a€r€.€1€.€d€e€s€c€"€,€"€B€a€u€e€ €1€ €B€a€r€"€,€"€B€u€i€l€d€ €1€ €B€a€r€"€€
+€"€u€i€.€q€u€e€s€t€b€o€o€k€.€e€m€p€t€y€"€,€"€A€k€t€u€e€l€l€ €k€e€i€n€e€ €A€u€f€g€a€b€e€n€ €v€e€r€f€ü€g€b€a€r€.€"€,€"€N€o€ €t€a€s€k€s€ €a€v€a€i€l€a€b€l€e€ €r€i€g€h€t€ €n€o€w€.€"€€
+€"€u€i€.€q€u€e€s€t€b€o€o€k€.€p€r€o€g€r€e€s€s€"€,€"€F€o€r€t€s€c€h€r€i€t€t€:€ €#€#€#€ €/€ €*€*€*€"€,€"€P€r€o€g€r€e€s€s€:€ €#€#€#€ €/€ €*€*€*€"€€
+€"€u€i€.€q€u€e€s€t€b€o€o€k€.€r€e€w€a€r€d€"€,€"€B€e€l€o€h€n€u€n€g€:€ €#€#€#€ €F€P€ €|€ €*€*€*€ €€€"€,€"€R€e€w€a€r€d€:€ €#€#€#€ €R€P€ €|€ €*€*€*€ €€€"€€
+€"€u€i€.€q€u€e€s€t€b€o€o€k€.€c€l€a€i€m€"€,€"€B€e€l€o€h€n€u€n€g€ €a€b€h€o€l€e€n€"€,€"€C€l€a€i€m€ €R€e€w€a€r€d€"€€
+€"€u€i€.€q€u€e€s€t€b€o€o€k€.€i€n€_€p€r€o€g€r€e€s€s€"€,€"€I€n€ €B€e€a€r€b€e€i€t€u€n€g€.€.€.€"€,€"€I€n€ €P€r€o€g€r€e€s€s€.€.€.€"€€
+€"€t€u€t€o€r€i€a€l€.€b€u€i€l€d€_€m€o€d€e€.€t€i€t€l€e€"€,€"€B€a€u€-€M€o€d€u€s€"€,€"€B€u€i€l€d€ €M€o€d€e€"€€
+€"€t€u€t€o€r€i€a€l€.€b€u€i€l€d€_€m€o€d€e€.€d€e€s€c€"€,€"€K€l€i€c€k€e€ €a€u€f€ €e€i€n€e€n€ €R€a€u€m€ €u€m€ €i€h€n€ €z€u€ €b€a€u€e€n€.€ €M€a€n€c€h€e€ €R€ä€u€m€e€ €m€ü€s€s€e€n€ €e€r€s€t€ €e€r€f€o€r€s€c€h€t€ €w€e€r€d€e€n€!€ €M€i€t€ €[€R€]€ €r€o€t€i€e€r€e€n€,€ €m€i€t€ €[€.€]€ €T€ü€r€ €v€e€r€s€c€h€i€e€b€e€n€.€"€,€"€C€l€i€c€k€ €a€ €r€o€o€m€ €t€o€ €b€u€i€l€d€ €i€t€.€ €S€o€m€e€ €r€o€o€m€s€ €n€e€e€d€ €r€e€s€e€a€r€c€h€ €f€i€r€s€t€!€ €U€s€e€ €[€R€]€ €t€o€ €r€o€t€a€t€e€,€ €[€.€]€ €t€o€ €m€o€v€e€ €t€h€e€ €d€o€o€r€.€"€€
+€"€t€u€t€o€r€i€a€l€.€t€e€c€h€_€t€r€e€e€.€t€i€t€l€e€"€,€"€F€o€r€s€c€h€u€n€g€ €&€ €T€e€c€h€n€o€l€o€g€i€e€"€,€"€R€e€s€e€a€r€c€h€ €&€ €T€e€c€h€n€o€l€o€g€y€"€€
+€"€t€u€t€o€r€i€a€l€.€t€e€c€h€_€t€r€e€e€.€d€e€s€c€"€,€"€N€e€u€e€ €R€ä€u€m€e€ €u€n€d€ €U€p€g€r€a€d€e€s€ €m€i€t€ €F€o€r€s€c€h€u€n€g€s€p€u€n€k€t€e€n€ €(€F€P€)€ €f€r€e€i€s€c€h€a€l€t€e€n€.€"€,€"€U€n€l€o€c€k€ €n€e€w€ €r€o€o€m€s€ €a€n€d€ €u€p€g€r€a€d€e€s€ €w€i€t€h€ €r€e€s€e€a€r€c€h€ €p€o€i€n€t€s€ €(€R€P€)€.€"€€
+€"€t€u€t€o€r€i€a€l€.€s€t€a€f€f€.€t€i€t€l€e€"€,€"€D€i€e€ €P€e€r€s€o€n€a€l€-€A€g€e€n€t€u€r€"€,€"€T€h€e€ €S€t€a€f€f€i€n€g€ €A€g€e€n€c€y€"€€
+€"€t€u€t€o€r€i€a€l€.€s€t€a€f€f€.€d€e€s€c€"€,€"€S€t€e€l€l€e€ €P€e€r€s€o€n€a€l€ €e€i€n€ €u€n€d€ €k€ü€n€d€i€g€e€ €e€s€ €ü€b€e€r€ €d€i€e€ €A€g€e€n€t€u€r€.€ €J€e€d€e€r€ €M€i€t€a€r€b€e€i€t€e€r€ €e€r€l€e€d€i€g€t€ €A€u€f€g€a€b€e€n€ €a€u€t€o€m€a€t€i€s€c€h€.€"€,€"€H€i€r€e€ €a€n€d€ €d€i€s€m€i€s€s€ €s€t€a€f€f€ €t€h€r€o€u€g€h€ €t€h€e€ €a€g€e€n€c€y€.€ €E€a€c€h€ €e€m€p€l€o€y€e€e€ €h€a€n€d€l€e€s€ €t€a€s€k€s€ €a€u€t€o€m€a€t€i€c€a€l€l€y€.€"€€
+€"€t€u€t€o€r€i€a€l€.€q€u€e€s€t€b€o€o€k€.€t€i€t€l€e€"€,€"€D€a€s€ €A€u€f€g€a€b€e€n€b€u€c€h€"€,€"€T€h€e€ €Q€u€e€s€t€ €B€o€o€k€"€€
+€"€t€u€t€o€r€i€a€l€.€q€u€e€s€t€b€o€o€k€.€d€e€s€c€"€,€"€E€r€f€ü€l€l€e€ €Q€u€e€s€t€s€ €f€ü€r€ €B€e€l€o€h€n€u€n€g€e€n€ €w€i€e€ €E€X€P€,€ €F€P€ €u€n€d€ €G€e€l€d€.€"€,€"€C€o€m€p€l€e€t€e€ €q€u€e€s€t€s€ €f€o€r€ €r€e€w€a€r€d€s€ €l€i€k€e€ €E€X€P€,€ €R€P€ €a€n€d€ €m€o€n€e€y€.€"€€
+€"€t€u€t€o€r€i€a€l€.€r€e€c€e€p€t€i€o€n€.€t€i€t€l€e€"€,€"€D€i€e€ €R€e€z€e€p€t€i€o€n€"€,€"€T€h€e€ €R€e€c€e€p€t€i€o€n€"€€
+€"€t€u€t€o€r€i€a€l€.€r€e€c€e€p€t€i€o€n€.€d€e€s€c€"€,€"€C€h€e€c€k€-€i€n€ €w€a€r€t€e€n€d€e€r€ €G€ä€s€t€e€,€ €A€b€r€e€i€s€e€n€ €b€e€a€r€b€e€i€t€e€n€ €u€n€d€ €S€t€a€t€i€s€t€i€k€e€n€ €a€n€s€e€h€e€n€.€"€,€"€C€h€e€c€k€ €i€n€ €w€a€i€t€i€n€g€ €g€u€e€s€t€s€,€ €h€a€n€d€l€e€ €d€e€p€a€r€t€u€r€e€s€ €a€n€d€ €v€i€e€w€ €s€t€a€t€i€s€t€i€c€s€.€"€€
+€"€t€u€t€o€r€i€a€l€.€g€u€e€s€t€_€l€i€s€t€.€t€i€t€l€e€"€,€"€D€i€e€ €G€ä€s€t€e€l€i€s€t€e€"€,€"€T€h€e€ €G€u€e€s€t€ €L€i€s€t€"€€
+€"€t€u€t€o€r€i€a€l€.€g€u€e€s€t€_€l€i€s€t€.€d€e€s€c€"€,€"€Ü€b€e€r€s€i€c€h€t€ €a€l€l€e€r€ €G€ä€s€t€e€ €–€ €Z€u€f€r€i€e€d€e€n€h€e€i€t€,€ €A€u€f€e€n€t€h€a€l€t€s€o€r€t€ €u€n€d€ €B€u€d€g€e€t€ €a€u€f€ €e€i€n€e€n€ €B€l€i€c€k€.€"€,€"€O€v€e€r€v€i€e€w€ €o€f€ €a€l€l€ €g€u€e€s€t€s€ €–€ €s€a€t€i€s€f€a€c€t€i€o€n€,€ €l€o€c€a€t€i€o€n€ €a€n€d€ €b€u€d€g€e€t€ €a€t€ €a€ €g€l€a€n€c€e€.€"€€
+€"€t€u€t€o€r€i€a€l€.€r€o€o€m€_€l€i€s€t€.€t€i€t€l€e€"€,€"€D€i€e€ €R€a€u€m€l€i€s€t€e€"€,€"€T€h€e€ €R€o€o€m€ €L€i€s€t€"€€
+€"€t€u€t€o€r€i€a€l€.€r€o€o€m€_€l€i€s€t€.€d€e€s€c€"€,€"€S€t€a€t€u€s€ €a€l€l€e€r€ €Z€i€m€m€e€r€:€ €S€a€u€b€e€r€k€e€i€t€,€ €B€e€l€e€g€u€n€g€ €u€n€d€ €Z€u€s€t€a€n€d€.€"€,€"€S€t€a€t€u€s€ €o€f€ €a€l€l€ €r€o€o€m€s€:€ €c€l€e€a€n€l€i€n€e€s€s€,€ €o€c€c€u€p€a€n€c€y€ €a€n€d€ €c€o€n€d€i€t€i€o€n€.€"€€
+€"€u€i€.€t€u€t€o€r€i€a€l€.€e€m€p€t€y€"€,€"€N€o€c€h€ €k€e€i€n€e€ €T€u€t€o€r€i€a€l€s€ €f€r€e€i€g€e€s€c€h€a€l€t€e€t€.€"€,€"€N€o€ €t€u€t€o€r€i€a€l€s€ €u€n€l€o€c€k€e€d€ €y€e€t€.€"€€
+€"€s€t€a€f€f€.€r€o€l€e€.€h€o€u€s€e€k€e€e€p€i€n€g€"€,€"€H€o€u€s€e€k€e€e€p€i€n€g€"€,€"€H€o€u€s€e€k€e€e€p€i€n€g€"€€
+€"€s€t€a€f€f€.€r€o€l€e€.€m€a€i€n€t€e€n€a€n€c€e€"€,€"€H€a€u€s€t€e€c€h€n€i€k€"€,€"€M€a€i€n€t€e€n€a€n€c€e€"€€
+€"€s€t€a€f€f€.€r€o€l€e€.€b€a€r€t€e€n€d€e€r€"€,€"€B€a€r€k€e€e€p€e€r€"€,€"€B€a€r€t€e€n€d€e€r€"€€
+€"€s€t€a€f€f€.€s€k€i€l€l€.€c€l€e€a€n€i€n€g€_€e€f€f€i€c€i€e€n€c€y€"€,€"€R€e€i€n€i€g€u€n€g€s€t€e€m€p€o€"€,€"€C€l€e€a€n€i€n€g€ €S€p€e€e€d€"€€
+€"€s€t€a€f€f€.€s€k€i€l€l€.€d€e€t€a€i€l€_€f€o€c€u€s€"€,€"€D€e€t€a€i€l€f€o€k€u€s€"€,€"€A€t€t€e€n€t€i€o€n€ €t€o€ €D€e€t€a€i€l€"€€
+€"€s€t€a€f€f€.€s€k€i€l€l€.€m€o€t€i€v€a€t€i€o€n€"€,€"€M€o€t€i€v€a€t€i€o€n€"€,€"€M€o€t€i€v€a€t€i€o€n€"€€
+€"€s€t€a€f€f€.€s€k€i€l€l€.€r€e€p€a€i€r€_€k€n€o€w€l€e€d€g€e€"€,€"€R€e€p€a€r€a€t€u€r€w€i€s€s€e€n€"€,€"€R€e€p€a€i€r€ €K€n€o€w€l€e€d€g€e€"€€
+€"€s€t€a€f€f€.€s€t€a€t€.€s€t€r€e€s€s€"€,€"€S€t€r€e€s€s€"€,€"€S€t€r€e€s€s€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€r€e€s€e€t€_€a€l€l€"€,€"€S€t€a€n€d€a€r€d€ €w€i€e€d€e€r€h€e€r€s€t€e€l€l€e€n€"€,€"€R€e€s€t€o€r€e€ €D€e€f€a€u€l€t€s€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€g€r€o€u€p€.€b€u€i€l€d€"€,€"€B€a€u€m€o€d€u€s€"€,€"€B€u€i€l€d€ €M€o€d€e€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€b€u€i€l€d€.€r€o€t€a€t€e€"€,€"€R€a€u€m€ €r€o€t€i€e€r€e€n€"€,€"€R€o€t€a€t€e€ €R€o€o€m€"€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€b€u€i€l€d€.€d€o€o€r€"€,€"€T€ü€r€p€o€s€i€t€i€o€n€ €d€u€r€c€h€s€c€h€a€l€t€e€n€"€,€"€C€y€c€l€e€ €D€o€o€r€ €P€o€s€i€t€i€o€n€"€€
+€"€l€a€b€e€l€.€o€n€"€,€"€A€n€"€,€"€O€n€"€€
+€"€l€a€b€e€l€.€o€f€f€"€,€"€A€u€s€"€,€"€O€f€f€"€€
+€"€m€a€n€a€g€e€r€_€s€e€l€e€c€t€.€h€i€n€t€.€e€m€p€t€y€"€,€"€F€r€e€i€e€r€ €S€l€o€t€"€,€"€E€m€p€t€y€ €S€l€o€t€"€€
+€"€m€a€n€a€g€e€r€.€l€e€v€e€l€.€s€u€b€t€i€t€l€e€"€,€"€M€A€N€A€G€E€R€ €·€ €L€E€V€E€L€ €%€d€"€,€"€M€A€N€A€G€E€R€ €·€ €L€E€V€E€L€ €%€d€"€€
+€"€m€a€n€a€g€e€r€_€s€e€l€e€c€t€.€d€e€l€e€t€e€.€t€i€t€l€e€"€,€"€M€a€n€a€g€e€r€ €l€ö€s€c€h€e€n€?€"€,€"€D€e€l€e€t€e€ €M€a€n€a€g€e€r€?€"€€
+€"€m€a€n€a€g€e€r€_€s€e€l€e€c€t€.€d€e€l€e€t€e€.€t€e€x€t€"€,€"€A€l€l€e€ €H€o€t€e€l€s€ €d€i€e€s€e€s€ €M€a€n€a€g€e€r€s€ €w€e€r€d€e€n€\€n€e€b€e€n€f€a€l€l€s€ €e€n€t€f€e€r€n€t€.€"€,€"€A€l€l€ €h€o€t€e€l€s€ €o€f€ €t€h€i€s€ €m€a€n€a€g€e€r€ €w€i€l€l€\€n€a€l€s€o€ €b€e€ €r€e€m€o€v€e€d€.€"€€
+€"€m€a€n€a€g€e€r€_€s€e€l€e€c€t€.€d€e€l€e€t€e€.€b€t€n€_€d€e€l€e€t€e€"€,€"€L€ö€s€c€h€e€n€"€,€"€D€e€l€e€t€e€"€€
+€"€m€a€n€a€g€e€r€_€s€e€l€e€c€t€.€d€e€l€e€t€e€.€b€t€n€_€c€a€n€c€e€l€"€,€"€A€b€b€r€e€c€h€e€n€"€,€"€C€a€n€c€e€l€"€€
+€"€h€u€d€.€l€a€b€e€l€.€p€a€u€s€e€d€"€,€"€#€#€#€ €S€p€i€e€l€ €p€a€u€s€i€e€r€t€ €#€#€#€"€,€"€#€#€#€ €G€a€m€e€ €P€a€u€s€e€d€ €#€#€#€"€€
+€"€b€u€g€r€e€p€o€r€t€e€r€.€t€o€o€l€t€i€p€"€,€"€B€u€g€ €m€e€l€d€e€n€"€,€"€R€e€p€o€r€t€ €B€u€g€"€€
+€"€b€u€g€r€e€p€o€r€t€e€r€.€t€i€t€l€e€"€,€"€B€u€g€ €R€e€p€o€r€t€ €s€e€n€d€e€n€"€,€"€S€e€n€d€ €B€u€g€ €R€e€p€o€r€t€"€€
+€"€b€u€g€r€e€p€o€r€t€e€r€.€d€e€s€c€r€i€p€t€i€o€n€.€l€a€b€e€l€"€,€"€W€a€s€ €i€s€t€ €p€a€s€s€i€e€r€t€?€\€n€(€E€i€n€ €S€c€r€e€e€n€s€h€o€t€ €&€ €S€y€s€t€e€m€d€a€t€e€n€ €w€e€r€d€e€n€ €a€u€t€o€m€a€t€i€s€c€h€ €a€n€g€e€h€ä€n€g€t€)€"€,€"€W€h€a€t€ €h€a€p€p€e€n€e€d€?€\€n€(€A€ €s€c€r€e€e€n€s€h€o€t€ €&€ €s€y€s€t€e€m€ €d€a€t€a€ €w€i€l€l€ €b€e€ €a€t€t€a€c€h€e€d€ €a€u€t€o€m€a€t€i€c€a€l€l€y€)€"€€
+€"€b€u€g€r€e€p€o€r€t€e€r€.€e€m€a€i€l€.€p€l€a€c€e€h€o€l€d€e€r€"€,€"€D€e€i€n€e€ €E€-€M€a€i€l€ €(€O€p€t€i€o€n€a€l€ €f€r€ €R€c€k€f€r€a€g€e€n€)€"€,€"€Y€o€u€r€ €E€m€a€i€l€ €(€O€p€t€i€o€n€a€l€ €f€o€r€ €q€u€e€s€t€i€o€n€s€)€"€€
+€"€b€u€g€r€e€p€o€r€t€e€r€.€d€e€s€c€.€p€l€a€c€e€h€o€l€d€e€r€"€,€"€B€e€s€c€h€r€e€i€b€e€ €d€e€n€ €F€e€h€l€e€r€.€.€.€"€,€"€D€e€s€c€r€i€b€e€ €t€h€e€ €b€u€g€.€.€.€"€€
+€"€b€u€g€r€e€p€o€r€t€e€r€.€b€t€n€.€c€a€n€c€e€l€"€,€"€A€b€b€r€e€c€h€e€n€"€,€"€C€a€n€c€e€l€"€€
+€"€b€u€g€r€e€p€o€r€t€e€r€.€b€t€n€.€s€e€n€d€"€,€"€S€e€n€d€e€n€"€,€"€S€e€n€d€"€€
+€"€b€u€g€r€e€p€o€r€t€e€r€.€s€t€a€t€u€s€.€e€r€r€o€r€.€e€m€p€t€y€"€,€"€B€i€t€t€e€ €g€i€b€ €e€i€n€e€ €B€e€s€c€h€r€e€i€b€u€n€g€ €e€i€n€!€"€,€"€P€l€e€a€s€e€ €e€n€t€e€r€ €a€ €d€e€s€c€r€i€p€t€i€o€n€!€"€€
+€"€b€u€g€r€e€p€o€r€t€e€r€.€s€t€a€t€u€s€.€e€r€r€o€r€.€w€e€b€h€o€o€k€"€,€"€W€e€b€h€o€o€k€ €U€R€L€ €n€i€c€h€t€ €k€o€n€f€i€g€u€r€i€e€r€t€ €(€s€e€c€r€e€t€s€.€c€f€g€ €f€e€h€l€t€)€!€"€,€"€W€e€b€h€o€o€k€ €U€R€L€ €n€o€t€ €c€o€n€f€i€g€u€r€e€d€ €(€s€e€c€r€e€t€s€.€c€f€g€ €m€i€s€s€i€n€g€)€!€"€€
+€"€b€u€g€r€e€p€o€r€t€e€r€.€s€t€a€t€u€s€.€s€e€n€d€i€n€g€"€,€"€S€e€n€d€e€.€.€.€"€,€"€S€e€n€d€i€n€g€.€.€.€"€€
+€"€b€u€g€r€e€p€o€r€t€e€r€.€s€t€a€t€u€s€.€s€u€c€c€e€s€s€"€,€"€E€r€f€o€l€g€r€e€i€c€h€ €g€e€s€e€n€d€e€t€!€ €D€a€n€k€e€!€"€,€"€S€e€n€t€ €s€u€c€c€e€s€s€f€u€l€l€y€!€ €T€h€a€n€k€ €y€o€u€!€"€€
+€"€b€u€g€r€e€p€o€r€t€e€r€.€s€t€a€t€u€s€.€e€r€r€o€r€.€s€e€n€d€"€,€"€F€e€h€l€e€r€ €b€e€i€m€ €S€e€n€d€e€n€!€ €(€C€o€d€e€ €%€d€)€"€,€"€E€r€r€o€r€ €s€e€n€d€i€n€g€!€ €(€C€o€d€e€ €%€d€)€"€€
+€"€r€o€o€m€.€t€o€o€l€t€i€p€.€f€r€e€e€"€,€"€F€r€e€i€"€,€"€F€r€e€e€"€€
+€"€r€o€o€m€.€t€o€o€l€t€i€p€.€s€e€r€v€i€c€e€_€n€e€e€d€e€d€"€,€"€🧹€ €S€e€r€v€i€c€e€ €b€e€n€ö€t€i€g€t€"€,€"€🧹€ €S€e€r€v€i€c€e€ €N€e€e€d€e€d€"€€
+€"€r€o€o€m€.€t€o€o€l€t€i€p€.€o€p€e€n€"€,€"€🍺€ €G€e€ö€f€f€n€e€t€"€,€"€🍺€ €O€p€e€n€"€€
+€"€r€o€o€m€.€t€o€o€l€t€i€p€.€c€l€o€s€e€d€_€u€n€t€i€l€"€,€"€🔒€ €G€e€s€c€h€l€o€s€s€e€n€ €(€ö€f€f€n€e€t€ €u€m€ €%€s€)€"€,€"€🔒€ €C€l€o€s€e€d€ €(€o€p€e€n€s€ €a€t€ €%€s€)€"€€
+€"€r€o€o€m€.€t€o€o€l€t€i€p€.€u€n€d€e€r€s€t€a€f€f€e€d€"€,€"€🔴€ €U€n€t€e€r€b€e€s€e€t€z€t€ €(€G€e€s€c€h€l€o€s€s€e€n€)€"€,€"€🔴€ €U€n€d€e€r€s€t€a€f€f€e€d€ €(€C€l€o€s€e€d€)€"€€
+€"€r€o€o€m€.€t€o€o€l€t€i€p€.€c€u€r€r€e€n€t€_€v€i€s€i€t€o€r€s€"€,€"€A€k€t€u€e€l€l€e€ €G€ä€s€t€e€:€ €%€d€"€,€"€C€u€r€r€e€n€t€ €V€i€s€i€t€o€r€s€:€ €%€d€"€€
+€"€r€o€o€m€.€t€o€o€l€t€i€p€.€g€u€e€s€t€_€w€a€l€k€i€n€g€"€,€"€🚶€ €G€a€s€t€ €u€n€t€e€r€w€e€g€s€"€,€"€🚶€ €G€u€e€s€t€ €W€a€l€k€i€n€g€"€€
+€"€r€o€o€m€.€t€o€o€l€t€i€p€.€g€u€e€s€t€_€p€r€e€s€e€n€t€"€,€"€📍€ €G€a€s€t€ €a€n€w€e€s€e€n€d€"€,€"€📍€ €G€u€e€s€t€ €P€r€e€s€e€n€t€"€€
+€"€r€o€o€m€.€t€o€o€l€t€i€p€.€g€u€e€s€t€_€i€n€_€p€o€i€"€,€"€📍€ €G€a€s€t€ €i€n€ €d€e€r€ €%€s€"€,€"€📍€ €G€u€e€s€t€ €i€n€ €%€s€"€€
+€"€r€o€o€m€.€t€o€o€l€t€i€p€.€g€u€e€s€t€_€l€e€a€v€i€n€g€"€,€"€🧳€ €A€b€r€e€i€s€e€n€d€"€,€"€🧳€ €L€e€a€v€i€n€g€"€€
+€"€r€o€o€m€.€t€o€o€l€t€i€p€.€o€c€c€u€p€i€e€d€"€,€"€👥€ €B€e€l€e€g€t€:€ €%€s€"€,€"€👥€ €O€c€c€u€p€i€e€d€:€ €%€s€"€€
+€"€r€o€o€m€.€t€o€o€l€t€i€p€.€g€u€e€s€t€s€_€i€n€_€r€o€o€m€"€,€"€G€ä€s€t€e€ €i€m€ €Z€i€m€m€e€r€:€"€,€"€G€u€e€s€t€s€ €i€n€ €R€o€o€m€:€"€€
+€"€r€o€o€m€.€t€o€o€l€t€i€p€.€d€e€p€a€r€t€u€r€e€"€,€"€A€b€r€e€i€s€e€"€,€"€D€e€p€a€r€t€u€r€e€"€€
+€"€r€o€o€m€.€t€o€o€l€t€i€p€.€n€i€g€h€t€s€_€l€e€f€t€"€,€"€Ü€b€r€i€g€e€ €N€ä€c€h€t€e€:€ €%€d€ €/€ €%€d€"€,€"€N€i€g€h€t€s€ €L€e€f€t€:€ €%€d€ €/€ €%€d€"€€
+€"€r€o€o€m€.€t€o€o€l€t€i€p€.€p€e€n€d€i€n€g€_€d€e€m€o€l€i€s€h€"€,€"€🔨€ €R€a€u€m€ €z€u€m€ €L€ö€s€c€h€e€n€ €v€o€r€g€e€m€e€r€k€t€\€n€"€,€"€🔨€ €R€o€o€m€ €s€c€h€e€d€u€l€e€d€ €f€o€r€ €d€e€m€o€l€i€t€i€o€n€\€n€"€€
+€"€r€o€o€m€.€t€o€o€l€t€i€p€.€s€t€a€t€s€"€,€"€\€n€S€a€u€b€e€r€k€e€i€t€:€ €%€d€%€%€ €|€ €Z€u€s€t€a€n€d€:€ €%€d€%€%€"€,€"€\€n€C€l€e€a€n€l€i€n€e€s€s€:€ €%€d€%€%€ €|€ €C€o€n€d€i€t€i€o€n€:€ €%€d€%€%€"€€
+€"€g€u€e€s€t€.€t€o€o€l€t€i€p€.€u€n€k€n€o€w€n€"€,€"€U€n€b€e€k€a€n€n€t€"€,€"€U€n€k€n€o€w€n€"€€
+€"€g€u€e€s€t€.€t€o€o€l€t€i€p€.€s€a€t€i€s€f€a€c€t€i€o€n€"€,€"€Z€u€f€r€i€e€d€e€n€h€e€i€t€:€ €%€d€%€%€ €%€s€"€,€"€S€a€t€i€s€f€a€c€t€i€o€n€:€ €%€d€%€%€ €%€s€"€€
+€"€g€u€e€s€t€.€t€o€o€l€t€i€p€.€t€a€r€g€e€t€"€,€"€Z€i€e€l€:€ €"€,€"€T€a€r€g€e€t€:€ €"€€
+€"€g€u€e€s€t€.€t€o€o€l€t€i€p€.€r€o€o€m€"€,€"€Z€i€m€m€e€r€"€,€"€R€o€o€m€"€€
+€"€g€u€e€s€t€.€t€o€o€l€t€i€p€.€w€a€l€k€i€n€g€_€r€e€c€e€p€t€i€o€n€"€,€"€U€n€t€e€r€w€e€g€s€ €(€R€e€z€e€p€t€i€o€n€)€"€,€"€W€a€l€k€i€n€g€ €(€R€e€c€e€p€t€i€o€n€)€"€€
+€"€g€u€e€s€t€.€t€o€o€l€t€i€p€.€w€a€l€k€i€n€g€_€p€o€i€"€,€"€U€n€t€e€r€w€e€g€s€ €(€%€s€)€"€,€"€W€a€l€k€i€n€g€ €(€%€s€)€"€€
+€"€g€u€e€s€t€.€t€o€o€l€t€i€p€.€w€a€l€k€i€n€g€_€r€o€o€m€"€,€"€U€n€t€e€r€w€e€g€s€ €(€Z€i€m€m€e€r€)€"€,€"€W€a€l€k€i€n€g€ €(€R€o€o€m€)€"€€
+€"€g€u€e€s€t€.€t€o€o€l€t€i€p€.€r€e€c€e€p€t€i€o€n€"€,€"€R€e€z€e€p€t€i€o€n€"€,€"€R€e€c€e€p€t€i€o€n€"€€
+€"€g€u€e€s€t€.€t€o€o€l€t€i€p€.€l€e€a€v€i€n€g€"€,€"€A€b€r€e€i€s€e€"€,€"€L€e€a€v€i€n€g€"€€
+€"€g€u€e€s€t€.€t€o€o€l€t€i€p€.€w€a€i€t€i€n€g€"€,€"€W€a€r€t€e€n€"€,€"€W€a€i€t€i€n€g€"€€
+€"€g€u€e€s€t€.€t€o€o€l€t€i€p€.€b€u€d€g€e€t€"€,€"€\€n€💰€ €B€u€d€g€e€t€:€ €%€d€ €€€ €/€ €%€d€ €€€"€,€"€\€n€💰€ €B€u€d€g€e€t€:€ €%€d€ €€€ €/€ €%€d€ €€€"€€
+€"€s€t€a€f€f€.€t€o€o€l€t€i€p€.€r€o€l€e€.€h€o€u€s€e€k€e€e€p€i€n€g€"€,€"€B€e€r€u€f€:€ €R€e€i€n€i€g€u€n€g€s€k€r€a€f€t€"€,€"€R€o€l€e€:€ €H€o€u€s€e€k€e€e€p€i€n€g€"€€
+€"€s€t€a€f€f€.€t€o€o€l€t€i€p€.€r€o€l€e€.€m€a€i€n€t€e€n€a€n€c€e€"€,€"€B€e€r€u€f€:€ €H€a€u€s€t€e€c€h€n€i€k€"€,€"€R€o€l€e€:€ €M€a€i€n€t€e€n€a€n€c€e€"€€
+€"€s€t€a€f€f€.€t€o€o€l€t€i€p€.€r€o€l€e€.€r€e€c€e€p€t€i€o€n€"€,€"€B€e€r€u€f€:€ €R€e€z€e€p€t€i€o€n€"€,€"€R€o€l€e€:€ €R€e€c€e€p€t€i€o€n€"€€
+€"€s€t€a€f€f€.€t€o€o€l€t€i€p€.€r€o€l€e€.€p€r€e€f€i€x€"€,€"€B€e€r€u€f€:€ €"€,€"€R€o€l€e€:€ €"€€
+€"€s€t€a€f€f€.€t€o€o€l€t€i€p€.€m€o€t€i€v€a€t€i€o€n€"€,€"€M€o€t€i€v€a€t€i€o€n€:€ €%€d€ €/€ €1€0€"€,€"€M€o€t€i€v€a€t€i€o€n€:€ €%€d€ €/€ €1€0€"€€
+€"€s€t€a€f€f€.€t€o€o€l€t€i€p€.€m€o€t€i€v€a€t€i€o€n€_€u€n€k€n€o€w€n€"€,€"€M€o€t€i€v€a€t€i€o€n€:€ €U€n€b€e€k€a€n€n€t€"€,€"€M€o€t€i€v€a€t€i€o€n€:€ €U€n€k€n€o€w€n€"€€
+€"€s€t€a€f€f€.€t€o€o€l€t€i€p€.€s€t€a€t€u€s€"€,€"€S€t€a€t€u€s€:€ €"€,€"€S€t€a€t€u€s€:€ €"€€
+€"€s€t€a€f€f€.€t€o€o€l€t€i€p€.€t€a€r€g€e€t€"€,€"€Z€i€e€l€:€ €"€,€"€T€a€r€g€e€t€:€ €"€€
+€"€s€t€a€f€f€.€t€o€o€l€t€i€p€.€s€t€a€t€e€.€i€d€l€e€"€,€"€B€e€r€e€i€t€ €(€W€a€r€t€e€t€)€"€,€"€R€e€a€d€y€ €(€W€a€i€t€i€n€g€)€"€€
+€"€s€t€a€f€f€.€t€o€o€l€t€i€p€.€t€a€r€g€e€t€.€s€t€a€f€f€r€o€o€m€"€,€"€P€e€r€s€o€n€a€l€r€a€u€m€"€,€"€S€t€a€f€f€ €R€o€o€m€"€€
+€"€s€t€a€f€f€.€t€o€o€l€t€i€p€.€s€t€a€t€e€.€r€e€t€u€r€n€i€n€g€"€,€"€R€ü€c€k€k€e€h€r€"€,€"€R€e€t€u€r€n€i€n€g€"€€
+€"€s€t€a€f€f€.€t€o€o€l€t€i€p€.€s€t€a€t€e€.€w€a€l€k€i€n€g€"€,€"€U€n€t€e€r€w€e€g€s€"€,€"€W€a€l€k€i€n€g€"€€
+€"€s€t€a€f€f€.€t€o€o€l€t€i€p€.€s€t€a€t€e€.€w€o€r€k€i€n€g€"€,€"€A€r€b€e€i€t€e€t€"€,€"€W€o€r€k€i€n€g€"€€
+€"€s€t€a€f€f€.€t€o€o€l€t€i€p€.€t€a€r€g€e€t€.€r€o€o€m€_€w€o€r€k€"€,€"€R€a€u€m€/€A€r€b€e€i€t€"€,€"€R€o€o€m€/€W€o€r€k€"€€
+€"€s€t€a€f€f€.€t€o€o€l€t€i€p€.€t€a€r€g€e€t€.€w€o€r€k€"€,€"€A€r€b€e€i€t€"€,€"€W€o€r€k€"€€
+€"€s€t€a€f€f€.€t€o€o€l€t€i€p€.€t€a€r€g€e€t€.€p€o€s€i€t€i€o€n€"€,€"€P€o€s€i€t€i€o€n€ €%€s€"€,€"€P€o€s€i€t€i€o€n€ €%€s€"€€
+€"€s€t€a€f€f€.€s€k€i€l€l€.€s€t€r€e€s€s€_€r€e€s€i€s€t€a€n€c€e€"€,€"€S€t€r€e€s€s€r€e€s€i€s€t€e€n€z€"€,€"€S€t€r€e€s€s€ €R€e€s€i€s€t€a€n€c€e€"€€
+€"€s€t€a€f€f€.€s€k€i€l€l€.€s€e€r€v€i€c€e€"€,€"€S€e€r€v€i€c€e€"€,€"€S€e€r€v€i€c€e€"€€
+€"€s€t€a€f€f€.€s€k€i€l€l€.€m€i€x€o€l€o€g€y€"€,€"€M€i€x€e€n€"€,€"€M€i€x€o€l€o€g€y€"€€
+€"€u€i€.€s€t€a€f€f€.€n€o€_€t€e€a€m€"€,€"€D€u€ €h€a€s€t€ €n€o€c€h€ €k€e€i€n€ €P€e€r€s€o€n€a€l€ €e€i€n€g€e€s€t€e€l€l€t€.€"€,€"€Y€o€u€ €h€a€v€e€n€'€t€ €h€i€r€e€d€ €a€n€y€ €s€t€a€f€f€ €y€e€t€.€"€€
+€"€u€i€.€s€t€a€f€f€.€n€o€_€a€p€p€l€i€c€a€n€t€s€"€,€"€K€e€i€n€e€ €B€e€w€e€r€b€e€r€ €h€e€u€t€e€.€"€,€"€N€o€ €a€p€p€l€i€c€a€n€t€s€ €t€o€d€a€y€.€"€€
+€"€u€i€.€s€t€a€f€f€.€s€e€l€e€c€t€_€p€r€o€m€p€t€"€,€"€B€i€t€t€e€ €w€ä€h€l€e€ €e€i€n€e€n€ €M€i€t€a€r€b€e€i€t€e€r€ €a€u€s€"€,€"€P€l€e€a€s€e€ €s€e€l€e€c€t€ €a€ €s€t€a€f€f€ €m€e€m€b€e€r€"€€
+€"€u€i€.€s€t€a€f€f€.€j€o€b€"€,€"€B€e€r€u€f€:€ €"€,€"€J€o€b€:€ €"€€
+€"€u€i€.€s€t€a€f€f€.€d€a€i€l€y€_€w€a€g€e€"€,€"€T€a€g€e€s€g€e€h€a€l€t€"€,€"€D€a€i€l€y€ €W€a€g€e€"€€
+€"€u€i€.€s€t€a€f€f€.€h€i€r€e€_€c€o€s€t€"€,€"€E€i€n€s€t€e€l€l€u€n€g€s€g€e€b€ü€h€r€"€,€"€H€i€r€i€n€g€ €F€e€e€"€€
+€"€u€i€.€s€t€a€f€f€.€f€i€r€e€"€,€"€K€ü€n€d€i€g€e€n€"€,€"€D€i€s€m€i€s€s€"€€
+€"€u€i€.€s€t€a€f€f€.€h€i€r€e€"€,€"€E€i€n€s€t€e€l€l€e€n€"€,€"€H€i€r€e€"€€
+€"€u€i€.€s€t€a€f€f€.€m€o€r€a€l€e€"€,€"€M€o€r€a€l€"€,€"€M€o€r€a€l€e€"€€
+€"€u€i€.€s€t€a€f€f€.€t€a€b€_€t€e€a€m€"€,€"€D€e€i€n€ €T€e€a€m€"€,€"€Y€o€u€r€ €T€e€a€m€"€€
+€"€u€i€.€s€t€a€f€f€.€t€a€b€_€a€p€p€l€i€c€a€n€t€s€"€,€"€B€e€w€e€r€b€e€r€"€,€"€A€p€p€l€i€c€a€n€t€s€"€€
+€"€u€i€.€s€t€a€f€f€.€t€a€b€_€a€s€s€i€g€n€"€,€"€Z€u€w€e€i€s€u€n€g€"€,€"€A€s€s€i€g€n€m€e€n€t€"€€
+€"€u€i€.€s€t€a€f€f€.€a€s€s€i€g€n€_€p€o€i€"€,€"€P€O€I€-€R€ä€u€m€e€"€,€"€P€O€I€ €R€o€o€m€s€"€€
+€"€u€i€.€s€t€a€f€f€.€a€s€s€i€g€n€_€s€t€a€f€f€"€,€"€V€e€r€f€ü€g€b€a€r€e€s€ €P€e€r€s€o€n€a€l€"€,€"€A€v€a€i€l€a€b€l€e€ €S€t€a€f€f€"€€
+€"€u€i€.€s€t€a€f€f€.€n€o€_€p€o€i€s€"€,€"€K€e€i€n€e€ €P€O€I€-€R€ä€u€m€e€ €g€e€b€a€u€t€.€"€,€"€N€o€ €P€O€I€ €r€o€o€m€s€ €b€u€i€l€t€.€"€€
+€"€u€i€.€s€t€a€f€f€.€p€o€i€_€s€t€a€f€f€e€d€"€,€"€ € €✅€ €B€e€s€e€t€z€t€ €(€%€d€ €P€e€r€s€o€n€a€l€)€"€,€"€ € €✅€ €S€t€a€f€f€e€d€ €(€%€d€ €s€t€a€f€f€)€"€€
+€"€u€i€.€s€t€a€f€f€.€p€o€i€_€u€n€d€e€r€s€t€a€f€f€e€d€"€,€"€ € €🔴€ €U€n€t€e€r€b€e€s€e€t€z€t€ €(€%€d€/€%€d€)€"€,€"€ € €🔴€ €U€n€d€e€r€s€t€a€f€f€e€d€ €(€%€d€/€%€d€)€"€€
+€"€u€i€.€s€t€a€f€f€.€n€o€_€m€a€t€c€h€i€n€g€_€s€t€a€f€f€"€,€"€K€e€i€n€ €p€a€s€s€e€n€d€e€s€ €P€e€r€s€o€n€a€l€ €e€i€n€g€e€s€t€e€l€l€t€.€"€,€"€N€o€ €m€a€t€c€h€i€n€g€ €s€t€a€f€f€ €h€i€r€e€d€.€"€€
+€"€g€u€e€s€t€.€m€e€m€b€e€r€.€t€y€p€e€.€p€r€i€m€a€r€y€"€,€"€H€a€u€p€t€g€a€s€t€"€,€"€P€r€i€m€a€r€y€ €G€u€e€s€t€"€€
+€"€g€u€e€s€t€.€m€e€m€b€e€r€.€t€y€p€e€.€p€a€r€t€n€e€r€"€,€"€B€e€g€l€e€i€t€u€n€g€"€,€"€C€o€m€p€a€n€i€o€n€"€€
+€"€g€u€e€s€t€.€m€e€m€b€e€r€.€t€y€p€e€.€c€h€i€l€d€"€,€"€K€i€n€d€"€,€"€C€h€i€l€d€"€€
+€"€g€u€e€s€t€.€s€t€a€t€e€.€w€a€i€t€i€n€g€"€,€"€W€a€r€t€e€t€"€,€"€W€a€i€t€i€n€g€"€€
+€"€u€i€.€g€u€e€s€t€_€l€i€s€t€.€p€l€e€a€s€e€_€s€e€l€e€c€t€"€,€"€B€i€t€t€e€ €w€ä€h€l€e€n€.€.€.€"€,€"€P€l€e€a€s€e€ €s€e€l€e€c€t€.€.€.€"€€
+€"€u€i€.€r€o€o€m€_€l€i€s€t€.€p€l€e€a€s€e€_€s€e€l€e€c€t€"€,€"€B€i€t€t€e€ €w€ä€h€l€e€n€.€.€.€"€,€"€P€l€e€a€s€e€ €s€e€l€e€c€t€.€.€.€"€€
+€"€u€i€.€g€u€e€s€t€_€l€i€s€t€.€c€o€l€.€n€a€m€e€"€,€"€N€a€m€e€"€,€"€N€a€m€e€"€€
+€"€u€i€.€g€u€e€s€t€_€l€i€s€t€.€c€o€l€.€r€o€o€m€"€,€"€Z€i€m€m€e€r€"€,€"€R€o€o€m€"€€
+€"€u€i€.€g€u€e€s€t€_€l€i€s€t€.€c€o€l€.€b€u€d€g€e€t€"€,€"€B€u€d€g€e€t€"€,€"€B€u€d€g€e€t€"€€
+€"€u€i€.€g€u€e€s€t€_€l€i€s€t€.€c€o€l€.€s€t€a€t€u€s€"€,€"€S€t€a€t€u€s€"€,€"€S€t€a€t€u€s€"€€
+€"€u€i€.€g€u€e€s€t€_€l€i€s€t€.€c€o€l€.€e€n€e€r€g€y€"€,€"€E€n€e€r€g€i€e€"€,€"€E€n€e€r€g€y€"€€
+€"€u€i€.€g€u€e€s€t€_€l€i€s€t€.€c€o€l€.€s€a€t€i€s€f€a€c€t€i€o€n€"€,€"€Z€u€f€r€.€"€,€"€S€a€t€.€"€€
+€"€u€i€.€g€u€e€s€t€_€l€i€s€t€.€t€o€o€l€t€i€p€.€s€a€t€i€s€f€a€c€t€i€o€n€"€,€"€Z€u€f€r€i€e€d€e€n€h€e€i€t€"€,€"€S€a€t€i€s€f€a€c€t€i€o€n€"€€
+€"€u€i€.€g€u€e€s€t€_€l€i€s€t€.€g€o€t€o€"€,€"€G€e€h€e€ €z€u€ €G€a€s€t€"€,€"€G€o€ €t€o€ €G€u€e€s€t€"€€
+€"€u€i€.€r€o€o€m€_€l€i€s€t€.€c€o€l€.€n€a€m€e€_€t€y€p€e€"€,€"€N€a€m€e€ €/€ €T€y€p€"€,€"€N€a€m€e€ €/€ €T€y€p€e€"€€
+€"€u€i€.€r€o€o€m€_€l€i€s€t€.€c€o€l€.€r€o€o€m€"€,€"€Z€i€m€m€e€r€"€,€"€R€o€o€m€"€€
+€"€u€i€.€r€o€o€m€_€l€i€s€t€.€c€o€l€.€g€u€e€s€t€"€,€"€G€a€s€t€"€,€"€G€u€e€s€t€"€€
+€"€u€i€.€r€o€o€m€_€l€i€s€t€.€c€o€l€.€c€l€e€a€n€"€,€"€S€a€u€b€e€r€"€,€"€C€l€e€a€n€"€€
+€"€u€i€.€r€o€o€m€_€l€i€s€t€.€c€o€l€.€c€o€n€d€i€t€i€o€n€"€,€"€Z€u€s€t€a€n€d€"€,€"€C€o€n€d€i€t€i€o€n€"€€
+€"€u€i€.€r€o€o€m€_€l€i€s€t€.€g€o€t€o€"€,€"€G€e€h€e€ €z€u€ €R€a€u€m€"€,€"€G€o€ €t€o€ €R€o€o€m€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€l€.€n€a€m€e€"€,€"€N€A€M€E€"€,€"€N€A€M€E€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€l€.€r€o€l€e€"€,€"€B€E€R€U€F€"€,€"€R€O€L€E€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€l€.€a€g€e€"€,€"€A€L€T€E€R€"€,€"€A€G€E€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€l€.€w€a€g€e€"€,€"€G€E€H€A€L€T€"€,€"€W€A€G€E€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€l€.€m€o€r€a€l€e€"€,€"€M€O€R€A€L€"€,€"€M€O€R€A€L€E€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€l€.€s€t€a€t€u€s€"€,€"€S€T€A€T€U€S€"€,€"€S€T€A€T€U€S€"€€
+€"€u€i€.€s€t€a€f€f€.€g€o€t€o€"€,€"€G€e€h€e€ €z€u€ €P€e€r€s€o€n€a€l€"€,€"€G€o€ €t€o€ €S€t€a€f€f€"€€
+€"€u€i€.€s€t€a€f€f€.€l€b€l€_€m€o€t€i€v€a€t€i€o€n€"€,€"€M€o€t€i€v€a€t€i€o€n€"€,€"€M€o€t€i€v€a€t€i€o€n€"€€
+€"€u€i€.€s€t€a€f€f€.€l€b€l€_€r€e€p€a€i€r€"€,€"€R€e€p€a€r€a€t€u€r€w€i€s€s€e€n€"€,€"€R€e€p€a€i€r€ €K€n€o€w€l€e€d€g€e€"€€
+€"€u€i€.€s€t€a€f€f€.€l€b€l€_€s€t€r€e€s€s€"€,€"€S€t€r€e€s€s€r€e€s€i€s€t€e€n€z€"€,€"€S€t€r€e€s€s€ €R€e€s€i€s€t€a€n€c€e€"€€
+€"€c€r€e€d€i€t€s€.€t€i€t€l€e€"€,€"€C€r€e€d€i€t€s€"€,€"€C€r€e€d€i€t€s€"€€
+€"€c€r€e€d€i€t€s€.€s€e€c€t€i€o€n€.€d€e€v€"€,€"€E€n€t€w€i€c€k€l€u€n€g€"€,€"€D€e€v€e€l€o€p€m€e€n€t€"€€
+€"€c€r€e€d€i€t€s€.€s€e€c€t€i€o€n€.€e€n€g€i€n€e€"€,€"€E€n€g€i€n€e€ €&€ €T€o€o€l€s€"€,€"€E€n€g€i€n€e€ €&€ €T€o€o€l€s€"€€
+€"€c€r€e€d€i€t€s€.€s€e€c€t€i€o€n€.€a€s€s€e€t€s€"€,€"€A€s€s€e€t€s€ €&€ €G€r€a€f€i€k€e€n€"€,€"€A€s€s€e€t€s€ €&€ €G€r€a€p€h€i€c€s€"€€
+€"€c€r€e€d€i€t€s€.€s€e€c€t€i€o€n€.€f€o€n€t€s€"€,€"€S€c€h€r€i€f€t€e€n€"€,€"€F€o€n€t€s€"€€
+€"€c€r€e€d€i€t€s€.€s€e€c€t€i€o€n€.€b€a€c€k€e€n€d€"€,€"€B€a€c€k€e€n€d€"€,€"€B€a€c€k€e€n€d€"€€
+€"€c€r€e€d€i€t€s€.€b€t€n€.€b€a€c€k€"€,€"€←€ €Z€u€r€ü€c€k€"€,€"€←€ €B€a€c€k€"€€
+€"€a€p€i€.€e€r€r€o€r€.€n€e€t€w€o€r€k€"€,€"€N€e€t€z€w€e€r€k€f€e€h€l€e€r€.€ €B€i€t€t€e€ €v€e€r€s€u€c€h€e€ €e€s€ €e€r€n€e€u€t€.€"€,€"€N€e€t€w€o€r€k€ €e€r€r€o€r€.€ €P€l€e€a€s€e€ €t€r€y€ €a€g€a€i€n€.€"€€
+€"€a€p€i€.€e€r€r€o€r€.€i€n€v€a€l€i€d€_€j€s€o€n€"€,€"€U€n€g€ü€l€t€i€g€e€ €S€e€r€v€e€r€a€n€t€w€o€r€t€.€"€,€"€I€n€v€a€l€i€d€ €s€e€r€v€e€r€ €r€e€s€p€o€n€s€e€.€"€€
+€"€u€i€.€s€t€a€f€f€.€s€t€a€t€u€s€.€u€n€a€s€s€i€g€n€e€d€"€,€"€O€h€n€e€ €A€u€f€g€a€b€e€"€,€"€U€n€a€s€s€i€g€n€e€d€"€€
+€"€u€i€.€s€t€a€f€f€.€s€t€a€t€u€s€.€a€s€s€i€g€n€e€d€"€,€"€Z€u€g€e€o€r€d€n€e€t€"€,€"€A€s€s€i€g€n€e€d€"€€
+€"€u€i€.€s€t€a€f€f€.€s€t€a€t€u€s€.€b€u€s€y€"€,€"€I€m€ €E€i€n€s€a€t€z€"€,€"€B€u€s€y€"€€
+€"€u€i€.€s€t€a€f€f€.€s€t€a€t€u€s€.€w€a€i€t€i€n€g€"€,€"€W€a€r€t€e€n€d€"€,€"€W€a€i€t€i€n€g€"€€
+€"€u€i€.€s€t€a€f€f€.€a€s€s€i€g€n€.€n€o€_€t€a€r€g€e€t€"€,€"€K€e€i€n€ €Z€i€e€l€ €/€ €P€e€r€s€o€n€a€l€ €g€e€w€ä€h€l€t€"€,€"€N€o€ €t€a€r€g€e€t€ €/€ €s€t€a€f€f€ €s€e€l€e€c€t€e€d€"€€
+€"€u€i€.€s€t€a€f€f€.€a€s€s€i€g€n€.€s€e€l€e€c€t€_€t€a€r€g€e€t€"€,€"€Z€i€e€l€ €w€ä€h€l€e€n€"€,€"€S€e€l€e€c€t€ €t€a€r€g€e€t€"€€
+€"€u€i€.€s€t€a€f€f€.€a€s€s€i€g€n€.€s€e€l€e€c€t€_€s€t€a€f€f€"€,€"€P€e€r€s€o€n€a€l€ €w€ä€h€l€e€n€"€,€"€S€e€l€e€c€t€ €s€t€a€f€f€"€€
+€"€u€i€.€s€t€a€f€f€.€a€s€s€i€g€n€.€w€r€o€n€g€_€r€o€l€e€"€,€"€F€a€l€s€c€h€e€ €R€o€l€l€e€"€,€"€W€r€o€n€g€ €r€o€l€e€"€€
+€"€u€i€.€s€t€a€f€f€.€a€s€s€i€g€n€.€a€s€s€i€g€n€"€,€"€Z€u€o€r€d€n€e€n€"€,€"€A€s€s€i€g€n€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€n€f€i€r€m€.€f€i€r€e€.€t€i€t€l€e€"€,€"€K€ü€n€d€i€g€u€n€g€"€,€"€D€i€s€m€i€s€s€a€l€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€n€f€i€r€m€.€f€i€r€e€.€d€e€s€c€"€,€"€M€ö€c€h€t€e€s€t€ €d€u€ €%€s€ €w€i€r€k€l€i€c€h€ €k€ü€n€d€i€g€e€n€?€"€,€"€D€o€ €y€o€u€ €r€e€a€l€l€y€ €w€a€n€t€ €t€o€ €d€i€s€m€i€s€s€ €%€s€?€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€n€f€i€r€m€.€h€i€r€e€.€t€i€t€l€e€"€,€"€A€r€b€e€i€t€s€v€e€r€t€r€a€g€"€,€"€E€m€p€l€o€y€m€e€n€t€ €C€o€n€t€r€a€c€t€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€n€f€i€r€m€.€h€i€r€e€.€d€e€s€c€"€,€"€M€ö€c€h€t€e€s€t€ €d€u€ €%€s€ €f€ü€r€ €%€d€ €â€€¬€ €e€i€n€s€t€e€l€l€e€n€?€"€,€"€D€o€ €y€o€u€ €w€a€n€t€ €t€o€ €h€i€r€e€ €%€s€ €f€o€r€ €%€d€ €â€€¬€?€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€n€f€i€r€m€.€u€n€a€s€s€i€g€n€.€t€i€t€l€e€"€,€"€Z€u€w€e€i€s€u€n€g€ €a€u€f€h€e€b€e€n€"€,€"€U€n€a€s€s€i€g€n€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€n€f€i€r€m€.€u€n€a€s€s€i€g€n€.€d€e€s€c€"€,€"€M€ö€c€h€t€e€s€t€ €d€u€ €%€s€ €w€i€r€k€l€i€c€h€ €a€u€s€ €d€i€e€s€e€m€ €R€a€u€m€ €e€n€t€f€e€r€n€e€n€?€"€,€"€D€o€ €y€o€u€ €r€e€a€l€l€y€ €w€a€n€t€ €t€o€ €r€e€m€o€v€e€ €%€s€ €f€r€o€m€ €t€h€i€s€ €r€o€o€m€?€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€n€f€i€r€m€.€b€t€n€.€f€i€r€e€"€,€"€K€ü€n€d€i€g€e€n€"€,€"€D€i€s€m€i€s€s€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€n€f€i€r€m€.€b€t€n€.€h€i€r€e€"€,€"€E€i€n€s€t€e€l€l€e€n€"€,€"€H€i€r€e€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€n€f€i€r€m€.€b€t€n€.€u€n€a€s€s€i€g€n€"€,€"€E€n€t€f€e€r€n€e€n€"€,€"€R€e€m€o€v€e€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€n€f€i€r€m€.€b€t€n€.€c€a€n€c€e€l€"€,€"€A€b€b€r€e€c€h€e€n€"€,€"€C€a€n€c€e€l€"€€
+€"€r€e€c€e€p€t€i€o€n€.€t€o€o€l€t€i€p€.€r€o€o€m€"€,€"€Z€i€m€m€e€r€"€,€"€R€o€o€m€"€€
+€"€r€e€c€e€p€t€i€o€n€.€t€o€o€l€t€i€p€.€g€r€o€u€p€"€,€"€G€r€u€p€p€e€:€ €#€#€#€ €P€e€r€s€o€n€(€e€n€)€"€,€"€G€r€o€u€p€:€ €#€#€#€ €P€e€r€s€o€n€(€s€)€"€€
+€"€r€e€c€e€p€t€i€o€n€.€t€o€o€l€t€i€p€.€n€i€g€h€t€s€"€,€"€N€o€c€h€ €#€#€#€ €N€a€c€h€t€(€e€)€"€,€"€#€#€#€ €N€i€g€h€t€(€s€)€ €l€e€f€t€"€€
+€"€r€e€c€e€p€t€i€o€n€.€t€o€o€l€t€i€p€.€s€a€t€i€s€f€a€c€t€i€o€n€"€,€"€Z€u€f€r€i€e€d€e€n€h€e€i€t€:€ €#€#€#€%€"€,€"€S€a€t€i€s€f€a€c€t€i€o€n€:€ €#€#€#€%€"€€
+€"€r€e€c€e€p€t€i€o€n€.€t€o€o€l€t€i€p€.€s€u€r€c€h€a€r€g€e€"€,€"€Z€a€h€l€t€ €A€u€f€p€r€e€i€s€"€,€"€P€a€y€s€ €s€u€r€c€h€a€r€g€e€"€€
+€"€r€e€c€e€p€t€i€o€n€.€t€o€o€l€t€i€p€.€g€u€e€s€t€s€"€,€"€G€ä€s€t€e€ €i€m€ €Z€i€m€m€e€r€:€"€,€"€G€u€e€s€t€s€ €i€n€ €r€o€o€m€:€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€t€i€e€r€_€l€o€c€k€e€d€"€,€"€🔒€ €T€i€e€r€ €#€#€#€ €G€e€s€p€e€r€r€t€"€,€"€🔒€ €T€i€e€r€ €#€#€#€ €L€o€c€k€e€d€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€u€n€l€o€c€k€_€r€e€q€s€"€,€"€F€r€e€i€s€c€h€a€l€t€b€e€d€i€n€g€u€n€g€e€n€:€"€,€"€U€n€l€o€c€k€ €r€e€q€u€i€r€e€m€e€n€t€s€:€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€r€e€q€.€l€e€v€e€l€"€,€"€ €H€o€t€e€l€ €L€e€v€e€l€ €#€#€#€"€,€"€ €H€o€t€e€l€ €L€e€v€e€l€ €#€#€#€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€r€e€q€.€s€t€a€r€s€"€,€"€ €G€o€u€r€m€e€t€ €S€t€e€r€n€e€:€ €#€#€#€"€,€"€ €G€o€u€r€m€e€t€ €S€t€a€r€s€:€ €#€#€#€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€r€e€q€.€f€p€"€,€"€ €#€#€#€ €F€P€"€,€"€ €#€#€#€ €R€P€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€r€e€q€.€p€r€e€v€_€t€i€e€r€"€,€"€ €V€o€r€h€e€r€i€g€e€s€ €T€i€e€r€ €#€#€#€/€*€*€*€"€,€"€ €P€r€e€v€i€o€u€s€ €T€i€e€r€ €#€#€#€/€*€*€*€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€b€t€n€.€u€n€l€o€c€k€_€t€i€e€r€"€,€"€T€i€e€r€ €#€#€#€ €F€r€e€i€s€c€h€a€l€t€e€n€"€,€"€U€n€l€o€c€k€ €T€i€e€r€ €#€#€#€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€d€e€m€o€_€l€o€c€k€e€d€"€,€"€🔒€ €N€I€C€H€T€ €I€N€ €D€E€R€ €T€E€C€H€D€E€M€O€ €V€E€R€F€Ü€G€B€A€R€"€,€"€🔒€ €N€O€T€ €A€V€A€I€L€A€B€L€E€ €I€N€ €T€E€C€H€D€E€M€O€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€c€o€n€f€i€r€m€.€t€i€t€l€e€"€,€"€T€e€c€h€n€o€l€o€g€i€e€ €f€r€e€i€s€c€h€a€l€t€e€n€"€,€"€U€n€l€o€c€k€ €T€e€c€h€n€o€l€o€g€y€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€c€o€n€f€i€r€m€.€d€e€s€c€"€,€"€M€ö€c€h€t€e€s€t€ €d€u€ €'€#€#€#€'€ €w€i€r€k€l€i€c€h€ €f€r€e€i€s€c€h€a€l€t€e€n€?€\€n€K€o€s€t€e€n€:€ €*€*€*€ €F€P€ €|€ €+€+€+€ €€"€,€"€D€o€ €y€o€u€ €r€e€a€l€l€y€ €w€a€n€t€ €t€o€ €u€n€l€o€c€k€ €'€#€#€#€'€?€\€n€C€o€s€t€:€ €*€*€*€ €R€P€ €|€ €+€+€+€ €€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€b€t€n€.€u€n€l€o€c€k€"€,€"€F€r€e€i€s€c€h€a€l€t€e€n€"€,€"€U€n€l€o€c€k€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€b€t€n€.€c€a€n€c€e€l€"€,€"€A€b€b€r€e€c€h€e€n€"€,€"€C€a€n€c€e€l€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€t€o€o€l€t€i€p€.€u€n€l€o€c€k€s€.€t€e€c€h€"€,€"€F€o€r€s€c€h€u€n€g€:€ €#€#€#€"€,€"€R€e€s€e€a€r€c€h€:€ €#€#€#€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€t€o€o€l€t€i€p€.€u€n€l€o€c€k€s€.€r€o€o€m€"€,€"€R€a€u€m€:€ €#€#€#€"€,€"€R€o€o€m€:€ €#€#€#€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€t€o€o€l€t€i€p€.€u€n€l€o€c€k€s€.€d€e€s€c€"€,€"€S€c€h€a€l€t€e€t€ €f€r€e€i€:€\€n€-€ €#€#€#€\€n€\€n€"€,€"€U€n€l€o€c€k€s€:€\€n€-€ €#€#€#€\€n€\€n€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€t€o€o€l€t€i€p€.€u€n€l€o€c€k€s€.€e€m€p€t€y€"€,€"€S€c€h€a€l€t€e€t€ €n€e€u€e€ €I€n€h€a€l€t€e€ €f€r€e€i€.€\€n€\€n€"€,€"€U€n€l€o€c€k€s€ €n€e€w€ €c€o€n€t€e€n€t€.€\€n€\€n€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€t€o€o€l€t€i€p€.€r€e€q€u€i€r€e€s€"€,€"€B€e€n€ö€t€i€g€t€:€ €#€#€#€\€n€"€,€"€R€e€q€u€i€r€e€s€:€ €#€#€#€\€n€"€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€t€o€o€l€t€i€p€.€d€e€m€o€_€a€l€e€r€t€"€,€"€D€i€e€s€e€r€ €I€n€h€a€l€t€ €i€s€t€ €i€n€ €d€e€r€ €T€e€c€h€d€e€m€o€ €n€i€c€h€t€ €v€e€r€f€ü€g€b€a€r€.€"€,€"€T€h€i€s€ €c€o€n€t€e€n€t€ €i€s€ €n€o€t€ €a€v€a€i€l€a€b€l€e€ €i€n€ €t€h€e€ €t€e€c€h€d€e€m€o€.€"€€
+€"€r€o€o€m€_€c€a€t€e€g€o€r€y€.€z€i€m€m€e€r€"€,€"€Z€i€m€m€e€r€"€,€"€R€o€o€m€s€"€€
+€"€r€o€o€m€_€c€a€t€e€g€o€r€y€.€g€a€s€t€r€o€n€o€m€i€e€"€,€"€G€a€s€t€r€o€n€o€m€i€e€"€,€"€G€a€s€t€r€o€n€o€m€y€"€€
+€"€r€o€o€m€_€c€a€t€e€g€o€r€y€.€w€e€l€l€n€e€s€s€"€,€"€W€e€l€l€n€e€s€s€"€,€"€W€e€l€l€n€e€s€s€"€€
+€"€r€o€o€m€_€c€a€t€e€g€o€r€y€.€m€a€n€a€g€e€m€e€n€t€"€,€"€M€a€n€a€g€e€m€e€n€t€"€,€"€M€a€n€a€g€e€m€e€n€t€"€€
+€"€r€o€o€m€_€c€a€t€e€g€o€r€y€.€p€r€e€s€t€i€g€e€"€,€"€P€r€e€s€t€i€g€e€"€,€"€P€r€e€s€t€i€g€e€"€€
+€"€u€i€.€q€u€e€s€t€s€.€r€a€n€k€"€,€"€R€a€n€g€ €#€#€#€"€,€"€R€a€n€k€ €#€#€#€"€€
+€"€u€i€.€q€u€e€s€t€s€.€a€l€l€_€d€o€n€e€"€,€"€A€l€l€e€ €R€ä€n€g€e€ €a€b€g€e€s€c€h€l€o€s€s€e€n€!€"€,€"€A€l€l€ €r€a€n€k€s€ €c€o€m€p€l€e€t€e€d€!€"€€
+€"€u€i€.€q€u€e€s€t€s€.€r€e€w€a€r€d€_€r€a€n€k€"€,€"€V€e€r€g€ü€t€u€n€g€:€ €#€#€#€ €F€P€ €|€ €*€*€*€ €€€"€,€"€R€e€w€a€r€d€:€ €#€#€#€ €R€P€ €|€ €*€*€*€ €€€"€€
+€"€u€i€.€q€u€e€s€t€s€.€b€t€n€.€c€o€m€p€l€e€t€e€_€r€a€n€k€"€,€"€R€a€n€g€ €a€b€s€c€h€l€i€e€ß€e€n€"€,€"€C€o€m€p€l€e€t€e€ €R€a€n€k€"€€
+€"€u€i€.€q€u€e€s€t€s€.€l€o€c€k€e€d€_€t€e€c€h€"€,€"€🔒€ €?€?€?€ €(€B€e€n€ö€t€i€g€t€ €F€o€r€s€c€h€u€n€g€)€"€,€"€🔒€ €?€?€?€ €(€R€e€q€u€i€r€e€s€ €R€e€s€e€a€r€c€h€)€"€€
+€"€u€i€.€q€u€e€s€t€s€.€p€r€o€g€r€e€s€s€"€,€"€F€o€r€t€s€c€h€r€i€t€t€:€ €#€#€#€ €/€ €*€*€*€"€,€"€P€r€o€g€r€e€s€s€:€ €#€#€#€ €/€ €*€*€*€"€€
+€"€u€i€.€q€u€e€s€t€s€.€r€e€w€a€r€d€_€q€u€e€s€t€"€,€"€B€e€l€o€h€n€u€n€g€:€ €#€#€#€ €F€P€ €|€ €*€*€*€ €€€"€,€"€R€e€w€a€r€d€:€ €#€#€#€ €R€P€ €|€ €*€*€*€ €€€"€€
+€"€u€i€.€q€u€e€s€t€s€.€b€t€n€.€l€o€c€k€e€d€"€,€"€G€e€s€p€e€r€r€t€"€,€"€L€o€c€k€e€d€"€€
+€"€u€i€.€q€u€e€s€t€s€.€b€t€n€.€f€u€t€u€r€e€"€,€"€R€a€n€g€ €n€o€c€h€ €n€i€c€h€t€ €e€r€r€e€i€c€h€t€"€,€"€R€a€n€k€ €n€o€t€ €r€e€a€c€h€e€d€ €y€e€t€"€€
+€"€u€i€.€q€u€e€s€t€s€.€b€t€n€.€d€o€n€e€"€,€"€E€r€l€e€d€i€g€t€"€,€"€D€o€n€e€"€€
+€"€u€i€.€q€u€e€s€t€s€.€b€t€n€.€c€l€a€i€m€"€,€"€B€e€l€o€h€n€u€n€g€ €a€b€h€o€l€e€n€"€,€"€C€l€a€i€m€ €R€e€w€a€r€d€"€€
+€"€u€i€.€q€u€e€s€t€s€.€b€t€n€.€w€o€r€k€i€n€g€"€,€"€I€n€ €B€e€a€r€b€e€i€t€u€n€g€.€.€.€"€,€"€I€n€ €P€r€o€g€r€e€s€s€.€.€.€"€€
+€"€r€o€o€m€_€c€a€t€e€g€o€r€y€.€g€a€s€t€r€o€"€,€"€G€a€s€t€r€o€n€o€m€i€e€"€,€"€G€a€s€t€r€o€n€o€m€y€"€€
+€"€r€o€o€m€_€c€a€t€e€g€o€r€y€.€s€e€r€v€i€c€e€"€,€"€S€e€r€v€i€c€e€"€,€"€S€e€r€v€i€c€e€"€€
+€"€r€o€o€m€_€c€a€t€e€g€o€r€y€.€s€o€n€s€t€i€g€e€s€"€,€"€S€o€n€s€t€i€g€e€s€"€,€"€M€i€s€c€"€€
+€"€r€o€o€m€_€c€a€t€e€g€o€r€y€.€w€e€r€k€z€e€u€g€e€"€,€"€W€e€r€k€z€e€u€g€e€"€,€"€T€o€o€l€s€"€€
+€"€u€i€.€b€u€i€l€d€m€e€n€u€.€c€a€t€e€g€o€r€y€"€,€"€K€a€t€e€g€o€r€i€e€:€ €#€#€#€"€,€"€C€a€t€e€g€o€r€y€:€ €#€#€#€"€€
+€"€A€b€r€i€s€s€b€i€r€n€e€"€,€"€A€b€r€i€s€s€b€i€r€n€e€"€,€"€D€e€m€o€l€i€s€h€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€l€.€n€a€m€e€"€,€"€N€A€M€E€"€,€"€N€A€M€E€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€l€.€r€o€l€e€"€,€"€B€E€R€U€F€"€,€"€R€O€L€E€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€l€.€a€g€e€"€,€"€A€L€T€E€R€"€,€"€A€G€E€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€l€.€w€a€g€e€"€,€"€G€E€H€A€L€T€"€,€"€W€A€G€E€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€l€.€m€o€r€a€l€e€"€,€"€M€O€R€A€L€"€,€"€M€O€R€A€L€E€"€€
+€"€u€i€.€s€t€a€f€f€.€c€o€l€.€s€t€a€t€u€s€"€,€"€S€T€A€T€U€S€"€,€"€S€T€A€T€U€S€"€€
+€"€u€i€.€s€t€a€f€f€.€t€a€b€_€t€e€a€m€"€,€"€D€e€i€n€ €T€e€a€m€"€,€"€Y€o€u€r€ €T€e€a€m€"€€
+€"€u€i€.€s€t€a€f€f€.€t€a€b€_€a€p€p€l€i€c€a€n€t€s€"€,€"€B€e€w€e€r€b€e€r€"€,€"€A€p€p€l€i€c€a€n€t€s€"€€
+€"€u€i€.€s€t€a€f€f€.€t€a€b€_€a€s€s€i€g€n€"€,€"€Z€u€w€e€i€s€u€n€g€"€,€"€A€s€s€i€g€n€m€e€n€t€"€€
+€"€u€i€.€s€t€a€f€f€.€s€t€a€t€u€s€.€u€n€a€s€s€i€g€n€e€d€"€,€"€O€h€n€e€ €A€u€f€g€a€b€e€"€,€"€U€n€a€s€s€i€g€n€e€d€"€€
+€"€u€i€.€s€t€a€f€f€.€s€t€a€t€u€s€.€a€s€s€i€g€n€e€d€"€,€"€Z€u€g€e€o€r€d€n€e€t€"€,€"€A€s€s€i€g€n€e€d€"€€
+€"€u€i€.€s€t€a€f€f€.€s€t€a€t€u€s€.€b€u€s€y€"€,€"€I€m€ €E€i€n€s€a€t€z€"€,€"€B€u€s€y€"€€
+€"€u€i€.€s€t€a€f€f€.€s€t€a€t€u€s€.€w€a€i€t€i€n€g€"€,€"€W€a€r€t€e€n€d€"€,€"€W€a€i€t€i€n€g€"€€
+€"€u€i€.€s€t€a€f€f€.€n€o€_€t€e€a€m€"€,€"€D€u€ €h€a€s€t€ €n€o€c€h€ €k€e€i€n€ €P€e€r€s€o€n€a€l€ €e€i€n€g€e€s€t€e€l€l€t€.€"€,€"€Y€o€u€ €h€a€v€e€n€'€t€ €h€i€r€e€d€ €a€n€y€ €s€t€a€f€f€ €y€e€t€.€"€€
+€"€u€i€.€s€t€a€f€f€.€n€o€_€a€p€p€l€i€c€a€n€t€s€"€,€"€K€e€i€n€e€ €B€e€w€e€r€b€e€r€ €h€e€u€t€e€.€"€,€"€N€o€ €a€p€p€l€i€c€a€n€t€s€ €t€o€d€a€y€.€"€€
+€"€u€i€.€s€t€a€f€f€.€s€e€l€e€c€t€_€p€r€o€m€p€t€"€,€"€B€i€t€t€e€ €w€ä€h€l€e€ €e€i€n€e€n€ €M€i€t€a€r€b€e€i€t€e€r€ €a€u€s€"€,€"€P€l€e€a€s€e€ €s€e€l€e€c€t€ €a€ €s€t€a€f€f€ €m€e€m€b€e€r€"€€
+€"€u€i€.€s€t€a€f€f€.€j€o€b€"€,€"€B€e€r€u€f€:€ €"€,€"€J€o€b€:€ €"€€
+€"€u€i€.€s€t€a€f€f€.€d€a€i€l€y€_€w€a€g€e€"€,€"€T€a€g€e€s€g€e€h€a€l€t€"€,€"€D€a€i€l€y€ €W€a€g€e€"€€
+€"€u€i€.€s€t€a€f€f€.€h€i€r€e€_€c€o€s€t€"€,€"€E€i€n€s€t€e€l€l€u€n€g€s€g€e€b€ü€h€r€"€,€"€H€i€r€e€ €C€o€s€t€"€€
+€"€u€i€.€s€t€a€f€f€.€f€i€r€e€"€,€"€K€ü€n€d€i€g€e€n€"€,€"€D€i€s€m€i€s€s€"€€
+€"€u€i€.€s€t€a€f€f€.€h€i€r€e€"€,€"€E€i€n€s€t€e€l€l€e€n€"€,€"€H€i€r€e€"€€
+€"€u€i€.€s€t€a€f€f€.€m€o€r€a€l€e€"€,€"€M€o€r€a€l€"€,€"€M€o€r€a€l€e€"€€
+€"€u€i€.€s€t€a€f€f€.€a€s€s€i€g€n€.€s€e€l€e€c€t€_€t€a€r€g€e€t€"€,€"€Z€i€e€l€ €w€ä€h€l€e€n€"€,€"€S€e€l€e€c€t€ €T€a€r€g€e€t€"€€
+€"€u€i€.€s€t€a€f€f€.€a€s€s€i€g€n€.€s€e€l€e€c€t€_€s€t€a€f€f€"€,€"€P€e€r€s€o€n€a€l€ €w€ä€h€l€e€n€"€,€"€S€e€l€e€c€t€ €S€t€a€f€f€"€€
+€"€u€i€.€s€t€a€f€f€.€a€s€s€i€g€n€.€w€r€o€n€g€_€r€o€l€e€"€,€"€F€a€l€s€c€h€e€ €R€o€l€l€e€"€,€"€W€r€o€n€g€ €R€o€l€e€"€€
+€"€u€i€.€s€t€a€f€f€.€a€s€s€i€g€n€.€a€s€s€i€g€n€"€,€"€Z€u€o€r€d€n€e€n€"€,€"€A€s€s€i€g€n€"€€
+€"€u€i€.€s€t€a€f€f€.€g€o€t€o€"€,€"€G€e€h€e€ €z€u€ €P€e€r€s€o€n€a€l€"€,€"€G€o€ €t€o€ €S€t€a€f€f€"€€
+€"€s€t€a€f€f€.€s€k€i€l€l€.€m€o€t€i€v€a€t€i€o€n€"€,€"€M€o€t€i€v€a€t€i€o€n€"€,€"€M€o€t€i€v€a€t€i€o€n€"€€
+€"€s€t€a€f€f€.€s€k€i€l€l€.€r€e€p€a€i€r€_€k€n€o€w€l€e€d€g€e€"€,€"€R€e€p€a€r€a€t€u€r€w€i€s€s€e€n€"€,€"€R€e€p€a€i€r€ €K€n€o€w€l€e€d€g€e€"€€
+€"€s€t€a€f€f€.€s€k€i€l€l€.€s€t€r€e€s€s€_€r€e€s€i€s€t€a€n€c€e€"€,€"€S€t€r€e€s€s€r€e€s€i€s€t€e€n€z€"€,€"€S€t€r€e€s€s€ €R€e€s€i€s€t€a€n€c€e€"€€
+€"€m€o€d€a€l€.€t€u€t€o€r€i€a€l€.€t€i€t€l€e€"€,€"€T€u€t€o€r€i€a€l€s€ €&€ €C€o€d€e€x€"€,€"€T€u€t€o€r€i€a€l€s€ €&€ €C€o€d€e€x€"€€
+€"€m€o€d€a€l€.€s€t€a€f€f€.€t€i€t€l€e€"€,€"€P€e€r€s€o€n€a€l€v€e€r€w€a€l€t€u€n€g€"€,€"€S€t€a€f€f€ €M€a€n€a€g€e€m€e€n€t€"€€
+€"€m€o€d€a€l€.€t€e€c€h€t€r€e€e€.€t€i€t€l€e€"€,€"€F€o€r€s€c€h€u€n€g€ €&€ €T€e€c€h€n€o€l€o€g€i€e€"€,€"€R€e€s€e€a€r€c€h€ €&€ €T€e€c€h€n€o€l€o€g€y€"€€
+€"€m€o€d€a€l€.€q€u€e€s€t€b€o€o€k€.€t€i€t€l€e€"€,€"€A€u€f€g€a€b€e€n€b€u€c€h€"€,€"€Q€u€e€s€t€b€o€o€k€"€€
+€"€m€o€d€a€l€.€g€u€e€s€t€l€i€s€t€.€t€i€t€l€e€"€,€"€G€ä€s€t€e€l€i€s€t€e€"€,€"€G€u€e€s€t€ €L€i€s€t€"€€
+€"€m€o€d€a€l€.€r€o€o€m€l€i€s€t€.€t€i€t€l€e€"€,€"€R€a€u€m€l€i€s€t€e€"€,€"€R€o€o€m€ €L€i€s€t€"€€
+€"€u€i€.€s€t€a€f€f€.€a€s€s€i€g€n€.€s€t€a€t€u€s€.€e€m€p€t€y€"€,€"€K€e€i€n€ €P€e€r€s€o€n€a€l€ €(€#€#€#€/€*€*€*€ €M€i€t€a€r€b€e€i€t€e€r€I€n€n€e€n€)€"€,€"€N€o€ €S€t€a€f€f€ €(€#€#€#€/€*€*€*€ €S€t€a€f€f€)€"€€
+€"€u€i€.€s€t€a€f€f€.€a€s€s€i€g€n€.€s€t€a€t€u€s€.€p€a€r€t€i€a€l€"€,€"€T€e€i€l€b€e€s€e€t€z€t€ €(€#€#€#€/€*€*€*€ €M€i€t€a€r€b€e€i€t€e€r€I€n€n€e€n€)€"€,€"€P€a€r€t€i€a€l€l€y€ €S€t€a€f€f€e€d€ €(€#€#€#€/€*€*€*€ €S€t€a€f€f€)€"€€
+€"€u€i€.€s€t€a€f€f€.€a€s€s€i€g€n€.€s€t€a€t€u€s€.€f€u€l€l€"€,€"€V€o€l€l€b€e€s€e€t€z€t€ €(€#€#€#€ €M€i€t€a€r€b€e€i€t€e€r€I€n€n€e€n€)€"€,€"€F€u€l€l€y€ €S€t€a€f€f€e€d€ €(€#€#€#€ €S€t€a€f€f€)€"€€
+€€
+€"€u€i€.€t€e€c€h€t€r€e€e€.€c€u€r€r€e€n€t€_€f€p€"€,€"€A€k€t€u€e€l€l€e€ €F€P€"€,€"€C€u€r€r€e€n€t€ €R€P€"€€
+€"€s€e€t€t€i€n€g€s€.€l€a€n€g€u€a€g€e€.€m€a€i€n€_€m€e€n€u€_€o€n€l€y€"€,€"€(€n€u€r€ €i€m€ €H€a€u€p€t€m€e€n€ü€)€"€,€"€(€M€a€i€n€ €M€e€n€u€ €o€n€l€y€)€"€€
+€"€u€i€.€d€i€s€c€l€a€i€m€e€r€.€t€i€t€l€e€"€,€"€W€i€l€l€k€o€m€m€e€n€ €b€e€i€ €d€e€r€ €H€O€·€M€A€·€S€I€M€ €T€e€c€h€-€D€e€m€o€!€"€,€"€W€e€l€c€o€m€e€ €t€o€ €t€h€e€ €H€O€·€M€A€·€S€I€M€ €T€e€c€h€ €D€e€m€o€!€"€€
+€"€u€i€.€d€i€s€c€l€a€i€m€e€r€.€t€e€x€t€"€,€"€S€c€h€ö€n€,€ €d€a€s€s€ €d€u€ €d€a€b€e€i€ €b€i€s€t€!€ €B€e€v€o€r€ €d€u€ €d€e€i€n€ €e€r€s€t€e€s€ €H€o€t€e€l€ €b€a€u€s€t€,€ €e€i€n€ €k€l€e€i€n€e€r€ €H€i€n€w€e€i€s€ €v€o€r€a€b€:€ €D€u€ €s€p€i€e€l€s€t€ €h€i€e€r€ €e€i€n€e€ €f€r€ü€h€e€ €T€e€c€h€-€D€e€m€o€ €(€a€l€s€o€ €v€o€m€ €E€n€t€w€i€c€k€l€u€n€g€s€s€t€a€n€d€ €n€o€c€h€ €w€e€i€t€ €v€o€r€ €e€i€n€e€r€ €e€r€s€t€e€n€ €A€l€p€h€a€-€V€e€r€s€i€o€n€)€.€ €D€a€s€ €b€e€d€e€u€t€e€t€,€ €d€a€s€ €F€u€n€d€a€m€e€n€t€ €s€t€e€h€t€,€ €a€b€e€r€ €d€e€r€ €P€u€t€z€ €t€r€o€c€k€n€e€t€ €n€o€c€h€.€\€n€\€n€B€i€t€t€e€ €b€e€h€a€l€t€e€ €w€ä€h€r€e€n€d€ €d€e€s€ €S€p€i€e€l€e€n€s€ €f€o€l€g€e€n€d€e€ €D€i€n€g€e€ €i€m€ €H€i€n€t€e€r€k€o€p€f€:€\€n€\€n€[€b€]€E€c€k€e€n€ €u€n€d€ €K€a€n€t€e€n€:€[€/€b€]€ €D€u€ €w€i€r€s€t€ €m€i€t€ €S€i€c€h€e€r€h€e€i€t€ €a€u€f€ €B€u€g€s€,€ €G€l€i€t€c€h€e€s€ €o€d€e€r€ €n€o€c€h€ €n€i€c€h€t€ €g€a€n€z€ €a€u€s€b€a€l€a€n€c€i€e€r€t€e€ €M€e€c€h€a€n€i€k€e€n€ €s€t€o€ß€e€n€.€\€n€\€n€[€b€]€W€o€r€k€ €i€n€ €P€r€o€g€r€e€s€s€:€[€/€b€]€ €V€i€e€l€e€ €G€r€a€f€i€k€e€n€,€ €A€n€i€m€a€t€i€o€n€e€n€ €u€n€d€ €U€I€-€E€l€e€m€e€n€t€e€ €s€i€n€d€ €n€o€c€h€ €P€l€a€t€z€h€a€l€t€e€r€ €u€n€d€ €s€p€i€e€g€e€l€n€ €n€i€c€h€t€ €d€i€e€ €f€i€n€a€l€e€ €Q€u€a€l€i€t€ä€t€ €w€i€d€e€r€.€\€n€\€n€[€b€]€D€e€i€n€ €F€e€e€d€b€a€c€k€ €i€s€t€ €G€o€l€d€ €w€e€r€t€:€[€/€b€]€ €A€u€f€ €d€e€r€ €r€e€c€h€t€e€n€ €B€i€l€d€s€c€h€i€r€m€s€e€i€t€e€ €f€i€n€d€e€s€t€ €d€u€ €e€i€n€e€n€ €"€"€B€u€g€ €m€e€l€d€e€n€"€"€-€B€u€t€t€o€n€.€ €B€i€t€t€e€ €n€u€t€z€e€ €i€h€n€ €a€u€s€g€i€e€b€i€g€!€ €E€g€a€l€ €o€b€ €d€u€ €e€i€n€e€n€ €F€e€h€l€e€r€ €g€e€f€u€n€d€e€n€ €h€a€s€t€,€ €K€r€i€t€i€k€ €ä€u€ß€e€r€n€ €m€ö€c€h€t€e€s€t€ €o€d€e€r€ €e€i€n€e€ €c€o€o€l€e€ €I€d€e€e€ €f€ü€r€ €e€i€n€ €F€e€a€t€u€r€e€ €h€a€s€t€ €–€ €l€a€s€s€ €e€s€ €m€i€c€h€ €w€i€s€s€e€n€.€\€n€\€n€V€i€e€l€e€n€ €D€a€n€k€,€ €d€a€s€s€ €d€u€ €m€e€i€n€e€ €S€o€l€o€-€E€n€t€w€i€c€k€l€u€n€g€ €s€p€i€e€l€s€t€ €u€n€d€ €d€i€e€s€e€s€ €P€r€o€j€e€k€t€ €m€i€t€ €d€e€i€n€e€r€ €Z€e€i€t€ €u€n€d€ €d€e€i€n€e€m€ €F€e€e€d€b€a€c€k€ €u€n€t€e€r€s€t€ü€t€z€t€.€ €V€i€e€l€ €S€p€a€ß€ €b€e€i€m€ €B€a€u€e€n€!€"€,€"€G€r€e€a€t€ €t€o€ €h€a€v€e€ €y€o€u€ €h€e€r€e€!€ €B€e€f€o€r€e€ €y€o€u€ €b€u€i€l€d€ €y€o€u€r€ €f€i€r€s€t€ €h€o€t€e€l€,€ €a€ €q€u€i€c€k€ €h€e€a€d€s€-€u€p€:€ €Y€o€u€ €a€r€e€ €p€l€a€y€i€n€g€ €a€n€ €e€a€r€l€y€ €t€e€c€h€ €d€e€m€o€ €(€w€h€i€c€h€ €m€e€a€n€s€ €t€h€e€ €d€e€v€e€l€o€p€m€e€n€t€ €s€t€a€t€e€ €i€s€ €s€t€i€l€l€ €w€e€l€l€ €b€e€f€o€r€e€ €a€ €f€i€r€s€t€ €A€l€p€h€a€ €v€e€r€s€i€o€n€)€.€ €T€h€i€s€ €m€e€a€n€s€ €t€h€e€ €f€o€u€n€d€a€t€i€o€n€ €i€s€ €l€a€i€d€,€ €b€u€t€ €t€h€e€ €p€a€i€n€t€ €i€s€ €s€t€i€l€l€ €d€r€y€i€n€g€.€\€n€\€n€P€l€e€a€s€e€ €k€e€e€p€ €t€h€e€ €f€o€l€l€o€w€i€n€g€ €t€h€i€n€g€s€ €i€n€ €m€i€n€d€ €w€h€i€l€e€ €p€l€a€y€i€n€g€:€\€n€\€n€[€b€]€R€o€u€g€h€ €E€d€g€e€s€:€[€/€b€]€ €Y€o€u€ €w€i€l€l€ €d€e€f€i€n€i€t€e€l€y€ €e€n€c€o€u€n€t€e€r€ €b€u€g€s€,€ €g€l€i€t€c€h€e€s€,€ €o€r€ €m€e€c€h€a€n€i€c€s€ €t€h€a€t€ €a€r€e€ €n€o€t€ €f€u€l€l€y€ €b€a€l€a€n€c€e€d€ €y€e€t€.€\€n€\€n€[€b€]€W€o€r€k€ €i€n€ €P€r€o€g€r€e€s€s€:€[€/€b€]€ €M€a€n€y€ €g€r€a€p€h€i€c€s€,€ €a€n€i€m€a€t€i€o€n€s€,€ €a€n€d€ €U€I€ €e€l€e€m€e€n€t€s€ €a€r€e€ €s€t€i€l€l€ €p€l€a€c€e€h€o€l€d€e€r€s€ €a€n€d€ €d€o€ €n€o€t€ €r€e€f€l€e€c€t€ €t€h€e€ €f€i€n€a€l€ €q€u€a€l€i€t€y€.€\€n€\€n€[€b€]€Y€o€u€r€ €F€e€e€d€b€a€c€k€ €i€s€ €G€o€l€d€:€[€/€b€]€ €O€n€ €t€h€e€ €r€i€g€h€t€ €s€i€d€e€ €o€f€ €t€h€e€ €s€c€r€e€e€n€,€ €y€o€u€ €w€i€l€l€ €f€i€n€d€ €a€ €"€"€R€e€p€o€r€t€ €B€u€g€"€"€ €b€u€t€t€o€n€.€ €P€l€e€a€s€e€ €u€s€e€ €i€t€ €e€x€t€e€n€s€i€v€e€l€y€!€ €W€h€e€t€h€e€r€ €y€o€u€'€v€e€ €f€o€u€n€d€ €a€ €b€u€g€,€ €h€a€v€e€ €s€o€m€e€ €c€o€n€s€t€r€u€c€t€i€v€e€ €c€r€i€t€i€c€i€s€m€,€ €o€r€ €a€ €c€o€o€l€ €i€d€e€a€ €f€o€r€ €a€ €f€e€a€t€u€r€e€ €–€ €l€e€t€ €m€e€ €k€n€o€w€.€\€n€\€n€T€h€a€n€k€ €y€o€u€ €s€o€ €m€u€c€h€ €f€o€r€ €p€l€a€y€i€n€g€ €m€y€ €s€o€l€o€-€d€e€v€e€l€o€p€e€d€ €g€a€m€e€ €a€n€d€ €s€u€p€p€o€r€t€i€n€g€ €t€h€i€s€ €p€r€o€j€e€c€t€ €w€i€t€h€ €y€o€u€r€ €t€i€m€e€ €a€n€d€ €f€e€e€d€b€a€c€k€.€ €H€a€v€e€ €f€u€n€ €b€u€i€l€d€i€n€g€!€"€€
+€"€u€i€.€d€i€s€c€l€a€i€m€e€r€.€d€o€n€t€_€s€h€o€w€"€,€"€B€e€i€m€ €n€ä€c€h€s€t€e€n€ €M€a€l€ €n€i€c€h€t€ €m€e€h€r€ €a€n€z€e€i€g€e€n€"€,€"€D€o€ €n€o€t€ €s€h€o€w€ €t€h€i€s€ €a€g€a€i€n€"€€
+€"€u€i€.€d€i€s€c€l€a€i€m€e€r€.€o€k€"€,€"€V€e€r€s€t€a€n€d€e€n€!€"€,€"€G€o€t€ €i€t€!€"€€
+€"€t€u€t€o€r€i€a€l€.€w€e€l€c€o€m€e€.€t€i€t€l€e€"€,€"€D€i€e€ €B€e€n€u€t€z€e€r€o€b€e€r€f€l€ä€c€h€e€ €H€U€D€"€,€"€U€s€e€r€i€n€t€e€r€f€a€c€e€ €H€U€D€"€€
+€"€t€u€t€o€r€i€a€l€.€w€e€l€c€o€m€e€.€d€e€s€c€"€,€"€W€i€l€l€k€o€m€m€e€n€ €i€n€ €d€e€i€n€e€m€ €n€e€u€e€n€ €H€o€t€e€l€!€ €H€i€e€r€ €e€i€n€ €k€u€r€z€e€r€ €Ü€b€e€r€b€l€i€c€k€:€\€n€O€b€e€n€ €(€T€o€p€H€U€D€)€:€ €D€e€i€n€e€ €w€i€c€h€t€i€g€s€t€e€n€ €L€a€u€f€d€a€t€e€n€ €w€i€e€ €F€i€n€a€n€z€e€n€ €u€n€d€ €G€ä€s€t€e€,€ €s€o€w€i€e€ €d€i€e€ €Z€e€i€t€s€t€e€u€e€r€u€n€g€.€\€n€U€n€t€e€n€ €r€e€c€h€t€s€:€ €D€i€e€ €S€t€e€u€e€r€u€n€g€ €f€ü€r€ €d€i€e€ €M€u€s€i€k€.€\€n€U€n€t€e€n€ €m€i€t€t€i€g€ €(€B€o€t€t€o€m€H€U€D€)€:€ €D€i€e€ €z€e€n€t€r€a€l€e€n€ €H€a€u€p€t€f€u€n€k€t€i€o€n€e€n€ €(€B€a€u€e€n€,€ €R€e€z€e€p€t€i€o€n€,€ €P€e€r€s€o€n€a€l€,€ €e€t€c€.€)€.€\€n€U€n€t€e€n€ €l€i€n€k€s€:€ €D€e€r€ €A€n€s€i€c€h€t€s€m€e€r€k€e€r€ €z€u€m€ €Z€w€i€s€c€h€e€n€s€p€e€i€c€h€e€r€n€ €d€e€r€ €K€a€m€e€r€a€p€o€s€i€t€i€o€n€.€\€n€K€a€m€e€r€a€-€S€t€e€u€e€r€u€n€g€:€ €M€i€t€ €W€A€S€D€ €b€e€w€e€g€s€t€ €d€u€ €d€i€e€ €K€a€m€e€r€a€ €u€n€d€ €m€i€t€ €d€e€m€ €M€a€u€s€r€a€d€ €s€t€e€u€e€r€s€t€ €d€u€ €d€e€n€ €Z€o€o€m€.€"€,€"€W€e€l€c€o€m€e€ €t€o€ €y€o€u€r€ €n€e€w€ €h€o€t€e€l€!€ €H€e€r€e€ €i€s€ €a€ €b€r€i€e€f€ €o€v€e€r€v€i€e€w€:€\€n€T€o€p€ €(€T€o€p€H€U€D€)€:€ €Y€o€u€r€ €k€e€y€ €r€u€n€n€i€n€g€ €d€a€t€a€ €l€i€k€e€ €f€i€n€a€n€c€e€s€,€ €g€u€e€s€t€s€ €a€n€d€ €t€i€m€e€-€c€o€n€t€r€o€l€.€\€n€B€o€t€t€o€m€ €r€i€g€h€t€:€ €T€h€e€ €m€u€s€i€c€ €c€o€n€t€r€o€l€s€.€\€n€B€o€t€t€o€m€ €c€e€n€t€e€r€ €(€B€o€t€t€o€m€H€U€D€)€:€ €T€h€e€ €m€a€i€n€ €f€u€n€c€t€i€o€n€s€ €(€B€u€i€l€d€i€n€g€,€ €S€t€a€f€f€,€ €e€t€c€.€)€.€\€n€B€o€t€t€o€m€ €l€e€f€t€:€ €T€h€e€ €v€i€e€w€ €i€n€d€i€c€a€t€o€r€ €t€o€ €s€a€v€e€ €a€n€d€ €l€o€a€d€ €c€a€m€e€r€a€ €p€o€s€i€t€i€o€n€s€.€\€n€C€a€m€e€r€a€ €c€o€n€t€r€o€l€s€:€ €U€s€e€ €W€A€S€D€ €t€o€ €m€o€v€e€ €t€h€e€ €c€a€m€e€r€a€ €a€n€d€ €t€h€e€ €m€o€u€s€e€ €w€h€e€e€l€ €t€o€ €z€o€o€m€.€"€€
+€€
+€"€i€n€g€a€m€e€.€q€u€i€t€.€m€e€s€s€a€g€e€"€,€"€B€i€s€t€ €d€u€ €s€i€c€h€e€r€,€ €d€a€s€s€ €d€u€ €d€a€s€ €S€p€i€e€l€ €v€e€r€l€a€s€s€e€n€ €m€ö€c€h€t€e€s€t€?€"€,€"€A€r€e€ €y€o€u€ €s€u€r€e€ €y€o€u€ €w€a€n€t€ €t€o€ €l€e€a€v€e€ €t€h€e€ €g€a€m€e€?€"€€
+€"€i€n€g€a€m€e€.€q€u€i€t€.€c€a€n€c€e€l€"€,€"€A€b€b€r€e€c€h€e€n€"€,€"€C€a€n€c€e€l€"€€
+€"€s€e€t€t€i€n€g€s€.€g€a€m€e€p€l€a€y€.€t€u€t€o€r€i€a€l€_€t€i€p€s€"€,€"€T€i€p€p€s€ €(€T€u€t€o€r€i€a€l€)€"€,€"€T€u€t€o€r€i€a€l€ €T€i€p€s€"€€
+€"€u€i€.€t€u€t€o€r€i€a€l€.€t€a€b€.€t€u€t€o€r€i€a€l€"€,€"€T€u€t€o€r€i€a€l€s€"€,€"€T€u€t€o€r€i€a€l€s€"€€
+€"€u€i€.€t€u€t€o€r€i€a€l€.€t€a€b€.€t€i€p€p€s€"€,€"€T€i€p€p€s€"€,€"€T€i€p€s€"€€
+€"€u€i€.€t€u€t€o€r€i€a€l€.€t€a€b€.€c€o€d€e€x€"€,€"€C€o€d€e€x€"€,€"€C€o€d€e€x€"€€
+€"€t€u€t€o€r€i€a€l€.€t€i€p€_€1€3€0€_€e€x€p€.€t€i€t€l€e€"€,€"€T€i€p€p€:€ €E€r€f€a€h€r€u€n€g€ €g€e€s€a€m€m€e€l€t€"€,€"€T€i€p€:€ €E€x€p€e€r€i€e€n€c€e€ €g€a€t€h€e€r€e€d€"€€
+€"€t€u€t€o€r€i€a€l€.€t€i€p€_€1€3€0€_€e€x€p€.€d€e€s€c€"€,€"€D€u€ €h€a€s€t€ €d€i€e€ €m€a€x€i€m€a€l€e€n€ €E€X€P€ €e€r€r€e€i€c€h€t€,€ €d€i€e€ €d€u€ €o€h€n€e€ €d€i€e€ €Z€e€i€t€ €l€a€u€f€e€n€ €l€a€s€s€e€n€ €z€u€ €m€u€e€s€s€e€n€ €e€r€r€e€i€c€h€e€n€ €k€a€n€n€s€t€.€ €N€u€n€ €s€o€l€l€t€e€s€t€ €d€u€ €d€e€n€ €H€o€t€e€l€b€e€t€r€i€e€b€ €s€t€a€r€t€e€n€ €u€n€d€ €d€i€e€ €Z€e€i€t€ €l€a€u€f€e€n€ €l€a€s€s€e€n€.€"€,€"€Y€o€u€ €h€a€v€e€ €r€e€a€c€h€e€d€ €t€h€e€ €m€a€x€i€m€u€m€ €E€X€P€ €y€o€u€ €c€a€n€ €e€a€r€n€ €w€h€i€l€e€ €t€h€e€ €g€a€m€e€ €i€s€ €p€a€u€s€e€d€.€ €Y€o€u€ €s€h€o€u€l€d€ €n€o€w€ €s€t€a€r€t€ €t€h€e€ €h€o€t€e€l€ €a€n€d€ €l€e€t€ €t€h€e€ €t€i€m€e€ €r€u€n€.€"€€
+€"€t€u€t€o€r€i€a€l€.€t€i€p€_€f€a€s€t€_€f€o€r€w€a€r€d€.€t€i€t€l€e€"€,€"€T€i€p€p€:€ €Z€e€i€t€ €b€e€s€c€h€l€e€u€n€i€g€e€n€"€,€"€T€i€p€:€ €F€a€s€t€ €F€o€r€w€a€r€d€"€€
+€"€t€u€t€o€r€i€a€l€.€t€i€p€_€f€a€s€t€_€f€o€r€w€a€r€d€.€d€e€s€c€"€,€"€D€u€ €k€a€n€n€s€t€ €d€i€e€ €Z€e€i€t€ €u€e€b€e€r€ €d€e€n€ €S€c€h€n€e€l€l€v€o€r€l€a€u€f€-€B€u€t€t€o€n€ €b€e€s€c€h€l€e€u€n€i€g€e€n€.€ €B€e€i€ €w€i€c€h€t€i€g€e€n€ €E€r€e€i€g€n€i€s€s€e€n€ €p€a€u€s€i€e€r€t€ €d€a€s€ €S€p€i€e€l€ €o€h€n€e€h€i€n€ €a€u€t€o€m€a€t€i€s€c€h€.€"€,€"€Y€o€u€ €c€a€n€ €s€p€e€e€d€ €u€p€ €t€i€m€e€ €u€s€i€n€g€ €t€h€e€ €f€a€s€t€ €f€o€r€w€a€r€d€ €b€u€t€t€o€n€.€ €T€h€e€ €g€a€m€e€ €w€i€l€l€ €a€u€t€o€m€a€t€i€c€a€l€l€y€ €p€a€u€s€e€ €f€o€r€ €i€m€p€o€r€t€a€n€t€ €e€v€e€n€t€s€ €a€n€y€w€a€y€.€"€€
+€€
+€"€s€e€t€t€i€n€g€s€.€c€o€n€t€r€o€l€s€.€u€i€.€f€i€n€a€n€c€e€s€"€,€"€F€i€n€a€n€z€e€n€ €/€ €K€a€s€s€e€n€b€u€c€h€"€,€"€F€i€n€a€n€c€e€s€ €/€ €C€a€s€h€b€o€o€k€"€€
+€€
+€"€h€u€d€.€b€o€t€t€o€m€.€f€i€n€a€n€c€e€s€_€t€t€"€,€"€F€i€n€a€n€z€e€n€ €/€ €K€a€s€s€e€n€b€u€c€h€ €#€#€#€"€,€"€F€i€n€a€n€c€e€s€ €/€ €C€a€s€h€b€o€o€k€ €#€#€#€"€€
+€€
+€"€m€o€d€a€l€.€f€i€n€a€n€c€e€s€.€t€i€t€l€e€"€,€"€K€a€s€s€e€n€b€u€c€h€ €&€ €F€i€n€a€n€z€e€n€"€,€"€C€a€s€h€b€o€o€k€ €&€ €F€i€n€a€n€c€e€s€"€€
+€"€c€o€d€e€x€.€g€u€e€s€t€_€s€i€n€g€l€e€.€t€i€t€l€e€"€,€"€N€e€u€e€r€ €G€ä€s€t€e€t€y€p€:€ €S€i€n€g€l€e€-€G€a€s€t€"€,€"€N€e€w€ €G€u€e€s€t€ €T€y€p€e€:€ €S€i€n€g€l€e€ €G€u€e€s€t€"€
+€"€c€o€d€e€x€.€g€u€e€s€t€_€s€i€n€g€l€e€.€d€e€s€c€"€,€"€B€l€e€i€b€t€ €m€e€i€s€t€ €1€-€3€ €N€ä€c€h€t€e€.€ €E€r€w€a€r€t€e€t€ €e€i€n€ €e€i€n€f€a€c€h€e€s€ €S€t€a€n€d€a€r€d€-€Z€i€m€m€e€r€.€ €H€a€t€ €k€e€i€n€e€ €b€e€s€o€n€d€e€r€e€n€ €A€n€s€p€r€ü€c€h€e€,€ €z€a€h€l€t€ €a€b€e€r€ €a€u€c€h€ €n€i€c€h€t€ €s€o€ €v€i€e€l€.€"€,€"€U€s€u€a€l€l€y€ €s€t€a€y€s€ €1€-€3€ €n€i€g€h€t€s€.€ €E€x€p€e€c€t€s€ €a€ €s€i€m€p€l€e€ €s€t€a€n€d€a€r€d€ €r€o€o€m€.€ €H€a€s€ €n€o€ €s€p€e€c€i€a€l€ €d€e€m€a€n€d€s€,€ €b€u€t€ €d€o€e€s€n€'€t€ €p€a€y€ €m€u€c€h€ €e€i€t€h€e€r€.€"€
+€"€c€o€d€e€x€.€g€u€e€s€t€_€c€o€u€p€l€e€.€t€i€t€l€e€"€,€"€N€e€u€e€r€ €G€ä€s€t€e€t€y€p€:€ €P€a€a€r€"€,€"€N€e€w€ €G€u€e€s€t€ €T€y€p€e€:€ €C€o€u€p€l€e€"€
+€"€c€o€d€e€x€.€g€u€e€s€t€_€c€o€u€p€l€e€.€d€e€s€c€"€,€"€B€l€e€i€b€e€n€ €m€e€i€s€t€ €1€-€4€ €N€ä€c€h€t€e€.€ €B€r€a€u€c€h€e€n€ €e€i€n€ €D€o€p€p€e€l€-€ €o€d€e€r€ €S€u€p€e€r€i€o€r€-€Z€i€m€m€e€r€ €u€n€d€ €s€c€h€ä€t€z€e€n€ €K€o€m€f€o€r€t€.€"€,€"€U€s€u€a€l€l€y€ €s€t€a€y€s€ €1€-€4€ €n€i€g€h€t€s€.€ €N€e€e€d€ €a€ €d€o€u€b€l€e€ €o€r€ €s€u€p€e€r€i€o€r€ €r€o€o€m€ €a€n€d€ €a€p€p€r€e€c€i€a€t€e€ €c€o€m€f€o€r€t€.€"€
+€"€c€o€d€e€x€.€g€u€e€s€t€_€b€u€s€i€n€e€s€s€.€t€i€t€l€e€"€,€"€N€e€u€e€r€ €G€ä€s€t€e€t€y€p€:€ €G€e€s€c€h€ä€f€t€s€r€e€i€s€e€n€d€e€r€"€,€"€N€e€w€ €G€u€e€s€t€ €T€y€p€e€:€ €B€u€s€i€n€e€s€s€ €T€r€a€v€e€l€e€r€"€
+€"€c€o€d€e€x€.€g€u€e€s€t€_€b€u€s€i€n€e€s€s€.€d€e€s€c€"€,€"€B€l€e€i€b€t€ €1€-€3€ €N€ä€c€h€t€e€.€ €B€e€n€ö€t€i€g€t€ €z€w€i€n€g€e€n€d€ €W€L€A€N€ €u€n€d€ €e€i€n€e€n€ €S€c€h€r€e€i€b€t€i€s€c€h€ €(€D€e€s€k€)€.€ €H€o€h€e€ €A€u€s€g€a€b€e€n€-€B€e€r€e€i€t€s€c€h€a€f€t€!€"€,€"€S€t€a€y€s€ €1€-€3€ €n€i€g€h€t€s€.€ €M€a€n€d€a€t€o€r€y€ €n€e€e€d€ €f€o€r€ €W€L€A€N€ €a€n€d€ €a€ €d€e€s€k€.€ €H€i€g€h€ €s€p€e€n€d€i€n€g€ €w€i€l€l€i€n€g€n€e€s€s€!€"€
+€"€c€o€d€e€x€.€g€u€e€s€t€_€f€a€m€i€l€y€.€t€i€t€l€e€"€,€"€N€e€u€e€r€ €G€ä€s€t€e€t€y€p€:€ €F€a€m€i€l€i€e€"€,€"€N€e€w€ €G€u€e€s€t€ €T€y€p€e€:€ €F€a€m€i€l€y€"€
+€"€c€o€d€e€x€.€g€u€e€s€t€_€f€a€m€i€l€y€.€d€e€s€c€"€,€"€B€l€e€i€b€e€n€ €2€-€5€ €N€ä€c€h€t€e€.€ €B€r€a€u€c€h€e€n€ €e€i€n€ €g€r€o€ß€e€s€ €F€a€m€i€l€i€e€n€z€i€m€m€e€r€,€ €s€c€h€ä€t€z€e€n€ €S€p€a€c€e€ €u€n€d€ €l€i€e€b€e€n€ €d€e€n€ €P€o€o€l€.€"€,€"€S€t€a€y€ €2€-€5€ €n€i€g€h€t€s€.€ €N€e€e€d€ €a€ €l€a€r€g€e€ €f€a€m€i€l€y€ €r€o€o€m€,€ €a€p€p€r€e€c€i€a€t€e€ €s€p€a€c€e€ €a€n€d€ €l€o€v€e€ €t€h€e€ €p€o€o€l€.€"€
+€"€c€o€d€e€x€.€g€u€e€s€t€_€b€u€d€g€e€t€.€t€i€t€l€e€"€,€"€N€e€u€e€r€ €G€ä€s€t€e€t€y€p€:€ €B€u€d€g€e€t€r€e€i€s€e€n€d€e€r€"€,€"€N€e€w€ €G€u€e€s€t€ €T€y€p€e€:€ €B€u€d€g€e€t€ €T€r€a€v€e€l€e€r€"€
+€"€c€o€d€e€x€.€g€u€e€s€t€_€b€u€d€g€e€t€.€d€e€s€c€"€,€"€B€l€e€i€b€t€ €1€-€2€ €N€ä€c€h€t€e€.€ €S€e€h€r€ €g€e€n€ü€g€s€a€m€,€ €b€u€c€h€t€ €e€i€n€f€a€c€h€e€ €S€t€a€n€d€a€r€d€-€Z€i€m€m€e€r€,€ €g€i€b€t€ €a€b€e€r€ €a€b€s€e€i€t€s€ €d€a€v€o€n€ €k€a€u€m€ €G€e€l€d€ €a€u€s€.€"€,€"€S€t€a€y€s€ €1€-€2€ €n€i€g€h€t€s€.€ €V€e€r€y€ €f€r€u€g€a€l€,€ €b€o€o€k€s€ €s€i€m€p€l€e€ €s€t€a€n€d€a€r€d€ €r€o€o€m€s€,€ €b€u€t€ €h€a€r€d€l€y€ €s€p€e€n€d€s€ €m€o€n€e€y€ €o€t€h€e€r€w€i€s€e€.€"€
+€"€c€o€d€e€x€.€g€u€e€s€t€_€n€o€m€a€d€.€t€i€t€l€e€"€,€"€N€e€u€e€r€ €G€ä€s€t€e€t€y€p€:€ €D€i€g€i€t€a€l€e€r€ €N€o€m€a€d€e€"€,€"€N€e€w€ €G€u€e€s€t€ €T€y€p€e€:€ €D€i€g€i€t€a€l€ €N€o€m€a€d€"€
+€"€c€o€d€e€x€.€g€u€e€s€t€_€n€o€m€a€d€.€d€e€s€c€"€,€"€B€l€e€i€b€t€ €s€e€h€r€ €l€a€n€g€e€ €(€7€-€1€4€ €N€ä€c€h€t€e€)€.€ €B€e€n€ö€t€i€g€t€ €W€L€A€N€,€ €v€e€r€b€r€i€n€g€t€ €d€e€n€ €g€a€n€z€e€n€ €T€a€g€ €i€m€ €Z€i€m€m€e€r€.€"€,€"€S€t€a€y€s€ €v€e€r€y€ €l€o€n€g€ €(€7€-€1€4€ €n€i€g€h€t€s€)€.€ €N€e€e€d€s€ €W€L€A€N€,€ €s€p€e€n€d€s€ €t€h€e€ €w€h€o€l€e€ €d€a€y€ €i€n€ €t€h€e€ €r€o€o€m€.€"€
+€"€c€o€d€e€x€.€g€u€e€s€t€_€e€v€e€n€t€.€t€i€t€l€e€"€,€"€N€e€u€e€r€ €G€ä€s€t€e€t€y€p€:€ €E€v€e€n€t€-€T€e€i€l€n€e€h€m€e€r€"€,€"€N€e€w€ €G€u€e€s€t€ €T€y€p€e€:€ €E€v€e€n€t€ €A€t€t€e€n€d€e€e€"€
+€"€c€o€d€e€x€.€g€u€e€s€t€_€e€v€e€n€t€.€d€e€s€c€"€,€"€B€l€e€i€b€t€ €n€u€r€ €k€u€r€z€ €(€1€-€2€ €N€ä€c€h€t€e€)€ €f€ü€r€ €e€i€n€ €E€v€e€n€t€.€ €K€e€i€n€e€ €b€e€s€o€n€d€e€r€e€n€ €A€n€s€p€r€ü€c€h€e€,€ €r€e€c€h€t€ €p€r€o€f€i€t€a€b€e€l€ €i€n€ €d€e€r€ €M€a€s€s€e€.€"€,€"€S€t€a€y€s€ €o€n€l€y€ €b€r€i€e€f€l€y€ €(€1€-€2€ €n€i€g€h€t€s€)€ €f€o€r€ €a€n€ €e€v€e€n€t€.€ €N€o€ €s€p€e€c€i€a€l€ €d€e€m€a€n€d€s€,€ €q€u€i€t€e€ €p€r€o€f€i€t€a€b€l€e€ €i€n€ €m€a€s€s€.€"€
+€"€c€o€d€e€x€.€g€u€e€s€t€_€l€u€x€u€r€y€.€t€i€t€l€e€"€,€"€N€e€u€e€r€ €G€ä€s€t€e€t€y€p€:€ €L€u€x€u€s€-€G€a€s€t€"€,€"€N€e€w€ €G€u€e€s€t€ €T€y€p€e€:€ €L€u€x€u€r€y€ €G€u€e€s€t€"€
+€"€c€o€d€e€x€.€g€u€e€s€t€_€l€u€x€u€r€y€.€d€e€s€c€"€,€"€B€l€e€i€b€t€ €2€-€5€ €N€ä€c€h€t€e€.€ €B€r€a€u€c€h€t€ €u€n€b€e€d€i€n€g€t€ €S€u€p€e€r€i€o€r€-€Z€i€m€m€e€r€,€ €v€i€e€l€ €P€r€i€v€a€t€s€p€h€ä€r€e€ €u€n€d€ €L€u€x€u€s€.€ €E€x€t€r€e€m€ €h€o€h€e€s€ €B€u€d€g€e€t€,€ €a€b€e€r€ €s€e€h€r€ €k€r€i€t€i€s€c€h€!€"€,€"€S€t€a€y€s€ €2€-€5€ €n€i€g€h€t€s€.€ €A€b€s€o€l€u€t€e€l€y€ €n€e€e€d€s€ €s€u€p€e€r€i€o€r€ €r€o€o€m€,€ €l€o€t€s€ €o€f€ €p€r€i€v€a€c€y€ €a€n€d€ €l€u€x€u€r€y€.€ €E€x€t€r€e€m€e€l€y€ €h€i€g€h€ €b€u€d€g€e€t€,€ €b€u€t€ €v€e€r€y€ €c€r€i€t€i€c€a€l€!€"€

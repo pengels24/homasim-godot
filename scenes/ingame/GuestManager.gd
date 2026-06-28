@@ -251,6 +251,9 @@ func _generate_party() -> GuestParty:
 	var type_id  := _weighted_random_type()
 	var party_id := "P%04d" % _next_party_id
 	_next_party_id += 1
+	
+	if is_instance_valid(TutorialManager):
+		TutorialManager.trigger("guest_" + type_id)
 
 	var party := GuestParty.new(party_id, type_id)
 	var def: Dictionary = GuestDefinitions.ALL[type_id]
@@ -498,7 +501,7 @@ func do_checkout(party: GuestParty) -> float:
 	
 	var exp_gain = GameState.calc_checkout_exp(party)
 	if exp_gain > 0:
-		GameState.add_exp(exp_gain)
+		GameState.add_exp(exp_gain, "Checkout (GuestManager)")
 
 	return payout
 

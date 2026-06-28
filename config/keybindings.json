@@ -128,6 +128,12 @@
         "order": 9,
         "default": "F11",
         "default_alt": ""
+      },
+      "ui_finances": {
+        "label": "settings.controls.ui.finances",
+        "order": 10,
+        "default": "F12",
+        "default_alt": ""
       }
     }
   },

@@ -2,8 +2,9 @@
   { "hour": 6, "event": "day_start" },
   { "hour": 7, "event": "reception_open" },
   { "hour": 8, "event": "guest_arrival" },
-  { "hour": 12, "event": "guest_arrival" },
-  { "hour": 16, "event": "guest_arrival" },
+  { "hour": 11, "event": "guest_arrival" },
+  { "hour": 14, "event": "guest_arrival" },
+  { "hour": 17, "event": "guest_arrival" },
   { "hour": 21, "minute": 30, "event": "reception_last_call" },
   { "hour": 22, "event": "reception_close" },
   { "hour": 23, "minute": 59, "event": "day_end" }

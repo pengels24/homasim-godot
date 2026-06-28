@@ -654,15 +654,15 @@ text = "*** Spiel pausiert ***"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="StandardModal" parent="." unique_id=979018255 instance=ExtResource("25_fiam6")]
+unique_name_in_owner = true
+
 [node name="LevelUpModal" parent="." unique_id=2093243680 instance=ExtResource("24_6iy1x")]
 unique_name_in_owner = true
 
 [node name="Partikel" parent="LevelUpModal" index="4" unique_id=222691070]
 z_index = 10
 scale_amount_max = 3.0
-
-[node name="StandardModal" parent="." unique_id=979018255 instance=ExtResource("25_fiam6")]
-unique_name_in_owner = true
 
 [node name="TechOverlay" parent="." instance=ExtResource("50_tech")]
 layout_mode = 1

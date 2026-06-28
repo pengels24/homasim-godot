@@ -42,6 +42,8 @@ layout_mode = 2
 
 [node name="Titel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" index="0" unique_id=2012609103]
 layout_mode = 2
+theme_type_variation = &"HeaderLarge"
+theme_override_colors/font_color = Color(0.917647, 0.701961, 0.0313726, 1)
 text = "LEVEL UP !"
 horizontal_alignment = 1
 uppercase = true
@@ -49,6 +51,8 @@ uppercase = true
 [node name="Level" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer" index="1" unique_id=484188599]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/font_color = Color(0.917647, 0.701961, 0.0313726, 1)
+theme_override_font_sizes/font_size = 250
 text = "3"
 horizontal_alignment = 1
 

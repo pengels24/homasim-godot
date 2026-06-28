@@ -23,7 +23,7 @@ static func get_definition() -> Dictionary:
 		"xp_reward": 0,
 		"prefix": "R",
 		"label": "Lobby",
-		"name": "roomdef.name.long.lobby",
+		"name": "room.lobby.name",
 		"category": "management",
 		"icon": "",
 		"nightly_price": 0,

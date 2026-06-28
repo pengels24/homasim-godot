@@ -40,6 +40,7 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	_bottom_bar.sig_guest_list_toggled.connect(open_guest_list)
 	_bottom_bar.sig_room_list_toggled.connect(open_room_list)
 	_bottom_bar.sig_tutorials_toggled.connect(open_tutorial_codex)
+	_bottom_bar.sig_finances_toggled.connect(open_finances)
 
 	_standard_modal.visibility_changed.connect(update_map_grid_mode)
 	_standard_modal.hidden.connect(_on_standard_modal_hidden)
@@ -75,6 +76,9 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	# room list
 	if not InputHandler.sig_hotkey_room_list_requested.is_connected(open_room_list):
 		InputHandler.sig_hotkey_room_list_requested.connect(open_room_list)
+	# finances
+	if not InputHandler.sig_hotkey_finances_requested.is_connected(open_finances):
+		InputHandler.sig_hotkey_finances_requested.connect(open_finances)
 
 	if OS.is_debug_build() and is_instance_valid(GlobalConsole):
 		if not GlobalConsole.visibility_changed.is_connected(update_map_grid_mode):
@@ -656,3 +660,18 @@ func open_room_list() -> void:
 		_standard_modal.set_title(GameState.T("modal.roomlist.title"))
 	else:
 		_standard_modal.open(GameState.T("modal.roomlist.title"))
+# =============================================================================
+func open_finances() -> void:
+	if _standard_modal.visible and _standard_modal.get_title() == GameState.T("modal.finances.title"):
+		_standard_modal.close()
+		return
+		
+	cleanup_current_states()
+	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentFinances.tscn")
+	if not is_instance_valid(content): return
+	_bottom_bar.sync_button_state("finances")
+
+	if _standard_modal.visible:
+		_standard_modal.set_title(GameState.T("modal.finances.title"))
+	else:
+		_standard_modal.open(GameState.T("modal.finances.title"))

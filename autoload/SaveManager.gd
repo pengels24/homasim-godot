@@ -433,6 +433,7 @@ func _load_hotel_file(filename: String) -> void:
 		"tutorials": cfg.get_value("hotel", "tutorials", []),
 		"quests": cfg.get_value("hotel", "quests", {}),
 		"staff": cfg.get_value("hotel", "staff", {}),
+		"built_room_types": cfg.get_value("hotel", "built_room_types", []),
 	}
 
 	# Alle dynamischen Zimmer-Zähler aus der Config lesen und in 'h' einfügen
@@ -449,7 +450,12 @@ func _save_hotel(hotel: Dictionary) -> void:
 	if hotel.is_empty():
 		return
 	var cfg := ConfigFile.new()
-	for key in ["profile_id", "name", "grid_cols", "grid_rows", "day", "money", "game_time", "plots", "auto_count", "level", "stars", "guests_active", "guests_checkin", "guests_checkout", "exp", "exp_max", "rep", "rep_max", "fp", "guest_data", "transactions", "unlocked_techs", "techtree", "tutorials", "quests", "staff"]:
+	var keys_to_save = [
+		"profile_id", "name", "grid_cols", "grid_rows", "day", "money", "game_time", "plots", "auto_count", 
+		"level", "stars", "guests_active", "guests_checkin", "guests_checkout", "exp", "exp_max", "rep", "rep_max", "fp", 
+		"guest_data", "transactions", "unlocked_techs", "techtree", "tutorials", "quests", "staff", "built_room_types"
+	]
+	for key in keys_to_save:
 		cfg.set_value("hotel", key, hotel.get(key))
 
 	# NEU: Alle dynamischen Zimmer-Zähler ("next_z_id", etc.) mitspeichern
@@ -583,6 +589,7 @@ func _take_snapshot(hotel: Dictionary, snap_name: String) -> Dictionary:
 		"tutorials": hotel.get("tutorials", []).duplicate(true),
 		"quests": hotel.get("quests", {}).duplicate(true),
 		"staff": hotel.get("staff", {}).duplicate(true),
+		"built_room_types": hotel.get("built_room_types", []).duplicate(true),
 	}
 
 	# NEU: Zähler in den Snapshot kopieren
@@ -621,6 +628,7 @@ func _apply_snapshot(hotel: Dictionary, snap: Dictionary) -> void:
 	hotel["tutorials"] = snap.get("tutorials", []).duplicate(true)
 	hotel["quests"] = snap.get("quests", {}).duplicate(true)
 	hotel["staff"] = snap.get("staff", {}).duplicate(true)
+	hotel["built_room_types"] = snap.get("built_room_types", []).duplicate(true)
 
 	# Zähler aus dem Snapshot wiederherstellen
 	for key in snap:

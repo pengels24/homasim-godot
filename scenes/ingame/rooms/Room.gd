@@ -469,11 +469,17 @@ func _update_indicator() -> void:
 
 	_status_indicator.visible = true
 
-	var unstaffed = false
-	if def.get("is_poi", false):
+	var staff_status = 0
+	if def.get("is_poi", false) and def.get("required_role", "") != "":
 		if StaffManager:
 			var rnum = str(get("room_number"))
 			var room_id = rnum if (rnum != "" and rnum != "null") else ("%s_%d_%d" % [str(get("room_type_id")), int(get("x_pos")), int(get("y_pos"))])
-			unstaffed = not StaffManager.is_poi_staffed(def, room_id)
+			
+			var max_s = def.get("max_staff", def.get("min_staff", 1))
+			var assigned_count = StaffManager.get_staff_for_room(room_id).size()
+			if assigned_count == 0:
+				staff_status = 2 # Kein Personal (Rot)
+			elif assigned_count < max_s:
+				staff_status = 1 # Unterbesetzt (Orange)
 
-	_status_indicator.set_status(is_service_requested, is_repair_requested, is_pending_demolish, unstaffed)
+	_status_indicator.set_status(is_service_requested, is_repair_requested, is_pending_demolish, staff_status)

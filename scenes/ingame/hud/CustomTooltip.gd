@@ -90,15 +90,21 @@ func _update_content() -> void:
 			status = GameState.T("room.tooltip.understaffed")
 			
 		var current_visitors = 0
+		var visitor_names = []
 		var ingame = get_tree().get_root().get_node_or_null("Ingame")
 		if is_instance_valid(ingame):
 			var ctrl = ingame.get("_guest_controller")
 			if ctrl:
 				for actor in ctrl._actors.values():
-					if actor.current_state == actor.State.IN_POI and actor._current_poi_id == room_id:
+					if actor.current_state == actor.State.IN_POI and actor._current_poi_id == def.get("id", ""):
 						current_visitors += 1
+						if is_instance_valid(actor._guest_member):
+							visitor_names.append("👤 " + actor._guest_member.name)
 			
-		guests_label.text = GameState.T("room.tooltip.current_visitors") % current_visitors
+		var txt = GameState.T("room.tooltip.current_visitors") % current_visitors
+		if current_visitors > 0:
+			txt += "\n" + "\n".join(visitor_names)
+		guests_label.text = txt
 		guests_label.show()
 	else:
 		# GuestManager direkt befragen (nicht mehr über room._guest_mgr)

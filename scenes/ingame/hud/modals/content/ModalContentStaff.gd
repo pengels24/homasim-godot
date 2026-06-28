@@ -214,7 +214,12 @@ func _refresh_list() -> void:
 			margin.add_child(hbox_inner)
 			
 			var list_font_color = Color("#CCCCCC")
-			
+			if _current_tab == 1 and not _get_available_poi_roles().has(item.get("role", "")):
+				list_font_color = Color("#555555")
+				btn.disabled = true
+				btn.mouse_default_cursor_shape = Control.CURSOR_FORBIDDEN
+				btn.tooltip_text = GameState.T("ui.staff.role_not_needed", "POI noch nicht gebaut")
+
 			# Name (Stretch 3.5)
 			var lbl_name = Label.new()
 			lbl_name.text = item.get("first_name", "") + " " + item.get("last_name", "")
@@ -447,9 +452,17 @@ func _update_details() -> void:
 		
 		_create_2col_row(GameState.T("ui.staff.hire_cost"), "%d €" % int(s.get("hire_cost", 0)), detail_costs, false)
 		_create_2col_row(GameState.T("ui.staff.daily_wage"), "%d €" % int(s.get("daily_wage", 0)), detail_costs, false)
-		action_btn.text = GameState.T("ui.staff.hire")
-		action_btn.remove_theme_color_override("font_color")
-		_style_action_btn(action_btn, "green")
+		if _get_available_poi_roles().has(job):
+			action_btn.text = GameState.T("ui.staff.hire")
+			action_btn.disabled = false
+			action_btn.remove_theme_color_override("font_color")
+			_style_action_btn(action_btn, "green")
+			action_btn.tooltip_text = ""
+		else:
+			action_btn.text = "Kein Arbeitsplatz"
+			action_btn.disabled = true
+			_style_action_btn(action_btn, "red")
+			action_btn.tooltip_text = "Dieser Beruf benötigt einen entsprechenden Arbeitsplatz (POI), der noch nicht gebaut wurde."
 		
 	var skills = s.get("skills", {})
 	for skill_name in skills.keys():
@@ -494,7 +507,7 @@ func _on_action_btn_pressed() -> void:
 		_pending_action = 1
 		modal.ask(
 			GameState.T("ui.staff.confirm.hire.title"),
-			GameState.T("ui.staff.confirm.hire.desc") % [staff_name, s.get("hire_cost", 0)],
+			GameState.T("ui.staff.confirm.hire.desc").replace("â¬", "€").replace("Ã¢â‚¬Â¬", "€") % [staff_name, s.get("hire_cost", 0)],
 			GameState.T("ui.staff.confirm.btn.hire"),
 			GameState.T("ui.staff.confirm.btn.cancel"),
 			"",
@@ -792,3 +805,22 @@ func _update_assignment_matching() -> void:
 			btn_assign.add_theme_stylebox_override("hover", SB_GREEN_HOVER)
 			btn_assign.add_theme_stylebox_override("pressed", SB_GREEN_PRESSED)
 			btn_assign.add_theme_stylebox_override("focus", SB_GREEN)
+
+
+func _get_available_poi_roles() -> Array:
+	var roles = ["housekeeping", "maintenance"] # Immer erlaubt
+	if not is_instance_valid(_map_grid):
+		return roles
+	var poi_rooms = []
+	if _map_grid.has_method("get_placed_rooms"):
+		var rooms = _map_grid.get_placed_rooms()
+		for r in rooms:
+			if r.get("room_type_id") != "corridor":
+				poi_rooms.append(r)
+	for room in poi_rooms:
+		if room.has_method("get_definition"):
+			var r_role = room.call("get_definition").get("required_role", "")
+			if r_role != "" and not roles.has(r_role):
+				roles.append(r_role)
+	return roles
+

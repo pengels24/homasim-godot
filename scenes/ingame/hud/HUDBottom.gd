@@ -9,6 +9,7 @@ signal sig_quest_book_toggled
 signal sig_guest_list_toggled
 signal sig_room_list_toggled
 signal sig_tutorials_toggled
+signal sig_finances_toggled
 
 @onready var build_menu: Button = %BuildMenu
 @onready var reception: Button = %Reception
@@ -19,6 +20,7 @@ signal sig_tutorials_toggled
 @onready var guest_list: Button = %GuestList
 @onready var room_list: Button = %RoomList
 @onready var tutorials: Button = %Tutorials
+@onready var finances: Button = %Finances
 @onready var ind_reception: Panel = %IndReception
 @onready var ind_sim_browser: Panel = %IndSimBrowser
 @onready var ind_quest_book: Panel = %IndQuestBook
@@ -62,6 +64,10 @@ func _ready() -> void:
 		sig_tutorials_toggled.emit()
 	)
 
+	finances.pressed.connect(func():
+		sig_finances_toggled.emit()
+	)
+
 	_update_quest_book_indicator()
 	
 	# Events
@@ -80,6 +86,7 @@ func _ready() -> void:
 	guest_list.tooltip_text = GameState.T("hud.bottom.guest_list_tt", _get_action_key_string("ui_guest_list"))
 	room_list.tooltip_text = GameState.T("hud.bottom.room_list_tt", _get_action_key_string("ui_room_list"))
 	tutorials.tooltip_text = GameState.T("hud.bottom.tutorials_tt", _get_action_key_string("ui_tutorial"))
+	finances.tooltip_text = GameState.T("hud.bottom.finances_tt", _get_action_key_string("ui_finances"))
 
 	ind_reception.hide()
 	ind_sim_browser.modulate = Color.GREEN
@@ -145,7 +152,7 @@ func update_build_menu_position() -> void:
 # Synchronisiert die visuelle Anzeige der Buttons mit dem aktuellen Menü-Status
 func sync_button_state(active_menu: String = "") -> void:
 	# Alle Buttons sicherheitshalber ausschalten und Fokus entfernen
-	for btn in [build_menu, reception, staff, tech_tree, sim_browser, quest_book, guest_list, room_list, tutorials]:
+	for btn in [build_menu, reception, staff, tech_tree, sim_browser, quest_book, guest_list, room_list, tutorials, finances]:
 		btn.set_pressed_no_signal(false)
 		btn.release_focus()
 
@@ -169,6 +176,8 @@ func sync_button_state(active_menu: String = "") -> void:
 			room_list.set_pressed_no_signal(true)
 		"tutorials":
 			tutorials.set_pressed_no_signal(true)
+		"finances":
+			finances.set_pressed_no_signal(true)
 
 
 # =============================================================================

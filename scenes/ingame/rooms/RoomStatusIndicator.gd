@@ -24,11 +24,11 @@ func _ready() -> void:
 		icon_unstaffed.tooltip_text = "Unterbesetzt"
 		icon_unstaffed.mouse_filter = Control.MOUSE_FILTER_PASS
 
-func set_status(needs_cleaning: bool, needs_repair: bool, pending_demolish: bool = false, unstaffed: bool = false) -> void:
+func set_status(needs_cleaning: bool, needs_repair: bool, pending_demolish: bool = false, staff_status: int = 0) -> void:
 	if not is_node_ready():
 		await ready
 
-	if not needs_cleaning and not needs_repair and not pending_demolish and not unstaffed:
+	if not needs_cleaning and not needs_repair and not pending_demolish and staff_status == 0:
 		hide()
 		return
 		
@@ -37,7 +37,13 @@ func set_status(needs_cleaning: bool, needs_repair: bool, pending_demolish: bool
 	icon_repair.visible = needs_repair
 	icon_demolish.visible = pending_demolish
 	if icon_unstaffed:
-		icon_unstaffed.visible = unstaffed
+		icon_unstaffed.visible = (staff_status > 0)
+		if staff_status == 1:
+			icon_unstaffed.modulate = Color(1.0, 0.5, 0.0)
+			icon_unstaffed.tooltip_text = "Unterbesetzt"
+		elif staff_status == 2:
+			icon_unstaffed.modulate = Color(0.89, 0.1, 0.1)
+			icon_unstaffed.tooltip_text = "Kein Personal"
 	
 	size = Vector2.ZERO
 

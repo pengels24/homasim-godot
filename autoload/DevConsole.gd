@@ -88,7 +88,7 @@ func _on_header_gui_input(event: InputEvent) -> void:
 
 # =============================================================================
 func _input(event: InputEvent) -> void:
-	if OS.is_debug_build() and event is InputEventKey and event.pressed and event.keycode == KEY_F12:
+	if OS.is_debug_build() and event is InputEventKey and event.pressed and event.keycode == KEY_D and event.alt_pressed:
 		get_viewport().set_input_as_handled()
 		toggle()
 		return
@@ -232,7 +232,7 @@ func _execute(cmd: String) -> void:
 			if amount <= 0:
 				_log("Fehler: Wert muss > 0 sein.", CLR_ERR)
 				return
-			GameState.add_exp(amount)
+			GameState.add_exp(amount, "Cheat (DevConsole)")
 			_log("EXP um %d erhöht." % amount, CLR_OK)
 
 		"set-level":

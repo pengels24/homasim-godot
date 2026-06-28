@@ -245,7 +245,7 @@ func _build_tier_content(parent: Control, _tier_id: String, tier_data: Dictionar
 						add_child(confirm)
 						
 						var title = GameState.T("ui.techtree.confirm.title")
-						var msg = GameState.T("ui.techtree.confirm.desc", display_name, n.get("cost_fp", 0), n.get("cost_money", 0))
+						var msg = GameState.T("ui.techtree.confirm.desc", display_name, int(n.get("cost_fp", 0)), str(int(n.get("cost_money", 0))) + " €")
 						
 						confirm.ask(title, msg, GameState.T("ui.techtree.btn.unlock"), GameState.T("ui.techtree.btn.cancel"))
 						confirm.confirmed.connect(func():
@@ -334,6 +334,12 @@ func _generate_tooltip(tech_id: String) -> String:
 	var n = TechtreeManager.get_tech_node(tech_id)
 	if n.is_empty(): return ""
 	
+	if TechtreeManager.is_tech_unlocked(tech_id):
+		var trans = GameState.T("ui.techtree.tooltip.already_unlocked")
+		if trans == "ui.techtree.tooltip.already_unlocked":
+			return "- Bereits erforscht -"
+		return trans
+		
 	var cost_fp = n.get("cost_fp", 0)
 	var cost_money = n.get("cost_money", 0)
 	var deps = n.get("dependencies", [])

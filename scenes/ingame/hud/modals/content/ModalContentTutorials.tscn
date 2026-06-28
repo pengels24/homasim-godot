@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://t2tutq0p1u2"]
 
 [ext_resource type="Script" path="res://scenes/ingame/hud/modals/content/ModalContentTutorials.gd" id="1_scpt"]
-[ext_resource type="FontFile" uid="uid://bs3xl562plyi2" path="res://assets/fonts/Jersey25-Regular.ttf" id="2_font"]
 
 [node name="ModalContentTutorials" type="VBoxContainer"]
 custom_minimum_size = Vector2(1200, 600)
@@ -13,13 +12,13 @@ grow_vertical = 2
 theme_override_constants/separation = 20
 script = ExtResource("1_scpt")
 
-[node name="TabBar" type="HBoxContainer" parent="MainHBox"]
+[node name="TabBar" type="HBoxContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="MainHBox" type="HBoxContainer" parent="MainHBox"]
+[node name="MainHBox" type="HBoxContainer" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 20
@@ -29,14 +28,14 @@ custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 theme_type_variation = &"InnerPanel"
 
-[node name="Margin" type="MarginContainer" parent="LeftPanel"]
+[node name="Margin" type="MarginContainer" parent="MainHBox/LeftPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="TutorialList" type="VBoxContainer" parent="LeftPanel/Margin"]
+[node name="TutorialList" type="VBoxContainer" parent="MainHBox/LeftPanel/Margin"]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 10
@@ -46,25 +45,25 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_type_variation = &"InnerPanel"
 
-[node name="Margin" type="MarginContainer" parent="RightPanel"]
+[node name="Margin" type="MarginContainer" parent="MainHBox/RightPanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 20
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="RightPanel/Margin"]
+[node name="VBoxContainer" type="VBoxContainer" parent="MainHBox/RightPanel/Margin"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Title" type="Label" parent="RightPanel/Margin/VBoxContainer"]
+[node name="Title" type="Label" parent="MainHBox/RightPanel/Margin/VBoxContainer"]
 theme_type_variation = &"HeaderLarge"
 unique_name_in_owner = true
 layout_mode = 2
 text = "Tutorial Title"
 horizontal_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="RightPanel/Margin/VBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="MainHBox/RightPanel/Margin/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 300)
 layout_mode = 2

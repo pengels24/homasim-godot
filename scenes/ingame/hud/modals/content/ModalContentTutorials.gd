@@ -12,6 +12,14 @@ var _tab_labels: Array = ["ui.tutorial.tab.tutorial", "ui.tutorial.tab.tipps", "
 var _current_tab: String = "tutorial"
 var _tab_buttons: Array[Button] = []
 
+var SB_BLUE = preload("res://assets/UI/menu_button_blue.tres")
+var SB_BLUE_HOVER = preload("res://assets/UI/menu_button_blue_hover.tres")
+var SB_BLUE_PRESSED = preload("res://assets/UI/menu_button_blue_pressed.tres")
+
+var SB_DARK = preload("res://assets/UI/menu_button_darkblue.tres")
+var SB_DARK_HOVER = preload("res://assets/UI/menu_button_darkblue_hover.tres")
+var SB_DARK_PRESSED = preload("res://assets/UI/menu_button_darkblue_pressed.tres")
+
 func _ready() -> void:
 	_setup_tabs()
 	_load_data()
@@ -46,9 +54,15 @@ func _load_data() -> void:
 	# Style tabs
 	for i in _tabs.size():
 		if _tabs[i] == _current_tab:
-			_tab_buttons[i].theme = load("res://assets/UI/menu_button_blue.tres")
+			_set_btn_style(_tab_buttons[i], SB_BLUE, SB_BLUE_HOVER, SB_BLUE_PRESSED)
 		else:
-			_tab_buttons[i].theme = load("res://assets/UI/menu_button_darkblue.tres")
+			_set_btn_style(_tab_buttons[i], SB_DARK, SB_DARK_HOVER, SB_DARK_PRESSED)
+
+func _set_btn_style(btn: Button, normal, hover, pressed) -> void:
+	btn.add_theme_stylebox_override("normal", normal)
+	btn.add_theme_stylebox_override("hover", hover)
+	btn.add_theme_stylebox_override("pressed", pressed)
+	btn.add_theme_stylebox_override("focus", normal)
 
 func _populate_list() -> void:
 	for c in item_list.get_children():
@@ -59,7 +73,7 @@ func _populate_list() -> void:
 		var text = GameState.T(title_key) if GameState else title_key
 		var btn = Button.new()
 		btn.text = text
-		btn.theme = load("res://assets/UI/menu_button_darkblue.tres")
+		_set_btn_style(btn, SB_DARK, SB_DARK_HOVER, SB_DARK_PRESSED)
 		btn.add_theme_font_size_override("font_size", 22)
 		btn.pressed.connect(_on_item_selected.bind(idx))
 		item_list.add_child(btn)
@@ -86,13 +100,12 @@ func _on_item_selected(index: int) -> void:
 	for c in item_list.get_children():
 		if c is Button:
 			if i == index:
-				c.theme = load("res://assets/UI/menu_button_blue.tres")
+				_set_btn_style(c, SB_BLUE, SB_BLUE_HOVER, SB_BLUE_PRESSED)
 			else:
-				c.theme = load("res://assets/UI/menu_button_darkblue.tres")
+				_set_btn_style(c, SB_DARK, SB_DARK_HOVER, SB_DARK_PRESSED)
 		i += 1
 
 func _clear_display() -> void:
 	title_label.text = GameState.T("ui.tutorial.empty", "Noch keine Einträge freigeschaltet.")
 	desc_label.text = ""
 	texture_rect.hide()
-

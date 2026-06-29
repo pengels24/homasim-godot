@@ -565,19 +565,27 @@
 "ui.questbook.claim","Belohnung abholen","Claim Reward"
 "ui.questbook.in_progress","In Bearbeitung...","In Progress..."
 "tutorial.build_mode.title","Bau-Modus","Build Mode"
-"tutorial.build_mode.desc","Klicke auf einen Raum um ihn zu bauen. Es erscheint ein Geistabbild des Raumes an deiner Maus. Mit [R] rotierst du den Raum, mit [.] kannst du die Türe verschieben.","Click on a room to build it. A ghost image of the room will appear at your mouse cursor. Use [R] to rotate the room, and [.] to move the door."
+"tutorial.build_mode.desc","Klicke auf einen Raum um ihn zu bauen. Es erscheint ein Geistabbild des Raumes an deiner Maus. Mit [R] rotierst du den Raum, mit [.] kannst du die Türe verschieben.
+Manche Räume müssen erst erforscht werden!","Click on a room to build it. A ghost image of the room will appear at your mouse cursor. Use [R] to rotate the room, and [.] to move the door.
+Some rooms must be researched first!"
 "tutorial.tech_tree.title","Forschung & Technologie","Research & Technology"
 "tutorial.tech_tree.desc","Über den Technologiebaum (Techtree) kannst du neue Räume und Upgrades mit Forschungspunkten (FP) freischalten. Welche Forschungen möglich sind bestimmt der Lauf der Zeit.","Through the technology tree (Techtree), you can unlock new rooms and upgrades using research points (RP). Which researches are available is determined by the passage of time."
 "tutorial.staff.title","Die Personal-Agentur","The Staffing Agency"
-"tutorial.staff.desc","Über diesen externen Dienstleister kannst du Personal einstellen, kündigen und den Arbeitsbereichen zuweisen.","Through this external service provider, you can hire, fire, and assign staff to their working areas."
+"tutorial.staff.desc","Über diesen externen Dienstleister kannst du Personal einstellen, kündigen und den Arbeitsbereichen zuweisen.
+Jeder Mitarbeiter erledigt seine Aufgaben automatisch. Einige Räume bieten auch die Möglichkeit Personal manuell zu rufen.","Through this external service provider, you can hire, fire, and assign staff to their working areas.
+Every employee performs their tasks automatically. Some rooms also offer the option to call staff manually."
 "tutorial.questbook.title","Das Aufgabenbuch","The Quest Book"
 "tutorial.questbook.desc","Jeder neue Raum und viele der erforschten Upgrades füllen dein Aufgabenbuch und sorgen so dafür, dass du bei Erfüllung der Quests Belohnungen wie EXP, FP und Geld erhälst.","Every new room and many of the researched upgrades fill your quest book, ensuring that completing these quests rewards you with EXP, RP, and money."
 "tutorial.reception.title","Die Rezeption","The Reception"
 "tutorial.reception.desc","Im Herzstück deines Hotels erledigst du den Check-in wartender Gäste (die Zuweisung in entsprechende Zimmer) und rechnest sie nach Ende ihres Aufenthaltes ab.","At the heart of your hotel, you handle the check-in of waiting guests (assigning them to appropriate rooms) and check them out at the end of their stay."
 "tutorial.guest_list.title","Die Gästeliste","The Guest List"
-"tutorial.guest_list.desc","Dies ist die Übersicht aller aktiven Gäste. Hier siehst du unter anderem die Zufriedenheit, den Aufenthaltsort und das Budget auf einen Blick.","This is the overview of all active guests. Here you can see, among other things, their satisfaction, location, and budget at a glance."
+"tutorial.guest_list.desc","Dies ist die Übersicht aller aktiven Gäste. Hier siehst du unter anderem die Zufriedenheit, den Aufenthaltsort und das Budget auf einen Blick.
+Über die Pip-Cam kannst du jeden aktiven Gast verfolgen und auch zu ihm springen.","This is the overview of all active guests. Here you can see, among other things, their satisfaction, location, and budget at a glance.
+Using the Pip-Cam, you can track any active guest and also jump directly to them."
 "tutorial.room_list.title","Die Raumliste","The Room List"
-"tutorial.room_list.desc","Diese Liste zeigt den Status aller Zimmer: Sauberkeit, Belegung und Zustand.","This list shows the status of all rooms: cleanliness, occupancy, and condition."
+"tutorial.room_list.desc","Diese Liste zeigt den Status aller Zimmer: Sauberkeit, Belegung und Zustand.
+Mit der Pip-Cam kannst du den Raum sehen und auch zu ihm springen.","This list shows the status of all rooms: cleanliness, occupancy, and condition.
+Using the Pip-Cam, you can view the room and also jump directly to it."
 "ui.tutorial.empty","Noch keine Tutorials freigeschaltet.","No tutorials unlocked yet."
 "staff.role.housekeeping","Housekeeping","Housekeeping"
 "staff.role.maintenance","Haustechnik","Maintenance"
@@ -829,7 +837,17 @@
 "ui.disclaimer.dont_show","Beim nächsten Mal nicht mehr anzeigen","Do not show this again"
 "ui.disclaimer.ok","Verstanden!","Got it!"
 "tutorial.welcome.title","Die Benutzeroberfläche HUD","The User Interface HUD"
-"tutorial.welcome.desc","Willkommen in deinem neuen Hotel - hier ein kurzer Überblick:","Welcome to your new hotel - here is a brief overview:"
+"tutorial.welcome.desc","Willkommen in deinem neuen Hotel - hier ein kurzer Überblick:
+Oben: Deine wichtigsten Laufdaten wie Finanzen und Gäste, sowie die Zeitsteuerung.
+Unten rechts: Die Steuerung für die Musik.
+Unten mittig: Die zentralen Hauptfunktionen (Bauen, Rezeption, Personal, etc.).
+Unten links: Der Ansichtsmerker zum Zwischenspeichern der Kameraposition.
+Kamera-Steuerung: Mit WASD bewegst du die Kamera und mit dem Mausrad steuerst du den Zoom.","Welcome to your new hotel - here is a brief overview:
+Top: Your most important running data like finances and guests, as well as the time control.
+Bottom right: The music controls.
+Bottom center: The main core functions (Building, Reception, Staff, etc.).
+Bottom left: The view indicator to temporarily save the camera position.
+Camera control: Use WASD to move the camera and the mouse wheel to control the zoom."
 
 "ingame.quit.message","Bist du sicher, dass du das Spiel verlassen möchtest?","Are you sure you want to leave the game?"
 "ingame.quit.cancel","Abbrechen","Cancel"
@@ -904,6 +922,10 @@
 "sim.site.gs.title","Gourmet-Sterne","Gourmet Stars"
 "sim.site.gs.desc","Stern-Fortschritt","Star Progress"
 "tutorial.sim_browser.title","SimBrowser","SimBrowser"
-"tutorial.sim_browser.desc","Dein persönliches In-Game Web-Portal. Hier findest du Bewertungen, Statistiken und Lieferanten. Neuigkeiten aus dem HO·MA·SIM-Universum werden hier genauso veröffentlicht, wie Bekanntmachungen zu Events und anderen Spielern.","Your personal in-game web portal. Here you will find reviews, statistics, and suppliers. News from the HO·MA·SIM universe is published here, as well as announcements about events and other players."
+"tutorial.sim_browser.desc","Dein persönliches In-Game Web-Portal. Hier findest du Bewertungen, Statistiken und Lieferanten. Neuigkeiten aus dem HO·MA·SIM-Universum werden hier genauso veröffentlicht, wie Bekanntmachungen zu Events und anderen Spielern.
+Tipp: Achte auf versteckte URLs!","Your personal in-game web portal. Here you will find reviews, statistics, and suppliers. News from the HO·MA·SIM universe is published here, as well as announcements about events and other players.
+Tip: Watch out for hidden URLs!"
 "tutorial.finances.title","Finanzen","Finances"
-"tutorial.finances.desc","Dies ist diee Übersicht deiner Einnahmen und Ausgaben.","This is the overview of your income and expenses."
+"tutorial.finances.desc","Dies ist die Übersicht deiner Einnahmen und Ausgaben.
+Du kannst alle Einträge sortieren und filtern. Dies verschafft dir den Überblick über deine finanzielle Situation.","This is the overview of your income and expenses.
+You can sort and filter all entries. This gives you a clear overview of your financial situation."

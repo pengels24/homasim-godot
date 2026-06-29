@@ -249,7 +249,7 @@ func _refresh_live_data() -> void:
 		else:
 			detail_guest_val.tooltip_text = ""
 
-func _on_room_selected(room: Node2D, btn: Button) -> void:
+func _on_room_selected(room: Node2D, _btn: Button) -> void:
 	_selected_room = room
 	pip_camera.set_target(room)
 	

@@ -118,6 +118,10 @@ func set_staff_locked(is_locked: bool) -> void:
 func set_techtree_locked(is_locked: bool) -> void:
 	tech_tree.disabled = is_locked
 
+# =============================================================================
+func set_browser_locked(is_locked: bool) -> void:
+	sim_browser.disabled = is_locked
+
 
 
 # =============================================================================

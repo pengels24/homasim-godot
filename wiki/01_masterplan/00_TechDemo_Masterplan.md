@@ -30,9 +30,9 @@ Die Systeme dafür haben wir gebaut, jetzt müssen die Inhalte rein.
   - [ ] `tutorials.json` finalisieren (Welche Popups erscheinen wann?).
   - [ ] Texte für Tutorials in der CSV-Übersetzung hinterlegen.
   - [ ] Trigger-Events im Code für die Tutorials sicherstellen (z.B. "Erster Raum gebaut").
-- [ ] **Techtree-Inhalte (Balancing):** 
-  - [ ] Kosten (Geld/FP) in der `techtree.json` für den frühen Spielverlauf anpassen.
-  - [ ] Voraussetzungen (Zimmer) so anpassen, dass man nicht feststeckt.
+- [x] **Techtree-Inhalte (Balancing):** 
+  - [x] Kosten (Geld/FP) in der `techtree.json` für den frühen Spielverlauf anpassen.
+  - [x] Voraussetzungen (Zimmer) so anpassen, dass man nicht feststeckt.
   - [x] Abgleich mit dem Konzept (via ANG-204 erledigt).
 
 ## 🏨 3. Core-Loop & Wuselfaktor (Das eigentliche Spiel)
@@ -59,7 +59,7 @@ Die Systeme dafür haben wir gebaut, jetzt müssen die Inhalte rein.
 - [x] **Sound & Feedback:** 
   - [x] "Kaching"-Sound beim Check-Out / Geldeingang einbauen.
   - [x] Klick-Sounds für die wichtigsten UI-Buttons.
-  - [ ] Atmosphärischer Background-Loop (leises Murmeln in der Lobby).
+  - [x] Atmosphärischer Background-Loop (leises Murmeln in der Lobby).
 - [ ] **Balancing Feinschliff:** 
   - [ ] Test-Run: Kann der Streamer in 45 Minuten ein ordentliches Hotel mit 3-4 Zimmertypen und erster Forschung aufbauen?
 

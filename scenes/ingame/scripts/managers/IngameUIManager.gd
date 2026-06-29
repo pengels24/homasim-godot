@@ -24,6 +24,8 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	_map_grid = map
 	_standard_modal = modal
 	_sim_browser = browser
+	if _sim_browser:
+		_sim_browser.sig_closed.connect(close_sim_browser)
 	_build = build
 	_guest_mgr = guest_mgr
 	_schedule_mgr = schedule_mgr # <--- NEUE ZEILE
@@ -589,16 +591,32 @@ func open_tech_tree() -> void:
 
 # =============================================================================
 func open_sim_browser() -> void:
+	if not TechtreeManager.is_tech_unlocked("M1.1"):
+		Toast.show(GameState.T("toast.simbrowser.locked"))
+		return
+
 	if TutorialManager:
 		TutorialManager.trigger("sim_browser")
 
-	Toast.show("Sim-Browser: Coming soon!")
-	return
-
+	cleanup_current_states()
+	
+	if _sim_browser:
+		_sim_browser.open()
+		if is_instance_valid(_bottom_bar):
+			_bottom_bar.sync_button_state("sim_browser")
+		_pause_time_for_ui()
+		InputHandler.current_mode = InputHandler.InputMode.MODAL
+		update_map_grid_mode()
 
 # =============================================================================
 func close_sim_browser() -> void:
-	return
+	if _sim_browser and _sim_browser.visible:
+		_sim_browser.close()
+	_resume_time_after_ui()
+	InputHandler.current_mode = InputHandler.InputMode.NORMAL
+	if is_instance_valid(_bottom_bar):
+		_bottom_bar.sync_button_state("")
+	update_map_grid_mode()
 
 # ── Aufgabenbuch ──────────────────────────────────────────────────────────────
 
@@ -670,6 +688,9 @@ func open_finances() -> void:
 	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentFinances.tscn")
 	if not is_instance_valid(content): return
 	_bottom_bar.sync_button_state("finances")
+
+	if TutorialManager:
+		TutorialManager.trigger("finances")
 
 	if _standard_modal.visible:
 		_standard_modal.set_title(GameState.T("modal.finances.title"))

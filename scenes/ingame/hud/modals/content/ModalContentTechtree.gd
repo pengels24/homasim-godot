@@ -220,13 +220,13 @@ func _build_tier_content(parent: Control, _tier_id: String, tier_data: Dictionar
 				
 				var cost_fp = n.get("cost_fp", 0)
 				var cost_money = n.get("cost_money", 0)
-				var deps = n.get("dependencies", [])
+				var _deps = n.get("dependencies", [])
 				
 				var cur_fp = int(GameState.selected_hotel.get("fp", 0))
 				var cur_money = int(GameState.selected_hotel.get("money", 0))
 				
-				var has_fp = cur_fp >= cost_fp
-				var has_money = cur_money >= cost_money
+				var _has_fp = cur_fp >= cost_fp
+				var _has_money = cur_money >= cost_money
 				var is_demo_locked = n.get("demo_locked", false)
 				
 				if is_demo_locked:
@@ -342,13 +342,13 @@ func _generate_tooltip(tech_id: String) -> String:
 		
 	var cost_fp = n.get("cost_fp", 0)
 	var cost_money = n.get("cost_money", 0)
-	var deps = n.get("dependencies", [])
+	var _deps = n.get("dependencies", [])
 	
 	var cur_fp = int(GameState.selected_hotel.get("fp", 0))
 	var cur_money = int(GameState.selected_hotel.get("money", 0))
 	
-	var has_fp = cur_fp >= cost_fp
-	var has_money = cur_money >= cost_money
+	var _has_fp = cur_fp >= cost_fp
+	var _has_money = cur_money >= cost_money
 	var is_demo_locked = n.get("demo_locked", false)
 	
 	var tt = ""
@@ -368,16 +368,20 @@ func _generate_tooltip(tech_id: String) -> String:
 			if r_def.get("req_tech", "") == tech_id:
 				unlocks.append(GameState.T("ui.techtree.tooltip.unlocks.room", GameState.T(r_def.get("name", "Raum"))))
 				
+		var custom_features = n.get("unlocks_features", [])
+		for f in custom_features:
+			unlocks.append(GameState.T("ui.techtree.tooltip.unlocks.feature", GameState.T(f)))
+				
 		if unlocks.size() > 0:
 			var joined = "\n- ".join(unlocks)
 			tt += GameState.T("ui.techtree.tooltip.unlocks.desc", joined)
 		else:
 			tt += GameState.T("ui.techtree.tooltip.unlocks.empty")
 	
-	tt += ("✅ " if has_fp else "❌ ") + "%d / %d FP\n" % [cur_fp, cost_fp]
-	tt += ("✅ " if has_money else "❌ ") + "%d / %d €\n" % [cur_money, cost_money]
+	tt += ("✅ " if _has_fp else "❌ ") + "%d / %d FP\n" % [cur_fp, cost_fp]
+	tt += ("✅ " if _has_money else "❌ ") + "%d / %d €\n" % [cur_money, cost_money]
 	
-	for d in deps:
+	for d in _deps:
 		var dep_name = d + " " + GameState.T(TechtreeManager.get_tech_node(d).get("name", d))
 		var is_dep_unlocked = TechtreeManager.is_tech_unlocked(d)
 		tt += ("✅ " if is_dep_unlocked else "❌ ") + GameState.T("ui.techtree.tooltip.requires", dep_name)

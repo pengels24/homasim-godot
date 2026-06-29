@@ -40,6 +40,7 @@ func _load_config() -> void:
 				if stream:
 					_sounds[key] = stream
 			else:
+				pass
 # 				push_warning("SoundManager: Sound file missing -> %s" % path)
 
 func _init_pool() -> void:

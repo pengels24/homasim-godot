@@ -97,7 +97,8 @@
           "cost_fp": 1000,
           "cost_money": 10000,
           "dependencies": [
-            "G1.1"
+            "G1.2",
+            "G1.3"
           ],
           "unlocks_emojis": "⭐ 🍽️",
           "demo_locked": true
@@ -123,7 +124,7 @@
           "cost_fp": 250,
           "cost_money": 2500,
           "dependencies": [
-            "Z1.1"
+            "W1.1"
           ],
           "unlocks_emojis": "🏊 🌳",
           "demo_locked": true
@@ -152,7 +153,10 @@
           "cost_money": 1000,
           "dependencies": [],
           "unlocks_emojis": "💼 📊",
-          "demo_locked": true
+          "demo_locked": false,
+          "unlocks_features": [
+            "tutorial.sim_browser.title"
+          ]
         },
         {
           "id": "M1.2",
@@ -162,7 +166,9 @@
           "row": 0,
           "cost_fp": 250,
           "cost_money": 2500,
-          "dependencies": [],
+          "dependencies": [
+            "M1.1"
+          ],
           "unlocks_emojis": "🧑‍💼 📝",
           "demo_locked": true
         },
@@ -188,7 +194,10 @@
           "row": 0,
           "cost_fp": 1000,
           "cost_money": 10000,
-          "dependencies": [],
+          "dependencies": [
+            "M1.2",
+            "M1.3"
+          ],
           "unlocks_emojis": "🏢 📈",
           "demo_locked": true
         },
@@ -212,7 +221,9 @@
           "row": 0,
           "cost_fp": 250,
           "cost_money": 2500,
-          "dependencies": [],
+          "dependencies": [
+            "P1.1"
+          ],
           "unlocks_emojis": "🏟️ 🎇",
           "demo_locked": true
         },
@@ -224,7 +235,9 @@
           "row": 0,
           "cost_fp": 500,
           "cost_money": 5000,
-          "dependencies": [],
+          "dependencies": [
+            "P1.2"
+          ],
           "unlocks_emojis": "🎭 🎵",
           "demo_locked": true
         }

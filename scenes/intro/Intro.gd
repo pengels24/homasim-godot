@@ -197,7 +197,7 @@ func _play_intro_sequence() -> void:
 
 func _show_frame(idx: int) -> void:
     if idx >= sequence.size(): return
-    var old_sprite = sequence[idx - 1]
+    var _old_sprite = sequence[idx - 1]
     var new_sprite = sequence[idx]
     
     new_sprite.visible = true

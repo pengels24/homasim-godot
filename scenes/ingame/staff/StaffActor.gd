@@ -63,6 +63,7 @@ func _update_visuals() -> void:
 		if tex and tex is Texture2D:
 			_sprite.texture = tex
 	else:
+		pass
 # 		push_warning("[StaffActor] Aseprite %s nicht gefunden!" % texture_path)
 	
 	# Solange kein Personalraum, warten MA unsichtbar in der Lobby

@@ -1,0 +1,37 @@
+[
+  {
+    "abbr": "HC",
+    "color": "2e7ad1",
+    "title": "sim.site.hc.title",
+    "desc": "sim.site.hc.desc",
+    "url": "hotelcheck.sim"
+  },
+  {
+    "abbr": "HB",
+    "color": "29a361",
+    "title": "sim.site.hb.title",
+    "desc": "sim.site.hb.desc",
+    "url": "hotelbooking.sim"
+  },
+  {
+    "abbr": "NE",
+    "color": "d16629",
+    "title": "sim.site.ne.title",
+    "desc": "sim.site.ne.desc",
+    "url": "news.sim"
+  },
+  {
+    "abbr": "LI",
+    "color": "8c47b8",
+    "title": "sim.site.li.title",
+    "desc": "sim.site.li.desc",
+    "url": "lieferanten.sim"
+  },
+  {
+    "abbr": "GS",
+    "color": "d91e1e",
+    "title": "sim.site.gs.title",
+    "desc": "sim.site.gs.desc",
+    "url": "gourmet.sim"
+  }
+]

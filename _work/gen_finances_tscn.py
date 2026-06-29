@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://dfinances001"]
+import os
+
+tscn_content = """[gd_scene format=3 uid="uid://dfinances001"]
 
 [ext_resource type="Script" path="res://scenes/ingame/hud/modals/content/ModalContentFinances.gd" id="1_scpt"]
 [ext_resource type="StyleBox" uid="uid://byn5sg5pqc4ux" path="res://assets/UI/menu_button_blue.tres" id="2_btn"]
@@ -6,7 +8,6 @@
 [ext_resource type="StyleBox" uid="uid://bc0pipuhgp5c7" path="res://assets/UI/menu_button_blue_hover.tres" id="4_btn_h"]
 
 [node name="ModalContentFinances" type="VBoxContainer"]
-custom_minimum_size = Vector2(1500, 700)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -36,8 +37,7 @@ layout_mode = 2
 theme_override_constants/separation = 5
 alignment = 1
 
-[node name="TitleIncome" type="Label" parent="SummaryHBox/IncomeBox/VBox"]
-unique_name_in_owner = true
+[node name="Title" type="Label" parent="SummaryHBox/IncomeBox/VBox"]
 layout_mode = 2
 theme_type_variation = &"DescLabel"
 text = "Einnahmen Heute"
@@ -46,7 +46,7 @@ horizontal_alignment = 1
 [node name="LblIncome" type="Label" parent="SummaryHBox/IncomeBox/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_type_variation = &"ValueLabelLarge"
+theme_type_variation = &"ValueLabel"
 theme_override_colors/font_color = Color(0.211765, 0.431373, 0.301961, 1)
 text = "+0 €"
 horizontal_alignment = 1
@@ -61,8 +61,7 @@ layout_mode = 2
 theme_override_constants/separation = 5
 alignment = 1
 
-[node name="TitleExpense" type="Label" parent="SummaryHBox/ExpenseBox/VBox"]
-unique_name_in_owner = true
+[node name="Title" type="Label" parent="SummaryHBox/ExpenseBox/VBox"]
 layout_mode = 2
 theme_type_variation = &"DescLabel"
 text = "Ausgaben Heute"
@@ -71,7 +70,7 @@ horizontal_alignment = 1
 [node name="LblExpense" type="Label" parent="SummaryHBox/ExpenseBox/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_type_variation = &"ValueLabelLarge"
+theme_type_variation = &"ValueLabel"
 theme_override_colors/font_color = Color(0.690196, 0.180392, 0.231373, 1)
 text = "-0 €"
 horizontal_alignment = 1
@@ -86,8 +85,7 @@ layout_mode = 2
 theme_override_constants/separation = 5
 alignment = 1
 
-[node name="TitleTotal" type="Label" parent="SummaryHBox/TotalBox/VBox"]
-unique_name_in_owner = true
+[node name="Title" type="Label" parent="SummaryHBox/TotalBox/VBox"]
 layout_mode = 2
 theme_type_variation = &"DescLabel"
 text = "Saldo Heute"
@@ -96,7 +94,7 @@ horizontal_alignment = 1
 [node name="LblTotal" type="Label" parent="SummaryHBox/TotalBox/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_type_variation = &"ValueLabelLarge"
+theme_type_variation = &"ValueLabel"
 text = "0 €"
 horizontal_alignment = 1
 
@@ -172,40 +170,6 @@ theme_override_styles/pressed = ExtResource("3_btn_p")
 theme_override_styles/normal = ExtResource("2_btn")
 text = ">"
 
-
-[node name="TypeFilter" type="HBoxContainer" parent="FiltersHBox"]
-layout_mode = 2
-theme_override_constants/separation = 15
-
-[node name="BtnTypeLeft" type="Button" parent="FiltersHBox/TypeFilter"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-theme_override_styles/hover = ExtResource("4_btn_h")
-theme_override_styles/pressed = ExtResource("3_btn_p")
-theme_override_styles/normal = ExtResource("2_btn")
-text = "<"
-
-[node name="LblType" type="Label" parent="FiltersHBox/TypeFilter"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(180, 0)
-layout_mode = 2
-theme_type_variation = &"ValueLabel"
-text = "Alle"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="BtnTypeRight" type="Button" parent="FiltersHBox/TypeFilter"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(40, 40)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-theme_override_styles/hover = ExtResource("4_btn_h")
-theme_override_styles/pressed = ExtResource("3_btn_p")
-theme_override_styles/normal = ExtResource("2_btn")
-text = ">"
-
 [node name="Panel" type="PanelContainer" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
@@ -220,39 +184,34 @@ theme_override_constants/margin_bottom = 10
 
 [node name="VBox" type="VBoxContainer" parent="Panel/Margin"]
 layout_mode = 2
-size_flags_vertical = 3
 
 [node name="Header" type="HBoxContainer" parent="Panel/Margin/VBox"]
 layout_mode = 2
 
 [node name="LblDay" type="Label" parent="Panel/Margin/VBox/Header"]
-custom_minimum_size = Vector2(130, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-theme_type_variation = &"DescLabelLarge"
+theme_type_variation = &"DescLabel"
 text = "Zeitpunkt"
 
 [node name="LblCat" type="Label" parent="Panel/Margin/VBox/Header"]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
-theme_type_variation = &"DescLabelLarge"
+theme_type_variation = &"DescLabel"
 text = "Kategorie"
 
 [node name="LblDesc" type="Label" parent="Panel/Margin/VBox/Header"]
 size_flags_horizontal = 3
 layout_mode = 2
-theme_type_variation = &"DescLabelLarge"
+theme_type_variation = &"DescLabel"
 text = "Beschreibung"
 
 [node name="LblAmount" type="Label" parent="Panel/Margin/VBox/Header"]
 custom_minimum_size = Vector2(120, 0)
 layout_mode = 2
-theme_type_variation = &"DescLabelLarge"
+theme_type_variation = &"DescLabel"
 text = "Betrag"
 horizontal_alignment = 2
-
-[node name="Spacer" type="Control" parent="Panel/Margin/VBox/Header"]
-custom_minimum_size = Vector2(20, 0)
-layout_mode = 2
 
 [node name="HSeparator" type="HSeparator" parent="Panel/Margin/VBox"]
 layout_mode = 2
@@ -270,3 +229,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 8
 
+"""
+
+with open("d:/game-dev/homasim-godot/scenes/ingame/hud/modals/content/ModalContentFinances.tscn", "w", encoding="utf-8") as f:
+    f.write(tscn_content)
+print("done")

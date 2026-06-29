@@ -114,3 +114,6 @@ res://
 - ANG-xxx Referenz im Code (Kommentare), Commits und Changelog verwenden
 
 - **WICHTIG: Kein Push ohne Test!** `git push` darf NUR ausgefuehrt werden, wenn der Code vorher erfolgreich durch Peter getestet wurde oder explizit das Go gegeben wurde.
+
+## Temporäre Skripte & KI-Tools
+- **Mülle das Root-Verzeichnis nicht zu!** Wenn du Python-Skripte oder andere temporäre Helfer-Skripte schreibst (z.B. für Batch-Ersetzungen in `.tscn` Dateien), speichere diese zwingend in einem separaten Arbeitsordner (z.B. im `_dev` Ordner oder einem neuen `_work` Ordner). Lege niemals `_temp*.py`, `fix_*.py` oder ähnliche Einweg-Skripte direkt in den Godot-Root-Ordner (`res://`).

@@ -122,7 +122,7 @@ func _display_category_buttons() -> void:
 		# Daten aus dem GameState holen (mit Fallback-Werten zur Sicherheit)
 		var cat_data: Dictionary = GameState.room_category_registry.get(cat_name.to_lower(), {})
 		var icon_path: String = cat_data.get("icon", "res://assets/icons/HUDTop/house.svg")
-		var raw_label: String = cat_data.get("label", cat_name.capitalize())
+		var _raw_label: String = cat_data.get("label", cat_name.capitalize())
 		var label_text: String = GameState.T("room_category." + cat_name.to_lower())
 
 		btn.icon = load(icon_path)
@@ -173,7 +173,7 @@ func _show_category(cat_name: String) -> void:
 	for c_name in _category_btns.keys():
 		_set_btn_active(_category_btns[c_name], c_name == cat_name)
 		
-	var raw_cat_label = GameState.room_category_registry.get(cat_name.to_lower(), {}).get("label", cat_name.capitalize())
+	var _raw_cat_label = GameState.room_category_registry.get(cat_name.to_lower(), {}).get("label", cat_name.capitalize())
 	var cat_label = GameState.T("room_category." + cat_name.to_lower())
 	_breadcrumb.text = GameState.T("ui.buildmenu.category", cat_label)
 

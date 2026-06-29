@@ -1,19 +1,16 @@
-## Version: 0.1.31
-**Datum: 2026-06-28**
+# Changelog gd-0.1.31
 
-### Features & Verbesserungen
+Datum: 2026-06-29
 
-- **Gästeliste (F2)**: Der Aufenthaltsort von Gästen, die sich gerade in einer Aktivität befinden, wird nun detaillierter angezeigt (z.B. "in Bar/Lounge B0001" statt nur "Aktivität" oder "POI").
-- **POI-Tooltips**: Beim Hovern über einen POI (z.B. Bar) wird nun die korrekte Anzahl der anwesenden Gäste sowie deren Namen aufgelistet. Der Bug, dass der Zähler trotz anwesender Gäste auf 0 blieb, wurde behoben.
-- **Forschung & Technologie (F5)**: Bereits freigeschaltete Technologien zeigen in ihrem Tooltip nun übersichtlich den Text "- Bereits erforscht -" an, anstatt weiterhin die (bereits erfüllten) Kosten und Abhängigkeiten aufzulisten.
+## Features & Verbesserungen
+- **Neues Design für den SimBrowser:** Die App-Karten wurden komplett überarbeitet und erstrahlen nun in einem edlen, einheitlichen "Corporate Look" (Dunkelblau mit gelben Akzenten und weichen Schatten).
+- **Landscape-Layout für Apps:** Die Kacheln im Browser nutzen jetzt ein horizontales Layout (Logo links, Texte rechts) für bessere Lesbarkeit und optimale Platznutzung. 
+- **CTA-Buttons integriert:** Jede App-Kachel besitzt nun am unteren Rand einen klaren Button zum Aufrufen der jeweiligen Funktion.
+- **Markenrechtliche Anpassungen:** Die App "Michelin" wurde in "Gourmet-Sterne" (Abkürzung: GS) umbenannt, inklusive angepasster URLs und Übersetzungen.
 
-### Bugfixes
+## Bugfixes
+- (Keine spezifischen Bugfixes in dieser Version)
 
-- `CustomTooltip.gd`: Fix für den POI-Gästezähler. Dieser suchte fälschlicherweise nach Gästen, deren Ziel-POI-ID der Raum-ID entsprach. Der Abgleich erfolgt nun korrekt über die ID der Raum-Definition.
-- `ModalContentTechtree.gd`: Fallback für den `- Bereits erforscht -`-String implementiert, um Caching-Probleme der Godot-Übersetzungsengine beim Live-Reload abzufangen.
-
-### Technische Änderungen
-
-- `ModalContentGuestList.gd`: Anpassung der Status-Strings in `_refresh_live_data` und der initialen Listen-Generierung zur dynamischen Namensauflösung der POIs.
-- `translations/de.csv`: Neuer Übersetzungsschlüssel `ui.techtree.tooltip.already_unlocked` hinzugefügt.
-- Agenten-Regelwerk (`AGENTS.md`) bereinigt und von veralteten `Nächste Schritte`-Einträgen befreit, um saubere Folge-Sessions zu gewährleisten.
+## Technische Änderungen
+- Anpassung des Grid-Layouts im SimBrowser (Reduzierung auf 3 Spalten zur optimalen Darstellung der neuen Landscape-Karten).
+- Entfernung der alten dynamischen Farb-Logik für SimBrowser-Tiles aus dem Code.

@@ -49,6 +49,18 @@
             "image": "res://assets/images/tutorials/tutorial_build_mode.png"
         },
         {
+            "id": "finances",
+            "title_key": "tutorial.finances.title",
+            "desc_key": "tutorial.finances.desc",
+            "image": "res://assets/images/tutorials/tutorial_build_mode.png"
+        },
+        {
+            "id": "sim_browser",
+            "title_key": "tutorial.sim_browser.title",
+            "desc_key": "tutorial.sim_browser.desc",
+            "image": "res://assets/images/tutorials/tutorial_build_mode.png"
+        },
+        {
             "id": "tip_130_exp",
             "category": "tipps",
             "title_key": "tutorial.tip_130_exp.title",

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://gy3l6e8gkvja" path="res://scenes/shared/ToastNotification.gd" id="1_toastnoti"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-bg_color = Color(0.078, 0.078, 0.098, 0.96)
+bg_color = Color(0.078, 0.078, 0.098, 1)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2

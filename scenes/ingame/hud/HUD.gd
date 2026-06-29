@@ -58,6 +58,9 @@ func _ready() -> void:
 	GameState.sig_hotel_level_up.connect(_on_hotel_level_up)
 	%LevelUpModal.sig_rewards_claimed.connect(_on_level_up_rewards_claimed)
 
+	# Techtree Signals
+	TechtreeManager.sig_tech_unlocked.connect(_on_tech_unlocked)
+
 	# Initialen Pause-Status setzen (falls wir direkt pausiert ins Spiel starten)
 	set_pause_visuals(TimeManager.is_paused())
 	
@@ -77,6 +80,10 @@ func _ready() -> void:
 	var room_menu_instance = room_menu_scene.instantiate()
 	add_child(room_menu_instance)
 
+# =============================================================================
+func _on_tech_unlocked(tech_id: String) -> void:
+	if tech_id == "M1.1" and is_instance_valid(bottom_bar) and bottom_bar.has_method("set_browser_locked"):
+		bottom_bar.set_browser_locked(false)
 
 # =============================================================================
 func _on_guest_clicked(guest: Node2D) -> void:
@@ -111,6 +118,10 @@ func _on_hotel_level_changed(new_level: int) -> void:
 			bottom_bar.set_staff_locked(new_level < GameState.UNLOCK_LEVELS.staff)
 		if bottom_bar.has_method("set_techtree_locked"):
 			bottom_bar.set_techtree_locked(new_level < GameState.UNLOCK_LEVELS.techtree)
+		
+		await get_tree().process_frame
+		if is_instance_valid(bottom_bar) and bottom_bar.has_method("set_browser_locked"):
+			bottom_bar.set_browser_locked(not TechtreeManager.is_tech_unlocked("M1.1"))
 
 
 # =============================================================================

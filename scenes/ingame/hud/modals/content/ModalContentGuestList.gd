@@ -232,7 +232,7 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 		"lbl_sat": lbl_sat
 	})
 
-func _on_guest_selected(party: GuestParty, member: GuestMember, btn: Button) -> void:
+func _on_guest_selected(party: GuestParty, member: GuestMember, _btn: Button) -> void:
 	if not _guest_controller:
 		return
 		

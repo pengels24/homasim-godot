@@ -15,9 +15,10 @@ Projektmanagement
 Versionierung
 
 ## Assets & Grafiken
-= Kenney – Roguelike Modern City
-Copyright (c) Kenney.nl
-Creative Commons Zero (CC0) · kenney.nl
+= Moon Phases (Tagesübergang)
+Copyright (c) grinnch.itch.io
+Creative Commons Attribution v4.0 International
+
 
 = Lucide Icons
 Copyright © 2026 Lucide Contributors
@@ -48,3 +49,24 @@ SIL Open Font License, Version 1.1
 by Kevin MacLeod - incompetech.com
 Creative Commons: By Attribution 4.0
 creativecommons.org/licenses/by/4.0
+
+## Soundeffekte (SFX)
+= Broom Sweep
+Sound Effect by freesound_community from Pixabay
+Pixabay License (pixabay.com)
+
+= Cash Register Fake
+Sound Effect by freesound_community from Pixabay
+Pixabay License (pixabay.com)
+
+= Türsounds
+FilmCow Royalty Free Sound Effects Library Vol. 2 & 3
+Royalty Free (filmcow.itch.io/filmcow-sfx-2)
+
+= Socket Wrench
+Sound Effect by freesound_community from Pixabay
+Pixabay License (pixabay.com)
+
+= Menü-Sounds (Universal UI/Menu Soundpack)
+by Nathan Gibson (cyrex-studios.itch.io)
+Creative Commons: By Attribution 4.0 (CC BY 4.0)

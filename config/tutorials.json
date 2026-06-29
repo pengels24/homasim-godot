@@ -34,31 +34,31 @@
             "id": "reception",
             "title_key": "tutorial.reception.title",
             "desc_key": "tutorial.reception.desc",
-            "image": "res://assets/images/tutorials/tutorial_build_mode.png"
+            "image": "res://assets/images/tutorials/tutorial_reception.png"
         },
         {
             "id": "guest_list",
             "title_key": "tutorial.guest_list.title",
             "desc_key": "tutorial.guest_list.desc",
-            "image": "res://assets/images/tutorials/tutorial_build_mode.png"
+            "image": "res://assets/images/tutorials/tutorial_guest_list.png"
         },
         {
             "id": "room_list",
             "title_key": "tutorial.room_list.title",
             "desc_key": "tutorial.room_list.desc",
-            "image": "res://assets/images/tutorials/tutorial_build_mode.png"
+            "image": "res://assets/images/tutorials/tutorial_room_list.png"
         },
         {
             "id": "finances",
             "title_key": "tutorial.finances.title",
             "desc_key": "tutorial.finances.desc",
-            "image": "res://assets/images/tutorials/tutorial_build_mode.png"
+            "image": "res://assets/images/tutorials/tutorial_finances.png"
         },
         {
             "id": "sim_browser",
             "title_key": "tutorial.sim_browser.title",
             "desc_key": "tutorial.sim_browser.desc",
-            "image": "res://assets/images/tutorials/tutorial_build_mode.png"
+            "image": "res://assets/images/tutorials/tutorial_sim_browser.png"
         },
         {
             "id": "tip_130_exp",

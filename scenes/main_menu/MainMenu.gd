@@ -95,7 +95,7 @@ func _load_assets() -> void:
 	login_button.text  = GameState.T("login.btn.submit")
 	btn_login.text     = GameState.T("menu.btn.account_bind")
 	btn_login.disabled = true
-
+	btn_tutorial.disabled = true
 	var vf := FileAccess.open("res://version.txt", FileAccess.READ)
 	if vf:
 		_version_lbl.text = "v" + vf.get_line().strip_edges().trim_prefix("gd-")

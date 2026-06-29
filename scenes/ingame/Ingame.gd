@@ -318,8 +318,7 @@ func _on_event_reception_last_call() -> void:
 
 
 # =============================================================================
-# TEMP TEST: Debug-Trigger (STRG + T)
+# (Veraltete Debug-Action entfernt)
 # =============================================================================
 func _on_debug_action_requested() -> void:
-	if is_instance_valid(map_grid):
-		map_grid._show_debug_grid = not map_grid._show_debug_grid
+	pass

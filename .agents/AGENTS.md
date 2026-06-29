@@ -12,12 +12,12 @@ Bevor du UI-Änderungen durchführst, musst du zwingend das Dokument `wiki/06_ui
 **Am Ende jeder Session oder auf explizite Aufforderung** einen Changelog erstellen:
 
 - Datei: `changelog/gd-0.1.XX.md` – Versionsnummer **immer aus `/version.txt` lesen** (nie raten, nie selbst erhöhen – es sei denn Peter sagt explizit „Version erhöhen")
-- Changelog-Nummer = aktuelle Version + 1 (z.B. `v0.1.28gd` → `gd-0.1.29.md`)
+- Changelog-Nummer = aktuelle Version (z.B. `v0.1.28gd` → `gd-0.1.28.md`)
 - Format: wie `changelog/gd-0.1.10.md` – Abschnitte: `Features & Verbesserungen`, `Bugfixes`, `Technische Änderungen`
 - **Kein Abschnitt „Offene Backlog-Issues"** – der bleibt weg
 - Datum im Format `YYYY-MM-DD` (tagesbezogen)
 - Der Changelog dient als Grundlage für Social Media Posts → prägnant, auf Deutsch, spielernah formulieren
-- Nach dem Changelog: `git add -A; git commit -m "chore: gd-0.1.XX changelog + session changes"; git push`
+- Nach dem Changelog: `git add -A; git commit -m "core: gd-0.1.XX changelog + session changes"`
 
 ---
 
@@ -95,7 +95,7 @@ res://
 - **`SaveManager`** – Zentrale Schnittstelle für lokales Speichern/Laden von Spielständen und Lesen der `/config` JSONs.
 - **`GameState`** – User/Hotel-State, `T()` Translation-Helper.
 - **`Api`** – (Zukünftig) für HTTP-Requests, Cookie-Persistenz (`user://session.cfg`).
-- vo dem coden neuer dinge zuerst schauen ob es schon lösungen via autoload gibt
+- vor dem coden neuer dinge zuerst schauen ob es schon lösungen via autoload gibt
 
 ## Zukünftige API-Konventionen (aktuell ungenutzt)
 - Login: `POST /api/auth/login` (Form-Data)
@@ -112,13 +112,5 @@ res://
 ## Workflow
 - **Issues vor der Umsetzung anlegen** – Linear-Issue (ANG-xxx) anlegen bevor mit der Implementierung begonnen wird
 - ANG-xxx Referenz im Code (Kommentare), Commits und Changelog verwenden
-
-## Session-Abschluss
-`/update-doku` ausführen:
-1. Changelog in `/changelog/gd-x-x-x.md` schreiben
-2. Git commit + Tag
-3. Linear Issues aktualisieren
-4. Memory + CLAUDE.md updaten
-5. NUR WENN EXPLIZIT GENANNT - Version in `version.txt` erhöhen (letzte Ziffer)
 
 - **WICHTIG: Kein Push ohne Test!** `git push` darf NUR ausgefuehrt werden, wenn der Code vorher erfolgreich durch Peter getestet wurde oder explizit das Go gegeben wurde.

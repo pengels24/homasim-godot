@@ -312,7 +312,7 @@ func start_checkout() -> void:
 		var lobby_tile = _get_lobby_tile()
 		var path_tiles = _map_grid.get_path_between_tiles(start_tile, lobby_tile)
 		if path_tiles.is_empty():
-			push_warning("[GuestActor] Kein Pfad zur Lobby für Checkout!")
+# 			push_warning("[GuestActor] Kein Pfad zur Lobby für Checkout!")
 			queue_free()
 			return
 		var lobby_world = _map_grid.tile_to_world(lobby_tile)
@@ -363,7 +363,7 @@ func _walk_to_room(room: Node2D, finish_state: State) -> void:
 	
 	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
 	if path_tiles.is_empty():
-		push_warning("[GuestActor] Check-In Pfad nicht gefunden! Start: %s Exit: %s" % [str(start_tile), str(exit_tile)])
+# 		push_warning("[GuestActor] Check-In Pfad nicht gefunden! Start: %s Exit: %s" % [str(start_tile), str(exit_tile)])
 		# Notfall-Teleport zur Tür, damit der nächste Pfad-Versuch funktioniert
 		global_position = _map_grid.tile_to_world(exit_tile)
 		_change_state(finish_state)
@@ -411,7 +411,7 @@ func _walk_to_poi(poi_id: String) -> void:
 				break
 		
 		if not is_instance_valid(poi_room):
-			push_warning("[GuestActor] POI '%s' nicht gefunden!" % poi_id)
+# 			push_warning("[GuestActor] POI '%s' nicht gefunden!" % poi_id)
 			_decide_next_action()
 			return
 			
@@ -435,7 +435,7 @@ func _walk_to_poi(poi_id: String) -> void:
 	
 	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
 	if path_tiles.is_empty():
-		push_warning("[GuestActor] Pfad zu POI '%s' nicht gefunden!" % poi_id)
+# 		push_warning("[GuestActor] Pfad zu POI '%s' nicht gefunden!" % poi_id)
 		_decide_next_action()
 		return
 	

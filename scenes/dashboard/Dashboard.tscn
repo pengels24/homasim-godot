@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://qp72xsscxvx6" path="res://scenes/dashboard/Dashboard.gd" id="1_dashboard"]
 [ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_theme"]
 [ext_resource type="PackedScene" uid="uid://cgjw8nvpmbcqm" path="res://scenes/character/CharacterDisplay.tscn" id="2_chardisplay"]
-[ext_resource type="PackedScene" uid="uid://confirmmodal" path="res://scenes/shared/ConfirmModal.tscn" id="3_confirmmodal"]
+[ext_resource type="PackedScene" path="res://scenes/shared/ConfirmModal.tscn" id="3_confirmmodal"]
 [ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="5_red"]
 [ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="red_hover"]
 [ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="red_normal"]

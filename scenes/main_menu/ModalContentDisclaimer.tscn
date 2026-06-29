@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c1disclaimer"]
 
-[ext_resource type="Script" uid="uid://ddisclaimer" path="res://scenes/main_menu/ModalContentDisclaimer.gd" id="1_script"]
+[ext_resource type="Script" path="res://scenes/main_menu/ModalContentDisclaimer.gd" id="1_script"]
 [ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://assets/UI/menu_button_green.tres" id="2_green"]
 [ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://assets/UI/menu_button_green_hover.tres" id="3_green_hover"]
 [ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://assets/UI/menu_button_green_pressed.tres" id="4_green_pressed"]

@@ -369,9 +369,6 @@ func get_match_type(party: GuestParty, room: Node2D) -> String:
 	var type_ok:  bool = rtype in def.get("allowed_rooms",   [])
 	var preferred: bool = rtype in def.get("preferred_rooms", [])
 
-	# todo MÄNGEL-SYSTEM PAUSIERT: Wir setzen reqs_met hart auf true,
-	# bis das Ausstattungs-Feature fertig ist.
-	# var reqs_met: bool = _check_requirements(room, def.get("requirements", []))
 	var reqs_met: bool = true
 
 	if not type_ok:

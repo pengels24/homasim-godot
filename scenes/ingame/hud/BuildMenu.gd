@@ -107,30 +107,6 @@ func _sort_rooms_into_categories() -> void:
 
 # # =============================================================================
 # func _sort_rooms_into_categories() -> void:
-# 	_categories.clear()
-
-# 	for scene in room_scenes:
-# 		if not scene: continue
-
-# 		# 1. Wir instanziieren kurz, um an das Root-Skript zu kommen
-# 		var temp_room = scene.instantiate()
-# 		var script: Script = temp_room.get_script()
-
-# 		if script and script.has_method("get_definition"):
-# 			var def: Dictionary = script.call("get_definition")
-# 			var cat_name: String = def.get("category", "Sonstiges")
-
-# 			if not _categories.has(cat_name):
-# 				_categories[cat_name] = []
-
-# 			_categories[cat_name].append({
-# 				"scene": scene,
-# 				"def": def
-# 			})
-
-# 		temp_room.free()
-
-
 # =============================================================================
 ## Erstellt die oberen Knöpfe für die Kategorien (Zimmer, Gastro etc.)
 func _display_category_buttons() -> void:
@@ -182,20 +158,7 @@ func _display_category_buttons() -> void:
 # 		var icon_path = category_icons.get(cat_name.to_lower(), "res://assets/icons/HUDTop/house.svg")
 # 		btn.icon = load(icon_path)
 
-# 		btn.text = "" # Text weg, Fokus auf Icon
-# 		btn.tooltip_text = "Kategorie: " + cat_name.capitalize()
 
-# 		# Gold-Style wie gehabt
-# 		var style: StyleBoxFlat = btn.get_theme_stylebox("normal").duplicate() as StyleBoxFlat
-# 		if style:
-# 			style.bg_color = Color("#694f06")
-# 			style.border_color = Color("#e3ae08")
-# 			btn.add_theme_stylebox_override("normal", style)
-# 			btn.add_theme_stylebox_override("hover", style)
-# 			btn.add_theme_stylebox_override("pressed", style)
-# 			btn.add_theme_stylebox_override("focus", style)
-
-# 		btn.pressed.connect(func(): _show_category(cat_name))
 
 
 # =============================================================================

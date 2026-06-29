@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c62pp6vo8r7ld" path="res://scenes/manager_select/ManagerSelect.gd" id="1_mgsel"]
 [ext_resource type="Texture2D" uid="uid://dq7o8pdrqma4" path="res://assets/icons/trash.svg" id="2_trash"]
-[ext_resource type="PackedScene" uid="uid://confirmmodal" path="res://scenes/shared/ConfirmModal.tscn" id="3_confirmmodal"]
+[ext_resource type="PackedScene" path="res://scenes/shared/ConfirmModal.tscn" id="3_confirmmodal"]
 [ext_resource type="FontFile" uid="uid://bs3xl562plyi2" path="res://assets/fonts/Jersey25-Regular.ttf" id="3_kdldv"]
 [ext_resource type="PackedScene" uid="uid://cgjw8nvpmbcqm" path="res://scenes/character/CharacterDisplay.tscn" id="4_chardisplay"]
 [ext_resource type="StyleBox" uid="uid://cg2q7w0wqska8" path="res://assets/UI/modal_panel_glow.tres" id="13_modal"]

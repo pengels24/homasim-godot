@@ -88,4 +88,4 @@ func debug_complete_room_clean(room: Node2D) -> void:
 		if task.type == "clean_room" and task.target == room:
 			complete_task(task.id)
 			return
-	push_warning("[TaskManager] Warnung: Kein Clean-Ticket für diesen Raum gefunden!")
+# 	push_warning("[TaskManager] Warnung: Kein Clean-Ticket für diesen Raum gefunden!")

@@ -25,7 +25,7 @@ func _on_node_added(node: Node) -> void:
 
 func _load_config() -> void:
 	if not FileAccess.file_exists(CONFIG_PATH):
-		push_warning("SoundManager: Config not found at %s" % CONFIG_PATH)
+# 		push_warning("SoundManager: Config not found at %s" % CONFIG_PATH)
 		return
 		
 	var file = FileAccess.open(CONFIG_PATH, FileAccess.READ)
@@ -40,7 +40,7 @@ func _load_config() -> void:
 				if stream:
 					_sounds[key] = stream
 			else:
-				push_warning("SoundManager: Sound file missing -> %s" % path)
+# 				push_warning("SoundManager: Sound file missing -> %s" % path)
 
 func _init_pool() -> void:
 	for i in range(POOL_SIZE):

@@ -25,6 +25,17 @@ echo ==============================================
 
 echo.
 echo ==============================================
+echo  Pushe Linux-Build...
+echo ==============================================
+"%BUTLER_PATH%" push builds\linux %TARGET%:linux
+
+echo.
+echo ==============================================
+echo  Pushe Mac-Build...
+echo ==============================================
+"%BUTLER_PATH%" push builds\mac %TARGET%:mac
+echo.
+echo ==============================================
 echo  Deployment abgeschlossen!
 echo ==============================================
 pause

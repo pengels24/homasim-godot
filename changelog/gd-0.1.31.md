@@ -21,3 +21,5 @@ Datum: 2026-06-29
 - Einrichtung der `export_presets.cfg` mit eigenem Windows `.ico` Logo für den Standalone-Build.
 - Entwicklung eines automatischen Deployment-Skripts (`deploy.bat`) zur Veröffentlichung der Builds via itch.io Butler.
 - Ausschluss der riesigen Windows-Build-Dateien (`.exe`/`.pck`) in der `.gitignore` zur Beachtung des GitHub-Limits.
+- Erweiterung des Deployment-Skripts und der `.gitignore` für automatische macOS- und Linux-Releases via itch.io.
+- Konfiguration der macOS-Export-Vorgaben in der `export_presets.cfg` (Aktivierung der ETC2/ASTC-Texturkompression für Apple Silicon und Fix des Bundle-Identifiers).

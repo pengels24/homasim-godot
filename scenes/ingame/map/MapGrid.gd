@@ -176,27 +176,29 @@ func center_on_entry(entry_plot: Vector2i) -> void:
 
 
 # =============================================================================
-func is_placement_valid(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
-		room_w: int, room_h: int, door_rot: int, door_off: int) -> bool:
+func get_placement_error(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
+		room_w: int, room_h: int, door_rot: int, door_off: int) -> String:
 
 	if tile_x < 0 or tile_y < 0 or tile_x + room_w > PARCEL_SZ or tile_y + room_h > PARCEL_SZ:
-		return false
+		return "build.error.out_of_bounds" # "Außerhalb der Parzelle"
+		
 	var gx := parcel_x * PARCEL_SZ + tile_x
 	var gy := parcel_y * PARCEL_SZ + tile_y
 
 	if not _occ_free_for_room(gx, gy, room_w, room_h):
-		return false
+		return "build.error.blocked" # "Bauplatz blockiert"
 
 	var exit := _exit_global(parcel_x, parcel_y, tile_x, tile_y, room_w, room_h, door_rot, door_off)
 	if not _occ_exit_free(exit.x, exit.y):
-		return false
+		return "build.error.door_blocked" # "Tür verdeckt / blockiert"
+		
 	if _exit_outside_parcel(parcel_x, parcel_y, exit, door_rot):
-		return false
+		return "build.error.door_out_of_bounds" # "Tür zeigt ins Nichts"
 
 	# --- NEU: Reachability Check (Erreichbarkeits-Prüfung) ---
 	# Wenn es noch keine Zimmer gibt, gibt es auch nichts einzusperren
 	if active_rooms.is_empty():
-		return true
+		return ""
 
 	# 1. SIMULATION: Raum auf dem Pathfinding-Grid blockieren
 	# (Wir blockieren nur den Raumkörper, die Tür als Flur-Tile bleibt durchgängig!)
@@ -217,7 +219,7 @@ func is_placement_valid(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 	var lobby_tile := Vector2i(start_x, start_y)
 
 	# 2. PRÜFUNG: Teste alle aktiven Zimmer
-	var is_valid := true
+	var error_msg := ""
 	for room: Node2D in active_rooms:
 		# Ignoriere Zimmer, die gerade abgerissen werden oder ungültig sind
 		if not is_instance_valid(room):
@@ -236,20 +238,26 @@ func is_placement_valid(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 		# Check 1: Findet das bestehende Zimmer noch einen Weg zur Lobby?
 		var path := get_path_between_tiles(lobby_tile, room_door_tile)
 		if path.is_empty():
-			is_valid = false
+			error_msg = "build.error.path_blocked" # "Blockiert Wege anderer Zimmer"
 			break # Sobald ein Raum meckert, brechen wir ab
 
 	# Check 2: Findet der GHOST selbst einen Weg? (Damit man keine Inseln baut)
-	if is_valid:
+	if error_msg == "":
 		var ghost_path := get_path_between_tiles(lobby_tile, exit)
 		if ghost_path.is_empty():
-			is_valid = false
+			error_msg = "build.error.no_connection" # "Keine Verbindung zum Wegenetz"
 
 	# 3. AUFRÄUMEN: Simulation rückgängig machen
 	for sim_p in sim_coords:
 		astar.set_point_solid(sim_p, false)
 
-	return is_valid
+	return error_msg
+
+
+# =============================================================================
+func is_placement_valid(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
+		room_w: int, room_h: int, door_rot: int, door_off: int) -> bool:
+	return get_placement_error(parcel_x, parcel_y, tile_x, tile_y, room_w, room_h, door_rot, door_off) == ""
 
 
 # =============================================================================

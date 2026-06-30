@@ -355,7 +355,7 @@ func start_checkin(room: Node2D, spawn_pos: Vector2, delay: float) -> void:
 # =============================================================================
 func _walk_to_room(room: Node2D, finish_state: State) -> void:
 	if not is_instance_valid(room):
-		_decide_next_action()
+		_action_timer = 5.0
 		return
 		
 	var start_tile = _get_current_tile()
@@ -393,8 +393,8 @@ func _walk_to_poi(poi_id: String) -> void:
 		var poi_def = _get_poi_def(poi_id)
 		var income: int = poi_def.get("visit_income", 0)
 		if income > 0 and _guest_member.spending_budget < income:
-			# Kein Geld mehr für diesen POI – andere Aktion wählen
-			_decide_next_action()
+			# Kein Geld mehr für diesen POI – kurz warten und dann neu entscheiden
+			_action_timer = randf_range(5.0, 15.0)
 			return
 	
 	var exit_tile: Vector2i
@@ -412,7 +412,7 @@ func _walk_to_poi(poi_id: String) -> void:
 		
 		if not is_instance_valid(poi_room):
 # 			push_warning("[GuestActor] POI '%s' nicht gefunden!" % poi_id)
-			_decide_next_action()
+			_action_timer = 5.0
 			return
 			
 		exit_tile = poi_room.get_target_tile(_map_grid)
@@ -436,7 +436,7 @@ func _walk_to_poi(poi_id: String) -> void:
 	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
 	if path_tiles.is_empty():
 # 		push_warning("[GuestActor] Pfad zu POI '%s' nicht gefunden!" % poi_id)
-		_decide_next_action()
+		_action_timer = 5.0
 		return
 	
 	_change_state(State.WALKING)
@@ -560,5 +560,3 @@ func _get_room_exit_tile(room: Node2D) -> Vector2i:
 	var px: int = int(room.get_parent().name.split("_")[1])
 	var py: int = int(room.get_parent().name.split("_")[2])
 	return _map_grid._exit_global(px, py, tx, ty, sz.x, sz.y, rot, off)
-
-

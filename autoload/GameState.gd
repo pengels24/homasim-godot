@@ -39,6 +39,7 @@ signal sig_hotel_day_changed(day_number: int)
 signal sig_hotel_time_changed(time_string: String)
 
 signal sig_hotel_level_up(new_level: int)
+signal sig_techdemo_completed()
 
 # interaktion
 @warning_ignore("unused_signal")
@@ -73,6 +74,7 @@ var active_profile:    Dictionary = {}   # Aktives Manager-Profil
 var snap_to_grid:      bool       = true  # Tile-Snap im Baumodus (Settings-Toggle)
 var open_dashboard_next: bool     = false # Flag um Dashboard aus MainMenu direkt zu öffnen
 
+var _demo_end_countdown: int = -1 # <--- NEU: Countdown für das TechDemo-Ende
 
 # =============================================================================
 func _ready() -> void:
@@ -82,6 +84,18 @@ func _ready() -> void:
 	load_daily_schedule_config()
 	# Das macht diesen Autoload immun gegen die Godot-Pause!
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	
+	if TimeManager:
+		TimeManager.sig_minute_passed.connect(_on_minute_passed)
+
+
+# =============================================================================
+func _on_minute_passed(_total_minutes: int) -> void:
+	if _demo_end_countdown > 0:
+		_demo_end_countdown -= 1
+		if _demo_end_countdown <= 0:
+			_demo_end_countdown = -1
+			sig_techdemo_completed.emit()
 
 
 # =============================================================================
@@ -414,6 +428,10 @@ func add_exp(amount: int, _source: String = "Unbekannt") -> void:
 
 	# Prüfen, ob ein Level-Up stattgefunden hat (kann auch mehrfach sein)
 	while current_exp >= exp_max:
+		if current_level >= 5:
+			current_exp = exp_max # Cap at 5
+			break
+
 		current_exp -= exp_max
 		current_level += 1
 		exp_max = get_xp_needed_for_level(current_level)
@@ -425,6 +443,14 @@ func add_exp(amount: int, _source: String = "Unbekannt") -> void:
 
 		# Signal für das UI (feuert das levelup-modal)
 		sig_hotel_level_up.emit(current_level)
+		
+		# TechDemo-Ende-Logik bei Level 5
+		if current_level >= 5:
+			current_exp = exp_max
+			selected_hotel["exp"] = exp_max
+			if _demo_end_countdown < 0:
+				_demo_end_countdown = 15 # 15 Ingame-Minuten Verzögerung
+			break
 
 	# Update der Standard-EXP-Anzeige und des Levels im HUD
 	selected_hotel["exp"] = current_exp

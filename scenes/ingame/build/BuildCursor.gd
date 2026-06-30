@@ -21,6 +21,8 @@ var _room_w:          int = 2
 var _room_h:          int = 2
 var _valid_combos:    Array[Vector2i] = []
 var _room_rotation:   int = 0
+var _error_msg:       String = ""
+var _tooltip_ui:      Node
 
 
 # =============================================================================
@@ -36,6 +38,11 @@ func activate(map_grid: Node2D, room_scene: PackedScene) -> void:
 		sig_cancelled.emit()
 		queue_free()
 		return
+
+	var tooltip_scene = load("res://scenes/shared/BuildTooltip.tscn") as PackedScene
+	if tooltip_scene:
+		_tooltip_ui = tooltip_scene.instantiate()
+		add_child(_tooltip_ui)
 
 	var mouse_parcel: Vector2i = _map_grid.world_to_grid(get_global_mouse_position())
 	if _map_grid.is_parcel_owned(mouse_parcel.x, mouse_parcel.y):
@@ -77,10 +84,11 @@ func _refresh_ghost() -> void:
 	_update_valid_combos()
 	_snap_to_valid_combo()
 	_ghost.configure({"door_rotation": _door_rotation, "door_offset": _door_offset})
-	_is_valid = _map_grid.is_placement_valid(
+	_error_msg = _map_grid.get_placement_error(
 		_current_parcel.x, _current_parcel.y,
 		_tile_pos.x, _tile_pos.y,
 		_room_w, _room_h, _door_rotation, _door_offset)
+	_is_valid = (_error_msg == "")
 	_update_modulate()
 
 
@@ -90,6 +98,12 @@ func _update_modulate() -> void:
 		return
 
 	_ghost.modulate = Color(0.35, 1.0, 0.45, 0.70) if _is_valid else Color(1.0, 0.35, 0.35, 0.65)
+	
+	if is_instance_valid(_tooltip_ui):
+		if _is_valid:
+			_tooltip_ui.set_error("")
+		else:
+			_tooltip_ui.set_error(_error_msg)
 
 # ── Prozess – Ghost folgt Maus ────────────────────────────────────────────────
 
@@ -129,10 +143,11 @@ func _process(_delta: float) -> void:
 
 	if new_tile != _tile_pos:
 		_tile_pos = new_tile
-		_is_valid = _map_grid.is_placement_valid(
+		_error_msg = _map_grid.get_placement_error(
 			_current_parcel.x, _current_parcel.y,
 			_tile_pos.x, _tile_pos.y,
 			_room_w, _room_h, _door_rotation, _door_offset)
+		_is_valid = (_error_msg == "")
 		_update_modulate()
 
 # ── Input ─────────────────────────────────────────────────────────────────────

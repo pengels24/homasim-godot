@@ -86,7 +86,7 @@ res://
 ├── autoload/       # Singletons: Api, GameState
 ├── scenes/         # Feature-basiert: main_menu/, login/, dashboard/, ingame/
 ├── assets/         # fonts/, images/
-├── translations/   # de.csv + kompilierte .translation Dateien
+├── translations/   # language.csv + kompilierte .translation Dateien
 ├── wiki/           # aktuelle konzepte und grundlageen
 └── _dev/           # Arbeitsdateien, Docs, nicht im Build
 ```

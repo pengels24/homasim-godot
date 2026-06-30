@@ -1049,3 +1049,10 @@ Zeigt die aktuelle Tageszeit an.",""
 "sim.site.mi.desc","Stern-Fortschritt",""
 "tutorial.sim_browser.title","SimBrowser",""
 "tutorial.sim_browser.desc","Dein persÃ¶nliches In-Game Web-Portal. Hier findest du Bewertungen, Statistiken und Lieferanten. Tipp: Achte auf versteckte URLs!",""
+b u i l d . e r r o r . o u t _ o f _ b o u n d s " A u ß e r h a l b   d e r   P a r z e l l e "  
+ b u i l d . e r r o r . b l o c k e d " B a u p l a t z   b l o c k i e r t "  
+ b u i l d . e r r o r . d o o r _ b l o c k e d " T ü r   b l o c k i e r t   /   v e r d e c k t "  
+ b u i l d . e r r o r . d o o r _ o u t _ o f _ b o u n d s " T ü r   z e i g t   i n s   N i c h t s "  
+ b u i l d . e r r o r . p a t h _ b l o c k e d " B l o c k i e r t   F l u r   e i n e s   a n d e r e n   R a u m s "  
+ b u i l d . e r r o r . n o _ c o n n e c t i o n " M u s s   a n   d a s   W e g e n e t z   g r e n z e n "  
+ 

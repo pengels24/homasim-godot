@@ -107,6 +107,9 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	# Initial einmal synchronisieren (wichtig für Spielstart & Savegame Load!)
 	_sync_guest_ui()
 
+	if not GameState.sig_techdemo_completed.is_connected(_on_techdemo_completed):
+		GameState.sig_techdemo_completed.connect(_on_techdemo_completed)
+
 
 # ── Zeit-Steuerung ────────────────────────────────────────────────────────────
 
@@ -144,6 +147,14 @@ func cleanup_current_states() -> void:
 	InputHandler.current_mode = InputHandler.InputMode.NORMAL
 	if is_instance_valid(_bottom_bar):
 		_bottom_bar.sync_button_state("")
+
+
+# =============================================================================
+func _on_techdemo_completed() -> void:
+	cleanup_current_states()
+	_pause_time_for_ui()
+	_standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentTechDemoEnd.tscn")
+	_standard_modal.open(GameState.T("ui.modal.techdemo_end.title", "TechDemo Abgeschlossen"))
 
 
 # =============================================================================

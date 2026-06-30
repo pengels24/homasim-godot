@@ -929,3 +929,10 @@ Tip: Watch out for hidden URLs!"
 "tutorial.finances.desc","Dies ist die Ãœbersicht deiner Einnahmen und Ausgaben.
 Du kannst alle EintrÃ¤ge sortieren und filtern. Dies verschafft dir den Ãœberblick Ã¼ber deine finanzielle Situation.","This is the overview of your income and expenses.
 You can sort and filter all entries. This gives you a clear overview of your financial situation."
+" b u i l d . e r r o r . o u t _ o f _ b o u n d s " , " A u ß e r h a l b   d e r   P a r z e l l e " , " O u t   o f   b o u n d s "  
+ " b u i l d . e r r o r . b l o c k e d " , " B a u p l a t z   b l o c k i e r t " , " C o n s t r u c t i o n   s i t e   b l o c k e d "  
+ " b u i l d . e r r o r . d o o r _ b l o c k e d " , " T ü r   b l o c k i e r t   /   v e r d e c k t " , " D o o r   b l o c k e d   /   o b s t r u c t e d "  
+ " b u i l d . e r r o r . d o o r _ o u t _ o f _ b o u n d s " , " T ü r   z e i g t   i n s   N i c h t s " , " D o o r   f a c e s   n o w h e r e "  
+ " b u i l d . e r r o r . p a t h _ b l o c k e d " , " B l o c k i e r t   F l u r   e i n e s   a n d e r e n   R a u m s " , " B l o c k s   h a l l w a y   o f   a n o t h e r   r o o m "  
+ " b u i l d . e r r o r . n o _ c o n n e c t i o n " , " M u s s   a n   d a s   W e g e n e t z   g r e n z e n " , " M u s t   c o n n e c t   t o   h a l l w a y   n e t w o r k "  
+ 

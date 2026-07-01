@@ -120,7 +120,7 @@ func _run_step() -> void:
 			if bottom: bottom.build_menu.disabled = false
 			_target_room = "bed_standard"
 			_target_parcel = Vector2i(2, 0)
-			_target_tile = Vector2i(6, 9)
+			_target_tile = Vector2i(9, 5)
 			_target_rot = 0
 			_pulse_room_button("bed_standard")
 			GameState.sig_room_built.connect(_on_room_built)
@@ -262,8 +262,9 @@ func _on_room_built(room_id: String) -> void:
 				bp.queue_free()
 			_stop_room_button_pulse(_target_room)
 			
-			if get_parent() and get_parent().get("_ui_mgr"):
-				get_parent()._ui_mgr.close_build_menu()
+			if step_index in [6, 11]:
+				if get_parent() and get_parent().get("_ui_mgr"):
+					get_parent()._ui_mgr.close_build_menu()
 			
 			advance_step()
 

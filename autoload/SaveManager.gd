@@ -131,7 +131,7 @@ func create_tutorial_hotel() -> int:
 		"day": 1,
 		"money": 50000,
 		"game_time": 360,
-		"plots": _init_plots(5, 5),
+		"plots": _init_tutorial_plots(),
 		"auto_count": 0,
 		"level": 1,
 		"stars": 0,
@@ -156,6 +156,16 @@ func create_tutorial_hotel() -> int:
 	_hotels.append(hotel)
 	_save_hotel(hotel)
 	return GameState.TUTORIAL_HOTEL_ID
+
+
+# =============================================================================
+func _init_tutorial_plots() -> Array:
+	var plots = _init_plots(5, 5)
+	for p in plots:
+		if p["x"] == 2 and p["y"] == 0:
+			p["is_built"] = true
+			p["entrance_dir"] = "top"
+	return plots
 
 
 # =============================================================================

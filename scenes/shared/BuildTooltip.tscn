@@ -25,5 +25,5 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_1")
 [node name="Label" type="Label" parent="PanelContainer"]
 layout_mode = 2
 	theme_override_colors/font_color = Color(0.9176, 0.702, 0.0314, 1)
-	theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 20
 	text = "Error Text"

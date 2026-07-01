@@ -42,6 +42,8 @@ const FADE_DURATION  := 1.2
 @onready var _dashboard_modal:  Control      = $DashboardModal
 @onready var _disclaimer_modal: StandardModal = $DisclaimerModal
 
+var _confirm_modal: ConfirmModal
+
 var _current_bg := 0
 var _slide_timer := 0.0
 
@@ -58,6 +60,10 @@ func _ready() -> void:
 	btn_settings.pressed.connect(_on_settings_pressed)
 	_settings_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentSettings.tscn")
 	_settings_modal.closed.connect(_on_settings_closed)
+	
+	_confirm_modal = preload("res://scenes/shared/ConfirmModal.tscn").instantiate()
+	add_child(_confirm_modal)
+	
 	btn_manager.pressed.connect(_on_manager_pressed)
 	btn_tutorial.pressed.connect(_on_tutorial_pressed)
 	_manager_modal.closed.connect(_on_manager_modal_closed)
@@ -95,7 +101,7 @@ func _load_assets() -> void:
 	login_button.text  = GameState.T("login.btn.submit")
 	btn_login.text     = GameState.T("menu.btn.account_bind")
 	btn_login.disabled = true
-	btn_tutorial.disabled = true
+	btn_tutorial.disabled = false # Tutorial freigeschaltet
 	var vf := FileAccess.open("res://version.txt", FileAccess.READ)
 	if vf:
 		_version_lbl.text = "v" + vf.get_line().strip_edges().trim_prefix("gd-")
@@ -241,7 +247,40 @@ func _on_manager_modal_closed() -> void:
 
 # =============================================================================
 func _on_tutorial_pressed() -> void:
-	pass # TODO: Tutorial-Szene (ANG-xxx)
+	if SaveManager.get_hotel(GameState.TUTORIAL_HOTEL_ID).is_empty() and not FileAccess.file_exists("user://hotels/hotel_%d.cfg" % GameState.TUTORIAL_HOTEL_ID):
+		_start_tutorial_clean()
+	else:
+		_confirm_modal.ask(
+			"Tutorial fortsetzen?",
+			"Du hast das Tutorial bereits begonnen. Möchtest du an der letzten Stelle fortsetzen oder komplett neu starten?",
+			"Fortsetzen",
+			"Neu starten",
+			"",
+			false
+		)
+		if not _confirm_modal.confirmed.is_connected(_resume_tutorial):
+			_confirm_modal.confirmed.connect(_resume_tutorial)
+		if not _confirm_modal.cancelled.is_connected(_start_tutorial_clean):
+			_confirm_modal.cancelled.connect(_start_tutorial_clean)
+
+func _resume_tutorial() -> void:
+	_disconnect_confirm()
+	GameState.is_tutorial_mode = true
+	GameState.active_hotel_id = GameState.TUTORIAL_HOTEL_ID
+	get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
+
+func _start_tutorial_clean() -> void:
+	_disconnect_confirm()
+	SaveManager.create_tutorial_hotel()
+	GameState.is_tutorial_mode = true
+	GameState.active_hotel_id = GameState.TUTORIAL_HOTEL_ID
+	get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
+
+func _disconnect_confirm() -> void:
+	if _confirm_modal.confirmed.is_connected(_resume_tutorial):
+		_confirm_modal.confirmed.disconnect(_resume_tutorial)
+	if _confirm_modal.cancelled.is_connected(_start_tutorial_clean):
+		_confirm_modal.cancelled.disconnect(_start_tutorial_clean)
 
 
 # =============================================================================

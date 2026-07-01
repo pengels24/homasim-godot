@@ -74,6 +74,9 @@ var active_profile:    Dictionary = {}   # Aktives Manager-Profil
 var snap_to_grid:      bool       = true  # Tile-Snap im Baumodus (Settings-Toggle)
 var open_dashboard_next: bool     = false # Flag um Dashboard aus MainMenu direkt zu öffnen
 
+var is_tutorial_mode:  bool       = false # Flag für das interaktive Tutorial
+const TUTORIAL_HOTEL_ID: int      = -2    # Dummy-ID für das Tutorial-Hotel
+
 var _demo_end_countdown: int = -1 # <--- NEU: Countdown für das TechDemo-Ende
 
 # =============================================================================

@@ -936,3 +936,4 @@ You can sort and filter all entries. This gives you a clear overview of your fin
  " b u i l d . e r r o r . p a t h _ b l o c k e d " , " B l o c k i e r t   F l u r   e i n e s   a n d e r e n   R a u m s " , " B l o c k s   h a l l w a y   o f   a n o t h e r   r o o m "  
  " b u i l d . e r r o r . n o _ c o n n e c t i o n " , " M u s s   a n   d a s   W e g e n e t z   g r e n z e n " , " M u s t   c o n n e c t   t o   h a l l w a y   n e t w o r k "  
  
+"build.error.tutorial_target","Muss richtig platziert und rotiert werden","Must be placed and rotated correctly"

@@ -190,6 +190,7 @@ func _show_category(cat_name: String) -> void:
 
 		var btn: Button = new_instance.get_node("%MenuButton") as Button
 		btn.icon = load(def.get("icon", ""))
+		btn.set_meta("room_id", def.get("id", ""))
 		_room_btns.append(btn)
 
 		var req_level: int = def.get("req_level", 1)
@@ -255,3 +256,9 @@ func _show_category(cat_name: String) -> void:
 	# 		# Raum ist noch gesperrt
 	# 		btn.disabled = true
 	# 		btn.tooltip_text = GameState.T("tt.build.room.locked", def.get("name", "Raum"), req_level)
+
+func get_room_button(room_id: String) -> Button:
+	for btn in _room_btns:
+		if btn.get_meta("room_id") == room_id:
+			return btn
+	return null

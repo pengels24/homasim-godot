@@ -153,7 +153,9 @@ func cleanup_current_states() -> void:
 func _on_techdemo_completed() -> void:
 	cleanup_current_states()
 	_pause_time_for_ui()
-	_standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentTechDemoEnd.tscn")
+	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentTechDemoEnd.tscn")
+	if content and content.has_signal("sig_close_requested"):
+		content.sig_close_requested.connect(_standard_modal.close)
 	_standard_modal.open(GameState.T("ui.modal.techdemo_end.title", "TechDemo Abgeschlossen"))
 
 

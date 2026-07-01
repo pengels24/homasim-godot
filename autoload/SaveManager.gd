@@ -111,11 +111,51 @@ func create_hotel(profile_id: int, hotel_name: String, cols: int = 5, rows: int 
 		"fp": 0,
 		"transactions": [],
 		"unlocked_techs": [],
+		"tutorial_step": 1,
 	}
 	_hotels.append(hotel)
 	_save_profiles()
 	_save_hotel(hotel)
 	return new_id
+
+
+# =============================================================================
+func create_tutorial_hotel() -> int:
+	delete_hotel(GameState.TUTORIAL_HOTEL_ID) # Lösche evtl. alten Stand
+	var hotel := {
+		"id": GameState.TUTORIAL_HOTEL_ID,
+		"profile_id": -1,
+		"name": "Tutorial Hotel",
+		"grid_cols": 5,
+		"grid_rows": 5,
+		"day": 1,
+		"money": 50000,
+		"game_time": 360,
+		"plots": _init_plots(5, 5),
+		"auto_count": 0,
+		"level": 1,
+		"stars": 0,
+		"guests_active": 0,
+		"guests_checkin": 0,
+		"guests_checkout": 0,
+		"exp": 0,
+		"exp_max": GameState.get_xp_needed_for_level(1),
+		"rep": 500,
+		"rep_max": 1000,
+		"fp": 0,
+		"guest_data": {},
+		"transactions": [],
+		"unlocked_techs": [],
+		"techtree": {},
+		"tutorials": [],
+		"quests": {},
+		"staff": {},
+		"built_room_types": [],
+		"tutorial_step": 1,
+	}
+	_hotels.append(hotel)
+	_save_hotel(hotel)
+	return GameState.TUTORIAL_HOTEL_ID
 
 
 # =============================================================================
@@ -434,6 +474,7 @@ func _load_hotel_file(filename: String) -> void:
 		"quests": cfg.get_value("hotel", "quests", {}),
 		"staff": cfg.get_value("hotel", "staff", {}),
 		"built_room_types": cfg.get_value("hotel", "built_room_types", []),
+		"tutorial_step": cfg.get_value("hotel", "tutorial_step", 1),
 	}
 
 	# Alle dynamischen Zimmer-Zähler aus der Config lesen und in 'h' einfügen
@@ -453,7 +494,7 @@ func _save_hotel(hotel: Dictionary) -> void:
 	var keys_to_save = [
 		"profile_id", "name", "grid_cols", "grid_rows", "day", "money", "game_time", "plots", "auto_count", 
 		"level", "stars", "guests_active", "guests_checkin", "guests_checkout", "exp", "exp_max", "rep", "rep_max", "fp", 
-		"guest_data", "transactions", "unlocked_techs", "techtree", "tutorials", "quests", "staff", "built_room_types"
+		"guest_data", "transactions", "unlocked_techs", "techtree", "tutorials", "quests", "staff", "built_room_types", "tutorial_step"
 	]
 	for key in keys_to_save:
 		cfg.set_value("hotel", key, hotel.get(key))
@@ -590,6 +631,7 @@ func _take_snapshot(hotel: Dictionary, snap_name: String) -> Dictionary:
 		"quests": hotel.get("quests", {}).duplicate(true),
 		"staff": hotel.get("staff", {}).duplicate(true),
 		"built_room_types": hotel.get("built_room_types", []).duplicate(true),
+		"tutorial_step": hotel.get("tutorial_step", 1),
 	}
 
 	# NEU: Zähler in den Snapshot kopieren
@@ -629,6 +671,7 @@ func _apply_snapshot(hotel: Dictionary, snap: Dictionary) -> void:
 	hotel["quests"] = snap.get("quests", {}).duplicate(true)
 	hotel["staff"] = snap.get("staff", {}).duplicate(true)
 	hotel["built_room_types"] = snap.get("built_room_types", []).duplicate(true)
+	hotel["tutorial_step"] = snap.get("tutorial_step", 1)
 
 	# Zähler aus dem Snapshot wiederherstellen
 	for key in snap:

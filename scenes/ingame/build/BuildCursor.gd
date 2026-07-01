@@ -88,8 +88,16 @@ func _refresh_ghost() -> void:
 		_current_parcel.x, _current_parcel.y,
 		_tile_pos.x, _tile_pos.y,
 		_room_w, _room_h, _door_rotation, _door_offset)
+	
+	if GameState.is_tutorial_mode:
+		var tut = get_tree().current_scene.get_node_or_null("TutorialScenarioManager")
+		if tut and tut.step_index in [5, 6, 11]:
+			if _current_parcel.x != tut._target_parcel.x or _current_parcel.y != tut._target_parcel.y or _tile_pos.x != tut._target_tile.x or _tile_pos.y != tut._target_tile.y or _room_rotation != tut._target_rot:
+				_error_msg = "build.error.tutorial_target" # "Muss auf der blauen Markierung platziert werden!"
+	
 	_is_valid = (_error_msg == "")
 	_update_modulate()
+
 
 
 # =============================================================================
@@ -147,8 +155,16 @@ func _process(_delta: float) -> void:
 			_current_parcel.x, _current_parcel.y,
 			_tile_pos.x, _tile_pos.y,
 			_room_w, _room_h, _door_rotation, _door_offset)
+			
+		if GameState.is_tutorial_mode:
+			var tut = get_tree().current_scene.get_node_or_null("TutorialScenarioManager")
+			if tut and tut.step_index in [5, 6, 11]:
+				if _current_parcel.x != tut._target_parcel.x or _current_parcel.y != tut._target_parcel.y or _tile_pos.x != tut._target_tile.x or _tile_pos.y != tut._target_tile.y or _room_rotation != tut._target_rot:
+					_error_msg = "build.error.tutorial_target"
+
 		_is_valid = (_error_msg == "")
 		_update_modulate()
+
 
 # ── Input ─────────────────────────────────────────────────────────────────────
 

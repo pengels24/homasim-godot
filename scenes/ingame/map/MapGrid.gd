@@ -339,10 +339,15 @@ func place_room(parcel_x: int, parcel_y: int, room_scene: PackedScene, hotel_id:
 		_configure_walls()
 	_update_all_floor_neighbors()
 
-	print("--- RAUM GEBAUT ---")
-	print("Tür-Rotation: ", door_rot)
-	print("Tür-Offset: ", door_off)
-	print("Raumgröße: ", sz.x, "x", sz.y)
+	_update_all_floor_neighbors()
+
+	print("--- TUTORIAL BLUEPRINT DATEN ---")
+	print("Room ID: ", room_scene.resource_path.get_file().replace(".tscn", ""))
+	print("Parcel X/Y: ", parcel_x, ", ", parcel_y)
+	print("Tile X/Y: ", tile_x, ", ", tile_y)
+	print("Tür-Rotation: ", door_rot, " | Tür-Offset: ", door_off, " | Raum-Rotation: ", room_rot)
+	print("--------------------------------")
+
 
 
 # =============================================================================
@@ -858,21 +863,3 @@ func get_room_exit_tile(room: Node2D) -> Vector2i:
 	var px: int = int(room.get_parent().name.split("_")[1])
 	var py: int = int(room.get_parent().name.split("_")[2])
 	return _exit_global(px, py, tile_x, tile_y, sz.x, sz.y, door_rot, door_off)
-
-
-
- #   = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
- f u n c   s a v e _ a l l _ r o o m s _ t o _ d b ( h o t e l _ i d :   i n t )   - >   v o i d : 
- 	 f o r   r o w _ i d x   i n   r a n g e ( _ g r i d . s i z e ( ) ) : 
- 	 	 v a r   r o w   =   _ g r i d [ r o w _ i d x ] 
- 	 	 f o r   c o l _ i d x   i n   r a n g e ( r o w . s i z e ( ) ) : 
- 	 	 	 v a r   p a r c e l :   N o d e 2 D   =   r o w [ c o l _ i d x ] 
- 	 	 	 i f   n o t   p a r c e l . v i s i b l e :   c o n t i n u e 
- 	 	 	 f o r   c h i l d :   N o d e   i n   p a r c e l . g e t _ c h i l d r e n ( ) : 
- 	 	 	 	 i f   c h i l d . h a s _ m e t h o d ( \ 
- 
- t o _ d i c t \ ) : 
- 	 	 	 	 	 S a v e M a n a g e r . s a v e _ r o o m _ t o _ p l o t ( h o t e l _ i d ,   c o l _ i d x ,   r o w _ i d x ,   c h i l d . c a l l ( \ t o _ d i c t \ ) ) 
- 
- 
- 

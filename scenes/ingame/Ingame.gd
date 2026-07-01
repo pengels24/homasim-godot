@@ -43,7 +43,13 @@ func _ready() -> void:
 	# DEBUG-Verbindung
 	InputHandler.sig_debug_action_requested.connect(_on_debug_action_requested)
 
-	_do_fade_in()
+	if GameState.is_tutorial_mode:
+		var tut_mgr = TutorialScenarioManager.new()
+		tut_mgr.name = "TutorialScenarioManager"
+		add_child(tut_mgr)
+		tut_mgr.start_tutorial(hud_canvas, map_grid)
+	else:
+		_do_fade_in()
 
 # ── Map-Start ─────────────────────────────────────────────────────────────────
 
@@ -66,7 +72,10 @@ func _start_map() -> void:
 	var built: Array = SaveManager.get_built_plots(_hotel.get("id", -1))
 
 	if built.is_empty():
-		built = [{ "x": 1, "y": 0, "is_built": true, "entrance_dir": "" }]
+		if GameState.is_tutorial_mode:
+			built = [{ "x": 2, "y": 0, "is_built": true, "entrance_dir": "top" }]
+		else:
+			built = [{ "x": 1, "y": 0, "is_built": true, "entrance_dir": "" }]
 
 	var entry     := Vector2i(built[0]["x"], built[0]["y"])
 	var enter_dir : String = built[0].get("entrance_dir", "")
@@ -79,6 +88,12 @@ func _start_map() -> void:
 
 # =============================================================================
 func _load_hotel() -> Dictionary:
+	if GameState.is_tutorial_mode:
+		var h = SaveManager.get_hotel(GameState.TUTORIAL_HOTEL_ID)
+		if not h.is_empty():
+			return h
+		return { "name": "Tutorial Hotel", "day": 1, "money": 50000.0, "id": GameState.TUTORIAL_HOTEL_ID }
+
 	if GameState.active_hotel_id >= 0:
 		var h := SaveManager.get_hotel(GameState.active_hotel_id)
 

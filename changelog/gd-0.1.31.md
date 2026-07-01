@@ -1,4 +1,4 @@
-# Changelog gd-0.1.31
+﻿# Changelog gd-0.1.31
 
 Datum: 2026-06-29
 
@@ -23,14 +23,3 @@ Datum: 2026-06-29
 - Ausschluss der riesigen Windows-Build-Dateien (`.exe`/`.pck`) in der `.gitignore` zur Beachtung des GitHub-Limits.
 - Erweiterung des Deployment-Skripts und der `.gitignore` für automatische macOS- und Linux-Releases via itch.io.
 - Konfiguration der macOS-Export-Vorgaben in der `export_presets.cfg` (Aktivierung der ETC2/ASTC-Texturkompression für Apple Silicon und Fix des Bundle-Identifiers).
-- **In-Game Tutorial (Neu):** Die interaktive Einführungs-Sequenz wurde massiv erweitert. Der Spieler lernt nun schrittweise die Kameraführung, das Bauen von Einzel- und Doppelzimmern, den Start der Zeit und das Check-in von Gästen an der Rezeption.
-- **Tutorial: Personal-Management:** Nach dem ersten Level-Up wird das Einstellen von Personal an der Personal-Agentur erklärt. (Schritte 21-25)
-- **Tutorial Abschluss-Fenster:** Ist das Tutorial abgeschlossen, wird der Spieler mit einem neuen Modal beglückwünscht und kann über einen Button sauber in das Hauptmenü zurückkehren (das Spiel wird dabei korrekt pausiert/fortgesetzt).
-- **Tutorial Texte:** Sämtliche 26 Schritte des Tutorials wurden in DE und EN übersetzt und vollständig in das zentrale Sprach-System (language.csv) integriert.
-
-## Bugfixes
-- Fix: Die fehlerhafte Anzeige von Sonderzeichen/Umlauten im Personal-Einstellungs-Popup (Arbeitsvertrag) wurde repariert, das Layout lädt jetzt sauberes UTF-8.
-- Fix: Wenn im Tutorial das Spiel neu geladen wird, erkennt das System nun sauber, ob Modals schon geöffnet sind und fängt asynchrone Fehler ab (Schritt 21).
-- Fix: Buttons im Hauptmenü waren nach Abschluss des Tutorials nicht anklickbar, da der Pause-Status des Engine-Trees nicht korrekt zurückgesetzt wurde. Dies ist nun behoben.
-- Fix: Bei Rückkehr aus dem Tutorial ins Hauptmenü wurde der Ingame-Status nicht korrekt zurückgesetzt, weshalb der Sprachen-Umschalter in den Settings gesperrt blieb.
-- Fix: Den veralteten "Tutorial abgeschlossen (Vorschau)" Toast am Ende des Tutorials entfernt.

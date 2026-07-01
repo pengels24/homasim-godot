@@ -23,6 +23,11 @@ var _target_rot: int = 2
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
+func _process(_delta: float) -> void:
+	if step_index in [7, 13]:
+		if InputHandler.current_mode != InputHandler.InputMode.BUILD:
+			advance_step()
+
 func start_tutorial(hud_ref: CanvasLayer, map_ref: Node2D) -> void:
 	is_active = true
 	hud = hud_ref
@@ -102,7 +107,7 @@ func _run_step() -> void:
 					bottom.sig_build_menu_toggled.connect(_on_build_opened)
 		5:
 			_target_parcel = Vector2i(2, 0)
-			_target_tile = Vector2i(9, 5)
+			_target_tile = Vector2i(8, 5)
 			_target_rot = 2
 			_target_room = "bed_standard"
 			_show_text("Wähle ein Einzelzimmer und platziere es. Nutze [R] zum Rotieren, bis es passt!", false)
@@ -126,23 +131,28 @@ func _run_step() -> void:
 			GameState.sig_room_built.connect(_on_room_built)
 			_draw_blueprint()
 		7:
+			_show_text("Super! Schließe nun das Baumenü (z.B. mit Rechtsklick oder ESC).", false)
+		8:
 			_slide_assistant(false)
 			_show_text("Die Rezeption hat, wie auch andere POI (Points of Interest), Öffnungszeiten. Sie öffnet um 7 Uhr und schließt um 22 Uhr.\nWährend dieser Zeit kommen neue Gäste an und bestehende Gäste nutzen diese POI für ihren Tagesablauf.", true)
-		8:
+		9:
 			_show_text("Starte nun die Zeit (oben rechts im Menü oder mit der Leertaste), um das Hotel zum Leben zu erwecken!", false)
+			if hud and "btn_ff" in hud:
+				hud.btn_ff.disabled = true
+			_pulse_play_button()
 			if not TimeManager.sig_speed_changed.is_connected(_on_time_resumed):
 				TimeManager.sig_speed_changed.connect(_on_time_resumed)
-		9:
+		10:
 			if TimeManager.get_hour() >= 7:
 				advance_step()
 			else:
 				_show_text("Warte nun, bis die Rezeption um 7 Uhr öffnet.", false)
 				if not TimeManager.sig_hour_passed.is_connected(_on_hour_passed):
 					TimeManager.sig_hour_passed.connect(_on_hour_passed)
-		10:
+		11:
 			_show_text("Um neue Räume und Funktionen freizuschalten, musst du das Level des Hotels erhöhen.\nHierfür benötigst du EXP. Diese bekommst du für den jeweils ersten Bau eines neuen Zimmertyps und für Ereignisse im Hotelbetrieb (Check-In, Check-Out, u.a.).", true)
 			_pulse_exp_bar()
-		11:
+		12:
 			_show_text("Baue nun, um noch einmal extra EXP zu bekommen, ein erstes Doppelzimmer.", false)
 			var bottom = _get_bottom_bar()
 			if bottom: bottom.build_menu.disabled = false
@@ -154,7 +164,9 @@ func _run_step() -> void:
 			_pulse_room_button("bed_double")
 			GameState.sig_room_built.connect(_on_room_built)
 			_draw_blueprint()
-		12:
+		13:
+			_show_text("Klasse! Schließe das Baumenü wieder.", false)
+		14:
 			_slide_assistant(false)
 			if TimeManager.get_hour() >= 8:
 				advance_step()
@@ -176,12 +188,15 @@ func _slide_assistant(to_right: bool) -> void:
 	tween.tween_property(assistant_ui, "position:x", target_x, 0.5).set_trans(Tween.TRANS_SINE)
 
 func _on_next_clicked() -> void:
-	if step_index in [1, 2, 3, 7, 10]:
+	if step_index in [1, 2, 3, 8, 11]:
 		advance_step()
 
 func advance_step() -> void:
 	step_index += 1
-	SaveManager.update_hotel(GameState.TUTORIAL_HOTEL_ID, {"tutorial_step": step_index})
+	SaveManager.update_hotel(GameState.TUTORIAL_HOTEL_ID, {
+		"tutorial_step": step_index,
+		"game_time": TimeManager.get_game_time()
+	})
 	if is_instance_valid(map) and map.has_method("save_all_rooms_to_db"):
 		map.save_all_rooms_to_db(GameState.TUTORIAL_HOTEL_ID)
 	_run_step()
@@ -227,9 +242,10 @@ func _on_build_opened() -> void:
 
 # --- STEP 5 & 6 & 11: Zimmer bauen ---
 func _draw_blueprint() -> void:
-	var old_bp = map.get_world_root().get_node_or_null("TutorialBlueprint")
-	if old_bp:
-		old_bp.queue_free()
+	for child in map.get_world_root().get_children():
+		if child.name.begins_with("TutorialBlueprint"):
+			child.name = child.name + "_deleted"
+			child.queue_free()
 
 	var scene_path = GameState.get_room_scene_path(_target_room)
 	if scene_path.is_empty():
@@ -258,32 +274,33 @@ func _draw_blueprint() -> void:
 	bp.z_index = 9
 
 func _on_room_built(room_id: String) -> void:
-	if step_index in [5, 6, 11]:
+	if step_index in [5, 6, 12]:
 		if room_id == _target_room:
 			GameState.sig_room_built.disconnect(_on_room_built)
-			var bp = map.get_world_root().get_node_or_null("TutorialBlueprint")
-			if bp:
-				bp.queue_free()
+			for child in map.get_world_root().get_children():
+				if child.name.begins_with("TutorialBlueprint"):
+					child.name = child.name + "_deleted"
+					child.queue_free()
 			_stop_room_button_pulse(_target_room)
-			
-			if step_index in [6, 11]:
-				if get_parent() and get_parent().get("_ui_mgr"):
-					get_parent()._ui_mgr.close_build_menu()
 			
 			advance_step()
 
-# --- STEP 8: Zeit starten ---
+# --- STEP 9: Zeit starten ---
 func _on_time_resumed(is_paused: bool, _speed: float) -> void:
-	if step_index == 8 and not is_paused:
+	if step_index == 9 and not is_paused:
 		TimeManager.sig_speed_changed.disconnect(_on_time_resumed)
+		_stop_play_button_pulse()
+		if hud and "btn_ff" in hud:
+			hud.btn_ff.disabled = false
 		advance_step()
 
-# --- STEP 9 & 12: Uhrzeit ---
+# --- STEP 10 & 14: Uhrzeit ---
 func _on_hour_passed(hour: int) -> void:
-	if step_index == 9 and hour >= 7:
+	if step_index == 10 and hour >= 7:
 		TimeManager.sig_hour_passed.disconnect(_on_hour_passed)
+		TimeManager.pause()
 		advance_step()
-	elif step_index == 12 and hour >= 8:
+	elif step_index == 14 and hour >= 8:
 		TimeManager.sig_hour_passed.disconnect(_on_hour_passed)
 		advance_step()
 
@@ -294,6 +311,40 @@ func _pulse_exp_bar() -> void:
 		var tween = create_tween().set_loops(4)
 		tween.tween_property(exp_bar, "modulate", Color(1.5, 1.5, 1.5, 1.0), 0.5)
 		tween.tween_property(exp_bar, "modulate", Color(1, 1, 1, 1), 0.5)
+
+func _pulse_play_button() -> void:
+	if not hud or not "btn_play" in hud: return
+	var btn: Button = hud.btn_play
+	if not btn: return
+	
+	var gold_style = load("res://assets/UI/menu_button_golden_pressed.tres")
+	
+	var tween = create_tween().set_loops().bind_node(btn)
+	tween.tween_callback(func(): 
+		btn.add_theme_stylebox_override("normal", gold_style)
+		btn.add_theme_stylebox_override("hover", gold_style)
+	)
+	tween.tween_property(btn, "self_modulate", Color(1.5, 1.5, 0.8), 0.4)
+	tween.tween_callback(func(): 
+		btn.remove_theme_stylebox_override("normal")
+		btn.remove_theme_stylebox_override("hover")
+	)
+	tween.tween_property(btn, "self_modulate", Color.WHITE, 0.4)
+	btn.set_meta("tut_tween", tween)
+
+func _stop_play_button_pulse() -> void:
+	if not hud or not "btn_play" in hud: return
+	var btn: Button = hud.btn_play
+	if not btn: return
+	
+	var tw = btn.get_meta("tut_tween") if btn.has_meta("tut_tween") else null
+	if is_instance_valid(tw):
+		tw.kill()
+	btn.remove_theme_stylebox_override("normal")
+	btn.remove_theme_stylebox_override("hover")
+	btn.self_modulate = Color.WHITE
+	if btn.has_meta("tut_tween"):
+		btn.remove_meta("tut_tween")
 
 func _pulse_room_button(room_id: String) -> void:
 	if not hud: return

@@ -30,7 +30,7 @@ func setup(hotel: Dictionary, guest_mgr: GuestManager, map_grid: Node2D = null) 
 # =============================================================================
 func save_progress(game_time_min: int) -> void:
 	var hotel_id: int = _hotel.get("id", -1)
-	if hotel_id < 0:
+	if hotel_id < 0 and hotel_id != GameState.TUTORIAL_HOTEL_ID:
 		return
 
 	var save_data := {
@@ -70,7 +70,7 @@ func _setup_autosave_timer() -> void:
 # =============================================================================
 func _on_timed_autosave() -> void:
 	var hotel_id: int = _hotel.get("id", -1)
-	if hotel_id < 0:
+	if hotel_id < 0 and hotel_id != GameState.TUTORIAL_HOTEL_ID:
 		return
 
 	save_progress(TimeManager.get_game_time())
@@ -89,7 +89,7 @@ func _on_day_ended(_new_day: int) -> void:
 # =============================================================================
 func quick_save() -> void:
 	var hotel_id: int = _hotel.get("id", -1)
-	if hotel_id < 0:
+	if hotel_id < 0 and hotel_id != GameState.TUTORIAL_HOTEL_ID:
 		return
 
 	save_progress(TimeManager.get_game_time())
@@ -100,7 +100,7 @@ func quick_save() -> void:
 # =============================================================================
 func quick_load() -> void:
 	var hotel_id: int = _hotel.get("id", -1)
-	if hotel_id < 0:
+	if hotel_id < 0 and hotel_id != GameState.TUTORIAL_HOTEL_ID:
 		return
 
 	if SaveManager.load_quick(hotel_id):

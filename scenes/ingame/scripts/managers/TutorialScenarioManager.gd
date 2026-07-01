@@ -120,7 +120,7 @@ func _run_step() -> void:
 			if bottom: bottom.build_menu.disabled = false
 			_target_room = "bed_standard"
 			_target_parcel = Vector2i(2, 0)
-			_target_tile = Vector2i(5, 5)
+			_target_tile = Vector2i(11, 5)
 			_target_rot = 2
 			_pulse_room_button("bed_standard")
 			GameState.sig_room_built.connect(_on_room_built)
@@ -249,6 +249,10 @@ func _draw_blueprint() -> void:
 
 	if bp.has_method("configure"):
 		bp.configure({"door_rotation": _target_rot, "door_offset": 0, "room_rotation": _target_rot})
+	bp.room_rotation = _target_rot
+	bp._ready()
+	if bp.has_method("_apply_visuals"):
+		bp._apply_visuals()
 
 	bp.modulate = Color(0.2, 0.5, 1.0, 0.7)
 	bp.z_index = 9

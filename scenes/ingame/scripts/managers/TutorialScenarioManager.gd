@@ -21,7 +21,7 @@ var _target_tile: Vector2i = Vector2i(8, 5)
 var _target_rot: int = 2
 
 func _ready() -> void:
-	pass
+	process_mode = Node.PROCESS_MODE_ALWAYS
 
 func start_tutorial(hud_ref: CanvasLayer, map_ref: Node2D) -> void:
 	is_active = true

@@ -32,3 +32,5 @@ Datum: 2026-06-29
 - Fix: Die fehlerhafte Anzeige von Sonderzeichen/Umlauten im Personal-Einstellungs-Popup (Arbeitsvertrag) wurde repariert, das Layout lädt jetzt sauberes UTF-8.
 - Fix: Wenn im Tutorial das Spiel neu geladen wird, erkennt das System nun sauber, ob Modals schon geöffnet sind und fängt asynchrone Fehler ab (Schritt 21).
 - Fix: Buttons im Hauptmenü waren nach Abschluss des Tutorials nicht anklickbar, da der Pause-Status des Engine-Trees nicht korrekt zurückgesetzt wurde. Dies ist nun behoben.
+- Fix: Bei Rückkehr aus dem Tutorial ins Hauptmenü wurde der Ingame-Status nicht korrekt zurückgesetzt, weshalb der Sprachen-Umschalter in den Settings gesperrt blieb.
+- Fix: Den veralteten "Tutorial abgeschlossen (Vorschau)" Toast am Ende des Tutorials entfernt.

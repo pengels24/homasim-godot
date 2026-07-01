@@ -251,10 +251,10 @@ func _on_tutorial_pressed() -> void:
 		_start_tutorial_clean()
 	else:
 		_confirm_modal.ask(
-			"Tutorial fortsetzen?",
-			"Du hast das Tutorial bereits begonnen. Möchtest du an der letzten Stelle fortsetzen oder komplett neu starten?",
-			"Fortsetzen",
-			"Neu starten",
+			GameState.T("ui.tutorial.resume.title"),
+			GameState.T("ui.tutorial.resume.desc"),
+			GameState.T("ui.tutorial.resume.btn.continue"),
+			GameState.T("ui.tutorial.resume.btn.restart"),
 			"",
 			false
 		)

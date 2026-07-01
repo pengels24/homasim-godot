@@ -975,3 +975,8 @@ You can sort and filter all entries. This gives you a clear overview of your fin
 "tutorial.end.title","Tutorial abgeschlossen","Tutorial completed"
 "tutorial.end.headline","[center][b]Herzlichen Glückwunsch![/b]\n\nDu hast das Tutorial erfolgreich abgeschlossen und kennst nun alle Grundlagen, um dein Hotel erfolgreich zu leiten.\n\nDer Techtree und weitere fortgeschrittene Funktionen stehen dir im weiteren Verlauf automatisch zur Verfügung.\n\nDu kannst dein Hotel nun völlig frei verwalten, ausbauen und experimentieren.\n\n[color=#eab308]Viel Erfolg![/color][/center]","[center][b]Congratulations![/b]\n\nYou have successfully completed the tutorial and now know all the basics to successfully manage your hotel.\n\nThe tech tree and other advanced features will become available to you automatically later on.\n\nYou can now freely manage, expand, and experiment with your hotel.\n\n[color=#eab308]Good luck![/color][/center]"
 "tutorial.end.button","Zurück zum Hauptmenü","Back to Main Menu"
+"ui.tutorial.resume.title","Tutorial fortsetzen?","Resume tutorial?"
+"ui.tutorial.resume.desc","Du hast das Tutorial bereits begonnen. Möchtest du an der letzten Stelle fortsetzen oder komplett neu starten?","You have already started the tutorial. Do you want to resume from the last point or start completely new?"
+"ui.tutorial.resume.btn.continue","Fortsetzen","Resume"
+"ui.tutorial.resume.btn.restart","Neu starten","Restart"
+"tutorial.btn.next","Weiter","Continue"

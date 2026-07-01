@@ -10,6 +10,7 @@ signal sig_close_requested
 func _ready() -> void:
 	btn_ok.pressed.connect(func():
 		get_tree().paused = false
+		GameState.active_hotel_id = -1
 		get_tree().change_scene_to_file("res://scenes/main_menu/MainMenu.tscn")
 	)
 	btn_discord.pressed.connect(func(): OS.shell_open("https://discord.gg/hYSvUqmhcw"))

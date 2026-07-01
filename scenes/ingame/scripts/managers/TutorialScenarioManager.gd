@@ -81,7 +81,7 @@ func _run_step() -> void:
 	
 	match step_index:
 		1:
-			_show_text("Hallo! Ich bin Angelus2010, der Entwickler von HO·MA·SIM.\nIch helfe dir bei deinen ersten Schritten.", true)
+			_show_text(GameState.T("tutorial.step.1"), true)
 		2:
 			_show_text(GameState.T("tutorial.step.2"), false)
 			_req_cam_moved = false
@@ -194,18 +194,24 @@ func _run_step() -> void:
 				if not modal.closed.is_connected(_on_reception_closed):
 					modal.closed.connect(_on_reception_closed)
 		18:
+			_slide_assistant(false)
 			_show_text(GameState.T("tutorial.step.18"), true)
+			var bottom = _get_bottom_bar()
+			if bottom:
+				_stop_bottom_button_pulse(bottom.reception)
 		19:
 			_show_text(GameState.T("tutorial.step.19"), true)
 		20:
 			_show_text(GameState.T("tutorial.step.20"), false)
 			var bottom = _get_bottom_bar()
 			if bottom:
+				_stop_bottom_button_pulse(bottom.reception)
 				bottom.staff.disabled = false
 				_pulse_bottom_button(bottom.staff)
 				if not bottom.sig_staff_toggled.is_connected(_on_staff_opened):
 					bottom.sig_staff_toggled.connect(_on_staff_opened)
 		21:
+			_slide_assistant(false)
 			var staff_modal = null
 			var std = hud.get_node_or_null("StandardModal")
 			if std: staff_modal = std.get_node_or_null("%ContentAnchor/ModalContentStaff")
@@ -595,4 +601,3 @@ func _end_tutorial() -> void:
 	is_active = false
 	if is_instance_valid(assistant_ui):
 		assistant_ui.queue_free()
-	Toast.show("Tutorial abgeschlossen (Vorschau)!")

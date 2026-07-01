@@ -8,6 +8,7 @@ signal sig_next_clicked
 
 func _ready() -> void:
 	btn_next.pressed.connect(func(): sig_next_clicked.emit())
+	btn_next.text = GameState.T("tutorial.btn.next")
 
 func set_text(text: String, show_next_btn: bool = false) -> void:
 	label.text = text

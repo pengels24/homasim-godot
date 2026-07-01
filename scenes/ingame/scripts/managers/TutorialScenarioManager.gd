@@ -17,8 +17,8 @@ var _req_cam_zoomed: bool = false
 # Ghost-Target-Prüfung
 var _target_room: String = "bed_standard"
 var _target_parcel: Vector2i = Vector2i(2, 0)
-var _target_tile: Vector2i = Vector2i(8, 5)
-var _target_rot: int = 2
+var _target_tile: Vector2i = Vector2i(6, 5)
+var _target_rot: int = 0
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -102,8 +102,8 @@ func _run_step() -> void:
 					bottom.sig_build_menu_toggled.connect(_on_build_opened)
 		5:
 			_target_parcel = Vector2i(2, 0)
-			_target_tile = Vector2i(8, 5)
-			_target_rot = 2
+			_target_tile = Vector2i(6, 5)
+			_target_rot = 0
 			_target_room = "bed_standard"
 			_show_text("Wähle ein Einzelzimmer und platziere es. Nutze [R] zum Rotieren, bis es passt!", false)
 			var bottom = _get_bottom_bar()
@@ -120,8 +120,8 @@ func _run_step() -> void:
 			if bottom: bottom.build_menu.disabled = false
 			_target_room = "bed_standard"
 			_target_parcel = Vector2i(2, 0)
-			_target_tile = Vector2i(11, 5)
-			_target_rot = 2
+			_target_tile = Vector2i(9, 5)
+			_target_rot = 0
 			_pulse_room_button("bed_standard")
 			GameState.sig_room_built.connect(_on_room_built)
 			_draw_blueprint()

@@ -120,8 +120,8 @@ func _run_step() -> void:
 			if bottom: bottom.build_menu.disabled = false
 			_target_room = "bed_standard"
 			_target_parcel = Vector2i(2, 0)
-			_target_tile = Vector2i(9, 5)
-			_target_rot = 0
+			_target_tile = Vector2i(5, 5)
+			_target_rot = 2
 			_pulse_room_button("bed_standard")
 			GameState.sig_room_built.connect(_on_room_built)
 			_draw_blueprint()

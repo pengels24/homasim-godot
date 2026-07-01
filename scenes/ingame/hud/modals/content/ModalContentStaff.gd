@@ -1,5 +1,7 @@
 extends MarginContainer
 
+signal sig_tab_changed(tab: int)
+
 var _selected_staff = null
 var _current_tab = 0 # 0 = Team, 1 = Bewerber
 var _map_grid: Node2D = null
@@ -128,6 +130,7 @@ func _on_tab_changed(tab: int) -> void:
 	_selected_staff = null
 	_update_tab_buttons()
 	_refresh_list()
+	sig_tab_changed.emit(tab)
 
 func _on_staff_changed(_dummy = null) -> void:
 	_selected_staff = null

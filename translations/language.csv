@@ -1,4 +1,4 @@
-"keys","de","en"
+﻿"keys","de","en"
 "game.title","HO·MA·SIM - Hotel Manager Simulation","HO·MA·SIM - Hotel Manager Simulation"
 "game.textlogo","HO·MA·SIM","HO·MA·SIM"
 "currency.symbol","€","€"
@@ -735,7 +735,7 @@ Using the Pip-Cam, you can view the room and also jump directly to it."
 "ui.staff.confirm.fire.title","Kündigung","Dismissal"
 "ui.staff.confirm.fire.desc","Möchtest du %s wirklich kündigen?","Do you really want to dismiss %s?"
 "ui.staff.confirm.hire.title","Arbeitsvertrag","Employment Contract"
-"ui.staff.confirm.hire.desc","Möchtest du %s für %d â¬ einstellen?","Do you want to hire %s for %d â¬?"
+"ui.staff.confirm.hire.desc","Möchtest du %s für %d € einstellen?","Do you want to hire %s for %d €?"
 "ui.staff.confirm.unassign.title","Zuweisung aufheben","Unassign"
 "ui.staff.confirm.unassign.desc","Möchtest du %s wirklich aus diesem Raum entfernen?","Do you really want to remove %s from this room?"
 "ui.staff.confirm.btn.fire","Kündigen","Dismiss"
@@ -929,11 +929,49 @@ Tip: Watch out for hidden URLs!"
 "tutorial.finances.desc","Dies ist die Übersicht deiner Einnahmen und Ausgaben.
 Du kannst alle Einträge sortieren und filtern. Dies verschafft dir den Überblick über deine finanzielle Situation.","This is the overview of your income and expenses.
 You can sort and filter all entries. This gives you a clear overview of your financial situation."
-" b u i l d . e r r o r . o u t _ o f _ b o u n d s " , " A u � e r h a l b   d e r   P a r z e l l e " , " O u t   o f   b o u n d s "  
- " b u i l d . e r r o r . b l o c k e d " , " B a u p l a t z   b l o c k i e r t " , " C o n s t r u c t i o n   s i t e   b l o c k e d "  
- " b u i l d . e r r o r . d o o r _ b l o c k e d " , " T � r   b l o c k i e r t   /   v e r d e c k t " , " D o o r   b l o c k e d   /   o b s t r u c t e d "  
- " b u i l d . e r r o r . d o o r _ o u t _ o f _ b o u n d s " , " T � r   z e i g t   i n s   N i c h t s " , " D o o r   f a c e s   n o w h e r e "  
- " b u i l d . e r r o r . p a t h _ b l o c k e d " , " B l o c k i e r t   F l u r   e i n e s   a n d e r e n   R a u m s " , " B l o c k s   h a l l w a y   o f   a n o t h e r   r o o m "  
- " b u i l d . e r r o r . n o _ c o n n e c t i o n " , " M u s s   a n   d a s   W e g e n e t z   g r e n z e n " , " M u s t   c o n n e c t   t o   h a l l w a y   n e t w o r k "  
+" b u i l d . e r r o r . o u t _ o f _ b o u n d s " , " A u � e r h a l b   d e r   P a r z e l l e " , " O u t   o f   b o u n d s " 
+ 
+ " b u i l d . e r r o r . b l o c k e d " , " B a u p l a t z   b l o c k i e r t " , " C o n s t r u c t i o n   s i t e   b l o c k e d " 
+ 
+ " b u i l d . e r r o r . d o o r _ b l o c k e d " , " T � r   b l o c k i e r t   /   v e r d e c k t " , " D o o r   b l o c k e d   /   o b s t r u c t e d " 
+ 
+ " b u i l d . e r r o r . d o o r _ o u t _ o f _ b o u n d s " , " T � r   z e i g t   i n s   N i c h t s " , " D o o r   f a c e s   n o w h e r e " 
+ 
+ " b u i l d . e r r o r . p a t h _ b l o c k e d " , " B l o c k i e r t   F l u r   e i n e s   a n d e r e n   R a u m s " , " B l o c k s   h a l l w a y   o f   a n o t h e r   r o o m " 
+ 
+ " b u i l d . e r r o r . n o _ c o n n e c t i o n " , " M u s s   a n   d a s   W e g e n e t z   g r e n z e n " , " M u s t   c o n n e c t   t o   h a l l w a y   n e t w o r k " 
+ 
  
 "build.error.tutorial_target","Muss richtig platziert und rotiert werden","Must be placed and rotated correctly"
+"tutorial.step.1","Hallo! Ich bin Angelus2010, der Entwickler von HO·MA·SIM.\nIch helfe dir bei deinen ersten Schritten.","Hello! I am Angelus2010, the developer of HO·MA·SIM.\nI will guide you through your first steps."
+"tutorial.step.2","Zuerst müssen wir uns umsehen können.\nBewege die Karte mit der rechten Maustaste (halten & ziehen) oder mit WASD.\n\n[ ] Karte bewegt","First, we need to look around.\nMove the map using the right mouse button (hold & drag) or WASD.\n\n[ ] Map moved"
+"tutorial.step.2_done","Zuerst müssen wir uns umsehen können.\nBewege die Karte mit der rechten Maustaste (halten & ziehen) oder mit WASD.\n\n[x] Karte bewegt","First, we need to look around.\nMove the map using the right mouse button (hold & drag) or WASD.\n\n[x] Map moved"
+"tutorial.step.3","Gut gemacht!\nNutze nun das Mausrad oder die +/- Tasten auf dem Numpad, um rein- und rauszuzoomen.\n\n[ ] Gezoomt","Well done!\nNow use the mouse wheel or the +/- keys on the numpad to zoom in and out.\n\n[ ] Zoomed"
+"tutorial.step.3_done","Gut gemacht!\nNutze nun das Mausrad oder die +/- Tasten auf dem Numpad, um rein- und rauszuzoomen.\n\n[x] Gezoomt","Well done!\nNow use the mouse wheel or the +/- keys on the numpad to zoom in and out.\n\n[x] Zoomed"
+"tutorial.step.4","Beginnen wir mit dem Wichtigsten: Zimmern!\nÖffne unten im Menü den Bau-Modus (oder drücke F2).","Let's start with the most important part: rooms!\nOpen the build mode in the menu below (or press F2)."
+"tutorial.step.5","Wähle ein Einzelzimmer und platziere es. Nutze [R] zum Rotieren, bis es passt!","Select a single room and place it. Use [R] to rotate it until it fits!"
+"tutorial.step.6","Super! Wir brauchen aber mehr als ein Zimmer. Baue noch ein weiteres Einzelzimmer daneben.","Great! But we need more than one room. Build another single room next to it."
+"tutorial.step.7","Super! Schließe nun das Baumenü (z.B. mit Rechtsklick oder ESC).","Great! Now close the build menu (e.g., with right-click or ESC)."
+"tutorial.step.8","Die Rezeption hat, wie auch andere POI (Points of Interest), Öffnungszeiten. Sie öffnet um 7 Uhr und schließt um 22 Uhr.\nWährend dieser Zeit kommen neue Gäste an und bestehende Gäste nutzen diese POI für ihren Tagesablauf.","The reception, like other POIs (Points of Interest), has opening hours. It opens at 7 AM and closes at 10 PM.\nDuring this time, new guests arrive and existing guests use these POIs for their daily routines."
+"tutorial.step.9","Starte nun die Zeit (oben rechts im Menü oder mit der Leertaste), um das Hotel zum Leben zu erwecken!","Now start the time (top right in the menu or with the spacebar) to bring the hotel to life!"
+"tutorial.step.10_wait","Warte nun, bis die Rezeption um 7 Uhr öffnet.","Now wait until the reception opens at 7 AM."
+"tutorial.step.11","Um neue Räume und Funktionen freizuschalten, musst du das Level des Hotels erhöhen.\nHierfür benötigst du EXP. Diese bekommst du für den jeweils ersten Bau eines neuen Zimmertyps und für Ereignisse im Hotelbetrieb (Check-In, Check-Out, u.a.).","To unlock new rooms and features, you need to increase the hotel's level.\nFor this, you need EXP. You get EXP for the first construction of a new room type and for events in hotel operations (Check-In, Check-Out, etc.)."
+"tutorial.step.12","Baue nun, um noch einmal extra EXP zu bekommen, ein erstes Doppelzimmer.","To get some extra EXP, build your first double room now."
+"tutorial.step.13","Klasse! Schließe das Baumenü wieder.","Awesome! Close the build menu again."
+"tutorial.step.14_wait","Die Rezeption ist nun geöffnet. Um 8 Uhr treffen die ersten Gäste ein!\nStarte die Zeit (falls pausiert) und warte auf ihre Ankunft.","The reception is now open. At 8 AM, the first guests will arrive!\nStart the time (if paused) and wait for their arrival."
+"tutorial.step.15","Schau, da kommen die ersten Gäste!\nÖffne nun die Rezeption unten im Menü (oder drücke F3).","Look, the first guests are arriving!\nNow open the reception in the menu below (or press F3)."
+"tutorial.step.16","Links siehst du die neuen Gäste mit pulsierendem Rahmen. Sie warten nun darauf, von dir ein Zimmer zu bekommen.","On the left, you see the new guests with a pulsing frame. They are now waiting for you to assign them a room."
+"tutorial.step.17","Klicke einen Gast an und wähle eins der passenden Zimmer...\nChecke die Gäste ein und schließe danach die Rezeption, um fortzufahren.","Click on a guest and choose one of the matching rooms...\nCheck the guests in and then close the reception to continue."
+"tutorial.step.17_error","Du hast noch keinen Gast eingecheckt!\nÖffne die Rezeption erneut und weise den Gästen Zimmer zu.","You haven't checked in any guests yet!\nOpen the reception again and assign rooms to the guests."
+"tutorial.step.18","Wie du bestimmt gemerkt hast, konntest du während des Gäste-Checkins weitere EXP sammeln und du hattest dein erstes Levelup.","As you probably noticed, you collected more EXP during guest check-in and reached your first level up."
+"tutorial.step.19","Da du nun Level 2 bist, kannst du die Personal-Agentur besuchen. Dort findest du deine Angestellten, neue Bewerber und den Bereich um deine Leute den POI zuzuweisen.","Since you are now level 2, you can visit the Staff Agency. There you will find your employees, new applicants, and the area to assign your people to POIs."
+"tutorial.step.20","Öffne nun die Personal-Agentur unten im Menü (oder drücke F4).","Now open the Staff Agency in the menu below (or press F4)."
+"tutorial.step.21","Wechsle nun bitte auf den Reiter mit den Bewerbern.","Please switch to the applicants tab now."
+"tutorial.step.21_alt","Öffne die Personal-Agentur und wechsle auf den Reiter mit den Bewerbern.","Open the Staff Agency and switch to the applicants tab."
+"tutorial.step.22","Du kannst hier Leute einstellen. Klicke dazu auf einen passenden Listeneintrag und dann rechts im Detailfenster auf einstellen.","You can hire people here. Click on a matching list entry and then click hire in the details window on the right."
+"tutorial.step.23","Du benötigst zu Beginn je 1x Personal für Reinigung und 1x Personal für den Hausmeisterbereich.","At the beginning, you need 1x staff for cleaning and 1x staff for the maintenance area."
+"tutorial.step.24","Stelle nun je eine Person für die Reinigung und die Haustechnik ein.","Now hire one person for cleaning and one for maintenance."
+"tutorial.step.25","Hervorragend! Schließe nun die Personalverwaltung wieder. Ab sofort werden automatisch für diese beiden Bereiche Tickets erstellt und abgearbeitet.","Excellent! Now close the staff management again. From now on, tickets for these two areas will be created and processed automatically."
+"tutorial.end.title","Tutorial abgeschlossen","Tutorial completed"
+"tutorial.end.headline","[center][b]Herzlichen Glückwunsch![/b]\n\nDu hast das Tutorial erfolgreich abgeschlossen und kennst nun alle Grundlagen, um dein Hotel erfolgreich zu leiten.\n\nDer Techtree und weitere fortgeschrittene Funktionen stehen dir im weiteren Verlauf automatisch zur Verfügung.\n\nDu kannst dein Hotel nun völlig frei verwalten, ausbauen und experimentieren.\n\n[color=#eab308]Viel Erfolg![/color][/center]","[center][b]Congratulations![/b]\n\nYou have successfully completed the tutorial and now know all the basics to successfully manage your hotel.\n\nThe tech tree and other advanced features will become available to you automatically later on.\n\nYou can now freely manage, expand, and experiment with your hotel.\n\n[color=#eab308]Good luck![/color][/center]"
+"tutorial.end.button","Zurück zum Hauptmenü","Back to Main Menu"

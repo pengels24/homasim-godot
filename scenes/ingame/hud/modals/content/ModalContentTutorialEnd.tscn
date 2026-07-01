@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://cxtutorialend"]
+
+[ext_resource type="Script" path="res://scenes/ingame/hud/modals/content/ModalContentTutorialEnd.gd" id="1_script"]
+[ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://assets/UI/menu_button_green.tres" id="2_green"]
+[ext_resource type="Texture2D" uid="uid://dh8sppodu0d3j" path="res://assets/images/bsky-favicon-tbn.png" id="3_3f2yf"]
+[ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://assets/UI/menu_button_green_hover.tres" id="3_green_hover"]
+[ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://assets/UI/menu_button_green_pressed.tres" id="4_green_pressed"]
+[ext_resource type="Texture2D" uid="uid://dtoyanhcnwt05" path="res://assets/icons/ic_discord.png" id="5_discord"]
+
+[node name="ModalContentTutorialEnd" type="VBoxContainer" unique_id=508613206]
+custom_minimum_size = Vector2(800, 400)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+script = ExtResource("1_script")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1438253006]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 28
+theme_override_font_sizes/bold_font_size = 32
+bbcode_enabled = true
+
+[node name="SocialHBox" type="HBoxContainer" parent="." unique_id=101956649]
+layout_mode = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="BtnDiscord" type="Button" parent="SocialHBox" unique_id=537978972]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 56)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = " Discord"
+icon = ExtResource("5_discord")
+expand_icon = true
+
+[node name="BtnBluesky" type="Button" parent="SocialHBox" unique_id=1472827850]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 56)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = " BlueSky"
+icon = ExtResource("3_3f2yf")
+
+[node name="Spacer" type="Control" parent="." unique_id=2025178853]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBox" type="HBoxContainer" parent="." unique_id=44108255]
+layout_mode = 2
+alignment = 1
+
+[node name="BtnOk" type="Button" parent="HBox" unique_id=2046335530]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(300, 64)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.96, 0.96, 0.96, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = ExtResource("2_green")
+theme_override_styles/pressed = ExtResource("4_green_pressed")
+theme_override_styles/hover = ExtResource("3_green_hover")
+theme_override_styles/focus = ExtResource("2_green")
+text = "Weiterspielen"

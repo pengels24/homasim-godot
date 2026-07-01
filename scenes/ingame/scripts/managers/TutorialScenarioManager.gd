@@ -17,8 +17,9 @@ var _req_cam_zoomed: bool = false
 # Ghost-Target-Prüfung
 var _target_room: String = "bed_standard"
 var _target_parcel: Vector2i = Vector2i(2, 0)
-var _target_tile: Vector2i = Vector2i(9, 5)
-var _target_rot: int = 2
+var _target_tile: Vector2i
+var _target_rot: int
+var _has_checked_in: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -60,8 +61,16 @@ func _lock_ui() -> void:
 		bottom.room_list.disabled = true
 		bottom.tutorials.disabled = true
 		bottom.finances.disabled = true
+		
+	# UI elemente basierend auf Tutorial-Fortschritt wieder freischalten
+	if step_index >= 4 and bottom:
+		bottom.build_menu.disabled = false
+	if step_index >= 15 and bottom:
+		bottom.reception.disabled = false
+	if step_index >= 20 and bottom:
+		bottom.staff.disabled = false
 
-func _get_bottom_bar() -> Node:
+func _get_bottom_bar() -> Control:
 	if hud and hud.has_node("BottomBarContainer/HUDBottom"):
 		return hud.get_node("BottomBarContainer/HUDBottom")
 	return null
@@ -74,35 +83,23 @@ func _run_step() -> void:
 		1:
 			_show_text("Hallo! Ich bin Angelus2010, der Entwickler von HO·MA·SIM.\nIch helfe dir bei deinen ersten Schritten.", true)
 		2:
-			_show_text("Zuerst müssen wir uns umsehen können.\nBewege die Karte mit der rechten Maustaste (halten & ziehen) oder mit WASD.\n\n[ ] Karte bewegt", false)
+			_show_text(GameState.T("tutorial.step.2"), false)
 			_req_cam_moved = false
 			if not InputHandler.sig_camera_pan_requested.is_connected(_on_cam_moved):
 				InputHandler.sig_camera_pan_requested.connect(_on_cam_moved)
 			if not InputHandler.sig_camera_drag_moved.is_connected(_on_cam_drag_moved):
 				InputHandler.sig_camera_drag_moved.connect(_on_cam_drag_moved)
 		3:
-			_show_text("Gut gemacht!\nNutze nun das Mausrad oder die +/- Tasten auf dem Numpad, um rein- und rauszuzoomen.\n\n[ ] Gezoomt", false)
+			_show_text(GameState.T("tutorial.step.3"), false)
 			_req_cam_zoomed = false
 			if not InputHandler.sig_camera_zoom_requested.is_connected(_on_cam_zoomed):
 				InputHandler.sig_camera_zoom_requested.connect(_on_cam_zoomed)
 		4:
-			_show_text("Klasse! Um Gäste zu empfangen, brauchst du ein Zimmer, damit die Rezeption öffnen kann.\nÖffne hierzu das Baumenü (Button unten links oder F2).", false)
+			_show_text(GameState.T("tutorial.step.4"), false)
 			var bottom = _get_bottom_bar()
 			if bottom:
 				bottom.build_menu.disabled = false
-				
-				# Pulsieren einbauen (Wechsel zwischen normalem Style und Gold-Pressed)
-				var orig_style = bottom.build_menu.get_theme_stylebox("normal")
-				var gold_style = load("res://assets/UI/menu_button_golden_pressed.tres")
-				bottom.build_menu.set_meta("tut_orig_style", orig_style)
-				
-				var tween = create_tween().set_loops()
-				tween.tween_callback(func(): bottom.build_menu.add_theme_stylebox_override("normal", gold_style))
-				tween.tween_interval(0.4)
-				tween.tween_callback(func(): bottom.build_menu.add_theme_stylebox_override("normal", orig_style))
-				tween.tween_interval(0.4)
-				bottom.build_menu.set_meta("tut_tween", tween)
-				
+				_pulse_bottom_button(bottom.build_menu)
 				if not bottom.sig_build_menu_toggled.is_connected(_on_build_opened):
 					bottom.sig_build_menu_toggled.connect(_on_build_opened)
 		5:
@@ -110,7 +107,7 @@ func _run_step() -> void:
 			_target_tile = Vector2i(8, 5)
 			_target_rot = 2
 			_target_room = "bed_standard"
-			_show_text("Wähle ein Einzelzimmer und platziere es. Nutze [R] zum Rotieren, bis es passt!", false)
+			_show_text(GameState.T("tutorial.step.5"), false)
 			var bottom = _get_bottom_bar()
 			if bottom: bottom.build_menu.disabled = false
 			_slide_assistant(true)
@@ -120,7 +117,7 @@ func _run_step() -> void:
 			# Blueprint anzeigen
 			_draw_blueprint()
 		6:
-			_show_text("Super! Wir brauchen aber mehr als ein Zimmer. Baue noch ein weiteres Einzelzimmer daneben.", false)
+			_show_text(GameState.T("tutorial.step.6"), false)
 			var bottom = _get_bottom_bar()
 			if bottom: bottom.build_menu.disabled = false
 			_target_room = "bed_standard"
@@ -131,12 +128,12 @@ func _run_step() -> void:
 			GameState.sig_room_built.connect(_on_room_built)
 			_draw_blueprint()
 		7:
-			_show_text("Super! Schließe nun das Baumenü (z.B. mit Rechtsklick oder ESC).", false)
+			_show_text(GameState.T("tutorial.step.7"), false)
 		8:
 			_slide_assistant(false)
-			_show_text("Die Rezeption hat, wie auch andere POI (Points of Interest), Öffnungszeiten. Sie öffnet um 7 Uhr und schließt um 22 Uhr.\nWährend dieser Zeit kommen neue Gäste an und bestehende Gäste nutzen diese POI für ihren Tagesablauf.", true)
+			_show_text(GameState.T("tutorial.step.8"), true)
 		9:
-			_show_text("Starte nun die Zeit (oben rechts im Menü oder mit der Leertaste), um das Hotel zum Leben zu erwecken!", false)
+			_show_text(GameState.T("tutorial.step.9"), false)
 			if hud and "btn_ff" in hud:
 				hud.btn_ff.disabled = true
 			_pulse_play_button()
@@ -146,14 +143,14 @@ func _run_step() -> void:
 			if TimeManager.get_hour() >= 7:
 				advance_step()
 			else:
-				_show_text("Warte nun, bis die Rezeption um 7 Uhr öffnet.", false)
+				_show_text(GameState.T("tutorial.step.10_wait"), false)
 				if not TimeManager.sig_hour_passed.is_connected(_on_hour_passed):
 					TimeManager.sig_hour_passed.connect(_on_hour_passed)
 		11:
-			_show_text("Um neue Räume und Funktionen freizuschalten, musst du das Level des Hotels erhöhen.\nHierfür benötigst du EXP. Diese bekommst du für den jeweils ersten Bau eines neuen Zimmertyps und für Ereignisse im Hotelbetrieb (Check-In, Check-Out, u.a.).", true)
+			_show_text(GameState.T("tutorial.step.11"), true)
 			_pulse_exp_bar()
 		12:
-			_show_text("Baue nun, um noch einmal extra EXP zu bekommen, ein erstes Doppelzimmer.", false)
+			_show_text(GameState.T("tutorial.step.12"), false)
 			var bottom = _get_bottom_bar()
 			if bottom: bottom.build_menu.disabled = false
 			_slide_assistant(true)
@@ -165,15 +162,85 @@ func _run_step() -> void:
 			GameState.sig_room_built.connect(_on_room_built)
 			_draw_blueprint()
 		13:
-			_show_text("Klasse! Schließe das Baumenü wieder.", false)
+			_show_text(GameState.T("tutorial.step.13"), false)
 		14:
 			_slide_assistant(false)
 			if TimeManager.get_hour() >= 8:
 				advance_step()
 			else:
-				_show_text("Die Rezeption ist nun geöffnet. Um 8 Uhr treffen die ersten Gäste ein!\nStarte die Zeit (falls pausiert) und warte auf ihre Ankunft.", false)
+				_show_text(GameState.T("tutorial.step.14_wait"), false)
 				if not TimeManager.sig_hour_passed.is_connected(_on_hour_passed):
 					TimeManager.sig_hour_passed.connect(_on_hour_passed)
+		15:
+			_show_text(GameState.T("tutorial.step.15"), false)
+			var bottom = _get_bottom_bar()
+			if bottom:
+				bottom.reception.disabled = false
+				_pulse_bottom_button(bottom.reception)
+				if not bottom.sig_reception_toggled.is_connected(_on_reception_opened):
+					bottom.sig_reception_toggled.connect(_on_reception_opened)
+		16:
+			_slide_assistant(true)
+			_show_text(GameState.T("tutorial.step.16"), true)
+		17:
+			_has_checked_in = false
+			_show_text(GameState.T("tutorial.step.17"), false)
+			var guest_mgr = get_parent().get("_guest_mgr")
+			if guest_mgr and not guest_mgr.sig_party_checked_in.is_connected(_on_party_checked_in):
+				guest_mgr.sig_party_checked_in.connect(_on_party_checked_in)
+				
+			if hud and hud.has_node("StandardModal"):
+				var modal = hud.get_node("StandardModal")
+				if not modal.closed.is_connected(_on_reception_closed):
+					modal.closed.connect(_on_reception_closed)
+		18:
+			_show_text(GameState.T("tutorial.step.18"), true)
+		19:
+			_show_text(GameState.T("tutorial.step.19"), true)
+		20:
+			_show_text(GameState.T("tutorial.step.20"), false)
+			var bottom = _get_bottom_bar()
+			if bottom:
+				bottom.staff.disabled = false
+				_pulse_bottom_button(bottom.staff)
+				if not bottom.sig_staff_toggled.is_connected(_on_staff_opened):
+					bottom.sig_staff_toggled.connect(_on_staff_opened)
+		21:
+			var staff_modal = null
+			var std = hud.get_node_or_null("StandardModal")
+			if std: staff_modal = std.get_node_or_null("%ContentAnchor/ModalContentStaff")
+			
+			if is_instance_valid(staff_modal):
+				_setup_step_21_modal(staff_modal)
+			else:
+				_show_text(GameState.T("tutorial.step.21_alt"), false)
+				var bottom = _get_bottom_bar()
+				if bottom:
+					bottom.staff.disabled = false
+					_pulse_bottom_button(bottom.staff)
+					if not bottom.sig_staff_toggled.is_connected(_on_step_21_staff_opened):
+						bottom.sig_staff_toggled.connect(_on_step_21_staff_opened)
+		22:
+			_show_text(GameState.T("tutorial.step.22"), true)
+		23:
+			_show_text(GameState.T("tutorial.step.23"), true)
+		24:
+			_show_text(GameState.T("tutorial.step.24"), false)
+			if StaffManager and not StaffManager.sig_staff_hired.is_connected(_on_staff_hired):
+				StaffManager.sig_staff_hired.connect(_on_staff_hired)
+			_check_hired_staff()
+		25:
+			_show_text(GameState.T("tutorial.step.25"), false)
+			if hud and hud.has_node("StandardModal"):
+				var modal = hud.get_node("StandardModal")
+				if not modal.closed.is_connected(_on_staff_closed):
+					modal.closed.connect(_on_staff_closed)
+		26:
+			if hud and hud.has_node("StandardModal"):
+				var modal = hud.get_node("StandardModal")
+				modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentTutorialEnd.tscn")
+				modal.open(GameState.T("tutorial.end.title"))
+			_end_tutorial()
 		_:
 			_end_tutorial()
 
@@ -188,31 +255,32 @@ func _slide_assistant(to_right: bool) -> void:
 	tween.tween_property(assistant_ui, "position:x", target_x, 0.5).set_trans(Tween.TRANS_SINE)
 
 func _on_next_clicked() -> void:
-	if step_index in [1, 2, 3, 8, 11]:
+	if step_index in [1, 2, 3, 8, 11, 16, 18, 19, 22, 23]:
 		advance_step()
 
 func advance_step() -> void:
 	step_index += 1
 	SaveManager.update_hotel(GameState.TUTORIAL_HOTEL_ID, {
-		"tutorial_step": step_index,
-		"game_time": TimeManager.get_game_time()
+		"tutorial_step": step_index
 	})
-	if is_instance_valid(map) and map.has_method("save_all_rooms_to_db"):
-		map.save_all_rooms_to_db(GameState.TUTORIAL_HOTEL_ID)
+	
+	# Trigger volles Savegame (inkl. Gäste, Geld, EXP, Räume)
+	TimeManager.sig_save_requested.emit(TimeManager.get_game_time())
+	
 	_run_step()
 
 # --- STEP 2: Kamera Bewegung ---
 func _on_cam_moved(_dir: Vector2) -> void:
 	if step_index == 2 and not _req_cam_moved:
 		_req_cam_moved = true
-		_show_text("Zuerst müssen wir uns umsehen können.\nBewege die Karte mit der rechten Maustaste (halten & ziehen) oder mit WASD.\n\n[x] Karte bewegt", true)
+		_show_text(GameState.T("tutorial.step.2_done"), true)
 		InputHandler.sig_camera_pan_requested.disconnect(_on_cam_moved)
 		InputHandler.sig_camera_drag_moved.disconnect(_on_cam_drag_moved)
 
 func _on_cam_drag_moved(_pos: Vector2) -> void:
 	if step_index == 2 and not _req_cam_moved:
 		_req_cam_moved = true
-		_show_text("Zuerst müssen wir uns umsehen können.\nBewege die Karte mit der rechten Maustaste (halten & ziehen) oder mit WASD.\n\n[x] Karte bewegt", true)
+		_show_text(GameState.T("tutorial.step.2_done"), true)
 		InputHandler.sig_camera_pan_requested.disconnect(_on_cam_moved)
 		InputHandler.sig_camera_drag_moved.disconnect(_on_cam_drag_moved)
 
@@ -220,7 +288,7 @@ func _on_cam_drag_moved(_pos: Vector2) -> void:
 func _on_cam_zoomed(_dir: float) -> void:
 	if step_index == 3 and not _req_cam_zoomed:
 		_req_cam_zoomed = true
-		_show_text("Gut gemacht!\nNutze nun das Mausrad oder die +/- Tasten auf dem Numpad, um rein- und rauszuzoomen.\n\n[x] Gezoomt", true)
+		_show_text(GameState.T("tutorial.step.3_done"), true)
 		InputHandler.sig_camera_zoom_requested.disconnect(_on_cam_zoomed)
 
 # --- STEP 4: Baumenü öffnen ---
@@ -229,15 +297,7 @@ func _on_build_opened() -> void:
 		var bottom = _get_bottom_bar()
 		if bottom:
 			bottom.sig_build_menu_toggled.disconnect(_on_build_opened)
-			if bottom.build_menu.has_meta("tut_tween"):
-				var tween: Tween = bottom.build_menu.get_meta("tut_tween")
-				if tween:
-					tween.kill()
-			if bottom.build_menu.has_meta("tut_orig_style"):
-				var orig_style = bottom.build_menu.get_meta("tut_orig_style")
-				if orig_style:
-					bottom.build_menu.add_theme_stylebox_override("normal", orig_style)
-				bottom.build_menu.remove_meta("tut_orig_style")
+			_stop_bottom_button_pulse(bottom.build_menu)
 		advance_step()
 
 # --- STEP 5 & 6 & 11: Zimmer bauen ---
@@ -302,6 +362,114 @@ func _on_hour_passed(hour: int) -> void:
 		advance_step()
 	elif step_index == 14 and hour >= 8:
 		TimeManager.sig_hour_passed.disconnect(_on_hour_passed)
+		TimeManager.pause()
+		advance_step()
+
+# --- STEP 15: Rezeption öffnen ---
+func _on_reception_opened() -> void:
+	if step_index == 15:
+		var bottom = _get_bottom_bar()
+		if bottom:
+			bottom.sig_reception_toggled.disconnect(_on_reception_opened)
+			_stop_bottom_button_pulse(bottom.reception)
+		advance_step()
+
+# --- STEP 17: Check-In ---
+func _on_party_checked_in(_party, _room) -> void:
+	if step_index == 17:
+		_has_checked_in = true
+
+func _on_reception_closed() -> void:
+	if step_index == 17:
+		if _has_checked_in:
+			var guest_mgr = get_parent().get("_guest_mgr")
+			if guest_mgr and guest_mgr.sig_party_checked_in.is_connected(_on_party_checked_in):
+				guest_mgr.sig_party_checked_in.disconnect(_on_party_checked_in)
+				
+			if hud and hud.has_node("StandardModal"):
+				var modal = hud.get_node("StandardModal")
+				if modal.closed.is_connected(_on_reception_closed):
+					modal.closed.disconnect(_on_reception_closed)
+			
+			advance_step()
+		else:
+			_show_text(GameState.T("tutorial.step.17_error"), false)
+			_pulse_bottom_button(_get_bottom_bar().reception)
+
+# --- STEP 20: Personal öffnen ---
+func _on_staff_opened() -> void:
+	if step_index == 20:
+		var bottom = _get_bottom_bar()
+		if bottom:
+			bottom.sig_staff_toggled.disconnect(_on_staff_opened)
+			_stop_bottom_button_pulse(bottom.staff)
+		# Damit das Modal Zeit hat zu spawnen, bevor Step 21 es sucht
+		call_deferred("advance_step")
+
+# --- STEP 21: Staff Tab gewechselt ---
+func _setup_step_21_modal(modal: Node) -> void:
+	_show_text(GameState.T("tutorial.step.21"), false)
+	if modal.tab_hbox and modal.tab_hbox.get_child_count() > 1:
+		var btn = modal.tab_hbox.get_child(1)
+		_pulse_bottom_button(btn)
+	if not modal.sig_tab_changed.is_connected(_on_staff_tab_changed):
+		modal.sig_tab_changed.connect(_on_staff_tab_changed)
+
+func _on_step_21_staff_opened() -> void:
+	if step_index == 21:
+		var bottom = _get_bottom_bar()
+		if bottom:
+			bottom.sig_staff_toggled.disconnect(_on_step_21_staff_opened)
+			_stop_bottom_button_pulse(bottom.staff)
+		call_deferred("_delayed_step_21_setup")
+
+func _delayed_step_21_setup() -> void:
+	if step_index == 21:
+		var staff_modal = null
+		var std = hud.get_node_or_null("StandardModal")
+		if std: staff_modal = std.get_node_or_null("%ContentAnchor/ModalContentStaff")
+		if is_instance_valid(staff_modal):
+			_setup_step_21_modal(staff_modal)
+
+func _on_staff_tab_changed(tab: int) -> void:
+	if step_index == 21 and tab == 1:
+		var staff_modal = null
+		var std = hud.get_node_or_null("StandardModal")
+		if std: staff_modal = std.get_node_or_null("%ContentAnchor/ModalContentStaff")
+		
+		if is_instance_valid(staff_modal):
+			if staff_modal.sig_tab_changed.is_connected(_on_staff_tab_changed):
+				staff_modal.sig_tab_changed.disconnect(_on_staff_tab_changed)
+			if staff_modal.tab_hbox and staff_modal.tab_hbox.get_child_count() > 1:
+				var btn = staff_modal.tab_hbox.get_child(1)
+				_stop_bottom_button_pulse(btn)
+		advance_step()
+
+# --- STEP 24: Staff checken ---
+func _on_staff_hired(_staff) -> void:
+	if step_index == 24:
+		_check_hired_staff()
+
+func _check_hired_staff() -> void:
+	var team = StaffManager.hired_staff.values()
+	var has_cleaner = false
+	var has_maintenance = false
+	for s in team:
+		if s.role == "housekeeping": has_cleaner = true
+		if s.role == "maintenance": has_maintenance = true
+	
+	if has_cleaner and has_maintenance:
+		if StaffManager.sig_staff_hired.is_connected(_on_staff_hired):
+			StaffManager.sig_staff_hired.disconnect(_on_staff_hired)
+		advance_step()
+
+# --- STEP 25: Staff Fenster zu ---
+func _on_staff_closed() -> void:
+	if step_index == 25:
+		if hud and hud.has_node("StandardModal"):
+			var modal = hud.get_node("StandardModal")
+			if modal.closed.is_connected(_on_staff_closed):
+				modal.closed.disconnect(_on_staff_closed)
 		advance_step()
 
 # --- STEP 10: EXP Pulse ---
@@ -345,6 +513,35 @@ func _stop_play_button_pulse() -> void:
 	btn.self_modulate = Color.WHITE
 	if btn.has_meta("tut_tween"):
 		btn.remove_meta("tut_tween")
+
+func _pulse_bottom_button(btn: Button) -> void:
+	if not is_instance_valid(btn): return
+	
+	var orig_style = btn.get_theme_stylebox("normal")
+	var gold_style = load("res://assets/UI/menu_button_golden_pressed.tres")
+	btn.set_meta("tut_orig_style", orig_style)
+	
+	var tween = create_tween().set_loops()
+	tween.tween_callback(func(): btn.add_theme_stylebox_override("normal", gold_style))
+	tween.tween_interval(0.4)
+	tween.tween_callback(func(): btn.add_theme_stylebox_override("normal", orig_style))
+	tween.tween_interval(0.4)
+	btn.set_meta("tut_tween", tween)
+
+func _stop_bottom_button_pulse(btn: Button) -> void:
+	if not is_instance_valid(btn): return
+	
+	if btn.has_meta("tut_tween"):
+		var tween: Tween = btn.get_meta("tut_tween")
+		if is_instance_valid(tween):
+			tween.kill()
+		btn.remove_meta("tut_tween")
+	
+	if btn.has_meta("tut_orig_style"):
+		var orig_style = btn.get_meta("tut_orig_style")
+		if orig_style:
+			btn.add_theme_stylebox_override("normal", orig_style)
+		btn.remove_meta("tut_orig_style")
 
 func _pulse_room_button(room_id: String) -> void:
 	if not hud: return

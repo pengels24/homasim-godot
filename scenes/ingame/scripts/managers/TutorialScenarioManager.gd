@@ -21,14 +21,7 @@ var _target_tile: Vector2i = Vector2i(8, 5)
 var _target_rot: int = 2
 
 func _ready() -> void:
-	process_mode = Node.PROCESS_MODE_ALWAYS
-
-func _process(_delta: float) -> void:
-	if not is_active: return
-	
-	if step_index == 7:
-		if InputHandler.current_mode != InputHandler.InputMode.BUILD:
-			advance_step()
+	pass
 
 func start_tutorial(hud_ref: CanvasLayer, map_ref: Node2D) -> void:
 	is_active = true
@@ -133,25 +126,23 @@ func _run_step() -> void:
 			GameState.sig_room_built.connect(_on_room_built)
 			_draw_blueprint()
 		7:
-			_show_text("Super! Beende nun den Baumodus, indem du [ESC] drückst oder einen Rechtsklick machst.", false)
-		8:
 			_slide_assistant(false)
 			_show_text("Die Rezeption hat, wie auch andere POI (Points of Interest), Öffnungszeiten. Sie öffnet um 7 Uhr und schließt um 22 Uhr.\nWährend dieser Zeit kommen neue Gäste an und bestehende Gäste nutzen diese POI für ihren Tagesablauf.", true)
-		9:
+		8:
 			_show_text("Starte nun die Zeit (oben rechts im Menü oder mit der Leertaste), um das Hotel zum Leben zu erwecken!", false)
 			if not TimeManager.sig_speed_changed.is_connected(_on_time_resumed):
 				TimeManager.sig_speed_changed.connect(_on_time_resumed)
-		10:
+		9:
 			if TimeManager.get_hour() >= 7:
 				advance_step()
 			else:
 				_show_text("Warte nun, bis die Rezeption um 7 Uhr öffnet.", false)
 				if not TimeManager.sig_hour_passed.is_connected(_on_hour_passed):
 					TimeManager.sig_hour_passed.connect(_on_hour_passed)
-		11:
+		10:
 			_show_text("Um neue Räume und Funktionen freizuschalten, musst du das Level des Hotels erhöhen.\nHierfür benötigst du EXP. Diese bekommst du für den jeweils ersten Bau eines neuen Zimmertyps und für Ereignisse im Hotelbetrieb (Check-In, Check-Out, u.a.).", true)
 			_pulse_exp_bar()
-		12:
+		11:
 			_show_text("Baue nun, um noch einmal extra EXP zu bekommen, ein erstes Doppelzimmer.", false)
 			var bottom = _get_bottom_bar()
 			if bottom: bottom.build_menu.disabled = false
@@ -163,7 +154,7 @@ func _run_step() -> void:
 			_pulse_room_button("bed_double")
 			GameState.sig_room_built.connect(_on_room_built)
 			_draw_blueprint()
-		13:
+		12:
 			_slide_assistant(false)
 			if TimeManager.get_hour() >= 8:
 				advance_step()
@@ -185,7 +176,7 @@ func _slide_assistant(to_right: bool) -> void:
 	tween.tween_property(assistant_ui, "position:x", target_x, 0.5).set_trans(Tween.TRANS_SINE)
 
 func _on_next_clicked() -> void:
-	if step_index in [1, 2, 3, 8, 11]:
+	if step_index in [1, 2, 3, 7, 10]:
 		advance_step()
 
 func advance_step() -> void:
@@ -234,7 +225,7 @@ func _on_build_opened() -> void:
 				bottom.build_menu.remove_meta("tut_orig_style")
 		advance_step()
 
-# --- STEP 5 & 6 & 12: Zimmer bauen ---
+# --- STEP 5 & 6 & 11: Zimmer bauen ---
 func _draw_blueprint() -> void:
 	var old_bp = map.get_world_root().get_node_or_null("TutorialBlueprint")
 	if old_bp:
@@ -263,13 +254,17 @@ func _draw_blueprint() -> void:
 	bp.z_index = 9
 
 func _on_room_built(room_id: String) -> void:
-	if step_index in [5, 6, 12]:
+	if step_index in [5, 6, 11]:
 		if room_id == _target_room:
 			GameState.sig_room_built.disconnect(_on_room_built)
 			var bp = map.get_world_root().get_node_or_null("TutorialBlueprint")
 			if bp:
 				bp.queue_free()
 			_stop_room_button_pulse(_target_room)
+			
+			if get_parent() and get_parent().get("_ui_mgr"):
+				get_parent()._ui_mgr.close_build_menu()
+			
 			advance_step()
 
 # --- STEP 8: Zeit starten ---

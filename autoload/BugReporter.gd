@@ -107,10 +107,13 @@ func _send_report() -> void:
 	if email_input.text.strip_edges() != "":
 		embed_fields.append({"name": "Kontakt (E-Mail)", "value": email_input.text.strip_edges(), "inline": false})
 	
+	var dt = Time.get_datetime_dict_from_system()
+	var time_id = "%02d%02d%02d-%02d%02d" % [dt.year % 100, dt.month, dt.day, dt.hour, dt.minute]
+	
 	var payload = {
-		"thread_name": "Bug Report - " + Time.get_datetime_string_from_system().replace("T", " "),
+		"thread_name": "[%s] Bug Report" % time_id,
 		"embeds": [{
-			"title": "🐞 Neuer Bug Report",
+			"title": "🐞 Neuer Bug Report [%s]" % time_id,
 			"description": input_field.text,
 			"color": 16711680,
 			"fields": embed_fields

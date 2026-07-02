@@ -17,23 +17,27 @@ if not exist "%BUTLER_PATH%" (
     exit /b
 )
 
+echo Lese Version aus version.txt...
+set /p VERSION=<version.txt
+echo Aktuelle Version: %VERSION%
+
 echo.
 echo ==============================================
 echo  Pushe Windows-Build...
 echo ==============================================
-"%BUTLER_PATH%" push builds\windows %TARGET%:win64
+"%BUTLER_PATH%" push builds\windows %TARGET%:win64 --userversion "%VERSION%"
 
 echo.
 echo ==============================================
 echo  Pushe Linux-Build...
 echo ==============================================
-"%BUTLER_PATH%" push builds\linux %TARGET%:linux
+"%BUTLER_PATH%" push builds\linux %TARGET%:linux --userversion "%VERSION%"
 
 echo.
 echo ==============================================
 echo  Pushe Mac-Build...
 echo ==============================================
-"%BUTLER_PATH%" push builds\mac %TARGET%:mac
+"%BUTLER_PATH%" push builds\mac %TARGET%:mac --userversion "%VERSION%"
 echo.
 echo ==============================================
 echo  Deployment abgeschlossen!

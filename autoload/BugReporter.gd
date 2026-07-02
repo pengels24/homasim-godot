@@ -22,6 +22,10 @@ func _ready() -> void:
 	var config = ConfigFile.new()
 	if config.load("res://secrets.cfg") == OK:
 		WEBHOOK_URL = config.get_value("Discord", "webhook_url", "")
+	# Fallback fuer Production-Builds (secrets.cfg wird nicht exportiert)
+	# TODO: Langfristig durch PHP-Proxy ersetzen (dann URL server-seitig)
+	if WEBHOOK_URL == "":
+		WEBHOOK_URL = "https://discord.com/api/webhooks/1516940649134428172/DS0EtXwN8weAavFBZBQiNmszo1d8v_h-cgLpljzDiYb2CbIk7R2AZwcZkgX1tiOn_t28"
 	
 	btn_report.pressed.connect(_on_report_pressed)
 	btn_cancel.pressed.connect(_close_modal)

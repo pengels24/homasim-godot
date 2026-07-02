@@ -96,7 +96,7 @@ func _format_task_target() -> String:
 	if task and task.has("target"):
 		var t = task["target"]
 		if is_instance_valid(t) and t.has_method("get_definition"):
-			var r_name = t.get_definition().get("name", "Raum")
+			var r_name = GameState.T(t.get_definition().get("name", "Raum"))
 			var r_id = t.get("id") if "id" in t else ""
 			return "%s (%s)" % [r_name, r_id] if r_id != "" else r_name
 		elif typeof(t) == TYPE_VECTOR2 or typeof(t) == TYPE_VECTOR2I:

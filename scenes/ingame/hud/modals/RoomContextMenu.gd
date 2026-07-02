@@ -40,25 +40,18 @@ func _ready() -> void:
 	GameState.sig_room_clicked.connect(open)
 
 # =============================================================================
+# ANG-212 Fix: Kein direktes Wert-Setzen mehr. Einfach Signal emittieren,
+# TaskManager erstellt das Ticket, Staff laeuft wirklich hin.
 func _on_service_pressed() -> void:
 	if is_instance_valid(_target_room):
-		# Test-Toggle: Sauber -> Dreckig -> Sauber
 		if _target_room.get("is_service_requested"):
-			_target_room.set("is_service_requested", false)
-			_target_room.set("cleanliness_level", 100)
-			if is_instance_valid(Toast):
-				Toast.show("Test: Zimmer wieder sauber!")
+			Toast.show("Service-Ticket bereits aktiv.")
 		else:
 			_target_room.set("is_service_requested", true)
-			_target_room.set("cleanliness_level", 30)
+			if _target_room.has_method("_update_indicator"):
+				_target_room.call("_update_indicator")
 			GameState.sig_room_needs_cleaning.emit(_target_room)
-			if is_instance_valid(Toast):
-				Toast.show("Test: Service angefordert!")
-		
-		# Indikator manuell aktualisieren
-		if _target_room.has_method("_update_indicator"):
-			_target_room.call("_update_indicator")
-			
+			Toast.show("Service angefordert!")
 	close()
 
 # =============================================================================
@@ -139,23 +132,18 @@ func _on_handle_input(event: InputEvent) -> void:
 		panel.global_position = event.global_position - _drag_offset
 
 # =============================================================================
+# ANG-212 Fix: Kein direktes Wert-Setzen mehr fuer Wartung.
 func _on_repair_pressed() -> void:
 	if is_instance_valid(_target_room):
 		if _target_room.get("is_repair_requested"):
-			_target_room.set("is_repair_requested", false)
-			_target_room.set("maintenance_level", 100)
-			if _target_room.has_method("_update_indicator"):
-				_target_room.call("_update_indicator")
-			if is_instance_valid(Toast):
-				Toast.show("Test: Zimmer repariert!")
+			Toast.show("Wartungs-Ticket bereits aktiv.")
 		else:
 			_target_room.set("is_repair_requested", true)
-			_target_room.set("maintenance_level", 30)
 			if _target_room.has_method("_update_indicator"):
 				_target_room.call("_update_indicator")
 			GameState.sig_room_needs_repair.emit(_target_room)
-			if is_instance_valid(Toast):
-				Toast.show("Test: Wartung angefordert!")
+			Toast.show("Wartung angefordert!")
+	close()
 
 # =============================================================================
 func _on_demolish_pressed() -> void:

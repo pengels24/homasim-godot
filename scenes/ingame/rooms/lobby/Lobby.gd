@@ -41,6 +41,13 @@ static func get_definition() -> Dictionary:
 # ── Public API ────────────────────────────────────────────────────────────────
 
 # =============================================================================
+## ANG-218: Lobby ist immer 4×4 Tiles – base_size wird in der .tscn nicht gesetzt,
+## daher hier als fester Override, damit Highlight, Hitbox und Pathfinding korrekt sind.
+func get_tile_size() -> Vector2i:
+	return Vector2i(4, 4)
+
+
+# =============================================================================
 func configure(data: Dictionary) -> void:
 	entrance_dir = data.get("entrance_dir", entrance_dir)
 	# ANG-211 Fix: door_rotation aus entrance_dir ableiten, damit get_target_tile()

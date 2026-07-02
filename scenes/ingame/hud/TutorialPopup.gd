@@ -7,6 +7,7 @@ extends CanvasLayer
 
 func _ready() -> void:
 	$Dim.mouse_filter = Control.MOUSE_FILTER_STOP
+	close_btn.text = GameState.T("ui.tutorial.btn_ok")
 	close_btn.pressed.connect(queue_free)
 	get_tree().paused = true
 	

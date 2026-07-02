@@ -242,11 +242,17 @@ func _on_create_pressed() -> void:
 		_error_lbl.text = GameState.T("dashboard.new_hotel.error.limit_reached")
 		return
 	
-	# Startkapital
+	# Startkapital und Multiplikatoren
 	var money = _money_values[_money_idx]
+	var refund_multi = [1.0, 0.75, 0.5, 0.25, 0.0][_refund_idx]
+	var exp_multi = [1.25, 1.10, 1.05, 1.0][_exp_idx]
 	
 	var hotel_id := SaveManager.create_hotel(GameState.active_profile_id, hotel_name)
-	SaveManager.update_hotel(hotel_id, {"money": money}) # Save custom money
+	SaveManager.update_hotel(hotel_id, {
+		"money": money,
+		"refund_multiplier": refund_multi,
+		"exp_multiplier": exp_multi
+	}) # Save custom settings
 	
 	SaveManager.set_plot_built(hotel_id, _selected_x, _selected_y, _derive_entrance_dir(_selected_x, _selected_y))
 	confirmed.emit(hotel_id)

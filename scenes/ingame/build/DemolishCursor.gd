@@ -93,7 +93,8 @@ func _try_demolish() -> void:
 	if room_number and str(room_number) != "":
 		room_name += " " + str(room_number)
 	var cost = def.get("build_cost", 0)
-	var refund = int(cost * 0.5)
+	var refund_multi = GameState.selected_hotel.get("refund_multiplier", 0.5) if GameState.selected_hotel else 0.5
+	var refund = int(cost * refund_multi)
 	
 	var confirm_scene = load("res://scenes/shared/ConfirmModal.tscn")
 	var confirm = confirm_scene.instantiate()

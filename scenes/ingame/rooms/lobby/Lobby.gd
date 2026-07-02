@@ -54,8 +54,8 @@ func get_tile_size() -> Vector2i:
 ## get_room_entry_pos() gibt die Lobby-Mitte zurück (Arbeitsposition des Staff).
 func get_target_tile(map_grid: Node) -> Vector2i:
 	var tile = map_grid.world_to_tile(global_position)
-	var gx := tile.x
-	var gy := tile.y
+	var gx = tile.x
+	var gy = tile.y
 	# Lobby ist 4×4 – Eingang in Mitte der jeweiligen Wand (Offset 1-2 von 4)
 	match entrance_dir:
 		"top":    return Vector2i(gx + 1, gy - 1)      # Über der Mitte der Oberwand
@@ -66,8 +66,8 @@ func get_target_tile(map_grid: Node) -> Vector2i:
 
 func get_room_entry_pos(map_grid: Node) -> Vector2:
 	var tile = map_grid.world_to_tile(global_position)
-	var gx := tile.x
-	var gy := tile.y
+	var gx = tile.x
+	var gy = tile.y
 	# Arbeitsposition = 1 Tile innerhalb der Eingangsmitte (wo Staff reinläuft)
 	match entrance_dir:
 		"top":    return map_grid.tile_to_world(Vector2i(gx + 1, gy + 1))

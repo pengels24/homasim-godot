@@ -104,3 +104,11 @@ func _format_task_target() -> String:
 		else:
 			return GameState.T("staff.tooltip.target.room_work")
 	return GameState.T("staff.tooltip.target.work")
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		queue_free()
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("ui_cancel"):
+		queue_free()
+		get_viewport().set_input_as_handled()

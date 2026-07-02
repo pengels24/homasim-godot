@@ -219,12 +219,15 @@ func _change_state(new_state: State) -> void:
 		State.IN_ROOM, State.IN_POI:
 			_action_timer = randf_range(45.0, 120.0)
 			avatar.visible = false
+			if has_node("ClickArea"): get_node("ClickArea").input_pickable = false
 		State.AWAITING_CHECKOUT:
 			# Unsichtbar am Schalter warten – kein Timer, Spieler löst aus
 			_action_timer = 0.0
 			avatar.visible = false
+			if has_node("ClickArea"): get_node("ClickArea").input_pickable = false
 		State.WALKING, State.LEAVING:
 			avatar.visible = true
+			if has_node("ClickArea"): get_node("ClickArea").input_pickable = true
 
 
 # =============================================================================

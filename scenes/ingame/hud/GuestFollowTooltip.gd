@@ -96,3 +96,11 @@ func _update_target_text() -> void:
 	var member = _target_guest.get("_guest_member")
 	if member and member.daily_budget > 0:
 		label_target.text += GameState.T("guest.tooltip.budget") % [member.spending_budget, member.daily_budget]
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		queue_free()
+		get_viewport().set_input_as_handled()
+	elif event.is_action_pressed("ui_cancel"):
+		queue_free()
+		get_viewport().set_input_as_handled()

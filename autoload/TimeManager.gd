@@ -22,6 +22,7 @@ var _game_hour: int = 10
 var _game_minute: int = 0
 var _game_paused: bool = true
 var _game_speed: float = 1.0
+var _pre_pause_speed: float = 1.0  # ANG-208: Speed vor Pause merken
 var _time_accum: float = 0.0
 
 var _ff_tip_shown: bool = false
@@ -66,16 +67,17 @@ func is_paused() -> bool:
 
 # =============================================================================
 func pause() -> void:
+  _pre_pause_speed = _game_speed  # ANG-208: Aktuelle Geschwindigkeit sichern
   _game_paused = true
-  get_tree().paused = true # <--- NEU: Die harte Engine-Pause!
+  get_tree().paused = true
   sig_speed_changed.emit(_game_paused, _game_speed)
 
 
 # =============================================================================
 func resume() -> void:
   _game_paused = false
-  _game_speed = 1.0
-  get_tree().paused = false # <--- NEU: Spielwelt läuft weiter
+  _game_speed = _pre_pause_speed  # ANG-208: Geschwindigkeit vor der Pause wiederherstellen
+  get_tree().paused = false
   sig_speed_changed.emit(_game_paused, _game_speed)
 
 

@@ -13,10 +13,11 @@ Bevor du UI-Änderungen durchführst, musst du zwingend das Dokument `wiki/06_ui
 
 - Datei: `changelog/gd-0.1.XX.md` – Versionsnummer **immer aus `/version.txt` lesen** (nie raten, nie selbst erhöhen – es sei denn Peter sagt explizit „Version erhöhen")
 - Changelog-Nummer = aktuelle Version (z.B. `v0.1.28gd` → `gd-0.1.28.md`)
-- Format: wie `changelog/gd-0.1.10.md` – Abschnitte: `Features & Verbesserungen`, `Bugfixes`, `Technische Änderungen`
+- Format: Abschnitte: `Features & Verbesserungen`, `Bugfixes`, `Technische Änderungen`
+- **WICHTIG:** Ab sofort kurze, prägnante Stichpunkte! Nicht zu detailliert, da der Changelog direkt als Upload-Notice bei itch.io verwendet wird.
 - **Kein Abschnitt „Offene Backlog-Issues"** – der bleibt weg
 - Datum im Format `YYYY-MM-DD` (tagesbezogen)
-- Der Changelog dient als Grundlage für Social Media Posts → prägnant, auf Deutsch, spielernah formulieren
+- Der Changelog dient als Grundlage für Social Media Posts und itch.io Updates → prägnant, auf Deutsch, spielernah formulieren
 - Nach dem Changelog: `git add -A; git commit -m "core: gd-0.1.XX changelog + session changes"`
 
 ---

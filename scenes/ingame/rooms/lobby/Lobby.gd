@@ -43,6 +43,14 @@ static func get_definition() -> Dictionary:
 # =============================================================================
 func configure(data: Dictionary) -> void:
 	entrance_dir = data.get("entrance_dir", entrance_dir)
+	# ANG-211 Fix: door_rotation aus entrance_dir ableiten, damit get_target_tile()
+	# den korrekten Exit-Tile berechnet. Ohne diesen Fix kann das Personal keinen
+	# Pfad zur Lobby berechnen und Tickets werden stillschweigend verworfen.
+	match entrance_dir:
+		"left":   data["door_rotation"] = 0
+		"top":    data["door_rotation"] = 1
+		"right":  data["door_rotation"] = 2
+		"bottom": data["door_rotation"] = 3
 	super.configure(data)
 
 

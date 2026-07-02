@@ -37,7 +37,7 @@ echo.
 echo ==============================================
 echo  Pushe Mac-Build...
 echo ==============================================
-"%BUTLER_PATH%" push builds\mac %TARGET%:mac --userversion "%VERSION%"
+"%BUTLER_PATH%" push builds\macos %TARGET%:mac --userversion "%VERSION%"
 echo.
 echo ==============================================
 echo  Deployment abgeschlossen!

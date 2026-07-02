@@ -42,10 +42,16 @@ static func get_definition() -> Dictionary:
 
 # =============================================================================
 ## ANG-218: Lobby ist immer 4×4 Tiles – base_size wird in der .tscn nicht gesetzt,
-## daher hier als fester Override, damit Highlight, Hitbox und Pathfinding korrekt sind.
+## daher hier als fester Override, damit Highlight und Hitbox korrekt sind.
 func get_tile_size() -> Vector2i:
 	return Vector2i(4, 4)
 
+
+# =============================================================================
+## ANG-211: Lobby ist Systemraum – keine Sauberkeits-/Wartungsabnahme,
+## keine Service-Tickets. _on_hour_passed() des Elternraums wird nicht ausgeführt.
+func _on_hour_passed(_hour: int) -> void:
+	pass  # Systemraum: Werte bleiben konstant bei 100%
 
 # =============================================================================
 ## ANG-211 Fix: Lobby braucht eigene Implementierungen, weil sie kein Standard-
@@ -81,6 +87,11 @@ func get_room_entry_pos(map_grid: Node) -> Vector2:
 func configure(data: Dictionary) -> void:
 	entrance_dir = data.get("entrance_dir", entrance_dir)
 	super.configure(data)
+	# Systemraum: Werte immer bei 100% halten, unabhängig vom Savegame
+	cleanliness_level = 100
+	maintenance_level = 100
+	is_service_requested = false
+	is_repair_requested = false
 
 
 

@@ -151,8 +151,11 @@ func _update_content() -> void:
 	var final_status = ""
 	if _target_room.get("is_pending_demolish"):
 		final_status += GameState.T("room.tooltip.pending_demolish")
-		
-	final_status += status + GameState.T("room.tooltip.stats") % [_target_room.cleanliness_level, _target_room.maintenance_level]
+	# ANG-211: Lobby ist Systemraum – Sauberkeit/Wartung nicht anzeigen
+	if _target_room.get("room_type_id") != "lobby":
+		final_status += status + GameState.T("room.tooltip.stats") % [_target_room.cleanliness_level, _target_room.maintenance_level]
+	else:
+		final_status += status
 	status_label.text = final_status
 	
 	# Zwingt das Tooltip-Panel zum Schrumpfen, falls vorher mehr Text da war

@@ -58,6 +58,9 @@ func _on_service_pressed() -> void:
 func open(room: Node2D) -> void:
 	if InputHandler.current_mode != InputHandler.InputMode.NORMAL:
 		return
+	# ANG-211: Lobby ist Systemraum – kein Aktionsmenü
+	if room.get("room_type_id") == "lobby":
+		return
 		
 	_target_room = room
 	if _target_room.has_method("set_highlight"):

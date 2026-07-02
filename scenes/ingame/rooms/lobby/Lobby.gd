@@ -56,19 +56,19 @@ func get_target_tile(map_grid: Node) -> Vector2i:
 	var tile = map_grid.world_to_tile(global_position)
 	var gx = tile.x
 	var gy = tile.y
-	# Lobby ist 4×4 – Eingang in Mitte der jeweiligen Wand (Offset 1-2 von 4)
+	# Lobby 4×4 – Exit-Tile direkt vor dem Eingang (nachgewiesen navigierbar)
 	match entrance_dir:
-		"top":    return Vector2i(gx + 1, gy - 1)      # Über der Mitte der Oberwand
-		"bottom": return Vector2i(gx + 1, gy + 4)      # Unter der Mitte der Unterwand
-		"left":   return Vector2i(gx - 1, gy + 1)      # Links der Mitte der Linkswand
-		"right":  return Vector2i(gx + 4, gy + 1)      # Rechts der Mitte der Rechtswand
+		"top":    return Vector2i(gx,     gy - 1)  # Korridor über Lobby
+		"bottom": return Vector2i(gx,     gy + 4)  # Korridor unter Lobby
+		"left":   return Vector2i(gx - 1, gy)      # Korridor links der Lobby
+		"right":  return Vector2i(gx + 4, gy)      # Korridor rechts der Lobby
 	return tile  # Fallback
 
 func get_room_entry_pos(map_grid: Node) -> Vector2:
 	var tile = map_grid.world_to_tile(global_position)
 	var gx = tile.x
 	var gy = tile.y
-	# Arbeitsposition = 1 Tile innerhalb der Eingangsmitte (wo Staff reinläuft)
+	# Arbeitsposition = 1 Tile innerhalb des Eingangs
 	match entrance_dir:
 		"top":    return map_grid.tile_to_world(Vector2i(gx + 1, gy + 1))
 		"bottom": return map_grid.tile_to_world(Vector2i(gx + 1, gy + 2))
@@ -98,4 +98,3 @@ func _apply_visuals() -> void:
 	_wall_bottom.visible = (entrance_dir == "bottom")
 	_wall_left.visible   = (entrance_dir == "left")
 	_wall_right.visible  = (entrance_dir == "right")
-

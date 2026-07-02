@@ -329,7 +329,7 @@ func _on_event_reception_last_call() -> void:
 	# Wenn gar niemand wartet, stören wir den Spieler auch nicht
 	if _guest_mgr.get_waiting().size() > 0:
 		TimeManager.pause()
-		Toast.show("Letzter Aufruf! Es warten noch Gäste auf den Check-in.")
+		Toast.show(GameState.T("toast.checkin.last_call"))
 
 
 # =============================================================================

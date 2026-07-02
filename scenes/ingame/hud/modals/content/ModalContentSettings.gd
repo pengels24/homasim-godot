@@ -552,7 +552,7 @@ func _exit_tree() -> void:
 		if missing_primary: break
 	
 	if missing_primary:
-		Toast.show("Warnung: Nicht alle Aktionen haben eine Primär-Taste zugewiesen!")
+		Toast.show(GameState.T("toast.settings.missing_keybind"))
 
 # =============================================================================
 func _translate_key(key_str: String) -> String:

@@ -45,13 +45,13 @@ func _ready() -> void:
 func _on_service_pressed() -> void:
 	if is_instance_valid(_target_room):
 		if _target_room.get("is_service_requested"):
-			Toast.show("Service-Ticket bereits aktiv.")
+			Toast.show(GameState.T("toast.room.service_active"))
 		else:
 			_target_room.set("is_service_requested", true)
 			if _target_room.has_method("_update_indicator"):
 				_target_room.call("_update_indicator")
 			GameState.sig_room_needs_cleaning.emit(_target_room)
-			Toast.show("Service angefordert!")
+			Toast.show(GameState.T("toast.room.service_requested"))
 	close()
 
 # =============================================================================
@@ -139,13 +139,13 @@ func _on_handle_input(event: InputEvent) -> void:
 func _on_repair_pressed() -> void:
 	if is_instance_valid(_target_room):
 		if _target_room.get("is_repair_requested"):
-			Toast.show("Wartungs-Ticket bereits aktiv.")
+			Toast.show(GameState.T("toast.room.repair_active"))
 		else:
 			_target_room.set("is_repair_requested", true)
 			if _target_room.has_method("_update_indicator"):
 				_target_room.call("_update_indicator")
 			GameState.sig_room_needs_repair.emit(_target_room)
-			Toast.show("Wartung angefordert!")
+			Toast.show(GameState.T("toast.room.repair_requested"))
 	close()
 
 # =============================================================================
@@ -156,12 +156,12 @@ func _on_demolish_pressed() -> void:
 		
 	var room = _target_room
 	if room.get("room_type_id") == "lobby":
-		if is_instance_valid(Toast): Toast.show("Die Lobby kann nicht abgerissen werden!")
+		if is_instance_valid(Toast): Toast.show(GameState.T("toast.room.lobby_no_demolish"))
 		close()
 		return
 		
 	if room.get("is_pending_demolish"):
-		if is_instance_valid(Toast): Toast.show("Raum ist bereits für den Abriss vorgemerkt.")
+		if is_instance_valid(Toast): Toast.show(GameState.T("toast.room.already_demolish"))
 		close()
 		return
 		

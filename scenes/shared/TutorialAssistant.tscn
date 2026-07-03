@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cx4x2b1ab2ab3"]
 
-[ext_resource type="Texture2D" uid="uid://djcx11xxxxxx" path="res://assets/images/angelus2010-avatar-8bit.png" id="1_avatar"]
+[ext_resource type="Texture2D" uid="uid://byq1d06ovi25n" path="res://assets/images/angelus2010-avatar-8bit.png" id="1_avatar"]
 [ext_resource type="Script" path="res://scenes/shared/TutorialAssistant.gd" id="2_script"]
 [ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://assets/UI/menu_button_green.tres" id="3_bg"]
 [ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://assets/UI/menu_button_green_hover.tres" id="4_bh"]

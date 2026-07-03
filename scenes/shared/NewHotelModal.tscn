@@ -93,6 +93,7 @@ text = "Hotelname"
 [node name="HotelNameField" type="LineEdit" parent="Content/Left/NameBox" unique_id=1042507903]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
+max_length = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_input_normal")
 theme_override_styles/focus = SubResource("StyleBoxFlat_input_focus")
 placeholder_text = "Hier Namen eintragen..."

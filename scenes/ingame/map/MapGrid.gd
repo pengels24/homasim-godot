@@ -783,8 +783,8 @@ func _on_input_camera_zoom(step: float) -> void:
 		# Tastatur-Zoom drosseln, indem wir es verkleinern
 		_apply_zoom(step * 0.2)
 	else:
-		# Mausrad-Impuls (1.0 / -1.0) sanfter machen: wir nutzen 50% des normalen Steps
-		_apply_zoom(step * (ZOOM_STEP * 0.5))
+		# Mausrad-Impuls (1.0 / -1.0) mit einstellbarer Empfindlichkeit (ANG-223)
+		_apply_zoom(step * (ZOOM_STEP * SettingsManager.scroll_zoom_sensitivity))
 
 
 # =============================================================================

@@ -19,6 +19,10 @@ const KEYBINDING_ROW = preload("res://scenes/ingame/hud/modals/content/Keybindin
 @onready var btn_tutorial_right: Button = %ButtonTutorialTipsRight
 @onready var lbl_tutorial: Label        = %LabelTutorialTipsValue
 
+@onready var slider_zoom: HSlider   = %HSliderZoomSens
+@onready var lbl_zoom: Label        = %LabelZoomSensValue
+@onready var lbl_zoom_title: Label  = %LabelZoomSens
+
 # -- AUDIO --
 @onready var slider_master: HSlider = %HSliderVolMaster
 @onready var lbl_master: Label      = %LabelVolMasterValue
@@ -88,6 +92,15 @@ func _init_gameplay_tab() -> void:
 	_setup_selector("tutorial", btn_tutorial_left, btn_tutorial_right, lbl_tutorial,
 		[GameState.T("label.off"), GameState.T("label.on")], [false, true],
 		SettingsManager.tutorial_tips, _on_tutorial_tips_changed)
+
+	if is_instance_valid(slider_zoom):
+		slider_zoom.value = SettingsManager.scroll_zoom_sensitivity
+		lbl_zoom.text = "%.1fx" % slider_zoom.value
+		slider_zoom.value_changed.connect(func(val: float):
+			lbl_zoom.text = "%.1fx" % val
+			SettingsManager.scroll_zoom_sensitivity = val
+			SettingsManager.save()
+		)
 
 
 # =============================================================================
@@ -285,6 +298,8 @@ func _refresh_translated_labels() -> void:
 		%LabelFastForward.text = GameState.T("settings.gameplay.ff_speed")
 	if is_instance_valid(%LabelTutorialTips):
 		%LabelTutorialTips.text = GameState.T("settings.gameplay.tutorial_tips")
+	if is_instance_valid(%LabelZoomSens):
+		%LabelZoomSens.text = GameState.T("settings.gameplay.zoom_sens")
 		
 	# Zeilen-Labels im Audio-Tab
 	if is_instance_valid(%LabelVolMaster):

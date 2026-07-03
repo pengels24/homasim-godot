@@ -181,6 +181,44 @@ theme_override_styles/pressed = ExtResource("3_d0jvy")
 theme_override_styles/hover = ExtResource("4_v1l06")
 icon = ExtResource("3_xeut1")
 
+
+[node name="PanelZoom" type="HSeparator" parent="Gameplay/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBoxContainerZoom" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LabelZoomSens" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerZoom"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Zoom-Empfindlichkeit"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerZoom"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="HSliderZoomSens" type="HSlider" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerZoom/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 4
+min_value = 0.5
+max_value = 3.0
+step = 0.1
+value = 1.0
+
+[node name="LabelZoomSensValue" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerZoom/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+theme_type_variation = &"ValueLabel"
+layout_mode = 2
+text = "1.0x"
+horizontal_alignment = 2
+
 [node name="Audio" type="VBoxContainer" parent="." unique_id=1957786893]
 visible = false
 layout_mode = 2

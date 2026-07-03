@@ -3,6 +3,8 @@
 ## Features & Verbesserungen
 - **Save/Load:** Sicherheitsabfrage vor dem Laden/Überschreiben von Spielständen hinzugefügt
 - **UX:** Nach dem Speichern schließt sich das Menü nun automatisch
+- **UX:** Schnellvorlauf bietet nun auch Geschwindigkeiten x30 und x50 an
+- **UX:** Scroll-Zoom Empfindlichkeit (Mausrad) ist nun in den Einstellungen anpassbar (ANG-223)
 - **Tooltips:** Raum-Tooltips zeigen nun Belegung und nötigen Service gleichzeitig an
 - **Kassenbuch:** Details zu Bau- und Abrisskosten werden nun detaillierter aufgeschlüsselt
 - **Rezeption:** Gäste-Tooltip zeigt nun den genauen Grund fürs Warten (Check-In/Check-Out) an

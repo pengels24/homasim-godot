@@ -596,6 +596,92 @@ theme_override_styles/pressed = ExtResource("3_d0jvy")
 theme_override_styles/hover = ExtResource("4_v1l06")
 icon = ExtResource("3_xeut1")
 
+
+[node name="PanelWindowMode" type="HSeparator" parent="Oberfläche/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBoxContainerWindowMode" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LabelWindowMode" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerWindowMode"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Fenstermodus"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerWindowMode"]
+layout_mode = 2
+
+[node name="ButtonWindowModeLeft" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerWindowMode/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("2_j758h")
+
+[node name="LabelWindowModeValue" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerWindowMode/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+theme_type_variation = &"ValueLabel"
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Fullscreen"
+horizontal_alignment = 1
+
+[node name="ButtonWindowModeRight" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerWindowMode/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("3_xeut1")
+
+
+[node name="PanelScreen" type="HSeparator" parent="Oberfläche/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBoxContainerScreen" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LabelScreen" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerScreen"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Monitor"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerScreen"]
+layout_mode = 2
+
+[node name="ButtonScreenLeft" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerScreen/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("2_j758h")
+
+[node name="LabelScreenValue" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerScreen/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+theme_type_variation = &"ValueLabel"
+layout_mode = 2
+size_flags_horizontal = 10
+text = "Monitor 1"
+horizontal_alignment = 1
+
+[node name="ButtonScreenRight" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerScreen/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("3_xeut1")
+
 [node name="Tastaturbelegung" type="VBoxContainer" parent="." unique_id=603090970]
 visible = false
 layout_mode = 2

@@ -54,6 +54,16 @@ const KEYBINDING_ROW = preload("res://scenes/ingame/hud/modals/content/Keybindin
 @onready var btn_lang_right: Button = %ButtonLanguageRight
 @onready var lbl_lang: Label        = %LabelLanguageValue
 
+@onready var btn_wm_left: Button   = %ButtonWindowModeLeft
+@onready var btn_wm_right: Button  = %ButtonWindowModeRight
+@onready var lbl_wm: Label         = %LabelWindowModeValue
+@onready var lbl_wm_title: Label   = %LabelWindowMode
+
+@onready var btn_screen_left: Button  = %ButtonScreenLeft
+@onready var btn_screen_right: Button = %ButtonScreenRight
+@onready var lbl_screen: Label        = %LabelScreenValue
+@onready var lbl_screen_title: Label  = %LabelScreen
+
 # Interne Speicherstruktur für die Left/Right-Logik
 var _sel_data: Dictionary = {}
 
@@ -135,12 +145,30 @@ func _init_ui_tab() -> void:
 			SettingsManager.LANGUAGES_LABELS, SettingsManager.LANGUAGES,
 			SettingsManager.language, _on_language_changed)
 
+	_setup_selector("winmode", btn_wm_left, btn_wm_right, lbl_wm,
+			[GameState.T("settings.ui.window_mode.fullscreen"), GameState.T("settings.ui.window_mode.borderless")],
+			["fullscreen", "borderless"],
+			SettingsManager.window_mode, _on_window_mode_changed)
+
 	# Sprache nur im Hauptmenü änderbar
 	var ingame := GameState.active_hotel_id != -1
 	btn_lang_left.disabled  = ingame
 	btn_lang_right.disabled = ingame
 	if ingame:
 		lbl_lang.text = lbl_lang.text + "  ·  " + GameState.T("settings.language.main_menu_only")
+
+	# Monitor-Selector: Einträge dynamisch nach Anzahl angeschlossener Monitore aufbauen
+	var screen_count := DisplayServer.get_screen_count()
+	var screen_labels: Array[String] = []
+	var screen_vals: Array[int] = []
+	for i in range(screen_count):
+		screen_labels.append("Monitor %d" % (i + 1))
+		screen_vals.append(i)
+	# Bei nur einem Monitor: Selector ausblenden (macht keinen Sinn)
+	btn_screen_left.visible  = screen_count > 1
+	btn_screen_right.visible = screen_count > 1
+	_setup_selector("screen", btn_screen_left, btn_screen_right, lbl_screen,
+		screen_labels, screen_vals, SettingsManager.preferred_screen, _on_screen_changed)
 
 
 # =============================================================================
@@ -283,6 +311,20 @@ func _on_language_changed(val: String) -> void:
 		_refresh_translated_labels()
 
 
+# =============================================================================
+func _on_window_mode_changed(val: String) -> void:
+	SettingsManager.window_mode = val
+	SettingsManager.save()
+	SettingsManager.apply_window_mode(true)  # true = Toast bei zu kleinem Monitor
+
+
+# =============================================================================
+func _on_screen_changed(val: int) -> void:
+	SettingsManager.preferred_screen = val
+	SettingsManager.save()
+	SettingsManager.apply_screen()
+	# KEIN apply_window_mode() hier – apply_screen() stellt den Modus selbst wieder her
+
 ## Aktualisiert alle Labels im Modal die über GameState.T() befüllt wurden.
 func _refresh_translated_labels() -> void:
 	# Tab-Namen
@@ -322,6 +364,8 @@ func _refresh_translated_labels() -> void:
 		%LabelPosHUDBottom.text = GameState.T("settings.ui.hud_side")
 	if is_instance_valid(%LabelTechInfo):
 		%LabelTechInfo.text = GameState.T("settings.ui.tech_info")
+	if is_instance_valid(%LabelWindowMode):
+		%LabelWindowMode.text = GameState.T("settings.ui.window_mode")
 
 
 

@@ -31,6 +31,7 @@ var show_tech_info: bool = false   # Ingame Performance Overlay
 var tutorial_tips: bool = true     # Tutorial-Tipps im Spiel anzeigen
 var language: String = "de"        # "de" / "en" (erweiterbar)
 var dont_show_disclaimer: bool = false
+var window_mode: String = "fullscreen"  # "fullscreen" / "borderless"
 
 # ── Session ───────────────────────────────────────────────────────────────────
 var last_profile_id: int = -1   # Zuletzt gewählter Manager – für Auto-Restore
@@ -73,6 +74,9 @@ const LANGUAGES: Array[String] = ["de", "en"]
 const LANGUAGES_LABELS: Array[String] = ["Deutsch", "English"]
 
 
+# ── Monitor-Auswahl ───────────────────────────────────────────────────────────
+var preferred_screen: int = 0  # Index des gewünschten Monitors (0 = primär)
+
 # =============================================================================
 func _ready() -> void:
 	# Das macht diesen Autoload immun gegen die Godot-Pause!
@@ -87,6 +91,69 @@ func _ready() -> void:
 # =============================================================================
 func _apply_startup_scale() -> void:
 	get_tree().root.content_scale_factor = ui_scale
+
+
+# =============================================================================
+## Bewegt das Fenster auf den gewählten Monitor.
+## Bei Fullscreen: kurz in Windowed, verschieben, zurück in Fullscreen.
+## Das kurze Flackern ist unter Windows unvermeidbar bei Monitor-Wechsel im Fullscreen.
+func apply_screen() -> void:
+	var count := DisplayServer.get_screen_count()
+	var screen := clampi(preferred_screen, 0, count - 1)
+
+	var current_mode := DisplayServer.window_get_mode()
+	var in_fullscreen := current_mode in [
+		DisplayServer.WINDOW_MODE_FULLSCREEN,
+		DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN
+	]
+
+	if in_fullscreen:
+		# Fullscreen kann nicht direkt verschoben werden – kurz Windowed schalten
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		DisplayServer.window_set_current_screen(screen)
+		# Position muss gesetzt werden damit das Fenster wirklich auf dem neuen Monitor ist
+		var screen_pos := DisplayServer.screen_get_position(screen)
+		DisplayServer.window_set_position(screen_pos + Vector2i(100, 100))
+		# Dann wieder Fullscreen auf dem neuen Monitor
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	else:
+		DisplayServer.window_set_current_screen(screen)
+		if window_mode == "borderless":
+			# Rahmenlos: Fenster muss auf dem neuen Monitor auch die richtige Größe/Position haben
+			var screen_size := DisplayServer.screen_get_size(screen)
+			var screen_pos  := DisplayServer.screen_get_position(screen)
+			DisplayServer.window_set_size(screen_size)
+			DisplayServer.window_set_position(screen_pos)
+
+
+
+# =============================================================================
+## Setzt den Fenstermodus. Bei "borderless" wird die Monitorauflösung geprüft –
+## ist sie kleiner als 1920×1080, bleibt Fullscreen und ein Toast wird angezeigt.
+func apply_window_mode(show_toast_on_fail: bool = false) -> void:
+	if window_mode == "borderless":
+		var screen_size := DisplayServer.screen_get_size()
+		if screen_size.x < 1920 or screen_size.y < 1080:
+			# Sicherheits-Fallback: Monitor zu klein → zurück auf Fullscreen
+			window_mode = "fullscreen"
+			if show_toast_on_fail:
+				# ToastManager wird erst nach dem ersten Frame verfügbar
+				call_deferred("_toast_resolution_warning")
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+			return
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
+		DisplayServer.window_set_size(screen_size)
+		DisplayServer.window_set_position(Vector2i.ZERO)
+	else:
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+
+
+func _toast_resolution_warning() -> void:
+	var toast := get_node_or_null("/root/ToastManager")
+	if toast:
+		toast.warning(GameState.T("settings.ui.window_mode.too_small"))
 
 
 # =============================================================================
@@ -109,7 +176,9 @@ func save() -> void:
 	cfg.set_value("ui", "tutorial_tips", tutorial_tips)
 	cfg.set_value("ui", "language", language)
 	cfg.set_value("ui", "dont_show_disclaimer", dont_show_disclaimer)
+	cfg.set_value("ui", "window_mode", window_mode)
 	cfg.set_value("session", "last_profile_id", last_profile_id)
+	cfg.set_value("ui", "preferred_screen", preferred_screen)
 	
 	for action in custom_keybindings:
 		cfg.set_value("input", action, custom_keybindings[action])
@@ -148,6 +217,10 @@ func _load() -> void:
 	language = cfg.get_value("ui", "language", "de")
 	TranslationServer.set_locale(language)
 	dont_show_disclaimer = cfg.get_value("ui", "dont_show_disclaimer", false)
+	window_mode = cfg.get_value("ui", "window_mode", "fullscreen")
+	preferred_screen = cfg.get_value("ui", "preferred_screen", 0)
+	apply_screen()
+	apply_window_mode()
 	last_profile_id = cfg.get_value("session",  "last_profile_id",           last_profile_id)
 	
 	custom_keybindings.clear()

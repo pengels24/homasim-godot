@@ -35,6 +35,7 @@ func _ready() -> void:
 	$Panel/Margin/VBox/Header/LblCat.text = GameState.T("finances.header.cat")
 	$Panel/Margin/VBox/Header/LblDesc.text = GameState.T("finances.header.desc")
 	$Panel/Margin/VBox/Header/LblAmount.text = GameState.T("finances.header.amount")
+	$Label.text = GameState.T("finances.book.title")
 	%BtnTimeLeft.pressed.connect(_on_btn_time_left)
 	%BtnTimeRight.pressed.connect(_on_btn_time_right)
 	
@@ -162,21 +163,23 @@ func _add_transaction_row(tx: Dictionary) -> void:
 	var lbl_t = Label.new()
 	lbl_t.custom_minimum_size = Vector2(130, 0)
 	lbl_t.theme_type_variation = &"DescLabelLarge"
-	lbl_t.text = "Tag %d, %02d:%02d" % [tx["day"], int(tx["time"] / 60.0), tx["time"] % 60]
+	lbl_t.text = GameState.T("finances.row.day") % [tx["day"], int(tx["time"] / 60.0), tx["time"] % 60]
 	row.add_child(lbl_t)
 	
 	var lbl_c = Label.new()
 	lbl_c.custom_minimum_size = Vector2(200, 0)
 	lbl_c.theme_type_variation = &"ValueLabelLarge"
 	var t_cat = tx["category"]
-	var cat_name = "Unbekannt"
-	if t_cat == "construction": cat_name = "Bau & Einrichtung"
-	elif t_cat == "Personal": cat_name = "Personal"
-	elif t_cat == "gastro": cat_name = "Gäste / Gastro"
-	elif t_cat == "quest" or t_cat == "reward": cat_name = "Quests & Bonus"
-	elif t_cat == "research": cat_name = "Forschung"
-	elif t_cat == "system": cat_name = "System"
-	else: cat_name = t_cat
+	var cat_name: String
+	match t_cat:
+		"construction": cat_name = GameState.T("finances.cat.label.construction")
+		"Personal":     cat_name = GameState.T("finances.cat.label.personal")
+		"gastro":       cat_name = GameState.T("finances.cat.label.gastro")
+		"quest", "reward": cat_name = GameState.T("finances.cat.label.quest")
+		"research":     cat_name = GameState.T("finances.cat.label.research")
+		"system":       cat_name = GameState.T("finances.cat.label.system")
+		"room":         cat_name = GameState.T("finances.cat.label.room")
+		_:              cat_name = t_cat  # Fallback: raw value
 	lbl_c.text = cat_name
 	row.add_child(lbl_c)
 	

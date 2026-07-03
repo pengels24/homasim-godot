@@ -132,19 +132,20 @@ func apply_screen() -> void:
 ## ist sie kleiner als 1920×1080, bleibt Fullscreen und ein Toast wird angezeigt.
 func apply_window_mode(show_toast_on_fail: bool = false) -> void:
 	if window_mode == "borderless":
-		var screen_size := DisplayServer.screen_get_size()
+		var screen := clampi(preferred_screen, 0, DisplayServer.get_screen_count() - 1)
+		var screen_size := DisplayServer.screen_get_size(screen)
+		var screen_pos  := DisplayServer.screen_get_position(screen)
 		if screen_size.x < 1920 or screen_size.y < 1080:
 			# Sicherheits-Fallback: Monitor zu klein → zurück auf Fullscreen
 			window_mode = "fullscreen"
 			if show_toast_on_fail:
-				# ToastManager wird erst nach dem ersten Frame verfügbar
 				call_deferred("_toast_resolution_warning")
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 			return
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
 		DisplayServer.window_set_size(screen_size)
-		DisplayServer.window_set_position(Vector2i.ZERO)
+		DisplayServer.window_set_position(screen_pos)  # ← korrekter Monitor, nicht immer Vector2i.ZERO
 	else:
 		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)

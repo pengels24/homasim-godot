@@ -27,7 +27,9 @@ func _ready() -> void:
 
 	# NEU: Harte UI-Texte übersetzen
 	%Subtitle1.text = GameState.T("modal.load.manual.title")
+	%Subtitle1.theme_type_variation = &"HeaderMedium"
 	%Subtitle2.text = GameState.T("modal.load.auto.title")
+	%Subtitle2.theme_type_variation = &"HeaderMedium"
 	load_button.text = GameState.T("modal.load.button.load")
 
 

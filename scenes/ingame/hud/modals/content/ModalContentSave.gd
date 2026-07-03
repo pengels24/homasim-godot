@@ -26,7 +26,9 @@ func _ready() -> void:
 
 	# NEU: Harte UI-Texte übersetzen
 	%Subtitle.text = GameState.T("modal.save.subtitle") # "Manuelle Spielstände"
+	%Subtitle.theme_type_variation = &"HeaderMedium"
 	%InputLabel.text = GameState.T("modal.save.input_label") # "Name:"
+	%InputLabel.theme_type_variation = &"DescLabel"
 	%SaveNameInput.placeholder_text = GameState.T("modal.save.input_placeholder") # "Spielstand benennen..."
 	save_button.text = GameState.T("modal.save.button.save") # "Spielstand speichern"
 
@@ -96,13 +98,40 @@ func _on_name_input_changed(new_text: String) -> void:
 # Wird aufgerufen, wenn auf "Speichern" geklickt wird
 func _on_save_button_pressed() -> void:
 	var final_save_name = save_name_input.text.strip_edges()
+	var slot_index = selected_slot_index - 1
+	var clicked_slot = slots_ui[slot_index]
+	
+	if not clicked_slot.is_empty:
+		# Slot belegt -> Warnung anzeigen
+		var confirm = preload("res://scenes/shared/ConfirmModal.tscn").instantiate()
+		add_child(confirm)
+		
+		confirm.ask(
+			GameState.T("modal.save.overwrite.title", "Spielstand überschreiben?"),
+			GameState.T("modal.save.overwrite.message", "Möchtest du den Spielstand wirklich überschreiben?"),
+			GameState.T("btn.save.overwrite", "Überschreiben"),
+			GameState.T("btn.cancel", "Abbrechen"),
+			"",
+			true # roter Button
+		)
+		
+		confirm.confirmed.connect(func():
+			_execute_save(slot_index, final_save_name)
+			confirm.queue_free()
+		)
+		confirm.cancelled.connect(func():
+			confirm.queue_free()
+		)
+	else:
+		_execute_save(slot_index, final_save_name)
 
+func _execute_save(index: int, final_name: String) -> void:
 	# WICHTIG: Bevor wir speichern, müssen wir das laufende Spiel zwingen,
 	# seinen aktuellsten Zustand (Zeit, Geld, Gäste) in den SaveManager zu schreiben!
 	TimeManager.sig_save_requested.emit(TimeManager.get_game_time())
 
-	# Speichern über den SaveManager (Wichtig: Index 0-4 nutzen)
-	SaveManager.save_manual(active_hotel_id, selected_slot_index - 1, final_save_name)
+	# Speichern über den SaveManager
+	SaveManager.save_manual(active_hotel_id, index, final_name)
 	Toast.show(GameState.T("toast.quicksave"))
 
 	# Visueller Reset nach dem Speichern (Liste neu generieren, damit neues Datum sichtbar wird)

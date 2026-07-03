@@ -116,7 +116,8 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 # =============================================================================
 func _pause_time_for_ui() -> void:
 	if InputHandler.current_mode == InputHandler.InputMode.NORMAL:
-		_pause_was_running = not TimeManager.is_paused()
+		# Resume nach UI wenn: Spiel lief, ODER war durch Autopause pausiert (nicht User-Pause)
+		_pause_was_running = not TimeManager.is_paused() or not TimeManager.is_user_paused()
 	TimeManager.pause()
 
 

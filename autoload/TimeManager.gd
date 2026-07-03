@@ -27,6 +27,7 @@ var _time_accum: float = 0.0
 
 var _ff_tip_shown: bool = false
 var _ff_used: bool = false
+var _user_paused: bool = false  # ANG-208: Nur true wenn Spieler manuell paused
 
 
 # =============================================================================
@@ -66,6 +67,7 @@ func is_paused() -> bool:
 
 
 # =============================================================================
+## Autopause – z.B. durch Events, Tagesende, Modals. Stellt _pre_pause_speed nicht vom User.
 func pause() -> void:
   _pre_pause_speed = _game_speed  # ANG-208: Aktuelle Geschwindigkeit sichern
   _game_paused = true
@@ -74,7 +76,20 @@ func pause() -> void:
 
 
 # =============================================================================
+## User-Pause – explizit vom Spieler per Pause-Button ausgelöst.
+func user_pause() -> void:
+  _user_paused = true
+  pause()
+
+
+# =============================================================================
+func is_user_paused() -> bool:
+  return _user_paused
+
+
+# =============================================================================
 func resume() -> void:
+  _user_paused = false  # Jede explizite Resume-Aktion hebt User-Pause auf
   _game_paused = false
   _game_speed = _pre_pause_speed  # ANG-208: Geschwindigkeit vor der Pause wiederherstellen
   get_tree().paused = false
@@ -84,6 +99,7 @@ func resume() -> void:
 # =============================================================================
 func fast_forward(ff_speed: float) -> void:
   _ff_used = true
+  _user_paused = false  # FF hebt User-Pause auf
   _game_paused = false
   _game_speed = ff_speed
   _pre_pause_speed = ff_speed  # User hat explizit diese Geschwindigkeit gewählt
@@ -127,6 +143,7 @@ func _tick_game_clock(delta: float) -> void:
     _game_hour = 24
     _game_minute = 0
     _game_paused = true
+    _user_paused = true  # Neuer Tag beginnt immer in Pause – Spieler muss manuell starten
     get_tree().paused = true
     _game_speed = 1.0
     sig_speed_changed.emit(_game_paused, _game_speed)

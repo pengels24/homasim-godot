@@ -141,7 +141,7 @@ func _setup_subsystems() -> void:
 	TimeManager.sig_day_updated.connect(func(d: String): if is_instance_valid(hud_canvas.label_day): hud_canvas.label_day.text = d)
 
 	# Buttons verbinden
-	hud_canvas.btn_pause.pressed.connect(TimeManager.pause)
+	hud_canvas.btn_pause.pressed.connect(TimeManager.user_pause)
 	hud_canvas.btn_play.pressed.connect(func(): TimeManager.fast_forward(1.0))
 	hud_canvas.btn_ff.pressed.connect(func(): TimeManager.fast_forward(SettingsManager.ff_speed))
 	# --- Rückkanal: Wenn die Zeit per Code geändert wird, HUD visuell anpassen ---

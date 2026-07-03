@@ -191,20 +191,37 @@ func _on_waiting_guest_clicked(party: GuestParty) -> void:
 
 # =============================================================================
 func _on_guest_reject_requested(party: GuestParty) -> void:
-	# Falls dieser Gast gerade ausgewählt war, heben wir die Auswahl auf
-	if _sel_party == party:
-		_clear_selection()
-
-	# Gast über den Manager ablehnen
-	_guest_mgr.reject_party(party)
-
-	# ---> NEU: Dynamischen Ruf-Verlust abfragen
 	var rep_loss = GameState.calc_reject_rep_penalty(party)
-	GameState.add_rep(-rep_loss)
-	Toast.show(GameState.T("toast.guest.declined", str(rep_loss)))
-
-	# UI neu laden
-	refresh()
+	
+	var confirm = preload("res://scenes/shared/ConfirmModal.tscn").instantiate()
+	add_child(confirm)
+	
+	confirm.ask(
+		GameState.T("reception.decline.title"),
+		GameState.T("reception.decline.message", party.get_display_name(), str(rep_loss)),
+		GameState.T("btn.decline"),
+		GameState.T("btn.cancel"),
+		"",
+		true # roter Button
+	)
+	
+	confirm.confirmed.connect(func():
+		# Falls dieser Gast gerade ausgewählt war, heben wir die Auswahl auf
+		if _sel_party == party:
+			_clear_selection()
+			
+		# Gast über den Manager ablehnen
+		_guest_mgr.reject_party(party)
+		GameState.add_rep(-rep_loss)
+		Toast.show(GameState.T("toast.guest.declined", str(rep_loss)))
+		
+		refresh()
+		confirm.queue_free()
+	)
+	
+	confirm.cancelled.connect(func():
+		confirm.queue_free()
+	)
 
 
 # =============================================================================

@@ -1018,3 +1018,12 @@ You can sort and filter all entries. This gives you a clear overview of your fin
 "tx.daily_wages","Tagesgehaelter","Daily wages"
 "tx.research","Forschung: %s","Research: %s"
 "finances.cat.label.betrieb","Betrieb/POI","Operations/POI"
+
+"reception.decline.title","Gast abweisen?","Decline Guest?"
+"reception.decline.message","Möchtest du %s wirklich abweisen?
+
+Das kostet dich %s Ruf.","Do you really want to decline %s?
+
+This will cost you %s reputation."
+"btn.decline","Abweisen","Decline"
+"btn.cancel","Abbrechen","Cancel"

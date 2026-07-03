@@ -1,5 +1,7 @@
 extends VBoxContainer
 
+signal sig_save_completed
+
 const GAME_SLOT_SCENE = preload("res://scenes/ingame/hud/modals/content/GameSlot.tscn")
 
 @onready var slot_container: VBoxContainer = %SlotContainer
@@ -138,3 +140,6 @@ func _execute_save(index: int, final_name: String) -> void:
 	_generate_slots()
 	save_button.disabled = true
 	save_name_input.clear()
+	
+	sig_save_completed.emit()
+

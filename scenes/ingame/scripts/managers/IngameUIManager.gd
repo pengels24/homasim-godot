@@ -442,9 +442,12 @@ func open_pause_menu() -> void:
 
 # =============================================================================
 func _on_pause_save() -> void:
-	_standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentSave.tscn")
+	var save_content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentSave.tscn")
 	_standard_modal.set_title(GameState.T("modal.save.title"))
+	if save_content and save_content.has_signal("sig_save_completed"):
+		save_content.sig_save_completed.connect(func(): _standard_modal.close(); _resume_time_after_ui(); update_map_grid_mode())
 	update_map_grid_mode()
+
 
 
 # =============================================================================

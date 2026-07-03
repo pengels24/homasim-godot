@@ -1,4 +1,4 @@
-# gd-0.1.34 - (in Arbeit)
+# gd-0.1.34 – 2026-07-03
 
 ## Features & Verbesserungen
 - **Save/Load:** Sicherheitsabfrage vor dem Laden/Überschreiben von Spielständen hinzugefügt

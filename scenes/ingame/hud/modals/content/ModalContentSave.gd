@@ -104,7 +104,7 @@ func _on_save_button_pressed() -> void:
 	if not clicked_slot.is_empty:
 		# Slot belegt -> Warnung anzeigen
 		var confirm = preload("res://scenes/shared/ConfirmModal.tscn").instantiate()
-		add_child(confirm)
+		get_tree().current_scene.add_child(confirm)
 		
 		confirm.ask(
 			GameState.T("modal.save.overwrite.title", "Spielstand überschreiben?"),

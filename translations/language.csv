@@ -1027,3 +1027,7 @@ Das kostet dich %s Ruf.","Do you really want to decline %s?
 This will cost you %s reputation."
 "btn.decline","Abweisen","Decline"
 "btn.cancel","Abbrechen","Cancel"
+
+"modal.save.overwrite.title","Spielstand überschreiben?","Overwrite Save Game?"
+"modal.save.overwrite.message","Möchtest du den Spielstand wirklich überschreiben?","Do you really want to overwrite this save game?"
+"btn.save.overwrite","Überschreiben","Overwrite"

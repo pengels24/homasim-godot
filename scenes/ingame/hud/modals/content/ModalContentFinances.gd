@@ -179,6 +179,7 @@ func _add_transaction_row(tx: Dictionary) -> void:
 		"research":     cat_name = GameState.T("finances.cat.label.research")
 		"system":       cat_name = GameState.T("finances.cat.label.system")
 		"room":         cat_name = GameState.T("finances.cat.label.room")
+		"betrieb":      cat_name = GameState.T("finances.cat.label.betrieb")
 		_:              cat_name = t_cat  # Fallback: raw value
 	lbl_c.text = cat_name
 	row.add_child(lbl_c)
@@ -186,7 +187,7 @@ func _add_transaction_row(tx: Dictionary) -> void:
 	var lbl_desc = Label.new()
 	lbl_desc.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lbl_desc.theme_type_variation = &"ValueLabelLarge"
-	lbl_desc.text = tx["description"]
+	lbl_desc.text = _translate_tx_desc(tx["description"])
 	row.add_child(lbl_desc)
 	
 	var lbl_amount = Label.new()
@@ -235,3 +236,17 @@ func _shift_selector(id: String, direction: int) -> void:
 
 	data.label.text = GameState.T(data.texts[data.idx])
 	data.callback.call(data.vals[data.idx])
+
+# =============================================================================
+## ANG-230: Übersetzt eine Transaction-Description die als "key|Param1|Param2" gespeichert ist.
+## Backward-kompatibel: Strings ohne | werden direkt angezeigt (alte Saves).
+func _translate_tx_desc(raw: String) -> String:
+	if "|" not in raw:
+		return raw
+	var parts := raw.split("|")
+	var translated := GameState.T(parts[0])
+	if parts.size() == 2:
+		return translated % parts[1]
+	if parts.size() >= 3:
+		return translated % [parts[1], parts[2]]
+	return translated

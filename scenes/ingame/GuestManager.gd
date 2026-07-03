@@ -557,7 +557,7 @@ func _finalize_checkout(party: GuestParty, payout: int, auto: bool) -> void:
 
 	if payout > 0:
 		var category := "room"
-		var desc := "Checkout: " + party.get_display_name()
+		var desc := "tx.checkout|" + party.get_display_name()
 		FinanceManager.add_transaction(payout, category, desc)
 
 	parties_changed.emit()
@@ -700,7 +700,7 @@ func _process_poi_supply_costs() -> void:
 		if total > 0:
 			FinanceManager.add_transaction(
 				-total, "betrieb",
-				"%s – Warenverbrauch (%d Besuche)" % [room.get_definition().get("name", room_id), visits]
+				"tx.supply|" + GameState.T(room.get_definition().get("name", room_id)) + "|" + str(visits)
 			)
 	_daily_poi_visits.clear()
 

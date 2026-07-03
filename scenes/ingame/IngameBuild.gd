@@ -114,7 +114,7 @@ func _apply_build_costs(def: Dictionary, world_center: Vector2) -> void:
 	if cost > 0:
 		# NEU: Über den FinanceManager routen
 		var room_name: String = GameState.T(def.get("name", "Raum"))
-		FinanceManager.add_transaction(-cost, "construction", "Bau: " + room_name)
+		FinanceManager.add_transaction(-cost, "construction", "tx.build|" + room_name)
 
 		EffectManager.spawn_money_text(-cost, world_center)
 

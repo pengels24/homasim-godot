@@ -177,7 +177,7 @@ func hire_staff(applicant_id: String) -> bool:
 		return false
 		
 	if FinanceManager:
-		FinanceManager.add_transaction(-cost, "Personal", "Einstellungsgebühr: " + applicant["first_name"] + " (" + GameState.T("staff.role." + applicant["role"]) + ")")
+		FinanceManager.add_transaction(-cost, "Personal", "tx.hire|" + applicant["first_name"] + "|" + GameState.T("staff.role." + applicant["role"]))
 	else:
 		GameState.add_money(-cost)
 	
@@ -213,7 +213,7 @@ func _process_wages() -> void:
 		
 	if total_wages > 0:
 		if FinanceManager:
-			FinanceManager.add_transaction(-int(total_wages), "Personal", "Tagesgehälter")
+			FinanceManager.add_transaction(-int(total_wages), "Personal", "tx.daily_wages")
 		else:
 			GameState.add_money(-int(total_wages))
 

@@ -199,7 +199,7 @@ func _on_demolish_pressed() -> void:
 		confirm.confirmed.connect(func():
 			var refund_pos = room.global_position + Vector2(16, 16)
 			if refund > 0:
-				if FinanceManager: FinanceManager.add_transaction(refund, "construction", "Abriss: " + GameState.T(def.get("name", "Raum")))
+				if FinanceManager: FinanceManager.add_transaction(refund, "construction", "tx.demolish|" + GameState.T(def.get("name", "Raum")))
 				if EffectManager: EffectManager.spawn_money_text(refund, refund_pos)
 				
 			map_grid.remove_room(room)

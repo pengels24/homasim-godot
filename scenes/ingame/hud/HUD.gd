@@ -233,7 +233,7 @@ func _on_level_up_rewards_claimed(money: int, fp: int) -> void:
 
 	if money > 0:
 		# NEU: Über den FinanceManager routen
-		FinanceManager.add_transaction(money, "reward", "Level-Up Bonus")
+		FinanceManager.add_transaction(money, "reward", "tx.level_up_bonus")
 
 		EffectManager.spawn_money_text(money, spawn_pos)
 

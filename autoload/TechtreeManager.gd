@@ -172,7 +172,7 @@ func unlock_tech(tech_id: String) -> bool:
 	
 	# Kosten abziehen
 	GameState.add_fp(-tech.get("cost_fp", 0))
-	FinanceManager.add_transaction(-tech.get("cost_money", 0), "research", "Forschung: " + GameState.T(tech.get("name", "Unknown")))
+	FinanceManager.add_transaction(-tech.get("cost_money", 0), "research", "tx.research|" + GameState.T(tech.get("name", "Unknown")))
 	
 	# Eintragen
 	unlocked_techs.append(tech_id)

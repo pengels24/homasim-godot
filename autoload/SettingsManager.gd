@@ -160,13 +160,28 @@ func apply_window_mode(show_toast_on_fail: bool = false) -> void:
 				call_deferred("_toast_resolution_warning")
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 			return
+		# Schritt 1: sofort in Windowed wechseln (Windows snappt das Fenster auf Mon. 1)
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
-		DisplayServer.window_set_size(screen_size)
-		DisplayServer.window_set_position(screen_pos)  # ← korrekter Monitor, nicht immer Vector2i.ZERO
+		# Schritt 2: Position, Größe, Borderless-Flag DEFERRED setzen –
+		# window_set_position im selben Frame wie window_set_mode wird von Windows ignoriert.
+		_bl_screen      = screen
+		_bl_screen_size = screen_size
+		_bl_screen_pos  = screen_pos
+		call_deferred("_apply_borderless_deferred")
 	else:
 		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+
+# ── Borderless deferred helper ────────────────────────────────────────────────
+var _bl_screen: int = 0
+var _bl_screen_size: Vector2i = Vector2i(1920, 1080)
+var _bl_screen_pos:  Vector2i = Vector2i.ZERO
+
+func _apply_borderless_deferred() -> void:
+	DisplayServer.window_set_current_screen(_bl_screen)
+	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
+	DisplayServer.window_set_size(_bl_screen_size)
+	DisplayServer.window_set_position(_bl_screen_pos)
 
 
 func _toast_resolution_warning() -> void:

@@ -313,6 +313,9 @@ func _on_language_changed(val: String) -> void:
 
 # =============================================================================
 func _on_window_mode_changed(val: String) -> void:
+	# Aktuellen Monitor merken BEVOR der Modus wechselt –
+	# Windows verschiebt das Fenster beim Fullscreen-Verlassen sonst auf Monitor 1.
+	SettingsManager.preferred_screen = DisplayServer.window_get_current_screen()
 	SettingsManager.window_mode = val
 	SettingsManager.save()
 	SettingsManager.apply_window_mode(true)  # true = Toast bei zu kleinem Monitor

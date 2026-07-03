@@ -86,11 +86,21 @@ func _ready() -> void:
 	_apply_audio()
 	_apply_keybindings()
 	call_deferred("_apply_startup_scale")
+	# Fenster-Einstellungen erst im nächsten Frame anwenden – Godot muss
+	# die eigene Initialisierung (project.godot-Mode) erst abschliessen.
+	call_deferred("_apply_startup_window")
 
 
 # =============================================================================
 func _apply_startup_scale() -> void:
 	get_tree().root.content_scale_factor = ui_scale
+
+
+# =============================================================================
+## Wird deferred aufgerufen – nach Godots eigener Fenster-Initialisierung.
+func _apply_startup_window() -> void:
+	apply_screen()
+	apply_window_mode()
 
 
 # =============================================================================
@@ -220,8 +230,8 @@ func _load() -> void:
 	dont_show_disclaimer = cfg.get_value("ui", "dont_show_disclaimer", false)
 	window_mode = cfg.get_value("ui", "window_mode", "fullscreen")
 	preferred_screen = cfg.get_value("ui", "preferred_screen", 0)
-	apply_screen()
-	apply_window_mode()
+	# Nicht sofort apply_screen/apply_window_mode aufrufen –
+	# das passiert deferred in _apply_startup_window() nach der Godot-Initialisierung.
 	last_profile_id = cfg.get_value("session",  "last_profile_id",           last_profile_id)
 	
 	custom_keybindings.clear()

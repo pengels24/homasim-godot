@@ -86,7 +86,8 @@ func fast_forward(ff_speed: float) -> void:
   _ff_used = true
   _game_paused = false
   _game_speed = ff_speed
-  get_tree().paused = false # <--- NEU: Spielwelt läuft weiter (schneller)
+  _pre_pause_speed = ff_speed  # User hat explizit diese Geschwindigkeit gewählt
+  get_tree().paused = false
   sig_speed_changed.emit(_game_paused, _game_speed)
 
 

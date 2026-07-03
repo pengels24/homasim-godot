@@ -193,12 +193,16 @@ func _on_waiting_guest_clicked(party: GuestParty) -> void:
 func _on_guest_reject_requested(party: GuestParty) -> void:
 	var rep_loss = GameState.calc_reject_rep_penalty(party)
 	
+	var layer = CanvasLayer.new()
+	layer.layer = 100
+	add_child(layer)
+
 	var confirm = preload("res://scenes/shared/ConfirmModal.tscn").instantiate()
-	add_child(confirm)
+	layer.add_child(confirm)
 	
 	confirm.ask(
 		GameState.T("reception.decline.title"),
-		GameState.T("reception.decline.message", party.get_display_name(), str(rep_loss)),
+		GameState.T("reception.decline.message") % [party.get_display_name(), str(rep_loss)],
 		GameState.T("btn.decline"),
 		GameState.T("btn.cancel"),
 		"",
@@ -216,12 +220,13 @@ func _on_guest_reject_requested(party: GuestParty) -> void:
 		Toast.show(GameState.T("toast.guest.declined", str(rep_loss)))
 		
 		refresh()
-		confirm.queue_free()
+		layer.queue_free()
 	)
 	
 	confirm.cancelled.connect(func():
-		confirm.queue_free()
+		layer.queue_free()
 	)
+
 
 
 # =============================================================================

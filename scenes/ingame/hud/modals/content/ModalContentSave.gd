@@ -105,8 +105,12 @@ func _on_save_button_pressed() -> void:
 	
 	if not clicked_slot.is_empty:
 		# Slot belegt -> Warnung anzeigen
+		var layer = CanvasLayer.new()
+		layer.layer = 100
+		add_child(layer)
+		
 		var confirm = preload("res://scenes/shared/ConfirmModal.tscn").instantiate()
-		get_tree().current_scene.add_child(confirm)
+		layer.add_child(confirm)
 		
 		confirm.ask(
 			GameState.T("modal.save.overwrite.title", "Spielstand überschreiben?"),
@@ -119,13 +123,14 @@ func _on_save_button_pressed() -> void:
 		
 		confirm.confirmed.connect(func():
 			_execute_save(slot_index, final_save_name)
-			confirm.queue_free()
+			layer.queue_free()
 		)
 		confirm.cancelled.connect(func():
-			confirm.queue_free()
+			layer.queue_free()
 		)
 	else:
 		_execute_save(slot_index, final_save_name)
+
 
 func _execute_save(index: int, final_name: String) -> void:
 	# WICHTIG: Bevor wir speichern, müssen wir das laufende Spiel zwingen,

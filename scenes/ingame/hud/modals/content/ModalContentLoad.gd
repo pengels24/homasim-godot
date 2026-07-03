@@ -108,8 +108,12 @@ func _on_slot_clicked(index: int, type: String) -> void:
 # =============================================================================
 # Klick auf "Laden"
 func _on_load_button_pressed() -> void:
+	var layer = CanvasLayer.new()
+	layer.layer = 100
+	add_child(layer)
+	
 	var confirm = preload("res://scenes/shared/ConfirmModal.tscn").instantiate()
-	get_tree().current_scene.add_child(confirm)
+	layer.add_child(confirm)
 	
 	confirm.ask(
 		GameState.T("modal.load.confirm.title", "Spielstand laden?"),
@@ -122,11 +126,12 @@ func _on_load_button_pressed() -> void:
 	
 	confirm.confirmed.connect(func():
 		_execute_load()
-		confirm.queue_free()
+		layer.queue_free()
 	)
 	confirm.cancelled.connect(func():
-		confirm.queue_free()
+		layer.queue_free()
 	)
+
 
 func _execute_load() -> void:
 	var loaded = false

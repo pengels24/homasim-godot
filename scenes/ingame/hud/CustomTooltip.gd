@@ -74,9 +74,11 @@ func _update_content() -> void:
 		stay_progress.hide()
 		if stay_spacer: stay_spacer.hide()
 	
+	var service_status = ""
 	if _target_room.is_service_requested or _target_room.maintenance_level < 50:
-		status = GameState.T("room.tooltip.service_needed")
-	elif def.get("is_poi", false):
+		service_status = GameState.T("room.tooltip.service_needed") + "\n"
+
+	if def.get("is_poi", false):
 		var room_id = GuestManager._room_key(_target_room)
 		var is_staffed = StaffManager.is_poi_staffed(def, room_id)
 		var is_open_now = GameState.is_facility_open(def)
@@ -148,6 +150,7 @@ func _update_content() -> void:
 					stay_progress.show()
 					if stay_spacer: stay_spacer.show()
 				
+	status = service_status + status
 	var final_status = ""
 	if _target_room.get("is_pending_demolish"):
 		final_status += GameState.T("room.tooltip.pending_demolish")
@@ -157,6 +160,7 @@ func _update_content() -> void:
 	else:
 		final_status += status
 	status_label.text = final_status
+
 	
 	# Zwingt das Tooltip-Panel zum Schrumpfen, falls vorher mehr Text da war
 	size = Vector2.ZERO

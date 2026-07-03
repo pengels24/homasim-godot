@@ -32,6 +32,13 @@ func _ready() -> void:
 	btn_send.pressed.connect(_send_report)
 	http_request.request_completed.connect(_on_request_completed)
 
+	# Sprache kann sich zur Laufzeit ändern – BugReporter muss mitziehen
+	SettingsManager.sig_language_changed.connect(_on_language_changed)
+
+	# Deferred – damit SettingsManager._load() die Sprache zuerst setzen kann
+	call_deferred("_apply_translations")
+
+func _on_language_changed(_locale: String) -> void:
 	_apply_translations()
 
 func _apply_translations() -> void:

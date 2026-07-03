@@ -98,8 +98,16 @@ func _apply_startup_scale() -> void:
 
 # =============================================================================
 ## Wird deferred aufgerufen – nach Godots eigener Fenster-Initialisierung.
+## Zwei Frames warten damit Windows/Godot die Initialisierung vollständig abschliesst.
 func _apply_startup_window() -> void:
-	apply_screen()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	# Rahmenlos: apply_window_mode() positioniert bereits über preferred_screen.
+	# apply_screen() wäre hier kontraproduktiv (geht durch Fullscreen → Windows
+	# verschiebt das Fenster beim Verlassen von Fullscreen zurück auf Monitor 1).
+	if window_mode == "fullscreen":
+		apply_screen()
+		await get_tree().process_frame
 	apply_window_mode()
 
 

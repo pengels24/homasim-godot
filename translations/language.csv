@@ -1031,3 +1031,7 @@ This will cost you %s reputation."
 "modal.save.overwrite.title","Spielstand überschreiben?","Overwrite Save Game?"
 "modal.save.overwrite.message","Möchtest du den Spielstand wirklich überschreiben?","Do you really want to overwrite this save game?"
 "btn.save.overwrite","Überschreiben","Overwrite"
+
+"modal.load.confirm.title","Spielstand laden?","Load Save Game?"
+"modal.load.confirm.message","Möchtest du diesen Spielstand wirklich laden? Nicht gespeicherter Fortschritt geht verloren.","Do you really want to load this save game? Unsaved progress will be lost."
+"btn.load.confirm","Spiel laden","Load Game"

@@ -104,7 +104,7 @@ func _load_assets() -> void:
 	btn_tutorial.disabled = false # Tutorial freigeschaltet
 	var vf := FileAccess.open("res://version.txt", FileAccess.READ)
 	if vf:
-		_version_lbl.text = "v" + vf.get_line().strip_edges().trim_prefix("gd-")
+		_version_lbl.text = vf.get_line().strip_edges().trim_prefix("gd-")
 		vf.close()
 	var godot_tex := load("res://icon.svg") as Texture2D
 	if godot_tex:

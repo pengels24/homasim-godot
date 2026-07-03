@@ -77,7 +77,8 @@ func _ready() -> void:
         
     music_player = AudioStreamPlayer.new()
     music_player.stream = load("res://assets/audio/credits_music.mp3")
-    music_player.volume_db = -40.0
+    music_player.bus = "Menu Music"  # Läuft über den Menu-Music-Bus → respektiert Master-Volume
+    music_player.volume_db = -80.0
     add_child(music_player)
     fader.modulate.a = 1.0 # Start fully black
     logo.modulate.a = 0.0
@@ -102,8 +103,10 @@ func _ready() -> void:
 
 func _play_intro_sequence() -> void:
     music_player.play()
+    # Fade auf die konfigurierte Menü-Musik-Lautstärke – nicht auf 0 dB (= volle Lautstärke)
+    var target_db := linear_to_db(SettingsManager.menu_music_volume)
     var tw_music = create_tween()
-    tw_music.tween_property(music_player, "volume_db", 0.0, 3.0)
+    tw_music.tween_property(music_player, "volume_db", target_db, 3.0)
     
     if is_skipping: return
     await get_tree().create_timer(1.0).timeout

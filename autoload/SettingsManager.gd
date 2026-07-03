@@ -108,6 +108,7 @@ func save() -> void:
 	cfg.set_value("ui", "show_tech_info", show_tech_info)
 	cfg.set_value("ui", "tutorial_tips", tutorial_tips)
 	cfg.set_value("ui", "language", language)
+	cfg.set_value("ui", "dont_show_disclaimer", dont_show_disclaimer)
 	cfg.set_value("session", "last_profile_id", last_profile_id)
 	
 	for action in custom_keybindings:
@@ -146,6 +147,7 @@ func _load() -> void:
 	tutorial_tips = cfg.get_value("ui", "tutorial_tips", true)
 	language = cfg.get_value("ui", "language", "de")
 	TranslationServer.set_locale(language)
+	dont_show_disclaimer = cfg.get_value("ui", "dont_show_disclaimer", false)
 	last_profile_id = cfg.get_value("session",  "last_profile_id",           last_profile_id)
 	
 	custom_keybindings.clear()

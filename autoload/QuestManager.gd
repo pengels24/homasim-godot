@@ -13,6 +13,7 @@ signal sig_rank_claimed(cat_id: String)
 func _ready() -> void:
 	_load_quests_db()
 	GameState.sig_room_built.connect(on_room_built)
+	GameState.sig_room_demolished.connect(on_room_demolished)
 
 # =============================================================================
 func _load_quests_db() -> void:
@@ -102,6 +103,31 @@ func on_room_built(room_id: String) -> void:
 					Toast.show(GameState.T("toast.quest.completed", GameState.T(t_def.get("name", ""))))
 				changed = true
 				
+	if changed:
+		SaveManager.save_quick(GameState.active_hotel_id)
+
+# =============================================================================
+func on_room_demolished(room_id: String) -> void:
+	if GameState.selected_hotel.is_empty(): return
+	var quest_state = GameState.selected_hotel.get("quests", {})
+	var changed = false
+	
+	for cat_id in quest_state:
+		var cat_data = quest_state[cat_id]
+		var targets_state = cat_data.get("targets", {})
+		
+		for t_id in targets_state:
+			var t_state = targets_state[t_id]
+			# Wir reduzieren den Fortschritt nur, solange das Ziel noch nicht erreicht wurde
+			if t_state["state"] == "active":
+				var t_def = flat_targets[t_id]
+				if t_def["type"] == "build_room" and t_def["target_id"] == room_id:
+					if t_state["progress"] > 0:
+						t_state["progress"] -= 1
+						var max_val = t_def.get("target_count", 1)
+						sig_quest_progress_updated.emit(t_id, t_state["progress"], max_val)
+						changed = true
+						
 	if changed:
 		SaveManager.save_quick(GameState.active_hotel_id)
 

@@ -608,6 +608,10 @@ func remove_room(room: Node2D) -> void:
 	unmark_placement(px, py, tile_x, tile_y, sz.x, sz.y, door_rot, door_off)
 	
 	active_rooms.erase(room)
+	if room.has_method("get_definition"):
+		var def = room.get_definition()
+		if def and def.has("id"):
+			GameState.sig_room_demolished.emit(def["id"])
 	room.queue_free()
 	
 	_update_all_floor_neighbors()

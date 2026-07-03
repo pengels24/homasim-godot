@@ -47,16 +47,28 @@ func set_status(needs_cleaning: bool, needs_repair: bool, pending_demolish: bool
 	
 	size = Vector2.ZERO
 
-func set_progress(value: float) -> void:
+var _active_progress: Dictionary = {}
+
+func set_progress(worker_id: String, value: float) -> void:
 	## value: 0.0 (start) bis 1.0 (fertig)
 	if not is_node_ready(): await ready
 	show()
+	
+	_active_progress[worker_id] = value
+	var max_val = 0.0
+	for v in _active_progress.values():
+		if v > max_val: max_val = v
+		
 	progress_bar.visible = true
-	progress_bar.value = clampf(value * 100.0, 0.0, 100.0)
+	progress_bar.value = clampf(max_val * 100.0, 0.0, 100.0)
 	size = Vector2.ZERO
 
-func hide_progress() -> void:
+func hide_progress(worker_id: String) -> void:
 	if not is_node_ready(): await ready
-	progress_bar.visible = false
-	progress_bar.value = 0.0
+	
+	_active_progress.erase(worker_id)
+	if _active_progress.is_empty():
+		progress_bar.visible = false
+		progress_bar.value = 0.0
+	
 	size = Vector2.ZERO

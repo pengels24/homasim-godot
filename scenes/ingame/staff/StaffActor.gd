@@ -216,6 +216,8 @@ func _process_walking(delta: float, speed: float) -> void:
 		if _path.is_empty() and dist_to_target < 5.0:
 			if _state == "walking":
 				_state = "working"
+				# Zufälliger Versatz, damit sich überlappende Mitarbeiter optisch trennen
+				global_position += Vector2(randf_range(-6.0, 6.0), randf_range(-6.0, 6.0))
 				_work_timer = 20.0
 				_work_timer_max = _work_timer
 				if _current_task.has("target"):
@@ -270,7 +272,7 @@ func _process_working(delta: float, speed_mult: float) -> void:
 	if is_instance_valid(_current_room) and _current_room.has_node("RoomStatusIndicator"):
 		var indicator = _current_room.get_node("RoomStatusIndicator")
 		var progress = 1.0 - (_work_timer / _work_timer_max)
-		indicator.set_progress(progress)
+		indicator.set_progress(get_staff_id(), progress)
 	
 	# Simples visuelles Feedback fürs Arbeiten (Wackeln)
 	_sprite.scale.y = 1.0 + sin(_work_timer * 10.0) * 0.1
@@ -281,7 +283,7 @@ func _process_working(delta: float, speed_mult: float) -> void:
 		_sprite.scale = Vector2.ONE
 		# Fortschrittsbalken wieder verstecken
 		if is_instance_valid(_current_room) and _current_room.has_node("RoomStatusIndicator"):
-			_current_room.get_node("RoomStatusIndicator").hide_progress()
+			_current_room.get_node("RoomStatusIndicator").hide_progress(get_staff_id())
 		TaskManager.complete_task(_current_task.id)
 		_current_task = {}
 		

@@ -15,9 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://bfib8j3upw5hb" path="res://assets/icons/HUDTop/calendar-days.svg" id="11_l8bek"]
 [ext_resource type="Texture2D" uid="uid://yxnshplq4qqh" path="res://assets/icons/HUDTop/pause.svg" id="12_unqwd"]
 [ext_resource type="StyleBox" uid="uid://brk7dwg72hmhm" path="res://assets/UI/hud_button_pressed_gold_bgt.tres" id="12_yugll"]
-[ext_resource type="PackedScene" uid="uid://qc5ayqs3wl0s" path="res://scenes/ingame/hud/HUDResetView.tscn" id="15_pek3b"]
 [ext_resource type="PackedScene" uid="uid://c5yo6bx5wcaoj" path="res://scenes/ingame/hud/HUDBottom.tscn" id="15_r421g"]
-[ext_resource type="PackedScene" uid="uid://dkopq8is4u4sl" path="res://scenes/ingame/hud/HUDMusicControl.tscn" id="16_6fy26"]
 [ext_resource type="PackedScene" uid="uid://2l7rq0krey8f" path="res://scenes/ingame/hud/BuildMenu.tscn" id="17_8e3pd"]
 [ext_resource type="PackedScene" uid="uid://dnlttoshpxisb" path="res://scenes/ingame/hud/modals/LevelUpModal.tscn" id="24_6iy1x"]
 [ext_resource type="PackedScene" uid="uid://bcweu4cs7d73x" path="res://scenes/ingame/hud/modals/StandardModal.tscn" id="25_fiam6"]
@@ -556,10 +554,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
 
-[node name="HUDResetView" parent="BottomBarContainer" unique_id=1145923070 instance=ExtResource("15_pek3b")]
-unique_name_in_owner = true
-layout_mode = 2
-
 [node name="HUDBottom" parent="BottomBarContainer" unique_id=491735265 instance=ExtResource("15_r421g")]
 unique_name_in_owner = true
 layout_mode = 2
@@ -575,9 +569,6 @@ offset_left = -170.0
 offset_top = -30.0
 offset_right = 170.0
 offset_bottom = 30.0
-
-[node name="Tutorials" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel0/MarginContainer" index="0"]
-button_group = SubResource("ButtonGroup_7mtkd")
 
 [node name="BuildMenu" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel1/MarginContainer" parent_id_path=PackedInt32Array(491735265, 566754857) index="0" unique_id=1033111495]
 button_group = SubResource("ButtonGroup_7mtkd")
@@ -612,14 +603,6 @@ offset_bottom = -50.0
 
 [node name="VBoxContainer" parent="BottomBarContainer/HUDBottom/BuildMenu/MarginContainer" parent_id_path=PackedInt32Array(1714912306, 1905983299) index="0" unique_id=905183679]
 theme_override_constants/separation = 10
-
-[node name="HUDMusicControl" parent="BottomBarContainer" unique_id=52681627 instance=ExtResource("16_6fy26")]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="HBoxContainer" parent="BottomBarContainer/HUDMusicControl" index="0" unique_id=1457741293]
-alignment = 2
 
 [node name="StateBorder" type="ReferenceRect" parent="." unique_id=1847592834]
 visible = false
@@ -678,9 +661,7 @@ offset_bottom = 160.0
 [editable path="TopBar/MarginContainer/HBoxContainer/Money"]
 [editable path="TopBar/MarginContainer/HBoxContainer/FP"]
 [editable path="TopBar/MarginContainer/HBoxContainer/Day"]
-[editable path="BottomBarContainer/HUDResetView"]
 [editable path="BottomBarContainer/HUDBottom"]
 [editable path="BottomBarContainer/HUDBottom/BuildMenu"]
-[editable path="BottomBarContainer/HUDMusicControl"]
 [editable path="LevelUpModal"]
 [editable path="StandardModal"]

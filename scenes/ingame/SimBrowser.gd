@@ -28,11 +28,13 @@ func _ready() -> void:
 # =============================================================================
 func open() -> void:
 	visible = true
+	SoundManager.play("modal_open")
 
 # =============================================================================
 func close() -> void:
 	if not visible: return
 	visible = false
+	SoundManager.play("modal_close")
 	sig_closed.emit()
 
 # =============================================================================

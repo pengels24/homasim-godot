@@ -38,8 +38,8 @@ signal sig_hotkey_guest_list_requested
 signal sig_hotkey_room_list_requested
 signal sig_hotkey_finances_requested
 signal sig_hotkey_escape_pressed
-signal sig_hotkey_quicksave_requested
-signal sig_hotkey_quickload_requested
+#signal sig_hotkey_quicksave_requested
+#signal sig_hotkey_quickload_requested
 # ── DEBUG HOTKEYS ─────────────────────────────────────────────
 signal sig_debug_action_requested
 
@@ -146,10 +146,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		sig_hotkey_staff_requested.emit()
 		return
 
-	if event.is_action_pressed("ui_quicksave"):
-		get_viewport().set_input_as_handled()
-		sig_hotkey_quicksave_requested.emit()
-		return
+#	if event.is_action_pressed("ui_quicksave"):
+#		get_viewport().set_input_as_handled()
+#		sig_hotkey_quicksave_requested.emit()
+#		return
 
 	if event.is_action_pressed("ui_tech_tree"):
 		get_viewport().set_input_as_handled()
@@ -180,10 +180,10 @@ func _unhandled_input(event: InputEvent) -> void:
 			sig_hotkey_finances_requested.emit()
 		return
 
-	if event.is_action_pressed("ui_quickload"):
-		get_viewport().set_input_as_handled()
-		sig_hotkey_quickload_requested.emit()
-		return
+#	if event.is_action_pressed("ui_quickload"):
+#		get_viewport().set_input_as_handled()
+#		sig_hotkey_quickload_requested.emit()
+#		return
 
 	# ── MODUS: NORMAL-MODUS EINGABEN ──────────────────────────────────────────
 	if current_mode in [InputMode.NORMAL, InputMode.BUILD]:

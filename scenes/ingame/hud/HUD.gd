@@ -20,9 +20,7 @@ extends CanvasLayer
 
 # Steuerung der unteren UI-Rochade (Links / Mitte / Rechts)
 @onready var lower_hbox: HBoxContainer = $BottomBarContainer
-@onready var reset_view: Node = %HUDResetView
 @onready var bottom_bar: Node = %HUDBottom
-@onready var music_ctrl: Node = %HUDMusicControl
 
 @onready var state_border: ReferenceRect = $StateBorder
 @onready var pause_label: Label = $PauseLabel
@@ -262,33 +260,21 @@ func update_bottom_layout(position_setting: String) -> void:
 	if not is_inside_tree():
 		await ready
 
-	if not reset_view or not bottom_bar or not music_ctrl:
+	if not bottom_bar:
 		return
 
 	match position_setting.to_lower():
 		"left":
 			lower_hbox.move_child(bottom_bar, 0)
 			_set_inner_alignment(bottom_bar, BoxContainer.ALIGNMENT_BEGIN)
-			lower_hbox.move_child(reset_view, 1)
-			_set_inner_alignment(reset_view, BoxContainer.ALIGNMENT_CENTER)
-			lower_hbox.move_child(music_ctrl, 2)
-			_set_inner_alignment(music_ctrl, BoxContainer.ALIGNMENT_END)
 
 		"right":
-			lower_hbox.move_child(reset_view, 0)
-			_set_inner_alignment(reset_view, BoxContainer.ALIGNMENT_BEGIN)
-			lower_hbox.move_child(music_ctrl, 1)
-			_set_inner_alignment(music_ctrl, BoxContainer.ALIGNMENT_CENTER)
 			lower_hbox.move_child(bottom_bar, 2)
 			_set_inner_alignment(bottom_bar, BoxContainer.ALIGNMENT_END)
 
 		"center", _:
-			lower_hbox.move_child(reset_view, 0)
-			_set_inner_alignment(reset_view, BoxContainer.ALIGNMENT_BEGIN)
 			lower_hbox.move_child(bottom_bar, 1)
 			_set_inner_alignment(bottom_bar, BoxContainer.ALIGNMENT_CENTER)
-			lower_hbox.move_child(music_ctrl, 2)
-			_set_inner_alignment(music_ctrl, BoxContainer.ALIGNMENT_END)
 
 	if bottom_bar.has_method("update_build_menu_position"):
 		bottom_bar.update_build_menu_position()

@@ -35,7 +35,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 
 	# Diese Kamera-Pin-Verbindung bleibt hier, da sie nicht zum Menü-System gehört
-	map_grid.view_saved_changed.connect(hud_canvas.reset_view.set_view_saved_state)
+
 
 	# Einmaliger Aufruf zum Start, ob die Rezeption auf oder zu sein soll
 	_restore_button_states()

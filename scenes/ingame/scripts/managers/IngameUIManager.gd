@@ -41,7 +41,7 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	_bottom_bar.sig_quest_book_toggled.connect(open_quest_book)
 	_bottom_bar.sig_guest_list_toggled.connect(open_guest_list)
 	_bottom_bar.sig_room_list_toggled.connect(open_room_list)
-	_bottom_bar.sig_tutorials_toggled.connect(open_tutorial_codex)
+
 	_bottom_bar.sig_finances_toggled.connect(open_finances)
 
 	_standard_modal.visibility_changed.connect(update_map_grid_mode)

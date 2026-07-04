@@ -190,6 +190,7 @@ func _setup_subsystems() -> void:
 	$HUD/BottomBarContainer/BuildMenu.sig_room_selected.connect(_build.start_building)
 	$HUD/BottomBarContainer/BuildMenu.sig_tool_selected.connect(_build._on_tool_selected)
 	$HUD/BottomBarContainer/BuildMenu.sig_build_cancelled.connect(_build.close_all)
+	_build.sig_build_ended.connect($HUD/BottomBarContainer/BuildMenu.clear_active_button)
 	$HUD/BottomBarContainer/BuildMenu.sig_build_mode_requested.connect(func(active: bool):
 		if active:
 			_ui_mgr.open_build_menu()

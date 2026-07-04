@@ -23,6 +23,7 @@ var _valid_combos:    Array[Vector2i] = []
 var _room_rotation:   int = 0
 var _error_msg:       String = ""
 var _tooltip_ui:      Node
+var _rmb_pressed_pos: Vector2 = Vector2.ZERO
 
 
 # =============================================================================
@@ -175,10 +176,13 @@ func _unhandled_input(event: InputEvent) -> void:
 		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT:
 			_try_place()
 
-		elif mb.pressed and mb.button_index == MOUSE_BUTTON_RIGHT:
-			get_viewport().set_input_as_handled()
-			sig_cancelled.emit()
-			queue_free()
+		elif mb.button_index == MOUSE_BUTTON_RIGHT:
+			if mb.pressed:
+				_rmb_pressed_pos = mb.position
+			else:
+				if mb.position.distance_to(_rmb_pressed_pos) < 5.0:
+					sig_cancelled.emit()
+					queue_free()
 		return
 
 	if event is InputEventKey:

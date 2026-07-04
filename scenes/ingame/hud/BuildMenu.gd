@@ -26,7 +26,7 @@ var _current_category: String = ""
 func _ready() -> void:
 	_sort_rooms_into_categories()
 	_display_category_buttons()
-	_breadcrumb.text = ""
+	_set_breadcrumb("")
 		
 	visibility_changed.connect(_on_visibility_changed)
 
@@ -186,12 +186,12 @@ func _show_category(cat_name: String) -> void:
 		_set_btn_active(_category_btns[btn_cat], btn_cat == cat_name)
 		
 	if cat_name == "demolish":
-		_breadcrumb.text = " > " + GameState.T("ui.buildmenu.demolish", "Abriss")
+		_set_breadcrumb(" > " + GameState.T("ui.buildmenu.demolish", "Abriss"))
 		sig_tool_selected.emit("demolish")
 		return
 
 	var cat_label = GameState.T("room_category." + cat_name.to_lower())
-	_breadcrumb.text = GameState.T("ui.buildmenu.category", cat_label)
+	_set_breadcrumb(GameState.T("ui.buildmenu.category", cat_label))
 
 	# Aktuelles Hotel-Level abfragen (Fallback auf 1, falls noch nichts geladen ist)
 	var current_level: int = GameState.selected_hotel.get("level", 1)
@@ -225,7 +225,7 @@ func _show_category(cat_name: String) -> void:
 			btn.pressed.connect(func():
 					for rb in _room_btns:
 						_set_btn_active(rb, rb == btn)
-					_breadcrumb.text = cat_label + " / " + GameState.T(def.get("name", "Raum"))
+					_set_breadcrumb(cat_label + " / " + GameState.T(def.get("name", "Raum")))
 					
 					if is_tool:
 						sig_tool_selected.emit(def.get("action", ""))
@@ -293,7 +293,7 @@ func set_locked(is_locked: bool) -> void:
 func close_build_menu() -> void:
 	if _current_category != "":
 		_current_category = ""
-		_breadcrumb.text = ""
+		_set_breadcrumb("")
 		for child in item_grid.get_children():
 			child.queue_free()
 		_room_btns.clear()
@@ -301,3 +301,19 @@ func close_build_menu() -> void:
 			_set_btn_active(btn, false)
 		sig_build_cancelled.emit()
 		sig_build_mode_requested.emit(false)
+
+func clear_active_button() -> void:
+	for rb in _room_btns:
+		_set_btn_active(rb, false)
+		
+	if _current_category == "demolish":
+		_set_breadcrumb(" > " + GameState.T("ui.buildmenu.demolish", "Abriss"))
+	elif _current_category != "":
+		var cat_label = GameState.T("room_category." + _current_category.to_lower())
+		_set_breadcrumb(GameState.T("ui.buildmenu.category", cat_label))
+	else:
+		_set_breadcrumb("")
+
+func _set_breadcrumb(text: String) -> void:
+	_breadcrumb.text = text
+	_breadcrumb.visible = (text != "")

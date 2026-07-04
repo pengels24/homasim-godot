@@ -3,6 +3,7 @@ class_name IngameBuild
 
 @warning_ignore("unused_signal")
 signal sig_room_built(room_type_id: String)
+signal sig_build_ended()
 
 var _hotel:              Dictionary
 var _map_grid:           Node2D
@@ -132,6 +133,7 @@ func _apply_build_rewards(def: Dictionary, world_center: Vector2) -> void:
 # =============================================================================
 func _on_build_cursor_done() -> void:
 	_build_cursor = null
+	sig_build_ended.emit()
 
 
 # =============================================================================

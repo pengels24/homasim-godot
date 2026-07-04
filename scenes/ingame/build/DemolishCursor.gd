@@ -51,9 +51,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT:
 			get_viewport().set_input_as_handled()
 			_try_demolish()
-		elif mb.pressed and mb.button_index == MOUSE_BUTTON_RIGHT:
-			get_viewport().set_input_as_handled()
-			_cancel()
+		elif mb.button_index == MOUSE_BUTTON_RIGHT:
+			if mb.pressed:
+				_rmb_pressed_pos = mb.position
+			else:
+				if mb.position.distance_to(_rmb_pressed_pos) < 5.0:
+					_cancel()
 			
 	elif event is InputEventKey:
 		var ke := event as InputEventKey

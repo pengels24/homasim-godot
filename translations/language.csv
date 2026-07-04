@@ -374,7 +374,7 @@ toast.reception.no_rooms,Erst Zimmer bauen bevor Gäste empfangen werden können
 toast.reception.closed,Die Rezeption ist heute geschlossen.,The reception is closed today.
 toast.reception.auto_pause,Rezeption automatisch pausiert,Reception automatically paused
 toast.reception.force_close,Rezeption geschlossen,Reception closed
-toast.reception.guests_arrived,Neue Gäste sind eingetroffen – Rezeption öffnen (F3),New guests have arrived – open reception (F3)
+toast.reception.guests_arrived,Neue Gäste sind eingetroffen – Rezeption öffnen (oben im Menü / F1),New guests have arrived – open reception (top menu / F1)
 toast.guest.arrival.single,1 neuer Gast ist eingetroffen,1 new guest has arrived
 toast.guest.arrival.multi,### neue Gäste sind eingetroffen,### new guests have arrived
 toast.guest.arrival.full,Keine weiteren Gäste – Warteliste voll,No more guests – waiting list full
@@ -383,7 +383,7 @@ toast.surcharge.accepted,Gast akzeptiert! (Würfel: ### – max. ### nötig),Gue
 toast.surcharge.rejected,Gast lehnt ab. (Würfel: ### – max. ### nötig),Guest declined. (Roll: ### – max. ### needed)
 toast.build.no_money,Nicht genug Kapital!,Not enough capital!
 toast.hr.locked,Personalverwaltung benötigt Hotel-Level %d!,Staff management requires hotel level %d!
-toast.hr.unlocked,Personalverwaltung freigeschaltet!,Staff management unlocked!
+toast.hr.unlocked,Personalverwaltung freigeschaltet! (oben im Menü / F5),Staff management unlocked! (top menu / F5)
 toast.hr.coming_soon,Personalverwaltung – coming soon,Staff Management – coming soon
 toast.research.unlocked,Forschungsbüro gebaut! FP sind jetzt aktiv.,Research office built! RP are now active.
 toast.system.autosave,Spielstand gespeichert,Game saved

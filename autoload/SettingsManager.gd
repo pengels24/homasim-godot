@@ -8,6 +8,8 @@ signal sig_hud_side_changed
 @warning_ignore("unused_signal")
 signal sig_language_changed(locale: String)
 
+signal sig_ff_speed_changed(new_speed: float)
+
 const SETTINGS_PATH := "user://settings.cfg"
 
 # ── Gameplay ──────────────────────────────────────────────────────────────────

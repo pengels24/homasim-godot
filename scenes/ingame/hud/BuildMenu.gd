@@ -113,6 +113,7 @@ func _display_category_buttons() -> void:
 		category_grid.add_child(new_instance)
 
 		var btn: Button = new_instance.get_node("%MenuButton") as Button
+		btn.focus_mode = Control.FOCUS_NONE
 
 		# Daten aus dem GameState holen (mit Fallback-Werten zur Sicherheit)
 		var cat_data: Dictionary = GameState.room_category_registry.get(cat_name.to_lower(), {})
@@ -132,6 +133,7 @@ func _display_category_buttons() -> void:
 	var dem_inst = button_template.instantiate()
 	category_grid.add_child(dem_inst)
 	var dem_btn: Button = dem_inst.get_node("%MenuButton") as Button
+	dem_btn.focus_mode = Control.FOCUS_NONE
 	dem_btn.icon = load("res://assets/icons/HUDBottom/hammer.svg")
 	dem_btn.text = ""
 	dem_btn.tooltip_text = GameState.T("ui.buildmenu.demolish", "Abriss")
@@ -203,6 +205,7 @@ func _show_category(cat_name: String) -> void:
 		item_grid.add_child(new_instance)
 
 		var btn: Button = new_instance.get_node("%MenuButton") as Button
+		btn.focus_mode = Control.FOCUS_NONE
 		btn.icon = load(def.get("icon", ""))
 		btn.set_meta("room_id", def.get("id", ""))
 		_room_btns.append(btn)

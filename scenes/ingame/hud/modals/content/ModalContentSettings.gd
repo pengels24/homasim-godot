@@ -244,6 +244,7 @@ func _on_autosave_changed(val: int) -> void:
 func _on_ff_changed(val: float) -> void:
 	SettingsManager.ff_speed = val
 	SettingsManager.save()
+	SettingsManager.sig_ff_speed_changed.emit(val)
 
 
 # =============================================================================

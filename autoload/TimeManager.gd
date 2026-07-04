@@ -34,6 +34,16 @@ var _user_paused: bool = false  # ANG-208: Nur true wenn Spieler manuell paused
 func _ready() -> void:
   # Das macht diesen Autoload immun gegen die Godot-Pause!
   process_mode = Node.PROCESS_MODE_ALWAYS
+  SettingsManager.sig_ff_speed_changed.connect(_on_settings_ff_speed_changed)
+
+func _on_settings_ff_speed_changed(new_speed: float) -> void:
+  # Aktualisiere die gespeicherte Speed für FF, falls wir gerade spulen oder 
+  # während FF pausiert haben (da FF Speed immer > 1.0 ist)
+  if _pre_pause_speed > 1.0:
+    _pre_pause_speed = new_speed
+  if not _game_paused and _game_speed > 1.0:
+    _game_speed = new_speed
+    sig_speed_changed.emit(_game_paused, _game_speed)
 
 
 # =============================================================================

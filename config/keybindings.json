@@ -60,13 +60,13 @@
       "ui_quicksave": {
         "label": "settings.controls.gameplay.quicksave",
         "order": 2,
-        "default": "F5",
+        "default": "",
         "default_alt": ""
       },
       "ui_quickload": {
         "label": "settings.controls.gameplay.quickload",
         "order": 3,
-        "default": "F9",
+        "default": "",
         "default_alt": ""
       }
     }
@@ -78,31 +78,31 @@
       "ui_tutorial": {
         "label": "settings.controls.ui.tutorial",
         "order": 1,
-        "default": "F1",
+        "default": "F10",
         "default_alt": ""
       },
       "ui_build_menu": {
         "label": "settings.controls.ui.build",
         "order": 2,
-        "default": "F2",
+        "default": "B",
         "default_alt": ""
       },
       "ui_reception": {
         "label": "settings.controls.ui.reception",
         "order": 3,
-        "default": "F3",
+        "default": "F1",
         "default_alt": ""
       },
       "ui_staff": {
         "label": "settings.controls.ui.staff",
         "order": 4,
-        "default": "F4",
+        "default": "F5",
         "default_alt": ""
       },
       "ui_tech_tree": {
         "label": "settings.controls.ui.tech",
         "order": 5,
-        "default": "F6",
+        "default": "F2",
         "default_alt": ""
       },
       "ui_sim_browser": {
@@ -114,25 +114,25 @@
       "ui_quest_book": {
         "label": "settings.controls.ui.quests",
         "order": 7,
-        "default": "J",
+        "default": "F8",
         "default_alt": ""
       },
       "ui_guest_list": {
         "label": "settings.controls.ui.guest_list",
         "order": 8,
-        "default": "F10",
+        "default": "F3",
         "default_alt": ""
       },
       "ui_room_list": {
         "label": "settings.controls.ui.room_list",
         "order": 9,
-        "default": "F11",
+        "default": "F4",
         "default_alt": ""
       },
       "ui_finances": {
         "label": "settings.controls.ui.finances",
         "order": 10,
-        "default": "F12",
+        "default": "F6",
         "default_alt": ""
       }
     }

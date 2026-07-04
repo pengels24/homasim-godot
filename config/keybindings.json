@@ -69,18 +69,6 @@
         "default": "2",
         "default_alt": ""
       },
-      "ui_quicksave": {
-        "label": "settings.controls.gameplay.quicksave",
-        "order": 4,
-        "default": "",
-        "default_alt": ""
-      },
-      "ui_quickload": {
-        "label": "settings.controls.gameplay.quickload",
-        "order": 3,
-        "default": "",
-        "default_alt": ""
-      }
     }
   },
   "ui": {

@@ -4,11 +4,15 @@
 **Datum:** 2026-07-04
 
 ### Features & Verbesserungen
+- **HUD Umbau (ANG-258):** Das Baumenü ist nun immer mittig unten (Kategorien) angedockt und die restlichen HUD-Buttons wurden in einen kompakten Block unterhalb der TopBar (oben rechts) verschoben, der sich von rechts nach links auffüllt (Reihenfolge: Rezeption(F1) bis Questbook(F8)).
+- **Aufgeräumte UI:** Veraltete und ungenutzte Funktionen wie "Camview Save" und "Audio Control" wurden restlos aus dem HUD und dem Code entfernt. Quicksave (F5) und Quickload (F9) wurden komplett aus den Controls verbannt und deaktiviert.
 - **Zeitsteuerung überarbeitet:** Das Pausieren und Fortsetzen der Spielzeit wurde intuitiver und verlässlicher gestaltet.
 - **Neue Hotkeys:** Tasten `1` (Normaler Speed) und `2` (Vorlauf-Speed) für schnellen Wechsel der Spielgeschwindigkeit eingebaut.
 - **Settings erweitert:** Hotkeys für Play und Forward sind nun in den Einstellungen (Controls) anpassbar.
 
 ### Bugfixes
+- **Baumenü (Baumodus):** Der goldene Bildschirmrahmen (StateBorder) wird nun zuverlässig aktiviert, sobald das Baumenü geöffnet ist, und bleibt durchgehend aktiv.
+- **Baumenü Tooltips:** Die Tooltips der Bau-Werkzeuge (z.B. Abriss) zeigen nun die korrekten Übersetzungen anstatt fehlender System-Variablen.
 - **Pausen-Status bei Modals gefixt:** Modals und Baumenü merken sich nun verlässlich den vorherigen Status und setzen das Spiel nach dem Schließen nur dann fort, wenn es vorher lief.
 - **Tutorial-Button gefixt:** Der Button leuchtet nun korrekt auf, wenn das Tutorial offen ist und resettet sich danach fehlerfrei.
 - **UI-Pause Hotkey:** Die Leertaste pausiert und setzt das Spiel nun wieder korrekt im Toggle-Modus fort.

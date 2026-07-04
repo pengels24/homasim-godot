@@ -19,15 +19,6 @@ func setup(hotel: Dictionary, guest_mgr: GuestManager, map_grid: Node2D = null) 
 
 	if not TimeManager.sig_day_ended.is_connected(_on_day_ended):
 		TimeManager.sig_day_ended.connect(_on_day_ended)
-
-#	if not InputHandler.sig_hotkey_quicksave_requested.is_connected(quick_save):
-#		InputHandler.sig_hotkey_quicksave_requested.connect(quick_save)
-#
-#	if not InputHandler.sig_hotkey_quickload_requested.is_connected(quick_load):
-#		InputHandler.sig_hotkey_quickload_requested.connect(quick_load)
-
-
-# =============================================================================
 func save_progress(game_time_min: int) -> void:
 	var hotel_id: int = _hotel.get("id", -1)
 	if hotel_id < 0 and hotel_id != GameState.TUTORIAL_HOTEL_ID:

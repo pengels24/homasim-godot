@@ -141,11 +141,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		sig_hotkey_staff_requested.emit()
 		return
 
-#	if event.is_action_pressed("ui_quicksave"):
-#		get_viewport().set_input_as_handled()
-#		sig_hotkey_quicksave_requested.emit()
-#		return
-
 	if event.is_action_pressed("ui_tech_tree"):
 		get_viewport().set_input_as_handled()
 		sig_hotkey_tech_tree_requested.emit()
@@ -174,13 +169,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		if current_mode == InputMode.NORMAL or current_mode == InputMode.MODAL:
 			sig_hotkey_finances_requested.emit()
 		return
-
-#	if event.is_action_pressed("ui_quickload"):
-#		get_viewport().set_input_as_handled()
-#		sig_hotkey_quickload_requested.emit()
-#		return
-
-	# ── MODUS: NORMAL-MODUS EINGABEN ──────────────────────────────────────────
 	if current_mode in [InputMode.NORMAL, InputMode.BUILD]:
 	#if current_mode == InputMode.NORMAL:
 		# Mausrad-Zoom (Darf laut Regel den Pin NIE killen!)
@@ -212,3 +200,4 @@ func _unhandled_input(event: InputEvent) -> void:
 		# Jede andere "echte" Taste im Normalmodus killt den Pin
 		if event is InputEventKey and event.pressed:
 			sig_kill_reset_pin_requested.emit()
+

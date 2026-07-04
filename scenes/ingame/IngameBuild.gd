@@ -54,9 +54,6 @@ func start_building(room_scene: PackedScene) -> void:
 	_build_cursor = cursor
 	cursor.activate(_map_grid, room_scene)
 
-	if is_instance_valid(_hud_canvas) and _hud_canvas.has_method("set_build_mode_visuals"):
-		_hud_canvas.set_build_mode_visuals(true)
-
 # =============================================================================
 func start_demolish() -> void:
 	if is_instance_valid(_build_cursor):
@@ -75,9 +72,6 @@ func start_demolish() -> void:
 
 	_build_cursor = cursor
 	cursor.activate(_map_grid)
-
-	if is_instance_valid(_hud_canvas) and _hud_canvas.has_method("set_build_mode_visuals"):
-		_hud_canvas.set_build_mode_visuals(true)
 
 
 # =============================================================================
@@ -138,9 +132,6 @@ func _apply_build_rewards(def: Dictionary, world_center: Vector2) -> void:
 # =============================================================================
 func _on_build_cursor_done() -> void:
 	_build_cursor = null
-
-	if is_instance_valid(_hud_canvas) and _hud_canvas.has_method("set_build_mode_visuals"):
-		_hud_canvas.set_build_mode_visuals(false)
 
 
 # =============================================================================

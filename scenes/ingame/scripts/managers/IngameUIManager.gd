@@ -219,6 +219,9 @@ func open_build_menu() -> void:
 		InputHandler.current_mode = InputHandler.InputMode.BUILD
 		if is_instance_valid(_bottom_bar):
 			_bottom_bar.sync_button_state("build")
+			
+		if is_instance_valid(_hud) and _hud.has_method("set_build_mode_visuals"):
+			_hud.set_build_mode_visuals(true)
 		
 		if TutorialManager:
 			TutorialManager.trigger("build_mode")
@@ -234,6 +237,8 @@ func close_build_menu() -> void:
 		_bottom_bar.sync_button_state("")
 	
 	if is_instance_valid(_hud):
+		if _hud.has_method("set_build_mode_visuals"):
+			_hud.set_build_mode_visuals(false)
 		var build_menu = _hud.get_node_or_null("BottomBarContainer/BuildMenu")
 		if build_menu and build_menu.has_method("close_build_menu"):
 			build_menu.close_build_menu()

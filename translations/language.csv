@@ -1045,3 +1045,4 @@ settings.ui.window_mode.too_small,Monitor zu klein fuer Rahmenlosen Modus (mind.
 
 settings.ui.window_mode.move_hint,"Fenster verschieben, dann ALT+ENTER zum Bestaetigen","Move window to your monitor, then press ALT+ENTER to confirm"
 settings.ui.window_mode.restored,Fenstermodus wiederhergestellt,Window mode restored
+ui.buildmenu.demolish,Abriss,Demolish

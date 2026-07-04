@@ -44,6 +44,9 @@ func setup(hotel: Dictionary) -> void:
   _game_hour = int(game_time_min / 60.0)
   _game_minute = game_time_min % 60
 
+  _ff_tip_shown = false
+  _ff_used = false
+
   get_tree().paused = _game_paused # <--- BUGFIX: Engine beim Start hart pausieren!
 
   _update_time_ui()

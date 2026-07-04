@@ -963,13 +963,13 @@ tutorial.step.11,"Um neue Räume und Funktionen freizuschalten, musst du das Lev
 tutorial.step.12,"Baue nun, um noch einmal extra EXP zu bekommen, ein erstes Doppelzimmer.","To get some extra EXP, build your first double room now."
 tutorial.step.13,Klasse! Schließe das Baumenü wieder.,Awesome! Close the build menu again.
 tutorial.step.14_wait,Die Rezeption ist nun geöffnet. Um 8 Uhr treffen die ersten Gäste ein!\nStarte die Zeit (falls pausiert) und warte auf ihre Ankunft.,"The reception is now open. At 8 AM, the first guests will arrive!\nStart the time (if paused) and wait for their arrival."
-tutorial.step.15,"Schau, da kommen die ersten Gäste!\nÖffne nun die Rezeption unten im Menü (oder drücke F3).","Look, the first guests are arriving!\nNow open the reception in the menu below (or press F3)."
+tutorial.step.15,"Schau, da kommen die ersten Gäste!\nÖffne nun die Rezeption oben im Menü (oder drücke F1).","Look, the first guests are arriving!\nNow open the reception in the menu above (or press F1)."
 tutorial.step.16,"Links siehst du die neuen Gäste mit pulsierendem Rahmen. Sie warten nun darauf, von dir ein Zimmer zu bekommen.","On the left, you see the new guests with a pulsing frame. They are now waiting for you to assign them a room."
 tutorial.step.17,"Klicke einen Gast an und wähle eins der passenden Zimmer...\nChecke die Gäste ein und schließe danach die Rezeption, um fortzufahren.",Click on a guest and choose one of the matching rooms...\nCheck the guests in and then close the reception to continue.
 tutorial.step.17_error,Du hast noch keinen Gast eingecheckt!\nÖffne die Rezeption erneut und weise den Gästen Zimmer zu.,You haven't checked in any guests yet!\nOpen the reception again and assign rooms to the guests.
 tutorial.step.18,"Wie du bestimmt gemerkt hast, konntest du während des Gäste-Checkins weitere EXP sammeln und du hattest dein erstes Levelup.","As you probably noticed, you collected more EXP during guest check-in and reached your first level up."
 tutorial.step.19,"Da du nun Level 2 bist, kannst du die Personal-Agentur besuchen. Dort findest du deine Angestellten, neue Bewerber und den Bereich um deine Leute den POI zuzuweisen.","Since you are now level 2, you can visit the Staff Agency. There you will find your employees, new applicants, and the area to assign your people to POIs."
-tutorial.step.20,Öffne nun die Personal-Agentur unten im Menü (oder drücke F4).,Now open the Staff Agency in the menu below (or press F4).
+tutorial.step.20,Öffne nun die Personal-Agentur oben im Menü (oder drücke F5).,Now open the Staff Agency in the menu above (or press F5).
 tutorial.step.21,Wechsle nun bitte auf den Reiter mit den Bewerbern.,Please switch to the applicants tab now.
 tutorial.step.21_alt,Öffne die Personal-Agentur und wechsle auf den Reiter mit den Bewerbern.,Open the Staff Agency and switch to the applicants tab.
 tutorial.step.22,Du kannst hier Leute einstellen. Klicke dazu auf einen passenden Listeneintrag und dann rechts im Detailfenster auf einstellen.,You can hire people here. Click on a matching list entry and then click hire in the details window on the right.

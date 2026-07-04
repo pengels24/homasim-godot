@@ -15,6 +15,7 @@ var WEBHOOK_URL = ""
 @onready var http_request: HTTPRequest = %HTTPRequest
 
 var screenshot_buffer: PackedByteArray
+var _previous_input_mode = null
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS # Damit das Popup auch bei pausiertem Spiel läuft
@@ -72,6 +73,8 @@ func _on_report_pressed() -> void:
 	_open_modal()
 
 func _open_modal() -> void:
+	_previous_input_mode = InputHandler.current_mode
+	InputHandler.current_mode = InputHandler.InputMode.MODAL
 	get_tree().paused = true
 	dim.show()
 	modal.show()
@@ -86,6 +89,9 @@ func _close_modal() -> void:
 	dim.hide()
 	modal.hide()
 	get_tree().paused = false
+	if _previous_input_mode != null:
+		InputHandler.current_mode = _previous_input_mode
+		_previous_input_mode = null
 
 func _send_report() -> void:
 	if input_field.text.strip_edges() == "":

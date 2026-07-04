@@ -368,7 +368,7 @@ checkin.btn.confirm,Check-In bestätigen,Confirm Check-In
 checkin.btn.roll,Aufpreis – Gast fragen,Surcharge – Ask Guest
 checkin.btn.other_room,Anderes Zimmer wählen,Choose Different Room
 toast.reception.checkin.success,Check-In erfolgreich!,Check-In successful!
-toast.reception.open,Rezeption geöffnet – Gäste empfangen (F3),Reception open – accepting guests (F3)
+toast.reception.open,Rezeption ist nun geöffnet,Reception is now open
 toast.reception.too_early,Rezeption öffnet erst um 07:00 Uhr,Reception opens at 07:00
 toast.reception.no_rooms,Erst Zimmer bauen bevor Gäste empfangen werden können,Build rooms before accepting guests
 toast.reception.closed,Die Rezeption ist heute geschlossen.,The reception is closed today.
@@ -952,12 +952,12 @@ tutorial.step.2,Zuerst müssen wir uns umsehen können.\nBewege die Karte mit de
 tutorial.step.2_done,Zuerst müssen wir uns umsehen können.\nBewege die Karte mit der rechten Maustaste (halten & ziehen) oder mit WASD.\n\n[x] Karte bewegt,"First, we need to look around.\nMove the map using the right mouse button (hold & drag) or WASD.\n\n[x] Map moved"
 tutorial.step.3,"Gut gemacht!\nNutze nun das Mausrad oder die +/- Tasten auf dem Numpad, um rein- und rauszuzoomen.\n\n[ ] Gezoomt",Well done!\nNow use the mouse wheel or the +/- keys on the numpad to zoom in and out.\n\n[ ] Zoomed
 tutorial.step.3_done,"Gut gemacht!\nNutze nun das Mausrad oder die +/- Tasten auf dem Numpad, um rein- und rauszuzoomen.\n\n[x] Gezoomt",Well done!\nNow use the mouse wheel or the +/- keys on the numpad to zoom in and out.\n\n[x] Zoomed
-tutorial.step.4,Beginnen wir mit dem Wichtigsten: Zimmern!\nÖffne unten im Menü den Bau-Modus (oder drücke F2).,Let's start with the most important part: rooms!\nOpen the build mode in the menu below (or press F2).
+tutorial.step.4,Beginnen wir mit dem Wichtigsten: Zimmern!\nÖffne unten im Menü den Bau-Modus.,Let's start with the most important part: rooms!\nOpen the build mode in the menu below.
 tutorial.step.5,"Wähle ein Einzelzimmer und platziere es. Nutze [R] zum Rotieren, bis es passt!",Select a single room and place it. Use [R] to rotate it until it fits!
 tutorial.step.6,Super! Wir brauchen aber mehr als ein Zimmer. Baue noch ein weiteres Einzelzimmer daneben.,Great! But we need more than one room. Build another single room next to it.
 tutorial.step.7,Super! Schließe nun das Baumenü (z.B. mit einem Klick auf das X oder per ESC).,"Great! Now close the build menu (e.g., by clicking the X or pressing ESC)."
 tutorial.step.8,"Die Rezeption hat, wie auch andere POI (Points of Interest), Öffnungszeiten. Sie öffnet um 7 Uhr und schließt um 22 Uhr.\nWährend dieser Zeit kommen neue Gäste an und bestehende Gäste nutzen diese POI für ihren Tagesablauf.","The reception, like other POIs (Points of Interest), has opening hours. It opens at 7 AM and closes at 10 PM.\nDuring this time, new guests arrive and existing guests use these POIs for their daily routines."
-tutorial.step.9,"Starte nun die Zeit (oben rechts im Menü oder mit der Leertaste), um das Hotel zum Leben zu erwecken!",Now start the time (top right in the menu or with the spacebar) to bring the hotel to life!
+tutorial.step.9,"Starte nun die Zeit (oben rechts im Menü oder mit der [1]), um das Hotel zum Leben zu erwecken!","Now start the time (top right in the menu or with [1]) to bring the hotel to life!"
 tutorial.step.10_wait,"Warte nun, bis die Rezeption um 7 Uhr öffnet.",Now wait until the reception opens at 7 AM.
 tutorial.step.11,"Um neue Räume und Funktionen freizuschalten, musst du das Level des Hotels erhöhen.\nHierfür benötigst du EXP. Diese bekommst du für den jeweils ersten Bau eines neuen Zimmertyps und für Ereignisse im Hotelbetrieb (Check-In, Check-Out, u.a.).","To unlock new rooms and features, you need to increase the hotel's level.\nFor this, you need EXP. You get EXP for the first construction of a new room type and for events in hotel operations (Check-In, Check-Out, etc.)."
 tutorial.step.12,"Baue nun, um noch einmal extra EXP zu bekommen, ein erstes Doppelzimmer.","To get some extra EXP, build your first double room now."

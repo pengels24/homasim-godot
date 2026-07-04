@@ -273,9 +273,19 @@ func _show_category(cat_name: String) -> void:
 
 func get_room_button(room_id: String) -> Button:
 	for btn in _room_btns:
-		if btn.get_meta("room_id") == room_id:
+		if is_instance_valid(btn) and btn.get_meta("room_id") == room_id:
 			return btn
 	return null
+
+func get_category_button(cat_name: String) -> Button:
+	if _category_btns.has(cat_name):
+		return _category_btns[cat_name]
+	return null
+
+func set_locked(is_locked: bool) -> void:
+	for btn in _category_btns.values():
+		if is_instance_valid(btn):
+			btn.disabled = is_locked
 
 func close_build_menu() -> void:
 	if _current_category != "":
@@ -283,6 +293,7 @@ func close_build_menu() -> void:
 		_breadcrumb.text = ""
 		for child in item_grid.get_children():
 			child.queue_free()
+		_room_btns.clear()
 		for btn in _category_btns.values():
 			_set_btn_active(btn, false)
 		sig_build_cancelled.emit()

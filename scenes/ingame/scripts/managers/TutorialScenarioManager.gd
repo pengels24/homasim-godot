@@ -50,8 +50,8 @@ func _spawn_assistant() -> void:
 
 func _lock_ui() -> void:
 	var bottom = _get_bottom_bar()
+	var build = _get_build_menu()
 	if bottom:
-		bottom.build_menu.disabled = true
 		bottom.reception.disabled = true
 		bottom.staff.disabled = true
 		bottom.tech_tree.disabled = true
@@ -59,20 +59,28 @@ func _lock_ui() -> void:
 		bottom.quest_book.disabled = true
 		bottom.guest_list.disabled = true
 		bottom.room_list.disabled = true
-		bottom.tutorials.disabled = true
+		bottom.tutorial.disabled = true
 		bottom.finances.disabled = true
 		
+	if build:
+		build.set_locked(true)
+		
 	# UI elemente basierend auf Tutorial-Fortschritt wieder freischalten
-	if step_index >= 4 and bottom:
-		bottom.build_menu.disabled = false
+	if step_index >= 4 and build:
+		build.set_locked(false)
 	if step_index >= 15 and bottom:
 		bottom.reception.disabled = false
 	if step_index >= 20 and bottom:
 		bottom.staff.disabled = false
 
 func _get_bottom_bar() -> Control:
-	if hud and hud.has_node("BottomBarContainer/HUDBottom"):
-		return hud.get_node("BottomBarContainer/HUDBottom")
+	if hud and hud.has_node("%HUDBottom"):
+		return hud.get_node("%HUDBottom")
+	return null
+
+func _get_build_menu() -> Control:
+	if hud and hud.has_node("BottomBarContainer/BuildMenu"):
+		return hud.get_node("BottomBarContainer/BuildMenu")
 	return null
 
 func _run_step() -> void:
@@ -96,20 +104,21 @@ func _run_step() -> void:
 				InputHandler.sig_camera_zoom_requested.connect(_on_cam_zoomed)
 		4:
 			_show_text(GameState.T("tutorial.step.4"), false)
-			var bottom = _get_bottom_bar()
-			if bottom:
-				bottom.build_menu.disabled = false
-				_pulse_bottom_button(bottom.build_menu)
-				if not bottom.sig_build_menu_toggled.is_connected(_on_build_opened):
-					bottom.sig_build_menu_toggled.connect(_on_build_opened)
+			var build = _get_build_menu()
+			if build:
+				build.set_locked(false)
+				var btn = build.get_category_button("zimmer")
+				_pulse_bottom_button(btn)
+				if not build.sig_build_mode_requested.is_connected(_on_build_opened):
+					build.sig_build_mode_requested.connect(_on_build_opened)
 		5:
 			_target_parcel = Vector2i(2, 0)
 			_target_tile = Vector2i(8, 5)
 			_target_rot = 2
 			_target_room = "bed_standard"
 			_show_text(GameState.T("tutorial.step.5"), false)
-			var bottom = _get_bottom_bar()
-			if bottom: bottom.build_menu.disabled = false
+			var build = _get_build_menu()
+			if build: build.set_locked(false)
 			_slide_assistant(true)
 			_pulse_room_button("bed_standard")
 			# Ghost-Zwang anwerfen
@@ -118,8 +127,8 @@ func _run_step() -> void:
 			_draw_blueprint()
 		6:
 			_show_text(GameState.T("tutorial.step.6"), false)
-			var bottom = _get_bottom_bar()
-			if bottom: bottom.build_menu.disabled = false
+			var build = _get_build_menu()
+			if build: build.set_locked(false)
 			_target_room = "bed_standard"
 			_target_parcel = Vector2i(2, 0)
 			_target_tile = Vector2i(6, 5)
@@ -151,8 +160,8 @@ func _run_step() -> void:
 			_pulse_exp_bar()
 		12:
 			_show_text(GameState.T("tutorial.step.12"), false)
-			var bottom = _get_bottom_bar()
-			if bottom: bottom.build_menu.disabled = false
+			var build = _get_build_menu()
+			if build: build.set_locked(false)
 			_slide_assistant(true)
 			_target_room = "bed_double"
 			_target_parcel = Vector2i(2, 0)
@@ -256,7 +265,7 @@ func _show_text(text: String, show_next_btn: bool = false) -> void:
 
 func _slide_assistant(to_right: bool) -> void:
 	if not is_instance_valid(assistant_ui): return
-	var target_x = 900.0 if to_right else 560.0
+	var target_x = 1020.0 if to_right else 560.0
 	var tween = create_tween()
 	tween.tween_property(assistant_ui, "position:x", target_x, 0.5).set_trans(Tween.TRANS_SINE)
 
@@ -298,12 +307,13 @@ func _on_cam_zoomed(_dir: float) -> void:
 		InputHandler.sig_camera_zoom_requested.disconnect(_on_cam_zoomed)
 
 # --- STEP 4: Baumenü öffnen ---
-func _on_build_opened() -> void:
-	if step_index == 4:
-		var bottom = _get_bottom_bar()
-		if bottom:
-			bottom.sig_build_menu_toggled.disconnect(_on_build_opened)
-			_stop_bottom_button_pulse(bottom.build_menu)
+func _on_build_opened(active: bool) -> void:
+	if step_index == 4 and active:
+		var build = _get_build_menu()
+		if build:
+			build.sig_build_mode_requested.disconnect(_on_build_opened)
+			var btn = build.get_category_button("zimmer")
+			_stop_bottom_button_pulse(btn)
 		advance_step()
 
 # --- STEP 5 & 6 & 11: Zimmer bauen ---
@@ -556,10 +566,8 @@ func _pulse_room_button(room_id: String) -> void:
 	# Versuche mehrfach den Button zu finden
 	for i in range(20):
 		if not is_instance_valid(hud): return
-		var bottom = _get_bottom_bar()
-		if bottom:
-			build_menu = bottom.get_node_or_null("BuildMenu")
-			if build_menu and build_menu.visible and build_menu.has_method("get_room_button"):
+		build_menu = _get_build_menu()
+		if build_menu and build_menu.visible and build_menu.has_method("get_room_button"):
 				btn = build_menu.get_room_button(room_id)
 				if btn: break
 		await get_tree().create_timer(0.05).timeout
@@ -582,9 +590,7 @@ func _pulse_room_button(room_id: String) -> void:
 
 func _stop_room_button_pulse(room_id: String) -> void:
 	if not hud: return
-	var bottom = _get_bottom_bar()
-	if not bottom: return
-	var build_menu = bottom.get_node_or_null("BuildMenu")
+	var build_menu = _get_build_menu()
 	if build_menu and build_menu.has_method("get_room_button"):
 		var btn = build_menu.get_room_button(room_id)
 		if btn:

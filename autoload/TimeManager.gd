@@ -152,7 +152,7 @@ func _tick_game_clock(delta: float) -> void:
   _update_time_ui()
   sig_minute_passed.emit(get_game_time())
 
-  if not _ff_tip_shown and not _ff_used and _game_hour == 6 and _game_minute == 15 and SettingsManager.tutorial_tips:
+  if not _ff_tip_shown and not _ff_used and _game_hour == 6 and _game_minute == 10 and SettingsManager.tutorial_tips:
       if TutorialManager:
           TutorialManager.trigger("tip_fast_forward")
       _ff_tip_shown = true

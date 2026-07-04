@@ -16,6 +16,8 @@
 - **Pausen-Status bei Modals gefixt:** Modals und Baumenü merken sich nun verlässlich den vorherigen Status und setzen das Spiel nach dem Schließen nur dann fort, wenn es vorher lief.
 - **Tutorial-Button gefixt:** Der Button leuchtet nun korrekt auf, wenn das Tutorial offen ist und resettet sich danach fehlerfrei.
 - **UI-Pause Hotkey:** Die Leertaste pausiert und setzt das Spiel nun wieder korrekt im Toggle-Modus fort.
+- **Tutorial HUD-Anpassung:** Das Tutorial wurde an den Umbau des HUDs angepasst. Die Tutorial-Schritte finden nun das zentrierte Baumenü und die neuen Button-Positionen (Rezeption, Personal) fehlerfrei. Erklärtexte wurden aktualisiert.
+- **Crash Fix (Baumenü):** Fehler behoben, bei dem das Spiel nach dem Schließen des Baumenüs abstürzte, weil noch auf verwaiste (gelöschte) Raum-Buttons verwiesen wurde (`is_instance_valid` Check eingebaut).
 
 ### Technische Änderungen
 - Logik in `IngameUIManager` (`_pause_time_for_ui`) drastisch vereinfacht, um Fehler bei kombinierten Pausen-Zuständen (User-Pause vs. System-Pause) zu verhindern.

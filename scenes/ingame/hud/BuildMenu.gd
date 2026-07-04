@@ -5,6 +5,7 @@ extends Control
 signal sig_room_selected(room_scene: PackedScene)
 signal sig_tool_selected(action_id: String)
 signal sig_build_cancelled()
+signal sig_build_mode_requested(active: bool)
 
 @export_group("Vorlagen & Daten")
 ## WICHTIG: Ziehe hier im Inspektor deine NEUE, skriptlose 'BuildMenuButton.tscn' rein!
@@ -23,18 +24,12 @@ var _current_category: String = ""
 
 # =============================================================================
 func _ready() -> void:
-	top_level = true
-
 	_sort_rooms_into_categories()
 	_display_category_buttons()
-
-	# Zeige beim ersten Öffnen direkt die erste Kategorie an (falls vorhanden)
-	if _categories.keys().size() > 0:
-		_show_category(_categories.keys()[0])
+	_breadcrumb.text = ""
 		
 	visibility_changed.connect(_on_visibility_changed)
 
-	visible = false
 
 # =============================================================================
 func _on_visibility_changed() -> void:
@@ -91,7 +86,7 @@ func _sort_rooms_into_categories() -> void:
 		var def: Dictionary = registry_entry.get("def", {})
 
 		# Nur Tools aufnehmen, die auch im Baumenü sichtbar sein sollen
-		if not def.get("in_build_menu", true):
+		if not def.get("in_build_menu", true) or tool_id == "demolish":
 			continue
 
 		var cat_name: String = def.get("category", "werkzeuge").to_lower()
@@ -133,6 +128,16 @@ func _display_category_buttons() -> void:
 
 		btn.pressed.connect(func(): _show_category(cat_name))
 
+	# NEU: Abriss-Button ganz rechts
+	var dem_inst = button_template.instantiate()
+	category_grid.add_child(dem_inst)
+	var dem_btn: Button = dem_inst.get_node("%MenuButton") as Button
+	dem_btn.icon = load("res://assets/icons/HUDBottom/hammer.svg")
+	dem_btn.text = ""
+	dem_btn.tooltip_text = GameState.T("ui.buildmenu.demolish", "Abriss")
+	_category_btns["demolish"] = dem_btn
+	dem_btn.pressed.connect(func(): _show_category("demolish"))
+
 # # =============================================================================
 # ## Erstellt die oberen Knöpfe für die Kategorien (Zimmer, Gastro etc.)
 # func _display_category_buttons() -> void:
@@ -163,17 +168,26 @@ func _display_category_buttons() -> void:
 
 # =============================================================================
 func _show_category(cat_name: String) -> void:
+	if _current_category == cat_name:
+		close_build_menu()
+		return
+
 	_current_category = cat_name
 	sig_build_cancelled.emit()
+	sig_build_mode_requested.emit(true)
 	
 	for child in item_grid.get_children():
 		child.queue_free()
 	_room_btns.clear()
 
-	for c_name in _category_btns.keys():
-		_set_btn_active(_category_btns[c_name], c_name == cat_name)
+	for btn_cat in _category_btns:
+		_set_btn_active(_category_btns[btn_cat], btn_cat == cat_name)
 		
-	var _raw_cat_label = GameState.room_category_registry.get(cat_name.to_lower(), {}).get("label", cat_name.capitalize())
+	if cat_name == "demolish":
+		_breadcrumb.text = " > " + GameState.T("ui.buildmenu.demolish", "Abriss")
+		sig_tool_selected.emit("demolish")
+		return
+
 	var cat_label = GameState.T("room_category." + cat_name.to_lower())
 	_breadcrumb.text = GameState.T("ui.buildmenu.category", cat_label)
 
@@ -262,3 +276,14 @@ func get_room_button(room_id: String) -> Button:
 		if btn.get_meta("room_id") == room_id:
 			return btn
 	return null
+
+func close_build_menu() -> void:
+	if _current_category != "":
+		_current_category = ""
+		_breadcrumb.text = ""
+		for child in item_grid.get_children():
+			child.queue_free()
+		for btn in _category_btns.values():
+			_set_btn_active(btn, false)
+		sig_build_cancelled.emit()
+		sig_build_mode_requested.emit(false)

@@ -12,15 +12,14 @@ enum InputMode {
 }
 
 var current_mode: InputMode = InputMode.NORMAL
-var is_view_saved: bool = false
+
 var _reset_frame_lock: int = -1
 
 # ── SIGNALE ────────────────────────────────────────────────
 # camera
 signal sig_camera_pan_requested(direction: Vector2) # WASD
 signal sig_camera_zoom_requested(direction: float)  # ZOOM
-signal sig_camera_save_view_requested()
-signal sig_camera_restore_view_requested()
+
 # camera right-click map-moving
 signal sig_camera_drag_started(start_position: Vector2)
 signal sig_camera_drag_moved(current_position: Vector2)
@@ -91,21 +90,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			sig_hotkey_escape_pressed.emit()
 		return
 
-	# POS1-TASTE (Zentraler Reset - Nur im Normal-Modus)
-	if event.is_action_pressed("map_reset_camera_view") and not event.is_echo() and current_mode == InputMode.NORMAL:
-		# Die Frame-Sperre bleibt als Sicherheit drin
-		if _reset_frame_lock == Engine.get_frames_drawn():
-			return
-		_reset_frame_lock = Engine.get_frames_drawn()
-
-		get_viewport().set_input_as_handled()
-
-		# HIER PASSIERT JETZT DIE EXAKTE TRENNUNG:
-		if not is_view_saved:
-			sig_camera_save_view_requested.emit()
-		else:
-			sig_camera_restore_view_requested.emit()
-		return
 
 	# ── DEBUG HOTKEYS ───────────────────────────────────────────
 	# STRG + T (Test-Funktionen)
@@ -123,7 +107,18 @@ func _unhandled_input(event: InputEvent) -> void:
 		if TimeManager.is_paused():
 			TimeManager.resume()
 		else:
-			TimeManager.pause()
+			TimeManager.user_pause()
+		return
+
+	if event.is_action_pressed("ui_play"):
+		get_viewport().set_input_as_handled()
+		if TimeManager.is_paused() or TimeManager._game_speed != 1.0:
+			TimeManager.fast_forward(1.0)
+		return
+
+	if event.is_action_pressed("ui_forward"):
+		get_viewport().set_input_as_handled()
+		TimeManager.fast_forward(SettingsManager.ff_speed)
 		return
 
 	if event.is_action_pressed("ui_escape"):

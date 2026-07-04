@@ -44,6 +44,7 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
 [node name="HUDBottom" type="Control" unique_id=491735265]
+custom_minimum_size = Vector2(620, 60)
 layout_mode = 3
 anchors_preset = 0
 mouse_filter = 1
@@ -55,40 +56,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 340.0
-offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 10
-
-[node name="Panel1" type="Panel" parent="HBoxContainer" unique_id=1153240142]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-mouse_filter = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel1" unique_id=566754857]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="BuildMenu" type="Button" parent="HBoxContainer/Panel1/MarginContainer" unique_id=1033111495]
-unique_name_in_owner = true
-layout_mode = 2
-focus_mode = 0
-theme_override_styles/pressed = ExtResource("3_jm8q0")
-toggle_mode = true
-button_group = ExtResource("4_hq4tq")
-icon = ExtResource("11_drill")
-icon_alignment = 1
 
 [node name="Panel2" type="Panel" parent="HBoxContainer" unique_id=1521044970]
 custom_minimum_size = Vector2(60, 60)
@@ -132,6 +102,93 @@ offset_bottom = 10.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_l5yvd")
 
+[node name="Panel4" type="Panel" parent="HBoxContainer" unique_id=979953461]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel4" unique_id=1152472691]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="TechTree" type="Button" parent="HBoxContainer/Panel4/MarginContainer" unique_id=1848820052]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/pressed = ExtResource("3_jm8q0")
+toggle_mode = true
+button_group = ExtResource("4_hq4tq")
+icon = ExtResource("13_flask")
+icon_alignment = 1
+
+[node name="Panel7" type="Panel" parent="HBoxContainer" unique_id=1865373646]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel7" unique_id=1564498093]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="GuestList" type="Button" parent="HBoxContainer/Panel7/MarginContainer" unique_id=1602170882]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/pressed = ExtResource("3_jm8q0")
+toggle_mode = true
+button_group = ExtResource("4_hq4tq")
+icon = ExtResource("7_chacj")
+icon_alignment = 1
+
+[node name="Panel8" type="Panel" parent="HBoxContainer" unique_id=572321918]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel8" unique_id=1190011345]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="RoomList" type="Button" parent="HBoxContainer/Panel8/MarginContainer" unique_id=790306827]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/pressed = ExtResource("3_jm8q0")
+toggle_mode = true
+button_group = ExtResource("4_hq4tq")
+icon = ExtResource("8_ibm0m")
+icon_alignment = 1
+
 [node name="Panel3" type="Panel" parent="HBoxContainer" unique_id=1595204757]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
@@ -161,14 +218,14 @@ button_group = ExtResource("4_hq4tq")
 icon = ExtResource("6_8opbb")
 icon_alignment = 1
 
-[node name="Panel4" type="Panel" parent="HBoxContainer" unique_id=979953461]
+[node name="Panel9" type="Panel" parent="HBoxContainer" unique_id=1955299421]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel4" unique_id=1152472691]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel9" unique_id=1759843935]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -180,14 +237,14 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="TechTree" type="Button" parent="HBoxContainer/Panel4/MarginContainer" unique_id=1848820052]
+[node name="Finances" type="Button" parent="HBoxContainer/Panel9/MarginContainer" unique_id=390759144]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 theme_override_styles/pressed = ExtResource("3_jm8q0")
 toggle_mode = true
 button_group = ExtResource("4_hq4tq")
-icon = ExtResource("13_flask")
+icon = ExtResource("10_chacj")
 icon_alignment = 1
 
 [node name="Panel5" type="Panel" parent="HBoxContainer" unique_id=284075502]
@@ -274,14 +331,14 @@ offset_bottom = 10.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_jm8q0")
 
-[node name="Panel7" type="Panel" parent="HBoxContainer" unique_id=1865373646]
+[node name="Panel10" type="Panel" parent="HBoxContainer" unique_id=9999999991]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 mouse_filter = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel7" unique_id=1564498093]
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel10" unique_id=9999999992]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -293,70 +350,26 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="GuestList" type="Button" parent="HBoxContainer/Panel7/MarginContainer" unique_id=1602170882]
+[node name="Tutorial" type="Button" parent="HBoxContainer/Panel10/MarginContainer" unique_id=9999999993]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 theme_override_styles/pressed = ExtResource("3_jm8q0")
 toggle_mode = true
 button_group = ExtResource("4_hq4tq")
-icon = ExtResource("7_chacj")
+icon = ExtResource("5_77a3o")
 icon_alignment = 1
 
-[node name="Panel8" type="Panel" parent="HBoxContainer" unique_id=572321918]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-mouse_filter = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel8" unique_id=1190011345]
+[node name="IndTutorial" type="Panel" parent="HBoxContainer/Panel10/MarginContainer/Tutorial" unique_id=9999999994]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(10, 10)
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 1
+anchor_left = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
+offset_left = -10.0
+offset_bottom = 10.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_jm8q0")
 
-[node name="RoomList" type="Button" parent="HBoxContainer/Panel8/MarginContainer" unique_id=790306827]
-unique_name_in_owner = true
-layout_mode = 2
-focus_mode = 0
-theme_override_styles/pressed = ExtResource("3_jm8q0")
-toggle_mode = true
-button_group = ExtResource("4_hq4tq")
-icon = ExtResource("8_ibm0m")
-icon_alignment = 1
-
-[node name="Panel9" type="Panel" parent="HBoxContainer" unique_id=1955299421]
-custom_minimum_size = Vector2(60, 60)
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-mouse_filter = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel9" unique_id=1759843935]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="Finances" type="Button" parent="HBoxContainer/Panel9/MarginContainer" unique_id=390759144]
-unique_name_in_owner = true
-layout_mode = 2
-focus_mode = 0
-theme_override_styles/pressed = ExtResource("3_jm8q0")
-toggle_mode = true
-button_group = ExtResource("4_hq4tq")
-icon = ExtResource("10_chacj")
-icon_alignment = 1

@@ -2,7 +2,6 @@ extends Node2D
 ## Verantwortlichkeit: Spielfeld aufbauen, Parzellen-Sichtbarkeit steuern, Kamera-Input.
 ## ANG-186 – Occupancy Grid: globales Bool-Grid ersetzt per-Parzelle Rect2i-Array.
 
-signal view_saved_changed(has_saved: bool)
 
 # ── Nodes ─────────────────────────────────────────────────────────────────────
 @onready var camera: Camera2D = $Camera2D
@@ -61,22 +60,14 @@ var is_miniature: bool = false
 # =============================================================================
 func _ready() -> void:
 	if not is_miniature:
-		InputHandler.sig_camera_save_view_requested.connect(save_current_view)
-		InputHandler.sig_camera_restore_view_requested.connect(restore_saved_view)
+
 		InputHandler.sig_camera_pan_requested.connect(_on_input_camera_pan)
 		InputHandler.sig_camera_zoom_requested.connect(_on_input_camera_zoom)
 		InputHandler.sig_camera_drag_started.connect(_on_input_drag_started)
 		InputHandler.sig_camera_drag_moved.connect(_on_input_drag_moved)
 		InputHandler.sig_camera_drag_ended.connect(_on_input_drag_ended)
-	InputHandler.sig_kill_reset_pin_requested.connect(func():
-		if _has_saved_view:
-			_has_saved_view = false
-			view_saved_changed.emit(false)
-	)
 
-	view_saved_changed.connect(func(has_saved: bool):
-		InputHandler.is_view_saved = has_saved
-	)
+
 
 	var p := $WorldRoot/ParcelsRoot
 	_grid = [
@@ -766,7 +757,6 @@ func _clear_saved_view() -> void:
 	if not _has_saved_view:
 		return
 	_has_saved_view = false
-	view_saved_changed.emit(false)
 
 
 # ── Signale vom InputHandler ausführen ────────────────────────────────────────
@@ -808,18 +798,7 @@ func _on_input_drag_ended() -> void:
 
 
 # =============================================================================
-func save_current_view() -> void:
-	_saved_cam_pos = camera.global_position
-	_saved_cam_zoom = camera.zoom.x
-	center_on_entry(_entry_plot)
-	view_saved_changed.emit(true)
 
-
-# =============================================================================
-func restore_saved_view() -> void:
-	camera.global_position = _saved_cam_pos
-	camera.zoom = Vector2(_saved_cam_zoom, _saved_cam_zoom)
-	view_saved_changed.emit(false)
 
 
 # pathfinding

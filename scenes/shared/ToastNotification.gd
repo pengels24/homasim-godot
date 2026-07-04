@@ -23,6 +23,9 @@ func _ready() -> void:
 
 
 func play(message: String) -> void:
+	if not is_inside_tree() or not is_node_ready():
+		await ready
+	
 	_apply_position()
 	_msg_lbl.text = message
 	_panel.modulate.a = 0.0
@@ -34,9 +37,12 @@ func play(message: String) -> void:
 
 
 func _apply_position() -> void:
-	var top_y: float
-	match SettingsManager.toast_position:
-		"top":    top_y = POS_TOP_Y
-		"middle": top_y = POS_MIDDLE_Y
-		_:        top_y = POS_BOTTOM_Y
-	_panel.position.y = top_y
+	var top_y: float = POS_BOTTOM_Y
+	if is_instance_valid(SettingsManager):
+		match SettingsManager.toast_position:
+			"top":    top_y = POS_TOP_Y
+			"middle": top_y = POS_MIDDLE_Y
+			_:        top_y = POS_BOTTOM_Y
+	
+	if is_instance_valid(_panel):
+		_panel.position.y = top_y

@@ -28,30 +28,13 @@ button_group = SubResource("ButtonGroup_wwfd2")
 [node name="Forward" parent="HUD/TopBar/MarginContainer/HBoxContainer/Button3/MarginContainer" parent_id_path=PackedInt32Array(102009972, 1558075564) index="0" unique_id=164350172]
 button_group = SubResource("ButtonGroup_wwfd2")
 
-[node name="BuildMenu" parent="HUD/BottomBarContainer/HUDBottom/HBoxContainer/Panel1/MarginContainer" parent_id_path=PackedInt32Array(102009972, 491735265, 566754857) index="0" unique_id=1033111495]
-button_group = SubResource("ButtonGroup_8ktxv")
-
-[node name="Reception" parent="HUD/BottomBarContainer/HUDBottom/HBoxContainer/Panel2/MarginContainer" parent_id_path=PackedInt32Array(102009972, 491735265, 1938624481) index="0" unique_id=2132307684]
-button_group = SubResource("ButtonGroup_8ktxv")
-
-[node name="Staff" parent="HUD/BottomBarContainer/HUDBottom/HBoxContainer/Panel3/MarginContainer" parent_id_path=PackedInt32Array(102009972, 491735265, 1093129650) index="0" unique_id=1652034052]
-button_group = SubResource("ButtonGroup_8ktxv")
-
-[node name="TechTree" parent="HUD/BottomBarContainer/HUDBottom/HBoxContainer/Panel4/MarginContainer" parent_id_path=PackedInt32Array(102009972, 491735265, 1152472691) index="0" unique_id=1848820052]
-button_group = SubResource("ButtonGroup_8ktxv")
-
-[node name="SimBrowser" parent="HUD/BottomBarContainer/HUDBottom/HBoxContainer/Panel5/MarginContainer" parent_id_path=PackedInt32Array(102009972, 491735265, 1000552068) index="0" unique_id=103433776]
-button_group = SubResource("ButtonGroup_8ktxv")
-
 [editable path="HUD"]
 [editable path="HUD/TopBar/MarginContainer/HBoxContainer/HotelName"]
 [editable path="HUD/TopBar/MarginContainer/HBoxContainer/Level"]
 [editable path="HUD/TopBar/MarginContainer/HBoxContainer/Money"]
 [editable path="HUD/TopBar/MarginContainer/HBoxContainer/FP"]
 [editable path="HUD/TopBar/MarginContainer/HBoxContainer/Day"]
-[editable path="HUD/BottomBarContainer/HUDResetView"]
-[editable path="HUD/BottomBarContainer/HUDBottom"]
-[editable path="HUD/BottomBarContainer/HUDBottom/BuildMenu"]
-[editable path="HUD/BottomBarContainer/HUDMusicControl"]
+[editable path="HUD/ManagementContainer/HUDBottom"]
+[editable path="HUD/BottomBarContainer/BuildMenu"]
 [editable path="HUD/LevelUpModal"]
 [editable path="HUD/StandardModal"]

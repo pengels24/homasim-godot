@@ -4,7 +4,7 @@ extends Node2D
 @onready var map_grid: Node2D = $MapGrid
 @onready var hud_canvas: CanvasLayer = $HUD
 @onready var top_bar: Control        = $HUD/TopBar
-@onready var bottom_bar = $HUD/BottomBarContainer/HUDBottom
+@onready var bottom_bar = $HUD/ManagementContainer/HUDBottom
 @onready var standard_modal: StandardModal = $HUD/StandardModal
 
 # ── Subsysteme ────────────────────────────────────────────────────────────────
@@ -185,11 +185,17 @@ func _setup_subsystems() -> void:
 	# Bausystem
 	_build = IngameBuild.new()
 	add_child(_build)
-	_build.configure(_hotel, map_grid, $HUD/BottomBarContainer/HUDBottom, $HUD)
+	_build.configure(_hotel, map_grid, $HUD/ManagementContainer/HUDBottom, $HUD)
 	_build.sig_room_built.connect(_on_room_built)
-	$HUD/BottomBarContainer/HUDBottom/BuildMenu.sig_room_selected.connect(_build.start_building)
-	$HUD/BottomBarContainer/HUDBottom/BuildMenu.sig_tool_selected.connect(_build._on_tool_selected)
-	$HUD/BottomBarContainer/HUDBottom/BuildMenu.sig_build_cancelled.connect(_build.close_all)
+	$HUD/BottomBarContainer/BuildMenu.sig_room_selected.connect(_build.start_building)
+	$HUD/BottomBarContainer/BuildMenu.sig_tool_selected.connect(_build._on_tool_selected)
+	$HUD/BottomBarContainer/BuildMenu.sig_build_cancelled.connect(_build.close_all)
+	$HUD/BottomBarContainer/BuildMenu.sig_build_mode_requested.connect(func(active: bool):
+		if active:
+			_ui_mgr.open_build_menu()
+		else:
+			_ui_mgr.close_build_menu()
+	)
 
 	# Signale vom TimeManager fangen
 	TimeManager.sig_hour_passed.connect(_guest_mgr.on_hour_passed)

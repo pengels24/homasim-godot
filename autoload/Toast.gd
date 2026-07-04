@@ -29,8 +29,13 @@ func _process_queue() -> void:
 		
 	var next_msg: String = _toast_queue.pop_front()
 	_active = TOAST_SCENE.instantiate() as ToastNotification
-	get_tree().get_root().add_child(_active)
-	_active.play(next_msg)
+	
+	# Verwende call_deferred für add_child, da sonst "busy setting up children" auftritt
+	get_tree().get_root().call_deferred("add_child", _active)
+	
+	# Da call_deferred das Hinzufügen verzögert, müssen wir auch das Aufrufen von play verzögern,
+	# damit @onready Variablen innerhalb des Toasts bereits initialisiert wurden!
+	_active.call_deferred("play", next_msg)
 	
 	# Wenn der Toast fertig ist, das nächste Element aus der Queue holen
 	_active.tree_exited.connect(func():

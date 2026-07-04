@@ -1,6 +1,5 @@
 extends Control
 
-signal sig_build_menu_toggled
 signal sig_reception_toggled
 signal sig_staff_toggled
 signal sig_tech_tree_toggled
@@ -9,27 +8,25 @@ signal sig_quest_book_toggled
 signal sig_guest_list_toggled
 signal sig_room_list_toggled
 signal sig_finances_toggled
+signal sig_tutorial_toggled
 
-@onready var build_menu: Button = %BuildMenu
 @onready var reception: Button = %Reception
 @onready var staff: Button = %Staff
 @onready var tech_tree: Button = %TechTree
 @onready var sim_browser: Button = %SimBrowser
 @onready var quest_book: Button = %QuestBook
+@onready var tutorial: Button = %Tutorial
 @onready var guest_list: Button = %GuestList
 @onready var room_list: Button = %RoomList
 @onready var finances: Button = %Finances
 @onready var ind_reception: Panel = %IndReception
 @onready var ind_sim_browser: Panel = %IndSimBrowser
 @onready var ind_quest_book: Panel = %IndQuestBook
+@onready var ind_tutorial: Panel = %IndTutorial
 
 
 # =============================================================================
 func _ready() -> void:
-	build_menu.pressed.connect(func():
-		sig_build_menu_toggled.emit()
-	)
-
 	reception.pressed.connect(func():
 		sig_reception_toggled.emit()
 	)
@@ -48,6 +45,10 @@ func _ready() -> void:
 
 	quest_book.pressed.connect(func():
 		sig_quest_book_toggled.emit()
+	)
+
+	tutorial.pressed.connect(func():
+		sig_tutorial_toggled.emit()
 	)
 
 	guest_list.pressed.connect(func():
@@ -70,7 +71,6 @@ func _ready() -> void:
 		QuestManager.sig_rank_claimable.connect(func(_id): _update_quest_book_indicator())
 		QuestManager.sig_rank_claimed.connect(func(_id): _update_quest_book_indicator())
 
-	build_menu.tooltip_text = GameState.T("hud.bottom.build_menu_tt", _get_action_key_string("ui_build_menu"))
 	reception.tooltip_text  = GameState.T("hud.bottom.reception_tt", _get_action_key_string("ui_reception"))
 	staff.tooltip_text      = GameState.T("hud.bottom.staff_tt", _get_action_key_string("ui_staff"))
 	tech_tree.tooltip_text  = GameState.T("hud.bottom.tech_tree_tt", _get_action_key_string("ui_tech_tree"))
@@ -127,28 +127,9 @@ func set_quest_alert(has_claimable: bool) -> void:
 
 # =============================================================================
 # Wird von Ingame.gd aufgerufen, um die Position des Baumenü-Panels anzupassen
-func update_build_menu_position() -> void:
-	if not has_node("BuildMenu") or not has_node("HBoxContainer/Panel1"):
-		return
-
-	var target_button = $HBoxContainer/Panel1
-	var build_menu_box = $BuildMenu
-	build_menu_box.top_level = true
-
-	await get_tree().process_frame
-
-	var offset_x = 10
-	var new_x = target_button.global_position.x - offset_x
-	var new_y = target_button.global_position.y - build_menu_box.size.y - 10
-
-	build_menu_box.global_position = Vector2(new_x, new_y)
-
-
-# =============================================================================
-# Synchronisiert die visuelle Anzeige der Buttons mit dem aktuellen Menü-Status
 func sync_button_state(active_menu: String = "") -> void:
 	# Alle Buttons sicherheitshalber ausschalten und Fokus entfernen
-	for btn in [build_menu, reception, staff, tech_tree, sim_browser, quest_book, guest_list, room_list, finances]:
+	for btn in [reception, staff, tech_tree, sim_browser, quest_book, guest_list, room_list, finances, tutorial]:
 		btn.set_pressed_no_signal(false)
 		btn.release_focus()
 
@@ -160,8 +141,8 @@ func sync_button_state(active_menu: String = "") -> void:
 			sim_browser.set_pressed_no_signal(true)
 		"quest_book":
 			quest_book.set_pressed_no_signal(true)
-		"build":
-			build_menu.set_pressed_no_signal(true)
+		"tutorial":
+			tutorial.set_pressed_no_signal(true)
 		"staff":
 			staff.set_pressed_no_signal(true)
 		"tech_tree":

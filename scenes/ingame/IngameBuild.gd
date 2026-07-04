@@ -21,11 +21,13 @@ func configure(hotel: Dictionary, map_grid: Node2D, hud: Node, hud_canvas: Node)
 # ── Public API ────────────────────────────────────────────────────────────────
 
 
-# =============================================================================
 func close_all() -> void:
 	if is_instance_valid(_build_cursor):
 		_build_cursor.queue_free()
 		_on_build_cursor_done()
+
+func has_active_cursor() -> bool:
+	return is_instance_valid(_build_cursor)
 
 
 # ── Neue Schnittstelle für das BuildMenu ──────────────────────────────────────

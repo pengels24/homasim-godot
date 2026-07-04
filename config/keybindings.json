@@ -57,9 +57,21 @@
         "default": "Space",
         "default_alt": ""
       },
+      "ui_play": {
+        "label": "settings.controls.gameplay.play",
+        "order": 2,
+        "default": "1",
+        "default_alt": ""
+      },
+      "ui_forward": {
+        "label": "settings.controls.gameplay.forward",
+        "order": 3,
+        "default": "2",
+        "default_alt": ""
+      },
       "ui_quicksave": {
         "label": "settings.controls.gameplay.quicksave",
-        "order": 2,
+        "order": 4,
         "default": "",
         "default_alt": ""
       },

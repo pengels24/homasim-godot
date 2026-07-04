@@ -33,7 +33,6 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	if not is_instance_valid(_bottom_bar):
 		return
 
-	_bottom_bar.sig_build_menu_toggled.connect(toggle_build_menu)
 	_bottom_bar.sig_reception_toggled.connect(open_reception)
 	_bottom_bar.sig_sim_browser_toggled.connect(open_sim_browser)
 	_bottom_bar.sig_staff_toggled.connect(open_staff)
@@ -41,6 +40,7 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	_bottom_bar.sig_quest_book_toggled.connect(open_quest_book)
 	_bottom_bar.sig_guest_list_toggled.connect(open_guest_list)
 	_bottom_bar.sig_room_list_toggled.connect(open_room_list)
+	_bottom_bar.sig_tutorial_toggled.connect(open_tutorial_codex)
 
 	_bottom_bar.sig_finances_toggled.connect(open_finances)
 
@@ -51,9 +51,7 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	# ESC
 	if not InputHandler.sig_hotkey_escape_pressed.is_connected(on_exit_pressed):
 		InputHandler.sig_hotkey_escape_pressed.connect(on_exit_pressed)
-	# buildmenu
-	if not InputHandler.sig_hotkey_build_menu_requested.is_connected(toggle_build_menu):
-		InputHandler.sig_hotkey_build_menu_requested.connect(toggle_build_menu)
+	# buildmenu is no longer toggled via hotkey
 	# reception
 	if not InputHandler.sig_hotkey_reception_requested.is_connected(open_reception):
 		InputHandler.sig_hotkey_reception_requested.connect(open_reception)
@@ -116,8 +114,8 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 # =============================================================================
 func _pause_time_for_ui() -> void:
 	if InputHandler.current_mode == InputHandler.InputMode.NORMAL:
-		# Resume nach UI wenn: Spiel lief, ODER war durch Autopause pausiert (nicht User-Pause)
-		_pause_was_running = not TimeManager.is_paused() or not TimeManager.is_user_paused()
+		# Resume nach UI wenn: Spiel lief (egal ob User-Pause oder Autopause)
+		_pause_was_running = not TimeManager.is_paused()
 	TimeManager.pause()
 
 
@@ -173,7 +171,10 @@ func update_map_grid_mode() -> void:
 # =============================================================================
 func on_exit_pressed() -> void:
 	if InputHandler.current_mode == InputHandler.InputMode.BUILD:
-		close_build_menu()
+		if is_instance_valid(_build) and _build.has_active_cursor():
+			_build.close_all() # First close the ghost
+		else:
+			close_build_menu() # Then exit build mode completely
 		return
 	if is_instance_valid(_sim_browser) and _sim_browser.visible:
 		close_sim_browser()
@@ -190,6 +191,7 @@ func open_tutorial_codex() -> void:
 	if not is_instance_valid(codex): return
 
 	_pause_time_for_ui()
+	_bottom_bar.sync_button_state("tutorial")
 
 	if _standard_modal.visible:
 		_standard_modal.set_title(GameState.T("modal.tutorial.title"))
@@ -213,11 +215,10 @@ func toggle_build_menu() -> void:
 # =============================================================================
 func open_build_menu() -> void:
 	if InputHandler.current_mode != InputHandler.InputMode.BUILD:
+		_pause_time_for_ui()
 		InputHandler.current_mode = InputHandler.InputMode.BUILD
 		if is_instance_valid(_bottom_bar):
-			_bottom_bar.update_build_menu_position()
 			_bottom_bar.sync_button_state("build")
-			_bottom_bar.get_node("BuildMenu").show()
 		
 		if TutorialManager:
 			TutorialManager.trigger("build_mode")
@@ -228,9 +229,14 @@ func close_build_menu() -> void:
 	if _build:
 		_build.close_all()
 	InputHandler.current_mode = InputHandler.InputMode.NORMAL
+	_resume_time_after_ui()
 	if is_instance_valid(_bottom_bar):
 		_bottom_bar.sync_button_state("")
-		_bottom_bar.get_node("BuildMenu").hide()
+	
+	if is_instance_valid(_hud):
+		var build_menu = _hud.get_node_or_null("BottomBarContainer/BuildMenu")
+		if build_menu and build_menu.has_method("close_build_menu"):
+			build_menu.close_build_menu()
 
 
 # ── Rezeption ─────────────────────────────────────────────────────────────────

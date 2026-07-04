@@ -265,19 +265,19 @@ func update_bottom_layout(position_setting: String) -> void:
 
 	match position_setting.to_lower():
 		"left":
-			lower_hbox.move_child(bottom_bar, 0)
-			_set_inner_alignment(bottom_bar, BoxContainer.ALIGNMENT_BEGIN)
+			lower_hbox.move_child($BottomBarContainer/BuildMenu, 0)
+			_set_inner_alignment($BottomBarContainer/BuildMenu, BoxContainer.ALIGNMENT_BEGIN)
 
 		"right":
-			lower_hbox.move_child(bottom_bar, 2)
-			_set_inner_alignment(bottom_bar, BoxContainer.ALIGNMENT_END)
+			lower_hbox.move_child($BottomBarContainer/BuildMenu, 2)
+			_set_inner_alignment($BottomBarContainer/BuildMenu, BoxContainer.ALIGNMENT_END)
 
 		"center", _:
-			lower_hbox.move_child(bottom_bar, 1)
-			_set_inner_alignment(bottom_bar, BoxContainer.ALIGNMENT_CENTER)
+			lower_hbox.move_child($BottomBarContainer/BuildMenu, 1)
+			_set_inner_alignment($BottomBarContainer/BuildMenu, BoxContainer.ALIGNMENT_CENTER)
 
-	if bottom_bar.has_method("update_build_menu_position"):
-		bottom_bar.update_build_menu_position()
+	if false:
+		pass
 
 
 # =============================================================================

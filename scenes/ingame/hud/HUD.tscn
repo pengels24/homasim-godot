@@ -542,6 +542,21 @@ toggle_mode = true
 button_group = SubResource("ButtonGroup_fiam6")
 icon = ExtResource("4_feby4")
 
+
+[node name="ManagementContainer" type="MarginContainer" parent="." unique_id=999999991]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_top = 80.0
+offset_right = -20.0
+offset_bottom = 140.0
+grow_horizontal = 0
+
+[node name="HUDBottom" parent="ManagementContainer" unique_id=491735265 instance=ExtResource("15_r421g")]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="BottomBarContainer" type="HBoxContainer" parent="." unique_id=378990724]
 custom_minimum_size = Vector2(0, 70)
 anchors_preset = 12
@@ -554,54 +569,12 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
 
-[node name="HUDBottom" parent="BottomBarContainer" unique_id=491735265 instance=ExtResource("15_r421g")]
-unique_name_in_owner = true
+[node name="BuildMenu" parent="BottomBarContainer" unique_id=1714912306 instance=ExtResource("17_8e3pd")]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 4
+size_flags_vertical = 8
 
-[node name="HBoxContainer" parent="BottomBarContainer/HUDBottom" index="0" unique_id=1516826197]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -170.0
-offset_top = -30.0
-offset_right = 170.0
-offset_bottom = 30.0
-
-[node name="BuildMenu" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel1/MarginContainer" parent_id_path=PackedInt32Array(491735265, 566754857) index="0" unique_id=1033111495]
-button_group = SubResource("ButtonGroup_7mtkd")
-
-[node name="Reception" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel2/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1938624481) index="0" unique_id=2132307684]
-button_group = SubResource("ButtonGroup_7mtkd")
-
-[node name="Staff" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel3/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1093129650) index="0" unique_id=1652034052]
-button_group = SubResource("ButtonGroup_7mtkd")
-
-[node name="TechTree" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel4/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1152472691) index="0" unique_id=1848820052]
-button_group = SubResource("ButtonGroup_7mtkd")
-
-[node name="SimBrowser" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel5/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1000552068) index="0" unique_id=103433776]
-button_group = SubResource("ButtonGroup_7mtkd")
-
-[node name="QuestBook" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel6/MarginContainer" index="0"]
-button_group = SubResource("ButtonGroup_7mtkd")
-
-[node name="GuestList" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel7/MarginContainer" index="0"]
-button_group = SubResource("ButtonGroup_7mtkd")
-
-[node name="RoomList" parent="BottomBarContainer/HUDBottom/HBoxContainer/Panel8/MarginContainer" index="0"]
-button_group = SubResource("ButtonGroup_7mtkd")
-
-[node name="BuildMenu" parent="BottomBarContainer/HUDBottom" unique_id=1714912306 instance=ExtResource("17_8e3pd")]
-layout_mode = 1
-offset_left = 150.0
-offset_top = -150.0
-offset_right = 350.0
-offset_bottom = -50.0
-
-[node name="VBoxContainer" parent="BottomBarContainer/HUDBottom/BuildMenu/MarginContainer" parent_id_path=PackedInt32Array(1714912306, 1905983299) index="0" unique_id=905183679]
+[node name="VBoxContainer" parent="BottomBarContainer/BuildMenu/MarginContainer" parent_id_path=PackedInt32Array(1714912306, 1905983299) index="0" unique_id=905183679]
 theme_override_constants/separation = 10
 
 [node name="StateBorder" type="ReferenceRect" parent="." unique_id=1847592834]
@@ -661,7 +634,7 @@ offset_bottom = 160.0
 [editable path="TopBar/MarginContainer/HBoxContainer/Money"]
 [editable path="TopBar/MarginContainer/HBoxContainer/FP"]
 [editable path="TopBar/MarginContainer/HBoxContainer/Day"]
-[editable path="BottomBarContainer/HUDBottom"]
-[editable path="BottomBarContainer/HUDBottom/BuildMenu"]
+[editable path="ManagementContainer/HUDBottom"]
+[editable path="BottomBarContainer/BuildMenu"]
 [editable path="LevelUpModal"]
 [editable path="StandardModal"]

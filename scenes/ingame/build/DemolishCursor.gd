@@ -5,6 +5,7 @@ signal sig_cancelled()
 
 var _map_grid: Node2D
 var _target_room: Node2D = null
+var _rmb_pressed_pos := Vector2.ZERO
 
 func activate(map_grid: Node2D) -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS

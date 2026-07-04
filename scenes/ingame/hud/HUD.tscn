@@ -20,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://dnlttoshpxisb" path="res://scenes/ingame/hud/modals/LevelUpModal.tscn" id="24_6iy1x"]
 [ext_resource type="PackedScene" uid="uid://bcweu4cs7d73x" path="res://scenes/ingame/hud/modals/StandardModal.tscn" id="25_fiam6"]
 [ext_resource type="PackedScene" uid="uid://df2m4b8v7e1q" path="res://scenes/ingame/hud/TechOverlay.tscn" id="50_tech"]
+[ext_resource type="PackedScene" uid="uid://df7h3x0j2lq4" path="res://scenes/ingame/hud/BuildHintPanel.tscn" id="51_bh"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_gfles"]
 content_margin_left = 0.0
@@ -630,6 +631,7 @@ offset_top = 80.0
 offset_right = 180.0
 offset_bottom = 160.0
 
+[node name="BuildHintPanel" parent="." instance=ExtResource("51_bh")]
 [editable path="TopBar/MarginContainer/HBoxContainer/Level"]
 [editable path="TopBar/MarginContainer/HBoxContainer/Money"]
 [editable path="TopBar/MarginContainer/HBoxContainer/FP"]

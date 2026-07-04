@@ -335,3 +335,9 @@ func set_pause_visuals(p_paused: bool) -> void:
 func set_build_mode_visuals(p_building: bool) -> void:
 	_is_building = p_building
 	update_state_visuals()
+	var hint = find_child("BuildHintPanel", true, false)
+	if hint:
+		if p_building:
+			hint.show_hints()
+		else:
+			hint.hide_hints()

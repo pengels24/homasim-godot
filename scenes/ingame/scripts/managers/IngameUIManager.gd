@@ -7,14 +7,22 @@ var _map_grid: Node2D
 var _standard_modal: StandardModal
 var _sim_browser: SimBrowser
 var _build: IngameBuild
-var _guest_mgr: GuestManager
 var _schedule_mgr: IngameScheduleManager
 
+var _guest_mgr: GuestManager
 var _reception: Control
 var _quit_confirm: Node
-var _pause_was_running: bool = false
-var _pause_requests: int = 0
 var _came_from_pause: bool = false
+var _modal_is_pausing: bool = false
+
+# =============================================================================
+func _set_modal_pausing(should_pause: bool) -> void:
+	if should_pause and not _modal_is_pausing:
+		TimeManager.add_system_pause()
+		_modal_is_pausing = true
+	elif not should_pause and _modal_is_pausing:
+		TimeManager.remove_system_pause()
+		_modal_is_pausing = false
 
 const CONFIRM_SCENE := preload("res://scenes/shared/ConfirmModal.tscn")
 
@@ -110,23 +118,7 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 		GameState.sig_techdemo_completed.connect(_on_techdemo_completed)
 
 
-# ── Zeit-Steuerung ────────────────────────────────────────────────────────────
-
-# =============================================================================
-func _pause_time_for_ui() -> void:
-	if _pause_requests == 0:
-		_pause_was_running = not TimeManager.is_paused()
-	_pause_requests += 1
-	TimeManager.pause()
-
-
-# =============================================================================
-func _resume_time_after_ui() -> void:
-	if _pause_requests > 0:
-		_pause_requests -= 1
-		
-	if _pause_requests == 0 and _pause_was_running:
-		TimeManager.resume()
+# ── Zeit-Steuerung (Veraltet, direkt TimeManager nutzen) ───────────────
 
 
 # =============================================================================
@@ -155,7 +147,7 @@ func cleanup_current_states() -> void:
 # =============================================================================
 func _on_techdemo_completed() -> void:
 	cleanup_current_states()
-	_pause_time_for_ui()
+	_set_modal_pausing(true)
 	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentTechDemoEnd.tscn")
 	if content and content.has_signal("sig_close_requested"):
 		content.sig_close_requested.connect(_standard_modal.close)
@@ -194,7 +186,7 @@ func open_tutorial_codex() -> void:
 	var codex = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentTutorials.tscn")
 	if not is_instance_valid(codex): return
 
-	_pause_time_for_ui()
+	_set_modal_pausing(true)
 	_bottom_bar.sync_button_state("tutorial")
 
 	if _standard_modal.visible:
@@ -219,7 +211,7 @@ func toggle_build_menu() -> void:
 # =============================================================================
 func open_build_menu() -> void:
 	if InputHandler.current_mode != InputHandler.InputMode.BUILD:
-		_pause_time_for_ui()
+		TimeManager.add_system_pause()
 		InputHandler.current_mode = InputHandler.InputMode.BUILD
 		if is_instance_valid(_bottom_bar):
 			_bottom_bar.sync_button_state("build")
@@ -236,7 +228,7 @@ func close_build_menu() -> void:
 	if _build:
 		_build.close_all()
 	InputHandler.current_mode = InputHandler.InputMode.NORMAL
-	_resume_time_after_ui()
+	TimeManager.remove_system_pause()
 	if is_instance_valid(_bottom_bar):
 		_bottom_bar.sync_button_state("")
 	
@@ -283,7 +275,7 @@ func open_reception() -> void:
 
 	_reception.configure(_guest_mgr)
 	_reception.refresh()
-	_pause_time_for_ui()
+	_set_modal_pausing(true)
 
 	if TutorialManager:
 		TutorialManager.trigger("reception")
@@ -324,7 +316,7 @@ func update_reception_button_state() -> void:
 # =============================================================================
 func show_end_of_day(guest_mgr: GuestManager) -> void:
 	cleanup_current_states()
-	_pause_time_for_ui()
+	_set_modal_pausing(true)
 	_standard_modal.modal_input_mode = InputHandler.InputMode.PAUSE
 	
 	var eod_scene = load("res://scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn")
@@ -440,12 +432,12 @@ func open_pause_menu() -> void:
 	if is_instance_valid(_hud):
 		SaveManager.capture_thumbnail(_hud.get_viewport())
 		
-	_pause_time_for_ui()
+	_set_modal_pausing(true)
 	_standard_modal.modal_input_mode = InputHandler.InputMode.PAUSE
 	var pause_content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentPause.tscn")
 
 	if pause_content:
-		pause_content.sig_resume_requested.connect(func(): _standard_modal.close(); _resume_time_after_ui(); update_map_grid_mode())
+		pause_content.sig_resume_requested.connect(func(): _standard_modal.close(); TimeManager.remove_system_pause(); update_map_grid_mode())
 		pause_content.sig_save_requested.connect(_on_pause_save)
 		pause_content.sig_load_requested.connect(_on_pause_load)
 		pause_content.sig_settings_requested.connect(func(): _came_from_pause = true; _open_settings())
@@ -460,7 +452,7 @@ func _on_pause_save() -> void:
 	var save_content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentSave.tscn")
 	_standard_modal.set_title(GameState.T("modal.save.title"))
 	if save_content and save_content.has_signal("sig_save_completed"):
-		save_content.sig_save_completed.connect(func(): _standard_modal.close(); _resume_time_after_ui(); update_map_grid_mode())
+		save_content.sig_save_completed.connect(func(): _standard_modal.close(); TimeManager.remove_system_pause(); update_map_grid_mode())
 	update_map_grid_mode()
 
 
@@ -534,7 +526,7 @@ func _on_standard_modal_hidden() -> void:
 		_came_from_pause = false
 		call_deferred("open_pause_menu")
 	else:
-		_resume_time_after_ui()
+		_set_modal_pausing(false)
 		InputHandler.current_mode = InputHandler.InputMode.NORMAL
 		if is_instance_valid(_bottom_bar):
 			_bottom_bar.sync_button_state("")
@@ -582,7 +574,7 @@ func open_staff() -> void:
 	var staff_modal = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentStaff.tscn")
 	if not is_instance_valid(staff_modal): return
 
-	_pause_time_for_ui()
+	_set_modal_pausing(true)
 
 	if _standard_modal.visible:
 		_standard_modal.set_title(GameState.T("modal.staff.title"))
@@ -599,10 +591,10 @@ func open_tech_tree() -> void:
 		return
 
 	cleanup_current_states()
-	var techtree = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentTechtree.tscn")
-	if not is_instance_valid(techtree): return
+	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentTechtree.tscn")
+	if not is_instance_valid(content): return
 
-	_pause_time_for_ui()
+	_set_modal_pausing(true)
 
 	if _standard_modal.visible:
 		_standard_modal.set_title(GameState.T("modal.techtree.title"))
@@ -636,7 +628,7 @@ func open_sim_browser() -> void:
 		_sim_browser.open()
 		if is_instance_valid(_bottom_bar):
 			_bottom_bar.sync_button_state("sim_browser")
-		_pause_time_for_ui()
+		TimeManager.add_system_pause()
 		InputHandler.current_mode = InputHandler.InputMode.MODAL
 		update_map_grid_mode()
 
@@ -644,7 +636,7 @@ func open_sim_browser() -> void:
 func close_sim_browser() -> void:
 	if _sim_browser and _sim_browser.visible:
 		_sim_browser.close()
-	_resume_time_after_ui()
+	TimeManager.remove_system_pause()
 	InputHandler.current_mode = InputHandler.InputMode.NORMAL
 	if is_instance_valid(_bottom_bar):
 		_bottom_bar.sync_button_state("")
@@ -665,7 +657,7 @@ func open_quest_book() -> void:
 	if TutorialManager:
 		TutorialManager.trigger("quest_book")
 
-	_pause_time_for_ui()
+	_set_modal_pausing(true)
 	
 	if _standard_modal.visible:
 		_standard_modal.set_title(GameState.T("modal.questbook.title"))
@@ -685,6 +677,8 @@ func open_guest_list() -> void:
 	cleanup_current_states()
 	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentGuestList.tscn")
 	if not is_instance_valid(content): return
+	
+	_set_modal_pausing(false)
 
 	if TutorialManager:
 		TutorialManager.trigger("guest_list")
@@ -702,6 +696,8 @@ func open_room_list() -> void:
 	cleanup_current_states()
 	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentRoomList.tscn")
 	if not is_instance_valid(content): return
+	
+	_set_modal_pausing(false)
 
 	if TutorialManager:
 		TutorialManager.trigger("room_list")
@@ -719,6 +715,9 @@ func open_finances() -> void:
 	cleanup_current_states()
 	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentFinances.tscn")
 	if not is_instance_valid(content): return
+	
+	_set_modal_pausing(true)
+	
 	_bottom_bar.sync_button_state("finances")
 
 	if TutorialManager:

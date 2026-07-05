@@ -284,7 +284,7 @@ func spawn_guests(amount: int = -1) -> int:
 			TimeManager.get_game_time(),
 		)
 
-	TimeManager.pause()
+	TimeManager.trigger_auto_pause()
 	parties_changed.emit()
 
 	return total_heads

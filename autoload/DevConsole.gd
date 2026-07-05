@@ -47,9 +47,7 @@ func toggle() -> void:
 
 # =============================================================================
 func _open() -> void:
-	# Nur pausieren, wenn wir wirklich im Spiel sind
-	_was_paused = TimeManager.is_paused()
-	TimeManager.pause()
+	TimeManager.add_system_pause()
 	InputHandler.current_mode = InputHandler.InputMode.CONSOLE
 	visible = true
 	_input_field.grab_focus()
@@ -58,10 +56,7 @@ func _open() -> void:
 # =============================================================================
 func _close() -> void:
 	visible = false
-
-	if not _was_paused:
-		TimeManager.resume()
-
+	TimeManager.remove_system_pause()
 	InputHandler.current_mode = InputHandler.InputMode.NORMAL
 
 

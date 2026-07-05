@@ -20,14 +20,14 @@ var _hotel_ref: Dictionary # Merken wir uns, um Tag/Zeit beim Tageswechsel ins S
 
 var _game_hour: int = 10
 var _game_minute: int = 0
-var _game_paused: bool = true
-var _game_speed: float = 1.0
-var _pre_pause_speed: float = 1.0  # ANG-208: Speed vor Pause merken
 var _time_accum: float = 0.0
+
+var user_speed: float = 0.0 # Der Wunsch des Spielers (0.0 = Pause, 1.0 = Play, >1.0 = FF)
+var system_pause_requests: int = 0 # Blockiert den Wunsch des Spielers
+var auto_paused: bool = false # Zarte Pause durch Events, die bei UI-Aktionen verfliegt
 
 var _ff_tip_shown: bool = false
 var _ff_used: bool = false
-var _user_paused: bool = false  # ANG-208: Nur true wenn Spieler manuell paused
 
 
 # =============================================================================
@@ -37,13 +37,9 @@ func _ready() -> void:
   SettingsManager.sig_ff_speed_changed.connect(_on_settings_ff_speed_changed)
 
 func _on_settings_ff_speed_changed(new_speed: float) -> void:
-  # Aktualisiere die gespeicherte Speed für FF, falls wir gerade spulen oder 
-  # während FF pausiert haben (da FF Speed immer > 1.0 ist)
-  if _pre_pause_speed > 1.0:
-    _pre_pause_speed = new_speed
-  if not _game_paused and _game_speed > 1.0:
-    _game_speed = new_speed
-    sig_speed_changed.emit(_game_paused, _game_speed)
+  if user_speed > 1.0:
+    user_speed = new_speed
+  _evaluate_speed()
 
 
 # =============================================================================
@@ -57,11 +53,13 @@ func setup(hotel: Dictionary) -> void:
   _ff_tip_shown = false
   _ff_used = false
 
-  get_tree().paused = _game_paused # <--- BUGFIX: Engine beim Start hart pausieren!
+  user_speed = 0.0
+  system_pause_requests = 0
+  auto_paused = false
+  _evaluate_speed()
 
   _update_time_ui()
   _update_day_ui()
-  sig_speed_changed.emit(_game_paused, _game_speed)
 
 
 # =============================================================================
@@ -76,48 +74,65 @@ func get_hour() -> int:
 
 # =============================================================================
 func is_paused() -> bool:
-  return _game_paused
+  return (user_speed == 0.0 or system_pause_requests > 0 or auto_paused)
 
 
 # =============================================================================
-## Autopause – z.B. durch Events, Tagesende, Modals. Stellt _pre_pause_speed nicht vom User.
-func pause() -> void:
-  _pre_pause_speed = _game_speed  # ANG-208: Aktuelle Geschwindigkeit sichern
-  _game_paused = true
-  get_tree().paused = true
-  sig_speed_changed.emit(_game_paused, _game_speed)
+## Wird von UI-Fenstern (z.B. Modals, Bau-Menü) aufgerufen, die eine System-Pause erzwingen.
+func add_system_pause() -> void:
+  system_pause_requests += 1
+  _evaluate_speed()
 
 
 # =============================================================================
-## User-Pause – explizit vom Spieler per Pause-Button ausgelöst.
+## Wird aufgerufen, wenn zwingende UI-Fenster geschlossen werden.
+func remove_system_pause() -> void:
+  system_pause_requests = max(0, system_pause_requests - 1)
+  if system_pause_requests == 0:
+      auto_paused = false # Wenn das letzte Fenster zugeht, verfliegt die Auto-Pause
+  _evaluate_speed()
+
+
+# =============================================================================
+## User-Pause – explizit vom Spieler per Pause-Button ausgelöst ODER durch Events (Tageswechsel, neue Gäste).
 func user_pause() -> void:
-  _user_paused = true
-  pause()
+  user_speed = 0.0
+  auto_paused = false
+  _evaluate_speed()
 
 
 # =============================================================================
-func is_user_paused() -> bool:
-  return _user_paused
+func trigger_auto_pause() -> void:
+  auto_paused = true
+  _evaluate_speed()
 
 
 # =============================================================================
 func resume() -> void:
-  _user_paused = false  # Jede explizite Resume-Aktion hebt User-Pause auf
-  _game_paused = false
-  _game_speed = _pre_pause_speed  # ANG-208: Geschwindigkeit vor der Pause wiederherstellen
-  get_tree().paused = false
-  sig_speed_changed.emit(_game_paused, _game_speed)
+  user_speed = 1.0
+  auto_paused = false
+  _evaluate_speed()
 
 
 # =============================================================================
 func fast_forward(ff_speed: float) -> void:
   _ff_used = true
-  _user_paused = false  # FF hebt User-Pause auf
-  _game_paused = false
-  _game_speed = ff_speed
-  _pre_pause_speed = ff_speed  # User hat explizit diese Geschwindigkeit gewählt
-  get_tree().paused = false
-  sig_speed_changed.emit(_game_paused, _game_speed)
+  user_speed = ff_speed
+  auto_paused = false
+  _evaluate_speed()
+
+
+# =============================================================================
+func _evaluate_speed() -> void:
+  var actual_speed: float = user_speed if (system_pause_requests == 0 and not auto_paused) else 0.0
+  var actual_paused: bool = (actual_speed == 0.0)
+  
+  get_tree().paused = actual_paused
+  
+  # Wir emitten actual_paused aber user_speed,
+  # damit das HUD anzeigt, was aktiv WÄRE, wenn die Systempause nicht wäre.
+  # Dadurch kann das HUD z.B. pausiert anzeigen, ohne die Buttons zu verstellen.
+  sig_speed_changed.emit(actual_paused, user_speed)
 
 
 # =============================================================================
@@ -131,10 +146,11 @@ func _process(delta: float) -> void:
 
 # =============================================================================
 func _tick_game_clock(delta: float) -> void:
-  if _game_paused:
+  var actual_speed: float = user_speed if (system_pause_requests == 0 and not auto_paused) else 0.0
+  if actual_speed == 0.0:
     return
 
-  _time_accum += delta * _game_speed
+  _time_accum += delta * actual_speed
   var minutes_passed := int(_time_accum / SECONDS_PER_GAME_MINUTE)
 
   if minutes_passed == 0:
@@ -155,11 +171,10 @@ func _tick_game_clock(delta: float) -> void:
   if _game_hour >= 24:
     _game_hour = 24
     _game_minute = 0
-    _game_paused = true
-    _user_paused = true  # Neuer Tag beginnt immer in Pause – Spieler muss manuell starten
-    get_tree().paused = true
-    _game_speed = 1.0
-    sig_speed_changed.emit(_game_paused, _game_speed)
+    
+    # NEU: Tageswechsel erzwingt eine User-Pause!
+    user_speed = 0.0
+    _evaluate_speed()
     _on_day_end()
 
   _update_time_ui()
@@ -216,4 +231,7 @@ func start_next_day() -> void:
   _update_time_ui()
 
   # Der Tag beginnt pausiert!
+  user_speed = 0.0
+  _evaluate_speed()
+  
   sig_save_requested.emit(get_game_time())

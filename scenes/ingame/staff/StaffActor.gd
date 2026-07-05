@@ -87,7 +87,7 @@ func _physics_process(delta: float) -> void:
 	if TimeManager.is_paused():
 		return
 		
-	var speed_mult = TimeManager._game_speed
+	var speed_mult = TimeManager.user_speed
 	var actual_speed = SPEED * speed_mult
 	
 	# Denkpause

@@ -84,7 +84,7 @@ func _process_waiting(delta: float) -> void:
 	if TimeManager:
 		if TimeManager.is_paused():
 			return # NEU: Nicht ticken, wenn pausiert!
-		speed = TimeManager._game_speed
+		speed = TimeManager.user_speed
 		
 	_action_timer -= delta * speed
 	if _action_timer <= 0.0:
@@ -348,8 +348,8 @@ func start_checkin(room: Node2D, spawn_pos: Vector2, delay: float) -> void:
 	# Warte die Check-in-Schlange ab (Zeitskalierung beachten)
 	if delay > 0.0:
 		var wait_time = delay
-		if TimeManager and not TimeManager._game_paused:
-			wait_time = delay / max(1.0, TimeManager._game_speed)
+		if TimeManager and not TimeManager.is_paused():
+			wait_time = delay / max(1.0, TimeManager.user_speed)
 		await get_tree().create_timer(wait_time).timeout
 	
 	_walk_to_room(room, State.IN_ROOM)
@@ -503,8 +503,8 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 	_active_tween = create_tween()
 	
 	if TimeManager:
-		if not TimeManager._game_paused:
-			_active_tween.set_speed_scale(TimeManager._game_speed)
+		if not TimeManager.is_paused():
+			_active_tween.set_speed_scale(TimeManager.user_speed)
 		else:
 			_active_tween.set_speed_scale(0.0)
 		

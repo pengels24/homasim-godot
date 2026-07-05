@@ -1054,3 +1054,5 @@ activitylog.filter.quest,Quest,Quest
 activitylog.filter.reward,Belohnung,Reward
 activitylog.filter.info,Info,Info
 settings.controls.ui.activity_log,Aktivitäten (Log),Activity Log
+
+activitylog.filter.finance,Finanzen,Finances

@@ -114,7 +114,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("ui_play"):
 		get_viewport().set_input_as_handled()
-		if TimeManager.is_paused() or TimeManager._game_speed != 1.0:
+		if TimeManager.user_speed != 1.0:
 			TimeManager.fast_forward(1.0)
 		return
 

@@ -16,8 +16,18 @@ func setup(entry: Dictionary) -> void:
 	var m = t % 60
 	lbl_time.text = "%02d:%02d" % [h, m]
 	
-	lbl_message.text = GameState.T(entry.get("message", ""))
-	
+	var raw_msg: String = entry.get("message", "")
+	if "|" in raw_msg:
+		var parts: PackedStringArray = raw_msg.split("|")
+		var msg_translated := GameState.T(parts[0])
+		if parts.size() == 2:
+			lbl_message.text = msg_translated % parts[1]
+		elif parts.size() >= 3:
+			lbl_message.text = msg_translated % [parts[1], parts[2]]
+		else:
+			lbl_message.text = msg_translated
+	else:
+		lbl_message.text = GameState.T(raw_msg)
 	# Color border based on category
 	var style: StyleBoxFlat = get_theme_stylebox("panel").duplicate()
 	match cat:

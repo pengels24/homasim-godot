@@ -374,11 +374,11 @@ func _on_time_resumed(is_paused: bool, _speed: float) -> void:
 func _on_hour_passed(hour: int) -> void:
 	if step_index == 10 and hour >= 7:
 		TimeManager.sig_hour_passed.disconnect(_on_hour_passed)
-		TimeManager.pause()
+		TimeManager.user_pause()
 		advance_step()
 	elif step_index == 14 and hour >= 8:
 		TimeManager.sig_hour_passed.disconnect(_on_hour_passed)
-		TimeManager.pause()
+		TimeManager.user_pause()
 		advance_step()
 
 # --- STEP 15: Rezeption öffnen ---

@@ -274,7 +274,7 @@ func _on_event_reception_open() -> void:
 	# Quality of Life: Auto-Pause, wenn Gäste warten oder auschecken wollen
 	if _guest_mgr.get_waiting().size() > 0 or _guest_mgr.get_checkout().size() > 0:
 		if not TimeManager.is_paused():
-			TimeManager.pause()
+			TimeManager.trigger_auto_pause()
 			Toast.show(GameState.T("toast.reception.auto_pause", "Auto-Pause: Gäste an der Rezeption!"), "guest", false)
 
 
@@ -285,8 +285,10 @@ func _on_event_guest_arrival() -> void:
 	print("[Ingame] _guest_mgr.spawn_guests returned: ", count)
 
 	if count == 1:
+		TimeManager.trigger_auto_pause()
 		Toast.show(GameState.T("toast.guest.arrival.single"), "guest")
 	elif count > 1:
+		TimeManager.trigger_auto_pause()
 		Toast.show(GameState.T("toast.guest.arrival.multi").replace("###", str(count)), "guest")
 
 
@@ -350,7 +352,7 @@ func _on_time_speed_changed(is_paused: bool, speed: float) -> void:
 func _on_event_reception_last_call() -> void:
 	# Wenn gar niemand wartet, stören wir den Spieler auch nicht
 	if _guest_mgr.get_waiting().size() > 0:
-		TimeManager.pause()
+		TimeManager.trigger_auto_pause()
 		Toast.show(GameState.T("toast.checkin.last_call"), "guest")
 
 

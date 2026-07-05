@@ -25,6 +25,11 @@ extends CanvasLayer
 @onready var state_border: ReferenceRect = $StateBorder
 @onready var pause_label: Label = $PauseLabel
 
+@onready var activity_btn: Button = $ActivityLogContainer/MarginContainer/ActivityBtn
+@onready var activity_badge: Panel = $ActivityLogContainer/Badge
+@onready var activity_badge_label: Label = $ActivityLogContainer/Badge/Label
+@onready var activity_panel: ActivityLogPanel = $ActivityLogPanel
+
 var _is_building: bool = false
 var _is_paused: bool = false
 
@@ -53,11 +58,20 @@ func _ready() -> void:
 	EffectManager.ui_exp_node = %EXP
 	EffectManager.ui_fp_node = bottom_bar.get_node("%TechTree")
 
+	$BottomBarContainer/BuildMenu.sig_tool_selected.connect(_on_build_tool_selected)
+
+
 	GameState.sig_hotel_level_up.connect(_on_hotel_level_up)
 	%LevelUpModal.sig_rewards_claimed.connect(_on_level_up_rewards_claimed)
 
 	# Techtree Signals
 	TechtreeManager.sig_tech_unlocked.connect(_on_tech_unlocked)
+	
+	# Activity Log
+	activity_btn.pressed.connect(_on_activity_btn_pressed)
+	InputHandler.sig_hotkey_activity_log_requested.connect(_on_activity_btn_pressed)
+	ActivityLog.entry_added.connect(_update_activity_badge)
+	_update_activity_badge()
 
 	# Initialen Pause-Status setzen (falls wir direkt pausiert ins Spiel starten)
 	set_pause_visuals(TimeManager.is_paused())
@@ -82,6 +96,26 @@ func _ready() -> void:
 func _on_tech_unlocked(tech_id: String) -> void:
 	if tech_id == "M1.1" and is_instance_valid(bottom_bar) and bottom_bar.has_method("set_browser_locked"):
 		bottom_bar.set_browser_locked(false)
+
+
+# =============================================================================
+func _on_activity_btn_pressed() -> void:
+	if activity_panel.visible and activity_panel._is_open:
+		activity_panel.close()
+	else:
+		activity_panel.open()
+		_update_activity_badge()
+
+
+# =============================================================================
+func _update_activity_badge(_entry = null) -> void:
+	var c = ActivityLog.get_unread_count()
+	if c > 0:
+		activity_badge.visible = true
+		activity_badge_label.text = str(c)
+	else:
+		activity_badge.visible = false
+
 
 # =============================================================================
 func _on_guest_clicked(guest: Node2D) -> void:
@@ -276,8 +310,7 @@ func update_bottom_layout(position_setting: String) -> void:
 			lower_hbox.move_child($BottomBarContainer/BuildMenu, 1)
 			_set_inner_alignment($BottomBarContainer/BuildMenu, BoxContainer.ALIGNMENT_CENTER)
 
-	if false:
-		pass
+
 
 
 # =============================================================================
@@ -338,6 +371,19 @@ func set_build_mode_visuals(p_building: bool) -> void:
 	var hint = find_child("BuildHintPanel", true, false)
 	if hint:
 		if p_building:
-			hint.show_hints()
+			var build_menu = $BottomBarContainer/BuildMenu
+			if build_menu and build_menu._current_category == "demolish":
+				hint.hide_hints()
+			else:
+				hint.show_hints()
 		else:
 			hint.hide_hints()
+
+# =============================================================================
+func _on_build_tool_selected(action_id: String) -> void:
+	var hint = find_child("BuildHintPanel", true, false)
+	if hint and _is_building:
+		if action_id == "demolish":
+			hint.hide_hints()
+		else:
+			hint.show_hints()

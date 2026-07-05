@@ -112,6 +112,7 @@ func create_hotel(profile_id: int, hotel_name: String, cols: int = 5, rows: int 
 		"transactions": [],
 		"unlocked_techs": [],
 		"tutorial_step": 1,
+		"activity_log": [],
 	}
 	_hotels.append(hotel)
 	_save_profiles()
@@ -152,6 +153,7 @@ func create_tutorial_hotel() -> int:
 		"staff": {},
 		"built_room_types": [],
 		"tutorial_step": 1,
+		"activity_log": [],
 	}
 	_hotels.append(hotel)
 	_save_hotel(hotel)
@@ -485,6 +487,7 @@ func _load_hotel_file(filename: String) -> void:
 		"staff": cfg.get_value("hotel", "staff", {}),
 		"built_room_types": cfg.get_value("hotel", "built_room_types", []),
 		"tutorial_step": cfg.get_value("hotel", "tutorial_step", 1),
+		"activity_log": cfg.get_value("hotel", "activity_log", []),
 	}
 
 	# Alle dynamischen Zimmer-Zähler aus der Config lesen und in 'h' einfügen
@@ -504,7 +507,7 @@ func _save_hotel(hotel: Dictionary) -> void:
 	var keys_to_save = [
 		"profile_id", "name", "grid_cols", "grid_rows", "day", "money", "game_time", "plots", "auto_count", 
 		"level", "stars", "guests_active", "guests_checkin", "guests_checkout", "exp", "exp_max", "rep", "rep_max", "fp", 
-		"guest_data", "transactions", "unlocked_techs", "techtree", "tutorials", "quests", "staff", "built_room_types", "tutorial_step"
+		"guest_data", "transactions", "unlocked_techs", "techtree", "tutorials", "quests", "staff", "built_room_types", "tutorial_step", "activity_log"
 	]
 	for key in keys_to_save:
 		cfg.set_value("hotel", key, hotel.get(key))
@@ -642,6 +645,7 @@ func _take_snapshot(hotel: Dictionary, snap_name: String) -> Dictionary:
 		"staff": hotel.get("staff", {}).duplicate(true),
 		"built_room_types": hotel.get("built_room_types", []).duplicate(true),
 		"tutorial_step": hotel.get("tutorial_step", 1),
+		"activity_log": hotel.get("activity_log", []).duplicate(true),
 	}
 
 	# NEU: Zähler in den Snapshot kopieren
@@ -682,6 +686,7 @@ func _apply_snapshot(hotel: Dictionary, snap: Dictionary) -> void:
 	hotel["staff"] = snap.get("staff", {}).duplicate(true)
 	hotel["built_room_types"] = snap.get("built_room_types", []).duplicate(true)
 	hotel["tutorial_step"] = snap.get("tutorial_step", 1)
+	hotel["activity_log"] = snap.get("activity_log", []).duplicate(true)
 
 	# Zähler aus dem Snapshot wiederherstellen
 	for key in snap:

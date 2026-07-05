@@ -66,7 +66,7 @@ func _on_timed_autosave() -> void:
 
 	save_progress(TimeManager.get_game_time())
 	SaveManager.save_auto(hotel_id)
-	Toast.show(GameState.T("toast.system.autosave"))
+	Toast.show(GameState.T("toast.system.autosave"), "system", false)
 
 
 # =============================================================================
@@ -85,7 +85,7 @@ func quick_save() -> void:
 
 	save_progress(TimeManager.get_game_time())
 	SaveManager.save_quick(hotel_id)
-	Toast.show(GameState.T("toast.quicksave"))
+	Toast.show(GameState.T("toast.quicksave"), "system", false)
 
 
 # =============================================================================
@@ -95,10 +95,10 @@ func quick_load() -> void:
 		return
 
 	if SaveManager.load_quick(hotel_id):
-		Toast.show_after_scene_change(GameState.T("toast.quickload.ok"))
+		Toast.show_after_scene_change(GameState.T("toast.quickload.ok"), "system", false)
 		get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
 	else:
-		Toast.show(GameState.T("toast.quickload.empty"))
+		Toast.show(GameState.T("toast.quickload.empty"), "system", false)
 
 
 # =============================================================================

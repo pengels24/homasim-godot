@@ -203,7 +203,7 @@ func _execute(cmd: String) -> void:
 				"game_time": TimeManager.get_game_time(),
 			})
 			SaveManager.save_quick(hotel_id)
-			Toast.show(GameState.T("toast.quicksave"))
+			Toast.show(GameState.T("toast.quicksave"), "system")
 			_log("Quicksave gespeichert.", CLR_OK)
 
 		"spawn-guests":

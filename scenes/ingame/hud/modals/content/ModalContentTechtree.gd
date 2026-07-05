@@ -158,7 +158,7 @@ func _build_tier_gate(parent: Control, tier_id: String, tier_data: Dictionary) -
 	btn.disabled = not can_unlock
 	btn.pressed.connect(func():
 		if TechtreeManager.unlock_tier(tier_id):
-			Toast.show(GameState.T("toast.techtree.tier_unlocked", tier_id))
+			Toast.show(GameState.T("toast.techtree.tier_unlocked", tier_id), "research")
 	)
 	vbox.add_child(btn)
 
@@ -236,7 +236,7 @@ func _build_tier_content(parent: Control, _tier_id: String, tier_data: Dictionar
 				
 				btn.pressed.connect(func():
 					if is_demo_locked:
-						Toast.show(GameState.T("ui.techtree.tooltip.demo_alert"))
+						Toast.show(GameState.T("ui.techtree.tooltip.demo_alert"), "info", false)
 						return
 						
 					if TechtreeManager.is_tech_available(tech_id):
@@ -250,12 +250,12 @@ func _build_tier_content(parent: Control, _tier_id: String, tier_data: Dictionar
 						confirm.ask(title, msg, GameState.T("ui.techtree.btn.unlock"), GameState.T("ui.techtree.btn.cancel"))
 						confirm.confirmed.connect(func():
 							if TechtreeManager.unlock_tech(tech_id):
-								Toast.show(GameState.T("toast.techtree.unlocked", GameState.T(n.get("name", "Unknown"))))
+								Toast.show(GameState.T("toast.techtree.unlocked", GameState.T(n.get("name", "Unknown"))), "research")
 							confirm.queue_free()
 						)
 						confirm.cancelled.connect(func(): confirm.queue_free())
 					else:
-						Toast.show(GameState.T("toast.techtree.failed"))
+						Toast.show(GameState.T("toast.techtree.failed"), "research", false)
 				)
 				
 				# Hover Effect

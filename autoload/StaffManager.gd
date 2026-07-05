@@ -157,7 +157,7 @@ func is_poi_staffed(room_def: Dictionary, room_id: String) -> bool:
 # =============================================================================
 func hire_staff(applicant_id: String) -> bool:
 	if hired_staff.size() >= 5:
-		Toast.show(GameState.T("toast.staff.limit_reached"))
+		Toast.show(GameState.T("toast.staff.limit_reached"), "personal")
 		return false
 		
 	var applicant_idx = -1
@@ -173,7 +173,7 @@ func hire_staff(applicant_id: String) -> bool:
 	var cost = applicant.get("hire_cost", 200)
 	
 	if GameState.selected_hotel.get("money", 0) < cost:
-		Toast.show(GameState.T("toast.staff.not_enough_capital"))
+		Toast.show(GameState.T("toast.staff.not_enough_capital"), "personal")
 		return false
 		
 	if FinanceManager:
@@ -188,7 +188,7 @@ func hire_staff(applicant_id: String) -> bool:
 	_save_to_hotel()
 	
 	sig_staff_hired.emit(applicant)
-	Toast.show(applicant["first_name"] + " wurde eingestellt!")
+	Toast.show(applicant["first_name"] + " wurde eingestellt!", "personal")
 	return true
 
 # =============================================================================

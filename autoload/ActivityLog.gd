@@ -25,6 +25,10 @@ func add(type: String, message: String, game_day: int, game_time: int) -> void:
 		"created_at": Time.get_datetime_string_from_system(),
 	}
 	_entries.append(entry)
+	if _entries.size() > 100:
+		_entries.pop_front()
+		
+	_sync_state()
 	entry_added.emit(entry)
 
 
@@ -46,8 +50,19 @@ func get_unread_count() -> int:
 func mark_all_read() -> void:
 	for e: Dictionary in _entries:
 		e["is_read"] = true
-
+	_sync_state()
 
 # =============================================================================
 func clear() -> void:
 	_entries.clear()
+	_sync_state()
+
+# =============================================================================
+func load_state(data: Array) -> void:
+	_entries = data.duplicate(true)
+
+# =============================================================================
+func _sync_state() -> void:
+	if not GameState.selected_hotel.is_empty():
+		GameState.selected_hotel["activity_log"] = _entries.duplicate(true)
+

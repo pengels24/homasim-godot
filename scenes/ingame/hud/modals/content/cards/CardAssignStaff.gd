@@ -34,7 +34,7 @@ func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		if _is_matching:
 			accept_event()
-			Toast.show("Staff Clicked: " + _staff_id)
+			Toast.show("Staff Clicked: " + _staff_id, "staff")
 			sig_clicked.emit(_staff_id)
 
 func populate(staff: Dictionary) -> void:

@@ -304,7 +304,7 @@ settings.audio.menu_music,Menü-Musik,Menu Music
 settings.audio.sound,Sound,Sound
 settings.ui.language,Sprache,Language
 settings.ui.scale,UI-Skalierung,UI Scale
-settings.ui.toast_position,Toast-Position,Toast Position
+settings.ui.toast_duration,Toast-Dauer,Toast Duration
 settings.ui.toast.top,Oben,Top
 settings.ui.toast.middle,Mitte,Middle
 settings.ui.toast.bottom,Unten,Bottom
@@ -933,13 +933,13 @@ tutorial.finances.title,Finanzen,Finances
 tutorial.finances.desc,"Dies ist die Übersicht deiner Einnahmen und Ausgaben.
 Du kannst alle Einträge sortieren und filtern. Dies verschafft dir den Überblick über deine finanzielle Situation.","This is the overview of your income and expenses.
 You can sort and filter all entries. This gives you a clear overview of your financial situation."
-build.error.out_of_bounds,Au�erhalb der Parzelle,Out of bounds
+build.error.out_of_bounds,Außerhalb der Parzelle,Out of bounds
 
 build.error.blocked,Bauplatz blockiert,Construction site blocked
 
-build.error.door_blocked,T�r blockiert / verdeckt,Door blocked / obstructed
+build.error.door_blocked,Tür blockiert / verdeckt,Door blocked / obstructed
 
-build.error.door_out_of_bounds,T�r zeigt ins Nichts,Door faces nowhere
+build.error.door_out_of_bounds,Tür zeigt ins Nichts,Door faces nowhere
 
 build.error.path_blocked,Blockiert Flur eines anderen Raums,Blocks hallway of another room
 
@@ -1046,3 +1046,11 @@ settings.ui.window_mode.too_small,Monitor zu klein fuer Rahmenlosen Modus (mind.
 settings.ui.window_mode.move_hint,"Fenster verschieben, dann ALT+ENTER zum Bestaetigen","Move window to your monitor, then press ALT+ENTER to confirm"
 settings.ui.window_mode.restored,Fenstermodus wiederhergestellt,Window mode restored
 ui.buildmenu.demolish,Abriss,Demolish
+activitylog.filter.construction,Bau,Construction
+activitylog.filter.personal,Personal,Staff
+activitylog.filter.wages,Löhne,Wages
+activitylog.filter.income,Einnahmen,Income
+activitylog.filter.quest,Quest,Quest
+activitylog.filter.reward,Belohnung,Reward
+activitylog.filter.info,Info,Info
+settings.controls.ui.activity_log,Aktivitäten (Log),Activity Log

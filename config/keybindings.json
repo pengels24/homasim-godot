@@ -134,6 +134,12 @@
         "order": 10,
         "default": "F6",
         "default_alt": ""
+      },
+      "ui_activity_log": {
+        "label": "settings.controls.ui.activity_log",
+        "order": 11,
+        "default": "L",
+        "default_alt": ""
       }
     }
   },

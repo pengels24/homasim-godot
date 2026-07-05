@@ -8,11 +8,12 @@ var _standard_modal: StandardModal
 var _sim_browser: SimBrowser
 var _build: IngameBuild
 var _guest_mgr: GuestManager
-var _schedule_mgr: IngameScheduleManager # <--- NEUE ZEILE
+var _schedule_mgr: IngameScheduleManager
 
 var _reception: Control
 var _quit_confirm: Node
 var _pause_was_running: bool = false
+var _pause_requests: int = 0
 var _came_from_pause: bool = false
 
 const CONFIRM_SCENE := preload("res://scenes/shared/ConfirmModal.tscn")
@@ -113,15 +114,18 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 
 # =============================================================================
 func _pause_time_for_ui() -> void:
-	if InputHandler.current_mode == InputHandler.InputMode.NORMAL:
-		# Resume nach UI wenn: Spiel lief (egal ob User-Pause oder Autopause)
+	if _pause_requests == 0:
 		_pause_was_running = not TimeManager.is_paused()
+	_pause_requests += 1
 	TimeManager.pause()
 
 
 # =============================================================================
 func _resume_time_after_ui() -> void:
-	if _pause_was_running:
+	if _pause_requests > 0:
+		_pause_requests -= 1
+		
+	if _pause_requests == 0 and _pause_was_running:
 		TimeManager.resume()
 
 
@@ -257,19 +261,19 @@ func open_reception() -> void:
 				total_rooms += 1
 
 	if total_rooms == 0:
-		Toast.show(GameState.T("toast.reception.no_rooms"))
+		Toast.show(GameState.T("toast.reception.no_rooms"), "guest", false)
 		return
 
 	# 2. ZEIT-CHECK: Es gibt Räume, aber hat die Rezeption schon auf?
 	if TimeManager.get_hour() < 7 or TimeManager.get_hour() >= 22:
-		Toast.show(GameState.T("toast.reception.too_early"))
+		Toast.show(GameState.T("toast.reception.too_early"), "guest", false)
 		return
 
 	# 3. VERFÜGBARKEITS-CHECK: Hat das Hotel ZIMMER FREI für NEUE Gäste?
 	# Optional: Diesen Toast könntest du weglassen, wenn der Spieler die
 	# Rezeption trotzdem öffnen darf, um z.B. nur Check-Outs zu bearbeiten.
 	if not _guest_mgr.has_bookable_rooms() and _guest_mgr.get_checkout().size() == 0:
-		Toast.show(GameState.T("toast.reception.no_rooms"))
+		Toast.show(GameState.T("toast.reception.no_rooms"), "guest", false)
 		return
 
 	# --- AB HIER: Alles gut, mach das Ding auf! ---
@@ -394,7 +398,7 @@ func _lock_reception() -> void:
 		# Nur schließen, wenn wir wirklich das Rezeptions-Fenster offen haben
 		if is_instance_valid(_reception) and _reception.is_visible_in_tree():
 			_standard_modal.close()
-			Toast.show(GameState.T("toast.reception.force_close"))
+			Toast.show(GameState.T("toast.reception.force_close"), "guest", false)
 
 
 # =============================================================================
@@ -505,7 +509,7 @@ func _on_quit_confirmed() -> void:
 # =============================================================================
 func _on_save_modal_loaded(hotel_id_loaded: int) -> void:
 	GameState.active_hotel_id = hotel_id_loaded
-	Toast.show_after_scene_change(GameState.T("toast.quickload.ok"))
+	Toast.show_after_scene_change(GameState.T("toast.quickload.ok"), "system", false)
 	get_tree().change_scene_to_file("res://scenes/ingame/Ingame.tscn")
 
 
@@ -568,7 +572,7 @@ func open_staff() -> void:
 	var level = GameState.selected_hotel.get("level", 1)
 	
 	if level < GameState.UNLOCK_LEVELS.staff:
-		Toast.show(GameState.T("toast.hr.locked") % GameState.UNLOCK_LEVELS.staff)
+		Toast.show(GameState.T("toast.hr.locked") % GameState.UNLOCK_LEVELS.staff, "staff", false)
 		return
 		
 	if TutorialManager:
@@ -591,7 +595,7 @@ func open_staff() -> void:
 # =============================================================================
 func open_tech_tree() -> void:
 	if GameState.selected_hotel.get("level", 1) < GameState.UNLOCK_LEVELS.techtree:
-		Toast.show(GameState.T("toast.techtree.locked") % GameState.UNLOCK_LEVELS.techtree)
+		Toast.show(GameState.T("toast.techtree.locked") % GameState.UNLOCK_LEVELS.techtree, "research", false)
 		return
 
 	cleanup_current_states()
@@ -620,7 +624,7 @@ func open_tech_tree() -> void:
 # =============================================================================
 func open_sim_browser() -> void:
 	if not TechtreeManager.is_tech_unlocked("M1.1"):
-		Toast.show(GameState.T("toast.simbrowser.locked"))
+		Toast.show(GameState.T("toast.simbrowser.locked"), "research", false)
 		return
 
 	if TutorialManager:

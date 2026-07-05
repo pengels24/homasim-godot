@@ -100,7 +100,7 @@ func on_room_built(room_id: String) -> void:
 				if t_state["progress"] >= max_val:
 					t_state["state"] = "claimable"
 					sig_quest_claimable.emit(t_id)
-					Toast.show(GameState.T("toast.quest.completed", GameState.T(t_def.get("name", ""))))
+					Toast.show(GameState.T("toast.quest.completed", GameState.T(t_def.get("name", ""))), "quest")
 				changed = true
 				
 	if changed:
@@ -169,7 +169,7 @@ func _check_rank_completion(cat_id: String) -> void:
 	if target_count > 0 and all_claimed:
 		cat_state["rank_claimable"] = true
 		sig_rank_claimable.emit(cat_id)
-		Toast.show(GameState.T("toast.quest.rank_complete", cat_state["current_rank"]))
+		Toast.show(GameState.T("toast.quest.rank_complete", cat_state["current_rank"]), "quest")
 
 # =============================================================================
 func claim_rank(cat_id: String) -> void:

@@ -226,7 +226,7 @@ func _on_action_pressed() -> void:
 		if save_name.is_empty():
 			save_name = "Slot %d" % (_selected_slot + 1)
 		SaveManager.save_manual(_hotel_id, _selected_slot, save_name)
-		Toast.show(GameState.T("toast.manualsave"))
+		Toast.show(GameState.T("toast.manualsave"), "system", false)
 		close()
 		save_completed.emit()
 	else:
@@ -236,11 +236,11 @@ func _on_action_pressed() -> void:
 		else:
 			ok = SaveManager.load_manual(_hotel_id, _selected_slot)
 		if ok:
-			Toast.show_after_scene_change(GameState.T("toast.manualload.ok"))
+			Toast.show_after_scene_change(GameState.T("toast.manualload.ok"), "system", false)
 			close()
 			load_completed.emit(_hotel_id)
 		else:
-			Toast.show(GameState.T("toast.manualload.empty"))
+			Toast.show(GameState.T("toast.manualload.empty"), "system", false)
 
 
 # =============================================================================

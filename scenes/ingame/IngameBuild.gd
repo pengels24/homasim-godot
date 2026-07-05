@@ -94,23 +94,26 @@ func _on_room_placed(room_scene: PackedScene, px: int, py: int, tx: int, ty: int
 	var cost: int = def.get("build_cost", 0)
 
 	if float(cost) > _hotel.get("money", 0.0):
-		Toast.show(GameState.T("toast.build.no_money"))
+		Toast.show(GameState.T("toast.build.no_money"), "build", false)
 		return
 
 	var room_number := _next_room_number(def)
 	_map_grid.place_room(px, py, room_scene, _hotel.get("id", -1), dr, doff, tx, ty, rrot, room_number)
-	_apply_build_costs(def, world_center)
+	_apply_build_costs(def, world_center, room_number)
 	_apply_build_rewards(def, world_center)
+	
 	sig_room_built.emit(def.get("id", "unknown"))
 	GameState.sig_room_built.emit(def.get("id", "unknown"))
 
 
 # =============================================================================
-func _apply_build_costs(def: Dictionary, world_center: Vector2) -> void:
+func _apply_build_costs(def: Dictionary, world_center: Vector2, room_number: String = "") -> void:
 	var cost: int = def.get("build_cost", 0)
 	if cost > 0:
 		# NEU: Über den FinanceManager routen
 		var room_name: String = GameState.T(def.get("name", "Raum"))
+		if room_number != "":
+			room_name += " " + room_number
 		FinanceManager.add_transaction(-cost, "construction", "tx.build|" + room_name)
 
 		EffectManager.spawn_money_text(-cost, world_center)

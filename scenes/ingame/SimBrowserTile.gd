@@ -17,8 +17,8 @@ func setup(data: Dictionary) -> void:
 	lbl_desc.text = GameState.T(data.get("desc", ""))
 	
 	# Fixes Styling wie vom User gewünscht: Dunkelblau, gelber Rahmen, gelbe Schrift
-	var dark_blue = Color(0.1, 0.12, 0.18, 1)
-	var yellow = Color(0.95, 0.8, 0.1, 1)
+	var _dark_blue = Color(0.1, 0.12, 0.18, 1)
+	var _yellow = Color(0.85, 0.7, 0.2, 1)
 	
 	lbl_cta.text = "▶ " + data.get("url", "app.sim")
 	

@@ -79,12 +79,12 @@ func _try_demolish() -> void:
 	var room = _target_room
 	if room.get("room_type_id") == "lobby":
 		if is_instance_valid(Toast):
-			Toast.show(GameState.T("toast.room.lobby_no_demolish"))
+			Toast.show(GameState.T("toast.room.lobby_no_demolish"), "build", false)
 		return
 		
 	if room.get("is_pending_demolish"):
 		if is_instance_valid(Toast):
-			Toast.show(GameState.T("toast.room.already_demolish"))
+			Toast.show(GameState.T("toast.room.already_demolish"), "build", false)
 		return
 		
 	var is_occupied = _map_grid.guest_manager and _map_grid.guest_manager.get_party_in_room(room) != null
@@ -108,7 +108,7 @@ func _try_demolish() -> void:
 	if is_occupied:
 		confirm.confirmed.connect(func():
 			room.set("is_pending_demolish", true)
-			if is_instance_valid(Toast): Toast.show(room_name + " für Abriss vorgemerkt.")
+			if is_instance_valid(Toast): Toast.show(room_name + " für Abriss vorgemerkt.", "build")
 			confirm.queue_free()
 		)
 		confirm.cancelled.connect(func(): confirm.queue_free())

@@ -7,7 +7,7 @@ var _transaction_counter: int = 1
 
 # =============================================================================
 ## Trägt eine neue Buchung in das Kassenbuch ein und aktualisiert den Kontostand.
-func add_transaction(amount: int, category: String, description: String) -> void:
+func add_transaction(amount: int, category: String, description: String, log_it: bool = true) -> void:
 
   # 1. Sicherstellen, dass überhaupt ein Hotel geladen ist
   if GameState.selected_hotel.is_empty():
@@ -44,3 +44,16 @@ func add_transaction(amount: int, category: String, description: String) -> void
   
   if amount != 0:
       SoundManager.play("cash")
+      
+  if log_it:
+      var log_desc: String = description
+      if "|" in description:
+          var parts := description.split("|")
+          var translated := GameState.T(parts[0])
+          if parts.size() == 2:
+              log_desc = translated % parts[1]
+          elif parts.size() >= 3:
+              log_desc = translated % [parts[1], parts[2]]
+          else:
+              log_desc = translated
+      ActivityLog.add(category, log_desc, current_day, current_time)

@@ -118,3 +118,6 @@ res://
 - **Unfertige Features (Feature Flags):** Da wir primär linear auf dem `master`-Branch arbeiten, müssen unfertige neue Features stets über **Feature Flags** (Schalter im Code) oder versteckte UI-Elemente (`visible = false`) deaktiviert/verborgen werden. So bleibt der `master`-Branch jederzeit "deployable" (veröffentlichungsfähig), falls spontan ein kritischer Bugfix für die Live-Version eingeschoben werden muss. Diese Flags und Work-In-Progress-Stellen (WIP) müssen im Code sauber dokumentiert werden (z.B. `# TODO: WIP Feature - Remove Flag when done`).
 ## Temporäre Skripte & KI-Tools
 - **Mülle das Root-Verzeichnis nicht zu!** Wenn du Python-Skripte oder andere temporäre Helfer-Skripte schreibst (z.B. für Batch-Ersetzungen in `.tscn` Dateien), speichere diese zwingend in einem separaten Arbeitsordner (z.B. im `_dev` Ordner oder einem neuen `_work` Ordner). Lege niemals `_temp*.py`, `fix_*.py` oder ähnliche Einweg-Skripte direkt in den Godot-Root-Ordner (`res://`).
+
+## Linear Issue Access
+- Zugriff auf Linear erfolgt zwingend �ber das Skript _dev/linear_cli.py in Verbindung mit dem API-Key aus secrets.cfg in der Root des Projekts. python _dev/linear_cli.py get ANG-xxx zeigt die Ticketdetails an.

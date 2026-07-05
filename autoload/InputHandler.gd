@@ -13,6 +13,7 @@ enum InputMode {
 
 var current_mode: InputMode = InputMode.NORMAL
 
+@warning_ignore("unused_private_class_variable")
 var _reset_frame_lock: int = -1
 
 # ── SIGNALE ────────────────────────────────────────────────
@@ -36,6 +37,7 @@ signal sig_hotkey_tutorial_requested
 signal sig_hotkey_guest_list_requested
 signal sig_hotkey_room_list_requested
 signal sig_hotkey_finances_requested
+signal sig_hotkey_activity_log_requested
 signal sig_hotkey_escape_pressed
 #signal sig_hotkey_quicksave_requested
 #signal sig_hotkey_quickload_requested
@@ -168,6 +170,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("ui_finances"):
 		if current_mode == InputMode.NORMAL or current_mode == InputMode.MODAL:
 			sig_hotkey_finances_requested.emit()
+		return
+	elif event.is_action_pressed("ui_activity_log"):
+		if current_mode == InputMode.NORMAL or current_mode == InputMode.MODAL:
+			sig_hotkey_activity_log_requested.emit()
 		return
 	if current_mode in [InputMode.NORMAL, InputMode.BUILD]:
 	#if current_mode == InputMode.NORMAL:

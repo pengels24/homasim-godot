@@ -1,0 +1,170 @@
+[gd_scene format=3 uid="uid://dly5vgbhpbm6r"]
+
+[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_theme"]
+[ext_resource type="Script" path="res://scenes/ingame/hud/ActivityLogPanel.gd" id="2_script"]
+[ext_resource type="StyleBox" path="res://assets/UI/menu_button_blue.tres" id="3_blue_n"]
+[ext_resource type="StyleBox" path="res://assets/UI/menu_button_blue_hover.tres" id="4_blue_h"]
+[ext_resource type="StyleBox" path="res://assets/UI/menu_button_blue_pressed.tres" id="5_blue_p"]
+[ext_resource type="StyleBox" path="res://assets/UI/menu_button_red.tres" id="6_red_n"]
+[ext_resource type="StyleBox" path="res://assets/UI/menu_button_red_hover.tres" id="7_red_h"]
+[ext_resource type="StyleBox" path="res://assets/UI/menu_button_red_pressed.tres" id="8_red_p"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s6xux"]
+bg_color = Color(0.10980392, 0.14901961, 0.21176471, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0, 0, 0, 0.78431374)
+shadow_size = 3
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="Animation" id="Animation_slide_in"]
+resource_name = "slide_in"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1950, 160), Vector2(1580, 160)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_slide_out"]
+resource_name = "slide_out"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1580, 160), Vector2(1950, 160)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_log"]
+_data = {
+"slide_in": SubResource("Animation_slide_in"),
+"slide_out": SubResource("Animation_slide_out")
+}
+
+[node name="ActivityLogPanel" type="PanelContainer"]
+offset_left = 1950.0
+offset_top = 160.0
+offset_right = 2270.0
+offset_bottom = 660.0
+theme = ExtResource("1_theme")
+theme_override_styles/panel = SubResource("StyleBoxFlat_s6xux")
+script = ExtResource("2_script")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Header" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="BtnPrev" type="Button" parent="MarginContainer/VBoxContainer/Header"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+theme_override_styles/normal = ExtResource("3_blue_n")
+theme_override_styles/hover = ExtResource("4_blue_h")
+theme_override_styles/pressed = ExtResource("5_blue_p")
+text = "<"
+
+[node name="FilterLabel" type="Label" parent="MarginContainer/VBoxContainer/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"HeaderMedium"
+theme_override_font_sizes/font_size = 23
+text = "ALLE"
+horizontal_alignment = 1
+
+[node name="BtnNext" type="Button" parent="MarginContainer/VBoxContainer/Header"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+theme_override_styles/normal = ExtResource("3_blue_n")
+theme_override_styles/hover = ExtResource("4_blue_h")
+theme_override_styles/pressed = ExtResource("5_blue_p")
+text = ">"
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/Header"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="BtnClose" type="Button" parent="MarginContainer/VBoxContainer/Header"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+theme_override_styles/normal = ExtResource("6_red_n")
+theme_override_styles/hover = ExtResource("7_red_h")
+theme_override_styles/pressed = ExtResource("8_red_p")
+text = "X"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="EntriesContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_log")
+}
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Header/BtnPrev" to="." method="_on_btn_prev_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Header/BtnNext" to="." method="_on_btn_next_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Header/BtnClose" to="." method="close"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

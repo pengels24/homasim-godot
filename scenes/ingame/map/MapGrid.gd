@@ -31,7 +31,9 @@ var _drag_active:    bool     = false
 var _drag_origin:    Vector2  = Vector2.ZERO
 var _cam_origin:     Vector2  = Vector2.ZERO
 var _entry_plot:     Vector2i = Vector2i(1, 0)
+@warning_ignore("unused_private_class_variable")
 var _saved_cam_pos:  Vector2  = Vector2.ZERO
+@warning_ignore("unused_private_class_variable")
 var _saved_cam_zoom: float    = 1.0
 var _has_saved_view: bool     = false
 

@@ -325,6 +325,10 @@ func select_hotel(hotel_data: Dictionary) -> void:
 		var tutorials_data = hotel_data.get("tutorials", [])
 		TutorialManager.load_state(tutorials_data)
 		
+	if ActivityLog:
+		var activity_log_data = hotel_data.get("activity_log", [])
+		ActivityLog.load_state(activity_log_data)
+		
 	if QuestManager:
 		QuestManager.check_and_activate_quests()
 

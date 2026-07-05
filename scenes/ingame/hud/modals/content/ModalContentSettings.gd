@@ -130,8 +130,8 @@ func _init_ui_tab() -> void:
 		SettingsManager.ui_scale, _on_scale_changed)
 
 	_setup_selector("toast", btn_toast_left, btn_toast_right, lbl_toast, 
-			SettingsManager.ui_toast_pos_labels, SettingsManager.UI_TOAST_POS, 
-			SettingsManager.toast_position, _on_toast_changed)
+			SettingsManager.ui_toast_duration_labels, SettingsManager.UI_TOAST_DURATION, 
+			SettingsManager.toast_duration, _on_toast_changed)
 			
 	_setup_selector("hud", btn_hud_left, btn_hud_right, lbl_hud, 
 			SettingsManager.ui_hudbottom_pos_labels, SettingsManager.UI_HUDBOTTOM_POS, 
@@ -278,8 +278,8 @@ func _on_sounds_vol_changed(val: float) -> void:
 
 
 # =============================================================================
-func _on_toast_changed(val: String) -> void:
-	SettingsManager.toast_position = val
+func _on_toast_changed(val: float) -> void:
+	SettingsManager.toast_duration = val
 	SettingsManager.save()
 
 
@@ -363,7 +363,7 @@ func _refresh_translated_labels() -> void:
 	if is_instance_valid(%LabelUIScale):
 		%LabelUIScale.text = GameState.T("settings.ui.scale")
 	if is_instance_valid(%LabelToastPos):
-		%LabelToastPos.text = GameState.T("settings.ui.toast_position")
+		%LabelToastPos.text = GameState.T("settings.ui.toast_duration")
 	if is_instance_valid(%LabelPosHUDBottom):
 		%LabelPosHUDBottom.text = GameState.T("settings.ui.hud_side")
 	if is_instance_valid(%LabelTechInfo):
@@ -615,7 +615,7 @@ func _exit_tree() -> void:
 		if missing_primary: break
 	
 	if missing_primary:
-		Toast.show(GameState.T("toast.settings.missing_keybind"))
+		Toast.show(GameState.T("toast.settings.missing_keybind"), "info", false)
 
 # =============================================================================
 func _translate_key(key_str: String) -> String:

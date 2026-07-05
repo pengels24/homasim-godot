@@ -217,7 +217,7 @@ func _on_guest_reject_requested(party: GuestParty) -> void:
 		# Gast über den Manager ablehnen
 		_guest_mgr.reject_party(party)
 		GameState.add_rep(-rep_loss)
-		Toast.show(GameState.T("toast.guest.declined", str(rep_loss)))
+		Toast.show(GameState.T("toast.guest.declined", str(rep_loss)), "guest")
 		
 		refresh()
 		layer.queue_free()
@@ -397,14 +397,14 @@ func _on_checkin_pressed() -> void:
 
 		if roll_result["accepted"]:
 			# Toast für erfolgreiche Verhandlung
-			Toast.show(GameState.T("toast.surcharge.accepted", roll_result["roll_val"], roll_result["target_val"]))
+			Toast.show(GameState.T("toast.surcharge.accepted", roll_result["roll_val"], roll_result["target_val"]), "guest")
 
 			# ---> NEU: Direkt einchecken! Kein zweiter Klick nötig.
 			_execute_checkin_logic(true)
 
 		else:
 			_guest_mgr.guest_declined_offer(_sel_party)
-			Toast.show(GameState.T("toast.surcharge.rejected", roll_result["roll_val"], roll_result["target_val"]))
+			Toast.show(GameState.T("toast.surcharge.rejected", roll_result["roll_val"], roll_result["target_val"]), "guest")
 
 			_clear_selection()
 			refresh()
@@ -420,7 +420,7 @@ func _execute_checkin_logic(surcharge: bool) -> void:
 
 	_guest_mgr.do_checkin(_sel_party, _sel_room)
 	SoundManager.play("reception_checkin")
-	Toast.show(GameState.T("toast.reception.checkin.success"))
+	Toast.show(GameState.T("toast.reception.checkin.success"), "guest", false)
 
 	_clear_selection()
 	refresh()
@@ -434,7 +434,7 @@ func _on_checkout_pressed() -> void:
 	SoundManager.play("reception_checkout")
 
 	if has_node("/root/Toast"):
-		Toast.show("Checkout: %.0f € erhalten" % payout)
+		Toast.show("Checkout: %.0f € erhalten" % payout, "guest", false)
 
 	refresh()
 

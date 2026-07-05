@@ -139,7 +139,7 @@ func _execute_save(index: int, final_name: String) -> void:
 
 	# Speichern über den SaveManager
 	SaveManager.save_manual(active_hotel_id, index, final_name)
-	Toast.show(GameState.T("toast.quicksave"))
+	Toast.show(GameState.T("toast.quicksave"), "system", false)
 
 	# Visueller Reset nach dem Speichern (Liste neu generieren, damit neues Datum sichtbar wird)
 	_generate_slots()

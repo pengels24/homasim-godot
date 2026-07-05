@@ -150,6 +150,8 @@ func _setup_subsystems() -> void:
 
 	# GuestManager
 	_guest_mgr = GuestManager.new()
+	_guest_mgr.name = "GuestManager"
+	_guest_mgr.add_to_group("guest_manager")
 	add_child(_guest_mgr)
 	_guest_mgr.configure(_hotel, map_grid)
 	map_grid.guest_manager = _guest_mgr
@@ -207,6 +209,7 @@ func _setup_subsystems() -> void:
 
 	# Tagesplan-Manager (Wecker)
 	var schedule_mgr := IngameScheduleManager.new()
+	schedule_mgr.name = "IngameScheduleManager"
 	add_child(schedule_mgr)
 	schedule_mgr.setup()
 	schedule_mgr.sig_schedule_event.connect(_on_schedule_event)
@@ -250,7 +253,12 @@ func _on_event_day_end(_day: int) -> void:
 
 func _on_event_day_start() -> void:
 	# Toast entfernt, da die Cinematic bereits "Ein neuer Tag beginnt" anzeigt.
-	pass
+	ActivityLog.add(
+		"system", 
+		"Tag %d beginnt" % _hotel.get("day", 1), 
+		_hotel.get("day", 1), 
+		TimeManager.get_game_time()
+	)
 
 
 # =============================================================================
@@ -261,23 +269,25 @@ func _on_event_reception_open() -> void:
 		return
 
 	hud_canvas.set_reception_locked(false)
-	Toast.show(GameState.T("toast.reception.open"))
+	Toast.show(GameState.T("toast.reception.open"), "guest", false)
 	
 	# Quality of Life: Auto-Pause, wenn Gäste warten oder auschecken wollen
 	if _guest_mgr.get_waiting().size() > 0 or _guest_mgr.get_checkout().size() > 0:
 		if not TimeManager.is_paused():
 			TimeManager.pause()
-			Toast.show(GameState.T("toast.reception.auto_pause", "Auto-Pause: Gäste an der Rezeption!"))
+			Toast.show(GameState.T("toast.reception.auto_pause", "Auto-Pause: Gäste an der Rezeption!"), "guest", false)
 
 
 # =============================================================================
 func _on_event_guest_arrival() -> void:
+	print("[Ingame] _on_event_guest_arrival triggered!")
 	var count := _guest_mgr.spawn_guests()
+	print("[Ingame] _guest_mgr.spawn_guests returned: ", count)
 
 	if count == 1:
-		Toast.show(GameState.T("toast.guest.arrival.single"))
+		Toast.show(GameState.T("toast.guest.arrival.single"), "guest")
 	elif count > 1:
-		Toast.show(GameState.T("toast.guest.arrival.multi").replace("###", str(count)))
+		Toast.show(GameState.T("toast.guest.arrival.multi").replace("###", str(count)), "guest")
 
 
 # =============================================================================
@@ -301,6 +311,11 @@ func _on_room_built(_room_type_id: String) -> void:
 	# Wenn ein Raum gebaut wird, schauen wir: Ist es Tag UND haben wir Gästezimmer?
 	if hour >= 7 and hour < 22 and get_total_guest_rooms() > 0:
 		hud_canvas.set_reception_locked(false)
+		
+	# Wir aktualisieren den Tagesplan, damit sofort Gäste spawnen können (falls es das erste Zimmer war)
+	var schedule_mgr = get_node_or_null("IngameScheduleManager")
+	if schedule_mgr and schedule_mgr.has_method("recalculate_guest_spawns"):
+		schedule_mgr.recalculate_guest_spawns()
 
 
 # =============================================================================
@@ -336,7 +351,7 @@ func _on_event_reception_last_call() -> void:
 	# Wenn gar niemand wartet, stören wir den Spieler auch nicht
 	if _guest_mgr.get_waiting().size() > 0:
 		TimeManager.pause()
-		Toast.show(GameState.T("toast.checkin.last_call"))
+		Toast.show(GameState.T("toast.checkin.last_call"), "guest")
 
 
 # =============================================================================

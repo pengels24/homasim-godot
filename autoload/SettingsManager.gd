@@ -8,6 +8,7 @@ signal sig_hud_side_changed
 @warning_ignore("unused_signal")
 signal sig_language_changed(locale: String)
 
+@warning_ignore("unused_signal")
 signal sig_ff_speed_changed(new_speed: float)
 
 const SETTINGS_PATH := "user://settings.cfg"
@@ -27,7 +28,7 @@ var sound_volume: float = 0.5  # 0.0 – 1.0
 
 # ── Oberfläche ────────────────────────────────────────────────────────────────
 var ui_scale: float  = 1.0       # 0.75 / 1.0 / 1.25 / 1.5
-var toast_position: String = "bottom"  # "top" / "middle" / "bottom"
+var toast_duration: float = 3.5  # 3.0 / 5.0 / 7.0
 var hud_side: String = "center"    # "left" / "center" / "right"
 var show_tech_info: bool = false   # Ingame Performance Overlay
 var tutorial_tips: bool = true     # Tutorial-Tipps im Spiel anzeigen
@@ -62,10 +63,10 @@ const FF_SPEEDS_LABELS: Array[String] = ["x5", "x10", "x20", "x30", "x50"]
 const UI_SCALES: Array[float] = [0.8, 0.9, 1.0, 1.1, 1.2, 1.3]
 const UI_SCALES_LABELS: Array[String] = ["80 %", "90 %", "100 %", "110 %", "120 %", "130 %"]
 
-const UI_TOAST_POS: Array[String] =	["top", "middle", "bottom"]
-var ui_toast_pos_labels: Array[String]:
+const UI_TOAST_DURATION: Array[float] =	[3.0, 5.0, 7.0]
+var ui_toast_duration_labels: Array[String]:
 	get:
-		return [GameState.T("settings.ui.toast.top"), GameState.T("settings.ui.toast.middle"), GameState.T("settings.ui.toast.bottom")]
+		return ["3 s", "5 s", "7 s"]
 
 const UI_HUDBOTTOM_POS: Array[String] = ["left", "center", "right"]
 var ui_hudbottom_pos_labels: Array[String]:
@@ -206,7 +207,7 @@ func save() -> void:
 	cfg.set_value("audio", "menu_music_volume", menu_music_volume)
 	cfg.set_value("audio", "sound_volume", sound_volume)
 	cfg.set_value("ui", "scale", ui_scale)
-	cfg.set_value("ui", "toast_position", toast_position)
+	cfg.set_value("ui", "toast_duration", toast_duration)
 	cfg.set_value("ui", "hud_side", hud_side)
 	cfg.set_value("ui", "show_tech_info", show_tech_info)
 	cfg.set_value("ui", "tutorial_tips", tutorial_tips)
@@ -246,7 +247,7 @@ func _load() -> void:
 	menu_music_volume = cfg.get_value("audio",    "menu_music_volume",         menu_music_volume)
 	sound_volume = cfg.get_value("audio",    "sound_volume",              sound_volume)
 	ui_scale = cfg.get_value("ui",       "scale",          ui_scale)
-	toast_position = cfg.get_value("ui", "toast_position", "bottom")
+	toast_duration = cfg.get_value("ui", "toast_duration", 3.5)
 	hud_side = cfg.get_value("ui", "hud_side", "center")
 	show_tech_info = cfg.get_value("ui", "show_tech_info", false)
 	tutorial_tips = cfg.get_value("ui", "tutorial_tips", true)

@@ -15,6 +15,7 @@ func _ready() -> void:
 	_on_visibility_changed()
 	
 	viewport.world_2d = get_tree().root.get_viewport().world_2d
+	viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
 
 func set_target(target_node: Node2D) -> void:
 	if is_instance_valid(_target) and _target.tree_exiting.is_connected(_on_target_exiting):

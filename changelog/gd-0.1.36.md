@@ -12,3 +12,6 @@
 
 ### Technische Änderungen
 - *Hier kommen technische Umbauten rein*
+
+## Bugfixes
+- **UI:** PiP-Kameras (Bild-in-Bild) in Gästeliste, Raumliste und Personal-Ansicht werden wieder gestochen scharf gerendert (ANG-244)

@@ -111,6 +111,18 @@ func _process_idle() -> void:
 	if not _current_task.is_empty():
 		return # Mache schon was
 		
+	var current_hour = TimeManager.get_hour()
+	var is_night = current_hour >= 22 or current_hour < 7
+	
+	if is_night:
+		# Feierabend: Keine neuen Tasks annehmen, ab in die Lobby
+		var spawn_pos = _controller._get_lobby_spawn_pos()
+		if global_position.distance_to(spawn_pos) > 10.0:
+			_start_path_to_lobby()
+			_state = "returning"
+			_think_timer = 1.0
+		return
+		
 	var my_job = get_job_type()
 	var tasks = TaskManager._tasks
 	

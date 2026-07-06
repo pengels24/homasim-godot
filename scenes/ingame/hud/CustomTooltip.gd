@@ -188,15 +188,22 @@ func _update_content() -> void:
 	size = Vector2.ZERO
 
 func _set_progress_color(pb: ProgressBar, val: float) -> void:
-	var sb = StyleBoxFlat.new()
+	var base_sb = pb.get_theme_stylebox("fill")
+	var sb: StyleBoxFlat
+	if base_sb and base_sb is StyleBoxFlat:
+		sb = base_sb.duplicate() as StyleBoxFlat
+	else:
+		sb = StyleBoxFlat.new()
+		sb.corner_radius_top_left = 4
+		sb.corner_radius_top_right = 4
+		sb.corner_radius_bottom_right = 4
+		sb.corner_radius_bottom_left = 4
+		
 	if val >= 75:
 		sb.bg_color = Color("2d863e") # Grün
 	elif val >= 50:
 		sb.bg_color = Color("b59616") # Gelb
 	else:
 		sb.bg_color = Color("9e2a2b") # Rot
-	sb.corner_radius_top_left = 4
-	sb.corner_radius_top_right = 4
-	sb.corner_radius_bottom_right = 4
-	sb.corner_radius_bottom_left = 4
+		
 	pb.add_theme_stylebox_override("fill", sb)

@@ -10,6 +10,13 @@ signal overlay_changed(overlay_type: String)
 @onready var btn_val = %BtnVal
 
 func _ready() -> void:
+	# Translations
+	btn_dirt.tooltip_text = GameState.T("overlay.dirt")
+	btn_maint.tooltip_text = GameState.T("overlay.maintenance")
+	btn_occ.tooltip_text = GameState.T("overlay.occupancy")
+	btn_cat.tooltip_text = GameState.T("overlay.category")
+	btn_val.tooltip_text = GameState.T("overlay.value")
+
 	btn_dirt.toggled.connect(_on_btn_toggled.bind("dirt"))
 	btn_maint.toggled.connect(_on_btn_toggled.bind("maintenance"))
 	btn_occ.toggled.connect(_on_btn_toggled.bind("occupancy"))

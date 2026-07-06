@@ -1074,3 +1074,51 @@ toast.room.service_no_staff,Service gerufen - aber kein Personal!,Service reques
 toast.room.repair_no_staff,Wartung gerufen - aber kein Personal!,Maintenance requested - but no staff hired!
 toast.room.staff_locked,Personal-Feature noch nicht freigeschaltet!,Staff feature not unlocked yet!
 settings.gameplay.maintenance,Raum-Zustandsverringerung,Room Maintenance
+ui.modal.techdemo_end.title,TechDemo Abgeschlossen,TechDemo Completed
+settings.gameplay.maintenance.normal,Standard,Normal
+settings.gameplay.maintenance.low,Niedrig,Low
+settings.gameplay.maintenance.high,Hoch,High
+room.action.details,Details anzeigen,Show Details
+room.action.maintenance,Wartung rufen,Call Maintenance
+room.action.coming_soon,Coming soon!,Coming soon!
+room.action.demolish_queued_toast,%s für Abriss vorgemerkt.,%s marked for demolition.
+room.action.demolish_queue_title,Abriss vormerken?,Queue Demolition?
+room.action.demolish_queue_desc,%s ist aktuell belegt!\nFür automatischen Abriss nach Abreise der Gäste vormerken?,%s is currently occupied!\nQueue for automatic demolition after guests check out?
+room.action.demolish_queue_btn,Vormerken,Queue
+room.action.demolish_title,Zimmer abreißen?,Demolish Room?
+room.action.demolish_desc,Möchtest du %s wirklich abreißen?\nDu erhältst %d € zurück.,Do you really want to demolish %s?\nYou will be refunded %d €.
+room.action.title,  ::: Aktionen,  ::: Actions
+room.action.service,Service rufen,Call Service
+room.action.demolish_btn,Zimmer abreißen,Demolish Room
+btn.confirm,Bestätigen,Confirm
+guest.nights.single,1 Nacht,1 Night
+guest.nights.plural,%s Nächte,%s Nights
+guest.nights.remaining,Noch ,Remaining: 
+guest.room,Zimmer ,Room 
+Single,Single,Single
+Paar,Paar,Couple
+Geschäftsreisender,Geschäftsreisender,Business Traveler
+Digitaler Nomade,Digitaler Nomade,Digital Nomad
+guest.tooltip.group,Gruppe:,Group:
+guest.tooltip.requirements,Anforderungen:,Requirements:
+guest.tooltip.preferred,Bevorzugt:,Preferred:
+room.price.nightly,%s € / Nacht,%s € / Night
+reception.btn.checkout,Check-out bestätigen,Confirm Check-out
+ui.techtree.tooltip.already_unlocked,- Bereits erforscht -,- Already researched -
+overlay.dirt,Verschmutzung,Cleanliness
+overlay.maintenance,Raumzustand,Maintenance
+overlay.occupancy,Belegung,Occupancy
+overlay.category,Kategorien,Categories
+overlay.value,Wertigkeit,Value
+log.guest.new_guest_details,Neuer Gast: ### (***),New guest: ### (***)
+log.guest.left_angry,### hat das Hotel wütend verlassen (-20 Ruf),### left the hotel angrily (-20 Rep)
+log.guest.check_in,Check-in: ### → ***,Check-in: ### → ***
+log.guest.rejected,### wurde abgelehnt,### was rejected
+log.guest.left_angry_closed,### ist wütend abgereist (Rezeption geschlossen),### left angrily (Reception closed)
+log.guest.rage_checkout,Wut-Checkout: ### ist wütend abgereist (0 €),Rage-Checkout: ### left angrily (0 €)
+log.guest.check_out,Check-out: ### (*** €),Check-out: ### (*** €)
+log.guest.left_end_of_day,### hat das Hotel verlassen (Tagesende),### left the hotel (End of day)
+log.guest.declined_offer,### hat das Angebot abgelehnt und ist abgereist,### declined the offer and left
+browser.status.locked,Gesperrt,Locked
+browser.status.coming_soon,Bald verfügbar,Coming soon
+browser.cta.denied,Zugriff verweigert,Access denied

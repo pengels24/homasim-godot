@@ -166,7 +166,7 @@ func _clear_selection() -> void:
 	_update_checkin_button()
 
 	_btn_checkout.disabled = true
-	_btn_checkout.text = "Check-out bestätigen"
+	_btn_checkout.text = GameState.T("reception.btn.checkout")
 	_apply_btn_styles(_btn_checkout, style_rec_normal, style_rec_normal, style_rec_normal, style_rec_disabled)
 
 

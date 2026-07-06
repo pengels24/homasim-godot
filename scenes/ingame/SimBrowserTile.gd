@@ -33,11 +33,11 @@ func setup(data: Dictionary) -> void:
 func set_locked(locked: bool) -> void:
 	disabled = locked
 	if locked:
-		lbl_status.text = "Gesperrt"
+		lbl_status.text = GameState.T("browser.status.locked")
 		lbl_status.add_theme_color_override("font_color", Color(0.8, 0.3, 0.3))
-		lbl_cta.text = "Zugriff verweigert"
+		lbl_cta.text = GameState.T("browser.cta.denied")
 		modulate = Color(0.5, 0.5, 0.5)
 	else:
-		lbl_status.text = "Verfügbar"
-		lbl_status.add_theme_color_override("font_color", Color(0.2, 0.8, 0.3))
+		lbl_status.text = GameState.T("browser.status.coming_soon")
+		lbl_status.add_theme_color_override("font_color", Color(0.8, 0.3, 0.3))
 		modulate = Color(1.0, 1.0, 1.0)

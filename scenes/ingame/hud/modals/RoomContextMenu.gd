@@ -22,13 +22,19 @@ func _ready() -> void:
 	handle.gui_input.connect(_on_handle_input)
 	handle.mouse_default_cursor_shape = Control.CURSOR_DRAG
 	
+	# Translations
+	handle.get_node("Label").text = GameState.T("room.action.title")
+	btn_details.text = GameState.T("room.action.details")
+	btn_service.text = GameState.T("room.action.service")
+	btn_demolish.text = GameState.T("room.action.demolish_btn")
+	
 	# Buttons
 	btn_close.pressed.connect(close)
-	btn_details.pressed.connect(func(): _on_action("Details anzeigen"))
+	btn_details.pressed.connect(func(): _on_action(GameState.T("room.action.details")))
 	btn_service.pressed.connect(_on_service_pressed)
 	
 	btn_repair = btn_service.duplicate()
-	btn_repair.text = "Wartung rufen"
+	btn_repair.text = GameState.T("room.action.maintenance")
 	btn_service.get_parent().add_child(btn_repair)
 	btn_repair.pressed.connect(_on_repair_pressed)
 	
@@ -120,7 +126,7 @@ func close() -> void:
 # =============================================================================
 func _on_action(action_name: String) -> void:
 	if is_instance_valid(Toast):
-		Toast.show(action_name + ": Coming soon!", "info", false)
+		Toast.show(action_name + ": " + GameState.T("room.action.coming_soon"), "info", false)
 	close()
 
 # =============================================================================
@@ -218,11 +224,11 @@ func _on_demolish_pressed() -> void:
 	if is_occupied:
 		confirm.confirmed.connect(func():
 			room.set("is_pending_demolish", true)
-			if is_instance_valid(Toast): Toast.show(room_name + " für Abriss vorgemerkt.", "build")
+			if is_instance_valid(Toast): Toast.show(GameState.T("room.action.demolish_queued_toast") % room_name, "build")
 			confirm.queue_free()
 		)
 		confirm.cancelled.connect(func(): confirm.queue_free())
-		confirm.ask("Abriss vormerken?", "%s ist aktuell belegt!\nFür automatischen Abriss nach Abreise der Gäste vormerken?" % room_name, "Vormerken")
+		confirm.ask(GameState.T("room.action.demolish_queue_title"), GameState.T("room.action.demolish_queue_desc") % room_name, GameState.T("room.action.demolish_queue_btn"))
 	else:
 		confirm.confirmed.connect(func():
 			var refund_pos = room.global_position + Vector2(16, 16)
@@ -234,6 +240,6 @@ func _on_demolish_pressed() -> void:
 			confirm.queue_free()
 		)
 		confirm.cancelled.connect(func(): confirm.queue_free())
-		confirm.ask("Zimmer abreißen?", "Möchtest du %s wirklich abreißen?\nDu erhältst %d € zurück." % [room_name, refund])
+		confirm.ask(GameState.T("room.action.demolish_title"), GameState.T("room.action.demolish_desc") % [room_name, refund])
 		
 	close()

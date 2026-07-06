@@ -235,7 +235,7 @@ func generate_daily_schedule(start_time: int) -> Array:
 					
 					if _room_assign.has(rid) and typeof(_room_assign[rid]) == TYPE_STRING and _room_assign[rid] != "DIRTY":
 						var party = get_party(_room_assign[rid])
-						if party and party.stay_days > 1:
+						if party and party.stay_days > 0:
 							is_occupied_next_night = true
 							
 					if not is_occupied_next_night:
@@ -295,7 +295,7 @@ func spawn_guests(amount: int = -1) -> int:
 
 		ActivityLog.add(
 			"guest",
-			"Neuer Gast: %s (%s)" % [party.get_display_name(), party.get_type_name()],
+			GameState.T("log.guest.new_guest_details", party.get_display_name(), GameState.T(party.get_type_name())),
 			_hotel.get("day", 1),
 			TimeManager.get_game_time(),
 		)
@@ -487,7 +487,7 @@ func _tick_patience() -> void:
 		party.state = "gone"
 		ActivityLog.add(
 			"guest_left",
-			"%s hat das Hotel wütend verlassen (-20 Ruf)" % party.get_display_name(),
+			GameState.T("log.guest.left_angry", party.get_display_name()),
 			_hotel.get("day", 1),
 			TimeManager.get_game_time(),
 		)
@@ -572,7 +572,7 @@ func do_checkin(party: GuestParty, room: Node2D) -> void:
 
 	ActivityLog.add(
 		"guest",
-		"Check-in: %s → %s" % [party.get_display_name(), str(room.get("room_number"))],
+		GameState.T("log.guest.check_in", party.get_display_name(), str(room.get("room_number"))),
 		_hotel.get("day", 1),
 		TimeManager.get_game_time(),
 	)
@@ -591,7 +591,7 @@ func reject_party(party: GuestParty) -> void:
 
 	ActivityLog.add(
 		"guest",
-		"%s wurde abgelehnt" % party.get_display_name(),
+		GameState.T("log.guest.rejected", party.get_display_name()),
 		_hotel.get("day", 1),
 		TimeManager.get_game_time(),
 	)
@@ -614,7 +614,7 @@ func clear_waiting_guests_with_penalty() -> void:
 
 		ActivityLog.add(
 			"guest",
-			"%s ist wütend abgereist (Rezeption geschlossen)" % party.get_display_name(),
+			GameState.T("log.guest.left_angry_closed", party.get_display_name()),
 			_hotel.get("day", 1),
 			TimeManager.get_game_time()
 		)
@@ -678,15 +678,15 @@ func _finalize_checkout(party: GuestParty, payout: int, auto: bool) -> void:
 
 	# NEU: Unterscheidung für den Wut-Checkout inkl. getrennter Statistik
 	if auto and payout == 0:
-		msg = "Wut-Checkout: %s ist wütend abgereist (0 €)" % party.get_display_name()
+		msg = GameState.T("log.guest.rage_checkout", party.get_display_name())
 		log_type = "rage_quit"
 
 		daily_rage_parties += 1
 		daily_rage_heads += party.members.size()
 	else:
-		msg = "Check-out: %s (%d €)" % [party.get_display_name(), payout]
+		msg = GameState.T("log.guest.check_out", party.get_display_name(), str(payout))
 		if auto:
-			msg += " [Auto-Checkout]"
+			msg += GameState.T("log.guest.auto_checkout")
 
 		daily_checkout_parties += 1
 		daily_checkout_heads += party.members.size()
@@ -797,7 +797,7 @@ func process_midnight_penalties(day: int) -> void:
 		party.state = "gone"
 		ActivityLog.add(
 			"guest_left",
-			"%s hat das Hotel verlassen (Tagesende)" % party.get_display_name(),
+			GameState.T("log.guest.left_end_of_day", party.get_display_name()),
 			day,
 			TimeManager.get_game_time(),
 		)
@@ -913,7 +913,7 @@ func guest_declined_offer(party: GuestParty) -> void:
 
 	ActivityLog.add(
 		"guest_declined",
-		"%s hat das Angebot abgelehnt und ist abgereist" % party.get_display_name(),
+		GameState.T("log.guest.declined_offer", party.get_display_name()),
 		_hotel.get("day", 1),
 		TimeManager.get_game_time()
 	)

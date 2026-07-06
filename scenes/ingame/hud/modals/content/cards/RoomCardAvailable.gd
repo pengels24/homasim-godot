@@ -30,7 +30,7 @@ func populate(room: Node2D) -> void:
 		def = room.get_script().get_definition()
 
 	# 1. Namen und ID zusammenbauen (z.B. "EZ | Z0001")
-	var label: String = def.get("label", "Zimmer")
+	var label: String = GameState.T(def.get("label", "Zimmer"))
 	var prefix: String = def.get("prefix", "")
 	var r_num: String = room.room_number if "room_number" in room else "????"
 
@@ -44,7 +44,7 @@ func populate(room: Node2D) -> void:
 	# 2. Details zusammenbauen (z.B. "Einzelzimmer | 60 € / Nacht")
 	var full_name: String = GameState.T(def.get("name", "Raum"))
 	var price: int = def.get("nightly_price", 0)
-	_details_label.text = full_name + " | " + str(price) + " € / Nacht"
+	_details_label.text = full_name + " | " + GameState.T("room.price.nightly") % str(price)
 
 	# 3. Icon laden
 	var icon_path: String = def.get("icon", "")

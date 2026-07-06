@@ -171,6 +171,7 @@ func _populate_quests() -> void:
 		rank_claim_btn.show()
 		rank_claim_btn.disabled = true
 		rank_claim_btn.remove_theme_color_override("font_color")
+		rank_claim_btn.text = GameState.T("ui.quests.btn.complete_rank")
 		_style_action_btn(rank_claim_btn, "disabled")
 		if rank_claim_btn.pressed.is_connected(_on_rank_claim):
 			rank_claim_btn.pressed.disconnect(_on_rank_claim)

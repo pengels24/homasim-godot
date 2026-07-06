@@ -414,16 +414,13 @@ func add_fp(amount: int) -> void:
 # =============================================================================
 ## Berechnet die benötigte EXP für ein bestimmtes Level basierend auf dem Modell.
 func get_xp_needed_for_level(level: int) -> int:
-	var base_exp = 150 # <--- NEU: Abgeflachte Kurve für TechDemo
-
-	if level <= 1:
-		return base_exp
-	elif level <= 5:
-		return int(base_exp * pow(1.5, level - 1))
-	elif level <= 10:
-		return int(get_xp_needed_for_level(5) * pow(1.4, level - 5))
-	else:
-		return int(get_xp_needed_for_level(10) * pow(1.3, level - 10))
+	match level:
+		1: return 150
+		2: return 500
+		3: return 1500
+		4: return 3500
+		5: return 7500
+		_: return int(7500 * pow(1.5, level - 5)) # fallback for > 5
 
 
 # =============================================================================

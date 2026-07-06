@@ -80,6 +80,9 @@ func trigger(tutorial_id: String) -> void:
 	var data = tutorial_registry[tutorial_id]
 	sig_tutorial_triggered.emit(data)
 	
+	if not GameState.is_tutorial_mode and not SettingsManager.tutorial_tips:
+		return
+	
 	if _is_popup_active:
 		_popup_queue.append(data)
 	else:

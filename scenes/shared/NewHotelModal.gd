@@ -22,6 +22,10 @@ const GRID_ROWS := 5
 @onready var _btn_money_r:  Button        = $Content/Left/SettingsBox/ParamGrid/OptMoney/RightBtn
 
 @onready var _lbl_refund:   Label         = $Content/Left/SettingsBox/ParamGrid/OptRefund/ValueLbl
+@onready var _btn_refund_l:  Button        = $Content/Left/SettingsBox/ParamGrid/OptRefund/LeftBtn
+@onready var _btn_refund_r:  Button        = $Content/Left/SettingsBox/ParamGrid/OptRefund/RightBtn
+@onready var _btn_exp_l:     Button        = $Content/Left/SettingsBox/ParamGrid/OptExp/LeftBtn
+@onready var _btn_exp_r:     Button        = $Content/Left/SettingsBox/ParamGrid/OptExp/RightBtn
 @onready var _lbl_exp:      Label         = $Content/Left/SettingsBox/ParamGrid/OptExp/ValueLbl
 
 @onready var _viewport:     SubViewport   = $Content/Right/MapContainer/SubViewportContainer/SubViewport
@@ -55,10 +59,23 @@ var _maintenance_idx := 1
 
 var _golden_pressed = preload("res://assets/UI/menu_button_golden_pressed.tres")
 var _dark_normal: StyleBox
+var _dark_disabled = preload("res://assets/UI/menu_button_darkblue_disabled.tres")
 
 # ── Lifecycle ─────────────────────────────────────────────────────────────────
 func _ready() -> void:
 	_dark_normal = _btn_easy.get_theme_stylebox("normal")
+
+	var all_arrows = [
+		_btn_money_l, _btn_money_r, 
+		_btn_refund_l, _btn_refund_r, 
+		_btn_exp_l, _btn_exp_r,
+		$Content/Left/SettingsBox/ParamGrid/OptDirt/LeftBtn, $Content/Left/SettingsBox/ParamGrid/OptDirt/RightBtn,
+		$Content/Left/SettingsBox/ParamGrid/OptMaintenance/LeftBtn, $Content/Left/SettingsBox/ParamGrid/OptMaintenance/RightBtn
+	]
+	for btn in all_arrows:
+		if btn:
+			btn.add_theme_stylebox_override("disabled", _dark_disabled)
+
 	
 	_btn_cancel.pressed.connect(func() -> void:
 		SoundManager.play("button_click")
@@ -74,6 +91,9 @@ func _ready() -> void:
 	
 	_btn_money_l.pressed.connect(_change_money.bind(-1))
 	_btn_money_r.pressed.connect(_change_money.bind(1))
+	
+	if _btn_refund_l: _btn_refund_l.pressed.connect(_change_refund.bind(-1))
+	if _btn_refund_r: _btn_refund_r.pressed.connect(_change_refund.bind(1))
 	
 	var btn_dirt_l = $Content/Left/SettingsBox/ParamGrid/OptDirt/LeftBtn
 	var btn_dirt_r = $Content/Left/SettingsBox/ParamGrid/OptDirt/RightBtn
@@ -107,6 +127,10 @@ func open() -> void:
 # ── Options & Settings ───────────────────────────────────────────────────────
 func _change_money(dir: int) -> void:
 	_money_idx = (_money_idx + dir + _money_values.size()) % _money_values.size()
+	_update_labels()
+
+func _change_refund(dir: int) -> void:
+	_refund_idx = (_refund_idx + dir + _refund_labels.size()) % _refund_labels.size()
 	_update_labels()
 
 func _change_dirt(dir: int) -> void:
@@ -144,6 +168,12 @@ func _set_difficulty(level: int) -> void:
 	# Inputs nur in "Angepasst" aktivieren
 	_btn_money_l.disabled = (level != 3)
 	_btn_money_r.disabled = (level != 3)
+	
+	if _btn_refund_l: _btn_refund_l.disabled = (level != 3)
+	if _btn_refund_r: _btn_refund_r.disabled = (level != 3)
+	
+	if _btn_exp_l: _btn_exp_l.disabled = true
+	if _btn_exp_r: _btn_exp_r.disabled = true
 	var dirt_l = $Content/Left/SettingsBox/ParamGrid/OptDirt/LeftBtn
 	var dirt_r = $Content/Left/SettingsBox/ParamGrid/OptDirt/RightBtn
 	if dirt_l: dirt_l.disabled = (level != 3)
@@ -166,13 +196,16 @@ func _set_difficulty(level: int) -> void:
 			_refund_idx = 3
 			_exp_idx = 3
 			_dirt_idx = 1
+			_maintenance_idx = 1
 		2: # Hard
 			_money_idx = 0
 			_refund_idx = 4
 			_exp_idx = 3
 			_dirt_idx = 2
+			_maintenance_idx = 2
 		3: # Custom
-			pass # Werte beibehalten
+			_dirt_idx = 1
+			_maintenance_idx = 1
 			
 	_update_labels()
 

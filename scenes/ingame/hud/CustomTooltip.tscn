@@ -67,7 +67,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="CleanProgress" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=978903630]
-custom_minimum_size = Vector2(0, 16)
+custom_minimum_size = Vector2(0, 24)
 theme_type_variation = &"TooltipProgressBar"
 unique_name_in_owner = true
 layout_mode = 2
@@ -87,7 +87,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="MaintainProgress" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=978903631]
-custom_minimum_size = Vector2(0, 16)
+custom_minimum_size = Vector2(0, 24)
 theme_type_variation = &"TooltipProgressBar"
 unique_name_in_owner = true
 layout_mode = 2

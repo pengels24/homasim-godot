@@ -59,22 +59,22 @@ func populate(party: GuestParty, mode: Mode, is_new: bool = false) -> void:
 
 	match current_mode:
 		Mode.WAITING:
-			var night_str = "1 Nacht" if party.stay_days == 1 else str(party.stay_days) + " Nächte"
-			_details_label.text = night_str + " | " + party.get_type_name()
+			var night_str = GameState.T("guest.nights.single") if party.stay_days == 1 else GameState.T("guest.nights.plural") % str(party.stay_days)
+			_details_label.text = night_str + " | " + GameState.T(party.get_type_name())
 			_build_waiting_tooltip(def)
 
 			if _is_new:
 				_start_golden_pulse()
 
 		Mode.ACTIVE:
-			var night_str = "1 Nacht" if party.stay_days == 1 else str(party.stay_days) + " Nächte"
-			_details_label.text = "Noch " + night_str
+			var night_str = GameState.T("guest.nights.single") if party.stay_days == 1 else GameState.T("guest.nights.plural") % str(party.stay_days)
+			_details_label.text = GameState.T("guest.nights.remaining") + night_str
 			mouse_filter = Control.MOUSE_FILTER_IGNORE
 			_build_active_tooltip()
 
 		Mode.CHECKOUT:
 			var est_price = party.base_price * float(party.total_stay_days) * (party.satisfaction / 100.0)
-			_details_label.text = "Zimmer " + party.room_id + " | " + "%.0f" % est_price + " €"
+			_details_label.text = GameState.T("guest.room") + party.room_id + " | " + "%.0f" % est_price + " €"
 			tooltip_text = ""
 
 
@@ -148,7 +148,7 @@ func _stop_golden_pulse() -> void:
 
 # =============================================================================
 func _build_waiting_tooltip(def: Dictionary) -> void:
-	var tt := "Gruppe:\n"
+	var tt := GameState.T("guest.tooltip.group") + "\n"
 
 	# 1. Rollen sauber über das Translation-System auflösen
 	for member in current_party.members:
@@ -158,12 +158,12 @@ func _build_waiting_tooltip(def: Dictionary) -> void:
 
 	var budget_min: int = def.get("min_base_price", 0)
 	var budget_max: int = def.get("max_base_price", 0)
-	tt += "\nBudget: %d - %d € / Nacht" % [budget_min, budget_max]
+	tt += "\n" + GameState.T("guest.tooltip.budget") % [budget_min, budget_max]
 
 	# 2. Anforderungen (z.B. WLAN)
 	var reqs: Array = def.get("requirements", [])
 	if not reqs.is_empty():
-		tt += "\nAnforderungen: " + ", ".join(reqs)
+		tt += "\n" + GameState.T("guest.tooltip.requirements") + " " + ", ".join(reqs)
 
 	# 3. Bevorzugte Zimmer über das Translation-System auflösen
 	var pref: Array = def.get("preferred_rooms", [])
@@ -173,7 +173,7 @@ func _build_waiting_tooltip(def: Dictionary) -> void:
 			var room_key: String = "room.type." + str(r_id)
 			pref_names.append(GameState.T(room_key))
 
-		tt += "\nBevorzugt: " + ", ".join(pref_names)
+		tt += "\n" + GameState.T("guest.tooltip.preferred") + " " + ", ".join(pref_names)
 
 	tooltip_text = tt
 

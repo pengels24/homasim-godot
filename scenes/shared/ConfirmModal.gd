@@ -28,11 +28,14 @@ func _ready() -> void:
 func ask(
 	title:          String,
 	message:        String,
-	confirm_text:   String = "Bestätigen",
-	cancel_text:    String = "Abbrechen",
+	confirm_text:   String = "",
+	cancel_text:    String = "",
 	checkbox_label: String = "",
 	is_destructive: bool = false
 ) -> void:
+	if confirm_text == "": confirm_text = GameState.T("btn.confirm")
+	if cancel_text == "": cancel_text = GameState.T("btn.cancel")
+	
 	_title_label.text   = title
 	_message_label.text = message
 	_btn_confirm.text   = confirm_text

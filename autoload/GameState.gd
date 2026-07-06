@@ -32,7 +32,8 @@ signal sig_hotel_rep_changed(rep: int, rep_max: int)
 # Globale Level-Voraussetzungen für Core-Module
 const UNLOCK_LEVELS = {
 	"staff": 2,
-	"techtree": 3
+	"techtree": 3,
+	"auto_staff": 100 # TODO: Später ins Techtree/Tier 3 verlegen (Automatik-Tickets für Service)
 }
 signal sig_hotel_fp_changed(new_fp: String)
 signal sig_hotel_day_changed(day_number: int)

@@ -7,6 +7,10 @@ class_name CustomTooltip
 @onready var stay_progress: ProgressBar = %StayProgress
 @onready var stay_progress_label: Label = %StayProgressLabel
 @onready var stay_spacer: Control = %StaySpacer
+@onready var clean_progress: ProgressBar = %CleanProgress
+@onready var clean_label: Label = %CleanLabel
+@onready var maintain_progress: ProgressBar = %MaintainProgress
+@onready var maintain_label: Label = %MaintainLabel
 
 var _target_room: Node2D = null
 
@@ -73,6 +77,10 @@ func _update_content() -> void:
 	if is_instance_valid(stay_progress):
 		stay_progress.hide()
 		if stay_spacer: stay_spacer.hide()
+	if is_instance_valid(clean_progress):
+		clean_progress.hide()
+	if is_instance_valid(maintain_progress):
+		maintain_progress.hide()
 	
 	var service_status = ""
 	if _target_room.is_service_requested or _target_room.maintenance_level < 50:
@@ -154,13 +162,41 @@ func _update_content() -> void:
 	var final_status = ""
 	if _target_room.get("is_pending_demolish"):
 		final_status += GameState.T("room.tooltip.pending_demolish")
-	# ANG-211: Lobby ist Systemraum – Sauberkeit/Wartung nicht anzeigen
-	if _target_room.get("room_type_id") != "lobby":
-		final_status += status + GameState.T("room.tooltip.stats") % [_target_room.cleanliness_level, _target_room.maintenance_level]
-	else:
-		final_status += status
+	final_status += status
 	status_label.text = final_status
 
-	
+	# ANG-211: Lobby ist Systemraum – Sauberkeit/Wartung nicht anzeigen
+	if _target_room.get("room_type_id") != "lobby":
+		if is_instance_valid(clean_progress):
+			clean_progress.max_value = 100
+			clean_progress.value = _target_room.cleanliness_level
+			clean_label.text = GameState.T("room.tooltip.cleanliness") + ": " + str(int(_target_room.cleanliness_level)) + "%"
+			_set_progress_color(clean_progress, _target_room.cleanliness_level)
+			clean_progress.show()
+			
+		if is_instance_valid(maintain_progress):
+			maintain_progress.max_value = 100
+			maintain_progress.value = _target_room.maintenance_level
+			maintain_label.text = GameState.T("room.tooltip.maintenance") + ": " + str(int(_target_room.maintenance_level)) + "%"
+			_set_progress_color(maintain_progress, _target_room.maintenance_level)
+			maintain_progress.show()
+			
+		if stay_spacer: stay_spacer.show()
+
 	# Zwingt das Tooltip-Panel zum Schrumpfen, falls vorher mehr Text da war
+	reset_size()
 	size = Vector2.ZERO
+
+func _set_progress_color(pb: ProgressBar, val: float) -> void:
+	var sb = StyleBoxFlat.new()
+	if val >= 75:
+		sb.bg_color = Color("2d863e") # Grün
+	elif val >= 50:
+		sb.bg_color = Color("b59616") # Gelb
+	else:
+		sb.bg_color = Color("9e2a2b") # Rot
+	sb.corner_radius_top_left = 4
+	sb.corner_radius_top_right = 4
+	sb.corner_radius_bottom_right = 4
+	sb.corner_radius_bottom_left = 4
+	pb.add_theme_stylebox_override("fill", sb)

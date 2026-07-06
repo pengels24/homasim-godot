@@ -1062,3 +1062,14 @@ settings.gameplay.multi_build.on,An,On
 settings.gameplay.multi_build.shift,Mit Taste,With Key
 settings.gameplay.multi_build.shift_hint,Mehrfachbau (Halten),Multi-Build (Hold)
 settings.controls.build.multi_build_modifier,Mehrfachbau-Modifikator,Multi-Build Modifier
+settings.gameplay.dirtiness,Raum-Verschmutzung,Room Dirtiness
+settings.gameplay.dirtiness.low,Niedrig,Low
+settings.gameplay.dirtiness.normal,Standard,Normal
+settings.gameplay.dirtiness.high,Hoch,High
+room.tooltip.cleanliness,Sauberkeit,Cleanliness
+room.tooltip.maintenance,Zustand,Maintenance
+toast.room.cleaned_instantly,Raum gereinigt!,Room cleaned!
+toast.room.cleaned_instantly_no_staff,Keine Putzkraft! Raum magisch gereinigt.,No housekeeper! Room magically cleaned.
+toast.room.service_no_staff,Service gerufen - aber kein Personal!,Service requested - but no staff hired!
+toast.room.repair_no_staff,Wartung gerufen - aber kein Personal!,Maintenance requested - but no staff hired!
+toast.room.staff_locked,Personal-Feature noch nicht freigeschaltet!,Staff feature not unlocked yet!

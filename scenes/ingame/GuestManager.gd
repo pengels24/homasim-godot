@@ -178,8 +178,13 @@ func _on_speed_changed(is_paused: bool, _speed: float) -> void:
 		for rid in _pending_dirty_rooms:
 			var room = _get_room_node(rid)
 			if room:
-				room.set_service_requested(true)
-				GameState.sig_room_needs_cleaning.emit(room)
+				room.set("cleanliness_level", 0)
+				if GameState.hotel_level >= GameState.UNLOCK_LEVELS.get("auto_staff", 100):
+					room.set_service_requested(true)
+					GameState.sig_room_needs_cleaning.emit(room)
+				else:
+					if room.has_method("_update_indicator"):
+						room.call("_update_indicator")
 		_pending_dirty_rooms.clear()
 
 
@@ -215,17 +220,28 @@ func generate_daily_schedule(start_time: int) -> Array:
 				open_to = def.get("open_to", 1320)
 				break
 				
-	var bookable_count := 0
+	# Keine Neuberechnungen (Spawns) mehr in den letzten 2 Stunden (120 Min) vor Schließung
+	if start_time >= open_to - 120:
+		return []
+				
+	var available_today := 0
 	if is_instance_valid(_map_grid):
 		for room in _map_grid.get_placed_rooms():
 			if room.has_method("get_definition"):
 				var def = room.get_definition()
-				if def.get("nightly_price", 0) > 0:
-					bookable_count += 1
+				if def.get("nightly_price", 0) > 0 and not room.get("is_pending_demolish", false):
+					var rid := _room_key(room)
+					var is_occupied_next_night = false
 					
-	var x: int = 0
-	if bookable_count > 0:
-		x = max(6, bookable_count + 3)
+					if _room_assign.has(rid) and typeof(_room_assign[rid]) == TYPE_STRING and _room_assign[rid] != "DIRTY":
+						var party = get_party(_room_assign[rid])
+						if party and party.stay_days > 1:
+							is_occupied_next_night = true
+							
+					if not is_occupied_next_night:
+						available_today += 1
+						
+	var x: int = available_today
 		
 	var remaining_spawns = max(0, x - _daily_spawned_parties)
 	
@@ -646,8 +662,13 @@ func _finalize_checkout(party: GuestParty, payout: int, auto: bool) -> void:
 			_pending_dirty_rooms.append(party.room_id)
 		else:
 			if room:
-				room.set_service_requested(true)
-				GameState.sig_room_needs_cleaning.emit(room)
+				room.set("cleanliness_level", 0)
+				if GameState.hotel_level >= GameState.UNLOCK_LEVELS.get("auto_staff", 100):
+					room.set_service_requested(true)
+					GameState.sig_room_needs_cleaning.emit(room)
+				else:
+					if room.has_method("_update_indicator"):
+						room.call("_update_indicator")
 	
 	if not auto:
 		sig_party_checked_out_physically.emit(party)
@@ -824,6 +845,11 @@ func _process_poi_supply_costs() -> void:
 				-total, "betrieb",
 				"tx.supply|" + GameState.T(room.get_definition().get("name", room_id)) + "|" + str(visits)
 			)
+		
+		# Verschmutzung basierend auf Besuchen erhöhen
+		if room.has_method("add_dirt_from_visits"):
+			room.add_dirt_from_visits(visits)
+			
 	_daily_poi_visits.clear()
 
 

@@ -86,6 +86,8 @@ func _ready() -> void:
 	
 	if TimeManager and not TimeManager.sig_hour_passed.is_connected(_on_hour_passed):
 		TimeManager.sig_hour_passed.connect(_on_hour_passed)
+	if TimeManager and not TimeManager.sig_midnight_struck.is_connected(_on_midnight_struck):
+		TimeManager.sig_midnight_struck.connect(_on_midnight_struck)
 
 # =============================================================================
 func can_build_path(_door_idx: int) -> bool:
@@ -177,22 +179,44 @@ func _on_hour_passed(_hour: int) -> void:
 		return
 		
 	# Werte langsam senken
-	cleanliness_level = clampi(cleanliness_level - 3, 0, 100)
 	maintenance_level = clampi(maintenance_level - 2, 0, 100)
 	
 	var needs_update = false
 	
-	if cleanliness_level < 50 and not is_service_requested:
-		is_service_requested = true
-		GameState.sig_room_needs_cleaning.emit(self)
-		needs_update = true
-		
 	if maintenance_level < 50 and not is_repair_requested:
 		is_repair_requested = true
 		GameState.sig_room_needs_repair.emit(self)
 		needs_update = true
 		
 	if needs_update:
+		_update_indicator()
+
+func _on_midnight_struck(_day: int) -> void:
+	if TimeManager.is_paused():
+		return
+		
+	var main = get_tree().root.get_node_or_null("Ingame")
+	if not main: return
+	
+	var guest_manager = main.get_node_or_null("GuestManager")
+	if not guest_manager: return
+		
+	var party = guest_manager.get_party_in_room(self)
+	if party and party.members.size() > 0:
+		var occupants_size = party.members.size()
+		add_dirt_from_visits(occupants_size)
+
+func add_dirt_from_visits(visits: int) -> void:
+	var dirt_factor: int = GameState.hotel_data.get("dirt_factor", 2)
+	var base_drop = visits * 8
+	var rand_drop = randi_range(0, visits * dirt_factor)
+	
+	cleanliness_level = clampi(cleanliness_level - (base_drop + rand_drop), 0, 100)
+	
+	if cleanliness_level < 50 and not is_service_requested:
+		if GameState.hotel_level >= GameState.UNLOCK_LEVELS.get("auto_staff", 100):
+			is_service_requested = true
+			GameState.sig_room_needs_cleaning.emit(self)
 		_update_indicator()
 
 # ── Public API ────────────────────────────────────────────────────────────────
@@ -482,4 +506,6 @@ func _update_indicator() -> void:
 			elif assigned_count < max_s:
 				staff_status = 1 # Unterbesetzt (Orange)
 
-	_status_indicator.set_status(is_service_requested, is_repair_requested, is_pending_demolish, staff_status)
+	var show_broom = is_service_requested or (cleanliness_level < 50)
+	var show_wrench = is_repair_requested or (maintenance_level < 50)
+	_status_indicator.set_status(show_broom, show_wrench, is_pending_demolish, staff_status)

@@ -47,6 +47,9 @@ var _refund_idx := 3
 var _exp_labels := ["+25 %", "+10 %", "+5 %", "0 %"]
 var _exp_idx := 3
 
+var _dirt_labels := ["settings.gameplay.dirtiness.low", "settings.gameplay.dirtiness.normal", "settings.gameplay.dirtiness.high"]
+var _dirt_idx := 1
+
 var _golden_pressed = preload("res://assets/UI/menu_button_golden_pressed.tres")
 var _dark_normal: StyleBox
 
@@ -69,6 +72,13 @@ func _ready() -> void:
 	_btn_money_l.pressed.connect(_change_money.bind(-1))
 	_btn_money_r.pressed.connect(_change_money.bind(1))
 	
+	var btn_dirt_l = $Content/Left/SettingsBox/ParamGrid/OptDirt/LeftBtn
+	var btn_dirt_r = $Content/Left/SettingsBox/ParamGrid/OptDirt/RightBtn
+	btn_dirt_l.pressed.connect(_change_dirt.bind(-1))
+	btn_dirt_r.pressed.connect(_change_dirt.bind(1))
+	btn_dirt_l.disabled = false
+	btn_dirt_r.disabled = false
+	
 	_setup_map_grid()
 	_build_click_grid()
 	_apply_translations()
@@ -88,10 +98,18 @@ func _change_money(dir: int) -> void:
 	_money_idx = (_money_idx + dir + _money_values.size()) % _money_values.size()
 	_update_labels()
 
+func _change_dirt(dir: int) -> void:
+	_dirt_idx = (_dirt_idx + dir + _dirt_labels.size()) % _dirt_labels.size()
+	_update_labels()
+
 func _update_labels() -> void:
 	_lbl_money.text = _money_labels[_money_idx]
 	_lbl_refund.text = _refund_labels[_refund_idx]
 	_lbl_exp.text = _exp_labels[_exp_idx]
+	
+	var lbl_dirt = $Content/Left/SettingsBox/ParamGrid/OptDirt/ValueLbl
+	if lbl_dirt:
+		lbl_dirt.text = GameState.T(_dirt_labels[_dirt_idx])
 
 func _set_difficulty(level: int) -> void:
 	_btn_easy.modulate = Color(1, 1, 1)
@@ -107,20 +125,27 @@ func _set_difficulty(level: int) -> void:
 	# Inputs nur in "Angepasst" aktivieren
 	_btn_money_l.disabled = (level != 3)
 	_btn_money_r.disabled = (level != 3)
+	var dirt_l = $Content/Left/SettingsBox/ParamGrid/OptDirt/LeftBtn
+	var dirt_r = $Content/Left/SettingsBox/ParamGrid/OptDirt/RightBtn
+	if dirt_l: dirt_l.disabled = (level != 3)
+	if dirt_r: dirt_r.disabled = (level != 3)
 	
 	match level:
 		0: # Easy
 			_money_idx = 2
 			_refund_idx = 0
 			_exp_idx = 0
+			_dirt_idx = 0
 		1: # Normal
 			_money_idx = 1
 			_refund_idx = 3
 			_exp_idx = 3
+			_dirt_idx = 1
 		2: # Hard
 			_money_idx = 0
 			_refund_idx = 4
 			_exp_idx = 3
+			_dirt_idx = 2
 		3: # Custom
 			pass # Werte beibehalten
 			
@@ -247,7 +272,7 @@ func _on_create_pressed() -> void:
 	var refund_multi = [1.0, 0.75, 0.5, 0.25, 0.0][_refund_idx]
 	var exp_multi = [1.25, 1.10, 1.05, 1.0][_exp_idx]
 	
-	var hotel_id := SaveManager.create_hotel(GameState.active_profile_id, hotel_name)
+	var hotel_id := SaveManager.create_hotel(GameState.active_profile_id, hotel_name, GRID_COLS, GRID_ROWS, _dirt_idx + 1)
 	SaveManager.update_hotel(hotel_id, {
 		"money": money,
 		"refund_multiplier": refund_multi,
@@ -268,6 +293,8 @@ func _apply_translations() -> void:
 	$Content/Left/SettingsBox/ParamGrid/LblMoney.text = GameState.T("dashboard.new_hotel.start_money")
 	$Content/Left/SettingsBox/ParamGrid/LblRefund.text = GameState.T("dashboard.new_hotel.refund")
 	$Content/Left/SettingsBox/ParamGrid/LblExp.text = GameState.T("dashboard.new_hotel.exp")
+	if $Content/Left/SettingsBox/ParamGrid.has_node("LblDirt"):
+		$Content/Left/SettingsBox/ParamGrid/LblDirt.text = GameState.T("settings.gameplay.dirtiness")
 	$Content/Left/SettingsBox/WipLabel.text = GameState.T("dashboard.new_hotel.notice")
 	$Content/Right/GridLabel.text = GameState.T("dashboard.new_hotel.start_plot")
 	_btn_cancel.text = GameState.T("dashboard.new_hotel.btn.cancel")

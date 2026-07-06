@@ -47,11 +47,25 @@ func _on_service_pressed() -> void:
 		if _target_room.get("is_service_requested"):
 			Toast.show(GameState.T("toast.room.service_active"), "build")
 		else:
-			_target_room.set("is_service_requested", true)
-			if _target_room.has_method("_update_indicator"):
-				_target_room.call("_update_indicator")
-			GameState.sig_room_needs_cleaning.emit(_target_room)
-			Toast.show(GameState.T("toast.room.service_requested"), "build")
+			if GameState.hotel_level < GameState.UNLOCK_LEVELS.get("staff", 2):
+				Toast.show(GameState.T("toast.room.staff_locked"), "personal")
+			else:
+				_target_room.set("is_service_requested", true)
+				if _target_room.has_method("_update_indicator"):
+					_target_room.call("_update_indicator")
+				GameState.sig_room_needs_cleaning.emit(_target_room)
+				
+				var has_hk = false
+				if StaffManager:
+					for s in StaffManager.hired_staff.values():
+						if s.get("role", "") == "housekeeping":
+							has_hk = true
+							break
+							
+				if not has_hk:
+					Toast.show(GameState.T("toast.room.service_no_staff"), "personal")
+				else:
+					Toast.show(GameState.T("toast.room.service_requested"), "build")
 	close()
 
 # =============================================================================
@@ -141,11 +155,25 @@ func _on_repair_pressed() -> void:
 		if _target_room.get("is_repair_requested"):
 			Toast.show(GameState.T("toast.room.repair_active"), "build")
 		else:
-			_target_room.set("is_repair_requested", true)
-			if _target_room.has_method("_update_indicator"):
-				_target_room.call("_update_indicator")
-			GameState.sig_room_needs_repair.emit(_target_room)
-			Toast.show(GameState.T("toast.room.repair_requested"), "build")
+			if GameState.hotel_level < GameState.UNLOCK_LEVELS.get("staff", 2):
+				Toast.show(GameState.T("toast.room.staff_locked"), "personal")
+			else:
+				_target_room.set("is_repair_requested", true)
+				if _target_room.has_method("_update_indicator"):
+					_target_room.call("_update_indicator")
+				GameState.sig_room_needs_repair.emit(_target_room)
+				
+				var has_mt = false
+				if StaffManager:
+					for s in StaffManager.hired_staff.values():
+						if s.get("role", "") == "maintenance":
+							has_mt = true
+							break
+							
+				if not has_mt:
+					Toast.show(GameState.T("toast.room.repair_no_staff"), "personal")
+				else:
+					Toast.show(GameState.T("toast.room.repair_requested"), "build")
 	close()
 
 # =============================================================================

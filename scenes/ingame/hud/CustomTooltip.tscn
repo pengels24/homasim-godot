@@ -65,3 +65,43 @@ theme_type_variation = &"TooltipText"
 text = "2 / 3 Tage"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="CleanProgress" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=978903630]
+custom_minimum_size = Vector2(0, 16)
+theme_type_variation = &"TooltipProgressBar"
+unique_name_in_owner = true
+layout_mode = 2
+show_percentage = false
+
+[node name="CleanLabel" type="Label" parent="MarginContainer/VBoxContainer/CleanProgress" unique_id=987654323]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"TooltipText"
+text = "Verschmutzung: 100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MaintainProgress" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=978903631]
+custom_minimum_size = Vector2(0, 16)
+theme_type_variation = &"TooltipProgressBar"
+unique_name_in_owner = true
+layout_mode = 2
+show_percentage = false
+
+[node name="MaintainLabel" type="Label" parent="MarginContainer/VBoxContainer/MaintainProgress" unique_id=987654324]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"TooltipText"
+text = "Zustand: 100%"
+horizontal_alignment = 1
+vertical_alignment = 1

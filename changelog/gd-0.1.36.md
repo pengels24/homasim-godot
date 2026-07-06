@@ -5,13 +5,14 @@
 
 ### Features & Verbesserungen
 - **Mehrfachbau-Option:** Neues Dropdown in den Gameplay-Einstellungen hinzugefügt, um beim Bauen von Räumen festzulegen, ob der Bau-Modus (Cursor) beibehalten werden soll ("Aus", "An", "Mit Shift") (ANG-253).
-- *Hier kommen die neuen Features rein*
+- **Zimmer-Tooltip:** Ampel-System (Grün/Gelb/Rot) für Zustand & Sauberkeit eingefügt und Tooltip-Größe dynamisch an Inhalt angepasst.
+- **Service & Personal:** Magisches Auto-Säubern entfernt. Service-Tickets warten nun regulär auf eingestelltes Personal, begleitet von passenden Ingame-Hinweisen (ANG-260).
+- **Verschmutzungs-Logik:** POIs verdrecken nun realistisch basierend auf Gäste-Besuchen. Hotelzimmer-Sauberkeit fällt beim Checkout komplett auf 0%.
+- **Warn-Icons:** Räume zeigen das Besen/Schraubenschlüssel-Icon ab sofort automatisch bei unter 50% Zustand, um Wartungsbedarf rechtzeitig zu signalisieren.
+- **Tages-Scheduler:** Spawns an der Rezeption exakt an die tatsächlich verfügbaren (und heute freiwerdenden) Zimmer gekoppelt, um künstliche Dauer-Bestrafung zu vermeiden.
 
 ### Bugfixes
-- *Hier kommen die Bugfixes rein*
+- **UI:** PiP-Kameras (Bild-in-Bild) in Gästeliste, Raumliste und Personal-Ansicht werden wieder gestochen scharf gerendert (ANG-244).
 
 ### Technische Änderungen
-- *Hier kommen technische Umbauten rein*
-
-## Bugfixes
-- **UI:** PiP-Kameras (Bild-in-Bild) in Gästeliste, Raumliste und Personal-Ansicht werden wieder gestochen scharf gerendert (ANG-244)
+- **Code-Cleanup:** Überflüssige Magic-Cleans und automatische Ticket-Erstellungen vor Level-Freischaltungen entfernt.

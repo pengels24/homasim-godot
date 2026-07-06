@@ -68,7 +68,7 @@
         "order": 3,
         "default": "2",
         "default_alt": ""
-      },
+      }
     }
   },
   "ui": {
@@ -157,6 +157,12 @@
         "label": "settings.controls.build.door",
         "order": 2,
         "default": "Period",
+        "default_alt": ""
+      },
+      "multi_build_modifier": {
+        "label": "settings.controls.build.multi_build_modifier",
+        "order": 3,
+        "default": "Shift",
         "default_alt": ""
       }
     }

@@ -167,6 +167,23 @@ theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
 theme_override_font_sizes/font_size = 22
 text = "Türposition rotieren"
 
+[node name="HBoxContainer3" type="HBoxContainer" parent="PanelContainer/MarginContainer/VBoxContainer" unique_id=6763582966]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="LabelShift" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=5367491968]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8901961, 0.68235296, 0.03137255, 1)
+theme_override_font_sizes/font_size = 22
+text = "[Shift]"
+
+[node name="LabelShift2" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=9537545518]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 22
+text = "Mehrfachbau (Halten)"
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=875457891]
 libraries/ = SubResource("AnimationLibrary_hint")
 

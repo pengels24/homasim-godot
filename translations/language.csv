@@ -1059,4 +1059,6 @@ activitylog.filter.finance,Finanzen,Finances
 settings.gameplay.multi_build.title,Mehrfachbau (Gebäude),Multi-Build (Buildings)
 settings.gameplay.multi_build.off,Aus,Off
 settings.gameplay.multi_build.on,An,On
-settings.gameplay.multi_build.shift,Mit Shift,With Shift
+settings.gameplay.multi_build.shift,Mit Taste,With Key
+settings.gameplay.multi_build.shift_hint,Mehrfachbau (Halten),Multi-Build (Hold)
+settings.controls.build.multi_build_modifier,Mehrfachbau-Modifikator,Multi-Build Modifier

@@ -182,6 +182,9 @@ theme_override_styles/hover = ExtResource("4_v1l06")
 icon = ExtResource("3_xeut1")
 
 
+[node name="PanelMultiBuild" type="HSeparator" parent="Gameplay/MarginContainer/VBoxContainer" unique_id=3516963967]
+custom_minimum_size = Vector2(0, 20)
+
 [node name="HBoxContainerMultiBuild" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer" unique_id=9249214714]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2

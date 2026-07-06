@@ -19,7 +19,7 @@ var autosave_interval_minutes: int   = 10    # Echtzeit-Minuten
 var ff_speed: float = 10.0  # Schnellvorlauf-Faktor
 var demolition_refund_rate: float = 0.5   # Kapital-Rückgabe beim Abreißen (0.0–1.0)
 var scroll_zoom_sensitivity: float = 1.0  # Mausrad-Zoom Empfindlichkeit
-var multi_build_mode: int = 0             # 0=Aus, 1=An, 2=Shift
+var multi_build_mode: int = 2             # 0=Aus, 1=An, 2=Shift
 
 # ── Audio ─────────────────────────────────────────────────────────────────────
 var master_volume: float = 1.0  # 0.0 – 1.0

@@ -280,7 +280,7 @@ func _try_place() -> void:
 		match SettingsManager.multi_build_mode:
 			0: keep_building = false
 			1: keep_building = true
-			2: keep_building = Input.is_key_pressed(KEY_SHIFT)
+			2: keep_building = Input.is_action_pressed("multi_build_modifier")
 			
 		if keep_building:
 			_spawn_ghost()

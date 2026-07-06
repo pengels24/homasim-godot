@@ -27,6 +27,9 @@ func _update_labels() -> void:
 	var label_r2 = $PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/LabelR2
 	var label_dot = $PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/LabelDot
 	var label_dot2 = $PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/LabelDot2
+	var hbox_shift = $PanelContainer/MarginContainer/VBoxContainer/HBoxContainer3
+	var label_shift = $PanelContainer/MarginContainer/VBoxContainer/HBoxContainer3/LabelShift
+	var label_shift2 = $PanelContainer/MarginContainer/VBoxContainer/HBoxContainer3/LabelShift2
 	
 	if label_r and label_r2:
 		label_r.text = "[%s]" % _get_key_string("rotate_room")
@@ -36,7 +39,14 @@ func _update_labels() -> void:
 		label_dot.text = "[%s]" % _get_key_string("cycle_door")
 		label_dot2.text = GameState.T("settings.controls.build.door")
 
+	if hbox_shift and label_shift and label_shift2:
+		label_shift.text = "[%s]" % _get_key_string("multi_build_modifier")
+		label_shift2.text = GameState.T("settings.gameplay.multi_build.shift_hint")
+		# Nur anzeigen, wenn Mehrfachbau "Mit Taste" eingestellt ist
+		hbox_shift.visible = (SettingsManager.multi_build_mode == 2)
+
 func show_hints() -> void:
+	_update_labels()
 	visible = true
 	anim_player.play("slide_in")
 

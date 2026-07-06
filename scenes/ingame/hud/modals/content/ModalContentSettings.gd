@@ -19,6 +19,10 @@ const KEYBINDING_ROW = preload("res://scenes/ingame/hud/modals/content/Keybindin
 @onready var btn_tutorial_right: Button = %ButtonTutorialTipsRight
 @onready var lbl_tutorial: Label        = %LabelTutorialTipsValue
 
+@onready var btn_multibuild_left: Button  = %ButtonMultiBuildLeft
+@onready var btn_multibuild_right: Button = %ButtonMultiBuildRight
+@onready var lbl_multibuild: Label        = %LabelMultiBuildValue
+
 @onready var slider_zoom: HSlider   = %HSliderZoomSens
 @onready var lbl_zoom: Label        = %LabelZoomSensValue
 @onready var lbl_zoom_title: Label  = %LabelZoomSens
@@ -102,6 +106,10 @@ func _init_gameplay_tab() -> void:
 	_setup_selector("tutorial", btn_tutorial_left, btn_tutorial_right, lbl_tutorial,
 		[GameState.T("label.off"), GameState.T("label.on")], [false, true],
 		SettingsManager.tutorial_tips, _on_tutorial_tips_changed)
+
+	_setup_selector("multibuild", btn_multibuild_left, btn_multibuild_right, lbl_multibuild,
+		SettingsManager.multi_build_mode_labels, SettingsManager.MULTI_BUILD_MODES,
+		SettingsManager.multi_build_mode, _on_multi_build_changed)
 
 	if is_instance_valid(slider_zoom):
 		slider_zoom.value = SettingsManager.scroll_zoom_sensitivity
@@ -250,6 +258,10 @@ func _on_ff_changed(val: float) -> void:
 # =============================================================================
 func _on_tutorial_tips_changed(val: bool) -> void:
 	SettingsManager.tutorial_tips = val
+	SettingsManager.save()
+
+func _on_multi_build_changed(val: int) -> void:
+	SettingsManager.multi_build_mode = val
 	SettingsManager.save()
 
 

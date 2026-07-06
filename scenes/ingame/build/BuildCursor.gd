@@ -275,4 +275,15 @@ func _try_place() -> void:
 		get_viewport().set_input_as_handled()
 		var ghost_center := _ghost.global_position + Vector2(_room_w, _room_h) * float(TILE_PX) * 0.5
 		sig_room_placed.emit(_current_parcel.x, _current_parcel.y, place_tile.x, place_tile.y, _door_rotation, _door_offset, _room_rotation, ghost_center)
-		_spawn_ghost()
+		
+		var keep_building = false
+		match SettingsManager.multi_build_mode:
+			0: keep_building = false
+			1: keep_building = true
+			2: keep_building = Input.is_key_pressed(KEY_SHIFT)
+			
+		if keep_building:
+			_spawn_ghost()
+		else:
+			sig_cancelled.emit()
+			queue_free()

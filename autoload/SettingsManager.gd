@@ -19,6 +19,7 @@ var autosave_interval_minutes: int   = 10    # Echtzeit-Minuten
 var ff_speed: float = 10.0  # Schnellvorlauf-Faktor
 var demolition_refund_rate: float = 0.5   # Kapital-Rückgabe beim Abreißen (0.0–1.0)
 var scroll_zoom_sensitivity: float = 1.0  # Mausrad-Zoom Empfindlichkeit
+var multi_build_mode: int = 0             # 0=Aus, 1=An, 2=Shift
 
 # ── Audio ─────────────────────────────────────────────────────────────────────
 var master_volume: float = 1.0  # 0.0 – 1.0
@@ -59,6 +60,11 @@ var autosave_intervals_labels: Array[String]:
 
 const FF_SPEEDS: Array[float] = [5.0, 10.0, 20.0, 30.0, 50.0]
 const FF_SPEEDS_LABELS: Array[String] = ["x5", "x10", "x20", "x30", "x50"]
+
+const MULTI_BUILD_MODES: Array[int] = [0, 1, 2]
+var multi_build_mode_labels: Array[String]:
+	get:
+		return [GameState.T("settings.gameplay.multi_build.off"), GameState.T("settings.gameplay.multi_build.on"), GameState.T("settings.gameplay.multi_build.shift")]
 
 const UI_SCALES: Array[float] = [0.8, 0.9, 1.0, 1.1, 1.2, 1.3]
 const UI_SCALES_LABELS: Array[String] = ["80 %", "90 %", "100 %", "110 %", "120 %", "130 %"]
@@ -201,6 +207,7 @@ func save() -> void:
 	cfg.set_value("gameplay", "ff_speed", ff_speed)
 	cfg.set_value("gameplay", "demolition_refund_rate", demolition_refund_rate)
 	cfg.set_value("gameplay", "scroll_zoom_sensitivity", scroll_zoom_sensitivity)
+	cfg.set_value("gameplay", "multi_build_mode", multi_build_mode)
 	
 	cfg.set_value("audio", "master_volume", master_volume)
 	cfg.set_value("audio", "music_volume", music_volume)
@@ -242,6 +249,7 @@ func _load() -> void:
 	ff_speed = cfg.get_value("gameplay", "ff_speed",                  ff_speed)
 	demolition_refund_rate = cfg.get_value("gameplay", "demolition_refund_rate",    demolition_refund_rate)
 	scroll_zoom_sensitivity = cfg.get_value("gameplay", "scroll_zoom_sensitivity", scroll_zoom_sensitivity)
+	multi_build_mode = cfg.get_value("gameplay", "multi_build_mode", multi_build_mode)
 	master_volume = cfg.get_value("audio",    "master_volume",             master_volume)
 	music_volume = cfg.get_value("audio",    "music_volume",              music_volume)
 	menu_music_volume = cfg.get_value("audio",    "menu_music_volume",         menu_music_volume)

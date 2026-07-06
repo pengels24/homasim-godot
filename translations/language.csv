@@ -1056,3 +1056,7 @@ activitylog.filter.info,Info,Info
 settings.controls.ui.activity_log,Aktivitäten (Log),Activity Log
 
 activitylog.filter.finance,Finanzen,Finances
+settings.gameplay.multi_build.title,Mehrfachbau (Gebäude),Multi-Build (Buildings)
+settings.gameplay.multi_build.off,Aus,Off
+settings.gameplay.multi_build.on,An,On
+settings.gameplay.multi_build.shift,Mit Shift,With Shift

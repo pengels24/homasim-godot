@@ -23,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://df7h3x0j2lq4" path="res://scenes/ingame/hud/BuildHintPanel.tscn" id="51_bh"]
 [ext_resource type="PackedScene" uid="uid://dxbxxxactivitylogpanel" path="res://scenes/ingame/hud/ActivityLogPanel.tscn" id="52_log"]
 [ext_resource type="Texture2D" uid="uid://cvaoe3hytdbse" path="res://assets/icons/HUDBottom/book-open-check.svg" id="53_icon"]
+[ext_resource type="PackedScene" uid="uid://ddxx_overlay_toolbar" path="res://scenes/ingame/hud/OverlayToolbar.tscn" id="ext_overlay_toolbar"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_gfles"]
 content_margin_left = 0.0
@@ -702,6 +703,13 @@ offset_right = 180.0
 offset_bottom = 160.0
 
 [node name="BuildHintPanel" parent="." instance=ExtResource("51_bh")]
+[node name="OverlayToolbar" parent="." instance=ExtResource("ext_overlay_toolbar")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 20.0
+offset_top = 80.0
+offset_right = 80.0
+offset_bottom = 480.0
 [editable path="TopBar/MarginContainer/HBoxContainer/Level"]
 [editable path="TopBar/MarginContainer/HBoxContainer/Money"]
 [editable path="TopBar/MarginContainer/HBoxContainer/FP"]

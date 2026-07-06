@@ -48,6 +48,24 @@ var room_rotation: int = 0   # Interior-Rotation 0–3  (R-Taste: ganzer Raum dr
 # ── UI / Indikatoren ──────────────────────────────────────────────────────────
 const INDICATOR_SCENE := preload("res://scenes/ingame/rooms/RoomStatusIndicator.tscn")
 var _status_indicator: RoomStatusIndicator
+var _overlay_rect: ColorRect
+
+# =============================================================================
+func set_overlay_color(color: Color) -> void:
+	if not is_instance_valid(_overlay_rect):
+		_overlay_rect = ColorRect.new()
+		var sz = get_tile_size()
+		_overlay_rect.size = Vector2(sz.x, sz.y) * TILE_PX
+		_overlay_rect.position = Vector2.ZERO
+		_overlay_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_overlay_rect.z_index = 50 # Über dem Boden, unter UI (UI hat meist 100+)
+		add_child(_overlay_rect)
+		
+	if color.a <= 0.0:
+		_overlay_rect.visible = false
+	else:
+		_overlay_rect.visible = true
+		_overlay_rect.color = color
 
 # ── Definition (von Unterklassen überschreiben) ───────────────────────────────
 

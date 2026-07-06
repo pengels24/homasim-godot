@@ -15,6 +15,10 @@ var _quit_confirm: Node
 var _came_from_pause: bool = false
 var _modal_is_pausing: bool = false
 
+var _overlay_toolbar = null
+var _current_overlay: String = "none"
+
+
 # =============================================================================
 func _set_modal_pausing(should_pause: bool) -> void:
 	if should_pause and not _modal_is_pausing:
@@ -38,6 +42,22 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	_build = build
 	_guest_mgr = guest_mgr
 	_schedule_mgr = schedule_mgr # <--- NEUE ZEILE
+
+	_overlay_toolbar = _hud.get_node_or_null("OverlayToolbar")
+	if _overlay_toolbar:
+		_overlay_toolbar.overlay_changed.connect(_on_overlay_changed)
+
+
+	if _guest_mgr and not _guest_mgr.parties_changed.is_connected(_update_overlays_if_active):
+		_guest_mgr.parties_changed.connect(_update_overlays_if_active)
+	if GameState and not GameState.sig_room_built.is_connected(_update_overlays_if_active):
+		GameState.sig_room_built.connect(_update_overlays_if_active)
+	if GameState and not GameState.sig_room_demolished.is_connected(_update_overlays_if_active):
+		GameState.sig_room_demolished.connect(_update_overlays_if_active)
+
+	if TimeManager and not TimeManager.sig_minute_passed.is_connected(_on_minute_passed):
+		TimeManager.sig_minute_passed.connect(_on_minute_passed)
+
 
 	if not is_instance_valid(_bottom_bar):
 		return
@@ -727,3 +747,102 @@ func open_finances() -> void:
 		_standard_modal.set_title(GameState.T("modal.finances.title"))
 	else:
 		_standard_modal.open(GameState.T("modal.finances.title"))
+
+
+# =============================================================================
+# Overlay Logic
+# =============================================================================
+
+func _on_overlay_changed(type: String) -> void:
+	_current_overlay = type
+	_update_overlays()
+
+
+func _update_overlays_if_active(arg1=null, arg2=null) -> void:
+	if _current_overlay != "none":
+		_update_overlays()
+
+func _on_minute_passed(time: int) -> void:
+	# Update overlays every 15 minutes
+	if _current_overlay != "none" and time % 15 == 0:
+		_update_overlays()
+
+func _update_overlays() -> void:
+	if not is_instance_valid(_map_grid):
+		return
+		
+	var rooms = _map_grid.get_placed_rooms()
+	
+	if _current_overlay == "none":
+		for room in rooms:
+			if room.has_method("set_overlay_color"):
+				room.set_overlay_color(Color(0, 0, 0, 0))
+		return
+		
+	for room in rooms:
+		if not room.has_method("set_overlay_color"):
+			continue
+			
+		var color := Color(0, 0, 0, 0)
+		var def = {}
+		if room.has_method("get_definition"):
+			def = room.get_definition()
+		
+		match _current_overlay:
+			"dirt":
+				var clean = room.get("cleanliness_level")
+				if clean != null:
+					# 100 = transparent, 0 = red (0.75 alpha)
+					var factor = clampf((100.0 - clean) / 100.0, 0.0, 1.0)
+					color = Color(1.0, 0.0, 0.0, factor * 0.75)
+					
+			"maintenance":
+				var maint = room.get("maintenance_level")
+				if maint != null:
+					var factor = clampf((100.0 - maint) / 100.0, 0.0, 1.0)
+					color = Color(1.0, 0.0, 0.0, factor * 0.75)
+					
+			"occupancy":
+				var is_poi = def.get("is_poi", false)
+				if is_poi:
+					# POIs sind dauerhaft grau
+					color = Color(0.5, 0.5, 0.5, 0.75)
+				else:
+					var rid = room.get("room_number")
+					if rid != null and _guest_mgr and _guest_mgr._room_assign.has(rid):
+						var status = _guest_mgr._room_assign[rid]
+						if typeof(status) == TYPE_STRING:
+							if status == "DIRTY":
+								color = Color(1.0, 0.5, 0.0, 0.75) # Orange for dirty/checkout
+							elif status.begins_with("RSV_"):
+								color = Color(0.0, 0.0, 1.0, 0.75) # Blue for reserved
+							else:
+								color = Color(1.0, 0.0, 0.0, 0.75) # Red for occupied
+						else:
+							color = Color(1.0, 0.0, 0.0, 0.75)
+					else:
+						# Free
+						color = Color(0.0, 1.0, 0.0, 0.75)
+						
+			"category":
+				var cat = def.get("category", "")
+				match cat:
+					"zimmer": color = Color(0.0, 0.5, 1.0, 0.75)
+					"gastro": color = Color(1.0, 0.5, 0.0, 0.75)
+					"infrastruktur": color = Color(0.6, 0.4, 0.2, 0.75)
+					"service": color = Color(0.5, 0.5, 0.5, 0.75)
+					_: color = Color(1.0, 1.0, 1.0, 0.75)
+					
+			"value":
+				var price = def.get("nightly_price", 0)
+				if price > 0:
+					var factor = clampf(price / 300.0, 0.0, 1.0) # Assume 300 is max price for now
+					# Starts at 0.75 green (darker green), goes to bright 0.85 green
+					color = Color(0.0, 1.0, 0.0, 0.75) if factor > 0.5 else Color(0.0, 0.5, 0.0, 0.75)
+					# Let's just make it a gradient from dark green to bright green, all at 0.75 alpha
+					color = Color(0.0, 0.3 + (factor * 0.7), 0.0, 0.75)
+				else:
+					# Not generating revenue directly
+					color = Color(1.0, 1.0, 1.0, 0.75)
+
+		room.set_overlay_color(color)

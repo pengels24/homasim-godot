@@ -11,7 +11,7 @@
 - **Wartungs-Logik:** Neuer Flow für Raum-Abnutzung. Räume verlieren nun unregelmäßig an Zustand (Chance abhängig von neuer Hotel-Einstellung "Raum-Zustandsverringerung" und täglicher Auslastung). Auto-Reparatur ist bis Level 100 gesperrt (ANG-257).
 - **Warn-Icons:** Räume zeigen das Besen/Schraubenschlüssel-Icon ab sofort automatisch bei unter 50% Zustand, um Wartungsbedarf rechtzeitig zu signalisieren.
 - **Tages-Scheduler:** Spawns an der Rezeption exakt an die tatsächlich verfügbaren (und heute freiwerdenden) Zimmer gekoppelt, um künstliche Dauer-Bestrafung zu vermeiden.
-
+- **Overlay-Toolbar:** Neue dynamische Overlay-Toolbar (links im HUD) eingefügt (ANG-259). Visualisiert Raumzustände (Verschmutzung, Wartung, Belegung, Kategorien, Preis) via Echtzeit-Farb-Overlays (75% Deckkraft) direkt auf der Karte. Aktualisiert sich bei Gäste-Aktionen (Check-In/-Out) sofort in Echtzeit.
 ### Bugfixes
 - **UI:** PiP-Kameras (Bild-in-Bild) in Gästeliste, Raumliste und Personal-Ansicht werden wieder gestochen scharf gerendert (ANG-244).
 

@@ -1,0 +1,157 @@
+[gd_scene format=3 uid="uid://d4kasrrt3p41g"]
+
+[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_mxw05"]
+[ext_resource type="Script" uid="uid://cp4awft2fknby" path="res://scenes/ingame/hud/OverlayToolbar.gd" id="1_scpt"]
+[ext_resource type="StyleBox" uid="uid://brk7dwg72hmhm" path="res://assets/UI/hud_button_pressed_gold_bgt.tres" id="3_jm8q0"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_overlay"]
+allow_unpress = true
+
+[node name="OverlayToolbar" type="MarginContainer" unique_id=1907989362]
+offset_right = 60.0
+offset_bottom = 400.0
+theme = ExtResource("1_mxw05")
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+script = ExtResource("1_scpt")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1669229622]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Panel1" type="Panel" parent="VBoxContainer" unique_id=1520439897]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Panel1" unique_id=1961898501]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="BtnDirt" type="Button" parent="VBoxContainer/Panel1/MarginContainer" unique_id=1119986969]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Verschmutzung"
+focus_mode = 0
+theme_override_styles/pressed = ExtResource("3_jm8q0")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_overlay")
+text = "1"
+
+[node name="Panel2" type="Panel" parent="VBoxContainer" unique_id=762152701]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Panel2" unique_id=90260989]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="BtnMaint" type="Button" parent="VBoxContainer/Panel2/MarginContainer" unique_id=1419135003]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Raumzustand"
+focus_mode = 0
+theme_override_styles/pressed = ExtResource("3_jm8q0")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_overlay")
+text = "2"
+
+[node name="Panel3" type="Panel" parent="VBoxContainer" unique_id=993114832]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Panel3" unique_id=652435391]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="BtnOcc" type="Button" parent="VBoxContainer/Panel3/MarginContainer" unique_id=144756595]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Belegung"
+focus_mode = 0
+theme_override_styles/pressed = ExtResource("3_jm8q0")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_overlay")
+text = "3"
+
+[node name="Panel4" type="Panel" parent="VBoxContainer" unique_id=558467976]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Panel4" unique_id=1859265509]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="BtnCat" type="Button" parent="VBoxContainer/Panel4/MarginContainer" unique_id=1970079428]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Kategorien"
+focus_mode = 0
+theme_override_styles/pressed = ExtResource("3_jm8q0")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_overlay")
+text = "4"
+
+[node name="Panel5" type="Panel" parent="VBoxContainer" unique_id=1969745473]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Panel5" unique_id=1115541880]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="BtnVal" type="Button" parent="VBoxContainer/Panel5/MarginContainer" unique_id=219836337]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Wertigkeit"
+focus_mode = 0
+theme_override_styles/pressed = ExtResource("3_jm8q0")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_overlay")
+text = "5"

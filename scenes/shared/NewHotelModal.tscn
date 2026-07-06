@@ -284,6 +284,38 @@ theme_override_styles/hover = ExtResource("12_blue_h")
 disabled = true
 icon = ExtResource("11_arrow_r")
 
+
+[node name="LblMaintenance" type="Label" parent="Content/Left/SettingsBox/ParamGrid"]
+layout_mode = 2
+text = "Raum-Zustandsverringerung:"
+
+[node name="OptMaintenance" type="HBoxContainer" parent="Content/Left/SettingsBox/ParamGrid"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LeftBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptMaintenance"]
+layout_mode = 2
+theme_override_styles/normal = ExtResource("9_blue")
+theme_override_styles/pressed = ExtResource("10_blue_p")
+theme_override_styles/hover = ExtResource("12_blue_h")
+disabled = true
+icon = ExtResource("8_arrow_l")
+
+[node name="ValueLbl" type="Label" parent="Content/Left/SettingsBox/ParamGrid/OptMaintenance"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ValueLabel"
+text = "0 %"
+horizontal_alignment = 1
+
+[node name="RightBtn" type="Button" parent="Content/Left/SettingsBox/ParamGrid/OptMaintenance"]
+layout_mode = 2
+theme_override_styles/normal = ExtResource("9_blue")
+theme_override_styles/pressed = ExtResource("10_blue_p")
+theme_override_styles/hover = ExtResource("12_blue_h")
+disabled = true
+icon = ExtResource("11_arrow_r")
+
 [node name="WipLabel" type="Label" parent="Content/Left/SettingsBox" unique_id=2288288430]
 layout_mode = 2
 text = "🔒 Einige Settings sind in der TechDemo noch ohne Effekt."

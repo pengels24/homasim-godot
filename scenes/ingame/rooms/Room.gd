@@ -178,18 +178,7 @@ func _on_hour_passed(_hour: int) -> void:
 	if TimeManager.is_paused():
 		return
 		
-	# Werte langsam senken
-	maintenance_level = clampi(maintenance_level - 2, 0, 100)
-	
-	var needs_update = false
-	
-	if maintenance_level < 50 and not is_repair_requested:
-		is_repair_requested = true
-		GameState.sig_room_needs_repair.emit(self)
-		needs_update = true
-		
-	if needs_update:
-		_update_indicator()
+	# Alte stündliche Degradation entfernt, läuft nun über degrade_condition_from_visits
 
 func _on_midnight_struck(_day: int) -> void:
 	if TimeManager.is_paused():
@@ -205,6 +194,7 @@ func _on_midnight_struck(_day: int) -> void:
 	if party and party.members.size() > 0:
 		var occupants_size = party.members.size()
 		add_dirt_from_visits(occupants_size)
+		degrade_condition_from_visits(occupants_size)
 
 func add_dirt_from_visits(visits: int) -> void:
 	var dirt_factor: int = GameState.hotel_data.get("dirt_factor", 2)
@@ -218,6 +208,20 @@ func add_dirt_from_visits(visits: int) -> void:
 			is_service_requested = true
 			GameState.sig_room_needs_cleaning.emit(self)
 		_update_indicator()
+
+func degrade_condition_from_visits(visits: int) -> void:
+	var maint_factor: int = GameState.hotel_data.get("maintenance_factor", 2)
+	
+	# Würfel w10(<= faktor)
+	if randi_range(1, 10) <= maint_factor:
+		var drop = randi_range(1, visits * maint_factor)
+		maintenance_level = clampi(maintenance_level - drop, 0, 100)
+		
+		if maintenance_level < 50 and not is_repair_requested:
+			if GameState.hotel_level >= GameState.UNLOCK_LEVELS.get("auto_staff", 100):
+				is_repair_requested = true
+				GameState.sig_room_needs_repair.emit(self)
+			_update_indicator()
 
 # ── Public API ────────────────────────────────────────────────────────────────
 

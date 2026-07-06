@@ -229,7 +229,7 @@ func generate_daily_schedule(start_time: int) -> Array:
 		for room in _map_grid.get_placed_rooms():
 			if room.has_method("get_definition"):
 				var def = room.get_definition()
-				if def.get("nightly_price", 0) > 0 and not room.get("is_pending_demolish", false):
+				if def.get("nightly_price", 0) > 0 and not room.get("is_pending_demolish"):
 					var rid := _room_key(room)
 					var is_occupied_next_night = false
 					
@@ -849,6 +849,8 @@ func _process_poi_supply_costs() -> void:
 		# Verschmutzung basierend auf Besuchen erhöhen
 		if room.has_method("add_dirt_from_visits"):
 			room.add_dirt_from_visits(visits)
+		if room.has_method("degrade_condition_from_visits"):
+			room.degrade_condition_from_visits(visits)
 			
 	_daily_poi_visits.clear()
 

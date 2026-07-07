@@ -13,6 +13,7 @@ Datum: 2026-07-06
 - SimBrowser-Apps zeigen nun ein rotes "Bald verfügbar" statt "Verfügbar", inklusive Lokalisierung.
 
 ## Bugfixes
+- Fehlende Zeichenbegrenzung bei der Manager-Erstellung hinzugefügt (max 16 Zeichen) inkl. sauberem Text-Clipping in der Namens-Vorschau.
 - Hauptmenü ID-Card verliert nach dem Hovern nicht mehr ihr Styling.
 - Klon-Bug im Manager-Select behoben (Avatare teilen sich nicht mehr unfreiwillig dieselben Farb-Materialien).
 - Fehlende Übersetzungs-Keys für das Quit-Bestätigungsmodal in `language.csv` nachgetragen.

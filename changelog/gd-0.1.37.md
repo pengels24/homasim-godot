@@ -2,6 +2,7 @@
 Datum: 2026-07-06
 
 ## Features & Verbesserungen
+- UX-Verbesserung (ANG-233): Nach der Erstellung eines neuen Managers landet der Spieler nun im Hauptmenü (wo der neue Manager stolz auf der ID-Card präsentiert wird) statt direkt in der Hotel-Auswahl. Das verhindert Verwirrung durch ähnlich aussehende Menüs.
 - Hauptmenü Layout-Update: Breitere Abstände, zentrierte Buttons und abgerundetes Profil-Panel.
 - Hauptmenü-Avatar zeigt nun die im Profil gespeicherten Farben korrekt an.
 - "Spiel beenden"-Button oben rechts (X) hinzugefügt, steuerbar via Mausklick und ESC-Taste.

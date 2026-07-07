@@ -202,7 +202,7 @@ func _on_save_pressed() -> void:
 		}
 		var profile_id: int = SaveManager.create_profile(name_text, appearance)
 		GameState.select_profile(SaveManager.get_profile(profile_id))
-		GameState.open_dashboard_next = true
+		# GameState.open_dashboard_next = true # ANG-233: Removed to prevent confusion between ManagerSelect and Dashboard
 		get_tree().change_scene_to_file("res://scenes/main_menu/MainMenu.tscn")
 		return
 

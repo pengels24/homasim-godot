@@ -17,10 +17,15 @@ const FADE_DURATION  := 1.2
 @onready var btn_play: Button = %BtnPlay
 @onready var btn_settings: Button = %BtnSettings
 @onready var btn_login: Button = %BtnLogin
-@onready var btn_manager: Button = %BtnManager
 @onready var btn_tutorial: Button = %BtnTutorial
 @onready var btn_credits: Button = %BtnCredits
-@onready var btn_quit: Button = %BtnQuit
+@onready var btn_close_game: Button = %BtnCloseGame
+
+@onready var btn_idcard: Button = %BtnIDCard
+@onready var _idcard_box: PanelContainer = %IDCardBox
+@onready var lbl_idcard_name: Label = %LblName
+@onready var lbl_idcard_info: Label = %LblInfo
+@onready var avatar_display: CharacterDisplay = %AvatarDisplay
 
 # footer
 @onready var _version_lbl:      Label        = %VersionLbl
@@ -47,6 +52,9 @@ var _confirm_modal: ConfirmModal
 var _current_bg := 0
 var _slide_timer := 0.0
 
+var _original_idcard_style: StyleBox
+var _hover_idcard_style: StyleBox
+
 
 # =============================================================================
 func _ready() -> void:
@@ -55,6 +63,15 @@ func _ready() -> void:
 	_setup_modal()
 	_try_restore_last_profile()
 	_update_manager_state()
+	
+	_original_idcard_style = _idcard_box.get_theme_stylebox("panel")
+	_hover_idcard_style = _original_idcard_style.duplicate() as StyleBoxFlat
+	_hover_idcard_style.border_color = Color(0.918, 0.702, 0.031, 1.0)
+	_hover_idcard_style.border_width_left = 2
+	_hover_idcard_style.border_width_top = 2
+	_hover_idcard_style.border_width_right = 2
+	_hover_idcard_style.border_width_bottom = 2
+	
 	btn_login.pressed.connect(_on_login_pressed)
 	btn_play.pressed.connect(_on_play_pressed)
 	btn_settings.pressed.connect(_on_settings_pressed)
@@ -64,12 +81,14 @@ func _ready() -> void:
 	_confirm_modal = preload("res://scenes/shared/ConfirmModal.tscn").instantiate()
 	add_child(_confirm_modal)
 	
-	btn_manager.pressed.connect(_on_manager_pressed)
+	btn_idcard.pressed.connect(_on_manager_pressed)
+	btn_idcard.mouse_entered.connect(_on_idcard_hover.bind(true))
+	btn_idcard.mouse_exited.connect(_on_idcard_hover.bind(false))
 	btn_tutorial.pressed.connect(_on_tutorial_pressed)
 	_manager_modal.closed.connect(_on_manager_modal_closed)
 	_dashboard_modal.closed.connect(_on_dashboard_closed)
 	btn_credits.pressed.connect(_on_credits_pressed)
-	btn_quit.pressed.connect(get_tree().quit)
+	btn_close_game.pressed.connect(_on_quit_pressed)
 
 	if GameState.open_dashboard_next:
 		GameState.open_dashboard_next = false
@@ -87,6 +106,13 @@ func _process(delta: float) -> void:
 
 
 # =============================================================================
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel") and not login_modal.visible and not _settings_modal.visible and not _manager_modal.visible and not _dashboard_modal.visible and not _confirm_modal.visible:
+		_on_quit_pressed()
+		get_viewport().set_input_as_handled()
+
+
+# =============================================================================
 func _load_assets() -> void:
 	for i in bg_nodes.size():
 		var tex := load(BG_IMAGES[i]) as Texture2D
@@ -97,7 +123,7 @@ func _load_assets() -> void:
 	subtitle.text    = GameState.T("menu.hero.subtitle")
 	btn_settings.text  = GameState.T("menu.btn.settings")
 	btn_play.text      = GameState.T("menu.btn.play")
-	btn_quit.text      = GameState.T("menu.btn.quit")
+	btn_credits.text   = GameState.T("menu.btn.credits")
 	login_button.text  = GameState.T("login.btn.submit")
 	btn_login.text     = GameState.T("menu.btn.account_bind")
 	btn_login.disabled = true
@@ -139,10 +165,30 @@ func _try_restore_last_profile() -> void:
 func _update_manager_state() -> void:
 	btn_play.disabled = GameState.active_profile_id < 0
 	btn_play.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND if GameState.active_profile_id >= 0 else Control.CURSOR_FORBIDDEN
+	
 	if GameState.active_profile_id >= 0:
-		btn_manager.text = GameState.T("menu.btn.manager_change")
+		var profile := SaveManager.get_profile(GameState.active_profile_id)
+		lbl_idcard_name.text = profile.name
+		
+		var hotels := SaveManager.get_hotels(GameState.active_profile_id)
+		if hotels.size() > 0:
+			var last_hotel = hotels.back()
+			lbl_idcard_info.text = "%d Hotels\nZuletzt: %s" % [hotels.size(), last_hotel.get("name", "Unbekannt")]
+		else:
+			lbl_idcard_info.text = "0 Hotels\n" + GameState.T("menu.idcard.change_profile", "Profil wechseln")
+		
+		# Avatar rendern
+		var ManagerSelectScript = preload("res://scenes/manager_select/ManagerSelect.gd")
+		var p_gender = profile.get("appearance_gender", "m")
+		var p_skin   = ManagerSelectScript.SKIN_COLORS.get(profile.get("appearance_skin", "hell"),   Color(0.95, 0.82, 0.70))
+		var p_hair   = ManagerSelectScript.HAIR_COLORS.get(profile.get("appearance_hair", "braun"),   Color(0.45, 0.30, 0.15))
+		var p_outfit = ManagerSelectScript.OUTFIT_COLORS.get(profile.get("appearance_outfit", "anzug_schwarz"), Color(0.12, 0.12, 0.16))
+		avatar_display.update_appearance(p_gender, p_skin, p_hair, p_outfit)
+		avatar_display.visible = true
 	else:
-		btn_manager.text = GameState.T("menu.btn.manager")
+		lbl_idcard_name.text = "Kein Profil"
+		lbl_idcard_info.text = GameState.T("menu.idcard.create_profile", "Neues Profil anlegen")
+		avatar_display.visible = false
 
 
 # =============================================================================
@@ -152,6 +198,14 @@ func _next_slide() -> void:
 	tween.tween_property(bg_nodes[next], "modulate:a", 1.0, FADE_DURATION)
 	tween.tween_property(bg_nodes[_current_bg], "modulate:a", 0.0, FADE_DURATION)
 	_current_bg = next
+
+
+# =============================================================================
+func _on_idcard_hover(is_hover: bool) -> void:
+	if is_hover:
+		_idcard_box.add_theme_stylebox_override("panel", _hover_idcard_style)
+	else:
+		_idcard_box.add_theme_stylebox_override("panel", _original_idcard_style)
 
 
 # =============================================================================
@@ -205,12 +259,38 @@ func _on_login_response(success: bool, data: Dictionary) -> void:
 
 
 # =============================================================================
+func _on_quit_pressed() -> void:
+	if _confirm_modal.visible: return
+	_confirm_modal.ask(
+		GameState.T("menu.quit_confirm.title", "Zurück zum Desktop"),
+		GameState.T("menu.quit_confirm.desc", "Möchtest du das Spiel wirklich beenden?")
+	)
+	if not _confirm_modal.confirmed.is_connected(_quit_game):
+		_confirm_modal.confirmed.connect(_quit_game)
+	if not _confirm_modal.cancelled.is_connected(_cancel_quit):
+		_confirm_modal.cancelled.connect(_cancel_quit)
+
+func _quit_game() -> void:
+	_cleanup_quit_signals()
+	get_tree().quit()
+
+func _cancel_quit() -> void:
+	_cleanup_quit_signals()
+
+func _cleanup_quit_signals() -> void:
+	if _confirm_modal.confirmed.is_connected(_quit_game):
+		_confirm_modal.confirmed.disconnect(_quit_game)
+	if _confirm_modal.cancelled.is_connected(_cancel_quit):
+		_confirm_modal.cancelled.disconnect(_cancel_quit)
+
+
+# =============================================================================
 func _on_play_pressed() -> void:
-	btn_quit.visible = false
+	btn_close_game.visible = false
 	_dashboard_modal.open()
 
 func _on_dashboard_closed() -> void:
-	btn_quit.visible = true
+	btn_close_game.visible = true
 
 
 # =============================================================================
@@ -223,25 +303,25 @@ func _unhandled_input(event: InputEvent) -> void:
 
 # =============================================================================
 func _on_settings_pressed() -> void:
-	btn_quit.visible = false
+	btn_close_game.visible = false
 	_settings_modal.open(GameState.T("settings.title"))
 
 
 # =============================================================================
 func _on_settings_closed() -> void:
-	btn_quit.visible = true
+	btn_close_game.visible = true
 
 
 # =============================================================================
 func _on_manager_pressed() -> void:
-	btn_quit.visible = false
+	btn_close_game.visible = false
 	_manager_modal.open()
 
 
 # =============================================================================
 func _on_manager_modal_closed() -> void:
 	_manager_modal.visible = false
-	btn_quit.visible = true
+	btn_close_game.visible = true
 	_update_manager_state()
 
 

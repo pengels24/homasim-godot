@@ -23,6 +23,14 @@ func _ready() -> void:
 		)
 
 func set_content(data: Dictionary) -> void:
+	var category = data.get("category", "tutorial")
+	
+	# Dynamische Skalierung für große Screenshots vs. kleine Icons
+	if category == "codex":
+		texture_rect.custom_minimum_size = Vector2(0, 150)
+	else:
+		texture_rect.custom_minimum_size = Vector2(0, 400)
+		
 	var title_key = data.get("title_key", "")
 	var desc_key = data.get("desc_key", "")
 	var image_path = data.get("image", "")

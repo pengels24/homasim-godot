@@ -25,6 +25,20 @@
 [ext_resource type="Texture2D" uid="uid://cvaoe3hytdbse" path="res://assets/icons/HUDBottom/book-open-check.svg" id="53_icon"]
 [ext_resource type="PackedScene" uid="uid://ddxx_overlay_toolbar" path="res://scenes/ingame/hud/OverlayToolbar.tscn" id="ext_overlay_toolbar"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nextevent"]
+content_margin_left = 20.0
+content_margin_top = 4.0
+content_margin_right = 20.0
+content_margin_bottom = 6.0
+bg_color = Color(0.13333334, 0.1254902, 0.18039216, 1)
+border_width_left = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.19215687, 0.20784314, 0.27450982, 1)
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 6
+
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_gfles"]
 content_margin_left = 0.0
 content_margin_top = 4.0
@@ -661,15 +675,35 @@ border_color = Color(1, 1, 1, 1)
 border_width = 10.0
 editor_only = false
 
+[node name="NextEventContainer" type="PanelContainer" parent="." unique_id=987654321]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = 70.0
+offset_right = 100.0
+offset_bottom = 100.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nextevent")
+
+[node name="NextEvent" type="Label" parent="NextEventContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 22
+text = "Keine Events"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="PauseLabel" type="Label" parent="." unique_id=1948573928]
 visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -200.0
-offset_top = 80.0
+offset_top = 120.0
 offset_right = 200.0
-offset_bottom = 120.0
+offset_bottom = 160.0
 grow_horizontal = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.6)
 theme_override_colors/font_outline_color = Color(0.1, 0.1, 0.1, 1)

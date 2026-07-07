@@ -11,6 +11,8 @@ signal sig_language_changed(locale: String)
 @warning_ignore("unused_signal")
 signal sig_ff_speed_changed(new_speed: float)
 
+signal sig_camera_pan_speed_changed(new_speed: float)
+
 const SETTINGS_PATH := "user://settings.cfg"
 
 # ── Gameplay ──────────────────────────────────────────────────────────────────
@@ -19,6 +21,7 @@ var autosave_interval_minutes: int   = 10    # Echtzeit-Minuten
 var ff_speed: float = 10.0  # Schnellvorlauf-Faktor
 var demolition_refund_rate: float = 0.5   # Kapital-Rückgabe beim Abreißen (0.0–1.0)
 var scroll_zoom_sensitivity: float = 1.0  # Mausrad-Zoom Empfindlichkeit
+var camera_pan_speed: float = 400.0       # WASD Kamera-Geschwindigkeit
 var multi_build_mode: int = 2             # 0=Aus, 1=An, 2=Shift
 
 # ── Audio ─────────────────────────────────────────────────────────────────────
@@ -33,7 +36,7 @@ var toast_duration: float = 3.5  # 3.0 / 5.0 / 7.0
 var hud_side: String = "center"    # "left" / "center" / "right"
 var show_tech_info: bool = false   # Ingame Performance Overlay
 var tutorial_tips: bool = true     # Tutorial-Tipps im Spiel anzeigen
-var language: String = "de"        # "de" / "en" (erweiterbar)
+var language: String = "en"        # "de" / "en" (erweiterbar)
 var dont_show_disclaimer: bool = false
 var window_mode: String = "fullscreen"  # "fullscreen" / "borderless"
 
@@ -205,6 +208,7 @@ func save() -> void:
 	cfg.set_value("gameplay", "autosave_enabled", autosave_enabled)
 	cfg.set_value("gameplay", "autosave_interval_minutes", autosave_interval_minutes)
 	cfg.set_value("gameplay", "ff_speed", ff_speed)
+	cfg.set_value("gameplay", "camera_pan_speed", camera_pan_speed)
 	cfg.set_value("gameplay", "demolition_refund_rate", demolition_refund_rate)
 	cfg.set_value("gameplay", "scroll_zoom_sensitivity", scroll_zoom_sensitivity)
 	cfg.set_value("gameplay", "multi_build_mode", multi_build_mode)
@@ -247,6 +251,7 @@ func _load() -> void:
 	autosave_enabled = cfg.get_value("gameplay", "autosave_enabled",          autosave_enabled)
 	autosave_interval_minutes = cfg.get_value("gameplay", "autosave_interval_minutes", autosave_interval_minutes)
 	ff_speed = cfg.get_value("gameplay", "ff_speed",                  ff_speed)
+	camera_pan_speed = cfg.get_value("gameplay", "camera_pan_speed", camera_pan_speed)
 	demolition_refund_rate = cfg.get_value("gameplay", "demolition_refund_rate",    demolition_refund_rate)
 	scroll_zoom_sensitivity = cfg.get_value("gameplay", "scroll_zoom_sensitivity", scroll_zoom_sensitivity)
 	multi_build_mode = cfg.get_value("gameplay", "multi_build_mode", multi_build_mode)
@@ -259,7 +264,9 @@ func _load() -> void:
 	hud_side = cfg.get_value("ui", "hud_side", "center")
 	show_tech_info = cfg.get_value("ui", "show_tech_info", false)
 	tutorial_tips = cfg.get_value("ui", "tutorial_tips", true)
-	language = cfg.get_value("ui", "language", "de")
+	var os_lang = OS.get_locale_language()
+	var default_lang = "de" if os_lang == "de" else "en"
+	language = cfg.get_value("ui", "language", default_lang)
 	TranslationServer.set_locale(language)
 	dont_show_disclaimer = cfg.get_value("ui", "dont_show_disclaimer", false)
 	window_mode = cfg.get_value("ui", "window_mode", "fullscreen")

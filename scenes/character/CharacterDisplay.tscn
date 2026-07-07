@@ -2,217 +2,425 @@
 
 [ext_resource type="Script" path="res://scenes/character/CharacterDisplay.gd" id="1_chardisplay"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_HairBack_1"]
+bg_color = Color(0.45, 0.30, 0.15, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_EarLeft_2"]
+bg_color = Color(0.95, 0.82, 0.70, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_EarRight_3"]
+bg_color = Color(0.95, 0.82, 0.70, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_SideHairLeft_4"]
+bg_color = Color(0.45, 0.30, 0.15, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_SideHairRight_5"]
+bg_color = Color(0.45, 0.30, 0.15, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Head_6"]
+bg_color = Color(0.95, 0.82, 0.70, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_HeadShadow_7"]
+bg_color = Color(0, 0, 0, 0.18)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_HairPony_8"]
+bg_color = Color(0.45, 0.30, 0.15, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_StrandLeft_9"]
+bg_color = Color(0.45, 0.30, 0.15, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_StrandRight_10"]
+bg_color = Color(0.45, 0.30, 0.15, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BrowLeft_11"]
+bg_color = Color(0.36, 0.24, 0.12, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BrowRight_12"]
+bg_color = Color(0.36, 0.24, 0.12, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_EyeLeftWhite_13"]
+bg_color = Color(0.95, 0.95, 0.95, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_EyeLeftIris_14"]
+bg_color = Color(0.15, 0.10, 0.08, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_EyeRightWhite_15"]
+bg_color = Color(0.95, 0.95, 0.95, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_EyeRightIris_16"]
+bg_color = Color(0.15, 0.10, 0.08, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Nose_17"]
+bg_color = Color(0.77, 0.66, 0.57, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Mouth_18"]
+bg_color = Color(0.67, 0.57, 0.49, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Neck_19"]
+bg_color = Color(0.95, 0.82, 0.70, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Shoulders_20"]
+bg_color = Color(0.12, 0.12, 0.16, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Torso_21"]
+bg_color = Color(0.12, 0.12, 0.16, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Belt_22"]
+bg_color = Color(0.06, 0.06, 0.08, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_BeltBuckle_23"]
+bg_color = Color(0.918, 0.702, 0.031, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Collar_24"]
+bg_color = Color(0.34, 0.34, 0.38, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_HandLeft_25"]
+bg_color = Color(0.95, 0.82, 0.70, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_HandRight_26"]
+bg_color = Color(0.95, 0.82, 0.70, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+anti_aliasing = false
+
 [node name="CharacterDisplay" type="Control"]
 custom_minimum_size = Vector2(180, 240)
 script = ExtResource("1_chardisplay")
 
-[node name="HairBack" type="ColorRect" parent="."]
+[node name="HairBack" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 53.0
 offset_top = 18.0
 offset_right = 127.0
 offset_bottom = 40.0
-color = Color(0.45, 0.30, 0.15, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_HairBack_1")
 
-[node name="EarLeft" type="ColorRect" parent="."]
+[node name="EarLeft" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 46.0
 offset_top = 58.0
 offset_right = 58.0
 offset_bottom = 78.0
-color = Color(0.95, 0.82, 0.70, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_EarLeft_2")
 
-[node name="EarRight" type="ColorRect" parent="."]
+[node name="EarRight" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 122.0
 offset_top = 58.0
 offset_right = 134.0
 offset_bottom = 78.0
-color = Color(0.95, 0.82, 0.70, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_EarRight_3")
 
-[node name="SideHairLeft" type="ColorRect" parent="."]
+[node name="SideHairLeft" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 53.0
 offset_top = 40.0
 offset_right = 63.0
 offset_bottom = 82.0
 visible = false
-color = Color(0.45, 0.30, 0.15, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_SideHairLeft_4")
 
-[node name="SideHairRight" type="ColorRect" parent="."]
+[node name="SideHairRight" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 117.0
 offset_top = 40.0
 offset_right = 127.0
 offset_bottom = 82.0
 visible = false
-color = Color(0.45, 0.30, 0.15, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_SideHairRight_5")
 
-[node name="Head" type="ColorRect" parent="."]
+[node name="Head" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 56.0
 offset_top = 28.0
 offset_right = 124.0
 offset_bottom = 102.0
-color = Color(0.95, 0.82, 0.70, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_Head_6")
 
-[node name="HeadShadow" type="ColorRect" parent="."]
+[node name="HeadShadow" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 56.0
 offset_top = 28.0
 offset_right = 124.0
 offset_bottom = 34.0
-color = Color(0, 0, 0, 0.18)
 mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_HeadShadow_7")
 
-[node name="HairPony" type="ColorRect" parent="."]
+[node name="HairPony" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 54.0
 offset_top = 28.0
 offset_right = 126.0
 offset_bottom = 36.0
-color = Color(0.45, 0.30, 0.15, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_HairPony_8")
 
-[node name="StrandLeft" type="ColorRect" parent="."]
+[node name="StrandLeft" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 52.0
 offset_top = 36.0
 offset_right = 60.0
 offset_bottom = 64.0
-color = Color(0.45, 0.30, 0.15, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_StrandLeft_9")
 
-[node name="StrandRight" type="ColorRect" parent="."]
+[node name="StrandRight" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 120.0
 offset_top = 36.0
 offset_right = 128.0
 offset_bottom = 64.0
-color = Color(0.45, 0.30, 0.15, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_StrandRight_10")
 
-[node name="BrowLeft" type="ColorRect" parent="."]
+[node name="BrowLeft" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 62.0
 offset_top = 50.0
 offset_right = 76.0
 offset_bottom = 55.0
-color = Color(0.36, 0.24, 0.12, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_BrowLeft_11")
 
-[node name="BrowRight" type="ColorRect" parent="."]
+[node name="BrowRight" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 104.0
 offset_top = 50.0
 offset_right = 118.0
 offset_bottom = 55.0
-color = Color(0.36, 0.24, 0.12, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_BrowRight_12")
 
-[node name="EyeLeftWhite" type="ColorRect" parent="."]
+[node name="EyeLeftWhite" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 62.0
 offset_top = 58.0
 offset_right = 74.0
 offset_bottom = 68.0
-color = Color(0.95, 0.95, 0.95, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_EyeLeftWhite_13")
 
-[node name="EyeLeftIris" type="ColorRect" parent="."]
+[node name="EyeLeftIris" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 65.0
 offset_top = 59.0
 offset_right = 71.0
 offset_bottom = 67.0
-color = Color(0.15, 0.10, 0.08, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_EyeLeftIris_14")
 
-[node name="EyeRightWhite" type="ColorRect" parent="."]
+[node name="EyeRightWhite" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 106.0
 offset_top = 58.0
 offset_right = 118.0
 offset_bottom = 68.0
-color = Color(0.95, 0.95, 0.95, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_EyeRightWhite_15")
 
-[node name="EyeRightIris" type="ColorRect" parent="."]
+[node name="EyeRightIris" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 109.0
 offset_top = 59.0
 offset_right = 115.0
 offset_bottom = 67.0
-color = Color(0.15, 0.10, 0.08, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_EyeRightIris_16")
 
-[node name="Nose" type="ColorRect" parent="."]
+[node name="Nose" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 87.0
 offset_top = 76.0
 offset_right = 93.0
 offset_bottom = 84.0
-color = Color(0.77, 0.66, 0.57, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_Nose_17")
 
-[node name="Mouth" type="ColorRect" parent="."]
+[node name="Mouth" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 78.0
 offset_top = 89.0
 offset_right = 102.0
 offset_bottom = 94.0
-color = Color(0.67, 0.57, 0.49, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_Mouth_18")
 
-[node name="Neck" type="ColorRect" parent="."]
+[node name="Neck" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 79.0
 offset_top = 102.0
 offset_right = 101.0
 offset_bottom = 120.0
-color = Color(0.95, 0.82, 0.70, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_Neck_19")
 
-[node name="Shoulders" type="ColorRect" parent="."]
+[node name="Shoulders" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 20.0
 offset_top = 116.0
 offset_right = 160.0
 offset_bottom = 138.0
-color = Color(0.12, 0.12, 0.16, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_Shoulders_20")
 
-[node name="Torso" type="ColorRect" parent="."]
+[node name="Torso" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 42.0
 offset_top = 134.0
 offset_right = 138.0
 offset_bottom = 206.0
-color = Color(0.12, 0.12, 0.16, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_Torso_21")
 
-[node name="Belt" type="ColorRect" parent="."]
+[node name="Belt" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 42.0
 offset_top = 188.0
 offset_right = 138.0
 offset_bottom = 195.0
-color = Color(0.06, 0.06, 0.08, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_Belt_22")
 
-[node name="BeltBuckle" type="ColorRect" parent="."]
+[node name="BeltBuckle" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 84.0
 offset_top = 188.0
 offset_right = 96.0
 offset_bottom = 195.0
-color = Color(0.918, 0.702, 0.031, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_BeltBuckle_23")
 
-[node name="Collar" type="ColorRect" parent="."]
+[node name="Collar" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 76.0
 offset_top = 118.0
 offset_right = 104.0
 offset_bottom = 122.0
-color = Color(0.34, 0.34, 0.38, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_Collar_24")
 
-[node name="HandLeft" type="ColorRect" parent="."]
+[node name="HandLeft" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 18.0
 offset_top = 138.0
 offset_right = 32.0
 offset_bottom = 156.0
-color = Color(0.95, 0.82, 0.70, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_HandLeft_25")
 
-[node name="HandRight" type="ColorRect" parent="."]
+[node name="HandRight" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 148.0
 offset_top = 138.0
 offset_right = 162.0
 offset_bottom = 156.0
-color = Color(0.95, 0.82, 0.70, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_HandRight_26")

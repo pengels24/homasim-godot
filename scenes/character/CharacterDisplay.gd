@@ -7,55 +7,65 @@ class_name CharacterDisplay
 const CX           := 90.0
 const COLOR_GOLD   := Color(0.918, 0.702, 0.031, 1.0)
 
-@onready var _hair_back:       ColorRect = $HairBack
-@onready var _ear_left:        ColorRect = $EarLeft
-@onready var _ear_right:       ColorRect = $EarRight
-@onready var _side_hair_left:  ColorRect = $SideHairLeft
-@onready var _side_hair_right: ColorRect = $SideHairRight
-@onready var _hair_pony:       ColorRect = $HairPony
-@onready var _strand_left:     ColorRect = $StrandLeft
-@onready var _strand_right:    ColorRect = $StrandRight
-@onready var _brow_left:       ColorRect = $BrowLeft
-@onready var _brow_right:      ColorRect = $BrowRight
-@onready var _head:            ColorRect = $Head
-@onready var _nose:            ColorRect = $Nose
-@onready var _mouth:           ColorRect = $Mouth
-@onready var _neck:            ColorRect = $Neck
-@onready var _shoulders:       ColorRect = $Shoulders
-@onready var _torso:           ColorRect = $Torso
-@onready var _belt:            ColorRect = $Belt
-@onready var _collar:          ColorRect = $Collar
-@onready var _hand_left:       ColorRect = $HandLeft
-@onready var _hand_right:      ColorRect = $HandRight
+@onready var _hair_back:       Panel = $HairBack
+@onready var _ear_left:        Panel = $EarLeft
+@onready var _ear_right:       Panel = $EarRight
+@onready var _side_hair_left:  Panel = $SideHairLeft
+@onready var _side_hair_right: Panel = $SideHairRight
+@onready var _hair_pony:       Panel = $HairPony
+@onready var _strand_left:     Panel = $StrandLeft
+@onready var _strand_right:    Panel = $StrandRight
+@onready var _brow_left:       Panel = $BrowLeft
+@onready var _brow_right:      Panel = $BrowRight
+@onready var _head:            Panel = $Head
+@onready var _nose:            Panel = $Nose
+@onready var _mouth:           Panel = $Mouth
+@onready var _neck:            Panel = $Neck
+@onready var _shoulders:       Panel = $Shoulders
+@onready var _torso:           Panel = $Torso
+@onready var _belt:            Panel = $Belt
+@onready var _collar:          Panel = $Collar
+@onready var _hand_left:       Panel = $HandLeft
+@onready var _hand_right:      Panel = $HandRight
 
 
 # ── Öffentliche API ───────────────────────────────────────────────────────────
 
 func update_appearance(p_gender: String, p_skin: Color, p_hair: Color, p_outfit: Color) -> void:
-	_hair_back.color       = p_hair
-	_ear_left.color        = p_skin
-	_ear_right.color       = p_skin
-	_side_hair_left.color  = p_hair
-	_side_hair_right.color = p_hair
-	_hair_pony.color       = p_hair
-	_strand_left.color     = p_hair
-	_strand_right.color    = p_hair
-	_brow_left.color       = p_hair.darkened(0.20)
-	_brow_right.color      = p_hair.darkened(0.20)
-	_head.color            = p_skin
-	_nose.color            = p_skin.darkened(0.18)
-	_mouth.color           = p_skin.darkened(0.30)
-	_neck.color            = p_skin
-	_shoulders.color       = p_outfit
-	_torso.color           = p_outfit
-	_belt.color            = p_outfit.darkened(0.40)
-	_collar.color          = p_outfit.lightened(0.25)
-	_hand_left.color       = p_skin
-	_hand_right.color      = p_skin
+	_set_color(_hair_back, p_hair)
+	_set_color(_ear_left, p_skin)
+	_set_color(_ear_right, p_skin)
+	_set_color(_side_hair_left, p_hair)
+	_set_color(_side_hair_right, p_hair)
+	_set_color(_hair_pony, p_hair)
+	_set_color(_strand_left, p_hair)
+	_set_color(_strand_right, p_hair)
+	_set_color(_brow_left, p_hair.darkened(0.20))
+	_set_color(_brow_right, p_hair.darkened(0.20))
+	_set_color(_head, p_skin)
+	_set_color(_nose, p_skin.darkened(0.18))
+	_set_color(_mouth, p_skin.darkened(0.30))
+	_set_color(_neck, p_skin)
+	_set_color(_shoulders, p_outfit)
+	_set_color(_torso, p_outfit)
+	_set_color(_belt, p_outfit.darkened(0.40))
+	_set_color(_collar, p_outfit.lightened(0.25))
+	_set_color(_hand_left, p_skin)
+	_set_color(_hand_right, p_skin)
 	_apply_gender(p_gender)
 
 
 # ── Privat ────────────────────────────────────────────────────────────────────
+
+func _set_color(node: Panel, color: Color) -> void:
+	var sb: StyleBoxFlat
+	if not node.has_meta("unique_stylebox"):
+		sb = node.get_theme_stylebox("panel").duplicate() as StyleBoxFlat
+		node.add_theme_stylebox_override("panel", sb)
+		node.set_meta("unique_stylebox", true)
+	else:
+		sb = node.get_theme_stylebox("panel") as StyleBoxFlat
+	sb.bg_color = color
 
 func _apply_gender(gender: String) -> void:
 	var is_female  := gender == "w"

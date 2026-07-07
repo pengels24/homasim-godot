@@ -1122,3 +1122,17 @@ log.guest.declined_offer,### hat das Angebot abgelehnt und ist abgereist,### dec
 browser.status.locked,Gesperrt,Locked
 browser.status.coming_soon,Bald verfügbar,Coming soon
 browser.cta.denied,Zugriff verweigert,Access denied
+room.tooltip.and_more,... und %d weitere,... and %d more
+hud.top.next_event.none,Keine Events,No Events
+hud.top.next_event.guests,Gäste Ankunft,Guest Arrival
+event.day_start,Tagesbeginn,Day Start
+event.reception_open,Rezeption öffnet,Reception Opens
+event.reception_last_call,Rezeption schließt bald,Last Call
+event.reception_close,Rezeption schließt,Reception Closes
+event.day_end,Tagesabschluss,Day End
+settings.gameplay.camera_pan_speed,Kamera-Geschwindigkeit,Camera Pan Speed
+menu.btn.credits,Credits,Credits
+menu.idcard.change_profile,Profil wechseln,Change Profile
+menu.idcard.create_profile,Neues Profil anlegen,Create Profile
+menu.quit_confirm.title,"Zurück zum Desktop","Return to Desktop"
+menu.quit_confirm.desc,"Möchtest du das Spiel wirklich beenden?","Do you really want to quit the game?"

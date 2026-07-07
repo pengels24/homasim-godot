@@ -13,6 +13,12 @@ extends CanvasLayer
 @onready var label_rep_range: Label = %REPRange
 @onready var label_day: Label = %Day
 @onready var label_time: Label = %Time
+@onready var label_next_event: Label = %NextEvent
+
+# =============================================================================
+func set_next_event(text: String) -> void:
+	if label_next_event:
+		label_next_event.text = text
 
 @onready var btn_pause: Button = %Pause
 @onready var btn_play: Button  = %Play

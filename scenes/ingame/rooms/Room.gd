@@ -215,7 +215,7 @@ func _on_midnight_struck(_day: int) -> void:
 		degrade_condition_from_visits(occupants_size)
 
 func add_dirt_from_visits(visits: int) -> void:
-	var dirt_factor: int = GameState.hotel_data.get("dirt_factor", 2)
+	var dirt_factor: int = GameState.selected_hotel.get("dirt_factor", 2)
 	var base_drop = visits * 8
 	var rand_drop = randi_range(0, visits * dirt_factor)
 	
@@ -228,7 +228,7 @@ func add_dirt_from_visits(visits: int) -> void:
 		_update_indicator()
 
 func degrade_condition_from_visits(visits: int) -> void:
-	var maint_factor: int = GameState.hotel_data.get("maintenance_factor", 2)
+	var maint_factor: int = GameState.selected_hotel.get("maintenance_factor", 2)
 	
 	# Würfel w10(<= faktor)
 	if randi_range(1, 10) <= maint_factor:

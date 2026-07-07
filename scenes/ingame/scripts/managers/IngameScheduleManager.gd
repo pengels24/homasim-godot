@@ -2,6 +2,7 @@ extends Node
 class_name IngameScheduleManager
 
 signal sig_schedule_event(event_id: String)
+signal sig_next_event_updated(event_text: String)
 
 var _daily_queue: Array = []
 
@@ -56,6 +57,7 @@ func _build_daily_queue(start_time: int = 0) -> void:
 			
 	# Queue sortieren (wichtig, da wir neue Events hinzugefügt haben)
 	_daily_queue.sort_custom(func(a, b): return a["trigger_time"] < b["trigger_time"])
+	_update_next_event_ui()
 	print("[ScheduleManager] _build_daily_queue completed with ", _daily_queue.size(), " total events. Queue:")
 	for ev in _daily_queue:
 		print("  - Time: ", ev["trigger_time"], " Event: ", ev["event"])
@@ -88,6 +90,7 @@ func recalculate_guest_spawns() -> void:
 			})
 			
 	_daily_queue.sort_custom(func(a, b): return a["trigger_time"] < b["trigger_time"])
+	_update_next_event_ui()
 	
 	print("[ScheduleManager] Queue updated after recalculation. New queue size: ", _daily_queue.size())
 
@@ -102,6 +105,7 @@ func _on_minute_passed(current_game_time: int) -> void:
 		print("[ScheduleManager] Triggering event: ", next_event["event"], " at time ", current_game_time)
 		sig_schedule_event.emit(next_event["event"])
 		_daily_queue.pop_front()
+		_update_next_event_ui()
 		_on_minute_passed(current_game_time)
 
 
@@ -115,3 +119,19 @@ func _on_morning_struck() -> void:
 # Wird vom GameState bei reload_all_configs() aufgerufen
 func force_reload_from_gamestate() -> void:
 	_build_daily_queue(0)
+
+# =============================================================================
+func _update_next_event_ui() -> void:
+	if _daily_queue.is_empty():
+		sig_next_event_updated.emit(GameState.T("hud.top.next_event.none", "Keine Events"))
+		return
+	var next = _daily_queue[0]
+	var time_min = next["trigger_time"]
+	var time_str = "%02d:%02d" % [int(time_min / 60.0), time_min % 60]
+	var ev = next["event"]
+	var ev_name = ""
+	if ev == "guest_arrival":
+		ev_name = GameState.T("hud.top.next_event.guests", "Gäste Ankunft")
+	else:
+		ev_name = GameState.T("event." + ev, ev.capitalize())
+	sig_next_event_updated.emit("%s (%s)" % [ev_name, time_str])

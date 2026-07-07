@@ -21,7 +21,7 @@ const SCALE     := 2.0
 
 # Raum-Typ → Szenen-Pfad wird jetzt dynamisch aus GameState.room_registry bezogen
 # ── Kamera-Konfiguration ──────────────────────────────────────────────────────
-const PAN_SPEED := 400.0
+var _pan_speed := 400.0
 const ZOOM_MIN  := 0.5
 const ZOOM_MAX  := 4.0
 const ZOOM_STEP := 0.15
@@ -69,7 +69,8 @@ func _ready() -> void:
 		InputHandler.sig_camera_drag_moved.connect(_on_input_drag_moved)
 		InputHandler.sig_camera_drag_ended.connect(_on_input_drag_ended)
 
-
+		_pan_speed = SettingsManager.camera_pan_speed
+		SettingsManager.sig_camera_pan_speed_changed.connect(func(speed): _pan_speed = speed)
 
 	var p := $WorldRoot/ParcelsRoot
 	_grid = [
@@ -765,7 +766,7 @@ func _clear_saved_view() -> void:
 
 # =============================================================================
 func _on_input_camera_pan(dir_delta: Vector2) -> void:
-	camera.position += dir_delta * PAN_SPEED / camera.zoom.x
+	camera.position += dir_delta * _pan_speed / camera.zoom.x
 
 
 # =============================================================================

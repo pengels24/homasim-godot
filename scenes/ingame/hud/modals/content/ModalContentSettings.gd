@@ -27,6 +27,10 @@ const KEYBINDING_ROW = preload("res://scenes/ingame/hud/modals/content/Keybindin
 @onready var lbl_zoom: Label        = %LabelZoomSensValue
 @onready var lbl_zoom_title: Label  = %LabelZoomSens
 
+@onready var slider_pan: HSlider    = %HSliderPanSpeed
+@onready var lbl_pan: Label         = %LabelPanSpeedValue
+@onready var lbl_pan_title: Label   = %LabelPanSpeed
+
 # -- AUDIO --
 @onready var slider_master: HSlider = %HSliderVolMaster
 @onready var lbl_master: Label      = %LabelVolMasterValue
@@ -117,6 +121,16 @@ func _init_gameplay_tab() -> void:
 		slider_zoom.value_changed.connect(func(val: float):
 			lbl_zoom.text = "%.1fx" % val
 			SettingsManager.scroll_zoom_sensitivity = val
+			SettingsManager.save()
+		)
+		
+	if is_instance_valid(slider_pan):
+		slider_pan.value = SettingsManager.camera_pan_speed
+		lbl_pan.text = str(slider_pan.value)
+		slider_pan.value_changed.connect(func(val: float):
+			lbl_pan.text = str(val)
+			SettingsManager.camera_pan_speed = val
+			SettingsManager.sig_camera_pan_speed_changed.emit(val)
 			SettingsManager.save()
 		)
 
@@ -358,6 +372,8 @@ func _refresh_translated_labels() -> void:
 		%LabelTutorialTips.text = GameState.T("settings.gameplay.tutorial_tips")
 	if is_instance_valid(%LabelZoomSens):
 		%LabelZoomSens.text = GameState.T("settings.gameplay.zoom_sens")
+	if is_instance_valid(%LabelPanSpeed):
+		%LabelPanSpeed.text = GameState.T("settings.gameplay.camera_pan_speed")
 		
 	# Zeilen-Labels im Audio-Tab
 	if is_instance_valid(%LabelVolMaster):

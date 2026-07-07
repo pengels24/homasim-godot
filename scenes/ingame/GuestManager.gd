@@ -179,7 +179,8 @@ func _on_speed_changed(is_paused: bool, _speed: float) -> void:
 			var room = _get_room_node(rid)
 			if room:
 				room.set("cleanliness_level", 0)
-				if GameState.hotel_level >= GameState.UNLOCK_LEVELS.get("auto_staff", 100):
+				var hotel_level: int = int(GameState.selected_hotel.get("level", 1))
+				if hotel_level >= GameState.UNLOCK_LEVELS.get("auto_staff", 100):
 					room.set_service_requested(true)
 					GameState.sig_room_needs_cleaning.emit(room)
 				else:

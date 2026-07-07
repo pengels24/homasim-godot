@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://b3x1qmainmenu"]
 
 [ext_resource type="Script" uid="uid://nflkh3eqs3tr" path="res://scenes/main_menu/MainMenu.gd" id="1_mainmenu"]
+[ext_resource type="StyleBox" uid="uid://cg2q7w0wqska8" path="res://assets/UI/modal_panel_glow.tres" id="101_glow"]
+[ext_resource type="PackedScene" uid="uid://cgjw8nvpmbcqm" path="res://scenes/character/CharacterDisplay.tscn" id="100_chardisplay"]
 [ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_wckin"]
 [ext_resource type="PackedScene" uid="uid://c1managersel" path="res://scenes/manager_select/ManagerSelect.tscn" id="2_mgsel"]
 [ext_resource type="Texture2D" uid="uid://dwnfttdpcsskc" path="res://assets/images/logo.png" id="2_qmweu"]
@@ -8,6 +10,9 @@
 [ext_resource type="FontFile" uid="uid://bs3xl562plyi2" path="res://assets/fonts/Jersey25-Regular.ttf" id="3_wckin"]
 [ext_resource type="PackedScene" uid="uid://do0i6skwd4iil" path="res://scenes/dashboard/Dashboard.tscn" id="99_dashboard"]
 
+[ext_resource type="StyleBox" path="res://assets/UI/menu_button_red.tres" id="red_n"]
+[ext_resource type="StyleBox" path="res://assets/UI/menu_button_red_hover.tres" id="red_h"]
+[ext_resource type="StyleBox" path="res://assets/UI/menu_button_red_pressed.tres" id="red_p"]
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_subtitle_bg"]
 content_margin_left = 24.0
 content_margin_top = 16.0
@@ -155,6 +160,15 @@ corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_link"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_id_hover"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.917647, 0.701961, 0.0313726, 1)
+
+
 [node name="MainMenu" type="Control" unique_id=1481950573]
 layout_mode = 3
 anchors_preset = 15
@@ -256,28 +270,36 @@ Plane, baue und verwalte dein Imperium – vom ersten Zimmer bis zum Luxus-Resor
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="MenuBox" type="PanelContainer" parent="MarginContainer/Content" unique_id=1229232634]
+[node name="MenuRow" type="HBoxContainer" parent="MarginContainer/Content" unique_id=1214402831]
+layout_mode = 2
+theme_override_constants/separation = 40
+alignment = 1
+
+[node name="MenuBox" type="PanelContainer" parent="MarginContainer/Content/MenuRow" unique_id=1229232634]
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.65
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_menu_bg")
 
-[node name="MenuVBox" type="VBoxContainer" parent="MarginContainer/Content/MenuBox" unique_id=985458382]
+[node name="MenuVBox" type="VBoxContainer" parent="MarginContainer/Content/MenuRow/MenuBox" unique_id=985458382]
 layout_mode = 2
 theme_override_constants/separation = 28
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Content/MenuBox/MenuVBox" unique_id=2000429734]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Content/MenuRow/MenuBox/MenuVBox" unique_id=2000429734]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 50
 theme_override_constants/margin_right = 50
 
-[node name="Buttons" type="GridContainer" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer" unique_id=924669182]
+[node name="Buttons" type="GridContainer" parent="MarginContainer/Content/MenuRow/MenuBox/MenuVBox/MarginContainer" unique_id=924669182]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 6
 theme_override_constants/h_separation = 100
-theme_override_constants/v_separation = 28
+theme_override_constants/v_separation = 48
 columns = 2
 
-[node name="BtnPlay" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=355715255]
+[node name="BtnPlay" type="Button" parent="MarginContainer/Content/MenuRow/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=355715255]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
@@ -299,7 +321,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 disabled = true
 text = "Spiel starten"
 
-[node name="BtnSettings" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=2137549259]
+[node name="BtnSettings" type="Button" parent="MarginContainer/Content/MenuRow/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=2137549259]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -317,7 +339,7 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 text = "Einstellungen"
 
-[node name="BtnLogin" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=362375200]
+[node name="BtnLogin" type="Button" parent="MarginContainer/Content/MenuRow/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=362375200]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
@@ -338,25 +360,7 @@ theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 text = "Login / Register"
 
-[node name="BtnManager" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=1714649453]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-mouse_default_cursor_shape = 2
-theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
-theme_override_colors/font_pressed_color = Color(0.7, 0.53, 0.02, 1)
-theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 5
-theme_override_fonts/font = ExtResource("3_wckin")
-theme_override_font_sizes/font_size = 48
-theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
-text = "Manager wählen"
-
-[node name="BtnTutorial" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=1385949115]
+[node name="BtnTutorial" type="Button" parent="MarginContainer/Content/MenuRow/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=1385949115]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
@@ -377,7 +381,7 @@ theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 text = "Tutorial"
 
-[node name="BtnCredits" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=1852897334]
+[node name="BtnCredits" type="Button" parent="MarginContainer/Content/MenuRow/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=1852897334]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
@@ -396,7 +400,6 @@ theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 text = "Info"
 
-[node name="BtnQuit" type="Button" parent="MarginContainer/Content/MenuBox/MenuVBox" unique_id=1864160667]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_default_cursor_shape = 2
@@ -436,7 +439,7 @@ modulate = Color(1, 1, 1, 0.8)
 custom_minimum_size = Vector2(22, 22)
 layout_mode = 2
 size_flags_horizontal = 0
-size_flags_vertical = 4
+size_flags_vertical = 6
 expand_mode = 1
 stretch_mode = 5
 
@@ -603,3 +606,76 @@ offset_right = 1920.0
 offset_bottom = 1080.0
 grow_horizontal = 1
 grow_vertical = 1
+
+[node name="IDCardBox" type="PanelContainer" parent="MarginContainer/Content/MenuRow" unique_id=6195415139]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.35
+theme_override_styles/panel = SubResource("StyleBoxFlat_menu_bg")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/Content/MenuRow/IDCardBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 30
+
+[node name="VBox" type="VBoxContainer" parent="MarginContainer/Content/MenuRow/IDCardBox/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="AvatarBox" type="Control" parent="MarginContainer/Content/MenuRow/IDCardBox/MarginContainer/VBox"]
+custom_minimum_size = Vector2(108, 144)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="AvatarDisplay" parent="MarginContainer/Content/MenuRow/IDCardBox/MarginContainer/VBox/AvatarBox" instance=ExtResource("100_chardisplay")]
+unique_name_in_owner = true
+scale = Vector2(0.6, 0.6)
+
+[node name="LblName" type="Label" parent="MarginContainer/Content/MenuRow/IDCardBox/MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.917647, 0.701961, 0.0313726, 1)
+theme_override_fonts/font = ExtResource("3_wckin")
+theme_override_font_sizes/font_size = 40
+text = "Name"
+horizontal_alignment = 1
+
+[node name="LblInfo" type="Label" parent="MarginContainer/Content/MenuRow/IDCardBox/MarginContainer/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 20
+text = "Klicken zum Wechseln"
+horizontal_alignment = 1
+
+[node name="BtnIDCard" type="Button" parent="MarginContainer/Content/MenuRow/IDCardBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+mouse_default_cursor_shape = 2
+
+[node name="BtnCloseGame" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -90.0
+offset_top = 50.0
+offset_right = -50.0
+offset_bottom = 90.0
+grow_horizontal = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 24
+theme_override_styles/focus = ExtResource("red_h")
+theme_override_styles/hover = ExtResource("red_h")
+theme_override_styles/pressed = ExtResource("red_p")
+theme_override_styles/normal = ExtResource("red_n")
+text = "X"

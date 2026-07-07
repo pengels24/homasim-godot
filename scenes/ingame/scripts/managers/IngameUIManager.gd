@@ -42,6 +42,10 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	_build = build
 	_guest_mgr = guest_mgr
 	_schedule_mgr = schedule_mgr # <--- NEUE ZEILE
+	
+	if _schedule_mgr and not _schedule_mgr.sig_next_event_updated.is_connected(_hud.set_next_event):
+		_schedule_mgr.sig_next_event_updated.connect(_hud.set_next_event)
+		_schedule_mgr._update_next_event_ui()
 
 	_overlay_toolbar = _hud.get_node_or_null("OverlayToolbar")
 	if _overlay_toolbar:

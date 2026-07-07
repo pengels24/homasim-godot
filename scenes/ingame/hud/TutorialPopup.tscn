@@ -26,7 +26,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=496478910]
-custom_minimum_size = Vector2(1200, 900)
+custom_minimum_size = Vector2(700, 0)
 layout_mode = 2
 theme_type_variation = &"ModalPanel"
 
@@ -53,13 +53,13 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=419221935]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 450)
+custom_minimum_size = Vector2(0, 180)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5
 
 [node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1418119967]
-custom_minimum_size = Vector2(0, 250)
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_vertical = 3
 

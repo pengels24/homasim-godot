@@ -245,8 +245,8 @@ alignment = 2
 
 [node name="HSliderZoomSens" type="HSlider" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerZoom/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 4
 min_value = 0.5
 max_value = 3.0
@@ -259,6 +259,43 @@ custom_minimum_size = Vector2(50, 0)
 theme_type_variation = &"ValueLabel"
 layout_mode = 2
 text = "1.0x"
+horizontal_alignment = 2
+
+[node name="PanelPan" type="HSeparator" parent="Gameplay/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBoxContainerPanSpeed" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LabelPanSpeed" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerPanSpeed"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Kamera-Geschwindigkeit"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerPanSpeed"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="HSliderPanSpeed" type="HSlider" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerPanSpeed/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 100.0
+max_value = 1500.0
+step = 50.0
+value = 400.0
+
+[node name="LabelPanSpeedValue" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerPanSpeed/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
+theme_type_variation = &"ValueLabel"
+layout_mode = 2
+text = "400"
 horizontal_alignment = 2
 
 [node name="Audio" type="VBoxContainer" parent="." unique_id=1957786893]

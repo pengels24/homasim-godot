@@ -113,7 +113,11 @@ func _update_content() -> void:
 			
 		var txt = GameState.T("room.tooltip.current_visitors") % current_visitors
 		if current_visitors > 0:
-			txt += "\n" + "\n".join(visitor_names)
+			var display_names = visitor_names.slice(0, 5)
+			txt += "\n" + "\n".join(display_names)
+			if visitor_names.size() > 5:
+				var more_count = visitor_names.size() - 5
+				txt += "\n" + (GameState.T("room.tooltip.and_more") % more_count)
 		guests_label.text = txt
 		guests_label.show()
 	else:

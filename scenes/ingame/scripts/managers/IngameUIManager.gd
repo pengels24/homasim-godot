@@ -842,14 +842,17 @@ func _update_overlays() -> void:
 					
 			"value":
 				var price = def.get("nightly_price", 0)
+				var cat = def.get("category", "")
 				if price > 0:
-					var factor = clampf(price / 300.0, 0.0, 1.0) # Assume 300 is max price for now
-					# Starts at 0.75 green (darker green), goes to bright 0.85 green
-					color = Color(0.0, 1.0, 0.0, 0.75) if factor > 0.5 else Color(0.0, 0.5, 0.0, 0.75)
-					# Let's just make it a gradient from dark green to bright green, all at 0.75 alpha
-					color = Color(0.0, 0.3 + (factor * 0.7), 0.0, 0.75)
+					# Besserer Kontrast: Basis-Preis ~40 bis ~250
+					var factor = clampf((price - 40.0) / 200.0, 0.0, 1.0)
+					# Lerp von dunklem, matten Grün zu extrem leuchtendem Hellgrün
+					color = Color(0.1, 0.3, 0.1, 0.75).lerp(Color(0.2, 1.0, 0.2, 0.75), factor)
+				elif cat == "gastro":
+					# Gastro-Betriebe (Bar etc.) bringen ebenfalls viel Geld
+					color = Color(0.6, 0.9, 0.1, 0.75)
 				else:
-					# Not generating revenue directly
-					color = Color(1.0, 1.0, 1.0, 0.75)
+					# Keine direkte Einnahmequelle (Lobby, Infrastruktur)
+					color = Color(0.6, 0.6, 0.6, 0.75)
 
 		room.set_overlay_color(color)

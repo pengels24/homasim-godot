@@ -12,7 +12,7 @@ func setup(entry: Dictionary) -> void:
 	lbl_category.text = translated if translated != trans_key else cat.to_upper()
 	
 	var t: int = entry.get("game_time", 0)
-	var h = t / 60
+	var h = int(t / 60.0)
 	var m = t % 60
 	lbl_time.text = "%02d:%02d" % [h, m]
 	

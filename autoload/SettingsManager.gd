@@ -11,6 +11,7 @@ signal sig_language_changed(locale: String)
 @warning_ignore("unused_signal")
 signal sig_ff_speed_changed(new_speed: float)
 
+@warning_ignore("unused_signal")
 signal sig_camera_pan_speed_changed(new_speed: float)
 
 const SETTINGS_PATH := "user://settings.cfg"

@@ -85,7 +85,7 @@ func can_create_hotel(profile_id: int) -> bool:
 
 
 # =============================================================================
-func create_hotel(profile_id: int, hotel_name: String, cols: int = 5, rows: int = 5, dirt_factor: int = 2, maintenance_factor: int = 2) -> int:
+func create_hotel(profile_id: int, hotel_name: String, cols: int = 5, rows: int = 5, dirt_factor: int = 2, _maintenance_factor: int = 2) -> int:
 	var new_id := _next_hotel_id
 	_next_hotel_id += 1
 	var hotel := {

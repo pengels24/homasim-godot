@@ -10,7 +10,7 @@ class_name DevConsole
 
 var _hotel:       Dictionary = {}
 var _hud:         Node
-var _was_paused:  bool    = true
+
 var _dragging:    bool    = false
 var _drag_offset: Vector2 = Vector2.ZERO
 

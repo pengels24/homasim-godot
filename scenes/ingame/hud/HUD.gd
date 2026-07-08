@@ -383,21 +383,21 @@ func set_build_mode_visuals(p_building: bool) -> void:
 			else:
 				hint.show_hints()
 		else:
-			if _is_overlay_category:
-				hint.show_category_legend()
+			if _active_overlay in ["category", "occupancy"]:
+				hint.show_overlay_legend(_active_overlay)
 			else:
 				hint.hide_hints()
 
-var _is_overlay_category: bool = false
+var _active_overlay: String = ""
 
-func set_overlay_category_visuals(active: bool) -> void:
-	_is_overlay_category = active
+func set_overlay_legend_visuals(type: String) -> void:
+	_active_overlay = type
 	var hint = find_child("BuildHintPanel", true, false)
 	if hint:
 		if _is_building:
 			pass # Build hints have priority
-		elif _is_overlay_category:
-			hint.show_category_legend()
+		elif _active_overlay in ["category", "occupancy"]:
+			hint.show_overlay_legend(_active_overlay)
 		else:
 			hint.hide_hints()
 

@@ -48,31 +48,40 @@ func _update_labels() -> void:
 func show_hints() -> void:
 	var vbox = $PanelContainer/MarginContainer/VBoxContainer
 	for child in vbox.get_children():
-		child.visible = true
-	if vbox.has_node("CatLegend"):
-		vbox.get_node("CatLegend").visible = false
+		child.visible = not child.name.begins_with("Legend_")
 	
 	_update_labels()
 	visible = true
 	anim_player.play("slide_in")
 
-func show_category_legend() -> void:
+func show_overlay_legend(type: String) -> void:
 	var vbox = $PanelContainer/MarginContainer/VBoxContainer
 	for child in vbox.get_children():
 		child.visible = false
 	
-	if not vbox.has_node("CatLegend"):
+	var node_name = "Legend_" + type
+	if not vbox.has_node(node_name):
 		var legend_box = VBoxContainer.new()
-		legend_box.name = "CatLegend"
+		legend_box.name = node_name
 		vbox.add_child(legend_box)
 		
-		var cats = [
-			{"name": GameState.T("overlay.cat.zimmer", "Zimmer"), "color": Color(0.0, 0.5, 1.0)},
-			{"name": GameState.T("overlay.cat.gastro", "Gastro"), "color": Color(1.0, 0.5, 0.0)},
-			{"name": GameState.T("overlay.cat.infra", "Infrastruktur"), "color": Color(0.6, 0.4, 0.2)},
-			{"name": GameState.T("overlay.cat.service", "Service"), "color": Color(0.5, 0.5, 0.5)}
-		]
-		for c in cats:
+		var items = []
+		if type == "category":
+			items = [
+				{"name": GameState.T("overlay.cat.zimmer", "Zimmer"), "color": Color(0.0, 0.5, 1.0)},
+				{"name": GameState.T("overlay.cat.gastro", "Gastro"), "color": Color(1.0, 0.5, 0.0)},
+				{"name": GameState.T("overlay.cat.infra", "Infrastruktur"), "color": Color(0.6, 0.4, 0.2)},
+				{"name": GameState.T("overlay.cat.service", "Service"), "color": Color(0.5, 0.5, 0.5)}
+			]
+		elif type == "occupancy":
+			items = [
+				{"name": GameState.T("overlay.occ.free", "Frei"), "color": Color(0.0, 1.0, 0.0)},
+				{"name": GameState.T("overlay.occ.dirty", "Dreckig / Checkout"), "color": Color(1.0, 0.5, 0.0)},
+				{"name": GameState.T("overlay.occ.occupied", "Belegt"), "color": Color(1.0, 0.0, 0.0)},
+				{"name": GameState.T("overlay.occ.reserved", "Reserviert"), "color": Color(0.0, 0.0, 1.0)}
+			]
+			
+		for c in items:
 			var hb = HBoxContainer.new()
 			hb.add_theme_constant_override("separation", 10)
 			
@@ -90,8 +99,9 @@ func show_category_legend() -> void:
 			
 			legend_box.add_child(hb)
 			
-	var legend = vbox.get_node("CatLegend")
-	legend.visible = true
+	for child in vbox.get_children():
+		if child.name.begins_with("Legend_"):
+			child.visible = (child.name == node_name)
 	
 	visible = true
 	anim_player.play("slide_in")

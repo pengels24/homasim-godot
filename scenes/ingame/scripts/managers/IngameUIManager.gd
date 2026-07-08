@@ -761,6 +761,8 @@ func open_finances() -> void:
 func _on_overlay_changed(type: String) -> void:
 	_current_overlay = type
 	_update_overlays()
+	if is_instance_valid(_hud) and _hud.has_method("set_overlay_category_visuals"):
+		_hud.set_overlay_category_visuals(type == "category")
 
 
 func _update_overlays_if_active(arg1=null, arg2=null) -> void:

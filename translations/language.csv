@@ -1136,3 +1136,7 @@ menu.idcard.change_profile,Profil wechseln,Change Profile
 menu.idcard.create_profile,Neues Profil anlegen,Create Profile
 menu.quit_confirm.title,"Zurück zum Desktop","Return to Desktop"
 menu.quit_confirm.desc,"Möchtest du das Spiel wirklich beenden?","Do you really want to quit the game?"
+overlay.cat.zimmer,"Zimmer","Rooms"
+overlay.cat.gastro,"Gastro","Dining"
+overlay.cat.infra,"Infrastruktur","Infrastructure"
+overlay.cat.service,"Service","Service"

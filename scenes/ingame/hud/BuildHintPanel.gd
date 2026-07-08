@@ -46,7 +46,53 @@ func _update_labels() -> void:
 		hbox_shift.visible = (SettingsManager.multi_build_mode == 2)
 
 func show_hints() -> void:
+	var vbox = $PanelContainer/MarginContainer/VBoxContainer
+	for child in vbox.get_children():
+		child.visible = true
+	if vbox.has_node("CatLegend"):
+		vbox.get_node("CatLegend").visible = false
+	
 	_update_labels()
+	visible = true
+	anim_player.play("slide_in")
+
+func show_category_legend() -> void:
+	var vbox = $PanelContainer/MarginContainer/VBoxContainer
+	for child in vbox.get_children():
+		child.visible = false
+	
+	if not vbox.has_node("CatLegend"):
+		var legend_box = VBoxContainer.new()
+		legend_box.name = "CatLegend"
+		vbox.add_child(legend_box)
+		
+		var cats = [
+			{"name": GameState.T("overlay.cat.zimmer", "Zimmer"), "color": Color(0.0, 0.5, 1.0)},
+			{"name": GameState.T("overlay.cat.gastro", "Gastro"), "color": Color(1.0, 0.5, 0.0)},
+			{"name": GameState.T("overlay.cat.infra", "Infrastruktur"), "color": Color(0.6, 0.4, 0.2)},
+			{"name": GameState.T("overlay.cat.service", "Service"), "color": Color(0.5, 0.5, 0.5)}
+		]
+		for c in cats:
+			var hb = HBoxContainer.new()
+			hb.add_theme_constant_override("separation", 10)
+			
+			var cr = ColorRect.new()
+			cr.custom_minimum_size = Vector2(24, 24)
+			cr.color = c.color
+			cr.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+			hb.add_child(cr)
+			
+			var lbl = Label.new()
+			lbl.text = c.name
+			lbl.add_theme_font_size_override("font_size", 22)
+			lbl.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8))
+			hb.add_child(lbl)
+			
+			legend_box.add_child(hb)
+			
+	var legend = vbox.get_node("CatLegend")
+	legend.visible = true
+	
 	visible = true
 	anim_player.play("slide_in")
 

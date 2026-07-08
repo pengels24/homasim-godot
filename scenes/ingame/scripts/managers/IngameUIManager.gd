@@ -765,7 +765,7 @@ func _on_overlay_changed(type: String) -> void:
 		_hud.set_overlay_legend_visuals(type)
 
 
-func _update_overlays_if_active(arg1=null, arg2=null) -> void:
+func _update_overlays_if_active(_arg1=null, _arg2=null) -> void:
 	if _current_overlay != "none":
 		_update_overlays()
 

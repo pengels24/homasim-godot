@@ -20,10 +20,10 @@
 [ext_resource type="PackedScene" uid="uid://dnlttoshpxisb" path="res://scenes/ingame/hud/modals/LevelUpModal.tscn" id="24_6iy1x"]
 [ext_resource type="PackedScene" uid="uid://bcweu4cs7d73x" path="res://scenes/ingame/hud/modals/StandardModal.tscn" id="25_fiam6"]
 [ext_resource type="PackedScene" uid="uid://df2m4b8v7e1q" path="res://scenes/ingame/hud/TechOverlay.tscn" id="50_tech"]
-[ext_resource type="PackedScene" uid="uid://df7h3x0j2lq4" path="res://scenes/ingame/hud/BuildHintPanel.tscn" id="51_bh"]
+[ext_resource type="PackedScene" uid="uid://dxemoh2bim084" path="res://scenes/ingame/hud/BuildHintPanel.tscn" id="51_bh"]
 [ext_resource type="PackedScene" uid="uid://dxbxxxactivitylogpanel" path="res://scenes/ingame/hud/ActivityLogPanel.tscn" id="52_log"]
 [ext_resource type="Texture2D" uid="uid://cvaoe3hytdbse" path="res://assets/icons/HUDBottom/book-open-check.svg" id="53_icon"]
-[ext_resource type="PackedScene" uid="uid://ddxx_overlay_toolbar" path="res://scenes/ingame/hud/OverlayToolbar.tscn" id="ext_overlay_toolbar"]
+[ext_resource type="PackedScene" uid="uid://d4kasrrt3p41g" path="res://scenes/ingame/hud/OverlayToolbar.tscn" id="ext_overlay_toolbar"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nextevent"]
 content_margin_left = 20.0

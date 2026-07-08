@@ -316,7 +316,7 @@ theme_override_styles/hover = ExtResource("12_blue_h")
 disabled = true
 icon = ExtResource("11_arrow_r")
 
-[node name="WipLabel" type="Label" parent="Content/Left/SettingsBox" unique_id=2288288430]
+[node name="WipLabel2" type="Label" parent="Content/Left/SettingsBox" unique_id=2288288430]
 layout_mode = 2
 text = "🔒 Einige Settings sind in der TechDemo noch ohne Effekt."
 

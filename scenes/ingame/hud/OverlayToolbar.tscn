@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://cdh1nawiebqeh" path="res://assets/icons/angelus2010/ang-brush.aseprite" id="4_abc4o"]
 [ext_resource type="Texture2D" uid="uid://bq4axaj8bime0" path="res://assets/icons/angelus2010/ang-wrench.aseprite" id="5_2xvye"]
 [ext_resource type="Texture2D" uid="uid://cnmlw3opos464" path="res://assets/icons/angelus2010/ang-usage.aseprite" id="6_1hx8q"]
+[ext_resource type="Texture2D" uid="uid://cq1w061nls65i" path="res://assets/icons/angelus2010/ang-cat-ov.aseprite" id="7_2xvye"]
+[ext_resource type="Texture2D" uid="uid://0rg81xk708b5" path="res://assets/icons/angelus2010/ang-value.aseprite" id="8_1hx8q"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_overlay"]
 allow_unpress = true
@@ -133,7 +135,8 @@ focus_mode = 0
 theme_override_styles/pressed = ExtResource("3_jm8q0")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_overlay")
-text = "4"
+icon = ExtResource("7_2xvye")
+icon_alignment = 1
 
 [node name="Panel5" type="Panel" parent="VBoxContainer" unique_id=1969745473]
 custom_minimum_size = Vector2(60, 60)
@@ -160,4 +163,5 @@ focus_mode = 0
 theme_override_styles/pressed = ExtResource("3_jm8q0")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_overlay")
-text = "5"
+icon = ExtResource("8_1hx8q")
+icon_alignment = 1

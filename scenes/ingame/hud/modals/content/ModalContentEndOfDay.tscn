@@ -89,6 +89,23 @@ layout_mode = 2
 text = "0 €"
 horizontal_alignment = 2
 
+[node name="RowOtherInc" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxFinance"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowOtherInc"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Sonstige Einnahmen"
+
+[node name="LblOtherIncome" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowOtherInc"]
+theme_type_variation = &"ValueLabel"
+unique_name_in_owner = true
+layout_mode = 2
+text = "0 €"
+horizontal_alignment = 2
+
+
 [node name="HSepFin2" type="Panel" parent="VBoxMain/HBoxColumns/VBoxFinance"]
 custom_minimum_size = Vector2(0, 1)
 layout_mode = 2

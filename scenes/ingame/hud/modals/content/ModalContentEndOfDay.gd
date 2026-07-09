@@ -7,6 +7,7 @@ signal sig_continue_requested
 @onready var _lbl_room_income: Label = %LblRoomIncome
 @onready var _lbl_restaurant: Label = %LblRestaurant
 @onready var _lbl_services: Label = %LblServices
+@onready var _lbl_other_income: Label = %LblOtherIncome
 
 @onready var _lbl_total_income: Label = %LblTotalIncome
 @onready var _lbl_staff: Label = %LblStaff
@@ -74,7 +75,7 @@ func _fill_finance_data(day: int) -> void:
 			if amount > 0:
 				match category:
 					"room": room_inc += amount
-					"restaurant": rest_inc += amount
+					"restaurant", "gastro": rest_inc += amount
 					"service": serv_inc += amount
 					_: other_inc += amount
 			else:
@@ -91,6 +92,7 @@ func _fill_finance_data(day: int) -> void:
 	if is_instance_valid(_lbl_room_income): _lbl_room_income.text = _format_money(room_inc, true)
 	if is_instance_valid(_lbl_restaurant): _lbl_restaurant.text = _format_money(rest_inc, true)
 	if is_instance_valid(_lbl_services): _lbl_services.text = _format_money(serv_inc, true)
+	if is_instance_valid(_lbl_other_income): _lbl_other_income.text = _format_money(other_inc, true)
 
 	if is_instance_valid(_lbl_total_income): _lbl_total_income.text = _format_money(total_inc, true)
 	if is_instance_valid(_lbl_staff): _lbl_staff.text = _format_money(staff_exp)

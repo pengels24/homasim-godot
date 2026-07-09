@@ -262,7 +262,13 @@ func _on_poi_arrived() -> void:
 		var sz = poi_room.call("get_tile_size") if poi_room.has_method("get_tile_size") else Vector2i(1, 1)
 		spawn_pos = poi_room.global_position + Vector2(sz.x * 16.0, sz.y * 16.0)
 	sig_poi_income.emit(income, spawn_pos)
-	
+
+	# EXP pro POI-Besuch vergeben (wenn definiert)
+	var visit_exp: int = poi_def.get("visit_exp", 0)
+	if visit_exp > 0:
+		GameState.add_exp(visit_exp)
+		EffectManager.spawn_exp_text(visit_exp, spawn_pos)
+
 	# GuestManager über Besuch informieren (für Warenverbrauch-Tracking)
 	if is_instance_valid(_guest_manager):
 		_guest_manager.on_poi_visited(room_id)

@@ -511,7 +511,7 @@ func _update_indicator() -> void:
 
 
 	# 2. HOLEN DER DATEN:
-	var def = get_definition()
+	var def: Dictionary = call("get_definition")
 	if def.get("max_beds", 0) == 0 and not def.get("is_poi", false):
 		_status_indicator.visible = false
 		return

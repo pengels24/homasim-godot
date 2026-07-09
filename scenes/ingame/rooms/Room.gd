@@ -202,8 +202,6 @@ func _on_hour_passed(_hour: int) -> void:
 	# Alte stündliche Degradation entfernt, läuft nun über degrade_condition_from_visits
 
 func _on_midnight_struck(_day: int) -> void:
-	if TimeManager.is_paused():
-		return
 		
 	var main = get_tree().root.get_node_or_null("Ingame")
 	if not main: return

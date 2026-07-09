@@ -720,8 +720,14 @@ func _finalize_checkout(party: GuestParty, payout: int, auto: bool) -> void:
 
 # =============================================================================
 func _calculate_payout(party: GuestParty) -> float:
-	return party.base_price * float(party.total_stay_days) * (party.satisfaction / 100.0)
-
+	var nightly_price: float = float(party.base_price) # Fallback
+	var room = _get_room_node(party.room_id)
+	if room and room.has_method("get_definition"):
+		var def = room.get_definition()
+		if def.has("nightly_price") and def.get("nightly_price") > 0:
+			nightly_price = float(def.get("nightly_price"))
+			
+	return nightly_price * float(party.total_stay_days) * (party.satisfaction / 100.0)
 
 # ── Serialisierung ────────────────────────────────────────────────────────────
 

@@ -495,6 +495,8 @@ func add_rep(amount: int) -> void:
 func calc_checkin_exp(party: GuestParty) -> int:
 	var def: Dictionary = GuestDefinitions.ALL.get(party.type, {})
 	var base_exp: int = def.get("base_exp", 10)
+	
+	base_exp = int(round(base_exp * 1.1))
 
 	# Wir geben fürs Erste NUR den flachen Basiswert aus der Definition.
 	# Eine Familie gibt also genau 15 EXP, ein Single genau 10.
@@ -507,6 +509,8 @@ func calc_checkin_exp(party: GuestParty) -> int:
 func calc_checkout_exp(party: GuestParty) -> int:
 	var def: Dictionary = GuestDefinitions.ALL.get(party.type, {})
 	var base_exp: int = def.get("base_exp", 10)
+	
+	base_exp = int(round(base_exp * 1.1))
 	
 	# Base * Nächte * Zufriedenheit
 	var sat_mod: float = party.satisfaction / 100.0

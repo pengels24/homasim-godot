@@ -65,8 +65,8 @@ func _apply_position() -> void:
 	var activity_log = get_tree().get_root().find_child("ActivityLogContainer", true, false)
 	if activity_log and activity_log.is_inside_tree():
 		var rect = activity_log.get_global_rect()
-		# Position to the left of ActivityLogContainer, aligned at its top edge
-		_panel.position = Vector2(rect.position.x - _panel.size.x - 20.0, rect.position.y)
+		# Position to the left of ActivityLogContainer, and shifted down by 80px to not overlap Modal close buttons
+		_panel.position = Vector2(rect.position.x - _panel.size.x - 20.0, rect.position.y + 80.0)
 	else:
 		# Fallback if no ActivityLogContainer is found
 		_panel.position = Vector2(20, 80)

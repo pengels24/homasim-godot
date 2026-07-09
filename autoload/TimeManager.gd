@@ -28,7 +28,7 @@ var auto_paused: bool = false # Zarte Pause durch Events, die bei UI-Aktionen ve
 
 var _ff_tip_shown: bool = false
 var _ff_used: bool = false
-
+var _normal_speed_minutes: int = 0
 
 # =============================================================================
 func _ready() -> void:
@@ -116,6 +116,8 @@ func resume() -> void:
 
 # =============================================================================
 func fast_forward(ff_speed: float) -> void:
+  if TutorialManager and not TutorialManager.unlocked_tutorials.has("tip_fast_forward"):
+    TutorialManager.unlocked_tutorials.append("tip_fast_forward")
   _ff_used = true
   user_speed = ff_speed
   auto_paused = false
@@ -158,6 +160,13 @@ func _tick_game_clock(delta: float) -> void:
 
   _time_accum -= minutes_passed * SECONDS_PER_GAME_MINUTE
   _game_minute += minutes_passed
+  
+  if actual_speed == 1.0 and not _ff_used and not _ff_tip_shown:
+    _normal_speed_minutes += minutes_passed
+    if _normal_speed_minutes >= 15:
+      if SettingsManager.tutorial_tips and TutorialManager:
+        TutorialManager.trigger("tip_fast_forward")
+      _ff_tip_shown = true
 
   if _game_minute >= 60:
     var prev_hour := _game_hour

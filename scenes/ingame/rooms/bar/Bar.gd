@@ -10,7 +10,7 @@ static func get_definition() -> Dictionary:
 		"label": "BA",
 		"name": "roomdef.name.long.bar",
 		"category": "gastro",
-		"icon": "res://assets/icons/rooms/wine.svg",
+		"icon": "res://assets/icons/angelus2010/Rooms/ang-bar.aseprite",
 		"nightly_price": 0,
 		"locked": false,
 		"in_build_menu": true,

@@ -10,7 +10,7 @@ static func get_definition() -> Dictionary:
     "label": "DZ",
     "name": "roomdef.name.long.bed_double",
     "category": "zimmer",
-    "icon": "res://assets/icons/rooms/bed-double.svg",
+    "icon": "res://assets/icons/angelus2010/Rooms/ang-bed-double.aseprite",
     "nightly_price": 130,
     "locked": false,
     "in_build_menu": true,

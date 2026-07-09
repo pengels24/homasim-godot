@@ -16,7 +16,7 @@ static func get_definition() -> Dictionary:
 		"label": "EZ",
 		"name": "roomdef.name.long.bed_standard",
 		"category": "zimmer",
-		"icon": "res://assets/icons/rooms/bed-single.svg",
+		"icon": "res://assets/icons/angelus2010/Rooms/ang-bed-single.aseprite",
 		"nightly_price": 80,
 		"locked": false,
 		"in_build_menu": true,

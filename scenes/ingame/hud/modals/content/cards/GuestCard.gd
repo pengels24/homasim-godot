@@ -41,7 +41,7 @@ func _ready() -> void:
 
 
 # =============================================================================
-func populate(party: GuestParty, mode: Mode, is_new: bool = false) -> void:
+func populate(party: GuestParty, mode: Mode, is_new: bool = false, guest_mgr: GuestManager = null) -> void:
 	current_party = party
 	current_mode = mode
 	_is_new = is_new
@@ -73,7 +73,12 @@ func populate(party: GuestParty, mode: Mode, is_new: bool = false) -> void:
 			_build_active_tooltip()
 
 		Mode.CHECKOUT:
-			var est_price = party.base_price * float(party.total_stay_days) * (party.satisfaction / 100.0)
+			var est_price: float
+			if is_instance_valid(guest_mgr):
+				est_price = guest_mgr.calculate_payout(party)
+			else:
+				# Fallback falls kein GuestManager übergeben wurde
+				est_price = party.base_price * float(party.total_stay_days) * (party.satisfaction / 100.0)
 			_details_label.text = GameState.T("guest.room") + party.room_id + " | " + "%.0f" % est_price + " €"
 			tooltip_text = ""
 

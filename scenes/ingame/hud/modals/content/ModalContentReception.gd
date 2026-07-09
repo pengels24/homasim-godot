@@ -134,7 +134,7 @@ func refresh() -> void:
 		for party in checkout_guests:
 			var card = GUEST_CARD_SCENE.instantiate()
 			_list_checkout.add_child(card)
-			card.populate(party, card.Mode.CHECKOUT)
+			card.populate(party, card.Mode.CHECKOUT, false, _guest_mgr)
 			card.sig_clicked.connect(_on_checkout_guest_clicked)
 
 

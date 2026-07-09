@@ -720,6 +720,10 @@ func _finalize_checkout(party: GuestParty, payout: int, auto: bool) -> void:
 
 # =============================================================================
 func _calculate_payout(party: GuestParty) -> float:
+	return calculate_payout(party)
+
+## Öffentliche Variante – wird auch von GuestCard zur Anzeige genutzt.
+func calculate_payout(party: GuestParty) -> float:
 	var nightly_price: float = float(party.base_price) # Fallback
 	var room = _get_room_node(party.room_id)
 	if room and room.has_method("get_definition"):

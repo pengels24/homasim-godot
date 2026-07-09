@@ -106,6 +106,9 @@ func _ready() -> void:
 		TimeManager.sig_hour_passed.connect(_on_hour_passed)
 	if TimeManager and not TimeManager.sig_midnight_struck.is_connected(_on_midnight_struck):
 		TimeManager.sig_midnight_struck.connect(_on_midnight_struck)
+		
+	if StaffManager and not StaffManager.sig_assignments_changed.is_connected(_update_indicator):
+		StaffManager.sig_assignments_changed.connect(_update_indicator)
 
 # =============================================================================
 func can_build_path(_door_idx: int) -> bool:

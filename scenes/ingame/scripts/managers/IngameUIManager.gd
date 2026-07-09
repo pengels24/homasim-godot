@@ -824,7 +824,11 @@ func _update_overlays() -> void:
 							elif status.begins_with("RSV_"):
 								color = Color(0.0, 0.0, 1.0, 0.75) # Blue for reserved
 							else:
-								color = Color(1.0, 0.0, 0.0, 0.75) # Red for occupied
+								var party = _guest_mgr.get_party(status)
+								if party and party.get("state") == "checkout":
+									color = Color(1.0, 0.5, 0.0, 0.75) # Orange if leaving
+								else:
+									color = Color(1.0, 0.0, 0.0, 0.75) # Red for occupied
 						else:
 							color = Color(1.0, 0.0, 0.0, 0.75)
 					else:

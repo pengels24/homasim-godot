@@ -379,8 +379,8 @@ toast.guest.arrival.single,1 neuer Gast ist eingetroffen,1 new guest has arrived
 toast.guest.arrival.multi,### neue Gäste sind eingetroffen,### new guests have arrived
 toast.guest.arrival.full,Keine weiteren Gäste – Warteliste voll,No more guests – waiting list full
 toast.guest.declined,Gast abgelehnt (### Ruf),Guest declined (### rep)
-toast.surcharge.accepted,Gast akzeptiert! (Würfel: ### – max. ### nötig),Guest accepted! (Roll: ### – max. ### needed)
-toast.surcharge.rejected,Gast lehnt ab. (Würfel: ### – max. ### nötig),Guest declined. (Roll: ### – max. ### needed)
+toast.surcharge.accepted,Gast akzeptiert! (Würfel: ### – max. *** nötig),Guest accepted! (Roll: ### – max. *** needed)
+toast.surcharge.rejected,Gast lehnt ab. (Würfel: ### – max. *** nötig),Guest declined. (Roll: ### – max. *** needed)
 toast.build.no_money,Nicht genug Kapital!,Not enough capital!
 toast.hr.locked,Personalverwaltung benötigt Hotel-Level %d!,Staff management requires hotel level %d!
 toast.hr.unlocked,Personalverwaltung freigeschaltet! (oben im Menü / F5),Staff management unlocked! (top menu / F5)

@@ -70,6 +70,13 @@ func play(sound_name: String) -> void:
 		_players.append(selected_player)
 		
 	selected_player.stream = stream
+	selected_player.volume_db = 0.0
+	
+	if sound_name == "cash":
+		var cam = get_viewport().get_camera_2d()
+		if cam and cam.zoom.x < 1.4:
+			selected_player.volume_db = -80.0
+			
 	selected_player.play()
 
 # Hilfsfunktionen für Buttons, damit man das easy connecten kann

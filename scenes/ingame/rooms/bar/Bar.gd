@@ -19,7 +19,7 @@ static func get_definition() -> Dictionary:
 		"max_beds": 0,
 		"is_poi": true,
 		"visit_income": 15,
-		"visit_exp": 5,
+		"visit_exp": 10,
 		"supply_cost_per_visit": 5,
 		"adults_only": true,
 		"required_role": "bartender",

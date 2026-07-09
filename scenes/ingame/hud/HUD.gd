@@ -165,6 +165,11 @@ func _on_hotel_level_changed(new_level: int) -> void:
 # =============================================================================
 func _on_hotel_money_changed(new_money: int) -> void:
 	label_money.text = GameState.format_money(new_money)
+	# Rot wenn Schulden, Standard-Weiß wenn positiv
+	if new_money < 0:
+		label_money.add_theme_color_override("font_color", Color("dc2626")) # Rot
+	else:
+		label_money.remove_theme_color_override("font_color") # Zurück zur Standard-Farbe
 
 
 # =============================================================================

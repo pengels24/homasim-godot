@@ -258,22 +258,30 @@ func generate_daily_schedule(start_time: int) -> Array:
 		
 	var spawn_times := []
 	
-	for i in range(remaining_spawns):
-		var time := randi_range(open_from, open_to)
+	if remaining_spawns > 0:
+		var time_left = max(1, open_to - max(open_from, start_time))
+		var block_duration = int(float(time_left) / float(remaining_spawns))
 		
-		# Garantieren, dass niemals ein Gast sofort in der Sekunde des Bauens auf der Matte steht
-		var min_time = start_time + 30 
+		# Für kleine Hotels (wenige Zimmer) die Wartezeit künstlich verkürzen, 
+		# damit der Spieler am Anfang nicht 6 Stunden auf den ersten Gast wartet.
+		block_duration = min(block_duration, 180) 
 		
-		if time < min_time:
-			if min_time < open_to:
-				time = randi_range(min_time, open_to)
-			else:
-				continue # Es ist schon zu spät am Tag für diesen Spawn
+		var current_min = max(start_time + 15, open_from) # mind. 15 Min nach Start
+		
+		for i in range(remaining_spawns):
+			if current_min >= open_to:
+				break
 				
-		spawn_times.append(time)
+			var current_max = min(open_to, current_min + block_duration)
+			var time = randi_range(current_min, current_max)
 			
+			spawn_times.append(time)
+			
+			# Nächster Gast frühestens 15-45 Minuten nach diesem
+			current_min = time + randi_range(15, 45)
+
 	spawn_times.sort()
-	print("[GuestManager] generate_daily_schedule called with start_time=", start_time, " -> generated ", spawn_times.size(), " spawns: ", spawn_times)
+	# print("[GuestManager] generate_daily_schedule called with start_time=", start_time, " -> generated ", spawn_times.size(), " spawns: ", spawn_times)
 	return spawn_times
 
 

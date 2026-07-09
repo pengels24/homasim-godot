@@ -256,7 +256,12 @@ func _on_poi_arrived() -> void:
 	)
 	
 	# FloatingValue Signal senden (GuestController leitet weiter)
-	sig_poi_income.emit(income, global_position)
+	var spawn_pos = global_position
+	var poi_room = _get_poi_room_node(_current_poi_id)
+	if is_instance_valid(poi_room):
+		var sz = poi_room.call("get_tile_size") if poi_room.has_method("get_tile_size") else Vector2i(1, 1)
+		spawn_pos = poi_room.global_position + Vector2(sz.x * 16.0, sz.y * 16.0)
+	sig_poi_income.emit(income, spawn_pos)
 	
 	# GuestManager über Besuch informieren (für Warenverbrauch-Tracking)
 	if is_instance_valid(_guest_manager):
@@ -283,6 +288,16 @@ func _get_poi_room_id(poi_id: String) -> String:
 		if def.get("id", "") == poi_id:
 			return GuestManager._room_key(room)
 	return ""
+
+# =============================================================================
+## Gibt den Node eines POIs anhand seiner Definition-ID zurück.
+func _get_poi_room_node(poi_id: String) -> Node2D:
+	for room in _map_grid.active_rooms:
+		if not is_instance_valid(room): continue
+		var def = room.call("get_definition")
+		if def.get("id", "") == poi_id:
+			return room
+	return null
 
 
 # =============================================================================

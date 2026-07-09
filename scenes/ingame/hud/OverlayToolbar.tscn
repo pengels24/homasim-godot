@@ -3,11 +3,11 @@
 [ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_mxw05"]
 [ext_resource type="Script" uid="uid://cp4awft2fknby" path="res://scenes/ingame/hud/OverlayToolbar.gd" id="1_scpt"]
 [ext_resource type="StyleBox" uid="uid://brk7dwg72hmhm" path="res://assets/UI/hud_button_pressed_gold_bgt.tres" id="3_jm8q0"]
-[ext_resource type="Texture2D" uid="uid://cdh1nawiebqeh" path="res://assets/icons/angelus2010/ang-brush.aseprite" id="4_abc4o"]
-[ext_resource type="Texture2D" uid="uid://bq4axaj8bime0" path="res://assets/icons/angelus2010/ang-wrench.aseprite" id="5_2xvye"]
-[ext_resource type="Texture2D" uid="uid://cnmlw3opos464" path="res://assets/icons/angelus2010/ang-usage.aseprite" id="6_1hx8q"]
-[ext_resource type="Texture2D" uid="uid://cq1w061nls65i" path="res://assets/icons/angelus2010/ang-cat-ov.aseprite" id="7_2xvye"]
-[ext_resource type="Texture2D" uid="uid://0rg81xk708b5" path="res://assets/icons/angelus2010/ang-value.aseprite" id="8_1hx8q"]
+[ext_resource type="Texture2D" uid="uid://cdh1nawiebqeh" path="res://assets/icons/angelus2010/OverlayToolbar/ang-brush.aseprite" id="4_abc4o"]
+[ext_resource type="Texture2D" uid="uid://bq4axaj8bime0" path="res://assets/icons/angelus2010/OverlayToolbar/ang-wrench.aseprite" id="5_2xvye"]
+[ext_resource type="Texture2D" uid="uid://cnmlw3opos464" path="res://assets/icons/angelus2010/OverlayToolbar/ang-usage.aseprite" id="6_1hx8q"]
+[ext_resource type="Texture2D" uid="uid://cq1w061nls65i" path="res://assets/icons/angelus2010/OverlayToolbar/ang-cat-ov.aseprite" id="7_2xvye"]
+[ext_resource type="Texture2D" uid="uid://0rg81xk708b5" path="res://assets/icons/angelus2010/OverlayToolbar/ang-value.aseprite" id="8_1hx8q"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_overlay"]
 allow_unpress = true

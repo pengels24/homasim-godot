@@ -161,7 +161,7 @@ func _on_repair_pressed() -> void:
 		if _target_room.get("is_repair_requested"):
 			Toast.show(GameState.T("toast.room.repair_active"), "build")
 		else:
-			if GameState.hotel_level < GameState.UNLOCK_LEVELS.get("staff", 2):
+			if GameState.selected_hotel.get("level", 1) < GameState.UNLOCK_LEVELS.get("staff", 2):
 				Toast.show(GameState.T("toast.room.staff_locked"), "personal")
 			else:
 				_target_room.set("is_repair_requested", true)

@@ -223,7 +223,7 @@ func add_dirt_from_visits(visits: int) -> void:
 	cleanliness_level = clampi(cleanliness_level - (base_drop + rand_drop), 0, 100)
 	
 	if cleanliness_level < 50 and not is_service_requested:
-		if GameState.hotel_level >= GameState.UNLOCK_LEVELS.get("auto_staff", 100):
+		if GameState.selected_hotel.get("level", 1) >= GameState.UNLOCK_LEVELS.get("auto_staff", 100):
 			is_service_requested = true
 			GameState.sig_room_needs_cleaning.emit(self)
 		_update_indicator()
@@ -237,7 +237,7 @@ func degrade_condition_from_visits(visits: int) -> void:
 		maintenance_level = clampi(maintenance_level - drop, 0, 100)
 		
 		if maintenance_level < 50 and not is_repair_requested:
-			if GameState.hotel_level >= GameState.UNLOCK_LEVELS.get("auto_staff", 100):
+			if GameState.selected_hotel.get("level", 1) >= GameState.UNLOCK_LEVELS.get("auto_staff", 100):
 				is_repair_requested = true
 				GameState.sig_room_needs_repair.emit(self)
 			_update_indicator()

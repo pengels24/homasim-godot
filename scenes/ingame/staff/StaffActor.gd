@@ -149,6 +149,11 @@ func _process_idle() -> void:
 						# Kein Weg?
 						_current_task = {}
 						t.status = "open"
+						# ANG-Fix: Move unreachable task to the back of the queue so he doesn't loop infinitely on it!
+						var t_idx = TaskManager._tasks.find(t)
+						if t_idx != -1:
+							TaskManager._tasks.remove_at(t_idx)
+							TaskManager._tasks.append(t)
 				else:
 					_current_task = {}
 					t.status = "open"

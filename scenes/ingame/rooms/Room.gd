@@ -531,4 +531,4 @@ func _update_indicator() -> void:
 
 	var show_broom = is_service_requested or (cleanliness_level < 50)
 	var show_wrench = is_repair_requested or (maintenance_level < 50)
-	_status_indicator.set_status(show_broom, show_wrench, is_pending_demolish, staff_status)
+	_status_indicator.set_status(show_broom, show_wrench, is_pending_demolish, staff_status, is_service_requested, is_repair_requested)

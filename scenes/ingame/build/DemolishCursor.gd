@@ -66,11 +66,13 @@ func _unhandled_input(event: InputEvent) -> void:
 			_cancel()
 
 func _cancel() -> void:
+	sig_cancelled.emit()
+	queue_free()
+
+func _exit_tree() -> void:
 	if is_instance_valid(_target_room) and _target_room.has_method("set_highlight"):
 		_target_room.set_highlight(false)
 	Input.set_custom_mouse_cursor(null)
-	sig_cancelled.emit()
-	queue_free()
 
 func _try_demolish() -> void:
 	if not is_instance_valid(_target_room):

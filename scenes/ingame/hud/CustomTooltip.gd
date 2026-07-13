@@ -13,6 +13,9 @@ class_name CustomTooltip
 @onready var maintain_label: Label = %MaintainLabel
 
 var _target_room: Node2D = null
+# Refresh-Interval: Inhalt alle X Sekunden neu laden (nicht jeden Frame)
+const REFRESH_INTERVAL := 0.5
+var _refresh_timer: float = 0.0
 
 # =============================================================================
 func _ready() -> void:
@@ -36,7 +39,7 @@ func _on_room_hovered(room: Node2D, is_hovered: bool) -> void:
 			hide()
 
 # =============================================================================
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if InputHandler.current_mode != InputHandler.InputMode.NORMAL:
 		hide()
 		return
@@ -59,6 +62,12 @@ func _process(_delta: float) -> void:
 			final_x = pos_on_screen.x + width_on_screen + 10
 			
 		position = Vector2(final_x, final_y)
+
+		# Inhalt periodisch aktualisieren – nicht jeden Frame (zu teuer)
+		_refresh_timer -= delta
+		if _refresh_timer <= 0.0:
+			_refresh_timer = REFRESH_INTERVAL
+			_update_content()
 
 # =============================================================================
 func _update_content() -> void:

@@ -1,5 +1,5 @@
-﻿# Changelog v0.1.38gd-td
-Datum: 2026-07-09
+# Changelog v0.1.38gd-td
+Datum: 2026-07-13
 
 ## Features & Verbesserungen
 - Bar: Jeder Gast-Besuch gibt nun +10 EXP (visit_exp-System) - sichtbar als blauer Floating-Text uber der Bar.
@@ -11,6 +11,8 @@ Datum: 2026-07-09
 - Toast-Nachrichten sind 80 Pixel nach unten verschoben - verdecken nicht mehr den Schliessen-Button von Modals.
 - Floating Income-Text erscheint nun uber dem Zentrum des POI-Raums statt an der Gastposition.
 - Tutorial-Tipp Vorlauf nutzen erscheint nach 15 echten Minuten auf Normalgeschwindigkeit.
+- **NEU:** Raum-Tooltips aktualisieren sich nun alle 0.5 Sekunden live (Gästeanzahl, Status, Sauberkeit), ohne dass man sie neu öffnen muss.
+- **NEU:** Service-Indikatoren über Räumen haben nun zwei Farben: Gold (Wartung/Reinigung nötig) und Grün (Service wurde beauftragt / Personal ist unterwegs).
 
 ## Bugfixes
 - Kritischer Absturz beim Tageswechsel behoben: GameState.hotel_level existiert nicht als Property - auf selected_hotel.get() umgestellt.
@@ -19,7 +21,11 @@ Datum: 2026-07-09
 - Bar-Service-Indikator nach Tageswechsel zeigt Nachschub-Bedarf wieder korrekt an.
 - Personal-Softlock behoben: Unerreichbare Aufgaben werden ans Ende der Warteschlange geschoben.
 - Cash-Sound der Bar wird beim Rauszoomen stummgeschaltet.
+- **NEU:** Abriss-Cursor (Hammer) bleibt nicht mehr im Spiel hängen, wenn der Modus ohne expliziten Klick abgebrochen wurde.
+- **NEU:** Savegames gefixt, bei denen das Superior-Zimmer fälschlicherweise als Familienzimmer gespeichert wurde.
+- **NEU:** Überflüssige Debug-Prints ("TUTORIAL BLUEPRINT") und doppelte Funktionsaufrufe im MapGrid entfernt.
 
 ## Technische Aenderungen
 - GuestManager.calculate_payout() als oeffentliche Funktion verfuegbar.
 - Populate-Signatur von GuestCard um optionalen guest_mgr-Parameter erweitert.
+- Linear Ticket ANG-271 für künftiges Payout-Balancing der Zimmerkosten vs. Gast-Budget angelegt.

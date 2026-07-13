@@ -12,7 +12,7 @@ static func get_definition() -> Dictionary:
 		"label": "FZ",
 		"name": "roomdef.name.long.bed_family",
 		"category": "zimmer",
-		"icon": "res://assets/icons/rooms/van.svg",
+    "icon": "res://assets/icons/angelus2010/Rooms/ang-bed-family.aseprite",
 		"nightly_price": 200,
 		"locked": false,
 		"in_build_menu": true,

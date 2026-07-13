@@ -22,7 +22,7 @@
     },
     {
       "id": "bed_superior",
-      "scene_path": "res://scenes/ingame/rooms/bed_superior/BedSuperior.tscn",
+      "scene_path": "res://scenes/ingame/rooms/bed_superior/Bed_Superior.tscn",
       "script_path": "res://scenes/ingame/rooms/bed_superior/BedSuperior.gd"
     },
     {

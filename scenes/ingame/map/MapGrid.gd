@@ -333,15 +333,6 @@ func place_room(parcel_x: int, parcel_y: int, room_scene: PackedScene, hotel_id:
 		_configure_walls()
 	_update_all_floor_neighbors()
 
-	_update_all_floor_neighbors()
-
-	print("--- TUTORIAL BLUEPRINT DATEN ---")
-	print("Room ID: ", room_scene.resource_path.get_file().replace(".tscn", ""))
-	print("Parcel X/Y: ", parcel_x, ", ", parcel_y)
-	print("Tile X/Y: ", tile_x, ", ", tile_y)
-	print("Tür-Rotation: ", door_rot, " | Tür-Offset: ", door_off, " | Raum-Rotation: ", room_rot)
-	print("--------------------------------")
-
 
 
 # =============================================================================

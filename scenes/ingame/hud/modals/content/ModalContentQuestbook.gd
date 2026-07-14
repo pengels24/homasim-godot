@@ -24,6 +24,7 @@ var SB_GREEN_PRESSED = preload("res://assets/UI/menu_button_green_pressed.tres")
 var SB_DISABLED = preload("res://assets/UI/menu_button_darkblue_disabled.tres")
 
 var SB_QUEST_PANEL: StyleBoxFlat
+var SB_IND: StyleBoxFlat
 
 func _style_toggle_btn(btn: Button) -> void:
 	btn.add_theme_stylebox_override("normal", SB_DARK)
@@ -53,6 +54,13 @@ func _style_action_btn(btn: Button, type: String) -> void:
 
 # =============================================================================
 func _ready() -> void:
+	
+	SB_IND = StyleBoxFlat.new()
+	SB_IND.bg_color = Color(0.1, 0.8, 0.2, 1.0)
+	SB_IND.border_color = Color(0.1, 0.3, 0.1, 1.0)
+	SB_IND.set_border_width_all(1)
+	SB_IND.set_corner_radius_all(5)
+
 	SB_QUEST_PANEL = StyleBoxFlat.new()
 	SB_QUEST_PANEL.bg_color = Color(0.1, 0.12, 0.15, 0.8)
 	SB_QUEST_PANEL.border_color = Color(0.3, 0.3, 0.3, 1.0)
@@ -80,6 +88,20 @@ func _build_categories() -> void:
 		btn.pressed.connect(func(): _select_category(cat_id))
 		cat_list.add_child(btn)
 		btn.set_meta("cat_id", cat_id)
+		
+		var ind = Panel.new()
+		ind.name = "IndQuest"
+		ind.custom_minimum_size = Vector2(10, 10)
+		ind.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+		ind.offset_right = -5
+		ind.offset_left = -15
+		ind.offset_top = 5
+		ind.offset_bottom = 15
+		ind.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ind.add_theme_stylebox_override("panel", SB_IND)
+		ind.visible = QuestManager.has_category_claimable(cat_id)
+		btn.add_child(ind)
+		btn.set_meta("ind", ind)
 
 # =============================================================================
 func _select_category(cat_id: String) -> void:
@@ -122,6 +144,20 @@ func _select_category(cat_id: String) -> void:
 		btn.pressed.connect(func(): _select_rank(r_id))
 		rank_list.add_child(btn)
 		
+		var ind = Panel.new()
+		ind.name = "IndQuest"
+		ind.custom_minimum_size = Vector2(10, 10)
+		ind.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+		ind.offset_right = -5
+		ind.offset_left = -15
+		ind.offset_top = 5
+		ind.offset_bottom = 15
+		ind.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ind.add_theme_stylebox_override("panel", SB_IND)
+		ind.visible = (r_int == current_rank and QuestManager.has_category_claimable(cat_id))
+		btn.add_child(ind)
+		btn.set_meta("ind", ind)
+		
 	_select_rank(str(current_rank))
 
 # =============================================================================
@@ -132,6 +168,7 @@ func _select_rank(r_id: String) -> void:
 		btn.button_pressed = (btn.get_meta("rank_id") == r_id)
 		
 	_populate_quests()
+	_update_indicators()
 
 # =============================================================================
 func _populate_quests() -> void:
@@ -181,7 +218,18 @@ func _populate_quests() -> void:
 	var is_past_rank = int(_active_rank_id) < current_rank
 	var is_future_rank = int(_active_rank_id) > current_rank
 	
+	var active_targets = []
+	var claimed_targets = []
 	for t_def in targets_def:
+		var t_state = targets_state.get(t_def["id"], {"state":"active"})
+		if t_state.get("state") == "claimed" or is_past_rank:
+			claimed_targets.append(t_def)
+		else:
+			active_targets.append(t_def)
+			
+	var sorted_targets = active_targets + claimed_targets
+	
+	for t_def in sorted_targets:
 		var t_id = t_def["id"]
 		var t_state = targets_state.get(t_id, {"progress":0, "state":"active"})
 		
@@ -272,9 +320,26 @@ func _populate_quests() -> void:
 		quest_list.add_child(panel)
 
 # =============================================================================
+
+# =============================================================================
+func _update_indicators() -> void:
+	for btn in cat_list.get_children():
+		if btn.has_meta("cat_id") and btn.has_meta("ind"):
+			btn.get_meta("ind").visible = QuestManager.has_category_claimable(btn.get_meta("cat_id"))
+			
+	var quest_state = QuestManager.get_quest_state()
+	var cat_state = quest_state.get(_active_cat)
+	var current_rank = cat_state.get("current_rank", 1) if cat_state else 1
+	
+	for btn in rank_list.get_children():
+		if btn.has_meta("rank_id") and btn.has_meta("ind"):
+			var r_int = int(btn.get_meta("rank_id"))
+			btn.get_meta("ind").visible = (r_int == current_rank and QuestManager.has_category_claimable(_active_cat))
+
 func _on_claim_pressed(t_id: String) -> void:
 	QuestManager.claim_quest(t_id)
 	_populate_quests()
+	_update_indicators()
 
 # =============================================================================
 func _on_rank_claim() -> void:

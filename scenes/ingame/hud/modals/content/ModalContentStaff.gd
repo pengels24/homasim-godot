@@ -353,6 +353,58 @@ func _create_2col_row(label_text: String, value_text: String, parent: Node, is_b
 	hbox.add_child(lbl_right)
 	parent.add_child(hbox)
 
+func _create_progress_row(label_text: String, current_val: float, max_val: float, is_percent: bool, parent: Node) -> void:
+	var hbox = HBoxContainer.new()
+	
+	var lbl_left = Label.new()
+	lbl_left.text = label_text
+	lbl_left.theme_type_variation = &"DescLabel"
+	lbl_left.custom_minimum_size = Vector2(160, 0)
+	
+	var progress = ProgressBar.new()
+	progress.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	progress.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	progress.min_value = 0
+	progress.max_value = max_val
+	progress.value = current_val
+	progress.custom_minimum_size = Vector2(0, 8)
+	progress.show_percentage = false
+	
+	var sb_bg = StyleBoxFlat.new()
+	sb_bg.bg_color = Color(0.1, 0.1, 0.1, 0.5)
+	sb_bg.corner_radius_top_left = 4
+	sb_bg.corner_radius_top_right = 4
+	sb_bg.corner_radius_bottom_right = 4
+	sb_bg.corner_radius_bottom_left = 4
+	progress.add_theme_stylebox_override("background", sb_bg)
+	
+	var sb_fg = StyleBoxFlat.new()
+	sb_fg.bg_color = Color.GOLD
+	if is_percent and current_val < 50:
+		sb_fg.bg_color = Color.RED
+	elif is_percent and current_val > 80:
+		sb_fg.bg_color = Color.GREEN
+		
+	sb_fg.corner_radius_top_left = 4
+	sb_fg.corner_radius_top_right = 4
+	sb_fg.corner_radius_bottom_right = 4
+	sb_fg.corner_radius_bottom_left = 4
+	progress.add_theme_stylebox_override("fill", sb_fg)
+	
+	var lbl_right = Label.new()
+	if is_percent:
+		lbl_right.text = str(int(current_val)) + "%"
+	else:
+		lbl_right.text = str(int(current_val))
+	lbl_right.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	lbl_right.theme_type_variation = &"ValueLabel"
+	lbl_right.custom_minimum_size = Vector2(40, 0)
+	
+	hbox.add_child(lbl_left)
+	hbox.add_child(progress)
+	hbox.add_child(lbl_right)
+	parent.add_child(hbox)
+
 func _select_item(item: Dictionary) -> void:
 	_selected_staff = item
 	_update_details()
@@ -472,10 +524,10 @@ func _update_details() -> void:
 		var translated_skill = GameState.T("staff.skill." + skill_name)
 		if translated_skill == "staff.skill." + skill_name:
 			translated_skill = skill_name.capitalize().replace("_", " ")
-		_create_2col_row(translated_skill, str(skills[skill_name]), detail_stats, false)
+		_create_progress_row(translated_skill, float(skills[skill_name]), 10.0, false, detail_stats)
 		
 	if s.has("morale"):
-		_create_2col_row(GameState.T("ui.staff.morale"), str(s.get("morale", 100)) + "%", detail_stats, false)
+		_create_progress_row(GameState.T("ui.staff.morale"), float(s.get("morale", 100)), 100.0, true, detail_stats)
 
 var _pending_action: int = 0 # 0=none, 1=hire, 2=fire, 3=unassign
 var _pending_unassign_sid: String = ""

@@ -406,7 +406,7 @@ func _lock_reception() -> void:
 	# 1. Button im HUD visuell sperren (Nutzt deine bestehende Funktion!)
 	if is_instance_valid(_bottom_bar):
 		_bottom_bar.set_reception_locked(true)
-		_bottom_bar.reception.tooltip_text = GameState.T("hud.bottom.reception_closed_tt", "Geschlossen bis 07:00 Uhr")
+		_bottom_bar.reception.tooltip_text = GameState.T("hud.bottom.reception_closed_tt", "bis 07:00 Uhr")
 
 	# 2. Hard-Lock: Wenn das Rezeptions-Modal gerade offen ist -> ZWANGSSCHLIESSEN!
 	# Wir werfen den Spieler einfach aus dem Modal, als hätte er ESC gedrückt

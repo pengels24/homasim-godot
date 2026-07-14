@@ -70,8 +70,8 @@ var multi_build_mode_labels: Array[String]:
 	get:
 		return [GameState.T("settings.gameplay.multi_build.off"), GameState.T("settings.gameplay.multi_build.on"), GameState.T("settings.gameplay.multi_build.shift")]
 
-const UI_SCALES: Array[float] = [0.8, 0.9, 1.0, 1.1, 1.2, 1.3]
-const UI_SCALES_LABELS: Array[String] = ["80 %", "90 %", "100 %", "110 %", "120 %", "130 %"]
+const UI_SCALES: Array[float] = [0.8, 0.9, 1.0, 1.1, 1.2]
+const UI_SCALES_LABELS: Array[String] = ["80 %", "90 %", "100 %", "110 %", "120 %"]
 
 const UI_TOAST_DURATION: Array[float] =	[3.0, 5.0, 7.0]
 var ui_toast_duration_labels: Array[String]:

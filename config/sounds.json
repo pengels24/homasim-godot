@@ -7,5 +7,6 @@
   "reception_checkout": "res://assets/sounds/reception_checkout.mp3",
   "door_close": "res://assets/sounds/door_close.wav",
   "broom": "res://assets/sounds/broom.mp3",
-  "wrench": "res://assets/sounds/wrench.mp3"
+  "wrench": "res://assets/sounds/wrench.mp3",
+  "reception_new_guests": "res://assets/sounds/reception_new_guests.mp3"
 }

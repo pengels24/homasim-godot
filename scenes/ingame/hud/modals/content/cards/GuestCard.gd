@@ -1,6 +1,7 @@
 extends PanelContainer
 
 signal sig_clicked(party: GuestParty)
+signal sig_double_clicked(party: GuestParty)
 signal sig_reject_requested(party: GuestParty) # <--- NEU: Das Signal für die Rezeption
 
 enum Mode { WAITING, ACTIVE, CHECKOUT }
@@ -98,6 +99,9 @@ func _gui_input(event: InputEvent) -> void:
 
 		if current_mode in [Mode.WAITING, Mode.CHECKOUT]:
 			sig_clicked.emit(current_party)
+			
+		if current_mode == Mode.CHECKOUT and event.double_click:
+			sig_double_clicked.emit(current_party)
 
 
 # ---> NEU: Hover- und Klick-Logik für den Reject-Button
@@ -168,14 +172,17 @@ func _build_waiting_tooltip(def: Dictionary) -> void:
 	# 2. Anforderungen (z.B. WLAN)
 	var reqs: Array = def.get("requirements", [])
 	if not reqs.is_empty():
-		tt += "\n" + GameState.T("guest.tooltip.requirements") + " " + ", ".join(reqs)
+		var translated_reqs := []
+		for req in reqs:
+			translated_reqs.append(GameState.T("guest.req." + req))
+		tt += "\n" + GameState.T("guest.tooltip.requirements") + " " + ", ".join(translated_reqs)
 
 	# 3. Bevorzugte Zimmer über das Translation-System auflösen
 	var pref: Array = def.get("preferred_rooms", [])
 	if not pref.is_empty():
 		var pref_names := []
 		for r_id in pref:
-			var room_key: String = "room.type." + str(r_id)
+			var room_key: String = "roomdef.name.long." + str(r_id)
 			pref_names.append(GameState.T(room_key))
 
 		tt += "\n" + GameState.T("guest.tooltip.preferred") + " " + ", ".join(pref_names)

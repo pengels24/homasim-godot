@@ -62,6 +62,7 @@ func _fill_finance_data(day: int) -> void:
 	var other_inc := 0
 	var expenses := 0
 	var staff_exp := 0
+	var build_costs := 0
 	var other_exp := 0
 
 	var transactions: Array = GameState.selected_hotel.get("transactions", [])
@@ -82,6 +83,8 @@ func _fill_finance_data(day: int) -> void:
 				expenses += amount # Ausgaben sind bereits negativ
 				if category == "Personal":
 					staff_exp += amount
+				elif category == "construction":
+					build_costs += amount
 				else:
 					other_exp += amount
 
@@ -96,6 +99,8 @@ func _fill_finance_data(day: int) -> void:
 
 	if is_instance_valid(_lbl_total_income): _lbl_total_income.text = _format_money(total_inc, true)
 	if is_instance_valid(_lbl_staff): _lbl_staff.text = _format_money(staff_exp)
+	if has_node("%LblConstructionExpenses"): 
+		get_node("%LblConstructionExpenses").text = _format_money(build_costs)
 	if is_instance_valid(_lbl_other_expenses): _lbl_other_expenses.text = _format_money(other_exp)
 	if is_instance_valid(_lbl_total_expenses): _lbl_total_expenses.text = _format_money(expenses)
 	

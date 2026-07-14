@@ -50,12 +50,24 @@ func complete_task(task_id: String) -> void:
 		# Wenn es ein Raum war, den Raum auf "clean" setzen und wieder freigeben
 		if task.type == "clean_room" and is_instance_valid(task.target):
 			var room = task.target
+			var old_level = room.get("cleanliness_level")
+			
+			if old_level != null and old_level < 90:
+				GameState.add_exp(15)
+				if EffectManager: EffectManager.spawn_exp_text(15, room.global_position + Vector2(64, 32))
+				
 			room.set("cleanliness_level", 100)
 			room.set_service_requested(false)
 			sig_room_cleaned.emit(room)
 			
 		elif task.type == "repair_room" and is_instance_valid(task.target):
 			var room = task.target
+			var old_level = room.get("maintenance_level")
+			
+			if old_level != null and old_level < 90:
+				GameState.add_exp(25)
+				if EffectManager: EffectManager.spawn_exp_text(25, room.global_position + Vector2(64, 32))
+				
 			room.set("maintenance_level", 100)
 			room.set("is_repair_requested", false)
 			# signal für repair existiert (noch) nicht, also nur update_indicator via property change

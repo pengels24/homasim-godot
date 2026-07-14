@@ -14,6 +14,11 @@ Datum: 2026-07-13
 - **NEU:** Raum-Tooltips aktualisieren sich nun alle 0.5 Sekunden live (Gästeanzahl, Status, Sauberkeit), ohne dass man sie neu öffnen muss.
 - **NEU:** Service-Indikatoren über Räumen haben nun zwei Farben: Gold (Wartung/Reinigung nötig) und Grün (Service wurde beauftragt / Personal ist unterwegs).
 
+- **NEU:** Aufgabenbuch (Questbook) visuell geupdatet: Grüne Indikatoren an Kategorien und Rängen zeigen nun direkt an, wo Belohnungen warten.
+- **NEU:** Padding der HUD-Menübuttons optimiert, sodass die Icons größer und besser fokussiert wirken.
+
+- **NEU:** Tutorial-Fenster vergrößert (Höhe 800px) und Bilder im Codex von 150px auf 350px vergrößert für bessere Lesbarkeit.
+
 ## Bugfixes
 - Kritischer Absturz beim Tageswechsel behoben: GameState.hotel_level existiert nicht als Property - auf selected_hotel.get() umgestellt.
 - Surcharge-Toast zeigte beide Wurfelwerte identisch an - Platzhalter in language.csv korrigiert.
@@ -24,6 +29,8 @@ Datum: 2026-07-13
 - **NEU:** Abriss-Cursor (Hammer) bleibt nicht mehr im Spiel hängen, wenn der Modus ohne expliziten Klick abgebrochen wurde.
 - **NEU:** Savegames gefixt, bei denen das Superior-Zimmer fälschlicherweise als Familienzimmer gespeichert wurde.
 - **NEU:** Überflüssige Debug-Prints ("TUTORIAL BLUEPRINT") und doppelte Funktionsaufrufe im MapGrid entfernt.
+
+- **NEU:** Bug behoben, durch den der Quest-Indikator am HUD-Button direkt nach Spielstart immer deaktiviert blieb, obwohl Belohnungen verfügbar waren (Timing-Issue beim Savegame-Laden).
 
 ## Technische Aenderungen
 - GuestManager.calculate_payout() als oeffentliche Funktion verfuegbar.

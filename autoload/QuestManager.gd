@@ -197,13 +197,21 @@ func get_quest_state() -> Dictionary:
 	if GameState.selected_hotel.is_empty(): return {}
 	return GameState.selected_hotel.get("quests", {})
 
+func has_category_claimable(cat_id: String) -> bool:
+	if GameState.selected_hotel.is_empty(): return false
+	var quest_state = GameState.selected_hotel.get("quests", {})
+	var cat_data = quest_state.get(cat_id)
+	if cat_data == null: return false
+	
+	if cat_data.get("rank_claimable", false): return true
+	var targets = cat_data.get("targets", {})
+	for t_id in targets:
+		if targets[t_id].get("state") == "claimable": return true
+	return false
+
 func has_any_claimable() -> bool:
 	if GameState.selected_hotel.is_empty(): return false
 	var quest_state = GameState.selected_hotel.get("quests", {})
 	for cat_id in quest_state:
-		var cat_data = quest_state[cat_id]
-		if cat_data.get("rank_claimable", false): return true
-		var targets = cat_data.get("targets", {})
-		for t_id in targets:
-			if targets[t_id].get("state") == "claimable": return true
+		if has_category_claimable(cat_id): return true
 	return false

@@ -147,6 +147,22 @@ layout_mode = 2
 text = "0 €"
 horizontal_alignment = 2
 
+[node name="RowConstruction" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxFinance"]
+layout_mode = 2
+
+[node name="Desc" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowConstruction"]
+theme_type_variation = &"DescLabel"
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Baukosten"
+
+[node name="LblConstructionExpenses" type="Label" parent="VBoxMain/HBoxColumns/VBoxFinance/RowConstruction"]
+theme_type_variation = &"ValueLabel"
+unique_name_in_owner = true
+layout_mode = 2
+text = "0 €"
+horizontal_alignment = 2
+
 [node name="RowOther" type="HBoxContainer" parent="VBoxMain/HBoxColumns/VBoxFinance"]
 layout_mode = 2
 

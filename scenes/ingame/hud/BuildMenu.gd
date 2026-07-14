@@ -215,11 +215,21 @@ func _show_category(cat_name: String) -> void:
 
 		var level_ok: bool = current_level >= req_level
 		var tech_ok: bool = req_tech == "" or TechtreeManager.is_tech_unlocked(req_tech)
+		
+		var cost: int = def.get("build_cost", 0)
+		var money_ok: bool = int(GameState.selected_hotel.get("money", 0)) >= cost
 
 		if level_ok and tech_ok:
-			btn.disabled = false
 			var item_name = GameState.T(def.get("name", "Raum"))
-			btn.tooltip_text = GameState.T("tt.build.room.cost", item_name, def.get("build_cost", 0))
+			
+			if not money_ok:
+				btn.disabled = true
+				btn.self_modulate = Color("e53935") # Rot
+				btn.tooltip_text = GameState.T("tt.build.room.too_expensive", item_name, cost)
+			else:
+				btn.disabled = false
+				btn.self_modulate = Color.WHITE
+				btn.tooltip_text = GameState.T("tt.build.room.cost", item_name, cost)
 
 			# Die Szene wird erst per load() geladen, wenn der Button geklickt wird
 			btn.pressed.connect(func():

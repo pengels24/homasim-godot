@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scenes/ingame/hud/modals/content/ModalContentTutorials.gd" id="1_scpt"]
 
 [node name="ModalContentTutorials" type="VBoxContainer"]
-custom_minimum_size = Vector2(1200, 600)
+custom_minimum_size = Vector2(1200, 800)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -65,7 +65,7 @@ horizontal_alignment = 1
 
 [node name="TextureRect" type="TextureRect" parent="MainHBox/RightPanel/Margin/VBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 150)
+custom_minimum_size = Vector2(0, 350)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5

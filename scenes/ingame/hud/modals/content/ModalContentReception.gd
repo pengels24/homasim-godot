@@ -136,6 +136,7 @@ func refresh() -> void:
 			_list_checkout.add_child(card)
 			card.populate(party, card.Mode.CHECKOUT, false, _guest_mgr)
 			card.sig_clicked.connect(_on_checkout_guest_clicked)
+			card.sig_double_clicked.connect(_on_checkout_guest_double_clicked)
 
 
 # =============================================================================
@@ -251,6 +252,11 @@ func _on_checkout_guest_clicked(party: GuestParty) -> void:
 		_btn_checkout.disabled = false
 		_apply_btn_styles(_btn_checkout, style_green_normal, style_green_hover, style_green_pressed, style_rec_disabled)
 
+# =============================================================================
+func _on_checkout_guest_double_clicked(party: GuestParty) -> void:
+	if party:
+		_sel_checkout_party = party
+		_on_checkout_pressed()
 
 # =============================================================================
 # CHECK-IN / CHECK-OUT FLOW

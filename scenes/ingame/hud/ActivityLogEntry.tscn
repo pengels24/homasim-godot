@@ -32,7 +32,7 @@ layout_mode = 2
 [node name="Category" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"DescLabel"
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "INFO"
 
 [node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
@@ -42,11 +42,11 @@ size_flags_horizontal = 3
 [node name="Time" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme_type_variation = &"DescLabel"
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "19:43"
 
 [node name="Message" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 24
 text = "Raum gebaut: Flur"
 autowrap_mode = 3

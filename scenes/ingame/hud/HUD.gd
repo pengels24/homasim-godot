@@ -84,6 +84,10 @@ func _ready() -> void:
 	
 	pause_label.text = GameState.T("hud.label.paused")
 	
+	btn_pause.tooltip_text = GameState.T("hud.top.right.tooltip.pause")
+	btn_play.tooltip_text = GameState.T("hud.top.right.tooltip.play")
+	btn_ff.tooltip_text = GameState.T("hud.top.right.tooltip.forward")
+	
 	# FP-Anzeige verstecken (wird jetzt im Techtree geregelt)
 	if has_node("TopBar/MarginContainer/HBoxContainer/FP"):
 		get_node("TopBar/MarginContainer/HBoxContainer/FP").hide()

@@ -21,8 +21,16 @@ func setup() -> void:
 	if not GameState.sig_configs_reloaded.is_connected(force_reload_from_gamestate):
 		GameState.sig_configs_reloaded.connect(force_reload_from_gamestate)
 
+	if not GameState.sig_room_built.is_connected(_on_room_built):
+		GameState.sig_room_built.connect(_on_room_built)
+
 	_build_daily_queue(TimeManager.get_game_time())
 
+# =============================================================================
+func _on_room_built(_room_type_id: String) -> void:
+	var current_time = TimeManager.get_game_time()
+	if current_time < 14 * 60: # Vor 14 Uhr
+		recalculate_guest_spawns()
 
 # =============================================================================
 func _build_daily_queue(start_time: int = 0) -> void:

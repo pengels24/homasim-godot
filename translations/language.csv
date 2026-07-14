@@ -1144,3 +1144,15 @@ overlay.occ.free,"Frei","Free"
 overlay.occ.dirty,"Dreckig / Checkout","Dirty / Checkout"
 overlay.occ.occupied,"Belegt","Occupied"
 overlay.occ.reserved,"Reserviert","Reserved"
+
+guest.req.space,Platz,Space
+guest.req.pool,Pool,Pool
+guest.req.comfort,Komfort,Comfort
+guest.req.wlan,WLAN,Wi-Fi
+guest.req.desk,Schreibtisch,Desk
+guest.req.luxury,Luxus,Luxury
+guest.req.privacy,Privatsphäre,Privacy
+
+tt.build.room.too_expensive,###\nKosten: *** (Nicht genug Geld),###\nCost: *** (Not enough money)
+
+log.guest.perfect_day,Tagesabschluss (Perfekter Tag! +100 EXP),End of Day (Perfect Day! +100 EXP)

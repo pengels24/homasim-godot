@@ -164,7 +164,7 @@ func _tick_game_clock(delta: float) -> void:
   
   if actual_speed == 1.0 and not _ff_used and not _ff_tip_shown:
     _normal_speed_real_seconds += delta
-    if _normal_speed_real_seconds >= 15.0 * 60.0: # 15 Echtzeit-Minuten
+    if _normal_speed_real_seconds >= 15.0 * SECONDS_PER_GAME_MINUTE: # 15 Ingame-Minuten
       if SettingsManager.tutorial_tips and TutorialManager:
         TutorialManager.trigger("tip_fast_forward")
       _ff_tip_shown = true

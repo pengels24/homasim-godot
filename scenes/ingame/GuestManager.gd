@@ -310,6 +310,9 @@ func spawn_guests(amount: int = -1) -> int:
 
 	TimeManager.trigger_auto_pause()
 	parties_changed.emit()
+	
+	if SoundManager and total_heads > 0:
+		SoundManager.play("reception_new_guests")
 
 	return total_heads
 
@@ -882,6 +885,19 @@ func demolish_pending_rooms(silent: bool = false) -> void:
 # =============================================================================
 ## Wird um 06:00 Uhr aufgerufen (Wenn der neue Tag physisch beginnt)
 func process_morning_routine() -> void:
+	# Perfekter Tag EXP Bonus (vor dem Reset auswerten)
+	var total_checkins_checkouts = daily_checkin_parties + daily_checkout_parties
+	if total_checkins_checkouts > 0:
+		var bad_events = daily_rage_parties + daily_timeout_parties + daily_declined_parties + daily_reject_parties
+		if bad_events == 0:
+			GameState.add_exp(100)
+			ActivityLog.add(
+				"guest", 
+				GameState.T("log.guest.perfect_day"), 
+				GameState.selected_hotel.get("day", 1), 
+				TimeManager.get_game_time()
+			)
+
 	# Tages-Statistiken auf null setzen
 	daily_checkin_parties = 0
 	daily_checkin_heads = 0

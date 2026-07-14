@@ -65,6 +65,8 @@ func _ready() -> void:
 	_update_quest_book_indicator()
 	
 	# Events
+	GameState.hotel_selected.connect(func(_data): _update_quest_book_indicator())
+	
 	if QuestManager:
 		QuestManager.sig_quest_claimable.connect(func(_id): _update_quest_book_indicator())
 		QuestManager.sig_quest_claimed.connect(func(_id): _update_quest_book_indicator())
@@ -84,7 +86,7 @@ func _ready() -> void:
 	ind_sim_browser.modulate = Color.GREEN
 	ind_sim_browser.hide()
 	ind_quest_book.modulate = Color.GREEN
-	ind_quest_book.hide()
+	_update_quest_book_indicator()
 
 
 # =============================================================================
@@ -128,6 +130,7 @@ func set_quest_alert(has_claimable: bool) -> void:
 # =============================================================================
 # Wird von Ingame.gd aufgerufen, um die Position des Baumenü-Panels anzupassen
 func sync_button_state(active_menu: String = "") -> void:
+	_update_quest_book_indicator()
 	# Alle Buttons sicherheitshalber ausschalten und Fokus entfernen
 	for btn in [reception, staff, tech_tree, sim_browser, quest_book, guest_list, room_list, finances, tutorial]:
 		btn.set_pressed_no_signal(false)

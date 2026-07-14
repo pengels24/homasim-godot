@@ -142,7 +142,7 @@ func _setup_subsystems() -> void:
 
 	# Buttons verbinden
 	hud_canvas.btn_pause.pressed.connect(TimeManager.user_pause)
-	hud_canvas.btn_play.pressed.connect(func(): TimeManager.fast_forward(1.0))
+	hud_canvas.btn_play.pressed.connect(TimeManager.resume)
 	hud_canvas.btn_ff.pressed.connect(func(): TimeManager.fast_forward(SettingsManager.ff_speed))
 	# --- Rückkanal: Wenn die Zeit per Code geändert wird, HUD visuell anpassen ---
 	if not TimeManager.sig_speed_changed.is_connected(_on_time_speed_changed):

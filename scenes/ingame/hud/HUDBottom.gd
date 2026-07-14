@@ -81,6 +81,7 @@ func _ready() -> void:
 	guest_list.tooltip_text = GameState.T("hud.bottom.guest_list_tt", _get_action_key_string("ui_guest_list"))
 	room_list.tooltip_text = GameState.T("hud.bottom.room_list_tt", _get_action_key_string("ui_room_list"))
 	finances.tooltip_text = GameState.T("hud.bottom.finances_tt", _get_action_key_string("ui_finances"))
+	tutorial.tooltip_text = GameState.T("hud.bottom.tutorials_tt", _get_action_key_string("ui_tutorial"))
 
 	ind_reception.hide()
 	ind_sim_browser.modulate = Color.GREEN
@@ -168,6 +169,10 @@ func _get_action_key_string(action_name: String) -> String:
 		if event is InputEventKey:
 			var code = event.get_physical_keycode_with_modifiers() if event.physical_keycode != 0 else event.get_keycode_with_modifiers()
 			var txt = OS.get_keycode_string(code)
+			var t_key = "key." + txt.to_lower().replace(" ", "_")
+			var translated = GameState.T(t_key)
+			if translated != t_key:
+				txt = translated
 			return "(" + txt + ")"
 	return ""
 

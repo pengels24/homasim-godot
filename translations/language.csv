@@ -87,9 +87,9 @@ hud.top.middle.label.exp,EXP,EXP
 hud.top.middle.label.rep,Ruf,Rep
 hud.top.middle.label.fp,FP,RP
 hud.top.right.label.day,Tag,Day
-hud.top.right.tooltip.pause,Pause: Spielzeit anhalten,Pause: Stop game time
-hud.top.right.tooltip.play,Abspielen: Normale Geschwindigkeit,Play: Normal speed
-hud.top.right.tooltip.forward,Vorspulen: Zeit beschleunigen,Fast forward: Speed up time
+hud.top.right.tooltip.pause,Pause: Spielzeit anhalten ###,Pause: Stop game time ###
+hud.top.right.tooltip.play,Abspielen: Normale Geschwindigkeit ###,Play: Normal speed ###
+hud.top.right.tooltip.forward,Vorspulen: Zeit beschleunigen ###,Fast forward: Speed up time ###
 hud.top.tooltip.hotelname,Dein aktuelles Hotel,Your current hotel
 hud.top.tooltip.level,Hotel Level\nSteigt durch gesammelte Erfahrung (EXP).,Hotel Level\nIncreases through collected experience (EXP).
 hud.top.tooltip.capital,Kapital\nDein aktuell verfügbares Geld.,Capital\nYour currently available funds.
@@ -1156,3 +1156,4 @@ guest.req.privacy,Privatsphäre,Privacy
 tt.build.room.too_expensive,###\nKosten: *** (Nicht genug Geld),###\nCost: *** (Not enough money)
 
 log.guest.perfect_day,Tagesabschluss (Perfekter Tag! +100 EXP),End of Day (Perfect Day! +100 EXP)
+hud.top.right.tooltip.activity_log,Ereignisse ###,Events ###

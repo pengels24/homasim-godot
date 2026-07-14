@@ -28,7 +28,7 @@ var auto_paused: bool = false # Zarte Pause durch Events, die bei UI-Aktionen ve
 
 var _ff_tip_shown: bool = false
 var _ff_used: bool = false
-var _normal_speed_real_seconds: float = 0.0
+var _normal_speed_game_minutes: int = 0
 
 # =============================================================================
 func _ready() -> void:
@@ -52,7 +52,7 @@ func setup(hotel: Dictionary) -> void:
 
   _ff_tip_shown = false
   _ff_used = false
-  _normal_speed_real_seconds = 0.0
+  _normal_speed_game_minutes = 0
 
   user_speed = 0.0
   system_pause_requests = 0
@@ -163,8 +163,8 @@ func _tick_game_clock(delta: float) -> void:
   _game_minute += minutes_passed
   
   if actual_speed == 1.0 and not _ff_used and not _ff_tip_shown:
-    _normal_speed_real_seconds += delta
-    if _normal_speed_real_seconds >= 15.0 * SECONDS_PER_GAME_MINUTE: # 15 Ingame-Minuten
+    _normal_speed_game_minutes += minutes_passed
+    if _normal_speed_game_minutes >= 15: # 15 Ingame-Minuten
       if SettingsManager.tutorial_tips and TutorialManager:
         TutorialManager.trigger("tip_fast_forward")
       _ff_tip_shown = true

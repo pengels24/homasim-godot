@@ -84,9 +84,10 @@ func _ready() -> void:
 	
 	pause_label.text = GameState.T("hud.label.paused")
 	
-	btn_pause.tooltip_text = GameState.T("hud.top.right.tooltip.pause")
-	btn_play.tooltip_text = GameState.T("hud.top.right.tooltip.play")
-	btn_ff.tooltip_text = GameState.T("hud.top.right.tooltip.forward")
+	btn_pause.tooltip_text = GameState.T("hud.top.right.tooltip.pause", _get_action_key_string("ui_pause"))
+	btn_play.tooltip_text = GameState.T("hud.top.right.tooltip.play", _get_action_key_string("ui_play"))
+	btn_ff.tooltip_text = GameState.T("hud.top.right.tooltip.forward", _get_action_key_string("ui_forward"))
+	activity_btn.tooltip_text = GameState.T("hud.top.right.tooltip.activity_log", _get_action_key_string("ui_activity_log"))
 	
 	# FP-Anzeige verstecken (wird jetzt im Techtree geregelt)
 	if has_node("TopBar/MarginContainer/HBoxContainer/FP"):
@@ -418,3 +419,17 @@ func _on_build_tool_selected(action_id: String) -> void:
 			hint.hide_hints()
 		else:
 			hint.show_hints()
+func _get_action_key_string(action_name: String) -> String:
+	var events = InputMap.action_get_events(action_name)
+	if events.size() > 0:
+		var event = events[0]
+		if event is InputEventKey:
+			var code = event.get_physical_keycode_with_modifiers() if event.physical_keycode != 0 else event.get_keycode_with_modifiers()
+			var txt = OS.get_keycode_string(code)
+			var t_key = "key." + txt.to_lower().replace(" ", "_")
+			var translated = GameState.T(t_key)
+			if translated != t_key:
+				txt = translated
+			return "(" + txt + ")"
+	return ""
+

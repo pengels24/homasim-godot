@@ -422,7 +422,7 @@ func _unlock_reception() -> void:
 	# 1. Button wieder freigeben
 	if is_instance_valid(_bottom_bar):
 		_bottom_bar.set_reception_locked(false)
-		_bottom_bar.reception.tooltip_text = GameState.T("hud.bottom.reception_tt", "F3")
+		_bottom_bar.reception.tooltip_text = GameState.T("hud.bottom.reception_tt", _bottom_bar._get_action_key_string("ui_reception"))
 		
 		# 2. Prüfen, ob schon Leute warten
 		if is_instance_valid(_guest_mgr) and is_instance_valid(_hud):

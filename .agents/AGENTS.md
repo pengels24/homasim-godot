@@ -121,3 +121,22 @@ res://
 
 ## Linear Issue Access
 - Zugriff auf Linear erfolgt zwingend über das Skript _dev/linear_cli.py in Verbindung mit dem API-Key aus secrets.cfg in der Root des Projekts. python _dev/linear_cli.py get ANG-xxx zeigt die Ticketdetails an.
+
+---
+
+## Alpha-Backlog (Prio-Direktive)
+
+**Der Alpha-Backlog ist die verbindliche Entwicklungs-Bibel für den `dev`-Branch.**
+Datei: `wiki/_dev/alpha_backlog.md` (Haupt-Referenz)
+
+### Regeln:
+- **Prio-Reihenfolge einhalten:** Phase 1 → 2 → 3 → 4 → 5. Nicht vorgreifen ohne Absprache.
+- **Abweichungen erlaubt wenn:** Ein unerwarteter Bug oder eine technische Notwendigkeit es erfordert (z.B. TechDemo-Hotfix auf `master`).
+- **Abweichungen dokumentieren:** Jede Abweichung vom Backlog (neue Idee, ungeplantes Feature) wird am Ende der Session in den Backlog eingetragen – entweder als neue Phase oder als Ergänzung einer bestehenden.
+- **Kein spekulatives Bauen:** Nichts implementieren was nicht im Backlog steht oder explizit von Peter freigegeben wurde.
+- **Getroffene Design-Entscheidungen** sind final und werden nicht erneut diskutiert (im Backlog markiert mit "Getroffene Design-Entscheidungen").
+
+### Branching-Workflow (ab v0.1.40):
+- `master` → nur TechDemo-Bugfixes. Nach jedem Fix: `git merge master` in `dev` ausführen.
+- `dev` → alle Alpha-Features. Peter testet, dann Push.
+- Tags: `v0.1.39-techdemo` = unveränderlicher TechDemo-Ankerpunkt.

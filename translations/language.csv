@@ -1181,3 +1181,8 @@ staff.role.waiter,Bedienung,Waiter
 ui.staff.assign.free_slot,Freier Arbeitsplatz,Free Workspace
 ui.staff.assign.unassign,Personal freistellen,Unassign staff
 ui.staff.assign.not_available,(Nicht verfügbar),(Not available)
+recipe.name.toast_hawaii,Toast Hawaii,Toast Hawaii
+recipe.name.chips_bowl,Schale Chips,Bowl of Chips
+recipe.name.burger_classic,Klassischer Burger,Classic Burger
+recipe.name.pasta_napoli,Pasta Napoli,Pasta Napoli
+recipe.name.steak_frites,Steak Frites,Steak Frites

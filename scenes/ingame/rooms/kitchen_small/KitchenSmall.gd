@@ -133,7 +133,8 @@ func get_live_details() -> Array[Dictionary]:
 		
 		var order_data = GastroManager.active_orders.get(order_id)
 		if order_data:
-			var guest_node = GuestManager.get_guest(order_data.get("guest_id", ""))
+			var gm = get_tree().get_first_node_in_group("guest_manager")
+			var guest_node = gm.get_guest(order_data.get("guest_id", "")) if gm else null
 			if is_instance_valid(guest_node) or guest_node != null:
 				guest_name = guest_node.name
 				

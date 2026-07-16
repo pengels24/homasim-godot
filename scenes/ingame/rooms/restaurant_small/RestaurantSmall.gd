@@ -104,7 +104,8 @@ func get_live_details() -> Array[Dictionary]:
 	for seat in _seats:
 		if seat["occupied_by"] != "":
 			var guest_name = "Gast"
-			var guest_node = GuestManager.get_guest(seat["occupied_by"])
+			var gm = get_tree().get_first_node_in_group("guest_manager")
+			var guest_node = gm.get_guest(seat["occupied_by"]) if gm else null
 			if is_instance_valid(guest_node) or guest_node != null:
 				guest_name = guest_node.name
 				

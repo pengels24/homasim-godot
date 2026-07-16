@@ -154,7 +154,11 @@ func _process_idle() -> void:
 				if t.type == "serve_meal":
 					var order_id = t.target.get("order_id")
 					var kitchen_id = GastroManager.active_orders.get(order_id, {}).get("kitchen_id", "")
-					target_room = GuestManager.get_room_by_id(kitchen_id) if GuestManager else null
+					if _map_grid and "active_rooms" in _map_grid:
+						for room in _map_grid.active_rooms:
+							if is_instance_valid(room) and GuestManager._room_key(room) == kitchen_id:
+								target_room = room
+								break
 					if not is_instance_valid(target_room):
 						target_room = t.target.get("room") # Fallback directly to restaurant
 						extra_pos = t.target.get("pos", Vector2.INF)

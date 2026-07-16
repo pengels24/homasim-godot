@@ -113,5 +113,9 @@ func _process_cooking(delta: float) -> void:
 			
 	for order_id in finished_orders:
 		_active_cook_timers.erase(order_id)
+		
+		if EffectManager: EffectManager.spawn_exp_text(5, global_position + Vector2(0, -32))
+		GameState.add_exp(5)
+			
 		if GastroManager:
 			GastroManager.finish_order(order_id)

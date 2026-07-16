@@ -29,6 +29,16 @@
       "id": "bar",
       "scene_path": "res://scenes/ingame/rooms/bar/Bar.tscn",
       "script_path": "res://scenes/ingame/rooms/bar/Bar.gd"
+    },
+    {
+      "id": "kitchen_small",
+      "scene_path": "res://scenes/ingame/rooms/kitchen_small/Kitchen_Small.tscn",
+      "script_path": "res://scenes/ingame/rooms/kitchen_small/KitchenSmall.gd"
+    },
+    {
+      "id": "restaurant_small",
+      "scene_path": "res://scenes/ingame/rooms/restaurant_small/Restaurant_Small.tscn",
+      "script_path": "res://scenes/ingame/rooms/restaurant_small/RestaurantSmall.gd"
     }
   ]
 }

@@ -59,6 +59,38 @@
                     8
                 ]
             }
+        },
+        "chef": {
+            "name": "Koch",
+            "desc": "Bereitet Speisen in der Küche zu. Wichtig für die Qualität des Essens.",
+            "daily_wage": 90,
+            "hire_cost": 300,
+            "base_skills": {
+                "cooking": [5, 10],
+                "speed": [3, 8],
+                "motivation": [4, 8]
+            }
+        },
+        "kitchen_helper": {
+            "name": "Küchenhilfe",
+            "desc": "Unterstützt den Koch und beschleunigt die Zubereitung.",
+            "daily_wage": 50,
+            "hire_cost": 150,
+            "base_skills": {
+                "speed": [4, 9],
+                "motivation": [5, 9]
+            }
+        },
+        "waiter": {
+            "name": "Bedienung",
+            "desc": "Serviert das Essen im Restaurant und räumt Tische ab.",
+            "daily_wage": 60,
+            "hire_cost": 180,
+            "base_skills": {
+                "service": [4, 9],
+                "speed": [4, 8],
+                "motivation": [4, 8]
+            }
         }
     },
     "names": {

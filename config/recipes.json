@@ -1,0 +1,44 @@
+{
+  "recipes": [
+    {
+      "id": "toast_hawaii",
+      "name_key": "recipe.name.toast_hawaii",
+      "prep_time": 10,
+      "cost": 3,
+      "price": 12,
+      "served_in": ["bar", "restaurant_small"]
+    },
+    {
+      "id": "chips_bowl",
+      "name_key": "recipe.name.chips_bowl",
+      "prep_time": 5,
+      "cost": 1,
+      "price": 5,
+      "served_in": ["bar"]
+    },
+    {
+      "id": "burger_classic",
+      "name_key": "recipe.name.burger_classic",
+      "prep_time": 15,
+      "cost": 5,
+      "price": 18,
+      "served_in": ["restaurant_small"]
+    },
+    {
+      "id": "pasta_napoli",
+      "name_key": "recipe.name.pasta_napoli",
+      "prep_time": 20,
+      "cost": 4,
+      "price": 16,
+      "served_in": ["restaurant_small"]
+    },
+    {
+      "id": "steak_frites",
+      "name_key": "recipe.name.steak_frites",
+      "prep_time": 30,
+      "cost": 10,
+      "price": 35,
+      "served_in": ["restaurant_small"]
+    }
+  ]
+}

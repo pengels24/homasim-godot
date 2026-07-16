@@ -64,6 +64,7 @@ signal sig_configs_reloaded()
 # REGISTRY - Zentrales Verzeichnis aller geladenen Räume.
 ## Struktur: { "room_id": { "scene_path": String, "def": Dictionary } }
 var room_registry: Dictionary = {}
+var recipes: Array = []
 ## Zentrales Verzeichnis aller Bau-Kategorien.
 var room_category_registry: Dictionary = {}
 ## Zentrales Verzeichnis aller Bau-Werkzeuge.
@@ -541,6 +542,26 @@ func get_room_scene_path(room_type_id: String) -> String:
 		return room_registry[room_type_id].get("scene_path", "")
 	return ""
 
+
+# =============================================================================
+func _load_recipes() -> void:
+	var path = "res://config/recipes.json"
+	if not FileAccess.file_exists(path):
+		return
+	var f = FileAccess.open(path, FileAccess.READ)
+	var j = JSON.new()
+	if j.parse(f.get_as_text()) == OK:
+		recipes = j.data.get("recipes", [])
+		
+# =============================================================================
+## Initialisiert die JSON-Daten
+func initialize() -> void:
+	_load_translations()
+	_load_config()
+	_load_recipes()
+	load_tool_config()
+	load_daily_schedule_config()
+	sig_configs_reloaded.emit()
 
 # =============================================================================
 func reload_all_configs() -> void:

@@ -687,6 +687,8 @@ ui.staff.morale,Moral,Morale
 ui.staff.tab_team,Dein Team,Your Team
 ui.staff.tab_applicants,Bewerber,Applicants
 ui.staff.tab_assign,Zuweisung,Assignment
+ui.staff.auto_assign_title,Auto-Zuweisung,Auto Assignment
+ui.staff.auto_assign_desc,"Das Personal sucht sich selbstständig freie Arbeitsplätze (z.B. sucht ein Barkeeper automatisch nach einer Bar).\n\nKlicke links bei einem Raum auf 'Freistellen', um einen Mitarbeiter von diesem Raum zu lösen. Er sucht sich dann automatisch einen neuen, unbesetzten Arbeitsplatz.","Staff members automatically find available workplaces (e.g., a bartender automatically seeks an unstaffed bar).\n\nClick 'Unassign' next to a room on the left to detach a staff member from that room. They will then automatically search for a new, unstaffed workplace."
 ui.staff.assign_poi,POI-Räume,POI Rooms
 ui.staff.assign_staff,Verfügbares Personal,Available Staff
 ui.staff.no_pois,Keine POI-Räume gebaut.,No POI rooms built.

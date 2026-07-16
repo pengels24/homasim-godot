@@ -77,9 +77,27 @@ func _generate_daily_applicants() -> void:
 	if not staff_config.has("roles"):
 		return
 		
+	var active_roles: Array = ["housekeeping", "maintenance"]
+	
+	var built_rooms = []
+	if SaveManager.has_method("get_built_plots"):
+		built_rooms = SaveManager.get_built_plots()
+		
+	# Prüfen welche Räume gebaut wurden und deren benötigte Rollen sammeln
+	for room_data in built_rooms:
+		var room_id = room_data.get("room_id", "")
+		if GameState.room_registry.has(room_id):
+			var def = GameState.room_registry[room_id].get("def", {})
+			var req_role = def.get("required_role", "")
+			if req_role != "" and not active_roles.has(req_role):
+				active_roles.append(req_role)
+
 	var roles = staff_config["roles"]
 	for role_key in roles.keys():
-		# Generiere 3 Bewerber pro Rolle
+		if not active_roles.has(role_key):
+			continue
+			
+		# Generiere 3 Bewerber pro aktiver Rolle
 		for i in 3:
 			daily_applicants.append(_generate_single_applicant(role_key))
 			

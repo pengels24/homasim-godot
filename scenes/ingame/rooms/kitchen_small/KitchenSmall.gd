@@ -27,8 +27,8 @@ static func get_definition() -> Dictionary:
 		"max_role_limits": {"chef": 2, "kitchen_helper": 1},
 		"min_staff": 1,
 		"max_staff": 3,
-		"open_from": 480, # 8:00
-		"open_to": 1380,  # 23:00
+		"open_from": 420, # 07:00
+		"open_to": 1320,  # 22:00
 		"valid_door_slots": ["R1", "L1"],
 		"cleanliness_level": 100,
 		"maintenance_level": 100,

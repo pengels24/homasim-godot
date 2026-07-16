@@ -25,8 +25,8 @@ static func get_definition() -> Dictionary:
 		"required_role": "waiter",
 		"min_staff": 1,
 		"max_staff": 3,
-		"open_from": 660, # 11:00
-		"open_to": 1380,  # 23:00
+		"open_from": 420, # 07:00
+		"open_to": 1320,  # 22:00
 		"capacity": 20,   # Max. gleichzeitige Gäste (2 Familien-Tische + 5 kleine Tische = 20 Plätze)
 		"valid_door_slots": ["R2"],
 		"cleanliness_level": 100,

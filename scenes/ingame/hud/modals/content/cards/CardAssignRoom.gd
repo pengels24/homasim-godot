@@ -46,8 +46,8 @@ func populate(formatted_name: String, room_id: String, _min_staff: int, max_staf
 	for child in grid_staff.get_children():
 		child.queue_free()
 		
-	# Grid auf max 3 Spalten begrenzen (4+ rutscht in neue Zeile)
-	grid_staff.columns = min(max_staff, 3)
+	# Grid auf exakt 3 Spalten erzwingen für eine saubere Tabelle
+	grid_staff.columns = 3
 		
 	for staff_data in assigned_staff:
 		if staff_data:
@@ -81,22 +81,31 @@ func populate(formatted_name: String, room_id: String, _min_staff: int, max_staf
 		placeholder_text = "Frei (%s)" % "/".join(role_names)
 	
 	for i in range(empty_slots):
-		var p = PanelContainer.new()
-		p.theme_type_variation = "InnerPanel"
-		p.custom_minimum_size = Vector2(0, 42)
-		p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		grid_staff.add_child(_create_slot_panel(placeholder_text, Color(1, 1, 1, 0.2)))
 		
-		var m = MarginContainer.new()
-		m.add_theme_constant_override("margin_left", 12)
-		m.add_theme_constant_override("margin_right", 12)
-		p.add_child(m)
-		
-		var l = Label.new()
-		l.text = placeholder_text
-		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		l.add_theme_color_override("font_color", Color(1, 1, 1, 0.2))
-		l.clip_text = true
-		m.add_child(l)
-		
-		grid_staff.add_child(p)
+	# Auffüllen auf 3 Spalten mit "Nicht verfügbar", um Flattern zu vermeiden
+	var disabled_slots = 3 - max_staff
+	if disabled_slots > 0:
+		for i in range(disabled_slots):
+			grid_staff.add_child(_create_slot_panel(GameState.T("ui.staff.assign.not_available", "(Nicht verfügbar)"), Color(1, 1, 1, 0.05)))
+
+func _create_slot_panel(lbl_text: String, txt_color: Color) -> PanelContainer:
+	var p = PanelContainer.new()
+	p.theme_type_variation = "InnerPanel"
+	p.custom_minimum_size = Vector2(0, 42)
+	p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	
+	var m = MarginContainer.new()
+	m.add_theme_constant_override("margin_left", 12)
+	m.add_theme_constant_override("margin_right", 12)
+	p.add_child(m)
+	
+	var l = Label.new()
+	l.text = lbl_text
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	l.add_theme_color_override("font_color", txt_color)
+	l.clip_text = true
+	m.add_child(l)
+	
+	return p

@@ -689,7 +689,7 @@ func _build_assignment_ui() -> void:
 	list_container.add_child(vbox)
 	
 	var info_lbl = Label.new()
-	info_lbl.text = GameState.T("ui.staff.auto_assign_desc", "Das Personal sucht sich selbstständig freie Arbeitsplätze (z.B. sucht ein Barkeeper automatisch nach einer Bar).\n\nKlicke bei einem Raum auf 'Freistellen', um einen Mitarbeiter von diesem Raum zu lösen. Er sucht sich dann automatisch einen neuen, unbesetzten Arbeitsplatz.")
+	info_lbl.text = "\n" + GameState.T("ui.staff.auto_assign_desc", "Das Personal sucht sich selbstständig freie Arbeitsplätze (z.B. sucht ein Barkeeper automatisch nach einer Bar).\nKlicke bei einem Raum auf 'Freistellen', um einen Mitarbeiter von diesem Raum zu lösen. Er sucht sich dann automatisch einen neuen, unbesetzten Arbeitsplatz.")
 	info_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info_lbl.add_theme_color_override("font_color", Color("#AAAAAA"))
 	vbox.add_child(info_lbl)

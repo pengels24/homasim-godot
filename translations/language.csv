@@ -1,7 +1,7 @@
-﻿keys,de,en
-game.title,HOÂ·MAÂ·SIM - Hotel Manager Simulation,HOÂ·MAÂ·SIM - Hotel Manager Simulation
-game.textlogo,HOÂ·MAÂ·SIM,HOÂ·MAÂ·SIM
-currency.symbol,â‚¬,â‚¬
+keys,de,en
+game.title,HO·MA·SIM - Hotel Manager Simulation,HO·MA·SIM - Hotel Manager Simulation
+game.textlogo,HO·MA·SIM,HO·MA·SIM
+currency.symbol,€,€
 dashboard.card.level,LEVEL,LEVEL
 dashboard.card.day,TAG,DAY
 dashboard.card.guests,GÄSTE,GUESTS
@@ -129,7 +129,7 @@ menu.btn.manager,Manager wählen,Select Manager
 menu.btn.manager_change,Manager wechseln,Change Manager
 menu.btn.back,Zurück,Back
 dashboard.title,Deine Hotels,Your Hotels
-dashboard.status.no_hotels,Noch keine Hotels â€“ leg dein erstes an!,No hotels yet â€“ create your first one!
+dashboard.status.no_hotels,Noch keine Hotels – leg dein erstes an!,No hotels yet – create your first one!
 dashboard.new_hotel.title,Neues Hotel anlegen,Create New Hotel
 dashboard.new_hotel.placeholder,bitte Namen eingeben,please enter a name
 dashboard.new_hotel.btn.create,Anlegen,Create
@@ -166,7 +166,7 @@ hotel.create.title,Neues Hotel gründen,Found a New Hotel
 hotel.create.form.label.name,Hotel-Name,Hotel Name
 hotel.create.form.placeholder.name,z.B. Grand Hotel,e.g. Grand Hotel
 manager.setup.title,Deinen Manager erstellen,Create Your Manager
-manager.setup.intro,Bevor es losgeht Ã¢Â€Â“ wer bist du? Erstelle deinen persönlichen Manager-Charakter.,Before we begin Ã¢Â€Â“ who are you? Create your personal manager character.
+manager.setup.intro,Bevor es losgeht â wer bist du? Erstelle deinen persönlichen Manager-Charakter.,Before we begin â who are you? Create your personal manager character.
 manager.setup.label.name,Manager-Name,Manager Name
 manager.setup.placeholder.name,z.B. Alexandra Berger,e.g. Alexandra Berger
 manager.setup.label.gender,Geschlecht,Gender
@@ -242,7 +242,7 @@ ingame.btn.help,Hilfe,Help
 ingame.btn.build,Bauen,Build
 ingame.btn.reception,Rezeption,Reception
 ingame.btn.staff,Personal,Staff
-ingame.btn.empty,â€“,â€“
+ingame.btn.empty,–,–
 ingame.btn.research,Forschung,Research
 ingame.btn.events,Events,Events
 ingame.btn.simbrowser,SIM-Browser,SIM Browser
@@ -284,7 +284,7 @@ saveslots.btn.delete,Löschen,Delete
 saveslots.save.title,Spiel speichern,Save Game
 saveslots.save.btn.save,Speichern,Save
 saveslots.load.title,Spiel laden,Load Game
-saveslots.slot.empty,â€” Leer â€”,â€” Empty â€”
+saveslots.slot.empty,— Leer —,— Empty —
 saveslots.slot.new,Neu,New
 saveslots.auto.empty,Noch keine Autosaves vorhanden.,No autosaves yet.
 settings.title,Einstellungen,Settings
@@ -293,7 +293,7 @@ settings.tab.gameplay,Gameplay,Gameplay
 settings.tab.audio,Audio,Audio
 settings.tab.ui,Oberfläche,Interface
 settings.tab.controls,Steuerung,Controls
-settings.discard.title,ÃƒÂ„nderungen verwerfen?,Discard Changes?
+settings.discard.title,Ãnderungen verwerfen?,Discard Changes?
 settings.discard.message,Die Einstellungen wurden nicht gespeichert.,The settings were not saved.
 settings.discard.confirm,Verwerfen,Discard
 settings.discard.cancel,Weiter bearbeiten,Keep Editing
@@ -317,7 +317,7 @@ settings.ui.hud_side.left,Links,Left
 settings.ui.hud_side.center,Mitte,Center
 settings.ui.hud_side.right,Rechts,Right
 settings.ui.tech_info,"Technische Infos (FPS, etc.)","Tech Info (FPS, etc.)"
-settings.controls.coming_soon,Tastenbelegung â€“ kommt in einer der nächsten Versionen.,Key bindings â€“ coming in a future version.
+settings.controls.coming_soon,Tastenbelegung – kommt in einer der nächsten Versionen.,Key bindings – coming in a future version.
 settings.controls.group.camera,Kamera-Steuerung,Camera Controls
 settings.controls.camera.up,Nach oben,Up
 settings.controls.camera.down,Nach unten,Down
@@ -369,7 +369,7 @@ reception.mismatch.tooltip,Dieses Zimmer ist nicht geeignet,This room is not sui
 reception.checkin.success,Check-In erfolgreich!,Check-In successful!
 reception.checkout.success,Gast ausgecheckt. Gute Reise!,Guest checked out. Safe travels!
 checkin.btn.confirm,Check-In bestätigen,Confirm Check-In
-checkin.btn.roll,Aufpreis â€“ Gast fragen,Surcharge â€“ Ask Guest
+checkin.btn.roll,Aufpreis – Gast fragen,Surcharge – Ask Guest
 checkin.btn.other_room,Anderes Zimmer wählen,Choose Different Room
 toast.reception.checkin.success,Check-In erfolgreich!,Check-In successful!
 toast.reception.open,Rezeption ist nun geöffnet,Reception is now open
@@ -378,17 +378,17 @@ toast.reception.no_rooms,Erst Zimmer bauen bevor Gäste empfangen werden können
 toast.reception.closed,Die Rezeption ist heute geschlossen.,The reception is closed today.
 toast.reception.auto_pause,Rezeption automatisch pausiert,Reception automatically paused
 toast.reception.force_close,Rezeption geschlossen,Reception closed
-toast.reception.guests_arrived,Neue Gäste sind eingetroffen â€“ Rezeption öffnen (oben im Menü / F1),New guests have arrived â€“ open reception (top menu / F1)
+toast.reception.guests_arrived,Neue Gäste sind eingetroffen – Rezeption öffnen (oben im Menü / F1),New guests have arrived – open reception (top menu / F1)
 toast.guest.arrival.single,1 neuer Gast ist eingetroffen,1 new guest has arrived
 toast.guest.arrival.multi,### neue Gäste sind eingetroffen,### new guests have arrived
-toast.guest.arrival.full,Keine weiteren Gäste â€“ Warteliste voll,No more guests â€“ waiting list full
+toast.guest.arrival.full,Keine weiteren Gäste – Warteliste voll,No more guests – waiting list full
 toast.guest.declined,Gast abgelehnt (### Ruf),Guest declined (### rep)
-toast.surcharge.accepted,Gast akzeptiert! (Würfel: ### â€“ max. *** nötig),Guest accepted! (Roll: ### â€“ max. *** needed)
-toast.surcharge.rejected,Gast lehnt ab. (Würfel: ### â€“ max. *** nötig),Guest declined. (Roll: ### â€“ max. *** needed)
+toast.surcharge.accepted,Gast akzeptiert! (Würfel: ### – max. *** nötig),Guest accepted! (Roll: ### – max. *** needed)
+toast.surcharge.rejected,Gast lehnt ab. (Würfel: ### – max. *** nötig),Guest declined. (Roll: ### – max. *** needed)
 toast.build.no_money,Nicht genug Kapital!,Not enough capital!
 toast.hr.locked,Personalverwaltung benötigt Hotel-Level %d!,Staff management requires hotel level %d!
 toast.hr.unlocked,Personalverwaltung freigeschaltet! (oben im Menü / F5),Staff management unlocked! (top menu / F5)
-toast.hr.coming_soon,Personalverwaltung â€“ coming soon,Staff Management â€“ coming soon
+toast.hr.coming_soon,Personalverwaltung – coming soon,Staff Management – coming soon
 toast.research.unlocked,Forschungsbüro gebaut! FP sind jetzt aktiv.,Research office built! RP are now active.
 toast.system.autosave,Spielstand gespeichert,Game saved
 toast.system.autosave.error,Speichern fehlgeschlagen,Save failed
@@ -414,12 +414,12 @@ toast.quest.new,Neue Quest verfügbar: ###,New quest available: ###
 toast.quest.reward,Belohnung: ###,Reward: ###
 toast.quest.rank_complete,Rang ### abgeschlossen!,Rank ### completed!
 toast.quest.rank_reward,Belohnung für Rang ###,Reward for rank ###
-label.pays.surcharge,Zahlt Aufpreis â€“ besonders zuvorkommend behandeln!,Pays surcharge â€“ treat with extra care!
+label.pays.surcharge,Zahlt Aufpreis – besonders zuvorkommend behandeln!,Pays surcharge – treat with extra care!
 tooltip.surcharge,Zahlt Aufpreis,Pays Surcharge
 tt.build.room.cost,###\nKosten: *** ,###\nCost: *** 
-tt.build.room.locked,###\nðŸ”’ GESPERRT\nBenötigt Hotel-Level ***,###\nðŸ”’ LOCKED\nRequires Hotel Level ***
-tt.build.room.locked_tech,###\nðŸ”’ GESPERRT\nBenötigt Forschung,###\nðŸ”’ LOCKED\nRequires Research
-tt.build.room.locked_both,###\nðŸ”’ GESPERRT\nBenötigt Level *** und Forschung,###\nðŸ”’ LOCKED\nRequires Level *** and Research
+tt.build.room.locked,###\n🔒 GESPERRT\nBenötigt Hotel-Level ***,###\n🔒 LOCKED\nRequires Hotel Level ***
+tt.build.room.locked_tech,###\n🔒 GESPERRT\nBenötigt Forschung,###\n🔒 LOCKED\nRequires Research
+tt.build.room.locked_both,###\n🔒 GESPERRT\nBenötigt Level *** und Forschung,###\n🔒 LOCKED\nRequires Level *** and Research
 build.isvalidpos.error.collision,Hier steht bereits etwas!,Something is already here!
 build.isvalidpos.error.hasneighbor,Muss an bestehende Räume angrenzen!,Must be adjacent to existing rooms!
 build.isvalidpos.error.doorcheck,Tür muss zu Flur/Lobby zeigen!,Door must face a corridor or lobby!
@@ -435,7 +435,7 @@ build.demolish.error.occupied,Dieser Raum ist belegt und kann nicht abgerissen w
 build.demolish.error.has_dependents,Zuerst alle angrenzenden Räume entfernen.,Remove all adjacent rooms first.
 build.demolish.error.server,Server-Fehler beim Abriss.,Server error during demolition.
 build.demolish.dialog.title,Raum abreißen,Demolish Room
-build.demolish.dialog.text,### abreiÃƒÂŸen? Du erhältst *** zurück.,Demolish ###? You will receive *** back.
+build.demolish.dialog.text,### abreiÃen? Du erhältst *** zurück.,Demolish ###? You will receive *** back.
 build.demolish.dialog.confirm,Abreißen,Demolish
 build.demolish.dialog.cancel,Abbrechen,Cancel
 build.demolish.success,### abgerissen. *** erstattet.,### demolished. *** refunded.
@@ -448,7 +448,7 @@ activitylog.filter.system,System,System
 activitylog.filter.guest,Gäste,Guests
 activitylog.filter.build,Bau,Build
 activitylog.filter.research,Forschung,Research
-log.guest.auto_checkout,Auto-Checkout: ### â€“ Keine Einnahmen (vergessen),Auto-Checkout: ### â€“ No income (forgotten)
+log.guest.auto_checkout,Auto-Checkout: ### – Keine Einnahmen (vergessen),Auto-Checkout: ### – No income (forgotten)
 log.reputation.auto_checkout,Vergessener Checkout: ###,Forgotten checkout: ###
 log.guest.declined,Gast ### wurde abgelehnt,Guest ### was declined
 log.reputation.decline,Gast ### abgelehnt,Guest ### declined
@@ -480,10 +480,10 @@ dayend.guests.couple,Paare,Couples
 dayend.guests.family,Familien,Families
 dayend.xp.rooms,XP aus Vermietung,XP from Rentals
 dayend.xp.build,XP aus Bau,XP from Building
-dayend.warning.forgotten_checkouts,âš  ### Gast/Gäste warten noch auf Checkout â€“ Einnahmen ausstehend!,âš  ### guest(s) still waiting for checkout â€“ income pending!
+dayend.warning.forgotten_checkouts,⚠ ### Gast/Gäste warten noch auf Checkout – Einnahmen ausstehend!,⚠ ### guest(s) still waiting for checkout – income pending!
 daystart.title,Heutige Aufgaben,Today's Tasks
 daystart.subtitle,Tag ###,Day ###
-daystart.pending_checkouts,âš  ### Gast/Gäste warten auf Checkout,âš  ### guest(s) waiting for checkout
+daystart.pending_checkouts,⚠ ### Gast/Gäste warten auf Checkout,⚠ ### guest(s) waiting for checkout
 daystart.auto_checked_out,"### Gast/Gäste automatisch ausgecheckt (keine Einnahmen, Ruf-Malus)","### guest(s) auto checked out (no income, reputation penalty)"
 daystart.btn.ok,Verstanden,Got it
 levelup.label,Level Up!,Level Up!
@@ -496,11 +496,11 @@ levelup.unlock.research_hint,Büro bauen schaltet das Forschungssystem frei,Buil
 levelup.unlock.hr_hint,Vertrag mit Personaldienstleister freigeschaltet!,Contract with staffing agency unlocked!
 levelup.unlock.no_unlocks,Neue Freischaltungen kommen über den Forschungsbaum,New unlocks come through the research tree
 levelup.unlock.l4_gastro,Gastronomie-Forschung verfügbar!\nErforsche Küche & Restaurant im Techtree.,Gastronomy research available!\nUnlock Kitchen & Restaurant in the Tech Tree.
-levelup.unlock.l5_staff_room,Pausenraum verfügbar!\nBaue einen Pausenraum â€“ dein Team wird es dir danken.,Staff Room available!\nBuild a Staff Room â€“ your team will thank you.
-levelup.unlock.l6_guest_needs,Gästebedürfnisse aktiv!\nDeine Gäste haben ab jetzt individuelle Wünsche â€“ erfülle sie für mehr Zufriedenheit.,Guest needs activated!\nYour guests now have individual needs â€“ fulfil them for higher satisfaction.
+levelup.unlock.l5_staff_room,Pausenraum verfügbar!\nBaue einen Pausenraum – dein Team wird es dir danken.,Staff Room available!\nBuild a Staff Room – your team will thank you.
+levelup.unlock.l6_guest_needs,Gästebedürfnisse aktiv!\nDeine Gäste haben ab jetzt individuelle Wünsche – erfülle sie für mehr Zufriedenheit.,Guest needs activated!\nYour guests now have individual needs – fulfil them for higher satisfaction.
 levelup.unlock.l7_gourmet_kitchen,Gourmetküche-Forschung verfügbar!\nDer Weg zu den Sternen beginnt im Techtree.,Gourmet Kitchen research available!\nThe path to the stars begins in the Tech Tree.
 levelup.unlock.l8_wellness,Wellness-Forschung verfügbar!\nErforsche Spa, Pool & Co. im Techtree.,Wellness research available!\nUnlock Spa, Pool & more in the Tech Tree.
-levelup.unlock.l9_stars,Gourmetsterne aktiv!\nDer Inspektor beobachtet dein Restaurantâ€¦ sei bereit.,Gourmet Stars activated!\nThe inspector is watching your restaurantâ€¦ be ready.
+levelup.unlock.l9_stars,Gourmetsterne aktiv!\nDer Inspektor beobachtet dein Restaurant… sei bereit.,Gourmet Stars activated!\nThe inspector is watching your restaurant… be ready.
 levelup.unlock.l10_tier2,Techtree Tier 2 & Zufallsereignisse!\nDas Hotel entwickelt jetzt sein eigenes Leben. Bleib wachsam.,Tech Tree Tier 2 & Random Events!\nThe hotel takes on a life of its own. Stay alert.
 techtree.title,Technologiebaum,Technology Tree
 techtree.branch.zimmer,Zimmer & Unterbringung,Rooms & Accommodation
@@ -615,7 +615,7 @@ settings.controls.build.door,Türposition durchschalten,Cycle Door Position
 label.on,An,On
 label.off,Aus,Off
 manager_select.hint.empty,Freier Slot,Empty Slot
-manager.level.subtitle,MANAGER Â· LEVEL %d,MANAGER Â· LEVEL %d
+manager.level.subtitle,MANAGER · LEVEL %d,MANAGER · LEVEL %d
 manager_select.delete.title,Manager löschen?,Delete Manager?
 manager_select.delete.text,Alle Hotels dieses Managers werden\nebenfalls entfernt.,All hotels of this manager will\nalso be removed.
 manager_select.delete.btn_delete,Löschen,Delete
@@ -634,20 +634,20 @@ bugreporter.status.sending,Sende...,Sending...
 bugreporter.status.success,Erfolgreich gesendet! Danke!,Sent successfully! Thank you!
 bugreporter.status.error.send,Fehler beim Senden! (Code %d),Error sending! (Code %d)
 room.tooltip.free,Frei,Free
-room.tooltip.service_needed,ðŸ§¹ Service benötigt,ðŸ§¹ Service Needed
-room.tooltip.open,ðŸº Geöffnet,ðŸº Open
-room.tooltip.closed_until,ðŸ”’ Geschlossen (öffnet um %s),ðŸ”’ Closed (opens at %s)
-room.tooltip.understaffed,ðŸ”´ Unterbesetzt (Geschlossen),ðŸ”´ Understaffed (Closed)
+room.tooltip.service_needed,🧹 Service benötigt,🧹 Service Needed
+room.tooltip.open,🍺 Geöffnet,🍺 Open
+room.tooltip.closed_until,🔒 Geschlossen (öffnet um %s),🔒 Closed (opens at %s)
+room.tooltip.understaffed,🔴 Unterbesetzt (Geschlossen),🔴 Understaffed (Closed)
 room.tooltip.current_visitors,Aktuelle Gäste: %d,Current Visitors: %d
-room.tooltip.guest_walking,ðŸš¶ Gast unterwegs,ðŸš¶ Guest Walking
-room.tooltip.guest_present,ðŸ“ Gast anwesend,ðŸ“ Guest Present
-room.tooltip.guest_in_poi,ðŸ“ Gast in der %s,ðŸ“ Guest in %s
-room.tooltip.guest_leaving,ðŸ§³ Abreisend,ðŸ§³ Leaving
-room.tooltip.occupied,ðŸ‘¥ Belegt: %s,ðŸ‘¥ Occupied: %s
+room.tooltip.guest_walking,🚶 Gast unterwegs,🚶 Guest Walking
+room.tooltip.guest_present,📍 Gast anwesend,📍 Guest Present
+room.tooltip.guest_in_poi,📍 Gast in der %s,📍 Guest in %s
+room.tooltip.guest_leaving,🧳 Abreisend,🧳 Leaving
+room.tooltip.occupied,👥 Belegt: %s,👥 Occupied: %s
 room.tooltip.guests_in_room,Gäste im Zimmer:,Guests in Room:
 room.tooltip.departure,Abreise,Departure
 room.tooltip.nights_left,Übrige Nächte: %d / %d,Nights Left: %d / %d
-room.tooltip.pending_demolish,ðŸ”¨ Raum zum Löschen vorgemerkt\n,ðŸ”¨ Room scheduled for demolition\n
+room.tooltip.pending_demolish,🔨 Raum zum Löschen vorgemerkt\n,🔨 Room scheduled for demolition\n
 room.tooltip.stats,\nSauberkeit: %d%% | Zustand: %d%%,\nCleanliness: %d%% | Condition: %d%%
 guest.tooltip.unknown,Unbekannt,Unknown
 guest.tooltip.satisfaction,Zufriedenheit: %d%% %s,Satisfaction: %d%% %s
@@ -659,7 +659,7 @@ guest.tooltip.walking_room,Unterwegs (Zimmer),Walking (Room)
 guest.tooltip.reception,Rezeption,Reception
 guest.tooltip.leaving,Abreise,Leaving
 guest.tooltip.waiting,Warten,Waiting
-guest.tooltip.budget,\nðŸ’° Budget: %d  / %d ,\nðŸ’° Budget: %d  / %d 
+guest.tooltip.budget,\n💰 Budget: %d  / %d ,\n💰 Budget: %d  / %d 
 staff.tooltip.role.housekeeping,Beruf: Reinigungskraft,Role: Housekeeping
 staff.tooltip.role.maintenance,Beruf: Haustechnik,Role: Maintenance
 staff.tooltip.role.reception,Beruf: Rezeption,Role: Reception
@@ -692,12 +692,12 @@ ui.staff.tab_team,Dein Team,Your Team
 ui.staff.tab_applicants,Bewerber,Applicants
 ui.staff.tab_assign,Zuweisung,Assignment
 ui.staff.auto_assign_title,Auto-Zuweisung,Auto Assignment
-ui.staff.auto_assign_desc,"Das Personal sucht sich selbstständig freie Arbeitsplätze (z.B. sucht ein Barkeeper automatisch nach einer Bar).\nKlicke links bei einem Raum auf 'Freistellen', um einen Mitarbeiter von diesem Raum zu lösen. Er sucht sich dann automatisch einen neuen, unbesetzten Arbeitsplatz.","Staff members automatically find available workplaces (e.g., a bartender automatically seeks an unstaffed bar).\n\nClick 'Unassign' next to a room on the left to detach a staff member from that room. They will then automatically search for a new, unstaffed workplace."
+ui.staff.auto_assign_desc,"Das Personal sucht sich selbstständig freie Arbeitsplätze (z.B. sucht ein Barkeeper automatisch nach einer Bar).\n\nKlicke links bei einem Raum auf 'Freistellen', um einen Mitarbeiter von diesem Raum zu lösen. Er sucht sich dann automatisch einen neuen, unbesetzten Arbeitsplatz.","Staff members automatically find available workplaces (e.g., a bartender automatically seeks an unstaffed bar).\n\nClick 'Unassign' next to a room on the left to detach a staff member from that room. They will then automatically search for a new, unstaffed workplace."
 ui.staff.assign_poi,POI-Räume,POI Rooms
 ui.staff.assign_staff,Verfügbares Personal,Available Staff
 ui.staff.no_pois,Keine POI-Räume gebaut.,No POI rooms built.
-ui.staff.poi_staffed,  âœ… Besetzt (%d Personal),  âœ… Staffed (%d staff)
-ui.staff.poi_understaffed,  ðŸ”´ Unterbesetzt (%d/%d),  ðŸ”´ Understaffed (%d/%d)
+ui.staff.poi_staffed,  ✅ Besetzt (%d Personal),  ✅ Staffed (%d staff)
+ui.staff.poi_understaffed,  🔴 Unterbesetzt (%d/%d),  🔴 Understaffed (%d/%d)
 ui.staff.no_matching_staff,Kein passendes Personal eingestellt.,No matching staff hired.
 guest.member.type.primary,Hauptgast,Primary Guest
 guest.member.type.partner,Begleitung,Companion
@@ -735,7 +735,7 @@ credits.section.engine,Engine & Tools,Engine & Tools
 credits.section.assets,Assets & Grafiken,Assets & Graphics
 credits.section.fonts,Schriften,Fonts
 credits.section.backend,Backend,Backend
-credits.btn.back,â† Zurück,â† Back
+credits.btn.back,← Zurück,← Back
 api.error.network,Netzwerkfehler. Bitte versuche es erneut.,Network error. Please try again.
 api.error.invalid_json,Ungültige Serverantwort.,Invalid server response.
 ui.staff.status.unassigned,Ohne Aufgabe,Unassigned
@@ -750,7 +750,7 @@ ui.staff.assign.assign,Zuordnen,Assign
 ui.staff.confirm.fire.title,Kündigung,Dismissal
 ui.staff.confirm.fire.desc,Möchtest du %s wirklich kündigen?,Do you really want to dismiss %s?
 ui.staff.confirm.hire.title,Arbeitsvertrag,Employment Contract
-ui.staff.confirm.hire.desc,Möchtest du %s für %d â‚¬ einstellen?,Do you want to hire %s for %d â‚¬?
+ui.staff.confirm.hire.desc,Möchtest du %s für %d € einstellen?,Do you want to hire %s for %d €?
 ui.staff.confirm.unassign.title,Zuweisung aufheben,Unassign
 ui.staff.confirm.unassign.desc,Möchtest du %s wirklich aus diesem Raum entfernen?,Do you really want to remove %s from this room?
 ui.staff.confirm.btn.fire,Kündigen,Dismiss
@@ -763,16 +763,16 @@ reception.tooltip.nights,Noch ### Nacht(e),### Night(s) left
 reception.tooltip.satisfaction,Zufriedenheit: ###%,Satisfaction: ###%
 reception.tooltip.surcharge,Zahlt Aufpreis,Pays surcharge
 reception.tooltip.guests,Gäste im Zimmer:,Guests in room:
-ui.techtree.tier_locked,ðŸ”’ Tier ### Gesperrt,ðŸ”’ Tier ### Locked
+ui.techtree.tier_locked,🔒 Tier ### Gesperrt,🔒 Tier ### Locked
 ui.techtree.unlock_reqs,Freischaltbedingungen:,Unlock requirements:
 ui.techtree.req.level, Hotel Level ###, Hotel Level ###
 ui.techtree.req.stars, Gourmet Sterne: ###, Gourmet Stars: ###
 ui.techtree.req.fp, ### FP, ### RP
 ui.techtree.req.prev_tier, Vorheriges Tier ###/***, Previous Tier ###/***
 ui.techtree.btn.unlock_tier,Tier ### Freischalten,Unlock Tier ###
-ui.techtree.demo_locked,ðŸ”’ NICHT IN DER TECHDEMO VERFÜGBAR,ðŸ”’ NOT AVAILABLE IN TECHDEMO
+ui.techtree.demo_locked,🔒 NICHT IN DER TECHDEMO VERFÜGBAR,🔒 NOT AVAILABLE IN TECHDEMO
 ui.techtree.confirm.title,Technologie freischalten,Unlock Technology
-ui.techtree.confirm.desc,Möchtest du '###' wirklich freischalten?\nKosten: *** FP | +++ Â€,Do you really want to unlock '###'?\nCost: *** RP | +++ Â€
+ui.techtree.confirm.desc,Möchtest du '###' wirklich freischalten?\nKosten: *** FP | +++ ,Do you really want to unlock '###'?\nCost: *** RP | +++ 
 ui.techtree.btn.unlock,Freischalten,Unlock
 ui.techtree.btn.cancel,Abbrechen,Cancel
 ui.techtree.tooltip.unlocks.tech,Forschung: ###,Research: ###
@@ -791,7 +791,7 @@ ui.quests.rank,Rang ###,Rank ###
 ui.quests.all_done,Alle Ränge abgeschlossen!,All ranks completed!
 ui.quests.reward_rank,Vergütung: ### FP | *** ,Reward: ### RP | *** 
 ui.quests.btn.complete_rank,Rang abschließen,Complete Rank
-ui.quests.locked_tech,ðŸ”’ ??? (Benötigt Forschung),ðŸ”’ ??? (Requires Research)
+ui.quests.locked_tech,🔒 ??? (Benötigt Forschung),🔒 ??? (Requires Research)
 ui.quests.progress,Fortschritt: ### / ***,Progress: ### / ***
 ui.quests.reward_quest,Belohnung: ### FP | *** ,Reward: ### RP | *** 
 ui.quests.btn.locked,Gesperrt,Locked
@@ -847,8 +847,8 @@ ui.staff.assign.status.full,Vollbesetzt (### MitarbeiterInnen),Fully Staffed (##
 
 ui.techtree.current_fp,Aktuelle FP,Current RP
 settings.language.main_menu_only,(nur im Hauptmenü),(Main Menu only)
-ui.disclaimer.title,Willkommen bei der HOÂ·MAÂ·SIM Tech-Demo!,Welcome to the HOÂ·MAÂ·SIM Tech Demo!
-ui.disclaimer.text,"Schön, dass du dabei bist! Bevor du dein erstes Hotel baust, ein kleiner Hinweis vorab: Du spielst hier eine frühe Tech-Demo (also vom Entwicklungsstand noch weit vor einer ersten Alpha-Version). Das bedeutet, das Fundament steht, aber der Putz trocknet noch.\n\nBitte behalte während des Spielens folgende Dinge im Hinterkopf:\n\n[b]Ecken und Kanten:[/b] Du wirst mit Sicherheit auf Bugs, Glitches oder noch nicht ganz ausbalancierte Mechaniken stoßen.\n\n[b]Work in Progress:[/b] Viele Grafiken, Animationen und UI-Elemente sind noch Platzhalter und spiegeln nicht die finale Qualität wider.\n\n[b]Dein Feedback ist Gold wert:[/b] Auf der rechten Bildschirmseite findest du einen ""Bug melden""-Button. Bitte nutze ihn ausgiebig! Egal ob du einen Fehler gefunden hast, Kritik äußern möchtest oder eine coole Idee für ein Feature hast â€“ lass es mich wissen.\n\nVielen Dank, dass du meine Solo-Entwicklung spielst und dieses Projekt mit deiner Zeit und deinem Feedback unterstützt. Viel Spaß beim Bauen!","Great to have you here! Before you build your first hotel, a quick heads-up: You are playing an early tech demo (which means the development state is still well before a first Alpha version). This means the foundation is laid, but the paint is still drying.\n\nPlease keep the following things in mind while playing:\n\n[b]Rough Edges:[/b] You will definitely encounter bugs, glitches, or mechanics that are not fully balanced yet.\n\n[b]Work in Progress:[/b] Many graphics, animations, and UI elements are still placeholders and do not reflect the final quality.\n\n[b]Your Feedback is Gold:[/b] On the right side of the screen, you will find a ""Report Bug"" button. Please use it extensively! Whether you've found a bug, have some constructive criticism, or a cool idea for a feature â€“ let me know.\n\nThank you so much for playing my solo-developed game and supporting this project with your time and feedback. Have fun building!"
+ui.disclaimer.title,Willkommen bei der HO·MA·SIM Tech-Demo!,Welcome to the HO·MA·SIM Tech Demo!
+ui.disclaimer.text,"Schön, dass du dabei bist! Bevor du dein erstes Hotel baust, ein kleiner Hinweis vorab: Du spielst hier eine frühe Tech-Demo (also vom Entwicklungsstand noch weit vor einer ersten Alpha-Version). Das bedeutet, das Fundament steht, aber der Putz trocknet noch.\n\nBitte behalte während des Spielens folgende Dinge im Hinterkopf:\n\n[b]Ecken und Kanten:[/b] Du wirst mit Sicherheit auf Bugs, Glitches oder noch nicht ganz ausbalancierte Mechaniken stoßen.\n\n[b]Work in Progress:[/b] Viele Grafiken, Animationen und UI-Elemente sind noch Platzhalter und spiegeln nicht die finale Qualität wider.\n\n[b]Dein Feedback ist Gold wert:[/b] Auf der rechten Bildschirmseite findest du einen ""Bug melden""-Button. Bitte nutze ihn ausgiebig! Egal ob du einen Fehler gefunden hast, Kritik äußern möchtest oder eine coole Idee für ein Feature hast – lass es mich wissen.\n\nVielen Dank, dass du meine Solo-Entwicklung spielst und dieses Projekt mit deiner Zeit und deinem Feedback unterstützt. Viel Spaß beim Bauen!","Great to have you here! Before you build your first hotel, a quick heads-up: You are playing an early tech demo (which means the development state is still well before a first Alpha version). This means the foundation is laid, but the paint is still drying.\n\nPlease keep the following things in mind while playing:\n\n[b]Rough Edges:[/b] You will definitely encounter bugs, glitches, or mechanics that are not fully balanced yet.\n\n[b]Work in Progress:[/b] Many graphics, animations, and UI elements are still placeholders and do not reflect the final quality.\n\n[b]Your Feedback is Gold:[/b] On the right side of the screen, you will find a ""Report Bug"" button. Please use it extensively! Whether you've found a bug, have some constructive criticism, or a cool idea for a feature – let me know.\n\nThank you so much for playing my solo-developed game and supporting this project with your time and feedback. Have fun building!"
 ui.disclaimer.dont_show,Beim nächsten Mal nicht mehr anzeigen,Do not show this again
 ui.disclaimer.ok,Verstanden!,Got it!
 tutorial.welcome.title,Die Benutzeroberfläche HUD,The User Interface HUD
@@ -939,8 +939,8 @@ sim.site.li.desc,Lieferanten-Katalog,Supplier Catalog
 sim.site.gs.title,Gourmet-Sterne,Gourmet Stars
 sim.site.gs.desc,Stern-Fortschritt,Star Progress
 tutorial.sim_browser.title,SimBrowser,SimBrowser
-tutorial.sim_browser.desc,"Dein persönliches In-Game Web-Portal. Hier findest du Bewertungen, Statistiken und Lieferanten. Neuigkeiten aus dem HOÂ·MAÂ·SIM-Universum werden hier genauso veröffentlicht, wie Bekanntmachungen zu Events und anderen Spielern.
-Tipp: Achte auf versteckte URLs!","Your personal in-game web portal. Here you will find reviews, statistics, and suppliers. News from the HOÂ·MAÂ·SIM universe is published here, as well as announcements about events and other players.
+tutorial.sim_browser.desc,"Dein persönliches In-Game Web-Portal. Hier findest du Bewertungen, Statistiken und Lieferanten. Neuigkeiten aus dem HO·MA·SIM-Universum werden hier genauso veröffentlicht, wie Bekanntmachungen zu Events und anderen Spielern.
+Tipp: Achte auf versteckte URLs!","Your personal in-game web portal. Here you will find reviews, statistics, and suppliers. News from the HO·MA·SIM universe is published here, as well as announcements about events and other players.
 Tip: Watch out for hidden URLs!"
 tutorial.finances.title,Finanzen,Finances
 tutorial.finances.desc,"Dies ist die Übersicht deiner Einnahmen und Ausgaben.
@@ -960,7 +960,7 @@ build.error.no_connection,Muss an das Wegenetz grenzen,Must connect to hallway n
 
 
 build.error.tutorial_target,Muss richtig platziert und rotiert werden,Must be placed and rotated correctly
-tutorial.step.1,"Hallo! Ich bin Angelus2010, der Entwickler von HOÂ·MAÂ·SIM.\nIch helfe dir bei deinen ersten Schritten.","Hello! I am Angelus2010, the developer of HOÂ·MAÂ·SIM.\nI will guide you through your first steps."
+tutorial.step.1,"Hallo! Ich bin Angelus2010, der Entwickler von HO·MA·SIM.\nIch helfe dir bei deinen ersten Schritten.","Hello! I am Angelus2010, the developer of HO·MA·SIM.\nI will guide you through your first steps."
 tutorial.step.2,Zuerst müssen wir uns umsehen können.\nBewege die Karte mit der rechten Maustaste (halten & ziehen) oder mit WASD.\n\n[ ] Karte bewegt,"First, we need to look around.\nMove the map using the right mouse button (hold & drag) or WASD.\n\n[ ] Map moved"
 tutorial.step.2_done,Zuerst müssen wir uns umsehen können.\nBewege die Karte mit der rechten Maustaste (halten & ziehen) oder mit WASD.\n\n[x] Karte bewegt,"First, we need to look around.\nMove the map using the right mouse button (hold & drag) or WASD.\n\n[x] Map moved"
 tutorial.step.3,"Gut gemacht!\nNutze nun das Mausrad oder die +/- Tasten auf dem Numpad, um rein- und rauszuzoomen.\n\n[ ] Gezoomt",Well done!\nNow use the mouse wheel or the +/- keys on the numpad to zoom in and out.\n\n[ ] Zoomed
@@ -1099,7 +1099,7 @@ room.action.demolish_queue_title,Abriss vormerken?,Queue Demolition?
 room.action.demolish_queue_desc,%s ist aktuell belegt!\nFür automatischen Abriss nach Abreise der Gäste vormerken?,%s is currently occupied!\nQueue for automatic demolition after guests check out?
 room.action.demolish_queue_btn,Vormerken,Queue
 room.action.demolish_title,Zimmer abreißen?,Demolish Room?
-room.action.demolish_desc,Möchtest du %s wirklich abreißen?\nDu erhältst %d â‚¬ zurück.,Do you really want to demolish %s?\nYou will be refunded %d â‚¬.
+room.action.demolish_desc,Möchtest du %s wirklich abreißen?\nDu erhältst %d € zurück.,Do you really want to demolish %s?\nYou will be refunded %d €.
 room.action.title,  ::: Aktionen,  ::: Actions
 room.action.service,Service rufen,Call Service
 room.action.demolish_btn,Zimmer abreißen,Demolish Room
@@ -1115,7 +1115,7 @@ Digitaler Nomade,Digitaler Nomade,Digital Nomad
 guest.tooltip.group,Gruppe:,Group:
 guest.tooltip.requirements,Anforderungen:,Requirements:
 guest.tooltip.preferred,Bevorzugt:,Preferred:
-room.price.nightly,%s â‚¬ / Nacht,%s â‚¬ / Night
+room.price.nightly,%s € / Nacht,%s € / Night
 reception.btn.checkout,Check-out bestätigen,Confirm Check-out
 ui.techtree.tooltip.already_unlocked,- Bereits erforscht -,- Already researched -
 overlay.dirt,Verschmutzung,Cleanliness
@@ -1125,11 +1125,11 @@ overlay.category,Kategorien,Categories
 overlay.value,Wertigkeit,Value
 log.guest.new_guest_details,Neuer Gast: ### (***),New guest: ### (***)
 log.guest.left_angry,### hat das Hotel wütend verlassen (-20 Ruf),### left the hotel angrily (-20 Rep)
-log.guest.check_in,Check-in: ### â†’ ***,Check-in: ### â†’ ***
+log.guest.check_in,Check-in: ### → ***,Check-in: ### → ***
 log.guest.rejected,### wurde abgelehnt,### was rejected
 log.guest.left_angry_closed,### ist wütend abgereist (Rezeption geschlossen),### left angrily (Reception closed)
-log.guest.rage_checkout,Wut-Checkout: ### ist wütend abgereist (0 â‚¬),Rage-Checkout: ### left angrily (0 â‚¬)
-log.guest.check_out,Check-out: ### (*** â‚¬),Check-out: ### (*** â‚¬)
+log.guest.rage_checkout,Wut-Checkout: ### ist wütend abgereist (0 €),Rage-Checkout: ### left angrily (0 €)
+log.guest.check_out,Check-out: ### (*** €),Check-out: ### (*** €)
 log.guest.left_end_of_day,### hat das Hotel verlassen (Tagesende),### left the hotel (End of day)
 log.guest.declined_offer,### hat das Angebot abgelehnt und ist abgereist,### declined the offer and left
 browser.status.locked,Gesperrt,Locked
@@ -1178,10 +1178,6 @@ ui.staff.refresh_applicants,Neue Bewerber,New Applicants
 staff.role.chef,Koch,Chef
 staff.role.kitchen_helper,Küchenhilfe,Kitchen Helper
 staff.role.waiter,Bedienung,Waiter
-
-staff.role.chef,Koch,Chef
-staff.role.kitchen_helper,Küchenhilfe,Kitchen Helper
-staff.role.waiter,Bedienung,Waiter
-ui.staff.assign.free_slot,- Freier Arbeitsplatz -,- Free Workspace -
+ui.staff.assign.free_slot,Freier Arbeitsplatz,Free Workspace
 ui.staff.assign.unassign,Personal freistellen,Unassign staff
 ui.staff.assign.not_available,(Nicht verfügbar),(Not available)

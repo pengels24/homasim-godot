@@ -99,18 +99,20 @@ func _generate_daily_applicants() -> void:
 		
 	var active_roles: Array = ["housekeeping", "maintenance"]
 	
-	var built_rooms = []
+	var built_plots = []
 	if SaveManager.has_method("get_built_plots"):
-		built_rooms = SaveManager.get_built_plots(GameState.active_hotel_id)
+		built_plots = SaveManager.get_built_plots(GameState.active_hotel_id)
 		
 	# Prüfen welche Räume gebaut wurden und deren benötigte Rollen sammeln
-	for room_data in built_rooms:
-		var room_id = room_data.get("room_id", "")
-		if GameState.room_registry.has(room_id):
-			var def = GameState.room_registry[room_id].get("def", {})
-			var req_role = def.get("required_role", "")
-			if req_role != "" and not active_roles.has(req_role):
-				active_roles.append(req_role)
+	for plot in built_plots:
+		var rooms: Array = plot.get("rooms", [])
+		for room_data in rooms:
+			var room_type_id = room_data.get("room_type_id", "")
+			if GameState.room_registry.has(room_type_id):
+				var def = GameState.room_registry[room_type_id].get("def", {})
+				var req_role = def.get("required_role", "")
+				if req_role != "" and not active_roles.has(req_role):
+					active_roles.append(req_role)
 
 	var roles = staff_config["roles"]
 	for role_key in roles.keys():

@@ -554,19 +554,10 @@ func _load_recipes() -> void:
 		recipes = j.data.get("recipes", [])
 		
 # =============================================================================
-## Initialisiert die JSON-Daten
-func initialize() -> void:
-	_load_translations()
-	_load_config()
-	_load_recipes()
-	load_tool_config()
-	load_daily_schedule_config()
-	sig_configs_reloaded.emit()
-
-# =============================================================================
 func reload_all_configs() -> void:
 	load_room_category_config()
 	load_room_config()
 	load_tool_config()
 	load_daily_schedule_config()
+	_load_recipes()
 	sig_configs_reloaded.emit()

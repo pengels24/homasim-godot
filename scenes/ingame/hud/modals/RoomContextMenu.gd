@@ -30,7 +30,7 @@ func _ready() -> void:
 	
 	# Buttons
 	btn_close.pressed.connect(close)
-	btn_details.pressed.connect(func(): _on_action(GameState.T("room.action.details")))
+	btn_details.pressed.connect(_on_details_pressed)
 	btn_service.pressed.connect(_on_service_pressed)
 	
 	btn_repair = btn_service.duplicate()
@@ -124,6 +124,20 @@ func close() -> void:
 		InputHandler.current_mode = InputHandler.InputMode.NORMAL
 
 # =============================================================================
+func _on_details_pressed() -> void:
+	if is_instance_valid(_target_room) and _target_room.has_method("get_live_details"):
+		var monitor_scene = load("res://scenes/ingame/hud/modals/RoomDetailsMonitor.tscn")
+		var monitor = monitor_scene.instantiate()
+		get_parent().add_child(monitor)
+		
+		# Setze Monitor in die Nähe des Menüs, aber leicht versetzt
+		monitor.global_position = global_position + Vector2(210, 0)
+		monitor.setup(_target_room)
+	else:
+		if is_instance_valid(Toast):
+			Toast.show(GameState.T("room.action.details") + ": " + GameState.T("room.action.coming_soon"), "info", false)
+	close()
+
 func _on_action(action_name: String) -> void:
 	if is_instance_valid(Toast):
 		Toast.show(action_name + ": " + GameState.T("room.action.coming_soon"), "info", false)

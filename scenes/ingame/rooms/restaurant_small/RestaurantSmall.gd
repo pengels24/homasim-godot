@@ -96,6 +96,46 @@ func leave_seat(guest_id: String) -> void:
 				TaskManager.add_task("clean_table", {"room": self, "pos": seat["node"].global_position})
 			break
 
+# =============================================================================
+# Live-Details für Gastro-Monitor
+# =============================================================================
+func get_live_details() -> Array[Dictionary]:
+	var details: Array[Dictionary] = []
+	for seat in _seats:
+		if seat["occupied_by"] != "":
+			var guest_name = "Gast"
+			var guest_node = GuestManager.get_guest(seat["occupied_by"])
+			if is_instance_valid(guest_node):
+				guest_name = guest_node.get_full_name()
+				
+			var status_text = "Studiert Speisekarte"
+			var order_id = seat.get("order_id", "")
+			
+			if order_id != "":
+				var order_data = GastroManager.active_orders.get(order_id)
+				if order_data:
+					var r_name = "?"
+					for r in GameState.recipes:
+						if r.get("id") == order_data.get("recipe_id"):
+							r_name = GameState.T(r.get("name_key", ""))
+							break
+					var s = order_data.get("status", "")
+					if s == "pending":
+						status_text = "Bestellt: " + r_name
+					elif s == "cooking":
+						status_text = "Wird gekocht: " + r_name
+					elif s == "ready":
+						status_text = "Wartet auf Service"
+				else:
+					# Wenn order_id gesetzt ist, aber nicht in active_orders -> Serviert
+					status_text = "Isst gerade"
+					
+			details.append({
+				"left": guest_name,
+				"right": status_text
+			})
+	return details
+
 ## Bedienung räumt Tisch ab
 func clean_dirty_seat() -> bool:
 	for seat in _seats:

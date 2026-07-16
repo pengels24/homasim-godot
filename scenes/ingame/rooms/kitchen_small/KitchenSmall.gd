@@ -120,3 +120,37 @@ func _process_cooking(delta: float) -> void:
 			
 		if GastroManager:
 			GastroManager.finish_order(order_id)
+
+# =============================================================================
+# Live-Details für Gastro-Monitor
+# =============================================================================
+func get_live_details() -> Array[Dictionary]:
+	var details: Array[Dictionary] = []
+	for order_id in _active_cook_timers.keys():
+		var time_left = int(_active_cook_timers[order_id])
+		var r_name = "?"
+		var guest_name = "Gast"
+		
+		var order_data = GastroManager.active_orders.get(order_id)
+		if order_data:
+			var guest_node = GuestManager.get_guest(order_data.get("guest_id", ""))
+			if is_instance_valid(guest_node):
+				guest_name = guest_node.get_full_name()
+				
+			for r in GameState.recipes:
+				if r.get("id") == order_data.get("recipe_id"):
+					r_name = GameState.T(r.get("name_key", ""))
+					break
+					
+		details.append({
+			"left": guest_name + " (" + r_name + ")",
+			"right": "Noch " + str(time_left) + "s"
+		})
+		
+	if details.is_empty():
+		details.append({
+			"left": "Küche",
+			"right": "Leer / Wartet"
+		})
+		
+	return details

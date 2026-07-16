@@ -344,26 +344,6 @@ func _refresh_list() -> void:
 			btn.focus_entered.connect(func(): 
 				btn.button_pressed = true
 				_select_item(item)
-				
-				var scroll = list_container.get_parent() as ScrollContainer
-				if scroll:
-					# call_deferred, damit die UI die Position des Buttons sicher kennt
-					scroll.call_deferred("ensure_control_visible", btn)
-					
-					# Hardcore-Fallback: Komplett manuell berechnen!
-					var scroll_func = func():
-						var btn_y = btn.position.y
-						var btn_h = btn.size.y
-						var scroll_y = scroll.scroll_vertical
-						var scroll_h = scroll.size.y
-						
-						if btn_y < scroll_y:
-							scroll.scroll_vertical = int(btn_y)
-						elif btn_y + btn_h > scroll_y + scroll_h:
-							scroll.scroll_vertical = int((btn_y + btn_h) - scroll_h)
-							
-					# Im nächsten Frame manuell prüfen und ggf. nachkorrigieren
-					get_tree().process_frame.connect(scroll_func, CONNECT_ONE_SHOT)
 			)
 			list_container.add_child(btn)
 			

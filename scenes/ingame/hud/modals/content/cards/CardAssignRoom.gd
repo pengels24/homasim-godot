@@ -16,9 +16,14 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	if _selection_border:
 		_selection_border.hide()
-		
-	mouse_entered.connect(func(): self_modulate = Color(1.5, 1.5, 1.5, 1.0))
-	mouse_exited.connect(func(): self_modulate = Color(1.0, 1.0, 1.0, 1.0))
+
+func _process(_delta: float) -> void:
+	if not visible or not is_inside_tree(): return
+	var is_hovered = get_global_rect().has_point(get_global_mouse_position())
+	if is_hovered:
+		self_modulate = Color(1.5, 1.5, 1.5, 1.0)
+	else:
+		self_modulate = Color(1.0, 1.0, 1.0, 1.0)
 
 func set_selected(sel: bool) -> void:
 	if _selection_border:
@@ -27,7 +32,6 @@ func set_selected(sel: bool) -> void:
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		accept_event()
-		Toast.show("Room Clicked: " + _room_id)
 		sig_clicked.emit(_room_id)
 
 func populate(formatted_name: String, room_id: String, _min_staff: int, max_staff: int, assigned_staff: Array, def: Dictionary = {}) -> void:
@@ -94,10 +98,12 @@ func _create_slot_panel(lbl_text: String, txt_color: Color) -> PanelContainer:
 	p.theme_type_variation = "InnerPanel"
 	p.custom_minimum_size = Vector2(0, 42)
 	p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	var m = MarginContainer.new()
 	m.add_theme_constant_override("margin_left", 12)
 	m.add_theme_constant_override("margin_right", 12)
+	m.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	p.add_child(m)
 	
 	var l = Label.new()
@@ -106,6 +112,7 @@ func _create_slot_panel(lbl_text: String, txt_color: Color) -> PanelContainer:
 	l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	l.add_theme_color_override("font_color", txt_color)
 	l.clip_text = true
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	m.add_child(l)
 	
 	return p

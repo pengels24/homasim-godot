@@ -24,6 +24,7 @@ static func get_definition() -> Dictionary:
 		"adults_only": false,
 		"required_role": "chef",
 		"allowed_roles": ["chef", "kitchen_helper"],
+		"max_role_limits": {"chef": 2, "kitchen_helper": 1},
 		"min_staff": 1,
 		"max_staff": 3,
 		"open_from": 480, # 8:00

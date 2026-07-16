@@ -276,6 +276,12 @@ func _process_auto_assign() -> void:
 				if role != req_role and not is_poi_staffed(r["def"], r["id"]):
 					continue
 					
+				var limits = r["def"].get("max_role_limits", {})
+				if limits.has(role):
+					var current_count = _count_role_in_room(r["id"], role)
+					if current_count >= limits[role]:
+						continue
+					
 				var c = get_staff_for_room(r["id"]).size()
 				var max_s = r["def"].get("max_staff", 1)
 				if c < max_s:

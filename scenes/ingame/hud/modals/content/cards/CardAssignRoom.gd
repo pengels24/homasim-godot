@@ -60,12 +60,21 @@ func populate(formatted_name: String, room_id: String, _min_staff: int, max_staf
 			
 	var empty_slots = max_staff - current
 	
-	# Erlaubte Rollen für den Text herausfinden
+	# Erlaubte Rollen für den Text herausfinden, die ihr Limit noch nicht erreicht haben
 	var req_r = def.get("required_role", "")
 	var allowed = def.get("allowed_roles", [req_r] if req_r != "" else [])
+	var limits = def.get("max_role_limits", {})
 	var role_names = []
+	
+	var count_by_role = {}
+	for staff in assigned_staff:
+		var r = staff.get("role", "")
+		count_by_role[r] = count_by_role.get(r, 0) + 1
+		
 	for r in allowed:
 		if r == "": continue
+		if limits.has(r) and count_by_role.get(r, 0) >= limits[r]:
+			continue
 		var r_name = StaffManager.staff_config.get("roles", {}).get(r, {}).get("name", r)
 		role_names.append(r_name)
 	

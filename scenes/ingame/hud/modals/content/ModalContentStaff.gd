@@ -681,70 +681,47 @@ func _on_goto_pressed() -> void:
 # =============================================================================
 
 func _build_assignment_ui() -> void:
-	# Zweispaltiges Layout
-	list_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	var hbox = HBoxContainer.new()
-	hbox.set_anchors_preset(Control.PRESET_FULL_RECT)
-	hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	hbox.add_theme_constant_override("separation", 16)
-	list_container.add_child(hbox)
-
-	# --- Linke Spalte: POI-Räume ---
-	var left_panel = PanelContainer.new()
-	left_panel.theme_type_variation = "InnerPanel"
-	left_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	left_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	hbox.add_child(left_panel)
+	var vbox = VBoxContainer.new()
+	vbox.name = "AssignmentVBox"
+	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vbox.add_theme_constant_override("separation", 16)
+	list_container.add_child(vbox)
 	
-	var left_margin = MarginContainer.new()
-	left_margin.add_theme_constant_override("margin_left", 12)
-	left_margin.add_theme_constant_override("margin_right", 12)
-	left_margin.add_theme_constant_override("margin_top", 12)
-	left_margin.add_theme_constant_override("margin_bottom", 12)
-	left_panel.add_child(left_margin)
+	var info_lbl = Label.new()
+	info_lbl.text = GameState.T("ui.staff.auto_assign_desc", "Das Personal sucht sich selbstständig freie Arbeitsplätze (z.B. sucht ein Barkeeper automatisch nach einer Bar).\n\nKlicke bei einem Raum auf 'Freistellen', um einen Mitarbeiter von diesem Raum zu lösen. Er sucht sich dann automatisch einen neuen, unbesetzten Arbeitsplatz.")
+	info_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	info_lbl.add_theme_color_override("font_color", Color("#AAAAAA"))
+	vbox.add_child(info_lbl)
 	
-	var left_vbox = VBoxContainer.new()
-	left_vbox.name = "LeftVBox"
-	left_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	left_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	left_margin.add_child(left_vbox)
-
-	var left_header = Label.new()
-	left_header.text = GameState.T("ui.staff.assign_poi", "POI-Räume")
-	left_header.theme_type_variation = "HeaderMedium"
-	left_vbox.add_child(left_header)
-
-	var sep_left = HSeparator.new()
-	left_vbox.add_child(sep_left)
-
-	# --- Rechte Spalte: Personal ---
-	var right_panel = PanelContainer.new()
-	right_panel.theme_type_variation = "InnerPanel"
-	right_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	right_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	hbox.add_child(right_panel)
+	var sep_top = HSeparator.new()
+	vbox.add_child(sep_top)
 	
-	var right_margin = MarginContainer.new()
-	right_margin.add_theme_constant_override("margin_left", 12)
-	right_margin.add_theme_constant_override("margin_right", 12)
-	right_margin.add_theme_constant_override("margin_top", 12)
-	right_margin.add_theme_constant_override("margin_bottom", 12)
-	right_panel.add_child(right_margin)
+	var panel = PanelContainer.new()
+	panel.theme_type_variation = "InnerPanel"
+	panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	vbox.add_child(panel)
 	
-	var right_vbox = VBoxContainer.new()
-	right_vbox.name = "RightVBox"
-	right_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	right_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	right_margin.add_child(right_vbox)
+	var margin = MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 12)
+	margin.add_theme_constant_override("margin_right", 12)
+	margin.add_theme_constant_override("margin_top", 12)
+	margin.add_theme_constant_override("margin_bottom", 12)
+	panel.add_child(margin)
+	
+	var inner_vbox = VBoxContainer.new()
+	inner_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	inner_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	margin.add_child(inner_vbox)
 
-	var right_header = Label.new()
-	right_header.text = GameState.T("ui.staff.auto_assign_title", "Auto-Zuweisung")
-	right_header.theme_type_variation = "HeaderMedium"
-	right_vbox.add_child(right_header)
+	var header = Label.new()
+	header.text = GameState.T("ui.staff.assign_poi", "POI-Räume")
+	header.theme_type_variation = "HeaderMedium"
+	inner_vbox.add_child(header)
 
-	var sep_right = HSeparator.new()
-	right_vbox.add_child(sep_right)
+	var sep_inner = HSeparator.new()
+	inner_vbox.add_child(sep_inner)
 
 	# POI-Räume aus MapGrid holen
 	var poi_rooms: Array = []
@@ -759,7 +736,7 @@ func _build_assignment_ui() -> void:
 		var no_poi_lbl = Label.new()
 		no_poi_lbl.text = GameState.T("ui.staff.no_pois", "Keine POI-Räume gebaut.")
 		no_poi_lbl.add_theme_color_override("font_color", Color("#888888"))
-		left_vbox.add_child(no_poi_lbl)
+		inner_vbox.add_child(no_poi_lbl)
 	else:
 		const CARD_ROOM = preload("res://scenes/ingame/hud/modals/content/cards/CardAssignRoom.tscn")
 		for room in poi_rooms:
@@ -779,16 +756,9 @@ func _build_assignment_ui() -> void:
 			var assigned: Array = StaffManager.get_staff_for_room(room_id)
 
 			var card = CARD_ROOM.instantiate()
-			left_vbox.add_child(card)
+			inner_vbox.add_child(card)
 			card.populate(formatted_name, room_id, min_s, max_s, assigned, def)
 			card.sig_unassign_staff.connect(_on_unassign_requested)
-			
-	var info_lbl = Label.new()
-	info_lbl.text = GameState.T("ui.staff.auto_assign_desc", "Das Personal sucht sich selbstständig freie Arbeitsplätze (z.B. sucht ein Barkeeper automatisch nach einer Bar).\n\nKlicke links bei einem Raum auf 'Freistellen', um einen Mitarbeiter von diesem Raum zu lösen. Er sucht sich dann automatisch einen neuen, unbesetzten Arbeitsplatz.")
-	info_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	info_lbl.add_theme_color_override("font_color", Color("#AAAAAA"))
-	info_lbl.custom_minimum_size = Vector2(100, 0)
-	right_vbox.add_child(info_lbl)
 
 func _on_assign_room_clicked(rid: String) -> void:
 	pass

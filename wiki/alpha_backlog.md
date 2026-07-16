@@ -86,6 +86,7 @@ In `config/staff_roles.json` (oder Äquivalent) neue Einträge anlegen.
 *Baut auf Moral-System aus Phase 1 auf.*
 
 ### 3.1 Personalraum (Staff Room)
+> 🎨 **TODO: Pixel-Art Asset "Pausenraum" muss noch erstellt werden (Peter)** – analog zu Küche/Restaurant via Duplicate-Workflow.
 **Konzept:** Aus `wiki/02_features/06_personal_und_aufgabensystem.md`
 
 - Neuer Raumtyp: Mitarbeiter wechseln in `IDLE`-State → suchen nächsten freien Personalraum

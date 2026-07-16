@@ -32,4 +32,3 @@ static func get_definition() -> Dictionary:
 		"maintenance_level": 100,
 		"is_service_requested": false
 	}
-

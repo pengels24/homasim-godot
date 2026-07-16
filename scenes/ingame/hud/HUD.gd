@@ -250,24 +250,51 @@ func _on_hotel_time_changed(time_string: String) -> void:
 
 # =============================================================================
 func _on_hotel_level_up(new_level: int) -> void:
-	var reward_money = 1500
-	var reward_fp = 250
-	var unlock_text = ""
-	
-	if new_level == GameState.UNLOCK_LEVELS.staff:
-		unlock_text = GameState.T("modal.staff.title")
-		reward_money = 1500
-		reward_fp = 250
-	elif new_level == GameState.UNLOCK_LEVELS.techtree:
-		unlock_text = GameState.T("modal.techtree.title")
-		reward_money = 2500
-		reward_fp = 500
-	else:
-		reward_money = 1000 * new_level
-		reward_fp = 100 * new_level
+	var reward_money := 1000 * new_level
+	var reward_fp    := 100  * new_level
+	var unlock_text  := ""
+
+	match new_level:
+		GameState.UNLOCK_LEVELS.staff:
+			unlock_text  = GameState.T("levelup.unlock.hr_hint")
+			reward_money = 1500
+			reward_fp    = 250
+		GameState.UNLOCK_LEVELS.techtree:
+			unlock_text  = GameState.T("modal.techtree.title")
+			reward_money = 2500
+			reward_fp    = 500
+		4:
+			unlock_text  = GameState.T("levelup.unlock.l4_gastro")
+			reward_money = 4000
+			reward_fp    = 600
+		5:
+			unlock_text  = GameState.T("levelup.unlock.l5_staff_room")
+			reward_money = 5000
+			reward_fp    = 750
+		6:
+			unlock_text  = GameState.T("levelup.unlock.l6_guest_needs")
+			reward_money = 6000
+			reward_fp    = 900
+		7:
+			unlock_text  = GameState.T("levelup.unlock.l7_gourmet_kitchen")
+			reward_money = 7000
+			reward_fp    = 1100
+		8:
+			unlock_text  = GameState.T("levelup.unlock.l8_wellness")
+			reward_money = 8000
+			reward_fp    = 1300
+		9:
+			unlock_text  = GameState.T("levelup.unlock.l9_stars")
+			reward_money = 10000
+			reward_fp    = 1500
+		10:
+			unlock_text  = GameState.T("levelup.unlock.l10_tier2")
+			reward_money = 15000
+			reward_fp    = 2000
 
 	%LevelUpModal.setup(new_level, reward_money, reward_fp, unlock_text)
 	%LevelUpModal.open()
+
 
 
 # =============================================================================

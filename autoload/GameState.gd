@@ -31,9 +31,16 @@ signal sig_hotel_rep_changed(rep: int, rep_max: int)
 
 # Globale Level-Voraussetzungen für Core-Module
 const UNLOCK_LEVELS = {
-	"staff": 2,
-	"techtree": 3,
-	"auto_staff": 100 # TODO: Später ins Techtree/Tier 3 verlegen (Automatik-Tickets für Service)
+	"staff":          2,  # Personal einstellen
+	"techtree":       3,  # Techtree + Forschung
+	"gastro":         4,  # Gastronomie-Forschung (Küche, Restaurant)
+	"staff_room":     5,  # Personalraum
+	"guest_needs":    6,  # Gästebedürfnisse aktiv
+	"gourmet_kitchen":7,  # Gourmetküche-Forschung
+	"wellness":       8,  # Wellness-Forschung (Spa, Pool)
+	"gourmet_stars":  9,  # Gourmetsterne + Inspektor
+	"tier2":          10, # Techtree Tier 2 + Zufallsereignisse
+	"auto_staff":     100 # TODO: Später ins Techtree/Tier 3 verlegen
 }
 signal sig_hotel_fp_changed(new_fp: String)
 signal sig_hotel_day_changed(day_number: int)
@@ -418,9 +425,14 @@ func get_xp_needed_for_level(level: int) -> int:
 		1: return 150
 		2: return 500
 		3: return 1500
-		4: return 3500
-		5: return 7500
-		_: return int(7500 * pow(1.5, level - 5)) # fallback for > 5
+		4: return 3000
+		5: return 6000
+		6: return 9000
+		7: return 13500
+		8: return 20000
+		9: return 30000
+		10: return 45000
+		_: return 45000 # Max-Level 10 erreicht
 
 
 # =============================================================================
@@ -433,8 +445,8 @@ func add_exp(amount: int, _source: String = "Unbekannt") -> void:
 
 	# Prüfen, ob ein Level-Up stattgefunden hat (kann auch mehrfach sein)
 	while current_exp >= exp_max:
-		if current_level >= 5:
-			current_exp = exp_max # Cap at 5
+		if current_level >= 10:
+			current_exp = exp_max # Cap bei Max-Level 10
 			break
 
 		current_exp -= exp_max
@@ -448,14 +460,6 @@ func add_exp(amount: int, _source: String = "Unbekannt") -> void:
 
 		# Signal für das UI (feuert das levelup-modal)
 		sig_hotel_level_up.emit(current_level)
-		
-		# TechDemo-Ende-Logik bei Level 5
-		if current_level >= 5:
-			current_exp = exp_max
-			selected_hotel["exp"] = exp_max
-			if _demo_end_countdown < 0:
-				_demo_end_countdown = 15 # 15 Ingame-Minuten Verzögerung
-			break
 
 	# Update der Standard-EXP-Anzeige und des Levels im HUD
 	selected_hotel["exp"] = current_exp

@@ -491,6 +491,13 @@ levelup.unlock.restaurant,Restaurant baubar,Restaurant can be built
 levelup.unlock.research_hint,Büro bauen schaltet das Forschungssystem frei,Building an office unlocks the research system
 levelup.unlock.hr_hint,Vertrag mit Personaldienstleister freigeschaltet!,Contract with staffing agency unlocked!
 levelup.unlock.no_unlocks,Neue Freischaltungen kommen über den Forschungsbaum,New unlocks come through the research tree
+levelup.unlock.l4_gastro,Gastronomie-Forschung verfügbar!\nErforsche Küche & Restaurant im Techtree.,Gastronomy research available!\nUnlock Kitchen & Restaurant in the Tech Tree.
+levelup.unlock.l5_staff_room,Pausenraum verfügbar!\nBaue einen Pausenraum – dein Team wird es dir danken.,Staff Room available!\nBuild a Staff Room – your team will thank you.
+levelup.unlock.l6_guest_needs,Gästebedürfnisse aktiv!\nDeine Gäste haben ab jetzt individuelle Wünsche – erfülle sie für mehr Zufriedenheit.,Guest needs activated!\nYour guests now have individual needs – fulfil them for higher satisfaction.
+levelup.unlock.l7_gourmet_kitchen,Gourmetküche-Forschung verfügbar!\nDer Weg zu den Sternen beginnt im Techtree.,Gourmet Kitchen research available!\nThe path to the stars begins in the Tech Tree.
+levelup.unlock.l8_wellness,Wellness-Forschung verfügbar!\nErforsche Spa, Pool & Co. im Techtree.,Wellness research available!\nUnlock Spa, Pool & more in the Tech Tree.
+levelup.unlock.l9_stars,Gourmetsterne aktiv!\nDer Inspektor beobachtet dein Restaurant… sei bereit.,Gourmet Stars activated!\nThe inspector is watching your restaurant… be ready.
+levelup.unlock.l10_tier2,Techtree Tier 2 & Zufallsereignisse!\nDas Hotel entwickelt jetzt sein eigenes Leben. Bleib wachsam.,Tech Tree Tier 2 & Random Events!\nThe hotel takes on a life of its own. Stay alert.
 techtree.title,Technologiebaum,Technology Tree
 techtree.branch.zimmer,Zimmer & Unterbringung,Rooms & Accommodation
 techtree.branch.gastronomie,Gastronomie & Service,Gastronomy & Service

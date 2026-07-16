@@ -58,6 +58,8 @@ var _hover_idcard_style: StyleBox
 
 # =============================================================================
 func _ready() -> void:
+	if has_node("Watermark"):
+		$Watermark.text = GameState.GAME_STAGE
 	MusicManager.play_menu()
 	_load_assets()
 	_setup_modal()

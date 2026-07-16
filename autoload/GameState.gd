@@ -46,6 +46,8 @@ signal sig_hotel_fp_changed(new_fp: String)
 signal sig_hotel_day_changed(day_number: int)
 signal sig_hotel_time_changed(time_string: String)
 
+const GAME_STAGE: String = "PRE-ALPHA"
+
 signal sig_hotel_level_up(new_level: int)
 signal sig_techdemo_completed()
 

@@ -84,7 +84,7 @@ func _ready() -> void:
     logo.modulate.a = 0.0
     
     lbl_techdemo = Label.new()
-    lbl_techdemo.text = "TECHDEMO"
+    lbl_techdemo.text = GameState.GAME_STAGE
     lbl_techdemo.add_theme_font_size_override("font_size", 30)
     lbl_techdemo.add_theme_color_override("font_color", Color(0.8, 0.4, 0.1))
     lbl_techdemo.set_anchors_preset(Control.PRESET_CENTER)

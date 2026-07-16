@@ -1178,3 +1178,7 @@ ui.staff.refresh_applicants,Neue Bewerber,New Applicants
 staff.role.chef,Koch,Chef
 staff.role.kitchen_helper,Küchenhilfe,Kitchen Helper
 staff.role.waiter,Bedienung,Waiter
+
+staff.role.chef,Koch,Chef
+staff.role.kitchen_helper,KÃ¼chenhilfe,Kitchen Helper
+staff.role.waiter,Bedienung,Waiter

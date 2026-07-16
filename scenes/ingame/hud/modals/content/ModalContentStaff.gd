@@ -466,10 +466,10 @@ func _refresh_live_data() -> void:
 		else:
 			lbl_morale.add_theme_color_override("font_color", list_font_color)
 			
-	if _selected_staff != null:
-		# Minimal update of detail panel if needed. We update it by recreating to keep it simple, 
-		# since F4 doesn't have complex focus state inside detail_stats.
-		_update_details()
+	# (Auskommentiert, da ständiges Löschen/Neubauen der Details den Layout-Container zucken lässt 
+	# und den ScrollContainer der Liste zurücksetzt)
+	# if _selected_staff != null:
+	# 	_update_details()
 
 func _update_details() -> void:
 	for child in detail_stats.get_children():

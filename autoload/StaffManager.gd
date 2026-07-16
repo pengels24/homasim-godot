@@ -236,7 +236,9 @@ func _process_auto_assign() -> void:
 			var r_type = r.get("room_type_id", "")
 			var reg = GameState.room_registry.get(r_type, {})
 			var def = reg.get("def", {})
-			var room_id = r.get("id", "")
+			var room_id = str(r.get("room_number", ""))
+			if room_id == "" or room_id == "null":
+				room_id = "%s_%d_%d" % [r_type, int(r.get("x_pos", 0)), int(r.get("y_pos", 0))]
 			if room_id == "": continue
 			if def.get("is_poi", false) and def.get("required_role", "") != "":
 				all_rooms.append({"id": room_id, "def": def})

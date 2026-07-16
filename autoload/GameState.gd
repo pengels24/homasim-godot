@@ -96,6 +96,7 @@ func _ready() -> void:
 	load_room_config()
 	load_tool_config()
 	load_daily_schedule_config()
+	_load_recipes()
 	# Das macht diesen Autoload immun gegen die Godot-Pause!
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	

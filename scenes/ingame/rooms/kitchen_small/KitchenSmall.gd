@@ -18,6 +18,7 @@ static func get_definition() -> Dictionary:
 		"req_tech": "G1.2",
 		"max_beds": 0,
 		"is_poi": true, # Muss true sein für Personal-Zuweisung
+		"is_guest_poi": false, # Gäste dürfen nicht in die Küche
 		"visit_income": 0,
 		"visit_exp": 10,
 		"supply_cost_per_visit": 5,

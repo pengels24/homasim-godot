@@ -124,6 +124,7 @@ func _get_open_pois() -> Array[String]:
 		if not is_instance_valid(room): continue
 		var def = room.call("get_definition")
 		if not def.get("is_poi", false): continue
+		if not def.get("is_guest_poi", true): continue
 		
 		# Kinder dürfen nicht in adults_only POIs
 		if def.get("adults_only", false) and _guest_member.is_child:

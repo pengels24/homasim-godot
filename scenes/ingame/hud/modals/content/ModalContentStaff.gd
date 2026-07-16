@@ -686,7 +686,7 @@ func _build_assignment_ui() -> void:
 	right_margin.add_child(right_vbox)
 
 	var right_header = Label.new()
-	right_header.text = GameState.T("ui.staff.assign_staff", "Verfügbares Personal")
+	right_header.text = GameState.T("ui.staff.auto_assign_title", "Auto-Zuweisung")
 	right_header.theme_type_variation = "HeaderMedium"
 	right_vbox.add_child(right_header)
 
@@ -727,140 +727,22 @@ func _build_assignment_ui() -> void:
 			left_vbox.add_child(card)
 			card.populate(formatted_name, room_id, min_s, max_s, assigned)
 			card.sig_unassign_staff.connect(_on_unassign_requested)
-			card.sig_clicked.connect(_on_assign_room_clicked)
 			
-	# Rechte Spalte: Personal mit passender Rolle
-	var hired = StaffManager.get_state().get("hired", {}).values()
-	# Alle POI required_roles sammeln
-	var poi_roles: Array = []
-	for room in poi_rooms:
-		var r = room.call("get_definition").get("required_role", "")
-		if r != "" and not poi_roles.has(r):
-			poi_roles.append(r)
-
-	var matching_staff: Array = []
-	for s in hired:
-		var sid = s.get("id", "")
-		var assigned_room = StaffManager.room_assignments.get(sid, "")
-		if assigned_room.is_empty():
-			if poi_roles.is_empty() or poi_roles.has(s.get("role", "")):
-				matching_staff.append(s)
-
-	if matching_staff.is_empty():
-		var no_staff_lbl = Label.new()
-		no_staff_lbl.text = GameState.T("ui.staff.no_matching_staff", "Kein passendes Personal eingestellt.")
-		no_staff_lbl.add_theme_color_override("font_color", Color("#888888"))
-		right_vbox.add_child(no_staff_lbl)
-	else:
-		const CARD_STAFF = preload("res://scenes/ingame/hud/modals/content/cards/CardAssignStaff.tscn")
-		for staff in matching_staff:
-			var card = CARD_STAFF.instantiate()
-			right_vbox.add_child(card)
-			card.populate(staff)
-			card.sig_clicked.connect(_on_assign_staff_clicked)
-			
-	var btn_margin = MarginContainer.new()
-	btn_margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	btn_margin.add_theme_constant_override("margin_top", 16)
-	var btn_assign = Button.new()
-	btn_assign.size_flags_vertical = Control.SIZE_SHRINK_END
-	btn_assign.name = "BtnAssign"
-	btn_assign.text = GameState.T("ui.staff.assign.no_target")
-	btn_assign.custom_minimum_size = Vector2(0, 48)
-	btn_assign.disabled = true
-	btn_assign.pressed.connect(_on_assign_btn_pressed)
-	btn_margin.add_child(btn_assign)
-	right_vbox.add_child(btn_margin)
-			
-	_update_assignment_matching()
+	var info_lbl = Label.new()
+	info_lbl.text = GameState.T("ui.staff.auto_assign_desc", "Das Personal sucht sich selbstständig freie Arbeitsplätze (z.B. sucht ein Barkeeper automatisch nach einer Bar).\n\nKlicke links bei einem Raum auf 'Freistellen', um einen Mitarbeiter von diesem Raum zu lösen. Er sucht sich dann automatisch einen neuen, unbesetzten Arbeitsplatz.")
+	info_lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	info_lbl.add_theme_color_override("font_color", Color("#AAAAAA"))
+	info_lbl.custom_minimum_size = Vector2(100, 0)
+	right_vbox.add_child(info_lbl)
 
 func _on_assign_room_clicked(rid: String) -> void:
-	_selected_room_id = rid
-	_update_assignment_matching()
+	pass
 
 func _on_assign_staff_clicked(sid: String) -> void:
-	_selected_staff_id = sid
-	_update_assignment_matching()
+	pass
 
 func _on_assign_btn_pressed() -> void:
-	if _selected_room_id != "" and _selected_staff_id != "":
-		StaffManager.assign_to_room(_selected_staff_id, _selected_room_id)
-		_selected_staff_id = "" # Reset staff selection, keep room selection
-		_refresh_list()
-
-func _update_assignment_matching() -> void:
-	if not is_instance_valid(list_container): return
-	# WICHTIG: Da queue_free() verzögert ist, müssen wir das LETZTE Kind nehmen!
-	var child_count = list_container.get_child_count()
-	var hbox = list_container.get_child(child_count - 1) if child_count > 0 else null
-	if not is_instance_valid(hbox) or hbox.is_queued_for_deletion():
-		# Fallback: Suche nach dem HBoxContainer, der nicht gelöscht wird
-		for c in list_container.get_children():
-			if not c.is_queued_for_deletion() and c is HBoxContainer:
-				hbox = c
-				break
-	if not hbox: return
-	var left_vbox = hbox.find_child("LeftVBox", true, false)
-	var right_vbox = hbox.find_child("RightVBox", true, false)
-	if not left_vbox or not right_vbox: return
-	
-	var sel_req_role = ""
-	var has_sel_room = _selected_room_id != ""
-	
-	if has_sel_room and is_instance_valid(_map_grid) and _map_grid.has_method("get_placed_rooms"):
-		for room in _map_grid.get_placed_rooms():
-			if not is_instance_valid(room): continue
-			var rid = GuestManager._room_key(room)
-			if rid == _selected_room_id:
-				sel_req_role = room.call("get_definition").get("required_role", "")
-				break
-	
-	# Update left side (selection borders)
-	for card in left_vbox.get_children():
-		if card.has_method("set_selected") and "_room_id" in card:
-			card.set_selected(card._room_id == _selected_room_id)
-			
-	# Update right side (buttons)
-	var has_valid_match = false
-	for card in right_vbox.get_children():
-		if card.has_method("set_selected") and "_staff_role" in card:
-			var role_matches = (sel_req_role == "" or sel_req_role == card._staff_role)
-			card.set_matching(role_matches)
-			card.set_selected(card._staff_id == _selected_staff_id)
-			if card._staff_id == _selected_staff_id and role_matches:
-				has_valid_match = true
-				
-	var btn_assign = right_vbox.get_node_or_null("MarginContainer/BtnAssign")
-	if not btn_assign:
-		# Fallback falls MarginContainer den Standardnamen hat
-		for child in right_vbox.get_children():
-			if child is MarginContainer:
-				btn_assign = child.get_node_or_null("BtnAssign")
-				if btn_assign: break
-				
-	if btn_assign:
-		var SB_DISABLED = preload("res://assets/UI/menu_button_darkblue_disabled.tres")
-		
-		if not has_sel_room:
-			btn_assign.text = GameState.T("ui.staff.assign.select_target")
-			btn_assign.disabled = true
-			btn_assign.add_theme_stylebox_override("disabled", SB_DISABLED)
-		elif _selected_staff_id == "":
-			btn_assign.text = GameState.T("ui.staff.assign.select_staff")
-			btn_assign.disabled = true
-			btn_assign.add_theme_stylebox_override("disabled", SB_DISABLED)
-		elif not has_valid_match:
-			btn_assign.text = GameState.T("ui.staff.assign.wrong_role")
-			btn_assign.disabled = true
-			btn_assign.add_theme_stylebox_override("disabled", SB_DISABLED)
-		else:
-			btn_assign.text = GameState.T("ui.staff.assign.assign")
-			btn_assign.disabled = false
-			btn_assign.add_theme_stylebox_override("normal", SB_GREEN)
-			btn_assign.add_theme_stylebox_override("hover", SB_GREEN_HOVER)
-			btn_assign.add_theme_stylebox_override("pressed", SB_GREEN_PRESSED)
-			btn_assign.add_theme_stylebox_override("focus", SB_GREEN)
-
+	pass
 
 func _get_available_poi_roles() -> Array:
 	var roles = ["housekeeping", "maintenance"] # Immer erlaubt

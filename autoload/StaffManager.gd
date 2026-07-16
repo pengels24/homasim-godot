@@ -13,6 +13,17 @@ var daily_applicants: Array = []
 var room_assignments: Dictionary = {}  # staff_id → room_id
 
 var _last_generated_day: int = -1
+var _auto_assign_timer: float = 0.0
+
+# =============================================================================
+func _process(delta: float) -> void:
+	if GameState.active_hotel_id <= 0:
+		return
+		
+	_auto_assign_timer -= delta
+	if _auto_assign_timer <= 0.0:
+		_auto_assign_timer = 2.0
+		_process_auto_assign()
 
 # =============================================================================
 func _ready() -> void:
@@ -144,6 +155,56 @@ func get_staff_for_room(room_id: String) -> Array:
 			if hired_staff.has(sid):
 				result.append(hired_staff[sid])
 	return result
+
+# =============================================================================
+func _process_auto_assign() -> void:
+	if hired_staff.is_empty():
+		return
+		
+	# 1. Alle gebauten Räume sammeln, die Personal benötigen
+	var active_hotel = GameState.active_hotel_id
+	if active_hotel <= 0: return
+	
+	var all_rooms = []
+	for p in SaveManager.get_built_plots(active_hotel):
+		for r in p.get("rooms", []):
+			var r_type = r.get("room_type_id", "")
+			var reg = GameState.room_registry.get(r_type, {})
+			var def = reg.get("def", {})
+			if def.get("is_poi", false) and def.get("required_role", "") != "":
+				all_rooms.append({"id": r["id"], "def": def})
+				
+	# 2. Unassigned Staff durchgehen
+	var unassigned_staff_ids = []
+	for staff_id in hired_staff:
+		if not room_assignments.has(staff_id):
+			unassigned_staff_ids.append(staff_id)
+			
+	for staff_id in unassigned_staff_ids:
+		var staff = hired_staff[staff_id]
+		var role = staff.get("role", "")
+		var assigned = false
+		
+		# Prio 1: Räume, die ihren min_staff noch nicht haben
+		for r in all_rooms:
+			if r["def"].get("required_role", "") == role:
+				var c = get_staff_for_room(r["id"]).size()
+				var min_s = r["def"].get("min_staff", 1)
+				if c < min_s:
+					assign_to_room(staff_id, r["id"])
+					assigned = true
+					break
+					
+		if assigned: continue
+		
+		# Prio 2: Räume, die max_staff noch nicht erreicht haben
+		for r in all_rooms:
+			if r["def"].get("required_role", "") == role:
+				var c = get_staff_for_room(r["id"]).size()
+				var max_s = r["def"].get("max_staff", 1)
+				if c < max_s:
+					assign_to_room(staff_id, r["id"])
+					break
 
 # =============================================================================
 ## Prüft, ob ein POI genügend Personal hat, um als geöffnet zu gelten.

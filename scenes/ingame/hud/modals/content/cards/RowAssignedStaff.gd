@@ -9,6 +9,7 @@ var _staff_id: String = ""
 
 func _ready() -> void:
 	btn_remove.pressed.connect(func(): sig_remove_clicked.emit(_staff_id))
+	btn_remove.tooltip_text = GameState.T("ui.staff.assign.unassign", "Personal freistellen")
 
 func populate(staff: Dictionary) -> void:
 	_staff_id = staff.get("id", "")

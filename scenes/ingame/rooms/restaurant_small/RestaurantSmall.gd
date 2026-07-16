@@ -28,7 +28,7 @@ static func get_definition() -> Dictionary:
 		"open_from": 660, # 11:00
 		"open_to": 1380,  # 23:00
 		"capacity": 20,   # Max. gleichzeitige Gäste (2 Familien-Tische + 5 kleine Tische = 20 Plätze)
-		"valid_door_slots": ["R1", "L1", "B1", "B2"],
+		"valid_door_slots": ["R2"],
 		"cleanliness_level": 100,
 		"maintenance_level": 100,
 		"is_service_requested": false

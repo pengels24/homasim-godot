@@ -44,11 +44,19 @@ func _on_room_built(room_type_id: String) -> void:
 	var reg = GameState.room_registry.get(room_type_id, {})
 	var def = reg.get("def", {})
 	var required_role = def.get("required_role", "")
-	if required_role == "": return
+	var allowed_roles = def.get("allowed_roles", [required_role])
+	if allowed_roles.is_empty() and required_role == "": return
 	
-	# Prüfen ob diese Rolle schon Bewerber hat
-	var has_applicant_for_role = daily_applicants.any(func(a): return a.get("role", "") == required_role)
-	if not has_applicant_for_role:
+	# Prüfen ob diese Rollen schon Bewerber haben
+	var missing_applicant = false
+	for r in allowed_roles:
+		if r == "": continue
+		var has_applicant_for_role = daily_applicants.any(func(a): return a.get("role", "") == r)
+		if not has_applicant_for_role:
+			missing_applicant = true
+			break
+			
+	if missing_applicant:
 		_generate_daily_applicants()
 		sig_applicants_generated.emit()
 
@@ -111,8 +119,10 @@ func _generate_daily_applicants() -> void:
 			if GameState.room_registry.has(room_type_id):
 				var def = GameState.room_registry[room_type_id].get("def", {})
 				var req_role = def.get("required_role", "")
-				if req_role != "" and not active_roles.has(req_role):
-					active_roles.append(req_role)
+				var allowed = def.get("allowed_roles", [req_role] if req_role != "" else [])
+				for r in allowed:
+					if r != "" and not active_roles.has(r):
+						active_roles.append(r)
 
 	var roles = staff_config["roles"]
 	for role_key in roles.keys():
@@ -244,7 +254,8 @@ func _process_auto_assign() -> void:
 		
 		# Prio 1: Räume, die ihren min_staff noch nicht haben
 		for r in all_rooms:
-			if r["def"].get("required_role", "") == role:
+			var allowed = r["def"].get("allowed_roles", [r["def"].get("required_role", "")] )
+			if allowed.has(role):
 				var c = get_staff_for_room(r["id"]).size()
 				var min_s = r["def"].get("min_staff", 1)
 				if c < min_s:
@@ -256,7 +267,8 @@ func _process_auto_assign() -> void:
 		
 		# Prio 2: Räume, die max_staff noch nicht erreicht haben
 		for r in all_rooms:
-			if r["def"].get("required_role", "") == role:
+			var allowed = r["def"].get("allowed_roles", [r["def"].get("required_role", "")] )
+			if allowed.has(role):
 				var c = get_staff_for_room(r["id"]).size()
 				var max_s = r["def"].get("max_staff", 1)
 				if c < max_s:

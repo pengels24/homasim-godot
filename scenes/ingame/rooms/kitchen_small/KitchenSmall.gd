@@ -23,6 +23,7 @@ static func get_definition() -> Dictionary:
 		"supply_cost_per_visit": 5,
 		"adults_only": false,
 		"required_role": "chef",
+		"allowed_roles": ["chef", "kitchen_helper"],
 		"min_staff": 1,
 		"max_staff": 2,
 		"open_from": 480, # 8:00

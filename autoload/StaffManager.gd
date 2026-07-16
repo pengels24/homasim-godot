@@ -252,11 +252,11 @@ func _process_auto_assign() -> void:
 		var role = staff.get("role", "")
 		var assigned = false
 		
-		# Prio 1: Räume, die ihren min_staff noch nicht haben
+		# Prio 1: Räume, die ihren min_staff noch nicht haben (Nur für required_role)
 		for r in all_rooms:
-			var allowed = r["def"].get("allowed_roles", [r["def"].get("required_role", "")] )
-			if allowed.has(role):
-				var c = get_staff_for_room(r["id"]).size()
+			var req_role = r["def"].get("required_role", "")
+			if req_role == role:
+				var c = _count_role_in_room(r["id"], req_role)
 				var min_s = r["def"].get("min_staff", 1)
 				if c < min_s:
 					assign_to_room(staff_id, r["id"])
@@ -267,8 +267,13 @@ func _process_auto_assign() -> void:
 		
 		# Prio 2: Räume, die max_staff noch nicht erreicht haben
 		for r in all_rooms:
-			var allowed = r["def"].get("allowed_roles", [r["def"].get("required_role", "")] )
+			var req_role = r["def"].get("required_role", "")
+			var allowed = r["def"].get("allowed_roles", [req_role] )
 			if allowed.has(role):
+				# Zusatzrollen dürfen erst zugewiesen werden, wenn die Hauptrolle (min_staff) erfüllt ist
+				if role != req_role and not is_poi_staffed(r["def"], r["id"]):
+					continue
+					
 				var c = get_staff_for_room(r["id"]).size()
 				var max_s = r["def"].get("max_staff", 1)
 				if c < max_s:
@@ -279,10 +284,19 @@ func _process_auto_assign() -> void:
 ## Prüft, ob ein POI genügend Personal hat, um als geöffnet zu gelten.
 ## POIs ohne required_role (z.B. Lobby) gelten immer als besetzt.
 func is_poi_staffed(room_def: Dictionary, room_id: String) -> bool:
-	if room_def.get("required_role", "") == "":
+	var req_role = room_def.get("required_role", "")
+	if req_role == "":
 		return true
 	var min_s: int = room_def.get("min_staff", 1)
-	return get_staff_for_room(room_id).size() >= min_s
+	return _count_role_in_room(room_id, req_role) >= min_s
+
+# =============================================================================
+func _count_role_in_room(room_id: String, role: String) -> int:
+	var c = 0
+	for s in get_staff_for_room(room_id):
+		if s.get("role", "") == role:
+			c += 1
+	return c
 
 # =============================================================================
 func hire_staff(applicant_id: String) -> bool:

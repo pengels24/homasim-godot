@@ -46,7 +46,6 @@ var _room_id: String = ""
 func _ready() -> void:
 	if not is_inside_tree(): return
 	super._ready()
-	_room_id = GuestManager._room_key(self)
 	
 	# Alle Stühle aus den Gruppen auslesen
 	var furniture = get_node_or_null("Interior/Furniture")
@@ -161,7 +160,9 @@ func place_order_for_seat(guest_id: String) -> void:
 				if "restaurant_small" in r.get("served_in", []):
 					possible_recipes.append(r)
 			
-			if not possible_recipes.is_empty():
+			if not GameState.recipes.is_empty():
+				if _room_id == "":
+					_room_id = GuestManager._room_key(self)
 				var chosen = possible_recipes[randi() % possible_recipes.size()]
 				if GastroManager:
 					var order_id = GastroManager.place_order(guest_id, chosen.get("id"), _room_id)
@@ -172,6 +173,9 @@ func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	if Engine.get_frames_drawn() % 60 == 0:
 		if GastroManager:
+			if _room_id == "":
+				_room_id = GuestManager._room_key(self)
+				
 			var ready_orders = GastroManager.get_ready_orders_for_restaurant(_room_id)
 			for order_id in ready_orders:
 				# Prüfen ob wir schon einen serve_task dafür haben

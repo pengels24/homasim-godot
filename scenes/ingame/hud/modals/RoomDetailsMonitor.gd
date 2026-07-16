@@ -73,6 +73,9 @@ func close() -> void:
 
 func _on_handle_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
+		if event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
+			get_viewport().set_input_as_handled()
+			return
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
 				_dragging = true
@@ -85,4 +88,4 @@ func _on_handle_input(event: InputEvent) -> void:
 func _on_panel_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
-			%MenuPanel.accept_event()
+			get_viewport().set_input_as_handled()

@@ -44,9 +44,9 @@ var _active_cook_timers: Dictionary = {} # order_id -> time_left
 var _check_timer: float = 0.0
 
 func _ready() -> void:
+	if not is_instance_valid(self): return
 	if not is_inside_tree(): return
 	super._ready()
-	_room_id = GuestManager._room_key(self)
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
@@ -60,6 +60,9 @@ func _process(delta: float) -> void:
 
 func _check_for_new_orders() -> void:
 	if not GastroManager: return
+	
+	if _room_id == "":
+		_room_id = GuestManager._room_key(self)
 	
 	var assigned = StaffManager.get_staff_for_room(_room_id)
 	var has_chef = false
@@ -126,6 +129,18 @@ func _process_cooking(delta: float) -> void:
 # =============================================================================
 func get_live_details() -> Array[Dictionary]:
 	var details: Array[Dictionary] = []
+	
+	if Engine.is_editor_hint() == false:
+		if _room_id == "":
+			_room_id = GuestManager._room_key(self)
+			
+		var assigned = StaffManager.get_staff_for_room(_room_id)
+		var chef_count = 0
+		for s in assigned:
+			if s.get("role") == "chef": chef_count += 1
+		details.append({"left": "Room ID", "right": _room_id})
+		details.append({"left": "Zugeordnet", "right": "%d Personal (%d Köche)" % [assigned.size(), chef_count]})
+		
 	for order_id in _active_cook_timers.keys():
 		var time_left = int(_active_cook_timers[order_id])
 		var r_name = "?"

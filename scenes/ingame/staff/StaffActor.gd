@@ -25,6 +25,8 @@ var _debug_line: Line2D
 const SPEED := 40.0
 
 func _ready() -> void:
+	scale = Vector2(0.8, 0.8)
+	
 	_work_audio = AudioStreamPlayer.new()
 	_work_audio.bus = "Sound"
 	add_child(_work_audio)
@@ -59,13 +61,15 @@ func _update_visuals() -> void:
 	var gender = _staff_data.get("gender", "female")
 	
 	var texture_path = "res://assets/staff/staff_avatar_%s_%s.aseprite" % [gender, job]
+	if not ResourceLoader.exists(texture_path):
+		texture_path = "res://assets/staff/staff_avatar_%s_bartender.aseprite" % [gender]
+		
 	if ResourceLoader.exists(texture_path):
 		var tex = load(texture_path)
 		if tex and tex is Texture2D:
 			_sprite.texture = tex
 	else:
-		pass
-# 		push_warning("[StaffActor] Aseprite %s nicht gefunden!" % texture_path)
+		push_warning("[StaffActor] Aseprite %s nicht gefunden!" % texture_path)
 	
 	# Solange kein Personalraum, warten MA unsichtbar in der Lobby
 	_sprite.visible = false
@@ -74,7 +78,16 @@ func get_staff_id() -> String:
 	return str(_staff_data.get("id", ""))
 
 func get_job_type() -> String:
-	return str(_staff_data.get("role", "housekeeping"))
+	return _staff_data.get("role", "housekeeping")
+
+func _get_assigned_room() -> Node2D:
+	var room_id = StaffManager.room_assignments.get(get_staff_id(), "")
+	if room_id == "": return null
+	if is_instance_valid(_map_grid) and _map_grid.has_method("get_placed_rooms"):
+		for room in _map_grid.get_placed_rooms():
+			if GuestManager._room_key(room) == room_id:
+				return room
+	return null
 
 func despawn() -> void:
 	if not _current_task.is_empty():
@@ -154,8 +167,8 @@ func _process_idle() -> void:
 				if t.type == "serve_meal":
 					var order_id = t.target.get("order_id")
 					var kitchen_id = GastroManager.active_orders.get(order_id, {}).get("kitchen_id", "")
-					if _map_grid and "active_rooms" in _map_grid:
-						for room in _map_grid.active_rooms:
+					if _map_grid and _map_grid.has_method("get_placed_rooms"):
+						for room in _map_grid.get_placed_rooms():
 							if is_instance_valid(room) and GuestManager._room_key(room) == kitchen_id:
 								target_room = room
 								break
@@ -187,6 +200,30 @@ func _process_idle() -> void:
 					_current_task = {}
 					t.status = "open"
 				break
+				
+	# Wenn er keinen neuen Job gefunden hat (state ist immer noch idle), geht er an seinen Arbeitsplatz oder in die Lobby zurück
+	if _state == "idle":
+		var room = _get_assigned_room()
+		
+		if room != null and not is_night:
+			if _current_room != room:
+				_start_path_to_room(room)
+				if _path.size() > 0:
+					_state = "returning"
+					_sprite.visible = true
+				_think_timer = 1.0
+			else:
+				_sprite.visible = true
+				_think_timer = 2.0 # Im Raum chillen
+		else:
+			var spawn_pos = _controller._get_lobby_spawn_pos()
+			if global_position.distance_to(spawn_pos) > 10.0:
+				_start_path_to_lobby()
+				_state = "returning"
+				_think_timer = 1.0
+			else:
+				_sprite.visible = false
+				_think_timer = 1.0
 
 func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void:
 	var start_tile: Vector2i
@@ -299,7 +336,6 @@ func _process_walking(delta: float, speed: float) -> void:
 							_current_room = _current_task.target
 			elif _state == "returning":
 				_state = "idle"
-				_sprite.visible = false  # Wieder unsichtbar in der Lobby
 			return
 
 	var move_dist = speed * delta
@@ -373,15 +409,14 @@ func _process_working(delta: float, speed_mult: float) -> void:
 				_work_timer = 1.0
 			return
 			
+		if _current_task.type == "serve_meal" and typeof(_current_task.target) == TYPE_DICTIONARY:
+			var target_room = _current_task.target.get("room")
+			if is_instance_valid(target_room) and target_room.has_method("serve_order_to_seat"):
+				target_room.serve_order_to_seat(_current_task.target.get("order_id"))
+		
 		TaskManager.complete_task(_current_task.id)
 		_current_task = {}
 		
 		# Prüfen ob es direkt noch einen weiteren Job gibt
 		_state = "idle"
 		_process_idle()
-		
-		# Wenn er keinen neuen Job gefunden hat (state ist immer noch idle), geht er in die Lobby zurück
-		if _state == "idle":
-			_start_path_to_lobby()
-			_state = "returning"
-			_think_timer = 1.0 # Nach der Arbeit kurz durchatmen

@@ -189,8 +189,10 @@ func _process_auto_assign() -> void:
 			var r_type = r.get("room_type_id", "")
 			var reg = GameState.room_registry.get(r_type, {})
 			var def = reg.get("def", {})
+			var room_id = r.get("id", "")
+			if room_id == "": continue
 			if def.get("is_poi", false) and def.get("required_role", "") != "":
-				all_rooms.append({"id": r["id"], "def": def})
+				all_rooms.append({"id": room_id, "def": def})
 				
 	# 2. Unassigned Staff durchgehen
 	var unassigned_staff_ids = []

@@ -235,7 +235,12 @@ func _process_walking(delta: float, speed: float) -> void:
 				_state = "working"
 				# Zufälliger Versatz, damit sich überlappende Mitarbeiter optisch trennen
 				global_position += Vector2(randf_range(-6.0, 6.0), randf_range(-6.0, 6.0))
-				_work_timer = 20.0
+				var morale = _staff_data.get("morale", 100)
+				var penalty = 0.0
+				if morale < 50:
+					penalty = 0.3 * (float(50 - morale) / 50.0) # Bis zu +30% Arbeitszeit
+					
+				_work_timer = 20.0 * (1.0 + penalty)
 				_work_timer_max = _work_timer
 				if _current_task.has("target"):
 					_current_room = _current_task["target"]

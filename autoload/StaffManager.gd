@@ -219,8 +219,29 @@ func _process_wages() -> void:
 
 
 # =============================================================================
+func _process_morale() -> void:
+	var to_fire = []
+	for staff_id in hired_staff:
+		var staff = hired_staff[staff_id]
+		var current_morale = staff.get("morale", 100)
+		
+		# Täglicher Basis-Verfall der Moral (-2)
+		current_morale = max(0, current_morale - 2)
+		staff["morale"] = current_morale
+		
+		if current_morale <= 0:
+			to_fire.append(staff_id)
+		elif current_morale < 20:
+			Toast.show(staff["first_name"] + " droht zu kündigen! (Moral kritisch)", "personal")
+			
+	for staff_id in to_fire:
+		Toast.show(hired_staff[staff_id]["first_name"] + " hat gekündigt! (Moral = 0)", "personal")
+		fire_staff(staff_id)
+
+# =============================================================================
 func _on_midnight_struck(_day: int) -> void:
 	_process_wages()
+	_process_morale()
 
 # =============================================================================
 func _on_morning_struck() -> void:

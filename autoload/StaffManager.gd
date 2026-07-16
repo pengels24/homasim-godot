@@ -15,6 +15,8 @@ var room_assignments: Dictionary = {}  # staff_id → room_id
 var _last_generated_day: int = -1
 var _auto_assign_timer: float = 0.0
 
+const MAX_DAILY_REFRESHES: int = 2
+
 # =============================================================================
 func _process(delta: float) -> void:
 	if GameState.active_hotel_id <= 0:
@@ -120,6 +122,21 @@ func _generate_daily_applicants() -> void:
 			daily_applicants.append(_generate_single_applicant(role_key))
 			
 	sig_applicants_generated.emit()
+
+# =============================================================================
+func get_daily_refreshes() -> int:
+	return GameState.selected_hotel.get("staff_refreshes", 0)
+
+# =============================================================================
+func refresh_applicants() -> bool:
+	var refreshes = get_daily_refreshes()
+	if refreshes >= MAX_DAILY_REFRESHES:
+		return false
+	
+	GameState.selected_hotel["staff_refreshes"] = refreshes + 1
+	_generate_daily_applicants()
+	return true
+
 
 
 # =============================================================================
@@ -344,6 +361,10 @@ func _on_midnight_struck(_day: int) -> void:
 
 # =============================================================================
 func _on_morning_struck() -> void:
+	# Jeden Morgen den Counter zurücksetzen
+	if not GameState.selected_hotel.is_empty():
+		GameState.selected_hotel["staff_refreshes"] = 0
+		
 	_ensure_daily_applicants()
 
 # =============================================================================

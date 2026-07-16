@@ -119,11 +119,42 @@ func _build_tabs() -> void:
 		btn.set_meta("tab_idx", i)
 		tab_hbox.add_child(btn)
 		
+	var spacer = Control.new()
+	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	tab_hbox.add_child(spacer)
+	
+	var refresh_btn = Button.new()
+	refresh_btn.custom_minimum_size = Vector2(250, 50)
+	refresh_btn.add_theme_stylebox_override("normal", SB_BLUE)
+	refresh_btn.add_theme_stylebox_override("hover", SB_BLUE_HOVER)
+	refresh_btn.add_theme_stylebox_override("pressed", SB_BLUE_PRESSED)
+	refresh_btn.add_theme_stylebox_override("focus", SB_BLUE)
+	refresh_btn.pressed.connect(_on_refresh_applicants_pressed)
+	refresh_btn.set_meta("is_refresh_btn", true)
+	tab_hbox.add_child(refresh_btn)
+		
 	_update_tab_buttons()
 
 func _update_tab_buttons() -> void:
 	for btn in tab_hbox.get_children():
-		btn.button_pressed = (btn.get_meta("tab_idx") == _current_tab)
+		if btn.has_meta("tab_idx"):
+			btn.button_pressed = (btn.get_meta("tab_idx") == _current_tab)
+		elif btn.has_meta("is_refresh_btn"):
+			btn.visible = (_current_tab == 1)
+			var max_ref = StaffManager.MAX_DAILY_REFRESHES
+			var cur_ref = StaffManager.get_daily_refreshes()
+			btn.text = GameState.T("ui.staff.refresh_applicants") + " (%d/%d)" % [cur_ref, max_ref]
+			btn.disabled = (cur_ref >= max_ref)
+			
+			if btn.disabled:
+				btn.modulate = Color(1, 1, 1, 0.5)
+			else:
+				btn.modulate = Color.WHITE
+
+func _on_refresh_applicants_pressed() -> void:
+	if StaffManager.refresh_applicants():
+		_update_tab_buttons()
+		_refresh_list()
 
 func _on_tab_changed(tab: int) -> void:
 	_current_tab = tab

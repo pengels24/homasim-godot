@@ -28,9 +28,9 @@ func setup(member: GuestMember) -> void:
 
 	# 4. Kinder schrumpfen
 	if member.is_child:
-		scale = Vector2(0.7, 0.7)
+		scale = Vector2(0.6, 0.6)
 	else:
-		scale = Vector2(1.0, 1.0)
+		scale = Vector2(0.9, 0.9)
 
 
 # =============================================================================

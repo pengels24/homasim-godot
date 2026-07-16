@@ -313,7 +313,9 @@ func _refresh_list() -> void:
 			if _current_tab == 0:
 				var role = item.get("role", "")
 				var assigned = StaffManager.room_assignments.get(item.get("id", ""), "")
-				if role == "bartender" or role == "receptionist":
+				var is_roaming = (role == "housekeeping" or role == "maintenance")
+				
+				if not is_roaming:
 					if assigned == "":
 						lbl_status.text = GameState.T("ui.staff.status.unassigned", "Ohne Aufgabe")
 						lbl_status.add_theme_color_override("font_color", Color.GRAY)
@@ -766,7 +768,9 @@ func _build_assignment_ui() -> void:
 			var min_s: int = def.get("min_staff", 1)
 			var max_s: int = def.get("max_staff", 1)
 			
-			var label_text: String = def.get("label", "Raum")
+			var label_text: String = GameState.T(def.get("name", ""))
+			if label_text == "" or label_text == def.get("name", ""):
+				label_text = def.get("label", "Raum")
 			var prefix: String = def.get("prefix", "")
 			var r_num: String = room.room_number if "room_number" in room else "????"
 			var display_id: String = prefix + r_num if prefix != "" and not r_num.begins_with(prefix) else r_num

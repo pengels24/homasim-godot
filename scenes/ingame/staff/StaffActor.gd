@@ -134,11 +134,11 @@ func _process_idle() -> void:
 			if my_job == "maintenance" and t.type == "repair_room": is_match = true
 			
 			if my_job == "waiter" and t.type in ["serve_meal", "clean_table"]:
-				var assigned = StaffManager.get_assignments_for_staff(get_staff_id())
+				var assigned_room = StaffManager.room_assignments.get(get_staff_id(), "")
 				var target_room_id = ""
 				if typeof(t.target) == TYPE_DICTIONARY and is_instance_valid(t.target.get("room")):
 					target_room_id = GuestManager._room_key(t.target.get("room"))
-				if assigned.has(target_room_id):
+				if assigned_room == target_room_id:
 					is_match = true
 			
 			if is_match:

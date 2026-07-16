@@ -31,6 +31,24 @@ func _ready() -> void:
 	if TimeManager:
 		TimeManager.sig_midnight_struck.connect(_on_midnight_struck)
 		TimeManager.sig_morning_struck.connect(_on_morning_struck)
+	# Bewerber regenerieren wenn ein neuer Raum gebaut wird (z.B. Küche -> Koch-Bewerber erscheinen sofort)
+	if not GameState.sig_room_built.is_connected(_on_room_built):
+		GameState.sig_room_built.connect(_on_room_built)
+
+# =============================================================================
+## Wird ausgelöst wenn ein neuer Raum gebaut wurde – regeneriert Bewerber
+## falls der neue Raum eine Rolle erfordert, die noch keine Bewerber hat.
+func _on_room_built(room_type_id: String) -> void:
+	var reg = GameState.room_registry.get(room_type_id, {})
+	var def = reg.get("def", {})
+	var required_role = def.get("required_role", "")
+	if required_role == "": return
+	
+	# Prüfen ob diese Rolle schon Bewerber hat
+	var has_applicant_for_role = daily_applicants.any(func(a): return a.get("role", "") == required_role)
+	if not has_applicant_for_role:
+		_generate_daily_applicants()
+		sig_applicants_generated.emit()
 
 # =============================================================================
 func _load_config() -> void:

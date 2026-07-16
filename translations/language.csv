@@ -1166,3 +1166,6 @@ tt.build.room.too_expensive,###\nKosten: *** (Nicht genug Geld),###\nCost: *** (
 
 log.guest.perfect_day,Tagesabschluss (Perfekter Tag! +100 EXP),End of Day (Perfect Day! +100 EXP)
 hud.top.right.tooltip.activity_log,Ereignisse ###,Events ###
+
+tutorial.gastro.title;Gastronomie & Küche;Gastronomy & Kitchen
+tutorial.gastro.desc;" Mit einer Küche und einem Restaurant versorgst du deine Gäste mit Essen.\n\nBeachte:\n- Das Restaurant erfordert eine funktionierende Küche.\n- Ein Koch kann jeweils eine Mahlzeit gleichzeitig zubereiten.\n- Küchenhilfen beschleunigen das Kochen.\n- Die Bedienung bringt das Essen aus der Küche an den Tisch und räumt später ab.\n\nStelle sicher dass genug Personal für den Ansturm bereitsteht!\;\With a kitchen and a restaurant you provide food for your guests.\n\nNote:\n- The restaurant requires a functioning kitchen.\n- A chef can prepare one meal at a time.\n- Kitchen helpers speed up the cooking process.\n- The waiter brings the food from the kitchen to the table and cleans up later.\n\nMake sure you have enough staff ready for the rush!\n

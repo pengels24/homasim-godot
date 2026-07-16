@@ -1,1 +1,158 @@
-extends Node2D
+extends "res://scenes/ingame/rooms/Room.gd"
+
+# =============================================================================
+static func get_definition() -> Dictionary:
+	return {
+		"id": "restaurant_small",
+		"build_cost": 5000,
+		"exp_reward": 500,
+		"prefix": "R",
+		"label": "RE",
+		"name": "roomdef.name.long.restaurant_small",
+		"category": "gastro",
+		"icon": "res://assets/icons/angelus2010/Rooms/ang-restaurant.aseprite",
+		"nightly_price": 0,
+		"locked": false,
+		"in_build_menu": true,
+		"req_level": 3,
+		"req_tech": "G1.3",
+		"max_beds": 0,
+		"is_poi": true,
+		"visit_income": 0, # Wird durch Rezepte bestimmt
+		"visit_exp": 15,
+		"supply_cost_per_visit": 10,
+		"adults_only": false,
+		"required_role": "waiter",
+		"min_staff": 1,
+		"max_staff": 3,
+		"open_from": 660, # 11:00
+		"open_to": 1380,  # 23:00
+		"capacity": 20,   # Max. gleichzeitige Gäste (2 Familien-Tische + 5 kleine Tische = 20 Plätze)
+		"valid_door_slots": ["R1", "L1", "B1", "B2"],
+		"cleanliness_level": 100,
+		"maintenance_level": 100,
+		"is_service_requested": false
+	}
+
+# =============================================================================
+# VARIABLES
+# =============================================================================
+
+# { chair_node: Node2D, occupied_by: guest_id, status: "clean"|"dirty", order_id: "" }
+var _seats: Array = []
+var _room_id: String = ""
+
+# =============================================================================
+func _ready() -> void:
+	if not is_inside_tree(): return
+	
+	_room_id = GuestManager._room_key(self)
+	
+	# Alle Stühle aus den Gruppen auslesen
+	var furniture = get_node_or_null("Interior/Furniture")
+	if not furniture: return
+	
+	var groups = ["Chairs1", "Chairs2", "Fam1", "Fam2"]
+	for g in groups:
+		var parent_node = furniture.get_node_or_null(g)
+		if parent_node:
+			for child in parent_node.get_children():
+				if "Chair" in child.name:
+					_seats.append({
+						"node": child,
+						"occupied_by": "",
+						"status": "clean",
+						"order_id": ""
+					})
+
+# =============================================================================
+# GUEST INTERACTION
+# =============================================================================
+
+## Prüft ob ein freier, sauberer Platz existiert
+func has_free_seat() -> bool:
+	for seat in _seats:
+		if seat["occupied_by"] == "" and seat["status"] == "clean":
+			return true
+	return false
+
+## Belegt einen Platz für einen Gast und gibt die globale Position des Stuhls zurück
+func claim_seat(guest_id: String) -> Vector2:
+	for seat in _seats:
+		if seat["occupied_by"] == "" and seat["status"] == "clean":
+			seat["occupied_by"] = guest_id
+			# Die Stühle sind in verschiedenen Parent-Nodes, get_global_position() ist am sichersten
+			return seat["node"].global_position
+	return Vector2.ZERO
+
+## Gast verlässt den Platz - Tisch wird dreckig
+func leave_seat(guest_id: String) -> void:
+	for seat in _seats:
+		if seat["occupied_by"] == guest_id:
+			seat["occupied_by"] = ""
+			seat["status"] = "dirty"
+			seat["order_id"] = ""
+			if TaskManager:
+				TaskManager.add_task("clean_table", {"room": self, "pos": seat["node"].global_position})
+			break
+
+## Bedienung räumt Tisch ab
+func clean_dirty_seat() -> bool:
+	for seat in _seats:
+		if seat["status"] == "dirty" and seat["occupied_by"] == "":
+			seat["status"] = "clean"
+			return true
+	return false
+
+## Sucht einen schmutzigen Stuhl (für TaskManager)
+func get_dirty_seat_position() -> Vector2:
+	for seat in _seats:
+		if seat["status"] == "dirty" and seat["occupied_by"] == "":
+			return seat["node"].global_position
+	return Vector2.ZERO
+
+## Gast bestellt etwas, sobald er sitzt
+func place_order_for_seat(guest_id: String) -> void:
+	for seat in _seats:
+		if seat["occupied_by"] == guest_id and seat["status"] == "clean":
+			var possible_recipes = []
+			for r in GameState.recipes:
+				if "restaurant_small" in r.get("served_in", []):
+					possible_recipes.append(r)
+			
+			if not possible_recipes.is_empty():
+				var chosen = possible_recipes[randi() % possible_recipes.size()]
+				if GastroManager:
+					var order_id = GastroManager.place_order(guest_id, chosen.get("id"), _room_id)
+					seat["order_id"] = order_id
+					# Wir melden keinen Task, denn die Küche fängt an zu kochen!
+
+func _process(delta: float) -> void:
+	if Engine.is_editor_hint(): return
+	if Engine.get_frames_drawn() % 60 == 0:
+		if GastroManager:
+			var ready_orders = GastroManager.get_ready_orders_for_restaurant(_room_id)
+			for order_id in ready_orders:
+				# Prüfen ob wir schon einen serve_task dafür haben
+				var has_task = false
+				if TaskManager:
+					for t in TaskManager._tasks:
+						if t.type == "serve_meal" and t.target.get("order_id") == order_id:
+							has_task = true
+							break
+				if not has_task and TaskManager:
+					# Find seat
+					var target_seat_pos = Vector2.ZERO
+					for seat in _seats:
+						if seat["order_id"] == order_id:
+							target_seat_pos = seat["node"].global_position
+							break
+					TaskManager.add_task("serve_meal", {"room": self, "pos": target_seat_pos, "order_id": order_id})
+
+## Essen wird von der Bedienung an den Tisch gebracht
+func serve_order_to_seat(order_id: String) -> void:
+	for seat in _seats:
+		if seat["order_id"] == order_id:
+			if GastroManager:
+				GastroManager.serve_order(order_id)
+			break

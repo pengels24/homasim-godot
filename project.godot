@@ -37,6 +37,7 @@ GlobalConsole="*uid://devconsole"
 TimeManager="*uid://bjb8v5puj4udo"
 FinanceManager="*uid://cax7qo8lsmlug"
 StaffManager="*res://autoload/StaffManager.gd"
+GastroManager="*res://autoload/GastroManager.gd"
 SoundManager="*res://autoload/SoundManager.gd"
 
 [display]

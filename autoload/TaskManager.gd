@@ -73,6 +73,19 @@ func complete_task(task_id: String) -> void:
 			# signal für repair existiert (noch) nicht, also nur update_indicator via property change
 			if room.has_method("_update_indicator"):
 				room.call("_update_indicator")
+				
+		elif task.type == "serve_meal":
+			var room = task.target.get("room")
+			var order_id = task.target.get("order_id")
+			if is_instance_valid(room) and room.has_method("serve_order_to_seat"):
+				room.call("serve_order_to_seat", order_id)
+				GameState.add_exp(5)
+				if EffectManager: EffectManager.spawn_exp_text(5, task.target.get("pos") + Vector2(0, -32))
+				
+		elif task.type == "clean_table":
+			var room = task.target.get("room")
+			if is_instance_valid(room) and room.has_method("clean_dirty_seat"):
+				room.call("clean_dirty_seat")
 
 
 func clear_all_tasks() -> void:

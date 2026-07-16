@@ -17,6 +17,7 @@ var _work_audio: AudioStreamPlayer
 var _path: Array[Vector2i] = []
 var _target_world_pos: Vector2 = Vector2.ZERO
 var _room_entry_pos: Vector2 = Vector2.INF
+var _extra_target_pos: Vector2 = Vector2.INF
 var _current_room: Node2D = null
 
 var _debug_line: Line2D
@@ -132,6 +133,10 @@ func _process_idle() -> void:
 			if my_job == "housekeeping" and t.type == "clean_room": is_match = true
 			if my_job == "maintenance" and t.type == "repair_room": is_match = true
 			
+			if my_job == "waiter" and t.type in ["serve_meal", "clean_table"]:
+				if typeof(t.target) == TYPE_DICTIONARY and t.target.get("room") == _current_room:
+					is_match = true
+			
 			if is_match:
 
 				t.status = "assigned"
@@ -139,8 +144,17 @@ func _process_idle() -> void:
 				_current_task = t
 				
 				# Ziel setzen
-				if is_instance_valid(t.target) and t.target is Node2D:
-					_start_path_to_room(t.target)
+				var target_room: Node2D = null
+				var extra_pos: Vector2 = Vector2.INF
+				
+				if typeof(t.target) == TYPE_DICTIONARY:
+					target_room = t.target.get("room")
+					extra_pos = t.target.get("pos", Vector2.INF)
+				elif is_instance_valid(t.target) and t.target is Node2D:
+					target_room = t.target
+					
+				if is_instance_valid(target_room):
+					_start_path_to_room(target_room, extra_pos)
 					if _path.size() > 0:
 						_state = "walking"
 						_sprite.visible = true  # MA wird sichtbar wenn er losläuft
@@ -159,7 +173,7 @@ func _process_idle() -> void:
 					t.status = "open"
 				break
 
-func _start_path_to_room(room: Node2D) -> void:
+func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void:
 	var start_tile: Vector2i
 	if is_instance_valid(_current_room):
 		start_tile = _current_room.get_target_tile(_map_grid)
@@ -172,6 +186,9 @@ func _start_path_to_room(room: Node2D) -> void:
 		_room_entry_pos = room.get_room_entry_pos(_map_grid)
 	else:
 		_room_entry_pos = Vector2.INF
+		
+	# Speichere extra_pos für den allerletzten Schritt (z.B. Tisch im Restaurant)
+	_extra_target_pos = extra_pos
 	
 	_path = _map_grid.call("get_path_between_tiles", start_tile, end_tile)
 	if _path.size() > 0:
@@ -196,6 +213,9 @@ func _start_path_to_lobby() -> void:
 		
 	var spawn_pos = _controller._get_lobby_spawn_pos()
 	var end_tile = _map_grid.call("world_to_tile", spawn_pos)
+	
+	_room_entry_pos = spawn_pos
+	_extra_target_pos = Vector2.INF
 	
 	_path = _map_grid.call("get_path_between_tiles", start_tile, end_tile)
 	if _path.size() > 0:
@@ -224,6 +244,9 @@ func _process_walking(delta: float, speed: float) -> void:
 				if _room_entry_pos != Vector2.INF:
 					_target_world_pos = _room_entry_pos
 					_room_entry_pos = Vector2.INF
+				elif _extra_target_pos != Vector2.INF:
+					_target_world_pos = _extra_target_pos
+					_extra_target_pos = Vector2.INF
 				else:
 					_target_world_pos = global_position
 		

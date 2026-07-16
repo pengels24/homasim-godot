@@ -134,8 +134,8 @@ func get_live_details() -> Array[Dictionary]:
 		var order_data = GastroManager.active_orders.get(order_id)
 		if order_data:
 			var guest_node = GuestManager.get_guest(order_data.get("guest_id", ""))
-			if is_instance_valid(guest_node):
-				guest_name = guest_node.get_full_name()
+			if is_instance_valid(guest_node) or guest_node != null:
+				guest_name = guest_node.name
 				
 			for r in GameState.recipes:
 				if r.get("id") == order_data.get("recipe_id"):

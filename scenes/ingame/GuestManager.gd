@@ -94,6 +94,13 @@ func get_active() -> Array:
 func get_checkout() -> Array:
 	return _checkout
 
+func get_guest(guest_id: String) -> GuestMember:
+	for p: GuestParty in _waiting + _active + _checkout:
+		for m: GuestMember in p.members:
+			if m.id == guest_id:
+				return m
+	return null
+
 
 # =============================================================================
 func get_party(party_id: String) -> GuestParty:

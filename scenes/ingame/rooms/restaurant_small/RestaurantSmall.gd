@@ -105,8 +105,8 @@ func get_live_details() -> Array[Dictionary]:
 		if seat["occupied_by"] != "":
 			var guest_name = "Gast"
 			var guest_node = GuestManager.get_guest(seat["occupied_by"])
-			if is_instance_valid(guest_node):
-				guest_name = guest_node.get_full_name()
+			if is_instance_valid(guest_node) or guest_node != null:
+				guest_name = guest_node.name
 				
 			var status_text = "Studiert Speisekarte"
 			var order_id = seat.get("order_id", "")

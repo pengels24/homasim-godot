@@ -134,7 +134,11 @@ func _process_idle() -> void:
 			if my_job == "maintenance" and t.type == "repair_room": is_match = true
 			
 			if my_job == "waiter" and t.type in ["serve_meal", "clean_table"]:
-				if typeof(t.target) == TYPE_DICTIONARY and t.target.get("room") == _current_room:
+				var assigned = StaffManager.get_assignments_for_staff(get_staff_id())
+				var target_room_id = ""
+				if typeof(t.target) == TYPE_DICTIONARY and is_instance_valid(t.target.get("room")):
+					target_room_id = GuestManager._room_key(t.target.get("room"))
+				if assigned.has(target_room_id):
 					is_match = true
 			
 			if is_match:
@@ -147,7 +151,14 @@ func _process_idle() -> void:
 				var target_room: Node2D = null
 				var extra_pos: Vector2 = Vector2.INF
 				
-				if typeof(t.target) == TYPE_DICTIONARY:
+				if t.type == "serve_meal":
+					var order_id = t.target.get("order_id")
+					var kitchen_id = GastroManager.active_orders.get(order_id, {}).get("kitchen_id", "")
+					target_room = GuestManager.get_room_by_id(kitchen_id) if GuestManager else null
+					if not is_instance_valid(target_room):
+						target_room = t.target.get("room") # Fallback directly to restaurant
+						extra_pos = t.target.get("pos", Vector2.INF)
+				elif typeof(t.target) == TYPE_DICTIONARY:
 					target_room = t.target.get("room")
 					extra_pos = t.target.get("pos", Vector2.INF)
 				elif is_instance_valid(t.target) and t.target is Node2D:
@@ -256,17 +267,32 @@ func _process_walking(delta: float, speed: float) -> void:
 		if _path.is_empty() and dist_to_target < 5.0:
 			if _state == "walking":
 				_state = "working"
-				# Zufälliger Versatz, damit sich überlappende Mitarbeiter optisch trennen
-				global_position += Vector2(randf_range(-6.0, 6.0), randf_range(-6.0, 6.0))
-				var morale = _staff_data.get("morale", 100)
-				var penalty = 0.0
-				if morale < 50:
-					penalty = 0.3 * (float(50 - morale) / 50.0) # Bis zu +30% Arbeitszeit
-					
-				_work_timer = 20.0 * (1.0 + penalty)
-				_work_timer_max = _work_timer
-				if _current_task.has("target"):
-					_current_room = _current_task["target"]
+				if not _current_task.is_empty() and _current_task.type == "serve_meal" and not _current_task.has("fetched"):
+					_state = "working"
+					_work_timer = 1.0 # 1 Sekunde in der Küche abholen
+					_current_task["fetched"] = true
+					_current_room = null # Wir sind nur kurz hier
+				else:
+					_state = "working"
+					# Zufälliger Versatz, damit sich überlappende Mitarbeiter optisch trennen
+					global_position += Vector2(randf_range(-6.0, 6.0), randf_range(-6.0, 6.0))
+					var morale = _staff_data.get("morale", 100)
+					var penalty = 0.0
+					if morale < 50:
+						penalty = 0.3 * (float(50 - morale) / 50.0) # Bis zu +30% Arbeitszeit
+						
+					var base_time = 20.0
+					if not _current_task.is_empty():
+						if _current_task.type == "serve_meal": base_time = 5.0
+						elif _current_task.type == "clean_table": base_time = 8.0
+						
+					_work_timer = base_time * (1.0 + penalty)
+					_work_timer_max = _work_timer
+					if not _current_task.is_empty():
+						if typeof(_current_task.target) == TYPE_DICTIONARY:
+							_current_room = _current_task.target.get("room")
+						else:
+							_current_room = _current_task.target
 			elif _state == "returning":
 				_state = "idle"
 				_sprite.visible = false  # Wieder unsichtbar in der Lobby
@@ -329,6 +355,20 @@ func _process_working(delta: float, speed_mult: float) -> void:
 		# Fortschrittsbalken wieder verstecken
 		if is_instance_valid(_current_room) and _current_room.has_node("RoomStatusIndicator"):
 			_current_room.get_node("RoomStatusIndicator").hide_progress(get_staff_id())
+			
+		if not _current_task.is_empty() and _current_task.type == "serve_meal" and _current_task.get("fetched") == true and not _current_task.has("served"):
+			# Essen ist abgeholt -> ab zum Tisch!
+			_current_task["served"] = true
+			var target_room = _current_task.target.get("room")
+			var extra_pos = _current_task.target.get("pos")
+			_start_path_to_room(target_room, extra_pos)
+			if _path.size() > 0:
+				_state = "walking"
+			else:
+				_state = "working" # Fallback falls schon da
+				_work_timer = 1.0
+			return
+			
 		TaskManager.complete_task(_current_task.id)
 		_current_task = {}
 		

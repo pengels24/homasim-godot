@@ -2,7 +2,7 @@ extends Node
 
 signal sig_order_placed(order_id: String)
 signal sig_order_ready(order_id: String)
-signal sig_order_served(order_id: String)
+signal sig_order_served(order_id: String, guest_id: String, recipe_id: String)
 
 # Struktur: order_id -> { guest_id, recipe_id, restaurant_id, status (pending|cooking|ready|served), kitchen_id }
 var active_orders: Dictionary = {}
@@ -27,12 +27,22 @@ func claim_order(order_id: String, kitchen_id: String) -> void:
 func finish_order(order_id: String) -> void:
 	if active_orders.has(order_id):
 		active_orders[order_id]['status'] = 'ready'
+		
+		# Koch gibt EXP wenn er Essen fertig hat (+5)
+		var kitchen_id = active_orders[order_id]['kitchen_id']
+		var kitchen_room = GuestManager.get_room_by_id(kitchen_id) if GuestManager else null
+		if is_instance_valid(kitchen_room):
+			if EffectManager: EffectManager.spawn_exp_text(5, kitchen_room.global_position + Vector2(0, -32))
+			GameState.add_exp(5)
+			
 		sig_order_ready.emit(order_id)
 
 func serve_order(order_id: String) -> void:
 	if active_orders.has(order_id):
 		active_orders[order_id]['status'] = 'served'
-		sig_order_served.emit(order_id)
+		var guest_id = active_orders[order_id]['guest_id']
+		var recipe_id = active_orders[order_id]['recipe_id']
+		sig_order_served.emit(order_id, guest_id, recipe_id)
 		active_orders.erase(order_id)
 
 func get_pending_orders() -> Array:

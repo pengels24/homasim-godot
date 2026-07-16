@@ -2,7 +2,7 @@ extends Node2D
 class_name GuestActor
 
 # --- Zustände ---
-enum State { IDLE, WALKING, IN_ROOM, IN_POI, AWAITING_CHECKOUT, LEAVING }
+enum State { IDLE, WALKING, IN_ROOM, IN_POI, AWAITING_CHECKOUT, LEAVING, WAITING_FOR_FOOD, EATING }
 
 var current_state: State = State.IDLE
 var _guest_member: GuestMember
@@ -17,6 +17,7 @@ var _is_checkout_walk: bool = false
 
 ## Welcher POI aktuell besucht wird (z.B. "lobby", "bar", "spa")
 var _current_poi_id: String = ""
+var _current_order_id: String = ""
 
 # Interner Timer für Aufenthaltsdauer
 var _action_timer: float = 0.0
@@ -32,10 +33,16 @@ signal sig_poi_income(amount: int, world_pos: Vector2)
 func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null, guest_manager: GuestManager = null) -> void:
 	_guest_member = member
 	_map_grid = map_grid
+	_target_room = start_room
 	_guest_manager = guest_manager
 	
+	name = "GuestActor_" + member.id
 	avatar.setup(member)
 	_base_speed = max(10.0, 40.0 + member.speed_offset)
+	
+	if GastroManager:
+		if not GastroManager.sig_order_served.is_connected(_on_order_served):
+			GastroManager.sig_order_served.connect(_on_order_served)
 	
 	if start_room != null:
 		# Wenn mit Startraum gespawnt (z.B. nach Laden), setze Position auf die Zimmertür!
@@ -88,7 +95,15 @@ func _process_waiting(delta: float) -> void:
 		
 	_action_timer -= delta * speed
 	if _action_timer <= 0.0:
-		_decide_next_action()
+		if current_state == State.EATING:
+			# Aufstehen
+			var room_node = _get_poi_room_node(_current_poi_id)
+			if is_instance_valid(room_node) and room_node.has_method("leave_seat"):
+				room_node.leave_seat(_guest_member.id)
+			_change_state(State.IDLE)
+			_action_timer = randf_range(1.0, 3.0) # Kurze Pause
+		else:
+			_decide_next_action()
 
 
 # =============================================================================
@@ -225,10 +240,45 @@ func _change_state(new_state: State) -> void:
 			_action_timer = 0.0
 			avatar.visible = false
 			if has_node("ClickArea"): get_node("ClickArea").input_pickable = false
+		State.WAITING_FOR_FOOD:
+			_action_timer = 0.0 # Warten auf Signal
+			avatar.visible = true
+			if has_node("ClickArea"): get_node("ClickArea").input_pickable = true
+		State.EATING:
+			_action_timer = 15.0 # Gast isst für 15 Sekunden
+			avatar.visible = true
+			if has_node("ClickArea"): get_node("ClickArea").input_pickable = true
 		State.WALKING, State.LEAVING:
 			avatar.visible = true
 			if has_node("ClickArea"): get_node("ClickArea").input_pickable = true
 
+
+func _on_order_served(order_id: String, guest_id: String, recipe_id: String) -> void:
+	if guest_id != _guest_member.id:
+		return
+	if current_state == State.WAITING_FOR_FOOD:
+		_current_order_id = ""
+		
+		# Preis des Gerichts ermitteln
+		var price = 0
+		var r_name = "Essen"
+		for r in GameState.recipes:
+			if r.get("id") == recipe_id:
+				price = r.get("price", 0)
+				r_name = GameState.T(r.get("name", ""))
+				break
+		
+		# Bezahlen via FinanceManager
+		if price > 0:
+			_guest_member.spending_budget = max(0, _guest_member.spending_budget - price)
+			FinanceManager.add_transaction(price, "gastro", "tx.poi_income|" + r_name + "|" + _guest_member.name)
+		
+		# Gast gibt EXP wenn er isst (+10)
+		if EffectManager: EffectManager.spawn_exp_text(10, global_position + Vector2(0, -32))
+		GameState.add_exp(10)
+		
+		# Essen-Status aktivieren
+		_change_state(State.EATING)
 
 # =============================================================================
 ## Verarbeitet die Ankunft in einem POI: Einnahmen buchen, Budget abziehen, Zufriedenheit boosten.
@@ -239,6 +289,18 @@ func _on_poi_arrived() -> void:
 	var poi_def = _get_poi_def(_current_poi_id)
 	var income: int = poi_def.get("visit_income", 0)
 	if income <= 0:
+		var room_node = _get_poi_room_node(_current_poi_id)
+		if is_instance_valid(room_node) and room_node.has_method("claim_seat"):
+			var seat_pos = room_node.claim_seat(_guest_member.id)
+			if seat_pos != Vector2.ZERO:
+				# Der Gast "teleportiert" sich auf den Stuhl
+				global_position = seat_pos
+				_change_state(State.WAITING_FOR_FOOD)
+				room_node.place_order_for_seat(_guest_member.id)
+				
+				# Wir holen uns die Order ID direkt, da place_order_for_seat sie ins _seats array schreibt.
+				# Einfacher ist es aber, einfach aufs Signal zu warten, da die ID dort eh übergeben wird,
+				# aber wir speichern sie sicherheitshalber nicht hier, sondern lauschen auf GastroManager.
 		return
 	
 	# Budget abziehen (per Member – jeder hat seinen eigenen Geldbeutel)

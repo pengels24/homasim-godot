@@ -15,6 +15,7 @@ func _ready() -> void:
 	handle.gui_input.connect(_on_handle_input)
 	handle.mouse_default_cursor_shape = Control.CURSOR_DRAG
 	btn_close.pressed.connect(close)
+	label_title.add_theme_font_size_override("font_size", 24)
 	
 func setup(room: Node2D) -> void:
 	_target_room = room
@@ -53,12 +54,12 @@ func _refresh_list() -> void:
 		var lbl_left = Label.new()
 		lbl_left.text = row.get("left", "")
 		lbl_left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		lbl_left.add_theme_font_size_override("font_size", 16)
+		lbl_left.add_theme_font_size_override("font_size", 22)
 		
 		var lbl_right = Label.new()
 		lbl_right.text = row.get("right", "")
 		lbl_right.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		lbl_right.add_theme_font_size_override("font_size", 16)
+		lbl_right.add_theme_font_size_override("font_size", 22)
 		lbl_right.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
 		
 		hbox.add_child(lbl_left)

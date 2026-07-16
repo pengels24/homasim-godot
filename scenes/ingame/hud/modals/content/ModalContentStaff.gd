@@ -342,6 +342,10 @@ func _refresh_list() -> void:
 			btn.focus_entered.connect(func(): 
 				btn.button_pressed = true
 				_select_item(item)
+				
+				var scroll = list_container.get_parent() as ScrollContainer
+				if scroll:
+					scroll.ensure_control_visible(btn)
 			)
 			list_container.add_child(btn)
 			

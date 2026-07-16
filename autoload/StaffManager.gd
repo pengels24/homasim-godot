@@ -81,7 +81,7 @@ func _generate_daily_applicants() -> void:
 	
 	var built_rooms = []
 	if SaveManager.has_method("get_built_plots"):
-		built_rooms = SaveManager.get_built_plots(GameState.current_hotel_id)
+		built_rooms = SaveManager.get_built_plots(GameState.active_hotel_id)
 		
 	# Prüfen welche Räume gebaut wurden und deren benötigte Rollen sammeln
 	for room_data in built_rooms:

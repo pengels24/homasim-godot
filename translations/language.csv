@@ -47,6 +47,8 @@ roomdef.name.long.foundation,Lobby,Lobby
 roomdef.name.short.foundation,LB,LB
 roomdef.name.long.restaurant,Restaurant,Restaurant
 roomdef.name.short.restaurant,RS,RS
+roomdef.name.long.restaurant_small,Restaurant (Klein),Restaurant (Small)
+roomdef.name.short.restaurant_small,RS,RS
 roomdef.name.long.bar,Bar/Lounge,Bar/Lounge
 roomdef.name.short.bar,BA,BA
 roomdef.name.long.fitness,Fitnessstudio,Fitness Studio
@@ -55,6 +57,8 @@ roomdef.name.long.conference,Konferenzraum,Conference Room
 roomdef.name.short.conference,KR,CR
 roomdef.name.long.kitchen,Küche,Kitchen
 roomdef.name.short.kitchen,KU,KT
+roomdef.name.long.kitchen_small,Küche (Klein),Kitchen (Small)
+roomdef.name.short.kitchen_small,KU,KT
 roomdef.name.long.management,Planungsbüro,Planning Office
 roomdef.name.short.management,PB,PO
 roomdef.name.long.sidewalk,Gehweg,Sidewalk

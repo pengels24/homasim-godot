@@ -17,6 +17,8 @@ func _ready() -> void:
 	btn_close.pressed.connect(close)
 	label_title.add_theme_font_size_override("font_size", 24)
 	
+	%MenuPanel.gui_input.connect(_on_panel_gui_input)
+	
 func setup(room: Node2D) -> void:
 	_target_room = room
 	if is_instance_valid(room) and room.has_method("get_definition"):
@@ -70,11 +72,17 @@ func close() -> void:
 	queue_free()
 
 func _on_handle_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed:
-			_dragging = true
-			_drag_offset = get_global_mouse_position() - global_position
-		else:
-			_dragging = false
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				_dragging = true
+				_drag_offset = get_global_mouse_position() - global_position
+			else:
+				_dragging = false
 	elif event is InputEventMouseMotion and _dragging:
 		global_position = get_global_mouse_position() - _drag_offset
+
+func _on_panel_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
+			%MenuPanel.accept_event()

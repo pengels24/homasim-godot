@@ -787,8 +787,11 @@ func _get_available_poi_roles() -> Array:
 				poi_rooms.append(r)
 	for room in poi_rooms:
 		if room.has_method("get_definition"):
-			var r_role = room.call("get_definition").get("required_role", "")
-			if r_role != "" and not roles.has(r_role):
-				roles.append(r_role)
+			var def = room.call("get_definition")
+			var r_role = def.get("required_role", "")
+			var allowed = def.get("allowed_roles", [r_role] if r_role != "" else [])
+			for role in allowed:
+				if role != "" and not roles.has(role):
+					roles.append(role)
 	return roles
 

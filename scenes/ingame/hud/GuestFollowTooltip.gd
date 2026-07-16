@@ -75,12 +75,12 @@ func _update_target_text() -> void:
 	if state == GuestActor.State.IN_ROOM:
 		t += GameState.T("guest.tooltip.room")
 	elif state == GuestActor.State.IN_POI:
-		t += _target_guest._current_poi_id.capitalize()
+		t += GameState.T("roomdef.name.long." + _target_guest._current_poi_id)
 	elif state == GuestActor.State.WALKING:
 		if _target_guest.get("_is_checkout_walk"):
 			t += GameState.T("guest.tooltip.walking_reception")
 		elif _target_guest._current_poi_id != "" and _target_guest._current_poi_id != "room":
-			t += GameState.T("guest.tooltip.walking_poi") % _target_guest._current_poi_id.capitalize()
+			t += GameState.T("guest.tooltip.walking_poi") % GameState.T("roomdef.name.long." + _target_guest._current_poi_id)
 		else:
 			t += GameState.T("guest.tooltip.walking_room")
 	elif state == GuestActor.State.AWAITING_CHECKOUT:

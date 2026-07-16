@@ -202,7 +202,7 @@ func _on_hotel_exp_changed(exp_curr: int, exp_max: int) -> void:
 	bar_exp.max_value = exp_max
 	bar_exp.value = exp_curr
 	
-	if GameState.selected_hotel.get("level", 1) >= 5:
+	if GameState.selected_hotel.get("level", 1) >= 10:
 		label_exp_range.text = "MAX LEVEL"
 	else:
 		label_exp_range.text = "%d / %d" % [exp_curr, exp_max]

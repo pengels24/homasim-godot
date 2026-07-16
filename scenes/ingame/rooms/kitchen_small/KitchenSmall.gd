@@ -42,6 +42,7 @@ var _check_timer: float = 0.0
 
 func _ready() -> void:
 	if not is_inside_tree(): return
+	super._ready()
 	_room_id = GuestManager._room_key(self)
 
 func _process(delta: float) -> void:

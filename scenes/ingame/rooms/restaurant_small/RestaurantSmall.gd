@@ -45,7 +45,7 @@ var _room_id: String = ""
 # =============================================================================
 func _ready() -> void:
 	if not is_inside_tree(): return
-	
+	super._ready()
 	_room_id = GuestManager._room_key(self)
 	
 	# Alle Stühle aus den Gruppen auslesen

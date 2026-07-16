@@ -2,7 +2,7 @@ extends Node2D
 class_name GuestActor
 
 # --- Zustände ---
-enum State { IDLE, WALKING, IN_ROOM, IN_POI, AWAITING_CHECKOUT, LEAVING, WAITING_FOR_FOOD, EATING }
+enum State { IDLE, WALKING, IN_ROOM, IN_POI, AWAITING_CHECKOUT, LEAVING, STUDYING_MENU, WAITING_FOR_FOOD, EATING }
 
 var current_state: State = State.IDLE
 var _guest_member: GuestMember
@@ -73,7 +73,7 @@ func _on_click_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: 
 # =============================================================================
 func _process(delta: float) -> void:
 	match current_state:
-		State.IN_ROOM, State.IN_POI:
+		State.IN_ROOM, State.IN_POI, State.STUDYING_MENU, State.EATING:
 			_process_waiting(delta)
 
 
@@ -102,6 +102,11 @@ func _process_waiting(delta: float) -> void:
 				room_node.leave_seat(_guest_member.id)
 			_change_state(State.IDLE)
 			_action_timer = randf_range(1.0, 3.0) # Kurze Pause
+		elif current_state == State.STUDYING_MENU:
+			var room_node = _get_poi_room_node(_current_poi_id)
+			if is_instance_valid(room_node) and room_node.has_method("place_order_for_seat"):
+				room_node.place_order_for_seat(_guest_member.id)
+			_change_state(State.WAITING_FOR_FOOD)
 		else:
 			_decide_next_action()
 
@@ -241,6 +246,10 @@ func _change_state(new_state: State) -> void:
 			_action_timer = 0.0
 			avatar.visible = false
 			if has_node("ClickArea"): get_node("ClickArea").input_pickable = false
+		State.STUDYING_MENU:
+			_action_timer = randf_range(5.0, 10.0)
+			avatar.visible = true
+			if has_node("ClickArea"): get_node("ClickArea").input_pickable = true
 		State.WAITING_FOR_FOOD:
 			_action_timer = 0.0 # Warten auf Signal
 			avatar.visible = true
@@ -296,8 +305,7 @@ func _on_poi_arrived() -> void:
 			if seat_pos != Vector2.ZERO:
 				# Der Gast "teleportiert" sich auf den Stuhl
 				global_position = seat_pos
-				_change_state(State.WAITING_FOR_FOOD)
-				room_node.place_order_for_seat(_guest_member.id)
+				_change_state(State.STUDYING_MENU)
 				
 				# Wir holen uns die Order ID direkt, da place_order_for_seat sie ins _seats array schreibt.
 				# Einfacher ist es aber, einfach aufs Signal zu warten, da die ID dort eh übergeben wird,

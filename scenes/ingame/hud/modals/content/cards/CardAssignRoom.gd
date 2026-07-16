@@ -35,21 +35,19 @@ func populate(formatted_name: String, room_id: String, _min_staff: int, max_staf
 	lbl_room_name.text = formatted_name
 	
 	var current = assigned_staff.size()
+	lbl_status.text = "%d/%d" % [current, max_staff]
 	if current == 0:
-		lbl_status.text = GameState.T("ui.staff.assign.status.empty", current, max_staff)
 		lbl_status.add_theme_color_override("font_color", Color(1.0, 0.4, 0.4)) # Rot
 	elif current < max_staff:
-		lbl_status.text = GameState.T("ui.staff.assign.status.partial", current, max_staff)
 		lbl_status.add_theme_color_override("font_color", Color(1.0, 0.8, 0.2)) # Gelb
 	else:
-		lbl_status.text = GameState.T("ui.staff.assign.status.full", current)
 		lbl_status.add_theme_color_override("font_color", Color(0.4, 1.0, 0.4)) # Grün
 		
 	for child in grid_staff.get_children():
 		child.queue_free()
 		
-	# Grid auf max 2 Spalten begrenzen, damit lange Namen nicht abgeschnitten werden
-	grid_staff.columns = min(max_staff, 2)
+	# Grid auf max 3 Spalten begrenzen (4+ rutscht in neue Zeile)
+	grid_staff.columns = min(max_staff, 3)
 		
 	for staff_data in assigned_staff:
 		if staff_data:
@@ -78,9 +76,9 @@ func populate(formatted_name: String, room_id: String, _min_staff: int, max_staf
 		var r_name = StaffManager.staff_config.get("roles", {}).get(r, {}).get("name", r)
 		role_names.append(r_name)
 	
-	var placeholder_text = GameState.T("ui.staff.assign.free_slot", "- Freier Arbeitsplatz -")
+	var placeholder_text = GameState.T("ui.staff.assign.free_slot", "Freier Arbeitsplatz")
 	if role_names.size() > 0:
-		placeholder_text = "- Frei (%s) -" % "/".join(role_names)
+		placeholder_text = "Frei (%s)" % "/".join(role_names)
 	
 	for i in range(empty_slots):
 		var p = PanelContainer.new()

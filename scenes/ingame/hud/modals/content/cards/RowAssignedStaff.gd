@@ -13,4 +13,6 @@ func _ready() -> void:
 
 func populate(staff: Dictionary) -> void:
 	_staff_id = staff.get("id", "")
-	lbl_name.text = "%s %s" % [staff.get("first_name", ""), staff.get("last_name", "")]
+	var r = staff.get("role", "")
+	var r_name = StaffManager.staff_config.get("roles", {}).get(r, {}).get("name", r)
+	lbl_name.text = "%s %s (%s)" % [staff.get("first_name", ""), staff.get("last_name", ""), GameState.T(r_name)]

@@ -30,7 +30,7 @@ func _gui_input(event: InputEvent) -> void:
 		Toast.show("Room Clicked: " + _room_id)
 		sig_clicked.emit(_room_id)
 
-func populate(formatted_name: String, room_id: String, _min_staff: int, max_staff: int, assigned_staff: Array) -> void:
+func populate(formatted_name: String, room_id: String, _min_staff: int, max_staff: int, assigned_staff: Array, def: Dictionary = {}) -> void:
 	_room_id = room_id
 	lbl_room_name.text = formatted_name
 	
@@ -48,8 +48,8 @@ func populate(formatted_name: String, room_id: String, _min_staff: int, max_staf
 	for child in grid_staff.get_children():
 		child.queue_free()
 		
-	# Grid dynamisch auf die maximale Personalanzahl aufteilen (je 1/x Breite)
-	grid_staff.columns = max_staff
+	# Grid auf max 2 Spalten begrenzen, damit lange Namen nicht abgeschnitten werden
+	grid_staff.columns = min(max_staff, 2)
 		
 	for staff_data in assigned_staff:
 		if staff_data:
@@ -59,6 +59,20 @@ func populate(formatted_name: String, room_id: String, _min_staff: int, max_staf
 			row.sig_remove_clicked.connect(func(sid): sig_unassign_staff.emit(sid))
 			
 	var empty_slots = max_staff - current
+	
+	# Erlaubte Rollen für den Text herausfinden
+	var req_r = def.get("required_role", "")
+	var allowed = def.get("allowed_roles", [req_r] if req_r != "" else [])
+	var role_names = []
+	for r in allowed:
+		if r == "": continue
+		var r_name = StaffManager.staff_config.get("roles", {}).get(r, {}).get("name", r)
+		role_names.append(r_name)
+	
+	var placeholder_text = GameState.T("ui.staff.assign.free_slot", "- Freier Arbeitsplatz -")
+	if role_names.size() > 0:
+		placeholder_text = "- Frei (%s) -" % "/".join(role_names)
+	
 	for i in range(empty_slots):
 		var p = PanelContainer.new()
 		p.theme_type_variation = "InnerPanel"
@@ -71,10 +85,11 @@ func populate(formatted_name: String, room_id: String, _min_staff: int, max_staf
 		p.add_child(m)
 		
 		var l = Label.new()
-		l.text = GameState.T("ui.staff.assign.free_slot", "- Freier Arbeitsplatz -")
+		l.text = placeholder_text
 		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		l.add_theme_color_override("font_color", Color(1, 1, 1, 0.2))
+		l.clip_text = true
 		m.add_child(l)
 		
 		grid_staff.add_child(p)

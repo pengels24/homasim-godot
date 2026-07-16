@@ -780,7 +780,7 @@ func _build_assignment_ui() -> void:
 
 			var card = CARD_ROOM.instantiate()
 			left_vbox.add_child(card)
-			card.populate(formatted_name, room_id, min_s, max_s, assigned)
+			card.populate(formatted_name, room_id, min_s, max_s, assigned, def)
 			card.sig_unassign_staff.connect(_on_unassign_requested)
 			
 	var info_lbl = Label.new()

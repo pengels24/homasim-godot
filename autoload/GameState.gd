@@ -437,11 +437,13 @@ func get_xp_needed_for_level(level: int) -> int:
 
 # =============================================================================
 func add_exp(amount: int, _source: String = "Unbekannt") -> void:
-	var current_exp: int = selected_hotel.get("exp", 0)
+	var current_exp: int   = selected_hotel.get("exp", 0)
 	var current_level: int = selected_hotel.get("level", 1)
-	var exp_max: int = selected_hotel.get("exp_max", 100)
+	var exp_max: int       = selected_hotel.get("exp_max", 100)
 
-	current_exp += amount
+	# EXP-Multiplikator aus den Hoteleinstellungen anwenden (Schwierigkeitsgrad)
+	var multiplier: float = selected_hotel.get("exp_multiplier", 1.0)
+	current_exp += int(round(amount * multiplier))
 
 	# Prüfen, ob ein Level-Up stattgefunden hat (kann auch mehrfach sein)
 	while current_exp >= exp_max:

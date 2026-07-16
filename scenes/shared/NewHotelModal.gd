@@ -48,8 +48,8 @@ var _money_idx := 1
 var _refund_labels := ["100 %", "75 %", "50 %", "25 %", "0 %"]
 var _refund_idx := 3
 
-var _exp_labels := ["+25 %", "+10 %", "+5 %", "0 %"]
-var _exp_idx := 3
+var _exp_labels := ["+50 %", "+25 %", "0 %", "-25 %"]
+var _exp_idx := 2
 
 var _dirt_labels := ["settings.gameplay.dirtiness.low", "settings.gameplay.dirtiness.normal", "settings.gameplay.dirtiness.high"]
 var _dirt_idx := 1
@@ -188,19 +188,19 @@ func _set_difficulty(level: int) -> void:
 		0: # Easy
 			_money_idx = 2
 			_refund_idx = 0
-			_exp_idx = 0
+			_exp_idx = 0   # +50%
 			_dirt_idx = 0
 			_maintenance_idx = 0
 		1: # Normal
 			_money_idx = 1
 			_refund_idx = 3
-			_exp_idx = 3
+			_exp_idx = 2   # 0%
 			_dirt_idx = 1
 			_maintenance_idx = 1
 		2: # Hard
 			_money_idx = 0
 			_refund_idx = 4
-			_exp_idx = 3
+			_exp_idx = 3   # -25%
 			_dirt_idx = 2
 			_maintenance_idx = 2
 		3: # Custom
@@ -328,7 +328,7 @@ func _on_create_pressed() -> void:
 	# Startkapital und Multiplikatoren
 	var money = _money_values[_money_idx]
 	var refund_multi = [1.0, 0.75, 0.5, 0.25, 0.0][_refund_idx]
-	var exp_multi = [1.25, 1.10, 1.05, 1.0][_exp_idx]
+	var exp_multi = [1.5, 1.25, 1.0, 0.75][_exp_idx]
 	
 	var hotel_id := SaveManager.create_hotel(GameState.active_profile_id, hotel_name, GRID_COLS, GRID_ROWS, _dirt_idx + 1, _maintenance_idx + 1)
 	SaveManager.update_hotel(hotel_id, {

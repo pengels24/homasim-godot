@@ -28,8 +28,8 @@ signal sig_hotel_guests_checkout_changed(guests_checkout: int)
 signal sig_hotel_exp_changed(exp: int, exp_max: int)
 
 signal sig_hotel_rep_changed(rep: int, rep_max: int)
-
 # Globale Level-Voraussetzungen für Core-Module
+const MAX_HOTEL_LEVEL: int = 15
 const UNLOCK_LEVELS = {
 	"staff":          2,  # Personal einstellen
 	"techtree":       3,  # Techtree + Forschung
@@ -448,8 +448,8 @@ func add_exp(amount: int, _source: String = "Unbekannt") -> void:
 
 	# Prüfen, ob ein Level-Up stattgefunden hat (kann auch mehrfach sein)
 	while current_exp >= exp_max:
-		if current_level >= 10:
-			current_exp = exp_max # Cap bei Max-Level 10
+		if current_level >= MAX_HOTEL_LEVEL:
+			current_exp = exp_max # Cap bei Max-Level
 			break
 
 		current_exp -= exp_max

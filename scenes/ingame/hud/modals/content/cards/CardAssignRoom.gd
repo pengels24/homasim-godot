@@ -54,3 +54,23 @@ func populate(formatted_name: String, room_id: String, _min_staff: int, max_staf
 			grid_staff.add_child(row)
 			row.populate(staff_data)
 			row.sig_remove_clicked.connect(func(sid): sig_unassign_staff.emit(sid))
+			
+	var empty_slots = max_staff - current
+	for i in range(empty_slots):
+		var p = PanelContainer.new()
+		p.theme_type_variation = "InnerPanel"
+		p.custom_minimum_size = Vector2(0, 42)
+		
+		var m = MarginContainer.new()
+		m.add_theme_constant_override("margin_left", 12)
+		m.add_theme_constant_override("margin_right", 12)
+		p.add_child(m)
+		
+		var l = Label.new()
+		l.text = GameState.T("ui.staff.assign.free_slot", "- Freier Arbeitsplatz -")
+		l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		l.add_theme_color_override("font_color", Color(1, 1, 1, 0.2))
+		m.add_child(l)
+		
+		grid_staff.add_child(p)

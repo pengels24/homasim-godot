@@ -48,6 +48,9 @@ func populate(formatted_name: String, room_id: String, _min_staff: int, max_staf
 	for child in grid_staff.get_children():
 		child.queue_free()
 		
+	# Grid dynamisch auf die maximale Personalanzahl aufteilen (je 1/x Breite)
+	grid_staff.columns = max_staff
+		
 	for staff_data in assigned_staff:
 		if staff_data:
 			var row = ROW_STAFF.instantiate()
@@ -60,6 +63,7 @@ func populate(formatted_name: String, room_id: String, _min_staff: int, max_staf
 		var p = PanelContainer.new()
 		p.theme_type_variation = "InnerPanel"
 		p.custom_minimum_size = Vector2(0, 42)
+		p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		
 		var m = MarginContainer.new()
 		m.add_theme_constant_override("margin_left", 12)

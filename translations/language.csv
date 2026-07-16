@@ -1182,3 +1182,4 @@ staff.role.waiter,Bedienung,Waiter
 staff.role.chef,Koch,Chef
 staff.role.kitchen_helper,Küchenhilfe,Kitchen Helper
 staff.role.waiter,Bedienung,Waiter
+ui.staff.assign.free_slot,- Freier Arbeitsplatz -,- Free Workspace -

@@ -58,30 +58,30 @@ script = ExtResource("1_juc3f")
 [node name="Ground" type="Node2D" parent="." unique_id=523780683]
 
 [node name="BaseFloor" type="Sprite2D" parent="Ground" unique_id=281127663]
-position = Vector2(32, 32)
+position = Vector2(24, 24)
 scale = Vector2(0.188, 48)
 texture = SubResource("GradientTexture1D_kdks4")
 
 [node name="WallLeft" type="Sprite2D" parent="Ground" unique_id=597280766]
-position = Vector2(9, 32)
+position = Vector2(1, 24)
 rotation = 3.1415927
 scale = Vector2(0.008, 48)
 texture = SubResource("GradientTexture1D_gouwv")
 
 [node name="WallRight" type="Sprite2D" parent="Ground" unique_id=1466592147]
-position = Vector2(55, 32)
+position = Vector2(47, 24)
 scale = Vector2(0.008, 48)
 skew = -0.00032782555
 texture = SubResource("GradientTexture1D_f8fa0")
 
 [node name="WallTop" type="Sprite2D" parent="Ground" unique_id=1374892124]
-position = Vector2(32, 9)
+position = Vector2(24, 1)
 rotation = 4.712389
 scale = Vector2(0.008, 48)
 texture = SubResource("GradientTexture1D_ugc3f")
 
 [node name="WallBottom" type="Sprite2D" parent="Ground" unique_id=60990802]
-position = Vector2(32, 55)
+position = Vector2(24, 47)
 rotation = 1.5707964
 scale = Vector2(0.008, 48)
 texture = SubResource("GradientTexture1D_lv322")
@@ -89,12 +89,11 @@ texture = SubResource("GradientTexture1D_lv322")
 [node name="Interior" type="Node2D" parent="." unique_id=455419346]
 
 [node name="Floor" type="Sprite2D" parent="Interior" unique_id=815949936]
-position = Vector2(32, 32)
+position = Vector2(24, 24)
 scale = Vector2(0.172, 44)
 texture = SubResource("GradientTexture1D_bco61")
 
 [node name="Furniture" type="Node2D" parent="Interior" unique_id=103375456]
-position = Vector2(8, 8)
 
 [node name="InnerKithen" type="Sprite2D" parent="Interior/Furniture" unique_id=362399933]
 position = Vector2(9, 8)

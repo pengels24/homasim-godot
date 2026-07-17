@@ -107,7 +107,7 @@ func on_room_built(room_id: String) -> void:
 		SaveManager.save_quick(GameState.active_hotel_id)
 
 # =============================================================================
-func on_room_demolished(room_id: String) -> void:
+func on_room_demolished(room_id: String, _unique_id: String = "") -> void:
 	if GameState.selected_hotel.is_empty(): return
 	var quest_state = GameState.selected_hotel.get("quests", {})
 	var changed = false

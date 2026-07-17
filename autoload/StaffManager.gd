@@ -30,12 +30,26 @@ func _process(delta: float) -> void:
 # =============================================================================
 func _ready() -> void:
 	_load_config()
+	if GameState and not GameState.sig_room_demolished.is_connected(_on_room_demolished):
+		GameState.sig_room_demolished.connect(_on_room_demolished)
 	if TimeManager:
 		TimeManager.sig_midnight_struck.connect(_on_midnight_struck)
 		TimeManager.sig_morning_struck.connect(_on_morning_struck)
 	# Bewerber regenerieren wenn ein neuer Raum gebaut wird (z.B. Küche -> Koch-Bewerber erscheinen sofort)
 	if not GameState.sig_room_built.is_connected(_on_room_built):
 		GameState.sig_room_built.connect(_on_room_built)
+
+func _on_room_demolished(_type_id: String, room_id: String) -> void:
+	# Wenn ein Raum abgerissen wird, werfen wir das zugewiesene Personal raus (auf unassigned)
+	var changed = false
+	for staff_id in room_assignments.keys():
+		if room_assignments[staff_id] == room_id:
+			room_assignments.erase(staff_id)
+			changed = true
+	
+	if changed:
+		_save_to_hotel()
+		sig_assignments_changed.emit()
 
 # =============================================================================
 ## Wird ausgelöst wenn ein neuer Raum gebaut wurde – regeneriert Bewerber

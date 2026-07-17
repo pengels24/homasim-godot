@@ -30,7 +30,7 @@ static func get_definition() -> Dictionary:
 		"max_staff": 3,
 		"open_from": 420, # 07:00
 		"open_to": 1320,  # 22:00
-		"valid_door_slots": ["R1", "L1"],
+		"valid_door_slots": ["R1"],
 		"cleanliness_level": 100,
 		"maintenance_level": 100,
 		"is_service_requested": false
@@ -141,26 +141,43 @@ func get_live_details() -> Array[Dictionary]:
 		details.append({"left": "Room ID", "right": _room_id})
 		details.append({"left": "Zugeordnet", "right": "%d Personal (%d Köche)" % [assigned.size(), chef_count]})
 		
-	for order_id in _active_cook_timers.keys():
-		var time_left = int(_active_cook_timers[order_id])
+	# Alle an diese Küche zugewiesenen Bestellungen anzeigen (oder pending)
+	var all_orders = GastroManager.active_orders.keys()
+	for order_id in all_orders:
+		var order_data = GastroManager.active_orders.get(order_id)
+		if not order_data:
+			continue
+			
+		var status = order_data.get("status", "")
+		var k_id = order_data.get("kitchen_id", "")
+		
+		# Entweder gehört sie mir, oder sie ist noch komplett offen
+		if k_id != _room_id and status != "pending":
+			continue
+			
+		if status in ["ready", "served"]:
+			continue
+			
 		var r_name = "?"
 		var guest_name = "Gast"
 		
-		var order_data = GastroManager.active_orders.get(order_id)
-		if order_data:
-			var gm = get_tree().get_first_node_in_group("guest_manager")
-			var guest_node = gm.get_guest(order_data.get("guest_id", "")) if gm else null
-			if is_instance_valid(guest_node) or guest_node != null:
-				guest_name = guest_node.name
+		var gm = get_tree().get_first_node_in_group("guest_manager")
+		var guest_node = gm.get_guest(order_data.get("guest_id", "")) if gm else null
+		if is_instance_valid(guest_node) or guest_node != null:
+			guest_name = guest_node.name
+			
+		for r in GameState.recipes:
+			if r.get("id") == order_data.get("recipe_id"):
+				r_name = GameState.T(r.get("name_key", ""))
+				break
 				
-			for r in GameState.recipes:
-				if r.get("id") == order_data.get("recipe_id"):
-					r_name = GameState.T(r.get("name_key", ""))
-					break
-					
+		var right_text = "- wartet -"
+		if status == "cooking" and _active_cook_timers.has(order_id):
+			right_text = "Noch " + str(int(_active_cook_timers[order_id])) + "s"
+			
 		details.append({
 			"left": guest_name + " (" + r_name + ")",
-			"right": "Noch " + str(time_left) + "s"
+			"right": right_text
 		})
 		
 	if details.is_empty():

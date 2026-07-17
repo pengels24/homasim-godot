@@ -157,6 +157,6 @@ region_rect = Rect2(64, 0, 16, 16)
 
 [node name="Door" type="Sprite2D" parent="." unique_id=1048250083]
 z_index = 1
-position = Vector2(31.000002, 15.000001)
+position = Vector2(31.000002, 21)
 scale = Vector2(0.008, 6)
 texture = SubResource("GradientTexture1D_42f35")

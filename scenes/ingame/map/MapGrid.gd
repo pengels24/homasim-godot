@@ -504,9 +504,8 @@ func _occ_mark_exit(gx: int, gy: int) -> void:
 	if gx < 0 or gy < 0 or gx >= _occ_w or gy >= _occ_h:
 		return
 	var idx := gy * _occ_w + gx
-	if _occ[idx] == 0:
-		_occ[idx] = 2
-		_sync_astar_cell(gx, gy) # <--- NEU
+	_occ[idx] = 2
+	_sync_astar_cell(gx, gy)
 
 
 # =============================================================================
@@ -515,8 +514,10 @@ func _occ_mark_wall(gx: int, gy: int, w: int, h: int) -> void:
 		for dx in w:
 			var idx := (gy + dy) * _occ_w + (gx + dx)
 			if idx >= 0 and idx < _occ.size():
-				_occ[idx] = 3
-				_sync_astar_cell(gx + dx, gy + dy) # <--- NEU
+				var existing = _occ[idx]
+				if existing != 1 and existing != 2:
+					_occ[idx] = 3
+					_sync_astar_cell(gx + dx, gy + dy)
 
 
 # =============================================================================
@@ -595,8 +596,12 @@ func remove_room(room: Node2D) -> void:
 	active_rooms.erase(room)
 	if room.has_method("get_definition"):
 		var def = room.get_definition()
+		var unique_id = ""
+		var gm = get_tree().get_first_node_in_group("guest_manager") if is_inside_tree() else null
+		if is_instance_valid(gm) and gm.has_method("_room_key"):
+			unique_id = gm._room_key(room)
 		if def and def.has("id"):
-			GameState.sig_room_demolished.emit(def["id"])
+			GameState.sig_room_demolished.emit(def["id"], unique_id)
 	room.queue_free()
 	
 	_update_all_floor_neighbors()
@@ -829,6 +834,19 @@ func get_lobby_spawn_pos_world() -> Vector2:
 	var start_x := (_entry_plot.x * PARCEL_SZ) + clearance.position.x + int(clearance.size.x / 2.0)
 	var start_y := (_entry_plot.y * PARCEL_SZ) + clearance.position.y + int(clearance.size.y / 2.0)
 	return tile_to_world(Vector2i(start_x, start_y))
+
+# =============================================================================
+func get_target_tile(room: Node2D) -> Vector2i:
+	if room.has_method("get_target_tile"):
+		return room.get_target_tile(self)
+	# Fallback: Zentrum
+	if room.has_method("get_rect"):
+		var rct = room.get_rect()
+		return world_to_tile(room.to_global(rct.position + rct.size * 0.5))
+	if room.has_method("get_tile_size"):
+		var sz = room.get_tile_size() * 16.0
+		return world_to_tile(room.global_position + Vector2(sz.x, sz.y) * 0.5)
+	return world_to_tile(room.global_position)
 
 # =============================================================================
 func get_room_exit_tile(room: Node2D) -> Vector2i:

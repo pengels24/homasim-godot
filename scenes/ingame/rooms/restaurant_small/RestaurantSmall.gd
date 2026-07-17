@@ -100,6 +100,30 @@ func leave_seat(guest_id: String) -> void:
 # =============================================================================
 func get_live_details() -> Array[Dictionary]:
 	var details: Array[Dictionary] = []
+	
+	if Engine.is_editor_hint() == false:
+		if _room_id == "":
+			_room_id = GuestManager._room_key(self)
+			
+		var assigned_data = StaffManager.get_staff_for_room(_room_id)
+		var waiter_status = "Fehlt"
+		if assigned_data.size() > 0:
+			var w_id = assigned_data[0].get("id", "")
+			var w_node = null
+			for node in get_tree().get_nodes_in_group("staff_actor"):
+				if node.get_staff_id() == w_id:
+					w_node = node
+					break
+			if is_instance_valid(w_node):
+				var w_task = "Kein Task"
+				if not w_node._current_task.is_empty():
+					w_task = w_node._current_task.type
+				var w_role = w_node.get_job_type()
+				var w_ass = StaffManager.room_assignments.get(w_id, "")
+				waiter_status = w_node._state + " | " + w_task + " | R:" + w_role + " | A:" + w_ass
+			
+		details.append({"left": "Bedienung Status", "right": waiter_status})
+		
 	for seat in _seats:
 		if seat["occupied_by"] != "":
 			var guest_name = "Gast"
@@ -171,6 +195,10 @@ func place_order_for_seat(guest_id: String) -> void:
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
+	
+	if _room_id == "":
+		_room_id = GuestManager._room_key(self)
+		
 	if Engine.get_frames_drawn() % 60 == 0:
 		if GastroManager:
 			if _room_id == "":

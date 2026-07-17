@@ -479,7 +479,7 @@ func add_exp(amount: int, _source: String = "Unbekannt") -> void:
 @warning_ignore("unused_signal")
 signal sig_room_built(room_id: String)
 @warning_ignore("unused_signal")
-signal sig_room_demolished(room_id: String)
+signal sig_room_demolished(room_type_id: String, unique_id: String)
 
 
 # =============================================================================

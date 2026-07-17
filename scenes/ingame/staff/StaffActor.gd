@@ -19,17 +19,17 @@ var _target_world_pos: Vector2 = Vector2.ZERO
 var _room_entry_pos: Vector2 = Vector2.INF
 var _extra_target_pos: Vector2 = Vector2.INF
 var _current_room: Node2D = null
+var _arriving_room: Node2D = null
 
 var _debug_line: Line2D
 
 const SPEED := 40.0
 
 func _ready() -> void:
-	scale = Vector2(0.8, 0.8)
-	
 	_work_audio = AudioStreamPlayer.new()
 	_work_audio.bus = "Sound"
 	add_child(_work_audio)
+	_sprite.scale = Vector2.ONE
 	
 	if has_node("ClickArea"):
 		var ca = get_node("ClickArea")
@@ -188,6 +188,7 @@ func _process_idle() -> void:
 						_sprite.visible = true  # MA wird sichtbar wenn er losläuft
 						_think_timer = 1.0 # Denkt kurz nach, bevor er losrennt
 					else:
+						print("[StaffActor] Path failed to target_room: ", target_room.name, " from current_room: ", _current_room.name if _current_room else "none")
 						# Kein Weg?
 						_current_task = {}
 						t.status = "open"
@@ -197,6 +198,7 @@ func _process_idle() -> void:
 							TaskManager._tasks.remove_at(t_idx)
 							TaskManager._tasks.append(t)
 				else:
+					print("[StaffActor] Target room invalid for task: ", t.type)
 					_current_task = {}
 					t.status = "open"
 				break
@@ -214,7 +216,18 @@ func _process_idle() -> void:
 				_think_timer = 1.0
 			else:
 				_sprite.visible = true
-				_think_timer = 2.0 # Im Raum chillen
+				# Im Raum chillen - ab und zu ein bisschen umhergehen
+				if randf() < 0.3:
+					var offset = Vector2(randf_range(-16.0, 16.0), randf_range(-16.0, 16.0))
+					var target = global_position + offset
+					if is_instance_valid(_current_room) and _current_room.has_method("get_tile_size"):
+						var sz = _current_room.get_tile_size() * 16.0
+						var r_rect = Rect2(_current_room.global_position + Vector2(4.0, 4.0), Vector2(sz.x - 8.0, sz.y - 8.0))
+						if r_rect.has_point(target):
+							_target_world_pos = target
+							_state = "walking"
+							_path = [_target_world_pos] # Fake-Pfad für minimalen Weg
+				_think_timer = 2.0 + randf() * 2.0
 		else:
 			var spawn_pos = _controller._get_lobby_spawn_pos()
 			if global_position.distance_to(spawn_pos) > 10.0:
@@ -226,6 +239,18 @@ func _process_idle() -> void:
 				_think_timer = 1.0
 
 func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void:
+	_arriving_room = room
+	if not is_instance_valid(_current_room) and is_instance_valid(_map_grid) and _map_grid.has_method("get_placed_rooms"):
+		for r in _map_grid.get_placed_rooms():
+			if is_instance_valid(r):
+				var sz = r.get_tile_size() * 16
+				var r_rect = Rect2(r.global_position, Vector2(sz.x * r.global_scale.x, sz.y * r.global_scale.y))
+				# Allow a small margin of error (16 pixels) because of chill offsets
+				r_rect = r_rect.grow(16.0)
+				if r_rect.has_point(global_position):
+					_current_room = r
+					break
+
 	var start_tile: Vector2i
 	if is_instance_valid(_current_room):
 		start_tile = _current_room.get_target_tile(_map_grid)
@@ -255,8 +280,27 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 				_target_world_pos = _map_grid.call("tile_to_world", _path[0])
 			else:
 				_target_world_pos = global_position
+	else:
+		var astar = _map_grid.get("astar") if _map_grid else null
+		var s_solid = astar.is_point_solid(start_tile) if astar else false
+		var e_solid = astar.is_point_solid(end_tile) if astar else false
+		print("[StaffActor] _start_path_to_room FAILED: start=", start_tile, " (solid:", s_solid, ") end=", end_tile, " (solid:", e_solid, ") room=", room.name if room else "null")
+		if is_instance_valid(_debug_line):
+			_debug_line.default_color = Color.RED
+			var e_world = _map_grid.call("tile_to_world", end_tile)
+			_debug_line.points = [Vector2.ZERO, e_world - global_position]
 
 func _start_path_to_lobby() -> void:
+	if not is_instance_valid(_current_room) and is_instance_valid(_map_grid) and _map_grid.has_method("get_placed_rooms"):
+		for r in _map_grid.get_placed_rooms():
+			if is_instance_valid(r):
+				var sz = r.get_tile_size() * 16
+				var r_rect = Rect2(r.global_position, Vector2(sz.x * r.global_scale.x, sz.y * r.global_scale.y))
+				r_rect = r_rect.grow(16.0)
+				if r_rect.has_point(global_position):
+					_current_room = r
+					break
+
 	var start_tile: Vector2i
 	if is_instance_valid(_current_room):
 		start_tile = _current_room.get_target_tile(_map_grid)
@@ -312,8 +356,7 @@ func _process_walking(delta: float, speed: float) -> void:
 					_state = "working"
 					_work_timer = 1.0 # 1 Sekunde in der Küche abholen
 					_current_task["fetched"] = true
-					_current_room = null # Wir sind nur kurz hier
-				else:
+				elif not _current_task.is_empty():
 					_state = "working"
 					# Zufälliger Versatz, damit sich überlappende Mitarbeiter optisch trennen
 					global_position += Vector2(randf_range(-6.0, 6.0), randf_range(-6.0, 6.0))
@@ -323,19 +366,24 @@ func _process_walking(delta: float, speed: float) -> void:
 						penalty = 0.3 * (float(50 - morale) / 50.0) # Bis zu +30% Arbeitszeit
 						
 					var base_time = 20.0
-					if not _current_task.is_empty():
-						if _current_task.type == "serve_meal": base_time = 5.0
-						elif _current_task.type == "clean_table": base_time = 8.0
+					if _current_task.type == "serve_meal": base_time = 5.0
+					elif _current_task.type == "clean_table": base_time = 8.0
 						
 					_work_timer = base_time * (1.0 + penalty)
 					_work_timer_max = _work_timer
-					if not _current_task.is_empty():
-						if typeof(_current_task.target) == TYPE_DICTIONARY:
-							_current_room = _current_task.target.get("room")
-						else:
-							_current_room = _current_task.target
+					if is_instance_valid(_arriving_room):
+						_current_room = _arriving_room
+						_arriving_room = null
+				else:
+					# Nur herumspaziert (chilling), kein Task vorhanden
+					_state = "idle"
+					_think_timer = 1.0
+					if is_instance_valid(_arriving_room):
+						_current_room = _arriving_room
+						_arriving_room = null
 			elif _state == "returning":
 				_state = "idle"
+				_current_room = _get_assigned_room()
 			return
 
 	var move_dist = speed * delta
@@ -355,14 +403,15 @@ func _process_walking(delta: float, speed: float) -> void:
 	_update_debug_line()
 
 func _update_debug_line() -> void:
-	if not is_instance_valid(_debug_line): return
-	var pts: PackedVector2Array = []
-	pts.append(Vector2.ZERO) # Actor-Position = lokal (0,0)
-	if _target_world_pos != Vector2.ZERO and _target_world_pos != global_position:
-		pts.append(to_local(_target_world_pos))
-	for p in _path:
-		pts.append(to_local(_map_grid.call("tile_to_world", p)))
-	_debug_line.points = pts
+	if is_instance_valid(_debug_line) and _path.size() > 0:
+		_debug_line.default_color = Color.GREEN
+		var pts: PackedVector2Array = []
+		pts.append(Vector2.ZERO) # Actor-Position = lokal (0,0)
+		if _target_world_pos != Vector2.ZERO and _target_world_pos != global_position:
+			pts.append(to_local(_target_world_pos))
+		for p in _path:
+			pts.append(to_local(_map_grid.call("tile_to_world", p)))
+		_debug_line.points = pts
 
 func _process_working(delta: float, speed_mult: float) -> void:
 	if is_instance_valid(_debug_line): _debug_line.points = []
@@ -409,13 +458,14 @@ func _process_working(delta: float, speed_mult: float) -> void:
 				_work_timer = 1.0
 			return
 			
-		if _current_task.type == "serve_meal" and typeof(_current_task.target) == TYPE_DICTIONARY:
+		if not _current_task.is_empty() and _current_task.get("type") == "serve_meal" and typeof(_current_task.get("target")) == TYPE_DICTIONARY:
 			var target_room = _current_task.target.get("room")
 			if is_instance_valid(target_room) and target_room.has_method("serve_order_to_seat"):
 				target_room.serve_order_to_seat(_current_task.target.get("order_id"))
 		
-		TaskManager.complete_task(_current_task.id)
-		_current_task = {}
+		if not _current_task.is_empty():
+			TaskManager.complete_task(_current_task.id)
+			_current_task = {}
 		
 		# Prüfen ob es direkt noch einen weiteren Job gibt
 		_state = "idle"

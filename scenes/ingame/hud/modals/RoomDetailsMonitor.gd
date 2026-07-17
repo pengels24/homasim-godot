@@ -89,19 +89,27 @@ func _refresh_list() -> void:
 	# Neue Einträge erstellen
 	for row in details:
 		var hbox = HBoxContainer.new()
+		hbox.add_theme_constant_override("separation", 24) # Abstand zwischen Texten
+		
 		var lbl_left = Label.new()
 		lbl_left.text = row.get("left", "")
 		lbl_left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		lbl_left.add_theme_font_size_override("font_size", 22)
+		lbl_left.clip_text = true # Verhindert, dass der Name alles sprengt
 		
 		var lbl_right = Label.new()
 		lbl_right.text = row.get("right", "")
 		lbl_right.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		lbl_right.add_theme_font_size_override("font_size", 22)
 		lbl_right.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
+		lbl_right.custom_minimum_size = Vector2(100, 0) # Platz für Timer reservieren
+		
+		var spacer = Control.new()
+		spacer.custom_minimum_size = Vector2(16, 0)
 		
 		hbox.add_child(lbl_left)
 		hbox.add_child(lbl_right)
+		hbox.add_child(spacer)
 		vbox_list.add_child(hbox)
 		
 func close() -> void:

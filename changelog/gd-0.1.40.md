@@ -1,4 +1,4 @@
-# Update v0.1.39gd-td
+# Update v0.1.40
 
 In dieser Session haben wir tief in die Mechaniken der Wegfindung (Pathfinding) eingegriffen, um blockierte Wege und hängengebliebenes Personal zu befreien.
 

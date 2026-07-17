@@ -222,7 +222,7 @@ func _process_idle() -> void:
 					var target = global_position + offset
 					if is_instance_valid(_current_room) and _current_room.has_method("get_tile_size"):
 						var sz = _current_room.get_tile_size() * 16.0
-						var r_rect = Rect2(_current_room.global_position + Vector2(4.0, 4.0), Vector2(sz.x - 8.0, sz.y - 8.0))
+						var r_rect = Rect2(_current_room.global_position + Vector2(4.0, 4.0), Vector2(sz.x * _current_room.global_scale.x - 8.0, sz.y * _current_room.global_scale.y - 8.0))
 						if r_rect.has_point(target):
 							_target_world_pos = target
 							_state = "walking"
@@ -245,8 +245,6 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 			if is_instance_valid(r):
 				var sz = r.get_tile_size() * 16
 				var r_rect = Rect2(r.global_position, Vector2(sz.x * r.global_scale.x, sz.y * r.global_scale.y))
-				# Allow a small margin of error (16 pixels) because of chill offsets
-				r_rect = r_rect.grow(16.0)
 				if r_rect.has_point(global_position):
 					_current_room = r
 					break
@@ -296,7 +294,6 @@ func _start_path_to_lobby() -> void:
 			if is_instance_valid(r):
 				var sz = r.get_tile_size() * 16
 				var r_rect = Rect2(r.global_position, Vector2(sz.x * r.global_scale.x, sz.y * r.global_scale.y))
-				r_rect = r_rect.grow(16.0)
 				if r_rect.has_point(global_position):
 					_current_room = r
 					break
@@ -366,8 +363,8 @@ func _process_walking(delta: float, speed: float) -> void:
 						penalty = 0.3 * (float(50 - morale) / 50.0) # Bis zu +30% Arbeitszeit
 						
 					var base_time = 20.0
-					if _current_task.type == "serve_meal": base_time = 5.0
-					elif _current_task.type == "clean_table": base_time = 8.0
+					if _current_task.type == "serve_meal": base_time = 2.0
+					elif _current_task.type == "clean_table": base_time = 3.0
 						
 					_work_timer = base_time * (1.0 + penalty)
 					_work_timer_max = _work_timer

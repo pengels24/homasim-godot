@@ -73,7 +73,7 @@ func _on_click_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: 
 # =============================================================================
 func _process(delta: float) -> void:
 	match current_state:
-		State.IN_ROOM, State.IN_POI, State.STUDYING_MENU, State.EATING:
+		State.IN_ROOM, State.IN_POI, State.STUDYING_MENU, State.EATING, State.IDLE:
 			_process_waiting(delta)
 
 
@@ -282,6 +282,7 @@ func _on_order_served(order_id: String, guest_id: String, recipe_id: String) -> 
 		if price > 0:
 			_guest_member.spending_budget = max(0, _guest_member.spending_budget - price)
 			FinanceManager.add_transaction(price, "gastro", "tx.poi_income|" + r_name + "|" + _guest_member.name)
+			if EffectManager: EffectManager.spawn_money_text(price, global_position + Vector2(0, -48))
 		
 		# Gast gibt EXP wenn er isst (+10)
 		if EffectManager: EffectManager.spawn_exp_text(10, global_position + Vector2(0, -32))

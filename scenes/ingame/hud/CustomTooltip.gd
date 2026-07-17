@@ -108,27 +108,31 @@ func _update_content() -> void:
 		else:
 			status = GameState.T("room.tooltip.understaffed")
 			
-		var current_visitors = 0
-		var visitor_names = []
-		var ingame = get_tree().get_root().get_node_or_null("Ingame")
-		if is_instance_valid(ingame):
-			var ctrl = ingame.get("_guest_controller")
-			if ctrl:
-				for actor in ctrl._actors.values():
-					if actor.current_state == actor.State.IN_POI and actor._current_poi_id == def.get("id", ""):
-						current_visitors += 1
-						if is_instance_valid(actor._guest_member):
-							visitor_names.append("👤 " + actor._guest_member.name)
-			
-		var txt = GameState.T("room.tooltip.current_visitors") % current_visitors
-		if current_visitors > 0:
-			var display_names = visitor_names.slice(0, 5)
-			txt += "\n" + "\n".join(display_names)
-			if visitor_names.size() > 5:
-				var more_count = visitor_names.size() - 5
-				txt += "\n" + (GameState.T("room.tooltip.and_more") % more_count)
-		guests_label.text = txt
-		guests_label.show()
+		if def.get("is_guest_poi", true):
+			var current_visitors = 0
+			var visitor_names = []
+			var ingame = get_tree().get_root().get_node_or_null("Ingame")
+			if is_instance_valid(ingame):
+				var ctrl = ingame.get("_guest_controller")
+				if ctrl:
+					for actor in ctrl._actors.values():
+						var valid_states = [actor.State.IN_POI, actor.State.STUDYING_MENU, actor.State.WAITING_FOR_FOOD, actor.State.EATING]
+						if actor.current_state in valid_states and actor._current_poi_id == def.get("id", ""):
+							current_visitors += 1
+							if is_instance_valid(actor._guest_member):
+								visitor_names.append("👤 " + actor._guest_member.name)
+				
+			var txt = GameState.T("room.tooltip.current_visitors") % current_visitors
+			if current_visitors > 0:
+				var display_names = visitor_names.slice(0, 5)
+				txt += "\n" + "\n".join(display_names)
+				if visitor_names.size() > 5:
+					var more_count = visitor_names.size() - 5
+					txt += "\n" + (GameState.T("room.tooltip.and_more") % more_count)
+			guests_label.text = txt
+			guests_label.show()
+		else:
+			guests_label.hide()
 	else:
 		# GuestManager direkt befragen (nicht mehr über room._guest_mgr)
 		var ingame = get_tree().get_root().get_node_or_null("Ingame")

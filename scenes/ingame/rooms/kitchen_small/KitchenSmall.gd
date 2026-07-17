@@ -135,11 +135,6 @@ func get_live_details() -> Array[Dictionary]:
 			_room_id = GuestManager._room_key(self)
 			
 		var assigned = StaffManager.get_staff_for_room(_room_id)
-		var chef_count = 0
-		for s in assigned:
-			if s.get("role") == "chef": chef_count += 1
-		details.append({"left": "Room ID", "right": _room_id})
-		details.append({"left": "Zugeordnet", "right": "%d Personal (%d Köche)" % [assigned.size(), chef_count]})
 		
 	# Alle an diese Küche zugewiesenen Bestellungen anzeigen (oder pending)
 	var all_orders = GastroManager.active_orders.keys()
@@ -155,11 +150,11 @@ func get_live_details() -> Array[Dictionary]:
 		if k_id != _room_id and status != "pending":
 			continue
 			
-		if status in ["ready", "served"]:
+		if status == "served":
 			continue
 			
 		var r_name = "?"
-		var guest_name = "Gast"
+		var guest_name = GameState.T("room.kitchen.guest")
 		
 		var gm = get_tree().get_first_node_in_group("guest_manager")
 		var guest_node = gm.get_guest(order_data.get("guest_id", "")) if gm else null
@@ -171,9 +166,11 @@ func get_live_details() -> Array[Dictionary]:
 				r_name = GameState.T(r.get("name_key", ""))
 				break
 				
-		var right_text = "- wartet -"
+		var right_text = GameState.T("room.kitchen.waiting")
 		if status == "cooking" and _active_cook_timers.has(order_id):
-			right_text = "Noch " + str(int(_active_cook_timers[order_id])) + "s"
+			right_text = GameState.T("room.kitchen.time_left", int(_active_cook_timers[order_id]))
+		elif status == "ready":
+			right_text = GameState.T("room.kitchen.ready")
 			
 		details.append({
 			"left": guest_name + " (" + r_name + ")",
@@ -182,8 +179,8 @@ func get_live_details() -> Array[Dictionary]:
 		
 	if details.is_empty():
 		details.append({
-			"left": "Küche",
-			"right": "Leer / Wartet"
+			"left": GameState.T("room.kitchen.status"),
+			"right": GameState.T("room.kitchen.empty")
 		})
 		
 	return details

@@ -1186,3 +1186,11 @@ recipe.name.chips_bowl,Schale Chips,Bowl of Chips
 recipe.name.burger_classic,Klassischer Burger,Classic Burger
 recipe.name.pasta_napoli,Pasta Napoli,Pasta Napoli
 recipe.name.steak_frites,Steak Frites,Steak Frites
+room.kitchen.ready,Abholbereit,Ready for Pickup
+room.kitchen.waiting,- wartet -,- waiting -
+room.kitchen.empty,Leer / Wartet,Empty / Waiting
+room.kitchen.time_left,Noch ###s,###s left
+room.kitchen.guest,Gast,Guest
+room.kitchen.assigned,Zugeordnet,Assigned
+room.kitchen.assigned_details,### Personal (*** Köche),### Staff (*** Chefs)
+room.kitchen.status,Status,Status

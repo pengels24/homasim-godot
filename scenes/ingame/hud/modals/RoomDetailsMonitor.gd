@@ -2,6 +2,7 @@ extends Control
 
 @onready var handle = %DragHandle
 @onready var btn_close = %BtnClose
+@onready var btn_collapse = %BtnCollapse
 @onready var label_title = %Label
 @onready var vbox_list = %VBoxList
 @onready var panel = %MenuPanel
@@ -13,7 +14,10 @@ var _drag_offset = Vector2()
 var _resizing = false
 var _resize_start_y: float = 0.0
 var _resize_start_h: float = 0.0
+var _collapsed := false
+var _pre_collapse_h: float = 300.0
 var _update_timer = 0.0
+var _group_siblings: Dictionary = {}  # sibling -> relative offset (Shift+Drag)
 
 const MIN_HEIGHT := 150.0
 
@@ -21,10 +25,32 @@ func _ready() -> void:
 	handle.gui_input.connect(_on_handle_input)
 	handle.mouse_default_cursor_shape = Control.CURSOR_DRAG
 	btn_close.pressed.connect(close)
+	btn_collapse.pressed.connect(_toggle_collapse)
 	label_title.add_theme_font_size_override("font_size", 24)
 	
 	%MenuPanel.gui_input.connect(_on_panel_gui_input)
 	resize_handle.gui_input.connect(_on_resize_handle_input)
+
+func _toggle_collapse() -> void:
+	_collapsed = not _collapsed
+	var content = panel.get_node_or_null("VBoxContainer/MarginContainer")
+	if not content: return
+	
+	if _collapsed:
+		_pre_collapse_h = panel.size.y
+		content.visible = false
+		resize_handle.visible = false
+		panel.custom_minimum_size = Vector2(panel.size.x, 0)
+		panel.size = Vector2(panel.size.x, 32)
+		size = panel.size
+		btn_collapse.text = "▼" # eingeklappt -> Pfeil nach unten = aufklappen
+	else:
+		content.visible = true
+		resize_handle.visible = true
+		panel.custom_minimum_size = Vector2(panel.size.x, MIN_HEIGHT)
+		panel.size = Vector2(panel.size.x, _pre_collapse_h)
+		size = panel.size
+		btn_collapse.text = "▲" # offen -> Pfeil nach oben = zuklappen
 	
 func get_target_room() -> Node2D:
 	return _target_room
@@ -88,13 +114,50 @@ func _on_handle_input(event: InputEvent) -> void:
 			return
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
+				move_to_front()
 				_dragging = true
 				_drag_offset = get_global_mouse_position() - global_position
+				_group_siblings.clear()
+				if Input.is_key_pressed(KEY_SHIFT):
+					_collect_group_siblings()
 			else:
 				_dragging = false
+				_group_siblings.clear()
 	elif event is InputEventMouseMotion and _dragging:
 		var new_pos = get_global_mouse_position() - _drag_offset
-		global_position = _apply_snapping(new_pos)
+		if _group_siblings.is_empty():
+			global_position = _clamp_to_screen(_apply_snapping(new_pos))
+		else:
+			# Gruppe verschieben: kein Snapping damit sich die Gruppe nicht selbst bekämpft
+			var delta = _clamp_to_screen(new_pos) - global_position
+			global_position += delta
+			for sibling in _group_siblings:
+				if is_instance_valid(sibling):
+					sibling.global_position = _clamp_to_screen(sibling.global_position + delta)
+
+func _collect_group_siblings() -> void:
+	for sibling in get_parent().get_children():
+		if sibling == self or not sibling.has_method("get_target_room"):
+			continue
+		if not is_instance_valid(sibling):
+			continue
+		if _is_touching(sibling):
+			_group_siblings[sibling] = sibling.global_position - global_position
+
+func _is_touching(sibling: Node) -> bool:
+	var s_panel = sibling.get_node_or_null("%MenuPanel")
+	if not s_panel: return false
+	var my_r = Rect2(global_position, panel.size)
+	var s_r  = Rect2(sibling.global_position, s_panel.size)
+	# Fenster gelten als aneinander wenn sie sich im Snap-Radius berühren
+	return my_r.grow(SNAP_DIST * 1.5).intersects(s_r)
+
+func _clamp_to_screen(pos: Vector2) -> Vector2:
+	var screen = get_viewport().get_visible_rect().size
+	const HANDLE_H := 32.0
+	var clamped_x = clamp(pos.x, 0.0, screen.x - panel.size.x)
+	var clamped_y = clamp(pos.y, 0.0, screen.y - HANDLE_H)
+	return Vector2(clamped_x, clamped_y)
 
 const SNAP_DIST := 15.0
 

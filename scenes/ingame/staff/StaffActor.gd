@@ -62,7 +62,7 @@ func _update_visuals() -> void:
 	
 	var texture_path = "res://assets/staff/staff_avatar_%s_%s.aseprite" % [gender, job]
 	if not ResourceLoader.exists(texture_path):
-		texture_path = "res://assets/staff/staff_avatar_%s_bartender.aseprite" % [gender]
+		texture_path = "res://assets/staff/staff_avatar_%s_maintenance.aseprite" % [gender]
 		
 	if ResourceLoader.exists(texture_path):
 		var tex = load(texture_path)

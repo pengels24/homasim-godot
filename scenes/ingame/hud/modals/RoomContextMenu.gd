@@ -126,12 +126,22 @@ func close() -> void:
 # =============================================================================
 func _on_details_pressed() -> void:
 	if is_instance_valid(_target_room) and _target_room.has_method("get_live_details"):
+		# Prüfen ob bereits ein Monitor für diesen Raum offen ist -> dann nach vorne bringen statt neu spawnen
+		for existing in get_parent().get_children():
+			if existing.has_method("get_target_room") and existing.get_target_room() == _target_room:
+				existing.move_to_front()
+				close()
+				return
+		
 		var monitor_scene = load("res://scenes/ingame/hud/modals/RoomDetailsMonitor.tscn")
 		var monitor = monitor_scene.instantiate()
 		get_parent().add_child(monitor)
 		
-		# Setze Monitor in die Nähe des Menüs, aber leicht versetzt
-		monitor.global_position = global_position + Vector2(210, 0)
+		# Mittig im Viewport platzieren, leicht versetzt damit mehrere Fenster nicht genau übereinander liegen
+		var screen_size = get_viewport().get_visible_rect().size
+		var spawn_x = screen_size.x * 0.5 - 150 + randf_range(-20, 20)
+		var spawn_y = screen_size.y * 0.3 + randf_range(-20, 20)
+		monitor.global_position = Vector2(spawn_x, spawn_y)
 		monitor.setup(_target_room)
 	else:
 		if is_instance_valid(Toast):

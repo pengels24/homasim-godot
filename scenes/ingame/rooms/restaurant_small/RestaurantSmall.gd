@@ -34,8 +34,20 @@ static func get_definition() -> Dictionary:
 		"is_service_requested": false
 	}
 
+## Gibt die globale Standposition für die Bedienung zurück (mittig im Gastraum)
+func get_waiter_stand_pos() -> Vector2:
+	var area = get_node_or_null("Interior/Furniture/WaiterArea")
+	if is_instance_valid(area):
+		return area.global_position
+	# Fallback: Mitte des Raums (ca. 24, 24)
+	return global_position + Vector2(24, 24)
+
 # =============================================================================
 # VARIABLES
+# =============================================================================
+
+# =============================================================================
+# SEAT MANAGEMENT
 # =============================================================================
 
 # { chair_node: Node2D, occupied_by: guest_id, status: "clean"|"dirty", order_id: "" }
@@ -157,7 +169,7 @@ func get_dirty_seat_position() -> Vector2:
 	return Vector2.ZERO
 
 ## Gast bestellt etwas, sobald er sitzt
-func place_order_for_seat(guest_id: String) -> void:
+func place_order_for_seat(guest_id: String) -> bool:
 	for seat in _seats:
 		if seat["occupied_by"] == guest_id and seat["status"] == "clean":
 			var possible_recipes = []
@@ -172,7 +184,8 @@ func place_order_for_seat(guest_id: String) -> void:
 				if GastroManager:
 					var order_id = GastroManager.place_order(guest_id, chosen.get("id"), _room_id)
 					seat["order_id"] = order_id
-					# Wir melden keinen Task, denn die Küche fängt an zu kochen!
+					return true
+	return false
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return

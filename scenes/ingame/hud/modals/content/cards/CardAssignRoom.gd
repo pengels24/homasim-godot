@@ -34,6 +34,8 @@ func _gui_input(event: InputEvent) -> void:
 		accept_event()
 		sig_clicked.emit(_room_id)
 
+signal sig_empty_slot_clicked(room_id: String, allowed_roles: Array)
+
 func populate(formatted_name: String, room_id: String, _min_staff: int, max_staff: int, assigned_staff: Array, def: Dictionary = {}) -> void:
 	_room_id = room_id
 	lbl_room_name.text = formatted_name
@@ -85,34 +87,51 @@ func populate(formatted_name: String, room_id: String, _min_staff: int, max_staf
 		placeholder_text = "Frei (%s)" % "/".join(role_names)
 	
 	for i in range(empty_slots):
-		grid_staff.add_child(_create_slot_panel(placeholder_text, Color(1, 1, 1, 0.2)))
+		var p = _create_slot_panel(placeholder_text, Color(1, 1, 1, 0.2), false, allowed)
+		grid_staff.add_child(p)
 		
 	# Auffüllen auf 3 Spalten mit "Nicht verfügbar", um Flattern zu vermeiden
 	var disabled_slots = 3 - max_staff
 	if disabled_slots > 0:
 		for i in range(disabled_slots):
-			grid_staff.add_child(_create_slot_panel(GameState.T("ui.staff.assign.not_available", "(Nicht verfügbar)"), Color(1, 1, 1, 0.05)))
+			var p = _create_slot_panel(GameState.T("ui.staff.assign.not_available", "(Nicht verfügbar)"), Color(1, 1, 1, 0.05), true, [])
+			grid_staff.add_child(p)
 
-func _create_slot_panel(lbl_text: String, txt_color: Color) -> PanelContainer:
+func _create_slot_panel(lbl_text: String, txt_color: Color, disabled: bool, allowed: Array) -> PanelContainer:
 	var p = PanelContainer.new()
 	p.theme_type_variation = "InnerPanel"
 	p.custom_minimum_size = Vector2(0, 42)
 	p.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	p.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	var m = MarginContainer.new()
 	m.add_theme_constant_override("margin_left", 12)
-	m.add_theme_constant_override("margin_right", 12)
-	m.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	m.add_theme_constant_override("margin_right", 8)
 	p.add_child(m)
+	
+	var hbox = HBoxContainer.new()
+	m.add_child(hbox)
 	
 	var l = Label.new()
 	l.text = lbl_text
-	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	l.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	l.add_theme_color_override("font_color", txt_color)
 	l.clip_text = true
-	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	m.add_child(l)
+	l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hbox.add_child(l)
 	
+	if not disabled:
+		var btn = Button.new()
+		btn.text = "..."
+		btn.custom_minimum_size = Vector2(28, 28)
+		btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		var sb_blue = preload("res://assets/UI/menu_button_blue.tres")
+		var sb_hover = preload("res://assets/UI/menu_button_blue_hover.tres")
+		var sb_pressed = preload("res://assets/UI/menu_button_blue_pressed.tres")
+		btn.add_theme_stylebox_override("normal", sb_blue)
+		btn.add_theme_stylebox_override("hover", sb_hover)
+		btn.add_theme_stylebox_override("pressed", sb_pressed)
+		btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		btn.pressed.connect(func(): sig_empty_slot_clicked.emit(_room_id, allowed))
+		hbox.add_child(btn)
+		
 	return p

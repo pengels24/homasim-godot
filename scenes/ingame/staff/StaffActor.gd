@@ -13,17 +13,15 @@ var _work_timer: float = 0.0
 var _work_timer_max: float = 20.0
 var _think_timer: float = 0.0
 var _work_audio: AudioStreamPlayer
-
 var _path: Array[Vector2i] = []
 var _target_world_pos: Vector2 = Vector2.ZERO
 var _room_entry_pos: Vector2 = Vector2.INF
 var _extra_target_pos: Vector2 = Vector2.INF
 var _current_room: Node2D = null
 var _arriving_room: Node2D = null
-
 var _debug_line: Line2D
 
-const SPEED := 40.0
+var _base_speed := 40.0
 
 func _ready() -> void:
 	_work_audio = AudioStreamPlayer.new()
@@ -44,6 +42,10 @@ func configure(staff_data: Dictionary, map_grid: Node2D, controller: Node) -> vo
 	_staff_data = staff_data
 	_map_grid = map_grid
 	_controller = controller
+	
+	# Leicht variierende Laufgeschwindigkeit (+/- 10%)
+	_base_speed = 40.0 * randf_range(0.9, 1.1)
+	
 	_update_visuals()
 	_sprite.visible = false
 	
@@ -102,7 +104,7 @@ func _physics_process(delta: float) -> void:
 		return
 		
 	var speed_mult = TimeManager.user_speed
-	var actual_speed = SPEED * speed_mult
+	var actual_speed = _base_speed * speed_mult
 	
 	# Denkpause
 	if _think_timer > 0.0:
@@ -217,17 +219,44 @@ func _process_idle() -> void:
 			else:
 				_sprite.visible = true
 				# Im Raum chillen - ab und zu ein bisschen umhergehen
-				if randf() < 0.3:
-					var offset = Vector2(randf_range(-16.0, 16.0), randf_range(-16.0, 16.0))
-					var target = global_position + offset
-					if is_instance_valid(_current_room) and _current_room.has_method("get_tile_size"):
+				# Barkeeper: immer am Tresen stehen bleiben
+				if my_job == "bartender" and is_instance_valid(_current_room) and _current_room.has_method("get_bartender_stand_pos"):
+					var stand_pos = _current_room.get_bartender_stand_pos()
+					if global_position.distance_to(stand_pos) > 6.0:
+						_target_world_pos = stand_pos
+						_state = "walking"
+						_path = [_target_world_pos]
+					else:
+						# Steht am Platz -> Rotiere in die gewünschte Richtung
+						if _current_room.has_method("get_bartender_look_dir"):
+							var dir = _current_room.get_bartender_look_dir()
+							_sprite.rotation = dir.angle() + PI / 2.0
+					_think_timer = 2.0
+				elif randf() < 0.3:
+					# Andere Rollen: im Raum umherwandern (Chill-Verhalten)
+					var wander_center = global_position
+					var max_radius = 16.0
+					
+					if my_job == "waiter" and is_instance_valid(_current_room) and _current_room.has_method("get_waiter_stand_pos"):
+						wander_center = _current_room.get_waiter_stand_pos()
+						max_radius = 12.0
+						
+					var offset = Vector2(randf_range(-max_radius, max_radius), randf_range(-max_radius, max_radius))
+					var target = wander_center + offset
+					
+					if my_job == "waiter" and is_instance_valid(_current_room) and _current_room.has_method("get_waiter_stand_pos"):
+						# Waiter bleibt strikt in seinem Radius um den Standpunkt
+						_target_world_pos = target
+						_state = "walking"
+						_path = [_target_world_pos]
+					elif is_instance_valid(_current_room) and _current_room.has_method("get_tile_size"):
 						var sz = _current_room.get_tile_size() * 16.0
 						var r_rect = Rect2(_current_room.global_position + Vector2(4.0, 4.0), Vector2(sz.x * _current_room.global_scale.x - 8.0, sz.y * _current_room.global_scale.y - 8.0))
 						if r_rect.has_point(target):
 							_target_world_pos = target
 							_state = "walking"
-							_path = [_target_world_pos] # Fake-Pfad für minimalen Weg
-				_think_timer = 2.0 + randf() * 2.0
+							_path = [_target_world_pos]
+					_think_timer = 2.0 + randf() * 2.0
 		else:
 			var spawn_pos = _controller._get_lobby_spawn_pos()
 			if global_position.distance_to(spawn_pos) > 10.0:

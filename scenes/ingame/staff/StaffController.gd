@@ -29,6 +29,7 @@ func _spawn_actor(staff_data: Dictionary) -> void:
 	
 	# Spawn-Punkt: Lobby Center
 	var spawn_pos = _get_lobby_spawn_pos()
+	spawn_pos += Vector2(randf_range(-12.0, 12.0), randf_range(-12.0, 12.0))
 	actor.global_position = spawn_pos
 	
 func _on_staff_hired(staff_data: Dictionary) -> void:

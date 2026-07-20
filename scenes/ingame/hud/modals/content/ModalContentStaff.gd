@@ -439,8 +439,20 @@ func _create_progress_row(label_text: String, current_val: float, max_val: float
 	parent.add_child(hbox)
 
 func _select_item(item: Dictionary) -> void:
+	var scroll_node = find_child("ScrollContainer", true, false)
+	var scroll_v = 0
+	if scroll_node:
+		scroll_v = scroll_node.scroll_vertical
+		
 	_selected_staff = item
 	_update_details()
+	
+	if scroll_node:
+		# call_deferred or setting it directly might not be enough if layout takes a frame
+		# A reliable way in Godot 4 is to set it deferred
+		scroll_node.call_deferred("set", "scroll_vertical", scroll_v)
+		# Just to be absolutely sure, also set it next frame
+		get_tree().process_frame.connect(func(): if is_instance_valid(scroll_node): scroll_node.scroll_vertical = scroll_v, CONNECT_ONE_SHOT)
 
 func _process(delta: float) -> void:
 	if not is_visible_in_tree():
@@ -562,10 +574,20 @@ func _update_details() -> void:
 	if s.has("morale"):
 		_create_progress_row(GameState.T("ui.staff.morale"), float(s.get("morale", 100)), 100.0, true, detail_stats)
 
-var _pending_action: int = 0 # 0=none, 1=hire, 2=fire, 3=unassign
+var _pending_action: int = 0 # 0=none, 1=hire, 2=fire, 3=unassign, 4=assign_only, 5=hire_and_assign
 var _pending_unassign_sid: String = ""
+var _pending_assign_sid: String = ""
+var _pending_assign_rid: String = ""
 var _confirm_modal: Node = null
+var _list_modal: Node = null
 
+func _get_list_modal() -> Node:
+	if not is_instance_valid(_list_modal):
+		_list_modal = preload("res://scenes/shared/ListModal.tscn").instantiate()
+		add_child(_list_modal)
+	for conn in _list_modal.item_selected.get_connections():
+		_list_modal.item_selected.disconnect(conn.callable)
+	return _list_modal
 func _get_confirm_modal() -> Node:
 	if not is_instance_valid(_confirm_modal):
 		_confirm_modal = preload("res://scenes/shared/ConfirmModal.tscn").instantiate()
@@ -592,6 +614,11 @@ func _on_action_btn_pressed() -> void:
 			true # Destructive (Red button)
 		)
 	else:
+		var role = s.get("role", "")
+		if role != "housekeeping" and role != "maintenance":
+			_show_hire_and_assign_popup(s)
+			return
+			
 		_pending_action = 1
 		modal.ask(
 			GameState.T("ui.staff.confirm.hire.title"),
@@ -635,6 +662,15 @@ func _on_confirm_accepted() -> void:
 	elif _pending_action == 1:
 		if StaffManager:
 			StaffManager.hire_staff(_selected_staff["id"])
+	elif _pending_action == 4:
+		if StaffManager:
+			StaffManager.assign_to_room(_pending_assign_sid, _pending_assign_rid)
+			_refresh_list()
+	elif _pending_action == 5:
+		if StaffManager:
+			if StaffManager.hire_staff(_pending_assign_sid):
+				StaffManager.assign_to_room(_pending_assign_sid, _pending_assign_rid)
+				_refresh_list()
 			
 	_pending_action = 0
 
@@ -739,15 +775,77 @@ func _build_assignment_ui() -> void:
 			inner_vbox.add_child(card)
 			card.populate(formatted_name, room_id, min_s, max_s, assigned, def)
 			card.sig_unassign_staff.connect(_on_unassign_requested)
+			card.sig_empty_slot_clicked.connect(_on_empty_slot_clicked)
 
-func _on_assign_room_clicked(rid: String) -> void:
-	pass
+func _on_empty_slot_clicked(room_id: String, allowed_roles: Array) -> void:
+	var unassigned_candidates = []
+	if StaffManager:
+		for staff_id in StaffManager.hired_staff:
+			if not StaffManager.room_assignments.has(staff_id):
+				var r = StaffManager.hired_staff[staff_id].get("role", "")
+				if allowed_roles.has(r):
+					unassigned_candidates.append(StaffManager.hired_staff[staff_id])
+					
+	var modal = _get_list_modal()
+	if unassigned_candidates.is_empty():
+		modal.ask_list("Personal Zuweisen", "Kein passendes Personal verfügbar.", [])
+	else:
+		var items = []
+		for c in unassigned_candidates:
+			var txt = "%s %s (%s)" % [c.get("first_name", ""), c.get("last_name", ""), GameState.T("staff.role." + c.get("role", ""))]
+			items.append({"id": c.get("id", ""), "text": txt, "data": c})
+			
+		modal.ask_list("Personal Zuweisen", "Wähle einen Mitarbeiter aus, der diesem Raum zugewiesen werden soll:", items)
+		modal.item_selected.connect(func(s_id: String):
+			if StaffManager:
+				StaffManager.assign_to_room(s_id, room_id)
+				_refresh_list()
+		)
 
-func _on_assign_staff_clicked(sid: String) -> void:
-	pass
-
-func _on_assign_btn_pressed() -> void:
-	pass
+func _show_hire_and_assign_popup(staff: Dictionary) -> void:
+	var role = staff.get("role", "")
+	var valid_rooms = []
+	if is_instance_valid(_map_grid) and _map_grid.has_method("get_placed_rooms"):
+		for room in _map_grid.get_placed_rooms():
+			if not is_instance_valid(room): continue
+			if not room.has_method("get_definition"): continue
+			var def = room.call("get_definition")
+			if not def.get("is_poi", false): continue
+			
+			var req = def.get("required_role", "")
+			var allowed = def.get("allowed_roles", [req] if req != "" else [])
+			if not allowed.has(role): continue
+			
+			var room_id = GuestManager._room_key(room)
+			var assigned = StaffManager.get_staff_for_room(room_id).size()
+			if assigned < def.get("max_staff", 1):
+				var prefix = def.get("prefix", "")
+				var rnum = room.room_number if "room_number" in room else "????"
+				var display_id = prefix + rnum if prefix != "" and not rnum.begins_with(prefix) else rnum
+				var rname = GameState.T(def.get("name", ""))
+				valid_rooms.append({"id": room_id, "text": "%s [%s]" % [rname, display_id]})
+				
+	var modal = _get_list_modal()
+	if valid_rooms.is_empty():
+		modal.ask_list("Arbeitsplatz Wählen", "Kein Raum mit freiem Slot für diesen Beruf vorhanden.", [])
+	else:
+		modal.ask_list("Arbeitsplatz Wählen", "Wähle den Raum, in dem %s %s arbeiten soll:" % [staff.get("first_name", ""), staff.get("last_name", "")], valid_rooms)
+		modal.item_selected.connect(func(r_id: String):
+			var staff_name = staff.get("first_name", "") + " " + staff.get("last_name", "")
+			var c_modal = _get_confirm_modal()
+			_pending_action = 5
+			_pending_assign_sid = staff.get("id", "")
+			_pending_assign_rid = r_id
+			
+			c_modal.ask(
+				GameState.T("ui.staff.confirm.hire.title"),
+				GameState.T("ui.staff.confirm.hire.desc").replace("â¬", "€").replace("Ã¢â‚¬Â¬", "€") % [staff_name, staff.get("hire_cost", 0)],
+				GameState.T("ui.staff.confirm.btn.hire", "Einstellen"),
+				GameState.T("ui.staff.confirm.btn.cancel", "Abbrechen"),
+				"",
+				false
+			)
+		)
 
 func _get_available_poi_roles() -> Array:
 	var roles = ["housekeeping", "maintenance"] # Immer erlaubt

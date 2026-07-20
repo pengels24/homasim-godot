@@ -96,17 +96,34 @@ func _process_waiting(delta: float) -> void:
 	_action_timer -= delta * speed
 	if _action_timer <= 0.0:
 		if current_state == State.EATING:
-			# Aufstehen
-			var room_node = _get_poi_room_node(_current_poi_id)
-			if is_instance_valid(room_node) and room_node.has_method("leave_seat"):
-				room_node.leave_seat(_guest_member.id)
-			_change_state(State.IDLE)
-			_action_timer = randf_range(1.0, 3.0) # Kurze Pause
+			# Aufstehen: Tisch freigeben
+			var poi_room_node = _get_poi_room_node(_current_poi_id)
+			if is_instance_valid(poi_room_node) and poi_room_node.has_method("leave_seat"):
+				poi_room_node.leave_seat(_guest_member.id)
+			
+			# Gast steht mitten im Restaurant → zuerst auf das Exit-Tile des POI setzen,
+			# damit AStar einen gültigen Startpunkt hat (wie beim Verlassen des Zimmers)
+			if is_instance_valid(poi_room_node) and poi_room_node.has_method("get_target_tile"):
+				var poi_exit_tile = poi_room_node.get_target_tile(_map_grid)
+				global_position = _map_grid.tile_to_world(poi_exit_tile)
+			
+			_current_poi_id = "" # POI verlassen, bevor der Walk startet
+			if is_instance_valid(_target_room):
+				_walk_to_room(_target_room, State.IN_ROOM)
+			else:
+				_change_state(State.IDLE)
+				_action_timer = randf_range(5.0, 15.0)
 		elif current_state == State.STUDYING_MENU:
 			var room_node = _get_poi_room_node(_current_poi_id)
+			var ordered = false
 			if is_instance_valid(room_node) and room_node.has_method("place_order_for_seat"):
-				room_node.place_order_for_seat(_guest_member.id)
-			_change_state(State.WAITING_FOR_FOOD)
+				ordered = room_node.place_order_for_seat(_guest_member.id)
+				
+			if ordered:
+				_change_state(State.WAITING_FOR_FOOD)
+			else:
+				# Gast hat nur Getränk bekommen oder nichts bestellt -> wechselt direkt in EATING (Trink-Timer)
+				_change_state(State.EATING)
 		else:
 			_decide_next_action()
 
@@ -299,51 +316,51 @@ func _on_poi_arrived() -> void:
 	
 	var poi_def = _get_poi_def(_current_poi_id)
 	var income: int = poi_def.get("visit_income", 0)
-	if income <= 0:
-		var room_node = _get_poi_room_node(_current_poi_id)
-		if is_instance_valid(room_node) and room_node.has_method("claim_seat"):
-			var seat_pos = room_node.claim_seat(_guest_member.id)
-			if seat_pos != Vector2.ZERO:
-				# Der Gast "teleportiert" sich auf den Stuhl
-				global_position = seat_pos
-				_change_state(State.STUDYING_MENU)
-				
-				# Wir holen uns die Order ID direkt, da place_order_for_seat sie ins _seats array schreibt.
-				# Einfacher ist es aber, einfach aufs Signal zu warten, da die ID dort eh übergeben wird,
-				# aber wir speichern sie sicherheitshalber nicht hier, sondern lauschen auf GastroManager.
-		return
 	
-	# Budget abziehen (per Member – jeder hat seinen eigenen Geldbeutel)
-	_guest_member.spending_budget = max(0, _guest_member.spending_budget - income)
-	# Zufriedenheits-Boost für diesen Member
-	var party := _get_my_party()
-	if is_instance_valid(party):
-		party.satisfaction = min(100, party.satisfaction + 5)
-	
-	# Einnahme buchen
-	var room_id = _get_poi_room_id(_current_poi_id)
-	FinanceManager.add_transaction(
-		income, "gastro",
-		"tx.poi_income|" + GameState.T(poi_def.get("name", _current_poi_id)) + "|" + _guest_member.name
-	)
-	
-	# FloatingValue Signal senden (GuestController leitet weiter)
-	var spawn_pos = global_position
-	var poi_room = _get_poi_room_node(_current_poi_id)
-	if is_instance_valid(poi_room):
-		var sz = poi_room.call("get_tile_size") if poi_room.has_method("get_tile_size") else Vector2i(1, 1)
-		spawn_pos = poi_room.global_position + Vector2(sz.x * 16.0, sz.y * 16.0)
-	sig_poi_income.emit(income, spawn_pos)
+	# Einnahmen buchen (falls Eintritt/Basis-Kosten existieren)
+	if income > 0:
+		# Budget abziehen (per Member – jeder hat seinen eigenen Geldbeutel)
+		_guest_member.spending_budget = max(0, _guest_member.spending_budget - income)
+		var party := _get_my_party()
+		if is_instance_valid(party):
+			party.satisfaction = min(100, party.satisfaction + 5)
+		
+		# Einnahme buchen
+		var room_id = _get_poi_room_id(_current_poi_id)
+		FinanceManager.add_transaction(
+			income, "gastro",
+			"tx.poi_income|" + GameState.T(poi_def.get("name", _current_poi_id)) + "|" + _guest_member.name
+		)
+		
+		# FloatingValue Signal senden
+		var spawn_pos = global_position
+		var poi_room = _get_poi_room_node(_current_poi_id)
+		if is_instance_valid(poi_room):
+			var sz = poi_room.call("get_tile_size") if poi_room.has_method("get_tile_size") else Vector2i(1, 1)
+			spawn_pos = poi_room.global_position + Vector2(sz.x * 16.0, sz.y * 16.0)
+		sig_poi_income.emit(income, spawn_pos)
 
 	# EXP pro POI-Besuch vergeben (wenn definiert)
 	var visit_exp: int = poi_def.get("visit_exp", 0)
 	if visit_exp > 0:
 		GameState.add_exp(visit_exp)
-		EffectManager.spawn_exp_text(visit_exp, spawn_pos)
+		var spawn_pos = global_position
+		if EffectManager: EffectManager.spawn_exp_text(visit_exp, spawn_pos)
 
 	# GuestManager über Besuch informieren (für Warenverbrauch-Tracking)
 	if is_instance_valid(_guest_manager):
+		var room_id = _get_poi_room_id(_current_poi_id)
 		_guest_manager.on_poi_visited(room_id)
+
+	# Nach dem Bezahlen prüfen ob der Raum Sitzplätze hat (Restaurant, Bar etc.)
+	var room_node = _get_poi_room_node(_current_poi_id)
+	if is_instance_valid(room_node) and room_node.has_method("claim_seat"):
+		var seat_pos = room_node.claim_seat(_guest_member.id)
+		if seat_pos != Vector2.ZERO:
+			# Der Gast "teleportiert" sich auf den Stuhl
+			global_position = seat_pos
+			_change_state(State.STUDYING_MENU)
+			return
 
 
 # =============================================================================

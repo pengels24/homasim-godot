@@ -1194,3 +1194,4 @@ room.kitchen.guest,Gast,Guest
 room.kitchen.assigned,Zugeordnet,Assigned
 room.kitchen.assigned_details,### Personal (*** Köche),### Staff (*** Chefs)
 room.kitchen.status,Status,Status
+room.bar.empty,Leer / Wartet,Empty / Waiting

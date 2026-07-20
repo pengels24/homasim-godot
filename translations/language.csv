@@ -1195,3 +1195,18 @@ room.kitchen.assigned,Zugeordnet,Assigned
 room.kitchen.assigned_details,### Personal (*** Köche),### Staff (*** Chefs)
 room.kitchen.status,Status,Status
 room.bar.empty,Leer / Wartet,Empty / Waiting
+room.action.upgrade_wlan,WLAN (50$),WLAN (50$)
+room.action.upgrade_klima,Klima (150$),AC (150$)
+toast.room.wlan_installed,WLAN installiert!,WLAN installed!
+toast.room.klima_installed,Klimaanlage installiert!,AC installed!
+poi.bar.drinking,Sitzt / Trinkt,Sitting / Drinking
+poi.restaurant.studying_menu,Studiert Speisekarte,Studying Menu
+poi.restaurant.ordered,Bestellt,Ordered
+poi.restaurant.cooking,Wird zubereitet,Being Prepared
+poi.restaurant.waiting_service,Wartet auf Service,Waiting for Service
+poi.restaurant.eating,Isst gerade,Eating
+ui.staff.assign.free,Frei,Free
+techtree.zimmer.wlan,WLAN (Internet),WIFI (Internet)
+techtree.zimmer.klima,Klimaanlage,Air Conditioning
+techtree.zimmer.wlan.desc,Schaltet das WLAN-Upgrade für Gästezimmer frei.,Unlocks the WIFI upgrade for guest rooms.
+techtree.zimmer.klima.desc,Schaltet das Klimaanlagen-Upgrade für Gästezimmer frei.,Unlocks the Air Conditioning upgrade for guest rooms.

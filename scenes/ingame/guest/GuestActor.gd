@@ -21,6 +21,7 @@ var _current_order_id: String = ""
 
 # Interner Timer für Aufenthaltsdauer
 var _action_timer: float = 0.0
+var _impatient_timer: float = 0.0
 var _base_speed: float = 40.0
 
 var _active_tween: Tween
@@ -75,6 +76,23 @@ func _process(delta: float) -> void:
 	match current_state:
 		State.IN_ROOM, State.IN_POI, State.STUDYING_MENU, State.EATING, State.IDLE:
 			_process_waiting(delta)
+		State.WAITING_FOR_FOOD, State.AWAITING_CHECKOUT:
+			_process_impatient(delta)
+
+
+# =============================================================================
+func _process_impatient(delta: float) -> void:
+	if TimeManager and TimeManager.is_paused():
+		return
+		
+	var speed = TimeManager.user_speed if TimeManager else 1.0
+	_impatient_timer += delta * speed
+	
+	if _impatient_timer >= 60.0: # Alle 60 Ingame-Sekunden
+		_impatient_timer = 0.0
+		var party = _get_my_party()
+		if party:
+			party.modify_satisfaction(-2)
 
 
 # =============================================================================

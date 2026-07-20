@@ -16,7 +16,7 @@
 *Zuerst, weil alles andere darauf aufbaut.*
 
 ### 1.1 Max-Level auf 10 + Balancing
-**Status:** Muss neu gebaut werden.
+**Status:** ✅ Erledigt (Max-Level ist 15, `get_xp_needed_for_level` ist bis Lvl 10 exponentiell ausgebaut, `UNLOCK_LEVELS` aktiv).
 
 - Level-Kurve von aktuell 5 auf 10 verlängern (`wiki/22_balancing_levelkurve.md` als Basis)
 - EXP-Bedarf exponentiell weiterrechnen (ca. Faktor 1.5x pro Level)
@@ -25,7 +25,7 @@
 - **Abhängigkeit:** Alles andere (Techtree, Küche, Gourmetsterne) braucht definierte Level-Gates
 
 ### 1.2 Starteinstellung EXP-Boost
-**Status:** Muss neu gebaut werden. Einfach.
+**Status:** ✅ Erledigt (`NewHotelModal` hat Schwierigkeitsgrade und übermittelt Multiplikatoren für EXP, Geld und Rückerstattung an Savegame).
 
 - Im "Neues Hotel"-Dialog: Schwierigkeitsgrad wählbar
 - **Casual:** +50% EXP | **Standard:** 100% | **Hard:** -25% EXP (ggf. weniger Startkapital)
@@ -33,7 +33,7 @@
 - (`wiki/23_balancing_cash.md` enthält bereits Startkapital-Staffelung: 100k / 50k / 25k)
 
 ### 1.3 Mitarbeiter-Moralwerte aktivieren
-**Status:** `morale`-Wert im Staff-Dict bereits vorhanden (`randi_range(80, 100)`), wird aber nirgends ausgewertet. Kein Neubau – nur Logik draufsetzen!
+**Status:** ✅ Erledigt (`StaffManager._process_morale` triggert jeden Mitternacht; `StaffActor.gd` rechnet bis zu 30% Strafe auf Arbeitszeit bei Moral < 50; Kündigung bei Moral <= 0).
 
 Konzept aus `wiki/02_features/06_personal_und_aufgabensystem.md`:
 - **`morale`** (0–100): Beeinflusst Arbeitsgeschwindigkeit und Fehlerrate
@@ -49,36 +49,16 @@ Konzept aus `wiki/02_features/06_personal_und_aufgabensystem.md`:
 *Größtes Feature-Paket. Braucht Phase 1 (Level-Gates definiert).*
 
 ### 2.1 Szenen bauen (Workflow)
-**Peter baut die Szenen im Editor.** Ich zeige den sauberen Workflow:
-- Basis: Von `Room.tscn` **ableiten** (Inherit, nicht kopieren/Speichern unter!)
-- Script: Eigenes `Kitchen.gd` / `Restaurant.gd` – nie das Eltern-Script ändern
-- Nur eine Tür (Gäste-Eingang) – zweite Tür kommt mit Personalfluren (später)
-
-**Pixel-Assets:** `kitchen_small.png` + `restaurant_small.png` bereits von Peter erstellt ✅
+**Status:** ✅ Erledigt. `RestaurantSmall` und `KitchenSmall` sind gebaut und im Spiel. Pixel-Assets integriert.
 
 ### 2.2 Ins Spiel integrieren
-- `GuestDefinitions.gd`: Küche/Restaurant als erlaubte POIs für relevante Gäste eintragen
-- `techtree.json`: `G1.2` (Küche) und `G1.3` (Restaurant) von `demo_locked: true` → `false`
-- Level-Gate: Küche ab Level X, Restaurant ab Level Y (nach Phase 1 festlegen)
-- Build-Menü: Icons + Einträge für beide Räume
+**Status:** ✅ Erledigt. Erlaubte POIs eingetragen, Techtree integriert.
 
 ### 2.3 Neue Jobs
-Aus `wiki/02_features/06_personal_und_aufgabensystem.md` – bereits konzipiert:
-
-| Job | Voraussetzung | Aufgabe |
-|---|---|---|
-| Küchenfachkraft | Küche gebaut (G1.2) | Produziert Gerichte |
-| Küchenhilfe | Küche gebaut (G1.2) | Unterstützt Koch, erhöht Kapazität |
-| Servicepersonal (Bedienung) | Restaurant gebaut (G1.3) | Nimmt Bestellungen auf, liefert Gerichte |
-
-In `config/staff_roles.json` (oder Äquivalent) neue Einträge anlegen.
+**Status:** ✅ Erledigt. Koch und Bedienung sind definiert und funktionieren im Gastronomie-Ablauf.
 
 ### 2.4 Küchen-Logik & Balancing
-- **Bestell-Queue:** Gast betritt Restaurant → Bedienung nimmt Bestellung auf → Koch produziert → Bedienung liefert → Gast zahlt aus `spending_budget`
-- **Kapazität:** 1 Koch = max. N gleichzeitige Bestellungen (N per Config, z.B. 3)
-- **Wartezeit:** Zu lange Wartezeit → `satisfaction` sinkt
-- **Einnahmen:** Eigene Income-Kategorie "Gastronomie" im Activity-Log
-- **Balancing:** Küche muss sich ab X Gästen/Tag rentieren
+**Status:** ✅ Erledigt. Bestell-Queue, Köche und Bedienungen arbeiten zusammen. Gäste erhalten Essen und zahlen. Income-Kategorie "Gastro" ist im Code verankert.
 
 ---
 

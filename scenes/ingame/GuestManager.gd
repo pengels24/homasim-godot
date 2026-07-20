@@ -576,6 +576,16 @@ func do_checkin(party: GuestParty, room: Node2D) -> void:
 
 	# Budget beim Check-in: jeder Member bekommt sein eigenes Tagesbudget
 	var def = GuestDefinitions.ALL.get(party.type, {})
+	
+	# === Traits checken und Zufriedenheit abziehen ===
+	var reqs = def.get("requirements", [])
+	var missing_count = 0
+	for req in reqs:
+		if not room.has_method("has_trait") or not room.has_trait(req):
+			missing_count += 1
+	if missing_count > 0:
+		party.modify_satisfaction(-20 * missing_count)
+	
 	var budget_min: int = def.get("min_daily_budget", 10)
 	var budget_max: int = def.get("max_daily_budget", 30)
 	for member: GuestMember in party.members:
@@ -655,7 +665,13 @@ func do_checkout(party: GuestParty) -> float:
 	
 	var exp_gain = GameState.calc_checkout_exp(party)
 	if exp_gain > 0:
-		GameState.add_exp(exp_gain, "Checkout (GuestManager)")
+		var final_exp = int(exp_gain * (party.satisfaction / 100.0))
+		GameState.add_exp(final_exp, "Checkout (GuestManager)")
+		
+	if party.satisfaction < 30:
+		GameState.add_rep(-15)
+	elif party.satisfaction >= 80:
+		GameState.add_rep(5)
 
 	return payout
 
@@ -740,7 +756,14 @@ func calculate_payout(party: GuestParty) -> float:
 		if def.has("nightly_price") and def.get("nightly_price") > 0:
 			nightly_price = float(def.get("nightly_price"))
 			
-	return nightly_price * float(party.total_stay_days) * (party.satisfaction / 100.0)
+	var base_payout = nightly_price * float(party.total_stay_days)
+	
+	if party.satisfaction < 40:
+		base_payout *= 0.8
+	elif party.satisfaction >= 90:
+		base_payout *= 1.15
+		
+	return base_payout
 
 # ── Serialisierung ────────────────────────────────────────────────────────────
 

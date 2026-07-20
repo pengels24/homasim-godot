@@ -318,7 +318,8 @@ func place_room(parcel_x: int, parcel_y: int, room_scene: PackedScene, hotel_id:
 			"guest_manager": guest_manager,
 			"door_rotation": door_rot,
 			"door_offset": door_off,
-			"room_rotation": room_rot
+			"room_rotation": room_rot,
+			"is_new_build": true
 		})
 
 	var sz: Vector2i = room.get_tile_size()

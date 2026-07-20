@@ -17,6 +17,7 @@ static func get_definition() -> Dictionary:
     "type": "room",
     "req_level": 0,
     "req_tech": "",
+    "traits": ["telefon", "tv", "desk", "comfort"],
     "max_beds": 2,
     "open_from": 0,
     "open_to": 0,

@@ -49,6 +49,34 @@
           "demo_locked": false
         },
         {
+          "id": "Z1.4",
+          "name": "techtree.zimmer.wlan",
+          "category": "zimmer",
+          "col": 2,
+          "row": 0,
+          "cost_fp": 150,
+          "cost_money": 1500,
+          "dependencies": [
+            "Z1.1"
+          ],
+          "unlocks_emojis": "📶 💻",
+          "demo_locked": false
+        },
+        {
+          "id": "Z1.5",
+          "name": "techtree.zimmer.klima",
+          "category": "zimmer",
+          "col": 2,
+          "row": 1,
+          "cost_fp": 200,
+          "cost_money": 2000,
+          "dependencies": [
+            "Z1.1"
+          ],
+          "unlocks_emojis": "❄️ 🌬️",
+          "demo_locked": false
+        },
+        {
           "id": "G1.1",
           "name": "techtree.gastro.g11",
           "category": "gastronomie",

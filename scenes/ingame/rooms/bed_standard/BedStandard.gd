@@ -22,6 +22,7 @@ static func get_definition() -> Dictionary:
 		"in_build_menu": true,
 		"req_level": 0,
 		"req_tech": "",
+		"traits": ["telefon", "tv"],
 		"max_beds": 1,
 		"open_from": 0,
 		"open_to": 0,

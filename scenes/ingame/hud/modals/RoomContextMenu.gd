@@ -12,6 +12,8 @@ var _target_room: Node2D = null
 var _dragging = false
 var _drag_offset = Vector2.ZERO
 var btn_repair: Button
+var btn_wlan: Button
+var btn_klima: Button
 
 # =============================================================================
 func _ready() -> void:
@@ -37,6 +39,16 @@ func _ready() -> void:
 	btn_repair.text = GameState.T("room.action.maintenance")
 	btn_service.get_parent().add_child(btn_repair)
 	btn_repair.pressed.connect(_on_repair_pressed)
+	
+	btn_wlan = btn_service.duplicate()
+	btn_wlan.text = "WLAN (50$)"
+	btn_service.get_parent().add_child(btn_wlan)
+	btn_wlan.pressed.connect(_on_wlan_pressed)
+	
+	btn_klima = btn_service.duplicate()
+	btn_klima.text = "Klima (150$)"
+	btn_service.get_parent().add_child(btn_klima)
+	btn_klima.pressed.connect(_on_klima_pressed)
 	
 	# Demolish button ans Ende verschieben
 	btn_demolish.get_parent().move_child(btn_demolish, -1)
@@ -92,6 +104,19 @@ func open(room: Node2D) -> void:
 	btn_service.disabled = is_pending
 	if is_instance_valid(btn_repair):
 		btn_repair.disabled = is_pending
+		
+	btn_wlan.visible = false
+	btn_klima.visible = false
+	if _target_room.has_method("has_trait"):
+		var has_wlan = GameState.techtree.get("tech_wlan", false) or (TechtreeManager and TechtreeManager.is_unlocked("Z1.4"))
+		if has_wlan and not _target_room.has_trait("wlan"):
+			btn_wlan.visible = true
+			btn_wlan.disabled = is_pending
+			
+		var has_klima = GameState.techtree.get("tech_klima", false) or (TechtreeManager and TechtreeManager.is_unlocked("Z1.5"))
+		if has_klima and not _target_room.has_trait("klima"):
+			btn_klima.visible = true
+			btn_klima.disabled = is_pending
 	
 	var canvas_trans = room.get_global_transform_with_canvas()
 	var pos_on_screen = canvas_trans.origin
@@ -266,4 +291,32 @@ func _on_demolish_pressed() -> void:
 		confirm.cancelled.connect(func(): confirm.queue_free())
 		confirm.ask(GameState.T("room.action.demolish_title"), GameState.T("room.action.demolish_desc") % [room_name, refund])
 		
+	close()
+
+# =============================================================================
+func _on_wlan_pressed() -> void:
+	if not is_instance_valid(_target_room): return
+	var cost = 50
+	if GameState.selected_hotel.get("money", 0) < cost:
+		if is_instance_valid(Toast): Toast.show(GameState.T("toast.build.no_money"), "build", false)
+		close()
+		return
+		
+	if FinanceManager: FinanceManager.add_transaction(-cost, "construction", "WLAN Upgrade")
+	_target_room.acquired_traits.append("wlan")
+	if is_instance_valid(Toast): Toast.show("WLAN installiert!", "build")
+	close()
+
+# =============================================================================
+func _on_klima_pressed() -> void:
+	if not is_instance_valid(_target_room): return
+	var cost = 150
+	if GameState.selected_hotel.get("money", 0) < cost:
+		if is_instance_valid(Toast): Toast.show(GameState.T("toast.build.no_money"), "build", false)
+		close()
+		return
+		
+	if FinanceManager: FinanceManager.add_transaction(-cost, "construction", "Klima Upgrade")
+	_target_room.acquired_traits.append("klima")
+	if is_instance_valid(Toast): Toast.show("Klimaanlage installiert!", "build")
 	close()

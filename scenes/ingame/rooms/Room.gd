@@ -43,7 +43,11 @@ var is_repair_requested: bool = false
 # ── Tür / Orientierung ────────────────────────────────────────────────────────
 var door_rotation: int = 0   # Welche Wand   0–3  (.-Taste: nur Tür wandert)
 var door_offset:   int = 0   # Position auf Wand 0–1  (,-Taste)
-var room_rotation: int = 0   # Interior-Rotation 0–3  (R-Taste: ganzer Raum dreht)
+var room_rotation: int = 0   # Gesamtrotation 0-3     (R-Taste: alles dreht)
+
+var acquired_traits: Array = []
+
+var _guest_manager: Node
 
 # ── UI / Indikatoren ──────────────────────────────────────────────────────────
 const INDICATOR_SCENE := preload("res://scenes/ingame/rooms/RoomStatusIndicator.tscn")
@@ -262,6 +266,15 @@ func configure(data: Dictionary) -> void:
 	door_rotation = data.get("door_rotation", door_rotation)
 	door_offset   = data.get("door_offset",   door_offset)
 	room_rotation = data.get("room_rotation", room_rotation)
+	
+	if data.get("is_new_build", false):
+		if GameState.techtree.get("tech_wlan", false) or (TechtreeManager and TechtreeManager.is_unlocked("Z1.4")):
+			acquired_traits.append("wlan")
+		if GameState.techtree.get("tech_klima", false) or (TechtreeManager and TechtreeManager.is_unlocked("Z1.5")):
+			acquired_traits.append("klima")
+	else:
+		acquired_traits = data.get("acquired_traits", [])
+
 	_apply_visuals()
 	_update_indicator()
 	
@@ -290,8 +303,17 @@ func to_dict() -> Dictionary:
 		"door_rotation": door_rotation,
 		"door_offset": door_offset,
 		"room_rotation": room_rotation,
+		"acquired_traits": acquired_traits
 	}
 
+
+# =============================================================================
+func has_trait(trait_id: String) -> bool:
+	if trait_id in acquired_traits:
+		return true
+	var def = call("get_definition")
+	var base_traits = def.get("traits", [])
+	return trait_id in base_traits
 
 # =============================================================================
 func rotate_door() -> void:

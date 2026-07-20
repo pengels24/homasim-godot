@@ -22,6 +22,11 @@ var pays_surcharge: bool = false
 
 
 # =============================================================================
+func modify_satisfaction(amount: int) -> void:
+	satisfaction = clampi(satisfaction + amount, 0, 100)
+
+
+# =============================================================================
 func _init(p_id: String, p_type: String) -> void:
 	id = p_id
 	type = p_type

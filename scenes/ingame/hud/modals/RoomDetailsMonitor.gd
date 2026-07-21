@@ -66,12 +66,18 @@ func get_target_room() -> Node2D:
 func setup(room: Node2D) -> void:
 	_target_room = room
 	
-	var hex: String = ""
 	if "custom_color" in room and room.get("custom_color") != null:
-		hex = str(room.get("custom_color"))
-		
-	if hex != "":
-		color_picker.color = Color(hex)
+		var col = room.get("custom_color")
+		if typeof(col) == TYPE_COLOR:
+			color_picker.color = col
+		elif typeof(col) == TYPE_STRING and col != "":
+			# Try to handle old string data
+			if col.begins_with("("):
+				color_picker.color = Color.WHITE # Fallback for stringified "(1.0, 1.0, 1.0, 1.0)"
+			else:
+				color_picker.color = Color(col)
+		else:
+			color_picker.color = Color.WHITE
 	else:
 		color_picker.color = Color.WHITE
 		

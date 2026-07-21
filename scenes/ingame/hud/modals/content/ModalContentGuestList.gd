@@ -256,7 +256,7 @@ func _on_guest_selected(party: GuestParty, member: GuestMember, _btn: Button) ->
 		var goal_text = "---"
 		var state = _selected_guest.get("current_state")
 		if state == 2: goal_text = GameState.T("guest.tooltip.room")
-		elif state == 3:
+		elif state in [3, 6, 7, 8]:
 			var poi_id = _selected_guest.get("_current_poi_id")
 			if poi_id != "":
 				var poi_name = poi_id.capitalize()
@@ -324,7 +324,7 @@ func _refresh_live_data() -> void:
 					goal_text = target_room.get_definition().get("name", GameState.T("guest.tooltip.room"))
 				else:
 					goal_text = GameState.T("guest.tooltip.room")
-			elif state == 3: # IN_POI
+			elif state in [3, 6, 7, 8]: # IN_POI, STUDYING_MENU, WAITING_FOR_FOOD, EATING
 				var poi_id = actor.get("_current_poi_id")
 				if poi_id != "":
 					var poi_name = poi_id.capitalize()

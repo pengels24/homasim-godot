@@ -46,7 +46,7 @@ var door_offset:   int = 0   # Position auf Wand 0–1  (,-Taste)
 var room_rotation: int = 0   # Gesamtrotation 0-3     (R-Taste: alles dreht)
 
 var acquired_traits: Array = []
-var custom_color: String = ""
+var custom_color: Color = Color.WHITE
 
 # ── UI / Indikatoren ──────────────────────────────────────────────────────────
 const INDICATOR_SCENE := preload("res://scenes/ingame/rooms/RoomStatusIndicator.tscn")
@@ -265,7 +265,10 @@ func configure(data: Dictionary) -> void:
 	door_rotation = data.get("door_rotation", door_rotation)
 	door_offset   = data.get("door_offset",   door_offset)
 	room_rotation = data.get("room_rotation", room_rotation)
-	custom_color  = data.get("custom_color",  custom_color)
+	if data.has("custom_color"):
+		var col_str = data.get("custom_color", "ffffff")
+		if typeof(col_str) == TYPE_STRING and col_str != "":
+			custom_color = Color(col_str)
 	
 	if data.get("is_new_build", false):
 		if TechtreeManager and TechtreeManager.is_tech_unlocked("Z1.4"):
@@ -303,7 +306,7 @@ func to_dict() -> Dictionary:
 		"door_rotation": door_rotation,
 		"door_offset": door_offset,
 		"room_rotation": room_rotation,
-		"custom_color": custom_color,
+		"custom_color": custom_color.to_html(false),
 		"acquired_traits": acquired_traits
 	}
 

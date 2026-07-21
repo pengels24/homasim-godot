@@ -1,6 +1,14 @@
 {
   "recipes": [
     {
+      "id": "softdrink",
+      "name_key": "recipe.name.softdrink",
+      "prep_time": 2,
+      "cost": 1,
+      "price": 3,
+      "served_in": ["bar", "restaurant_small"]
+    },
+    {
       "id": "toast_hawaii",
       "name_key": "recipe.name.toast_hawaii",
       "prep_time": 10,

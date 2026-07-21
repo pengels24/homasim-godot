@@ -50,10 +50,14 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
+	if TimeManager and TimeManager.is_paused(): return
 	
-	_process_cooking(delta)
+	var speed = TimeManager.user_speed if TimeManager else 1.0
+	var scaled_delta = delta * speed
 	
-	_check_timer -= delta
+	_process_cooking(scaled_delta)
+	
+	_check_timer -= scaled_delta
 	if _check_timer <= 0:
 		_check_timer = 1.0 # Einmal pro Sekunde prüfen
 		_check_for_new_orders()
@@ -185,9 +189,8 @@ func get_live_details() -> Array[Dictionary]:
 		var rest_node = gm._get_room_node(rest_id) if gm else null
 		var custom_col = Color.WHITE
 		if is_instance_valid(rest_node):
-			var hex = rest_node.get("custom_color") if rest_node.get("custom_color") != null else ""
-			if hex != "":
-				custom_col = Color(hex)
+			if "custom_color" in rest_node and typeof(rest_node.custom_color) == TYPE_COLOR and rest_node.custom_color != Color.WHITE:
+				custom_col = rest_node.custom_color
 				
 		details.append({
 			"left": guest_name + " (" + r_name + ")",

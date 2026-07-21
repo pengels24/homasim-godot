@@ -151,7 +151,7 @@ func _update_content() -> void:
 							if actor.current_state == actor.State.IN_ROOM:
 								presence = GameState.T("room.tooltip.guest_present")
 								break
-							elif actor.current_state == actor.State.IN_POI:
+							elif actor.current_state in [actor.State.IN_POI, actor.State.STUDYING_MENU, actor.State.WAITING_FOR_FOOD, actor.State.EATING]:
 								presence = GameState.T("room.tooltip.guest_in_poi") % actor._current_poi_id.capitalize()
 								break
 							elif actor.current_state == actor.State.LEAVING or actor.current_state == actor.State.AWAITING_CHECKOUT or (actor.current_state == actor.State.WALKING and actor._is_checkout_walk):

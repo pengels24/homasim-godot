@@ -148,8 +148,8 @@ func get_live_details() -> Array[Dictionary]:
 					status_text = GameState.T("poi.restaurant.eating")
 					
 			var c = Color.WHITE
-			if "custom_color" in self and custom_color != "":
-				c = Color(custom_color)
+			if "custom_color" in self and typeof(custom_color) == TYPE_COLOR and custom_color != Color.WHITE:
+				c = custom_color
 			details.append({
 				"left": guest_name,
 				"right": status_text,
@@ -179,12 +179,32 @@ func get_dirty_seat_position() -> Vector2:
 	return Vector2.ZERO
 
 ## Gast bestellt etwas, sobald er sitzt
-func place_order_for_seat(guest_id: String) -> bool:
+func place_order_for_seat(guest_id: String, budget: int = 9999) -> bool:
 	for seat in _seats:
 		if seat["occupied_by"] == guest_id and seat["status"] == "clean":
+			if _room_id == "":
+				_room_id = GuestManager._room_key(self)
+				
+			var has_waiter = _has_waiter_assigned()
+			if not has_waiter:
+				return false
+				
+			var kitchen_is_open = false
+			var map_grid = get_tree().get_first_node_in_group("map_grid")
+			if map_grid and map_grid.has_method("get_placed_rooms"):
+				for room in map_grid.get_placed_rooms():
+					if is_instance_valid(room) and room.has_method("get_definition"):
+						var def = room.get_definition()
+						if def.get("id") == "kitchen_small" and GameState.is_facility_open(def, 30):
+							kitchen_is_open = true
+							break
+			
+			if not kitchen_is_open:
+				return false
+				
 			var possible_recipes = []
 			for r in GameState.recipes:
-				if "restaurant_small" in r.get("served_in", []):
+				if "restaurant_small" in r.get("served_in", []) and r.get("price", 0) <= budget:
 					possible_recipes.append(r)
 			
 			if not GameState.recipes.is_empty():
@@ -195,6 +215,16 @@ func place_order_for_seat(guest_id: String) -> bool:
 					var order_id = GastroManager.place_order(guest_id, chosen.get("id"), _room_id)
 					seat["order_id"] = order_id
 					return true
+	return false
+
+## Prüft ob ein Waiter (Bedienung) für dieses Restaurant zugewiesen ist
+func _has_waiter_assigned() -> bool:
+	if _room_id == "":
+		_room_id = GuestManager._room_key(self)
+	var assigned = StaffManager.get_staff_for_room(_room_id)
+	for s in assigned:
+		if s.get("role", "") == "waiter":
+			return true
 	return false
 
 func _process(delta: float) -> void:

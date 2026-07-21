@@ -135,7 +135,7 @@ func _process_waiting(delta: float) -> void:
 			var room_node = _get_poi_room_node(_current_poi_id)
 			var ordered = false
 			if is_instance_valid(room_node) and room_node.has_method("place_order_for_seat"):
-				ordered = room_node.place_order_for_seat(_guest_member.id)
+				ordered = room_node.place_order_for_seat(_guest_member.id, _guest_member.spending_budget)
 				
 			if ordered:
 				_change_state(State.WAITING_FOR_FOOD)
@@ -170,6 +170,13 @@ func _get_open_pois() -> Array[String]:
 			continue
 		
 		var room_id: String = def.get("id", "")
+		
+		var cost = def.get("visit_income", 0)
+		if room_id in ["restaurant_small", "bar", "kiosk"]:
+			cost = max(cost, 5) # Gastro braucht mindestens 5€ Budget für Essen/Getränke
+			
+		if _guest_member.spending_budget < cost:
+			continue
 		
 		# Öffnungszeiten prüfen (mit 30 Minuten Bestell-Stopp vor Schließung)
 		if not GameState.is_facility_open(def, 30):

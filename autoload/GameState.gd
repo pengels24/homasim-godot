@@ -361,7 +361,7 @@ func format_game_time(total_minutes: int) -> String:
 # =============================================================================
 ## Prüft anhand der Raum-Definition, ob eine Einrichtung aktuell geöffnet ist.
 ## open_from = 0 und open_to = 0 bedeutet 24/7 geöffnet.
-func is_facility_open(def: Dictionary) -> bool:
+func is_facility_open(def: Dictionary, close_margin_minutes: int = 0) -> bool:
 	var open_from: int = def.get("open_from", 0)
 	var open_to: int = def.get("open_to", 0)
 
@@ -369,14 +369,17 @@ func is_facility_open(def: Dictionary) -> bool:
 		return true
 
 	var current_time: int = TimeManager.get_game_time()
+	var effective_to: int = open_to - close_margin_minutes
+	if effective_to < 0:
+		effective_to += 1440 # 24 Stunden Wrap-Around falls margin in den Vortag ragt
 
 	if open_from < open_to:
 		# Regulärer Tag (z.B. 07:00 bis 22:00)
-		return current_time >= open_from and current_time < open_to
+		return current_time >= open_from and current_time < effective_to
 
 	else:
 		# Nachtbetrieb über Mitternacht (z.B. 22:00 bis 04:00)
-		return current_time >= open_from or current_time < open_to
+		return current_time >= open_from or current_time < effective_to
 
 
 # =============================================================================

@@ -644,6 +644,7 @@ room.tooltip.guest_present,📍 Gast anwesend,📍 Guest Present
 room.tooltip.guest_in_poi,📍 Gast in der %s,📍 Guest in %s
 room.tooltip.guest_leaving,🧳 Abreisend,🧳 Leaving
 room.tooltip.occupied,👥 Belegt: %s,👥 Occupied: %s
+room.tooltip.equipment,Ausstattung:,Equipment:
 room.tooltip.guests_in_room,Gäste im Zimmer:,Guests in Room:
 room.tooltip.departure,Abreise,Departure
 room.tooltip.nights_left,Übrige Nächte: %d / %d,Nights Left: %d / %d
@@ -1027,7 +1028,7 @@ tx.auto_demolish,Auto-Abriss: %s,Auto-Demolish: %s
 tx.demolish,Abriss: %s,Demolish: %s
 tx.checkout,Checkout: %s,Checkout: %s
 tx.supply,Warenverbrauch: %s (%s Besuche),Supply costs: %s (%s visits)
-tx.poi_income,%s - Besuch: %s,%s - Visit: %s
+tx.poi_income,%s (%s),%s (%s)
 tx.level_up_bonus,Level-Up Bonus,Level-Up Bonus
 tx.hire,Einstellungsgebuehr: %s (%s),Hire fee: %s (%s)
 tx.daily_wages,Tagesgehaelter,Daily wages
@@ -1187,7 +1188,7 @@ recipe.name.burger_classic,Klassischer Burger,Classic Burger
 recipe.name.pasta_napoli,Pasta Napoli,Pasta Napoli
 recipe.name.steak_frites,Steak Frites,Steak Frites
 room.kitchen.ready,Abholbereit,Ready for Pickup
-room.kitchen.waiting,- wartet -,- waiting -
+room.kitchen.waiting,bestellt,ordered
 room.kitchen.empty,Leer / Wartet,Empty / Waiting
 room.kitchen.time_left,Noch ###s,###s left
 room.kitchen.guest,Gast,Guest
@@ -1195,14 +1196,14 @@ room.kitchen.assigned,Zugeordnet,Assigned
 room.kitchen.assigned_details,### Personal (*** Köche),### Staff (*** Chefs)
 room.kitchen.status,Status,Status
 room.bar.empty,Leer / Wartet,Empty / Waiting
-room.action.upgrade_wlan,WLAN (50$),WLAN (50$)
-room.action.upgrade_klima,Klima (150$),AC (150$)
+room.action.upgrade_wlan,WLAN nachrüsten (50 €),Upgrade WIFI (50$)
+room.action.upgrade_klima,Klima nachrüsten (150 €),Upgrade AC (150$)
 toast.room.wlan_installed,WLAN installiert!,WLAN installed!
 toast.room.klima_installed,Klimaanlage installiert!,AC installed!
 poi.bar.drinking,Sitzt / Trinkt,Sitting / Drinking
 poi.restaurant.studying_menu,Studiert Speisekarte,Studying Menu
 poi.restaurant.ordered,Bestellt,Ordered
-poi.restaurant.cooking,Wird zubereitet,Being Prepared
+poi.restaurant.cooking,Zubereitung,Preparation
 poi.restaurant.waiting_service,Wartet auf Service,Waiting for Service
 poi.restaurant.eating,Isst gerade,Eating
 ui.staff.assign.free,Frei,Free
@@ -1210,3 +1211,4 @@ techtree.zimmer.wlan,WLAN (Internet),WIFI (Internet)
 techtree.zimmer.klima,Klimaanlage,Air Conditioning
 techtree.zimmer.wlan.desc,Schaltet das WLAN-Upgrade für Gästezimmer frei.,Unlocks the WIFI upgrade for guest rooms.
 techtree.zimmer.klima.desc,Schaltet das Klimaanlagen-Upgrade für Gästezimmer frei.,Unlocks the Air Conditioning upgrade for guest rooms.
+reception.tooltip.type,Gästetyp:,Guest Type:

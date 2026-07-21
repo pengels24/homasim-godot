@@ -92,6 +92,7 @@ func load_state(saved_state: Dictionary) -> void:
 	room_assignments = saved_state.get("assignments", {}).duplicate()
 
 	_ensure_daily_applicants()
+	sig_assignments_changed.emit()
 
 # =============================================================================
 func get_state() -> Dictionary:
@@ -281,7 +282,7 @@ func hire_staff(applicant_id: String) -> bool:
 	_save_to_hotel()
 	
 	sig_staff_hired.emit(applicant)
-	Toast.show(applicant["first_name"] + " wurde eingestellt!", "personal")
+	Toast.show(applicant["first_name"] + " wurde eingestellt!", "personal", false)
 	return true
 
 # =============================================================================

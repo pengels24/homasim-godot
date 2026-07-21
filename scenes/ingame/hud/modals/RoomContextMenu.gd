@@ -41,12 +41,18 @@ func _ready() -> void:
 	btn_repair.pressed.connect(_on_repair_pressed)
 	
 	btn_wlan = btn_service.duplicate()
-	btn_wlan.text = "WLAN (50$)"
+	btn_wlan.text = GameState.T("room.action.upgrade_wlan")
+	btn_wlan.add_theme_stylebox_override("normal", load("res://assets/UI/menu_button_green.tres"))
+	btn_wlan.add_theme_stylebox_override("pressed", load("res://assets/UI/menu_button_green_pressed.tres"))
+	btn_wlan.add_theme_stylebox_override("hover", load("res://assets/UI/menu_button_green_hover.tres"))
 	btn_service.get_parent().add_child(btn_wlan)
 	btn_wlan.pressed.connect(_on_wlan_pressed)
 	
 	btn_klima = btn_service.duplicate()
-	btn_klima.text = "Klima (150$)"
+	btn_klima.text = GameState.T("room.action.upgrade_klima")
+	btn_klima.add_theme_stylebox_override("normal", load("res://assets/UI/menu_button_green.tres"))
+	btn_klima.add_theme_stylebox_override("pressed", load("res://assets/UI/menu_button_green_pressed.tres"))
+	btn_klima.add_theme_stylebox_override("hover", load("res://assets/UI/menu_button_green_hover.tres"))
 	btn_service.get_parent().add_child(btn_klima)
 	btn_klima.pressed.connect(_on_klima_pressed)
 	
@@ -108,15 +114,17 @@ func open(room: Node2D) -> void:
 	btn_wlan.visible = false
 	btn_klima.visible = false
 	if _target_room.has_method("has_trait"):
-		var has_wlan = GameState.techtree.get("tech_wlan", false) or (TechtreeManager and TechtreeManager.is_unlocked("Z1.4"))
+		var has_wlan = (TechtreeManager and TechtreeManager.is_tech_unlocked("Z1.4"))
 		if has_wlan and not _target_room.has_trait("wlan"):
 			btn_wlan.visible = true
 			btn_wlan.disabled = is_pending
 			
-		var has_klima = GameState.techtree.get("tech_klima", false) or (TechtreeManager and TechtreeManager.is_unlocked("Z1.5"))
+		var has_klima = (TechtreeManager and TechtreeManager.is_tech_unlocked("Z1.5"))
 		if has_klima and not _target_room.has_trait("klima"):
 			btn_klima.visible = true
 			btn_klima.disabled = is_pending
+	
+	panel.reset_size()
 	
 	var canvas_trans = room.get_global_transform_with_canvas()
 	var pos_on_screen = canvas_trans.origin
@@ -128,7 +136,7 @@ func open(room: Node2D) -> void:
 	if start_x < 0:
 		start_x = pos_on_screen.x + width_on_screen + 20
 		
-	var p_height = max(panel.size.y, 250.0)
+	var p_height = panel.size.y
 	var final_y = pos_on_screen.y
 	if final_y + p_height > size.y - 20:
 		final_y = size.y - p_height - 20
@@ -302,9 +310,9 @@ func _on_wlan_pressed() -> void:
 		close()
 		return
 		
-	if FinanceManager: FinanceManager.add_transaction(-cost, "construction", "WLAN Upgrade")
+	if FinanceManager: FinanceManager.add_transaction(-cost, "construction", "tx.construction|WLAN")
 	_target_room.acquired_traits.append("wlan")
-	if is_instance_valid(Toast): Toast.show("WLAN installiert!", "build")
+	if is_instance_valid(Toast): Toast.show(GameState.T("toast.room.wlan_installed"), "build", false)
 	close()
 
 # =============================================================================
@@ -316,7 +324,7 @@ func _on_klima_pressed() -> void:
 		close()
 		return
 		
-	if FinanceManager: FinanceManager.add_transaction(-cost, "construction", "Klima Upgrade")
+	if FinanceManager: FinanceManager.add_transaction(-cost, "construction", "tx.construction|Klima")
 	_target_room.acquired_traits.append("klima")
-	if is_instance_valid(Toast): Toast.show("Klimaanlage installiert!", "build")
+	if is_instance_valid(Toast): Toast.show(GameState.T("toast.room.klima_installed"), "build", false)
 	close()

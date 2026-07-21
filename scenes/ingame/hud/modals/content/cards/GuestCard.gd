@@ -69,7 +69,7 @@ func populate(party: GuestParty, mode: Mode, is_new: bool = false, guest_mgr: Gu
 
 		Mode.ACTIVE:
 			var night_str = GameState.T("guest.nights.single") if party.stay_days == 1 else GameState.T("guest.nights.plural") % str(party.stay_days)
-			_details_label.text = GameState.T("guest.nights.remaining") + night_str
+			_details_label.text = GameState.T("guest.nights.remaining") + night_str + " | " + GameState.T(party.get_type_name())
 			mouse_filter = Control.MOUSE_FILTER_IGNORE
 			_build_active_tooltip()
 
@@ -157,7 +157,9 @@ func _stop_golden_pulse() -> void:
 
 # =============================================================================
 func _build_waiting_tooltip(def: Dictionary) -> void:
-	var tt := GameState.T("guest.tooltip.group") + "\n"
+	var type_name: String = GameState.T(def.get("name", ""))
+	var tt := "🏷️ " + GameState.T("reception.tooltip.type") + " " + type_name + "\n"
+	tt += GameState.T("guest.tooltip.group") + "\n"
 
 	# 1. Rollen sauber über das Translation-System auflösen
 	for member in current_party.members:
@@ -192,17 +194,22 @@ func _build_waiting_tooltip(def: Dictionary) -> void:
 
 # =============================================================================
 func _build_active_tooltip() -> void:
+	var def: Dictionary = GuestDefinitions.ALL.get(current_party.type, {})
+	var type_name: String = GameState.T(def.get("name", ""))
+
 	# 1. Allgemeine Infos zum Aufenthalt
 	var tt := "🏨 " + GameState.T("reception.tooltip.room") + " " + current_party.room_id + "\n"
+	tt += "🏷️ " + GameState.T("reception.tooltip.type") + " " + type_name + "\n"
 	tt += "👥 " + GameState.T("reception.tooltip.group", current_party.members.size()) + "\n"
 	tt += "🌙 " + GameState.T("reception.tooltip.nights", current_party.stay_days) + "\n"
-	tt += "😊 " + GameState.T("reception.tooltip.satisfaction", round(current_party.satisfaction * 100)) + "\n\n"
+	tt += "😊 " + GameState.T("reception.tooltip.satisfaction", current_party.satisfaction) + "\n\n"
 
 	if current_party.pays_surcharge:
 		tt += "🪙 " + GameState.T("reception.tooltip.surcharge") + "\n\n"
 
 	# 2. Die Namen der Gäste auflisten (wie im Waiting-Tooltip)
 	tt += GameState.T("reception.tooltip.guests") + "\n"
+	
 	for member in current_party.members:
 		var role_key: String = "guest.member.type." + str(member.role)
 		var display_role: String = GameState.T(role_key)

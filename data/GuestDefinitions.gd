@@ -13,7 +13,7 @@ const ALL: Dictionary = {
 		"max_base_price":  60,
 		"min_daily_budget": 20,
 		"max_daily_budget": 60,
-		"icon":            "res://assets/icons/guests/user.svg",
+		"icon":            "res://assets/guesttypes/gt-icon-single.aseprite",
 		"base_exp": 20,
 		"rep_penalty": 5
 	},
@@ -29,7 +29,7 @@ const ALL: Dictionary = {
 		"max_base_price":  100,
 		"min_daily_budget": 40,
 		"max_daily_budget": 100,
-		"icon":            "res://assets/icons/guests/users.svg",
+		"icon":            "res://assets/guesttypes/gt-icon-couple.aseprite",
 		"base_exp": 30,
 		"rep_penalty": 5
 	},
@@ -45,7 +45,7 @@ const ALL: Dictionary = {
 		"max_base_price":  120,
 		"min_daily_budget": 60,
 		"max_daily_budget": 160,
-		"icon":            "res://assets/icons/guests/briefcase.svg",
+		"icon":            "res://assets/guesttypes/gt-icon-business.aseprite",
 		"base_exp": 40,
 		"rep_penalty": 10
 	},
@@ -61,7 +61,7 @@ const ALL: Dictionary = {
 		"max_base_price":  150,
 		"min_daily_budget": 30,
 		"max_daily_budget": 80,
-		"icon":            "res://assets/icons/guests/van.svg",
+		"icon":            "res://assets/guesttypes/gt-icon-family.aseprite",
 		"base_exp": 30,
 		"rep_penalty": 5
 	},

@@ -7,6 +7,7 @@ extends Control
 @onready var vbox_list = %VBoxList
 @onready var panel = %MenuPanel
 @onready var resize_handle = %ResizeHandle
+@onready var color_picker = %ColorPickerButton
 
 var _target_room: Node2D = null
 var _dragging = false
@@ -30,6 +31,13 @@ func _ready() -> void:
 	
 	%MenuPanel.gui_input.connect(_on_panel_gui_input)
 	resize_handle.gui_input.connect(_on_resize_handle_input)
+	color_picker.color_changed.connect(_on_color_changed)
+	
+	var popup = color_picker.get_popup()
+	if popup:
+		popup.theme_type_variation = "InnerPanel"
+		
+	size = panel.size
 
 func _toggle_collapse() -> void:
 	_collapsed = not _collapsed
@@ -57,6 +65,16 @@ func get_target_room() -> Node2D:
 
 func setup(room: Node2D) -> void:
 	_target_room = room
+	
+	var hex: String = ""
+	if "custom_color" in room and room.get("custom_color") != null:
+		hex = str(room.get("custom_color"))
+		
+	if hex != "":
+		color_picker.color = Color(hex)
+	else:
+		color_picker.color = Color.WHITE
+		
 	if is_instance_valid(room) and room.has_method("get_definition"):
 		var def = room.get_definition()
 		var n = GameState.T("roomdef.name.long." + def.get("id", ""))
@@ -65,6 +83,10 @@ func setup(room: Node2D) -> void:
 		label_title.text = "  ::: Live-Details"
 		
 	_refresh_list()
+	
+func _on_color_changed(color: Color) -> void:
+	if is_instance_valid(_target_room):
+		_target_room.set("custom_color", color.to_html(false))
 	
 func _process(delta: float) -> void:
 	_update_timer += delta
@@ -80,6 +102,24 @@ func _refresh_list() -> void:
 	if not _target_room.has_method("get_live_details"):
 		return
 		
+	# Ampel-Farbe für Titel (falls Raum eine Definition hat)
+	if _target_room.has_method("get_definition"):
+		var def = _target_room.get_definition()
+		if def.get("open_from", 0) != 0 or def.get("open_to", 0) != 0:
+			var taking_orders = GameState.is_facility_open(def, 30)
+			var is_open = GameState.is_facility_open(def, 0)
+			
+			if taking_orders:
+				label_title.add_theme_color_override("font_color", Color("#22c55e")) # Grün
+			elif is_open:
+				label_title.add_theme_color_override("font_color", Color("#f97316")) # Orange
+			else:
+				label_title.add_theme_color_override("font_color", Color("#ef4444")) # Rot
+		else:
+			label_title.add_theme_color_override("font_color", Color.WHITE) # 24/7 oder keine Zeiten
+	else:
+		label_title.add_theme_color_override("font_color", Color.WHITE)
+	
 	var details = _target_room.get_live_details()
 	
 	# Alte Einträge löschen
@@ -91,17 +131,20 @@ func _refresh_list() -> void:
 		var hbox = HBoxContainer.new()
 		hbox.add_theme_constant_override("separation", 24) # Abstand zwischen Texten
 		
+		var row_color = row.get("color", Color.WHITE)
+		
 		var lbl_left = Label.new()
 		lbl_left.text = row.get("left", "")
 		lbl_left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		lbl_left.add_theme_font_size_override("font_size", 22)
 		lbl_left.clip_text = true # Verhindert, dass der Name alles sprengt
+		lbl_left.add_theme_color_override("font_color", row_color)
 		
 		var lbl_right = Label.new()
 		lbl_right.text = row.get("right", "")
 		lbl_right.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		lbl_right.add_theme_font_size_override("font_size", 22)
-		lbl_right.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
+		lbl_right.add_theme_color_override("font_color", row_color)
 		lbl_right.custom_minimum_size = Vector2(100, 0) # Platz für Timer reservieren
 		
 		var spacer = Control.new()

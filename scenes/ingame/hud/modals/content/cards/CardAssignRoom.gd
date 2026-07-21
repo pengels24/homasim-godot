@@ -80,11 +80,11 @@ func populate(formatted_name: String, room_id: String, _min_staff: int, max_staf
 		if limits.has(r) and count_by_role.get(r, 0) >= limits[r]:
 			continue
 		var r_name = StaffManager.staff_config.get("roles", {}).get(r, {}).get("name", r)
-		role_names.append(r_name)
+		role_names.append(GameState.T(r_name))
 	
 	var placeholder_text = GameState.T("ui.staff.assign.free_slot", "Freier Arbeitsplatz")
 	if role_names.size() > 0:
-		placeholder_text = "Frei (%s)" % "/".join(role_names)
+		placeholder_text = GameState.T("ui.staff.assign.free", "Frei") + " (" + "/".join(role_names) + ")"
 	
 	for i in range(empty_slots):
 		var p = _create_slot_panel(placeholder_text, Color(1, 1, 1, 0.2), false, allowed)

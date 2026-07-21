@@ -151,7 +151,6 @@ func _get_open_pois() -> Array[String]:
 	## Gibt alle POI-Typen zurück, die aktuell geöffnet haben.
 	## Nutzt open_from / open_to aus der Raumdefinition (Minuten seit Mitternacht).
 	var open_pois: Array[String] = []
-	var now := TimeManager.get_game_time() if TimeManager else 600
 	
 	var all_rooms: Array = _map_grid.active_rooms.duplicate()
 	var entry_parcel = _map_grid._grid[_map_grid._entry_plot.y][_map_grid._entry_plot.x]
@@ -170,12 +169,10 @@ func _get_open_pois() -> Array[String]:
 		if def.get("adults_only", false) and _guest_member.is_child:
 			continue
 		
-		var from: int = def.get("open_from", 0)
-		var to: int = def.get("open_to", 0)
 		var room_id: String = def.get("id", "")
 		
-		# Geöffnungszeiten prüfen
-		if not (now >= from and now < to):
+		# Öffnungszeiten prüfen (mit 30 Minuten Bestell-Stopp vor Schließung)
+		if not GameState.is_facility_open(def, 30):
 			continue
 		
 		# min_staff Check: Nur geöffnet wenn genügend Personal zugewiesen ist
@@ -298,7 +295,7 @@ func _change_state(new_state: State) -> void:
 			if has_node("ClickArea"): get_node("ClickArea").input_pickable = true
 
 
-func _on_order_served(order_id: String, guest_id: String, recipe_id: String) -> void:
+func _on_order_served(_order_id: String, guest_id: String, recipe_id: String) -> void:
 	if guest_id != _guest_member.id:
 		return
 	if current_state == State.WAITING_FOR_FOOD:
@@ -316,7 +313,7 @@ func _on_order_served(order_id: String, guest_id: String, recipe_id: String) -> 
 		# Bezahlen via FinanceManager
 		if price > 0:
 			_guest_member.spending_budget = max(0, _guest_member.spending_budget - price)
-			FinanceManager.add_transaction(price, "gastro", "tx.poi_income|" + r_name + "|" + _guest_member.name)
+			FinanceManager.add_transaction(price, "gastro", "tx.poi_income|" + _guest_member.name + "|" + r_name)
 			if EffectManager: EffectManager.spawn_money_text(price, global_position + Vector2(0, -48))
 		
 		# Gast gibt EXP wenn er isst (+10)
@@ -344,10 +341,10 @@ func _on_poi_arrived() -> void:
 			party.satisfaction = min(100, party.satisfaction + 5)
 		
 		# Einnahme buchen
-		var room_id = _get_poi_room_id(_current_poi_id)
+		# Einnahme buchen
 		FinanceManager.add_transaction(
 			income, "gastro",
-			"tx.poi_income|" + GameState.T(poi_def.get("name", _current_poi_id)) + "|" + _guest_member.name
+			"tx.poi_income|" + _guest_member.name + "|" + GameState.T(poi_def.get("name", _current_poi_id))
 		)
 		
 		# FloatingValue Signal senden

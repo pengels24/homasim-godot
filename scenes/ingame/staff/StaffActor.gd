@@ -127,16 +127,48 @@ func _process_idle() -> void:
 	if not _current_task.is_empty():
 		return # Mache schon was
 		
-	var current_hour = TimeManager.get_hour()
-	var is_night = current_hour >= 22 or current_hour < 7
+	var is_night = false
+	var assigned_room = _get_assigned_room()
+	
+	if is_instance_valid(assigned_room) and assigned_room.has_method("get_definition"):
+		var def = assigned_room.get_definition()
+		if not GameState.is_facility_open(def):
+			is_night = true # Raum ist geschlossen
+			
+			# Überstunden-Check: Gibt es noch was zu tun?
+			var room_id = GuestManager._room_key(assigned_room)
+			if GastroManager and GastroManager.has_active_orders_for_room(room_id):
+				is_night = false # Bleibt, bis alle versorgt sind
+	else:
+		# Fallback für Personal ohne feste Raum-Öffnungszeiten (Housekeeping, Maintenance)
+		var current_hour = TimeManager.get_hour()
+		is_night = current_hour >= 22 or current_hour < 7
 	
 	if is_night:
 		# Feierabend: Keine neuen Tasks annehmen, ab in die Lobby
-		var spawn_pos = _controller._get_lobby_spawn_pos()
-		if global_position.distance_to(spawn_pos) > 10.0:
-			_start_path_to_lobby()
-			_state = "returning"
+		if _room_entry_pos == Vector2.INF and _extra_target_pos == Vector2.INF and _target_world_pos == Vector2.ZERO:
+			pass # just for state check, actually we can just check if _sprite.visible is true
+			
+		# Wenn wir schon versteckt sind, mach nichts
+		if not _sprite.visible:
+			return
+			
+		# Wir haben noch kein festes Ziel für die Lobby? Holen wir uns eins
+		if _extra_target_pos == Vector2.INF:
+			_extra_target_pos = _controller._get_lobby_spawn_pos()
+			
+		if global_position.distance_to(_extra_target_pos) > 10.0:
+			if _state != "returning":
+				_start_path_to_lobby()
+				# Überschreibe _room_entry_pos in _start_path_to_lobby mit unserem gecachten _extra_target_pos
+				_room_entry_pos = _extra_target_pos
+				_state = "returning"
 			_think_timer = 1.0
+		else:
+			# FIX: Sobald der MA seinen Spot in der Lobby erreicht hat, versteckt er sich
+			_sprite.visible = false
+			_think_timer = 1.0
+			_extra_target_pos = Vector2.INF # Reset für nächste Schicht
 		return
 		
 	var my_job = get_job_type()
@@ -149,11 +181,11 @@ func _process_idle() -> void:
 			if my_job == "maintenance" and t.type == "repair_room": is_match = true
 			
 			if my_job == "waiter" and t.type in ["serve_meal", "clean_table"]:
-				var assigned_room = StaffManager.room_assignments.get(get_staff_id(), "")
+				var assigned_room_id = StaffManager.room_assignments.get(get_staff_id(), "")
 				var target_room_id = ""
 				if typeof(t.target) == TYPE_DICTIONARY and is_instance_valid(t.target.get("room")):
 					target_room_id = GuestManager._room_key(t.target.get("room"))
-				if assigned_room == target_room_id:
+				if assigned_room_id == target_room_id:
 					is_match = true
 			
 			if is_match:
@@ -258,14 +290,23 @@ func _process_idle() -> void:
 							_path = [_target_world_pos]
 					_think_timer = 2.0 + randf() * 2.0
 		else:
-			var spawn_pos = _controller._get_lobby_spawn_pos()
-			if global_position.distance_to(spawn_pos) > 10.0:
-				_start_path_to_lobby()
-				_state = "returning"
+			if _room_entry_pos == Vector2.INF and _extra_target_pos == Vector2.INF and _target_world_pos == Vector2.ZERO:
+				pass
+			if not _sprite.visible:
+				return
+			if _extra_target_pos == Vector2.INF:
+				_extra_target_pos = _controller._get_lobby_spawn_pos()
+				
+			if global_position.distance_to(_extra_target_pos) > 10.0:
+				if _state != "returning":
+					_start_path_to_lobby()
+					_room_entry_pos = _extra_target_pos
+					_state = "returning"
 				_think_timer = 1.0
 			else:
 				_sprite.visible = false
 				_think_timer = 1.0
+				_extra_target_pos = Vector2.INF
 
 func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void:
 	_arriving_room = room

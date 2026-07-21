@@ -44,6 +44,15 @@ func get_pending_orders() -> Array:
 			pending.append(order_id)
 	return pending
 
+func has_active_orders_for_room(room_id: String) -> bool:
+	for order_id in active_orders.keys():
+		var order = active_orders[order_id]
+		# Entweder das Restaurant oder die Küche ist dieser Raum
+		if order.get("restaurant_id", "") == room_id or order.get("kitchen_id", "") == room_id:
+			if order.get("status", "") != "served":
+				return true
+	return false
+
 func get_ready_orders_for_restaurant(restaurant_id: String) -> Array:
 	var ready = []
 	for order_id in active_orders.keys():

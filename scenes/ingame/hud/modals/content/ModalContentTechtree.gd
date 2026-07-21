@@ -250,7 +250,7 @@ func _build_tier_content(parent: Control, _tier_id: String, tier_data: Dictionar
 						confirm.ask(title, msg, GameState.T("ui.techtree.btn.unlock"), GameState.T("ui.techtree.btn.cancel"))
 						confirm.confirmed.connect(func():
 							if TechtreeManager.unlock_tech(tech_id):
-								Toast.show(GameState.T("toast.techtree.unlocked", GameState.T(n.get("name", "Unknown"))), "research")
+								Toast.show(GameState.T("toast.techtree.unlocked", GameState.T(n.get("name", "Unknown"))), "research", false)
 							confirm.queue_free()
 						)
 						confirm.cancelled.connect(func(): confirm.queue_free())

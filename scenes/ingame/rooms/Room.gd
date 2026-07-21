@@ -46,8 +46,7 @@ var door_offset:   int = 0   # Position auf Wand 0–1  (,-Taste)
 var room_rotation: int = 0   # Gesamtrotation 0-3     (R-Taste: alles dreht)
 
 var acquired_traits: Array = []
-
-var _guest_manager: Node
+var custom_color: String = ""
 
 # ── UI / Indikatoren ──────────────────────────────────────────────────────────
 const INDICATOR_SCENE := preload("res://scenes/ingame/rooms/RoomStatusIndicator.tscn")
@@ -266,11 +265,12 @@ func configure(data: Dictionary) -> void:
 	door_rotation = data.get("door_rotation", door_rotation)
 	door_offset   = data.get("door_offset",   door_offset)
 	room_rotation = data.get("room_rotation", room_rotation)
+	custom_color  = data.get("custom_color",  custom_color)
 	
 	if data.get("is_new_build", false):
-		if GameState.techtree.get("tech_wlan", false) or (TechtreeManager and TechtreeManager.is_unlocked("Z1.4")):
+		if TechtreeManager and TechtreeManager.is_tech_unlocked("Z1.4"):
 			acquired_traits.append("wlan")
-		if GameState.techtree.get("tech_klima", false) or (TechtreeManager and TechtreeManager.is_unlocked("Z1.5")):
+		if TechtreeManager and TechtreeManager.is_tech_unlocked("Z1.5"):
 			acquired_traits.append("klima")
 	else:
 		acquired_traits = data.get("acquired_traits", [])
@@ -303,6 +303,7 @@ func to_dict() -> Dictionary:
 		"door_rotation": door_rotation,
 		"door_offset": door_offset,
 		"room_rotation": room_rotation,
+		"custom_color": custom_color,
 		"acquired_traits": acquired_traits
 	}
 
@@ -541,8 +542,7 @@ func _update_indicator() -> void:
 	var staff_status = 0
 	if def.get("is_poi", false) and def.get("required_role", "") != "":
 		if StaffManager:
-			var rnum = str(get("room_number"))
-			var room_id = rnum if (rnum != "" and rnum != "null") else ("%s_%d_%d" % [str(get("room_type_id")), int(get("x_pos")), int(get("y_pos"))])
+			var room_id = GuestManager._room_key(self)
 			
 			var max_s = def.get("max_staff", def.get("min_staff", 1))
 			var assigned_count = StaffManager.get_staff_for_room(room_id).size()

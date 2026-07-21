@@ -165,7 +165,22 @@ func place_order_for_seat(guest_id: String) -> bool:
 				# Gast bleibt kurz sitzen und geht dann
 				return false
 			
-			# Bedienung vorhanden → Speise bestellen
+			# Bedienung vorhanden -> Speise bestellen
+			# ZUERST PRÜFEN: Ist überhaupt eine Küche noch offen für Bestellungen?
+			var kitchen_is_open = false
+			var map_grid = get_tree().get_first_node_in_group("map_grid")
+			if map_grid and map_grid.has_method("get_placed_rooms"):
+				for room in map_grid.get_placed_rooms():
+					if is_instance_valid(room) and room.has_method("get_definition"):
+						var def = room.get_definition()
+						if def.get("id") == "kitchen_small" and GameState.is_facility_open(def, 30):
+							kitchen_is_open = true
+							break
+			
+			if not kitchen_is_open:
+				# Küche geschlossen -> Gast trinkt nur
+				return false
+				
 			var possible_recipes: Array = []
 			for r in GameState.recipes:
 				if "bar" in r.get("served_in", []):
@@ -235,13 +250,13 @@ func get_live_details() -> Array[Dictionary]:
 	
 	for seat in _seats:
 		if seat["occupied_by"] != "":
-			var guest_name = "Gast"
+			var guest_name = GameState.T("room.kitchen.guest")
 			var gm = get_tree().get_first_node_in_group("guest_manager")
 			var guest_node = gm.get_guest(seat["occupied_by"]) if gm else null
 			if is_instance_valid(guest_node) or guest_node != null:
 				guest_name = guest_node.name
 			
-			var status_text = "Sitzt / Trinkt"
+			var status_text = GameState.T("poi.bar.drinking")
 			var order_id = seat.get("order_id", "")
 			
 			if order_id != "":
@@ -254,15 +269,18 @@ func get_live_details() -> Array[Dictionary]:
 							break
 					var s = order_data.get("status", "")
 					if s == "pending":
-						status_text = "Bestellt: " + r_name
+						status_text = GameState.T("poi.restaurant.ordered") + ": " + r_name
 					elif s == "cooking":
-						status_text = "Wird gekocht: " + r_name
+						status_text = GameState.T("poi.restaurant.cooking") + ": " + r_name
 					elif s == "ready":
-						status_text = "Wartet auf Service"
+						status_text = GameState.T("poi.restaurant.waiting_service")
 				else:
-					status_text = "Isst gerade"
+					status_text = GameState.T("poi.restaurant.eating")
 			
-			details.append({"left": guest_name, "right": status_text})
+			var c = Color.WHITE
+			if "custom_color" in self and custom_color != "":
+				c = Color(custom_color)
+			details.append({"left": guest_name, "right": status_text, "color": c})
 	
 	if details.is_empty():
 		details.append({"left": GameState.T("room.kitchen.status"), "right": GameState.T("room.bar.empty")})

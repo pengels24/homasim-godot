@@ -129,12 +129,13 @@ func _process_cooking(delta: float) -> void:
 # =============================================================================
 func get_live_details() -> Array[Dictionary]:
 	var details: Array[Dictionary] = []
+	var assigned = []
 	
 	if Engine.is_editor_hint() == false:
 		if _room_id == "":
 			_room_id = GuestManager._room_key(self)
 			
-		var assigned = StaffManager.get_staff_for_room(_room_id)
+		assigned = StaffManager.get_staff_for_room(_room_id)
 		
 	# Alle an diese Küche zugewiesenen Bestellungen anzeigen (oder pending)
 	var all_orders = GastroManager.active_orders.keys()
@@ -169,12 +170,29 @@ func get_live_details() -> Array[Dictionary]:
 		var right_text = GameState.T("room.kitchen.waiting")
 		if status == "cooking" and _active_cook_timers.has(order_id):
 			right_text = GameState.T("room.kitchen.time_left", int(_active_cook_timers[order_id]))
+			var has_helper = false
+			if typeof(assigned) == TYPE_ARRAY:
+				for s in assigned:
+					if typeof(s) == TYPE_DICTIONARY and s.get("role") == "kitchen_helper":
+						has_helper = true
+						break
+			if has_helper:
+				right_text += " ⚡"
 		elif status == "ready":
 			right_text = GameState.T("room.kitchen.ready")
 			
+		var rest_id = order_data.get("restaurant_id", "")
+		var rest_node = gm._get_room_node(rest_id) if gm else null
+		var custom_col = Color.WHITE
+		if is_instance_valid(rest_node):
+			var hex = rest_node.get("custom_color") if rest_node.get("custom_color") != null else ""
+			if hex != "":
+				custom_col = Color(hex)
+				
 		details.append({
 			"left": guest_name + " (" + r_name + ")",
-			"right": right_text
+			"right": right_text,
+			"color": custom_col
 		})
 		
 	if details.is_empty():

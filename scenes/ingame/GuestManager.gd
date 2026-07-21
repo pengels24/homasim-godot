@@ -166,7 +166,7 @@ func get_party_in_room(room: Node2D) -> GuestParty:
 static func _room_key(room: Node2D) -> String:
 	var rnum: String = str(room.get("room_number"))
 
-	if rnum != "" and rnum != "null":
+	if rnum != "" and rnum != "null" and rnum != "0":
 		return rnum
 
 	return "%s_%d_%d" % [str(room.get("room_type_id")), int(room.get("x_pos")), int(room.get("y_pos"))]

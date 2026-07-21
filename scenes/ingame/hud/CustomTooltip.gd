@@ -180,6 +180,18 @@ func _update_content() -> void:
 	if _target_room.get("is_pending_demolish"):
 		final_status += GameState.T("room.tooltip.pending_demolish")
 	final_status += status
+	if _target_room.has_method("has_trait"):
+		var eq := []
+		if _target_room.has_trait("telefon"): eq.append("Telefon")
+		if _target_room.has_trait("tv"): eq.append("TV")
+		if _target_room.has_trait("desk"): eq.append("Schreibtisch")
+		if _target_room.has_trait("wlan"): eq.append("WLAN")
+		if _target_room.has_trait("klima"): eq.append("Klima")
+		
+		if not eq.is_empty():
+			eq.sort()
+			final_status += "\n" + GameState.T("room.tooltip.equipment", "Ausstattung:") + " " + ", ".join(eq)
+
 	status_label.text = final_status
 
 	# ANG-211: Lobby ist Systemraum – Sauberkeit/Wartung nicht anzeigen
@@ -205,19 +217,24 @@ func _update_content() -> void:
 	size = Vector2.ZERO
 
 func _set_progress_color(pb: ProgressBar, val: float) -> void:
-	var base_sb = pb.get_theme_stylebox("fill")
+	var base_sb = pb.get_theme_stylebox("fill", "TooltipProgressBar")
 	var sb: StyleBoxFlat
 	if base_sb and base_sb is StyleBoxFlat:
 		sb = base_sb.duplicate() as StyleBoxFlat
 	else:
 		sb = StyleBoxFlat.new()
-		sb.corner_radius_top_left = 4
-		sb.corner_radius_top_right = 4
-		sb.corner_radius_bottom_right = 4
-		sb.corner_radius_bottom_left = 4
+		sb.corner_radius_top_left = 6
+		sb.corner_radius_top_right = 6
+		sb.corner_radius_bottom_right = 6
+		sb.corner_radius_bottom_left = 6
+		sb.corner_detail = 6
+		sb.content_margin_left = 2.0
+		sb.content_margin_top = 2.0
+		sb.content_margin_right = 2.0
+		sb.content_margin_bottom = 2.0
 		
 	if val >= 75:
-		sb.bg_color = Color("2d863e") # Grün
+		sb.bg_color = Color(0.0, 0.42, 0.11) # Grün
 	elif val >= 50:
 		sb.bg_color = Color("b59616") # Gelb
 	else:

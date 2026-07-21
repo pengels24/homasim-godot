@@ -119,13 +119,13 @@ func get_live_details() -> Array[Dictionary]:
 			
 	for seat in _seats:
 		if seat["occupied_by"] != "":
-			var guest_name = "Gast"
+			var guest_name = GameState.T("room.kitchen.guest")
 			var gm = get_tree().get_first_node_in_group("guest_manager")
 			var guest_node = gm.get_guest(seat["occupied_by"]) if gm else null
 			if is_instance_valid(guest_node) or guest_node != null:
 				guest_name = guest_node.name
 				
-			var status_text = "Studiert Speisekarte"
+			var status_text = GameState.T("poi.restaurant.studying_menu")
 			var order_id = seat.get("order_id", "")
 			
 			if order_id != "":
@@ -138,19 +138,29 @@ func get_live_details() -> Array[Dictionary]:
 							break
 					var s = order_data.get("status", "")
 					if s == "pending":
-						status_text = "Bestellt: " + r_name
+						status_text = GameState.T("poi.restaurant.ordered") + ": " + r_name
 					elif s == "cooking":
-						status_text = "Wird gekocht: " + r_name
+						status_text = GameState.T("poi.restaurant.cooking") + ": " + r_name
 					elif s == "ready":
-						status_text = "Wartet auf Service"
+						status_text = GameState.T("poi.restaurant.waiting_service")
 				else:
 					# Wenn order_id gesetzt ist, aber nicht in active_orders -> Serviert
-					status_text = "Isst gerade"
+					status_text = GameState.T("poi.restaurant.eating")
 					
+			var c = Color.WHITE
+			if "custom_color" in self and custom_color != "":
+				c = Color(custom_color)
 			details.append({
 				"left": guest_name,
-				"right": status_text
+				"right": status_text,
+				"color": c
 			})
+			
+	if details.is_empty():
+		details.append({
+			"left": GameState.T("room.kitchen.status"),
+			"right": GameState.T("room.restaurant.empty")
+		})
 	return details
 
 ## Bedienung räumt Tisch ab

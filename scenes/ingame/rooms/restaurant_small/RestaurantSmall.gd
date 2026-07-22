@@ -207,7 +207,7 @@ func place_order_for_seat(guest_id: String, budget: int = 9999) -> bool:
 				if "restaurant_small" in r.get("served_in", []) and r.get("price", 0) <= budget:
 					possible_recipes.append(r)
 			
-			if not GameState.recipes.is_empty():
+			if not possible_recipes.is_empty():
 				if _room_id == "":
 					_room_id = GuestManager._room_key(self)
 				var chosen = possible_recipes[randi() % possible_recipes.size()]
@@ -227,7 +227,7 @@ func _has_waiter_assigned() -> bool:
 			return true
 	return false
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	
 	if _room_id == "":

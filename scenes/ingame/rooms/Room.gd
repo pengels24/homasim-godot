@@ -344,7 +344,7 @@ func set_service_requested(requested: bool) -> void:
 var _highlight_rect: ReferenceRect
 
 # =============================================================================
-func set_highlight(active: bool, custom_color: Color = Color(1.0, 0.8, 0.1, 0.9)) -> void:
+func set_highlight(active: bool, highlight_color: Color = Color(1.0, 0.8, 0.1, 0.9)) -> void:
 	if active:
 		if not is_instance_valid(_highlight_rect):
 			_highlight_rect = ReferenceRect.new()
@@ -364,8 +364,8 @@ func set_highlight(active: bool, custom_color: Color = Color(1.0, 0.8, 0.1, 0.9)
 			
 			add_child(_highlight_rect)
 			
-		_highlight_rect.border_color = custom_color
-		var bg_color = custom_color
+		_highlight_rect.border_color = highlight_color
+		var bg_color = highlight_color
 		bg_color.a = 0.2
 		var bg_node = _highlight_rect.get_node_or_null("HighlightBG")
 		if bg_node:
@@ -556,4 +556,6 @@ func _update_indicator() -> void:
 
 	var show_broom = is_service_requested or (cleanliness_level < 50)
 	var show_wrench = is_repair_requested or (maintenance_level < 50)
-	_status_indicator.set_status(show_broom, show_wrench, is_pending_demolish, staff_status, is_service_requested, is_repair_requested)
+	var is_critical_clean = (cleanliness_level == 0)
+	var is_critical_repair = (maintenance_level == 0)
+	_status_indicator.set_status(show_broom, show_wrench, is_pending_demolish, staff_status, is_service_requested, is_repair_requested, is_critical_clean, is_critical_repair)

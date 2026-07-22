@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cmfmonitor123"]
 
-[ext_resource type="Script" uid="uid://b1script123" path="res://scenes/ingame/hud/modals/RoomDetailsMonitor.gd" id="1_script"]
+[ext_resource type="Script" path="res://scenes/ingame/hud/modals/RoomDetailsMonitor.gd" id="1_script"]
 [ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="2_theme"]
 [ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="3_l0jnf"]
 [ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="4_knild"]

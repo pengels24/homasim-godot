@@ -313,7 +313,8 @@ func _refresh_live_data() -> void:
 		if _guest_controller._actors.has(member.id):
 			actor = _guest_controller._actors[member.id]
 			
-		var goal_text = "---"
+		var goal_text_short = "---"
+		var goal_text_long = "---"
 		var energy_val = 100.0
 		
 		if actor:
@@ -321,9 +322,10 @@ func _refresh_live_data() -> void:
 			if state == 2: # IN_ROOM
 				var target_room = actor.get("_target_room")
 				if is_instance_valid(target_room) and target_room.has_method("get_definition"):
-					goal_text = target_room.get_definition().get("name", GameState.T("guest.tooltip.room"))
+					goal_text_short = target_room.get_definition().get("name", GameState.T("guest.tooltip.room"))
 				else:
-					goal_text = GameState.T("guest.tooltip.room")
+					goal_text_short = GameState.T("guest.tooltip.room")
+				goal_text_long = goal_text_short
 			elif state in [3, 6, 7, 8]: # IN_POI, STUDYING_MENU, WAITING_FOR_FOOD, EATING
 				var poi_id = actor.get("_current_poi_id")
 				if poi_id != "":
@@ -338,24 +340,33 @@ func _refresh_live_data() -> void:
 						room_key = actor.call("_get_poi_room_id", poi_id)
 						
 					if room_key != "" and room_key != "null":
-						goal_text = "in %s %s" % [poi_name, room_key]
+						goal_text_long = "in %s %s" % [poi_name, room_key]
 					else:
-						goal_text = "in %s" % poi_name
+						goal_text_long = "in %s" % poi_name
+					
+					# Kürzen für die Liste: Alles ab "(" abschneiden
+					goal_text_short = poi_name.split(" (")[0]
+					goal_text_short = "in %s" % goal_text_short
 				else:
-					goal_text = "POI"
+					goal_text_short = "POI"
+					goal_text_long = "POI"
 			elif state == 4: # AWAITING_CHECKOUT
-				goal_text = GameState.T("guest.tooltip.reception")
+				goal_text_short = GameState.T("guest.tooltip.reception")
+				goal_text_long = goal_text_short
 			elif state == 1: # WALKING
 				if actor.get("_is_checkout_walk"):
-					goal_text = GameState.T("guest.tooltip.walking_reception")
+					goal_text_short = GameState.T("guest.tooltip.walking_reception")
 				else:
-					goal_text = GameState.T("guest.tooltip.walking_room").replace(" (Zimmer)", "")
+					goal_text_short = GameState.T("guest.tooltip.walking_room").replace(" (Zimmer)", "")
+				goal_text_long = goal_text_short
 			elif state == 5: # LEAVING
-				goal_text = GameState.T("guest.tooltip.leaving")
+				goal_text_short = GameState.T("guest.tooltip.leaving")
+				goal_text_long = goal_text_short
 			else:
-				goal_text = "-"
+				goal_text_short = "-"
+				goal_text_long = "-"
 				
-		row.lbl_goal.text = goal_text
+		row.lbl_goal.text = goal_text_short
 		row.lbl_energy.text = "%d%%" % int(energy_val)
 		if energy_val < 30:
 			row.lbl_energy.add_theme_color_override("font_color", Color.RED)
@@ -372,7 +383,7 @@ func _refresh_live_data() -> void:
 			
 		if _selected_guest and member.id == (_selected_guest.get("id") if "id" in _selected_guest else ""):
 			detail_satisfaction_val.text = "%d%%" % party.satisfaction
-			detail_status_val.text = goal_text
+			detail_status_val.text = goal_text_long
 
 func _on_goto_pressed() -> void:
 	if not is_instance_valid(_selected_guest):

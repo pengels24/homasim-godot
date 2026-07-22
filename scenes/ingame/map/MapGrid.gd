@@ -61,6 +61,7 @@ var is_miniature: bool = false
 
 # =============================================================================
 func _ready() -> void:
+	add_to_group("map_grid")
 	if not is_miniature:
 
 		InputHandler.sig_camera_pan_requested.connect(_on_input_camera_pan)

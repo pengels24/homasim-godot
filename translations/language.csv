@@ -1196,6 +1196,7 @@ room.kitchen.guest,Gast,Guest
 room.kitchen.assigned,Zugeordnet,Assigned
 room.kitchen.assigned_details,### Personal (*** Köche),### Staff (*** Chefs)
 room.kitchen.status,Status,Status
+room.restaurant.empty,Leer,Empty
 room.bar.empty,Leer / Wartet,Empty / Waiting
 room.action.upgrade_wlan,WLAN nachrüsten (50 €),Upgrade WIFI (50$)
 room.action.upgrade_klima,Klima nachrüsten (150 €),Upgrade AC (150$)

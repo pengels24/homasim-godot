@@ -24,7 +24,7 @@ func _ready() -> void:
 		icon_unstaffed.tooltip_text = "Unterbesetzt"
 		icon_unstaffed.mouse_filter = Control.MOUSE_FILTER_PASS
 
-func set_status(needs_cleaning: bool, needs_repair: bool, pending_demolish: bool = false, staff_status: int = 0, cleaning_requested: bool = false, repair_requested: bool = false) -> void:
+func set_status(needs_cleaning: bool, needs_repair: bool, pending_demolish: bool = false, staff_status: int = 0, cleaning_requested: bool = false, repair_requested: bool = false, is_critical_clean: bool = false, is_critical_repair: bool = false) -> void:
 	if not is_node_ready():
 		await ready
 
@@ -36,12 +36,16 @@ func set_status(needs_cleaning: bool, needs_repair: bool, pending_demolish: bool
 	icon_clean.visible = needs_cleaning
 	if cleaning_requested:
 		icon_clean.modulate = Color("2d863e") # Gruen, analog zum Tooltip-Progress
+	elif is_critical_clean:
+		icon_clean.modulate = Color(0.89, 0.1, 0.1) # Rot (Kritisch)
 	else:
 		icon_clean.modulate = Color("e3ae08") # Gold/Gelb (Aufgabe offen)
 		
 	icon_repair.visible = needs_repair
 	if repair_requested:
 		icon_repair.modulate = Color("2d863e") # Gruen
+	elif is_critical_repair:
+		icon_repair.modulate = Color(0.89, 0.1, 0.1) # Rot (Kritisch)
 	else:
 		icon_repair.modulate = Color("e3ae08") # Gold/Gelb
 	icon_demolish.visible = pending_demolish

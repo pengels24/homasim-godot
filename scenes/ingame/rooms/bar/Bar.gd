@@ -206,7 +206,7 @@ func _has_waiter_assigned() -> bool:
 # =============================================================================
 # PROCESS – Prüft jede Sekunde ob fertig gekochte Bestellungen abgeholt werden müssen
 # =============================================================================
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	
 	if _room_id == "":

@@ -7,8 +7,6 @@ var _current_tab = 0 # 0 = Team, 1 = Bewerber
 var _map_grid: Node2D = null
 
 var _active_rows: Array = []
-var _selected_room_id: String = ""
-var _selected_staff_id: String = ""
 var _update_timer: float = 0.0
 
 @onready var tab_hbox: HBoxContainer = %TabHBox

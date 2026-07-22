@@ -355,7 +355,8 @@ func pay_bonus(staff_id: String) -> bool:
 		GameState.add_money(-bonus_cost)
 		
 	add_morale(staff_id, 25, 100)
-	Toast.show(hired_staff[staff_id]["first_name"] + " hat einen Bonus erhalten!", "personal", false)
+	var staff_name = hired_staff[staff_id]["first_name"]
+	Toast.show(GameState.T("toast.staff.bonus_received", "%s hat einen Bonus erhalten!") % staff_name, "personal", false)
 	return true
 
 # =============================================================================

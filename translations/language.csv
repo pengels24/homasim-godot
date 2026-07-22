@@ -1214,3 +1214,5 @@ techtree.zimmer.klima,Klimaanlage,Air Conditioning
 techtree.zimmer.wlan.desc,Schaltet das WLAN-Upgrade für Gästezimmer frei.,Unlocks the WIFI upgrade for guest rooms.
 techtree.zimmer.klima.desc,Schaltet das Klimaanlagen-Upgrade für Gästezimmer frei.,Unlocks the Air Conditioning upgrade for guest rooms.
 reception.tooltip.type,Gästetyp:,Guest Type:
+ui.staff.pay_bonus,Bonus zahlen (100 €),Pay Bonus (100 €)
+toast.staff.bonus_received,%s hat einen Bonus erhalten!,%s received a bonus!

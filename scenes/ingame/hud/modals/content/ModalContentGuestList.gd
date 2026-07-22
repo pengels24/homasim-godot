@@ -189,8 +189,9 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 	lbl_goal.size_flags_stretch_ratio = 1.5
 	lbl_goal.add_theme_color_override("font_color", font_color)
 	
-	# Energy
+	# Energy -> Saturation
 	var lbl_energy = Label.new()
+	energy_val = member.saturation if "saturation" in member else 100.0
 	lbl_energy.text = "%d%%" % int(energy_val)
 	lbl_energy.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	lbl_energy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -315,7 +316,7 @@ func _refresh_live_data() -> void:
 			
 		var goal_text_short = "---"
 		var goal_text_long = "---"
-		var energy_val = 100.0
+		var energy_val = member.saturation if "saturation" in member else 100.0
 		
 		if actor:
 			var state = actor.get("current_state")

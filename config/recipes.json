@@ -6,6 +6,7 @@
       "prep_time": 2,
       "cost": 1,
       "price": 3,
+      "saturation": 10,
       "served_in": ["bar", "restaurant_small"]
     },
     {
@@ -14,6 +15,7 @@
       "prep_time": 10,
       "cost": 3,
       "price": 12,
+      "saturation": 25,
       "served_in": ["bar", "restaurant_small"]
     },
     {
@@ -22,6 +24,7 @@
       "prep_time": 5,
       "cost": 1,
       "price": 5,
+      "saturation": 15,
       "served_in": ["bar"]
     },
     {
@@ -30,6 +33,7 @@
       "prep_time": 15,
       "cost": 5,
       "price": 18,
+      "saturation": 40,
       "served_in": ["restaurant_small"]
     },
     {
@@ -38,6 +42,7 @@
       "prep_time": 20,
       "cost": 4,
       "price": 16,
+      "saturation": 35,
       "served_in": ["restaurant_small"]
     },
     {
@@ -46,6 +51,7 @@
       "prep_time": 30,
       "cost": 10,
       "price": 35,
+      "saturation": 60,
       "served_in": ["restaurant_small"]
     }
   ]

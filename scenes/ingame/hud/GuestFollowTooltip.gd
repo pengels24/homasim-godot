@@ -6,6 +6,7 @@ var _timer: float = 5.0
 @onready var label_name: Label = %NameLabel
 @onready var label_target: Label = %TargetLabel
 @onready var label_satisfaction: Label = %SatisfactionLabel
+@onready var hunger_bar: ProgressBar = %HungerBar
 
 func setup(guest: GuestActor) -> void:
 	_target_guest = guest
@@ -94,8 +95,27 @@ func _update_target_text() -> void:
 	
 	# Budget des Members anzeigen
 	var member = _target_guest.get("_guest_member")
-	if member and member.daily_budget > 0:
-		label_target.text += GameState.T("guest.tooltip.budget") % [member.spending_budget, member.daily_budget]
+	if member:
+		if member.daily_budget > 0:
+			label_target.text += GameState.T("guest.tooltip.budget") % [member.spending_budget, member.daily_budget]
+		
+		# Hunger Bar Update
+		if hunger_bar:
+			hunger_bar.value = member.saturation
+			var base_sb = hunger_bar.get_theme_stylebox("fill", "TooltipProgressBar")
+			var sb_style: StyleBoxFlat
+			if base_sb and base_sb is StyleBoxFlat:
+				sb_style = base_sb.duplicate() as StyleBoxFlat
+			else:
+				sb_style = StyleBoxFlat.new()
+			
+			if member.saturation > 50:
+				sb_style.bg_color = Color(0.0, 0.42, 0.11) # Dunkelgrün
+			elif member.saturation > 25:
+				sb_style.bg_color = Color("b59616") # Gelb
+			else:
+				sb_style.bg_color = Color("9e2a2b") # Rot
+			hunger_bar.add_theme_stylebox_override("fill", sb_style)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:

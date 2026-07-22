@@ -32,6 +32,7 @@ var shirt_color: String = ""
 var speed_offset: float = 0.0
 var daily_budget: int = 0    # Einmalig bei Check-in gewürfelt
 var spending_budget: int = 0 # Aktuelles Tagesbudget (jeden Morgen reset)
+var saturation: int = 100    # Sättigung / Hunger (100 = satt, <30 = hungrig)
 
 
 # =============================================================================
@@ -46,6 +47,8 @@ func _init(p_id: String, p_party_id: String, p_name: String, p_role: String, p_g
 	hair_color = p_hair if p_hair != "" else HAIR_COLORS.pick_random()
 	shirt_color = p_shirt if p_shirt != "" else SHIRT_COLORS.pick_random()
 	speed_offset = p_speed if p_speed != -999.0 else randf_range(-10.0, 10.0)
+	
+	saturation = randi_range(40, 100)
 
 
 # =============================================================================
@@ -67,6 +70,7 @@ func to_dict() -> Dictionary:
 		"speed_offset": speed_offset,
 		"daily_budget": daily_budget,
 		"spending_budget": spending_budget,
+		"saturation": saturation,
 	}
 
 
@@ -85,6 +89,7 @@ static func from_dict(d: Dictionary) -> GuestMember:
 	)
 	m.daily_budget    = int(d.get("daily_budget",    20))
 	m.spending_budget = int(d.get("spending_budget", m.daily_budget))
+	m.saturation      = int(d.get("saturation",      100))
 	return m
 
 

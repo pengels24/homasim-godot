@@ -76,7 +76,7 @@ layout_mode = 2
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.0
-text = "Energie"
+text = "Sättigung"
 
 [node name="LblSatisfaction" type="Label" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2

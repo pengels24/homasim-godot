@@ -73,6 +73,12 @@ func _on_click_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: 
 
 # =============================================================================
 func _process(delta: float) -> void:
+	if has_node("HungryIcon"):
+		if avatar.visible and _guest_member.saturation <= 50:
+			$HungryIcon.visible = true
+		else:
+			$HungryIcon.visible = false
+
 	match current_state:
 		State.IN_ROOM, State.IN_POI, State.STUDYING_MENU, State.EATING, State.IDLE:
 			_process_waiting(delta)
@@ -135,7 +141,8 @@ func _process_waiting(delta: float) -> void:
 			var room_node = _get_poi_room_node(_current_poi_id)
 			var ordered = false
 			if is_instance_valid(room_node) and room_node.has_method("place_order_for_seat"):
-				ordered = room_node.place_order_for_seat(_guest_member.id, _guest_member.spending_budget)
+				var missing_sat = max(0, 100 - _guest_member.saturation)
+				ordered = room_node.place_order_for_seat(_guest_member.id, _guest_member.spending_budget, missing_sat)
 				
 			if ordered:
 				_change_state(State.WAITING_FOR_FOOD)
@@ -174,6 +181,8 @@ func _get_open_pois() -> Array[String]:
 		var cost = def.get("visit_income", 0)
 		if room_id in ["restaurant_small", "bar", "kiosk"]:
 			cost = max(cost, 5) # Gastro braucht mindestens 5€ Budget für Essen/Getränke
+			if _guest_member.saturation > 50:
+				continue
 			
 		if _guest_member.spending_budget < cost:
 			continue
@@ -311,9 +320,11 @@ func _on_order_served(_order_id: String, guest_id: String, recipe_id: String) ->
 		# Preis des Gerichts ermitteln
 		var price = 0
 		var r_name = "Essen"
+		var sat = 0
 		for r in GameState.recipes:
 			if r.get("id") == recipe_id:
 				price = r.get("price", 0)
+				sat = r.get("saturation", 0)
 				r_name = GameState.T(r.get("name", ""))
 				break
 		
@@ -326,6 +337,9 @@ func _on_order_served(_order_id: String, guest_id: String, recipe_id: String) ->
 		# Gast gibt EXP wenn er isst (+10)
 		if EffectManager: EffectManager.spawn_exp_text(10, global_position + Vector2(0, -32))
 		GameState.add_exp(10)
+		
+		# Sättigung wiederherstellen
+		_guest_member.saturation = min(100, _guest_member.saturation + sat)
 		
 		# Essen-Status aktivieren
 		_change_state(State.EATING)

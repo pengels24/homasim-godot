@@ -179,7 +179,7 @@ func get_dirty_seat_position() -> Vector2:
 	return Vector2.ZERO
 
 ## Gast bestellt etwas, sobald er sitzt
-func place_order_for_seat(guest_id: String, budget: int = 9999) -> bool:
+func place_order_for_seat(guest_id: String, budget: int = 9999, missing_sat: int = 100) -> bool:
 	for seat in _seats:
 		if seat["occupied_by"] == guest_id and seat["status"] == "clean":
 			if _room_id == "":
@@ -204,7 +204,7 @@ func place_order_for_seat(guest_id: String, budget: int = 9999) -> bool:
 				
 			var possible_recipes = []
 			for r in GameState.recipes:
-				if "restaurant_small" in r.get("served_in", []) and r.get("price", 0) <= budget:
+				if "restaurant_small" in r.get("served_in", []) and r.get("price", 0) <= budget and r.get("saturation", 0) <= missing_sat:
 					possible_recipes.append(r)
 			
 			if not possible_recipes.is_empty():

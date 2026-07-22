@@ -209,6 +209,12 @@ func _on_room_cleaned(room: Node2D) -> void:
 # =============================================================================
 func on_hour_passed(_hour: int) -> void:
 	_tick_patience()
+	_tick_active_guests()
+
+func _tick_active_guests() -> void:
+	for party: GuestParty in _active:
+		for member: GuestMember in party.members:
+			member.saturation = max(0, member.saturation - 5)
 
 
 # =============================================================================
@@ -941,6 +947,11 @@ func process_morning_routine() -> void:
 	daily_reject_heads = 0
 	daily_declined_parties = 0
 	daily_declined_heads = 0
+	
+	# === Gäste werden über Nacht hungrig ===
+	for party: GuestParty in _active:
+		for member: GuestMember in party.members:
+			member.saturation = max(0, member.saturation - 25)
 
 	var moving: Array = []
 

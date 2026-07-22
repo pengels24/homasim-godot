@@ -563,9 +563,14 @@ func _on_standard_modal_hidden() -> void:
 # =============================================================================
 func _sync_guest_ui() -> void:
 	# 1. Das Top-HUD (über den GameState Briefkasten) updaten
-	var waiting_count = _guest_mgr.get_waiting().size()
-	var active_count = _guest_mgr.get_active().size()
-	var checkout_count = _guest_mgr.get_checkout().size()
+	var waiting_count = 0
+	for p in _guest_mgr.get_waiting(): waiting_count += p.members.size()
+	
+	var active_count = 0
+	for p in _guest_mgr.get_active(): active_count += p.members.size()
+	
+	var checkout_count = 0
+	for p in _guest_mgr.get_checkout(): checkout_count += p.members.size()
 
 	if GameState.has_signal("sig_hotel_guests_checkin_changed"):
 		GameState.sig_hotel_guests_checkin_changed.emit(waiting_count)

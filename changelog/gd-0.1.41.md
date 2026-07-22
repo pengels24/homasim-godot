@@ -2,6 +2,12 @@
 Datum: 2026-07-22
 
 ## Features & Verbesserungen
+- **Sättigungs-System (Hunger):** Gäste haben nun einen funktionierenden Sättigungs-Wert, der stündlich sinkt. Ab einem Wert von 50 gehen sie in die Gastro (Restaurant/Bar), um etwas passendes zu bestellen.
+- **Nacht-Hunger:** Bei Tagesbeginn (06:00 Uhr) verlieren alle aktiven Gäste sofort 25 Sättigung, damit sie pünktlich hungrig zum Frühstück erscheinen.
+- **Zufälliger Start-Hunger:** Neue Gäste spawnen nun mit einem zufälligen Sättigungsgrad (40-100), da manche nach einer "langen Anfahrt" direkten Hunger mitbringen.
+- **Hunger-Indikator:** Ein kleines, passendes Icon (roter Kochtopf) erscheint mittig über dem Gast, solange sein Hunger-Wert unter 50 liegt, um den Spieler optisch darauf hinzuweisen.
+- **Köpfe statt Partys:** Das Top-HUD sowie die Rezeption zeigen ab sofort die tatsächliche Anzahl der Personen (Köpfe) an, statt der gebuchten Zimmer/Partys, um Verwirrung mit den Tooltip-Zahlen zu vermeiden.
+- **Sättigungs-Balken UI:** Der Gäste-Tooltip (Lobby/Zimmer) zeigt nun den "Sättigung"-Balken in Farbe und Stil analog zu den Sauberkeitsbalken.
 - **Neues Getränk:** Softdrinks stehen jetzt für den schmalen Geldbeutel auf der Karte
 - **Schlaue Gäste:** Gäste haben jetzt ihr Budget im Blick und bestellen nur, was sie sich leisten können (Gastro-Eintritt erfordert min. 5€ Budget)
 - **Klare Übersicht:** Die Gästeliste zeigt jetzt den korrekten Status an, wenn Gäste essen oder an der Bar trinken

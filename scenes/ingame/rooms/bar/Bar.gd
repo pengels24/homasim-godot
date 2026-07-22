@@ -152,7 +152,7 @@ func get_dirty_seat_position() -> Vector2:
 
 ## Gast bestellt – Speisen nur wenn eine Bedienung zugewiesen ist.
 ## Ohne Bedienung trinkt der Gast nur (kein GastroManager-Aufruf).
-func place_order_for_seat(guest_id: String, budget: int = 9999) -> bool:
+func place_order_for_seat(guest_id: String, budget: int = 9999, missing_sat: int = 100) -> bool:
 	for seat in _seats:
 		if seat["occupied_by"] == guest_id and seat["status"] == "clean":
 			# Prüfen ob Bedienung vorhanden
@@ -161,7 +161,7 @@ func place_order_for_seat(guest_id: String, budget: int = 9999) -> bool:
 			var has_waiter = _has_waiter_assigned()
 			
 			if not has_waiter:
-				# Kein Waiter → Gast trinkt nur (kein Küchenauftrag, kein GastroManager)
+				# Kein Waiter -> Gast trinkt nur (kein Küchenauftrag, kein GastroManager)
 				# Gast bleibt kurz sitzen und geht dann
 				return false
 			
@@ -183,7 +183,7 @@ func place_order_for_seat(guest_id: String, budget: int = 9999) -> bool:
 				
 			var possible_recipes: Array = []
 			for r in GameState.recipes:
-				if "bar" in r.get("served_in", []) and r.get("price", 0) <= budget:
+				if "bar" in r.get("served_in", []) and r.get("price", 0) <= budget and r.get("saturation", 0) <= missing_sat:
 					possible_recipes.append(r)
 			
 			if not possible_recipes.is_empty() and GastroManager:

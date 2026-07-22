@@ -28,12 +28,20 @@ func set_status(needs_cleaning: bool, needs_repair: bool, pending_demolish: bool
 	if not is_node_ready():
 		await ready
 
+	icon_clean.visible = needs_cleaning
+	icon_repair.visible = needs_repair
+	icon_demolish.visible = pending_demolish
+	if icon_unstaffed:
+		icon_unstaffed.visible = (staff_status > 0)
+
 	if not needs_cleaning and not needs_repair and not pending_demolish and staff_status == 0:
-		hide()
+		# Wenn wir KEINEN Progress-Bar haben, können wir uns verstecken
+		if _active_progress.is_empty():
+			hide()
 		return
 		
 	show()
-	icon_clean.visible = needs_cleaning
+	
 	if cleaning_requested:
 		icon_clean.modulate = Color("2d863e") # Gruen, analog zum Tooltip-Progress
 	elif is_critical_clean:
@@ -41,16 +49,14 @@ func set_status(needs_cleaning: bool, needs_repair: bool, pending_demolish: bool
 	else:
 		icon_clean.modulate = Color("e3ae08") # Gold/Gelb (Aufgabe offen)
 		
-	icon_repair.visible = needs_repair
 	if repair_requested:
 		icon_repair.modulate = Color("2d863e") # Gruen
 	elif is_critical_repair:
 		icon_repair.modulate = Color(0.89, 0.1, 0.1) # Rot (Kritisch)
 	else:
 		icon_repair.modulate = Color("e3ae08") # Gold/Gelb
-	icon_demolish.visible = pending_demolish
-	if icon_unstaffed:
-		icon_unstaffed.visible = (staff_status > 0)
+
+	if icon_unstaffed and staff_status > 0:
 		if staff_status == 1:
 			icon_unstaffed.modulate = Color(1.0, 0.5, 0.0)
 			icon_unstaffed.tooltip_text = "Unterbesetzt"

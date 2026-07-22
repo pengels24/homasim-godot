@@ -333,6 +333,32 @@ func _process_morale() -> void:
 		fire_staff(staff_id)
 
 # =============================================================================
+func add_morale(staff_id: String, amount: int, cap: int = 100) -> void:
+	if not hired_staff.has(staff_id): return
+	var staff = hired_staff[staff_id]
+	var current = staff.get("morale", 100)
+	if current < cap:
+		staff["morale"] = min(cap, current + amount)
+		_save_to_hotel()
+
+# =============================================================================
+func pay_bonus(staff_id: String) -> bool:
+	if not hired_staff.has(staff_id): return false
+	var bonus_cost = 100
+	if GameState.selected_hotel.get("money", 0) < bonus_cost:
+		Toast.show(GameState.T("toast.staff.not_enough_capital"), "personal")
+		return false
+		
+	if FinanceManager:
+		FinanceManager.add_transaction(-bonus_cost, "Personal", "tx.bonus|" + hired_staff[staff_id]["first_name"])
+	else:
+		GameState.add_money(-bonus_cost)
+		
+	add_morale(staff_id, 25, 100)
+	Toast.show(hired_staff[staff_id]["first_name"] + " hat einen Bonus erhalten!", "personal", false)
+	return true
+
+# =============================================================================
 func _on_midnight_struck(_day: int) -> void:
 	_process_wages()
 	_process_morale()

@@ -77,7 +77,7 @@ const ALL: Dictionary = {
 		"max_base_price":  40,
 		"min_daily_budget": 4,
 		"max_daily_budget": 20,
-		"icon":            "res://assets/icons/guests/wallet-minimal.svg",
+		"icon":            "res://assets/guesttypes/gt-icon-budget.aseprite",
 		"base_exp": 10,
 		"rep_penalty": 2,
 	},
@@ -109,7 +109,7 @@ const ALL: Dictionary = {
 		"max_base_price":  90,
 		"min_daily_budget": 30,
 		"max_daily_budget": 80,
-		"icon":            "res://assets/icons/guests/sunset.svg",
+		"icon":            "res://assets/guesttypes/gt-icon-event.aseprite",
 		"base_exp": 20,
 		"rep_penalty": 5
 	},

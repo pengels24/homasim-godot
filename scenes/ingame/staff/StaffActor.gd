@@ -33,6 +33,13 @@ func _ready() -> void:
 		var ca = get_node("ClickArea")
 		if not ca.input_event.is_connected(_on_click_area_input_event):
 			ca.input_event.connect(_on_click_area_input_event)
+			
+	if TimeManager and not TimeManager.sig_hour_passed.is_connected(_on_hour_passed):
+		TimeManager.sig_hour_passed.connect(_on_hour_passed)
+
+func _on_hour_passed(_hour: int) -> void:
+	if _state == "idle" and StaffManager:
+		StaffManager.add_morale(get_staff_id(), 5, 50)
 
 func _on_click_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:

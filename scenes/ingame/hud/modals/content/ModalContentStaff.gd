@@ -542,6 +542,20 @@ func _update_details() -> void:
 		action_btn.text = GameState.T("ui.staff.fire")
 		action_btn.remove_theme_color_override("font_color")
 		_style_action_btn(action_btn, "red")
+		
+		var bonus_btn = Button.new()
+		bonus_btn.custom_minimum_size = Vector2(0, 44)
+		bonus_btn.text = GameState.T("ui.staff.pay_bonus", "Bonus zahlen (100 €)")
+		_style_toggle_btn(bonus_btn)
+		bonus_btn.pressed.connect(func():
+			if StaffManager and StaffManager.pay_bonus(s.get("id", "")):
+				_refresh_live_data()
+				_update_details() # Refresh the disabled state
+		)
+		if s.get("morale", 100) >= 100:
+			bonus_btn.disabled = true
+			bonus_btn.modulate = Color(1, 1, 1, 0.5)
+		detail_costs.add_child(bonus_btn)
 	else:
 		image_rect.visible = true
 		pip_camera.visible = false

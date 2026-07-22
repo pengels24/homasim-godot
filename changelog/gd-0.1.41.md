@@ -16,6 +16,7 @@ Datum: 2026-07-22
 - **Zustands-Feedback:** Fällt die Sauberkeit oder der Zustand eines Zimmers auf 0%, wird das entsprechende Warn-Icon (Besen/Schlüssel) nun auffällig rot eingefärbt
 
 ## Bugfixes
+- **Ghost-Icons im UI:** Ein Fehler wurde behoben, bei dem das "Kein Personal"-Warn-Icon unberechtigterweise in POI-Räumen (wie der Bar) neben dem Fortschrittsbalken auftauchte, wenn Mitarbeiter dort eine Aufgabe (z.B. Putzen) ausführten.
 - **Timer & Fast Forward:** Der Fehler wurde behoben, durch den das Spiel nach Schließen der Rezeption am Tagesanfang ungewollt in den extremen Vorlauf schoss
 - **Farb-Picker Absturz:** Alte Savegames verursachen beim Öffnen des Zimmermenüs keinen Absturz mehr (Invalid color name Bug gefixt)
 - **Küche nicht gefunden:** Ein Bug wurde behoben, bei dem das Restaurant die Küche nicht finden konnte (weil das MapGrid nicht korrekt in der Godot-Gruppe registriert war) und Bestellungen deshalb abgebrochen wurden

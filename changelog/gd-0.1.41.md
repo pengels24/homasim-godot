@@ -14,6 +14,8 @@ Datum: 2026-07-22
 - **Smarte Gastro:** Das Restaurant nimmt keine Bestellungen mehr an, wenn keine Bedienung da ist
 - **Gäste-Liste UI:** Die aktuelle Aktivität/Ort der Gäste wird in der Listen-Ansicht nun kompakt ("in Restaurant") und in den Details ausführlich mit Zimmernummer angezeigt
 - **Zustands-Feedback:** Fällt die Sauberkeit oder der Zustand eines Zimmers auf 0%, wird das entsprechende Warn-Icon (Besen/Schlüssel) nun auffällig rot eingefärbt
+- **Personal-Moral Aktiviert:** Mitarbeiter erholen sich nun automatisch (bis max 50%), wenn sie im Leerlauf sind (Idle). Zudem gibt es in der Personal-Übersicht nun einen "Bonus zahlen"-Button, um die Moral aktiv durch eine Geldzahlung hochzuhalten.
+- **Neue Gäste-Icons:** Die Gästetypen "Budgetreisender" und "Event-Teilnehmer" haben frische, neue Icons erhalten.
 
 ## Bugfixes
 - **Ghost-Icons im UI:** Ein Fehler wurde behoben, bei dem das "Kein Personal"-Warn-Icon unberechtigterweise in POI-Räumen (wie der Bar) neben dem Fortschrittsbalken auftauchte, wenn Mitarbeiter dort eine Aufgabe (z.B. Putzen) ausführten.

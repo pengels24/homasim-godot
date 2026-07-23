@@ -773,12 +773,14 @@ ui.techtree.req.prev_tier, Vorheriges Tier ###/***, Previous Tier ###/***
 ui.techtree.btn.unlock_tier,Tier ### Freischalten,Unlock Tier ###
 ui.techtree.demo_locked,🔒 NICHT IN DER TECHDEMO VERFÜGBAR,🔒 NOT AVAILABLE IN TECHDEMO
 ui.techtree.confirm.title,Technologie freischalten,Unlock Technology
-ui.techtree.confirm.desc,Möchtest du '###' wirklich freischalten?\nKosten: *** FP | +++ ,Do you really want to unlock '###'?\nCost: *** RP | +++ 
+ui.techtree.confirm.desc,Möchtest du '###' wirklich freischalten?\nKosten: *** FP | +++ €,Do you really want to unlock '###'?\nCost: *** RP | +++ €
 ui.techtree.btn.unlock,Freischalten,Unlock
 ui.techtree.btn.cancel,Abbrechen,Cancel
 ui.techtree.tooltip.unlocks.tech,Forschung: ###,Research: ###
 ui.techtree.tooltip.unlocks.room,Raum: ###,Room: ###
 ui.techtree.tooltip.unlocks.feature,Feature: ###,Feature: ###
+ui.techtree.feature.z11_speed,+5% Personal-Geschwindigkeit,+5% Staff Speed
+ui.techtree.feature.m13_speed,+15% Personal-Geschwindigkeit,+15% Staff Speed
 ui.techtree.tooltip.unlocks.desc,Schaltet frei:\n- ###\n\n,Unlocks:\n- ###\n\n
 ui.techtree.tooltip.unlocks.empty,Schaltet neue Inhalte frei.\n\n,Unlocks new content.\n\n
 ui.techtree.tooltip.requires,Benötigt: ###\n,Requires: ###\n

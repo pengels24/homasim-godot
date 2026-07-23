@@ -18,7 +18,10 @@
           "cost_money": 1000,
           "dependencies": [],
           "unlocks_emojis": "🛏️ 🚿",
-          "demo_locked": false
+          "demo_locked": false,
+          "unlocks_features": [
+            "ui.techtree.feature.z11_speed"
+          ]
         },
         {
           "id": "Z1.2",
@@ -212,7 +215,10 @@
             "M1.1"
           ],
           "unlocks_emojis": "⚙️ ⏱️",
-          "demo_locked": true
+          "demo_locked": true,
+          "unlocks_features": [
+            "ui.techtree.feature.m13_speed"
+          ]
         },
         {
           "id": "M1.4",

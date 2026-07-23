@@ -2,6 +2,10 @@
 Datum: 2026-07-22
 
 ## Features & Verbesserungen
+- **Tech-Boni Aktiviert:** Das Personal arbeitet jetzt dank der Technologien Z1.1 (Komfort-Grundlagen) 5% und M1.3 (Prozessoptimierung) 15% schneller. Die Boni greifen automatisch auf Gehgeschwindigkeit und Arbeitsdauer.
+- **Techtree Tooltips:** Die Tooltips im Forschungsbaum wurden aufgeräumt. Sie zeigen nun keine langen Fließtexte mehr, sondern nur noch kompakte System-Infos und automatisch generierte Feature-Unlocks (z. B. "+5% Personal-Geschwindigkeit").
+- **Techtree Deeplinks:** Bereits erforschte Knoten erhalten zur besseren Übersicht einen grünen Haken ("✅ - Bereits erforscht -") und bleiben voll klickbar, um als Direktlink zum entsprechenden Codex-Eintrag zu fungieren.
+- **Codex Zurück-Funktion:** Ein smartes Modal-Management sorgt nun dafür, dass man beim Schließen des Codex (via "X" oder ESC) nahtlos in den Techtree zurückkehrt, sofern dieser als Absprungpunkt diente (Backstack-Logik).
 - **Sättigungs-System (Hunger):** Gäste haben nun einen funktionierenden Sättigungs-Wert, der stündlich sinkt. Ab einem Wert von 50 gehen sie in die Gastro (Restaurant/Bar), um etwas passendes zu bestellen.
 - **Nacht-Hunger:** Bei Tagesbeginn (06:00 Uhr) verlieren alle aktiven Gäste sofort 25 Sättigung, damit sie pünktlich hungrig zum Frühstück erscheinen.
 - **Zufälliger Start-Hunger:** Neue Gäste spawnen nun mit einem zufälligen Sättigungsgrad (40-100), da manche nach einer "langen Anfahrt" direkten Hunger mitbringen.

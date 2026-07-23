@@ -205,3 +205,19 @@ func _clear_display() -> void:
 	title_label.text = GameState.T("ui.tutorial.empty", "Noch keine Einträge freigeschaltet.")
 	desc_label.text = ""
 	texture_rect.hide()
+
+func open_tech(tech_id: String) -> void:
+	if _current_tab != "forschung":
+		_on_tab_selected("forschung")
+		
+	for i in range(item_list.get_child_count()):
+		var margin = item_list.get_child(i)
+		if margin is MarginContainer:
+			var vbox = margin.get_child(0)
+			for tech_btn in vbox.get_children():
+				if tech_btn is Button and tech_btn.text.begins_with(tech_id + " -"):
+					var cat_btn = item_list.get_child(i - 1)
+					if not margin.visible:
+						cat_btn.pressed.emit()
+					tech_btn.pressed.emit()
+					return

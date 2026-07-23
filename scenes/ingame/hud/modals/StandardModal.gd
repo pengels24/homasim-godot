@@ -6,6 +6,8 @@ var modal_input_mode = InputHandler.InputMode.MODAL
 
 signal closed
 
+var back_action: Callable
+
 
 # =============================================================================
 func _ready() -> void:
@@ -63,6 +65,12 @@ func close() -> void:
 	else:
 		InputHandler.current_mode = InputHandler.InputMode.NORMAL
 
+func trigger_close_or_back() -> void:
+	if back_action.is_valid():
+		back_action.call()
+	else:
+		close()
+
 
 # =============================================================================
 func _unhandled_input(event: InputEvent) -> void:
@@ -73,11 +81,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		# but if it does or its content does, we might want to be careful. 
 		# Actually, ui_cancel closing generic modals is standard.)
 		get_viewport().set_input_as_handled()
-		close()
+		trigger_close_or_back()
 
 # =============================================================================
 func _on_close_button_pressed() -> void:
-	close()
+	trigger_close_or_back()
 
 
 # =============================================================================

@@ -254,6 +254,8 @@ func _build_tier_content(parent: Control, _tier_id: String, tier_data: Dictionar
 							confirm.queue_free()
 						)
 						confirm.cancelled.connect(func(): confirm.queue_free())
+					elif TechtreeManager.is_tech_unlocked(tech_id):
+						GameState.sig_open_codex_tech.emit(tech_id)
 					else:
 						Toast.show(GameState.T("toast.techtree.failed"), "research", false)
 				)
@@ -313,15 +315,23 @@ func _update_single_button(tech_id: String) -> void:
 	btn.tooltip_text = _generate_tooltip(tech_id)
 	
 	if TechtreeManager.is_tech_unlocked(tech_id):
-		btn.disabled = true
+		btn.disabled = false
+		btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		btn.modulate = Color.WHITE
-		btn.add_theme_color_override("font_disabled_color", Color("#366e4d"))
+		btn.add_theme_color_override("font_color", Color("#366e4d"))
+		btn.add_theme_color_override("font_hover_color", Color("#4da370"))
+		btn.add_theme_color_override("font_focus_color", Color("#366e4d"))
+		btn.add_theme_color_override("font_pressed_color", Color("#264d36"))
 		btn.set_glow_state(true, true)
 		btn.get_glow_node().modulate.a = 1.0
 	elif TechtreeManager.is_tech_available(tech_id):
 		btn.disabled = false
+		btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 		btn.modulate = Color.WHITE
-		btn.remove_theme_color_override("font_disabled_color")
+		btn.remove_theme_color_override("font_color")
+		btn.remove_theme_color_override("font_hover_color")
+		btn.remove_theme_color_override("font_focus_color")
+		btn.remove_theme_color_override("font_pressed_color")
 		btn.set_glow_state(false, true)
 	else:
 		btn.disabled = true
@@ -340,9 +350,9 @@ func _generate_tooltip(tech_id: String) -> String:
 	if is_unlocked:
 		var trans = GameState.T("ui.techtree.tooltip.already_unlocked")
 		if trans == "ui.techtree.tooltip.already_unlocked":
-			tt += "- Bereits erforscht -\n\n"
+			tt += "✅ - Bereits erforscht -\n\n"
 		else:
-			tt += trans + "\n\n"
+			tt += "✅ " + trans + "\n\n"
 		
 	var cost_fp = n.get("cost_fp", 0)
 	var cost_money = n.get("cost_money", 0)
@@ -358,29 +368,27 @@ func _generate_tooltip(tech_id: String) -> String:
 	if is_demo_locked:
 		tt += GameState.T("ui.techtree.demo_locked") + "\n\n"
 		
-	if n.has("desc") and n["desc"] != "":
-		tt += GameState.T(n["desc"]) + "\n\n"
-	else:
-		var unlocks = []
-		for t in TechtreeManager.tech_registry.values():
-			if tech_id in t.get("dependencies", []):
-				unlocks.append(GameState.T("ui.techtree.tooltip.unlocks.tech", GameState.T(t.get("name", t.get("id", "")))))
-		
-		for r in GameState.room_registry.values():
-			var r_def = r.get("def", {})
-			if r_def.get("req_tech", "") == tech_id:
-				unlocks.append(GameState.T("ui.techtree.tooltip.unlocks.room", GameState.T(r_def.get("name", "Raum"))))
-				
-		var custom_features = n.get("unlocks_features", [])
-		for f in custom_features:
-			unlocks.append(GameState.T("ui.techtree.tooltip.unlocks.feature", GameState.T(f)))
-				
-		if unlocks.size() > 0:
-			var joined = "\n- ".join(unlocks)
-			tt += GameState.T("ui.techtree.tooltip.unlocks.desc", joined)
-		else:
-			tt += GameState.T("ui.techtree.tooltip.unlocks.empty")
+	var unlocks = []
+	for t in TechtreeManager.tech_registry.values():
+		if tech_id in t.get("dependencies", []):
+			unlocks.append(GameState.T("ui.techtree.tooltip.unlocks.tech", GameState.T(t.get("name", t.get("id", "")))))
 	
+	for r in GameState.room_registry.values():
+		var r_def = r.get("def", {})
+		if r_def.get("req_tech", "") == tech_id:
+			unlocks.append(GameState.T("ui.techtree.tooltip.unlocks.room", GameState.T(r_def.get("name", "Raum"))))
+			
+	var custom_features = n.get("unlocks_features", [])
+	for f in custom_features:
+		unlocks.append(GameState.T("ui.techtree.tooltip.unlocks.feature", GameState.T(f)))
+			
+	if unlocks.size() > 0:
+		var joined = "\n- ".join(unlocks)
+		tt += GameState.T("ui.techtree.tooltip.unlocks.desc", joined)
+	else:
+		tt += GameState.T("ui.techtree.tooltip.unlocks.empty")
+	
+	tt += "Voraussetzungen:\n"
 	tt += ("✅ " if _has_fp else "❌ ") + "%d / %d FP\n" % [cur_fp, cost_fp]
 	tt += ("✅ " if _has_money else "❌ ") + "%d / %d €\n" % [cur_money, cost_money]
 	

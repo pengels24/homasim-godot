@@ -141,6 +141,9 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	if not GameState.sig_techdemo_completed.is_connected(_on_techdemo_completed):
 		GameState.sig_techdemo_completed.connect(_on_techdemo_completed)
 
+	if not GameState.sig_open_codex_tech.is_connected(open_codex_at_tech):
+		GameState.sig_open_codex_tech.connect(open_codex_at_tech)
+
 
 # ── Zeit-Steuerung (Veraltet, direkt TimeManager nutzen) ───────────────
 
@@ -154,13 +157,16 @@ func _on_time_jumped(_new_time: int) -> void:
 # ── State & Map ───────────────────────────────────────────────────────────────
 
 # =============================================================================
-func cleanup_current_states() -> void:
+func cleanup_current_states(keep_modal: bool = false) -> void:
 	if InputHandler.current_mode == InputHandler.InputMode.BUILD:
 		close_build_menu()
 	if is_instance_valid(_sim_browser) and _sim_browser.visible:
 		_sim_browser.close()
-	if is_instance_valid(_standard_modal) and _standard_modal.visible:
+	if not keep_modal and is_instance_valid(_standard_modal) and _standard_modal.visible:
 		_standard_modal.close()
+		
+	if is_instance_valid(_standard_modal):
+		_standard_modal.back_action = Callable()
 
 	update_map_grid_mode()
 	InputHandler.current_mode = InputHandler.InputMode.NORMAL
@@ -206,7 +212,7 @@ func on_exit_pressed() -> void:
 
 # =============================================================================
 func open_tutorial_codex() -> void:
-	cleanup_current_states()
+	cleanup_current_states(true)
 	var codex = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentTutorials.tscn")
 	if not is_instance_valid(codex): return
 
@@ -217,6 +223,27 @@ func open_tutorial_codex() -> void:
 		_standard_modal.set_title(GameState.T("modal.tutorial.title"))
 	else:
 		_standard_modal.open(GameState.T("modal.tutorial.title"))
+
+	update_map_grid_mode()
+
+# =============================================================================
+func open_codex_at_tech(tech_id: String) -> void:
+	cleanup_current_states(true)
+	var codex = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentTutorials.tscn")
+	if not is_instance_valid(codex): return
+
+	_set_modal_pausing(true)
+	_bottom_bar.sync_button_state("tutorial")
+
+	if _standard_modal.visible:
+		_standard_modal.set_title(GameState.T("modal.tutorial.title"))
+	else:
+		_standard_modal.open(GameState.T("modal.tutorial.title"))
+		
+	_standard_modal.back_action = Callable(self, "open_tech_tree")
+		
+	if codex.has_method("open_tech"):
+		codex.open_tech(tech_id)
 
 	update_map_grid_mode()
 
@@ -293,7 +320,7 @@ func open_reception() -> void:
 		return
 
 	# --- AB HIER: Alles gut, mach das Ding auf! ---
-	cleanup_current_states()
+	cleanup_current_states(true)
 	_reception = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentReception.tscn")
 	if not is_instance_valid(_reception): return
 
@@ -600,7 +627,7 @@ func open_staff() -> void:
 	if TutorialManager:
 		TutorialManager.trigger("staff")
 		
-	cleanup_current_states()
+	cleanup_current_states(true)
 	var staff_modal = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentStaff.tscn")
 	if not is_instance_valid(staff_modal): return
 
@@ -620,7 +647,7 @@ func open_tech_tree() -> void:
 		Toast.show(GameState.T("toast.techtree.locked") % GameState.UNLOCK_LEVELS.techtree, "research", false)
 		return
 
-	cleanup_current_states()
+	cleanup_current_states(true)
 	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentTechtree.tscn")
 	if not is_instance_valid(content): return
 
@@ -680,7 +707,7 @@ func open_quest_book() -> void:
 		_standard_modal.close()
 		return
 	
-	cleanup_current_states()
+	cleanup_current_states(true)
 	var qbook = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentQuestbook.tscn")
 	if not is_instance_valid(qbook): return
 	
@@ -704,7 +731,7 @@ func open_guest_list() -> void:
 		_standard_modal.close()
 		return
 		
-	cleanup_current_states()
+	cleanup_current_states(true)
 	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentGuestList.tscn")
 	if not is_instance_valid(content): return
 	
@@ -723,7 +750,7 @@ func open_room_list() -> void:
 		_standard_modal.close()
 		return
 		
-	cleanup_current_states()
+	cleanup_current_states(true)
 	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentRoomList.tscn")
 	if not is_instance_valid(content): return
 	
@@ -742,7 +769,7 @@ func open_finances() -> void:
 		_standard_modal.close()
 		return
 		
-	cleanup_current_states()
+	cleanup_current_states(true)
 	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentFinances.tscn")
 	if not is_instance_valid(content): return
 	

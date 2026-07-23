@@ -50,6 +50,7 @@ const GAME_STAGE: String = "PRE-ALPHA"
 
 signal sig_hotel_level_up(new_level: int)
 signal sig_techdemo_completed()
+signal sig_open_codex_tech(tech_id: String)
 
 # interaktion
 @warning_ignore("unused_signal")

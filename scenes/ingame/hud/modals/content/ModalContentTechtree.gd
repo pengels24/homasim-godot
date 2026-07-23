@@ -334,11 +334,15 @@ func _generate_tooltip(tech_id: String) -> String:
 	var n = TechtreeManager.get_tech_node(tech_id)
 	if n.is_empty(): return ""
 	
-	if TechtreeManager.is_tech_unlocked(tech_id):
+	var is_unlocked = TechtreeManager.is_tech_unlocked(tech_id)
+	var tt = ""
+	
+	if is_unlocked:
 		var trans = GameState.T("ui.techtree.tooltip.already_unlocked")
 		if trans == "ui.techtree.tooltip.already_unlocked":
-			return "- Bereits erforscht -"
-		return trans
+			tt += "- Bereits erforscht -\n\n"
+		else:
+			tt += trans + "\n\n"
 		
 	var cost_fp = n.get("cost_fp", 0)
 	var cost_money = n.get("cost_money", 0)
@@ -351,7 +355,6 @@ func _generate_tooltip(tech_id: String) -> String:
 	var _has_money = cur_money >= cost_money
 	var is_demo_locked = n.get("demo_locked", false)
 	
-	var tt = ""
 	if is_demo_locked:
 		tt += GameState.T("ui.techtree.demo_locked") + "\n\n"
 		

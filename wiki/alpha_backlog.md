@@ -105,8 +105,8 @@ Aktuell gesperrte Nodes ohne Inhalt:
 | `W1.1` | Wellness | Spa / Massage |
 | `W1.2` | Wellness | Pool / Außenbereich |
 | `W1.3` | Wellness | Wellness-Paket (Kombination) |
-| `M1.2` | Management | Personalentwicklung (Schulungsbonus) |
-| `M1.3` | Management | Prozessoptimierung (Effizienz-Bonus) |
+| ~~`M1.2`~~ | ~~Management~~ | ~~Personalentwicklung (Schulungsbonus)~~ ✅ Erledigt |
+| ~~`M1.3`~~ | ~~Management~~ | ~~Prozessoptimierung (Effizienz-Bonus)~~ ✅ Erledigt |
 | `M1.4` | Management | Hotelleitung (Globaler Effizienz-Bonus) |
 | `P1.1` | Prestige | Events (Konzerte, Messen etc.) |
 | `P1.2` | Prestige | Veranstaltungszentrum |

@@ -15,3 +15,4 @@
 ## Technische Änderungen
 - **Generische Personalprüfung:** Neue zentrale Methode `StaffManager.is_staff_available(staff)`, um Verfügbarkeiten (Training, und zukünftig Krankheit/Urlaub) für alle POIs einheitlich zu prüfen.
 - **Rezeptions-Zeiten entkoppelt:** Trennung der Öffnungszeiten-Logik zwischen dem Raum "Lobby" (`open_from: 0`) und der Funktion "Rezeption" (`reception_open_from`).
+- **Umfangreiche Tech-Dokus:** 5 neue Wiki-Dokumente für GuestActor, StaffActor, Restaurant, Küche und Bar hinzugefügt, um das KI-Verhalten transparent zu dokumentieren.

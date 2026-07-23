@@ -711,7 +711,7 @@ ui.guest_list.col.name,Name,Name
 ui.guest_list.col.room,Zimmer,Room
 ui.guest_list.col.budget,Budget,Budget
 ui.guest_list.col.status,Status,Status
-ui.guest_list.col.energy,Energie,Energy
+ui.guest_list.col.energy,Sättigung,Saturation
 ui.guest_list.col.satisfaction,Zufr.,Sat.
 ui.guest_list.tooltip.satisfaction,Zufriedenheit,Satisfaction
 ui.guest_list.goto,Gehe zu Gast,Go to Guest

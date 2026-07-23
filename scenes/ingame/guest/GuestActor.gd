@@ -381,8 +381,21 @@ func _on_poi_arrived() -> void:
 				if EffectManager: EffectManager.spawn_money_text(lobby.VENDING_MACHINE_PRICE, global_position + Vector2(0, -48))
 				if EffectManager: EffectManager.spawn_exp_text(lobby.VENDING_MACHINE_EXP, global_position + Vector2(0, -32))
 				
-				# Gast wartet 15 Sekunden zum Essen
-				_action_timer = 15.0
+				# Gast macht einen Schritt zur Seite, wird wieder sichtbar und isst
+				_change_state(State.EATING)
+				
+				# Gast weicht lokal relativ zu seiner Blickrichtung zurück und zur Seite (links)
+				var local_step = Vector2(
+					randf_range(-5.0, -1.0), # Nur ein winziges Stück zurück
+					randf_range(-25.0, -10.0) # Ausschließlich nach links aus seiner Sicht (negatives lokales Y)
+				)
+				var target_pos = global_position + local_step.rotated(avatar.rotation)
+				
+				if _active_tween and _active_tween.is_valid():
+					_active_tween.kill()
+				_active_tween = create_tween()
+				_active_tween.tween_property(self, "global_position", target_pos, 0.5)
+				
 				return
 		
 		# Falls Automat nicht klappt

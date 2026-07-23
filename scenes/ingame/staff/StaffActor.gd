@@ -111,7 +111,12 @@ func _physics_process(delta: float) -> void:
 		return
 		
 	var speed_mult = TimeManager.user_speed
-	var actual_speed = _base_speed * speed_mult
+	
+	var tech_bonus = 0.0
+	if TechtreeManager.is_tech_unlocked("Z1.1"): tech_bonus += 0.05
+	if TechtreeManager.is_tech_unlocked("M1.3"): tech_bonus += 0.15
+	
+	var actual_speed = _base_speed * speed_mult * (1.0 + tech_bonus)
 	
 	# Denkpause
 	if _think_timer > 0.0:
@@ -442,8 +447,12 @@ func _process_walking(delta: float, speed: float) -> void:
 					var base_time = 20.0
 					if _current_task.type == "serve_meal": base_time = 2.0
 					elif _current_task.type == "clean_table": base_time = 3.0
+					
+					var tech_bonus = 0.0
+					if TechtreeManager.is_tech_unlocked("Z1.1"): tech_bonus += 0.05
+					if TechtreeManager.is_tech_unlocked("M1.3"): tech_bonus += 0.15
 						
-					_work_timer = base_time * (1.0 + penalty)
+					_work_timer = base_time * (1.0 + penalty) * (1.0 - tech_bonus)
 					_work_timer_max = _work_timer
 					if is_instance_valid(_arriving_room):
 						_current_room = _arriving_room

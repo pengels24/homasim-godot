@@ -334,6 +334,21 @@ texture = ExtResource("6_y7m36")
 region_enabled = true
 region_rect = Rect2(80, 0, 16, 16)
 
+[node name="VendingTargetPoint" type="Node2D" parent="Interior/Furniture" unique_id=1661513051]
+unique_name_in_owner = true
+z_index = 1
+position = Vector2(8, 41)
+
+[node name="VendingMachine" type="Sprite2D" parent="Interior/Furniture" unique_id=627436589]
+unique_name_in_owner = true
+visible = false
+z_index = 1
+position = Vector2(14, 42)
+rotation = 1.5707964
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(80, 16, 16, 16)
+
 [node name="Door" type="Node2D" parent="." unique_id=145803355]
 
 [node name="Top" type="TileMapLayer" parent="Door" unique_id=1450227237]

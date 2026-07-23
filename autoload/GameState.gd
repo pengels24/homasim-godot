@@ -427,6 +427,10 @@ func add_fp(amount: int) -> void:
 
 
 # =============================================================================
+func get_level() -> int:
+	if selected_hotel.is_empty(): return 1
+	return selected_hotel.get("level", 1)
+
 ## Berechnet die benötigte EXP für ein bestimmtes Level basierend auf dem Modell.
 func get_xp_needed_for_level(level: int) -> int:
 	match level:

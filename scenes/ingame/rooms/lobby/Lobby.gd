@@ -14,6 +14,14 @@ extends "res://scenes/ingame/rooms/Room.gd"
 # ── Zustand ───────────────────────────────────────────────────────────────────
 var entrance_dir: String = "top"
 
+# ── Konstanten (Snack-Automat) ────────────────────────────────────────────────
+const VENDING_MACHINE_PRICE: int = 5
+const VENDING_MACHINE_EXP: int = 3
+const VENDING_MACHINE_SATURATION: int = 20
+
+@onready var _vending_machine: Node2D = get_node_or_null("%VendingMachine") if get_node_or_null("%VendingMachine") else get_node_or_null("%VendingMashine")
+@onready var _vending_target: Node2D = get_node_or_null("%VendingTargetPoint")
+
 
 # =============================================================================
 static func get_definition() -> Dictionary:
@@ -96,6 +104,32 @@ func configure(data: Dictionary) -> void:
 	is_repair_requested = false
 
 
+# =============================================================================
+func _ready() -> void:
+	super._ready()
+	if not GameState.sig_hotel_level_changed.is_connected(_on_hotel_level_changed):
+		GameState.sig_hotel_level_changed.connect(_on_hotel_level_changed)
+
+func _on_hotel_level_changed(_new_level: int) -> void:
+	_apply_visuals()
+
+
+# =============================================================================
+## VENDING MACHINE API
+func get_vending_target(map_grid: Node) -> Vector2i:
+	if not is_instance_valid(_vending_target):
+		_vending_target = get_node_or_null("%VendingTargetPoint")
+		
+	if is_instance_valid(_vending_target):
+		return map_grid.world_to_tile(_vending_target.global_position)
+	return get_target_tile(map_grid)
+
+func buy_snack(budget: int) -> bool:
+	if budget >= VENDING_MACHINE_PRICE:
+		GameState.add_money(VENDING_MACHINE_PRICE)
+		GameState.add_exp(VENDING_MACHINE_EXP, "Snack-Automat")
+		return true
+	return false
 
 # ── Visuals ───────────────────────────────────────────────────────────────────
 
@@ -103,6 +137,12 @@ func configure(data: Dictionary) -> void:
 func _apply_visuals() -> void:
 	if not is_node_ready():
 		return
+		
+	if not is_instance_valid(_vending_machine):
+		_vending_machine = get_node_or_null("%VendingMachine")
+	if is_instance_valid(_vending_machine):
+		_vending_machine.visible = GameState.get_level() >= 2
+		
 	# Nur die passende Eingangs-Door-Layer anzeigen
 	for child in _door_container.get_children():
 		child.visible = (child.name.to_lower() == entrance_dir)

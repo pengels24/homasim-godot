@@ -198,6 +198,13 @@ func _get_open_pois() -> Array[String]:
 			
 		if not open_pois.has(room_id):
 			open_pois.append(room_id)
+			
+	# Vending Machine in Lobby (Level 2+)
+	if GameState.get_level() >= 2:
+		var can_afford = _guest_member.spending_budget >= 5
+		var is_hungry = _guest_member.saturation < 30
+		if (is_hungry and can_afford) or _current_poi_id == "vending_machine":
+			open_pois.append("vending_machine")
 	
 	return open_pois
 
@@ -215,7 +222,19 @@ func _decide_next_action() -> void:
 	if current_state == State.LEAVING:
 		return
 	
+	# (Müdigkeits-Check entfernt, da GuestMember keine energy Property hat)
+		
 	var open_pois := _get_open_pois()
+	
+	# 2. Nachtruhe-Logik (22:00 - 06:00): 
+	# Die Lobby ist nachts als reiner "Zeitvertreib" tabu, um Endlos-Pendeln zu verhindern.
+	# Echte POIs wie die Bar (die bis 23:30 auf hat) bleiben aber erlaubt!
+	var current_hour = 12
+	if TimeManager:
+		current_hour = TimeManager.get_hour()
+		
+	if current_hour >= 22 or current_hour < 6:
+		open_pois.erase("lobby")
 	
 	# Kein offener POI? Gast wartet etwas und probiert es später wieder
 	if open_pois.is_empty():
@@ -348,6 +367,26 @@ func _on_order_served(_order_id: String, guest_id: String, recipe_id: String) ->
 ## Verarbeitet die Ankunft in einem POI: Einnahmen buchen, Budget abziehen, Zufriedenheit boosten.
 func _on_poi_arrived() -> void:
 	if _current_poi_id.is_empty() or _current_poi_id == "lobby":
+		return
+		
+	# Snack-Automat Logik
+	if _current_poi_id == "vending_machine":
+		var lobby = _get_lobby_room()
+		if is_instance_valid(lobby) and lobby.has_method("buy_snack"):
+			if lobby.buy_snack(_guest_member.spending_budget):
+				_guest_member.spending_budget = max(0, _guest_member.spending_budget - lobby.VENDING_MACHINE_PRICE)
+				_guest_member.saturation = min(100, _guest_member.saturation + lobby.VENDING_MACHINE_SATURATION)
+				
+				FinanceManager.add_transaction(lobby.VENDING_MACHINE_PRICE, "gastro", "tx.poi_income|" + _guest_member.name + "|Snack-Automat")
+				if EffectManager: EffectManager.spawn_money_text(lobby.VENDING_MACHINE_PRICE, global_position + Vector2(0, -48))
+				if EffectManager: EffectManager.spawn_exp_text(lobby.VENDING_MACHINE_EXP, global_position + Vector2(0, -32))
+				
+				# Gast wartet 15 Sekunden zum Essen
+				_action_timer = 15.0
+				return
+		
+		# Falls Automat nicht klappt
+		_action_timer = randf_range(5.0, 15.0)
 		return
 	
 	var poi_def = _get_poi_def(_current_poi_id)
@@ -570,6 +609,8 @@ func _walk_to_poi(poi_id: String) -> void:
 	
 	if poi_id == "lobby":
 		exit_tile = _get_lobby_tile()
+	elif poi_id == "vending_machine":
+		exit_tile = _get_vending_tile()
 	else:
 		var poi_room: Node2D = null
 		for room in _map_grid.active_rooms:
@@ -719,6 +760,20 @@ func _get_lobby_tile() -> Vector2i:
 	var lx: int = int(_map_grid._entry_plot.x * _map_grid.PARCEL_SZ) + clearance.position.x + int(clearance.size.x / 2.0)
 	var ly: int = int(_map_grid._entry_plot.y * _map_grid.PARCEL_SZ) + clearance.position.y + int(clearance.size.y / 2.0)
 	return Vector2i(lx, ly)
+
+func _get_vending_tile() -> Vector2i:
+	var entry_parcel: Node2D = _map_grid._grid[_map_grid._entry_plot.y][_map_grid._entry_plot.x]
+	if entry_parcel and entry_parcel.has_method("get_lobby"):
+		var lobby = entry_parcel.get_lobby()
+		if is_instance_valid(lobby) and lobby.has_method("get_vending_target"):
+			return lobby.get_vending_target(_map_grid)
+	return _get_lobby_tile()
+
+func _get_lobby_room() -> Node2D:
+	var entry_parcel: Node2D = _map_grid._grid[_map_grid._entry_plot.y][_map_grid._entry_plot.x]
+	if entry_parcel and entry_parcel.has_method("get_lobby"):
+		return entry_parcel.get_lobby()
+	return null
 
 func _get_room_exit_tile(room: Node2D) -> Vector2i:
 	var sz: Vector2i = room.get_tile_size()

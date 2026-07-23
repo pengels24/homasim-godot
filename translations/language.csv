@@ -1216,3 +1216,27 @@ techtree.zimmer.klima.desc,Schaltet das Klimaanlagen-Upgrade für Gästezimmer f
 reception.tooltip.type,Gästetyp:,Guest Type:
 ui.staff.pay_bonus,Bonus zahlen (100 €),Pay Bonus (100 €)
 toast.staff.bonus_received,%s hat einen Bonus erhalten!,%s received a bonus!
+ui.tutorial.tab.forschung,Forschung,Research
+ui.tutorial.forschung.intro,Wähle links eine Kategorie aus, um Details zu den einzelnen Forschungsprojekten zu sehen.,Select a category on the left to see details about the individual research projects.
+techtree.category.zimmer,Zimmer,Rooms
+techtree.category.gastronomie,Gastronomie,Gastronomy
+techtree.category.wellness,Wellness,Wellness
+techtree.category.management,Management,Management
+techtree.category.prestige,Prestige,Prestige
+techtree.zimmer.z11.desc,Schaltet das Standard-Gästezimmer frei. Die Basis deines Hotelbetriebs.,Unlocks the standard guest room. The foundation of your hotel operations.
+techtree.zimmer.z12.desc,Schaltet Familienzimmer frei. Diese sind lukrativer und erfordern ein Doppelbett sowie ein Einzelbett.,Unlocks family rooms. More lucrative and require a double bed and a single bed.
+techtree.zimmer.z13.desc,Schaltet Superior-Zimmer frei. Diese bringen mehr Einnahmen, benötigen aber einen TV und ein Sofa.,Unlocks superior rooms. Generates more income but requires a TV and a sofa.
+techtree.gastro.g11.desc,Schaltet die kleine Küche und das kleine Restaurant frei. Bietet einfache Mahlzeiten für hungrige Gäste.,Unlocks the small kitchen and restaurant. Offers simple meals for hungry guests.
+techtree.gastro.g12.desc,Schaltet die große Küche und das große Restaurant frei. Bietet mehr Kapazität und Vielfalt auf der Speisekarte.,Unlocks the large kitchen and restaurant. Offers more capacity and menu variety.
+techtree.gastro.g13.desc,Schaltet die Bar frei. Eine zusätzliche Einnahmequelle für den Abend, bei der Gäste Cocktails genießen können.,Unlocks the bar. An additional evening income source where guests can enjoy cocktails.
+techtree.gastro.g14.desc,Erweitert die Küche zur Gourmetküche. Zieht Gastro-Kritiker an, die bei gutem Service lukrative Gourmetsterne vergeben.,Upgrades to a gourmet kitchen. Attracts food critics who award lucrative gourmet stars for good service.
+techtree.wellness.w11.desc,Schaltet das Spa / den Massageraum frei. Ein neuer Bereich, der die Zufriedenheit und das Luxusbedürfnis deiner Gäste drastisch steigert.,Unlocks the spa/massage room. A new area that drastically increases the satisfaction and luxury needs of your guests.
+techtree.wellness.w12.desc,Schaltet den Pool-Bereich frei. Ein absolutes Muss für Familien, um Punktabzüge bei der Zufriedenheit zu vermeiden.,Unlocks the pool area. An absolute must for families to avoid satisfaction penalties.
+techtree.wellness.w13.desc,Schaltet das Wellness-Paket an der Rezeption frei. Gäste zahlen 30% mehr für ihr Zimmer und nutzen Spa & Pool priorisiert.,Unlocks the wellness package at reception. Guests pay 30% more for their room and prioritize spa & pool usage.
+techtree.management.m11.desc,Schaltet das Planungsbüro frei. Der Arbeitsplatz deiner Manager, um Forschungspunkte (FP) für den Techtree zu generieren.,Unlocks the planning office. The workplace for your managers to generate research points (RP) for the tech tree.
+techtree.management.m12.desc,Schaltet das Schulungssystem für Personal frei. Mitarbeiter können gegen Bezahlung weitergebildet werden, um ihre Skills zu erhöhen.,Unlocks the staff training system. Employees can be trained for a fee to increase their skills.
+techtree.management.m13.desc,Prozessoptimierung! Dein gesamtes Personal arbeitet durch bessere Abläufe ab sofort 15% schneller.,Process optimization! All your staff now work 15% faster due to better workflows.
+techtree.management.m14.desc,Konzern-Management! Die Wartegeduld aller Gäste (z.B. an der Rezeption) sinkt ab sofort 20% langsamer.,Corporate Management! The waiting patience of all guests (e.g. at reception) now decreases 20% slower.
+techtree.prestige.p11.desc,Schaltet das Zufallsereignis-System frei. Es können spontane Reisegruppen oder Messe-Gäste auftauchen, die Zimmer suchen.,Unlocks the random event system. Spontaneous tour groups or trade fair guests looking for rooms can appear.
+techtree.prestige.p12.desc,Schaltet Großveranstaltungen frei. Errichte einen Eventsaal, um massive Mengen an Kurzzeit-Gästen und Prestige anzulocken.,Unlocks large events. Build an event hall to attract massive amounts of short-term guests and prestige.
+techtree.prestige.p13.desc,VIP-Events! Ermöglicht das Anlocken von hochkarätigen Gästen mit extrem hohen Budgets und besonderen Wünschen.,VIP Events! Allows attracting high-profile guests with extremely high budgets and special requests.

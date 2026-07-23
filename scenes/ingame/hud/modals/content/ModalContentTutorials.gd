@@ -7,8 +7,8 @@ extends VBoxContainer
 @onready var texture_rect: TextureRect = %TextureRect
 
 var _tutorials: Array = []
-var _tabs: Array = ["tutorial", "tipps", "codex"]
-var _tab_labels: Array = ["ui.tutorial.tab.tutorial", "ui.tutorial.tab.tipps", "ui.tutorial.tab.codex"]
+var _tabs: Array = ["tutorial", "tipps", "codex", "forschung"]
+var _tab_labels: Array = ["ui.tutorial.tab.tutorial", "ui.tutorial.tab.tipps", "ui.tutorial.tab.codex", "ui.tutorial.tab.forschung"]
 var _current_tab: String = "tutorial"
 var _tab_buttons: Array[Button] = []
 
@@ -39,14 +39,22 @@ func _on_tab_selected(tab_id: String) -> void:
 	_load_data()
 
 func _load_data() -> void:
-	if TutorialManager:
+	if _current_tab == "forschung":
+		_tutorials = []
+	elif TutorialManager:
 		_tutorials = TutorialManager.get_unlocked_data(_current_tab)
 	else:
 		_tutorials = []
 		
 	_populate_list()
 	
-	if _tutorials.size() > 0:
+	if _current_tab == "forschung":
+		_clear_display()
+		title_label.text = GameState.T("ui.tutorial.tab.forschung", "Forschung")
+		desc_label.text = GameState.T("ui.tutorial.forschung.intro", "Wähle links eine Kategorie, um alle Forschungs-Projekte zu sehen.")
+		texture_rect.texture = preload("res://assets/icons/HUDBottom/flask-conical.svg")
+		texture_rect.show()
+	elif _tutorials.size() > 0:
 		_on_item_selected(0)
 	else:
 		_clear_display()
@@ -67,6 +75,11 @@ func _set_btn_style(btn: Button, normal, hover, pressed) -> void:
 func _populate_list() -> void:
 	for c in item_list.get_children():
 		c.queue_free()
+		
+	if _current_tab == "forschung":
+		_populate_techtree_list()
+		return
+		
 	var idx = 0
 	for tut in _tutorials:
 		var title_key = tut.get("title_key", "")
@@ -78,6 +91,81 @@ func _populate_list() -> void:
 		btn.pressed.connect(_on_item_selected.bind(idx))
 		item_list.add_child(btn)
 		idx += 1
+
+func _populate_techtree_list() -> void:
+	if not TechtreeManager: return
+	
+	var categories = {}
+	for tech_id in TechtreeManager.tech_registry:
+		var node = TechtreeManager.tech_registry[tech_id]
+		var cat = node.get("category", "allgemein")
+		if not categories.has(cat):
+			categories[cat] = []
+		categories[cat].append(node)
+		
+	var cat_order = ["zimmer", "gastronomie", "wellness", "management", "prestige"]
+	for cat in cat_order:
+		if not categories.has(cat): continue
+		var nodes = categories[cat]
+		nodes.sort_custom(func(a, b): return a.get("id", "") < b.get("id", ""))
+		
+		var cat_btn = Button.new()
+		var cat_name = GameState.T("techtree.category." + cat, cat.capitalize())
+		cat_btn.text = "▶ " + cat_name
+		_set_btn_style(cat_btn, SB_DARK, SB_DARK_HOVER, SB_DARK_PRESSED)
+		cat_btn.add_theme_font_size_override("font_size", 22)
+		item_list.add_child(cat_btn)
+		
+		var margin = MarginContainer.new()
+		margin.add_theme_constant_override("margin_left", 20)
+		margin.visible = false
+		item_list.add_child(margin)
+		
+		var inner_vbox = VBoxContainer.new()
+		inner_vbox.add_theme_constant_override("separation", 5)
+		margin.add_child(inner_vbox)
+		
+		cat_btn.pressed.connect(func():
+			margin.visible = not margin.visible
+			if margin.visible:
+				cat_btn.text = "▼ " + cat_name
+			else:
+				cat_btn.text = "▶ " + cat_name
+		)
+		
+		for node in nodes:
+			var tech_btn = Button.new()
+			var tech_name = GameState.T(node.get("name", node.get("id", "")))
+			tech_btn.text = node.get("id", "") + " - " + tech_name
+			_set_btn_style(tech_btn, SB_BLUE, SB_BLUE_HOVER, SB_BLUE_PRESSED)
+			tech_btn.add_theme_font_size_override("font_size", 20)
+			inner_vbox.add_child(tech_btn)
+			
+			tech_btn.pressed.connect(func():
+				_on_tech_selected(node)
+				for c in item_list.get_children():
+					if c is MarginContainer:
+						for b in c.get_child(0).get_children():
+							if b is Button:
+								_set_btn_style(b, SB_BLUE, SB_BLUE_HOVER, SB_BLUE_PRESSED)
+				# Highlight clicked button
+				_set_btn_style(tech_btn, SB_DARK, SB_DARK_HOVER, SB_DARK_PRESSED)
+			)
+
+func _on_tech_selected(node: Dictionary) -> void:
+	var tech_id = node.get("id", "")
+	var title_key = node.get("name", tech_id)
+	var desc_key = title_key + ".desc"
+	
+	title_label.text = GameState.T(title_key) if GameState else title_key
+	
+	var desc_text = GameState.T(desc_key) if GameState else desc_key
+	if desc_text == desc_key:
+		desc_text = "Keine Beschreibung verfügbar."
+		
+	desc_label.text = desc_text
+	texture_rect.texture = preload("res://assets/icons/angelus2010/HUDBottom/ang-flask.aseprite")
+	texture_rect.show()
 
 func _on_item_selected(index: int) -> void:
 	if index < 0 or index >= _tutorials.size(): return

@@ -255,6 +255,13 @@ func _refresh_list() -> void:
 			# Name (Stretch 3.5)
 			var lbl_name = Label.new()
 			lbl_name.text = item.get("first_name", "") + " " + item.get("last_name", "")
+			if _current_tab == 0 and item.get("training_state", "none") == "in_training":
+				lbl_name.text += " [📖]"
+				list_font_color = Color(1.0, 0.8, 0.2)
+				btn.disabled = true
+				btn.mouse_default_cursor_shape = Control.CURSOR_FORBIDDEN
+				btn.tooltip_text = GameState.T("ui.staff.assign.training_locked", "In Schulung (Gesperrt)")
+			
 			lbl_name.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 			lbl_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			lbl_name.size_flags_stretch_ratio = 3.5
@@ -313,7 +320,14 @@ func _refresh_list() -> void:
 				var assigned = StaffManager.room_assignments.get(item.get("id", ""), "")
 				var is_roaming = (role == "housekeeping" or role == "maintenance")
 				
-				if not is_roaming:
+				var t_state = item.get("training_state", "none")
+				if t_state == "in_training":
+					lbl_status.text = GameState.T("ui.staff.status.in_training", "In Schulung")
+					lbl_status.add_theme_color_override("font_color", Color.CYAN)
+				elif t_state == "scheduled":
+					lbl_status.text = GameState.T("ui.staff.status.scheduled", "Schulung geplant")
+					lbl_status.add_theme_color_override("font_color", Color.YELLOW)
+				elif not is_roaming:
 					if assigned == "":
 						lbl_status.text = GameState.T("ui.staff.status.unassigned", "Ohne Aufgabe")
 						lbl_status.add_theme_color_override("font_color", Color.GRAY)
@@ -543,19 +557,75 @@ func _update_details() -> void:
 		action_btn.remove_theme_color_override("font_color")
 		_style_action_btn(action_btn, "red")
 		
+		var t_state = s.get("training_state", "none")
+		
+		if t_state == "in_training":
+			action_btn.disabled = true
+			btn_goto.disabled = true
+		else:
+			action_btn.disabled = false
+		
 		var bonus_btn = Button.new()
 		bonus_btn.custom_minimum_size = Vector2(0, 44)
 		bonus_btn.text = GameState.T("ui.staff.pay_bonus", "Bonus zahlen (100 €)")
-		_style_toggle_btn(bonus_btn)
+		bonus_btn.add_theme_stylebox_override("normal", SB_DARK)
+		bonus_btn.add_theme_stylebox_override("hover", SB_DARK_HOVER)
+		bonus_btn.add_theme_stylebox_override("pressed", SB_DARK_HOVER)
+		bonus_btn.add_theme_stylebox_override("disabled", SB_DARK)
 		bonus_btn.pressed.connect(func():
 			if StaffManager and StaffManager.pay_bonus(s.get("id", "")):
 				_refresh_live_data()
 				_update_details() # Refresh the disabled state
 		)
-		if s.get("morale", 100) >= 100:
+		if s.get("morale", 100) >= 100 or t_state != "none":
 			bonus_btn.disabled = true
 			bonus_btn.modulate = Color(1, 1, 1, 0.5)
 		detail_costs.add_child(bonus_btn)
+		
+		# Training Button
+		var train_btn = Button.new()
+		train_btn.custom_minimum_size = Vector2(0, 44)
+		var train_cost = 400
+		train_btn.text = GameState.T("ui.staff.train_staff", "Schulen (%d €)") % train_cost
+		train_btn.add_theme_stylebox_override("normal", SB_DARK)
+		train_btn.add_theme_stylebox_override("hover", SB_DARK_HOVER)
+		train_btn.add_theme_stylebox_override("pressed", SB_DARK_HOVER)
+		train_btn.add_theme_stylebox_override("disabled", SB_DARK)
+		train_btn.pressed.connect(func():
+			_pending_action = 6
+			_pending_train_cost = train_cost
+			var staff_name = s.get("first_name", "") + " " + s.get("last_name", "")
+			var modal = _get_confirm_modal()
+			modal.ask(
+				GameState.T("ui.staff.confirm.train.title", "Mitarbeiter schulen?"),
+				GameState.T("ui.staff.confirm.train.desc", "Möchtest du [%s] für %d € auf Schulung schicken? Der Mitarbeiter fällt am Folgetag aus.") % [staff_name, train_cost],
+				GameState.T("ui.staff.confirm.btn.train", "Schulen"),
+				GameState.T("ui.staff.confirm.btn.cancel", "Abbrechen"),
+				"",
+				false
+			)
+		)
+		
+		if not TechtreeManager.is_tech_unlocked("M1.2"):
+			train_btn.disabled = true
+			train_btn.modulate = Color(1, 1, 1, 0.5)
+			train_btn.tooltip_text = GameState.T("ui.staff.train_locked", "Benötigt Forschung M1.2 (Personalentwicklung)")
+		elif s.get("skills", {}).get(job, 0) >= 10:
+			train_btn.disabled = true
+			train_btn.modulate = Color(1, 1, 1, 0.5)
+			train_btn.tooltip_text = GameState.T("ui.staff.train_max", "Maximales Level erreicht")
+		elif GameState.selected_hotel.get("money", 0) < train_cost:
+			train_btn.disabled = true
+			train_btn.modulate = Color(1, 1, 1, 0.5)
+		elif t_state != "none":
+			train_btn.disabled = true
+			train_btn.modulate = Color(1, 1, 1, 0.5)
+			if t_state == "in_training":
+				train_btn.text = GameState.T("ui.staff.status.in_training", "In Schulung")
+			elif t_state == "scheduled":
+				train_btn.text = GameState.T("ui.staff.status.scheduled", "Schulung geplant")
+		
+		detail_costs.add_child(train_btn)
 	else:
 		image_rect.visible = true
 		pip_camera.visible = false
@@ -586,7 +656,8 @@ func _update_details() -> void:
 	if s.has("morale"):
 		_create_progress_row(GameState.T("ui.staff.morale"), float(s.get("morale", 100)), 100.0, true, detail_stats)
 
-var _pending_action: int = 0 # 0=none, 1=hire, 2=fire, 3=unassign, 4=assign_only, 5=hire_and_assign
+var _pending_action: int = 0 # 0=none, 1=hire, 2=fire, 3=unassign, 4=assign_only, 5=hire_and_assign, 6=train
+var _pending_train_cost: int = 0
 var _pending_unassign_sid: String = ""
 var _pending_assign_sid: String = ""
 var _pending_assign_rid: String = ""
@@ -682,6 +753,12 @@ func _on_confirm_accepted() -> void:
 		if StaffManager:
 			if StaffManager.hire_staff(_pending_assign_sid):
 				StaffManager.assign_to_room(_pending_assign_sid, _pending_assign_rid)
+				_refresh_list()
+	elif _pending_action == 6:
+		if StaffManager:
+			if StaffManager.train_staff(_selected_staff["id"], _pending_train_cost):
+				_refresh_live_data()
+				_update_details()
 				_refresh_list()
 			
 	_pending_action = 0
@@ -782,6 +859,15 @@ func _build_assignment_ui() -> void:
 			var formatted_name = label_text + " [" + display_id + "]"
 			
 			var assigned: Array = StaffManager.get_staff_for_room(room_id)
+			var req_role = def.get("required_role", "")
+			if req_role != "":
+				assigned.sort_custom(func(a, b):
+					var a_main = (a.get("role", "") == req_role)
+					var b_main = (b.get("role", "") == req_role)
+					if a_main and not b_main: return true
+					if not a_main and b_main: return false
+					return false
+				)
 
 			var card = CARD_ROOM.instantiate()
 			inner_vbox.add_child(card)

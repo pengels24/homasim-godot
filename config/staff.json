@@ -78,6 +78,7 @@
             "hire_cost": 150,
             "base_skills": {
                 "speed": [4, 9],
+                "stress_resistance": [3, 8],
                 "motivation": [5, 9]
             }
         },

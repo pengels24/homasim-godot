@@ -25,6 +25,7 @@ signal sig_camera_zoom_requested(direction: float)  # ZOOM
 signal sig_camera_drag_started(start_position: Vector2)
 signal sig_camera_drag_moved(current_position: Vector2)
 signal sig_camera_drag_ended()
+signal sig_camera_reset_requested()
 signal sig_kill_reset_pin_requested() # Feuert, wenn eine Aktion den Pin killen soll
 # ── UI HOTKEYS ─────────────────────────────────────────────
 signal sig_hotkey_build_menu_requested
@@ -126,6 +127,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_escape"):
 		get_viewport().set_input_as_handled()
 		sig_hotkey_escape_pressed.emit()
+		return
+
+	if event.is_action_pressed("map_reset_camera_view"):
+		get_viewport().set_input_as_handled()
+		if current_mode == InputMode.NORMAL or current_mode == InputMode.BUILD:
+			sig_camera_reset_requested.emit()
 		return
 
 	if event.is_action_pressed("ui_build_menu"):

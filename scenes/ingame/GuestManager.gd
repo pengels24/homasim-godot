@@ -229,8 +229,8 @@ func generate_daily_schedule(start_time: int) -> Array:
 		for room in _map_grid.get_placed_rooms():
 			if room.get("room_type_id") == "lobby" and room.has_method("get_definition"):
 				var def: Dictionary = room.get_definition()
-				open_from = def.get("open_from", 420)
-				open_to = def.get("open_to", 1320)
+				open_from = def.get("reception_open_from", 420)
+				open_to = def.get("reception_open_to", 1320)
 				break
 				
 	# Keine Neuberechnungen (Spawns) mehr in den letzten 2 Stunden (120 Min) vor Schließung
@@ -489,8 +489,12 @@ func _tick_patience() -> void:
 	var current_time = TimeManager.get_game_time()
 
 	for party: GuestParty in _waiting:
-		# 11 Ingame-Stunden (660 Minuten) Geduld
-		if current_time - party.arrived_time >= 660:
+		# 11 Ingame-Stunden (660 Minuten) Geduld als Basis
+		var wait_limit = 660
+		if TechtreeManager and TechtreeManager.is_tech_unlocked("M1.4"):
+			wait_limit = 792 # +20% Wartezeit (660 * 1.2)
+			
+		if current_time - party.arrived_time >= wait_limit:
 			left_ids.append(party.id)
 
 	for pid: String in left_ids:

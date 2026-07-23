@@ -549,8 +549,9 @@ func _update_indicator() -> void:
 			
 			var max_s = def.get("max_staff", def.get("min_staff", 1))
 			var assigned_count = StaffManager.get_staff_for_room(room_id).size()
-			if assigned_count == 0:
-				staff_status = 2 # Kein Personal (Rot)
+			
+			if not StaffManager.is_poi_staffed(def, room_id):
+				staff_status = 2 # Kein Personal / Wichtige Rolle fehlt (Rot)
 			elif assigned_count < max_s:
 				staff_status = 1 # Unterbesetzt (Orange)
 

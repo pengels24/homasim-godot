@@ -196,8 +196,10 @@ func place_order_for_seat(guest_id: String, budget: int = 9999, missing_sat: int
 					if is_instance_valid(room) and room.has_method("get_definition"):
 						var def = room.get_definition()
 						if def.get("id") == "kitchen_small" and GameState.is_facility_open(def, 30):
-							kitchen_is_open = true
-							break
+							var k_id = GuestManager._room_key(room)
+							if StaffManager.is_poi_staffed(def, k_id):
+								kitchen_is_open = true
+								break
 			
 			if not kitchen_is_open:
 				return false
@@ -223,6 +225,8 @@ func _has_waiter_assigned() -> bool:
 		_room_id = GuestManager._room_key(self)
 	var assigned = StaffManager.get_staff_for_room(_room_id)
 	for s in assigned:
+		if not StaffManager.is_staff_available(s):
+			continue
 		if s.get("role", "") == "waiter":
 			return true
 	return false

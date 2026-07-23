@@ -73,6 +73,9 @@ func _check_for_new_orders() -> void:
 	var chef_speed = 1.0
 	
 	for s in assigned:
+		if not StaffManager.is_staff_available(s):
+			continue
+			
 		if s.get("role") == "chef":
 			has_chef = true
 			chef_speed += (s.get("skills", {}).get("speed", 5) * 0.05)
@@ -85,6 +88,9 @@ func _check_for_new_orders() -> void:
 	# Wie viele Gerichte können wir gleichzeitig kochen? (1 pro Koch)
 	var max_concurrent = 1
 	for s in assigned:
+		if not StaffManager.is_staff_available(s):
+			continue
+			
 		if s.get("role") == "chef" and max_concurrent == 1:
 			pass # Der erste Koch ist schon in max_concurrent=1 enthalten
 		elif s.get("role") == "chef":

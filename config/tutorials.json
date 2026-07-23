@@ -133,6 +133,13 @@
             "title_key": "codex.guest_luxury.title",
             "desc_key": "codex.guest_luxury.desc",
             "image": "res://assets/icons/guests/user-star.svg"
+        },
+        {
+            "id": "guest_groups",
+            "category": "codex",
+            "title_key": "codex.guest_groups.title",
+            "desc_key": "codex.guest_groups.desc",
+            "image": "res://assets/icons/guests/users.svg"
         }
     ]
 }

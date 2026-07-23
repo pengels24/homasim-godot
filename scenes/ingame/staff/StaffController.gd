@@ -14,10 +14,15 @@ func configure(map_grid: Node2D) -> void:
 		StaffManager.sig_staff_hired.connect(_on_staff_hired)
 	if not StaffManager.sig_staff_fired.is_connected(_on_staff_fired):
 		StaffManager.sig_staff_fired.connect(_on_staff_fired)
+	if not StaffManager.sig_staff_training_started.is_connected(_on_staff_training_started):
+		StaffManager.sig_staff_training_started.connect(_on_staff_training_started)
+	if not StaffManager.sig_staff_training_ended.is_connected(_on_staff_training_ended):
+		StaffManager.sig_staff_training_ended.connect(_on_staff_training_ended)
 
 func _spawn_all_staff() -> void:
 	for staff in StaffManager.hired_staff.values():
-		_spawn_actor(staff)
+		if staff.get("training_state", "none") != "in_training":
+			_spawn_actor(staff)
 
 func _spawn_actor(staff_data: Dictionary) -> void:
 	var actor = STAFF_ACTOR_SCENE.instantiate()
@@ -42,6 +47,13 @@ func _on_staff_fired(staff_id: String) -> void:
 			actor.despawn()
 			_actors.remove_at(i)
 			break
+
+func _on_staff_training_started(staff_id: String) -> void:
+	# Same as fired: remove the actor from the map
+	_on_staff_fired(staff_id)
+
+func _on_staff_training_ended(staff_data: Dictionary) -> void:
+	_spawn_actor(staff_data)
 
 func _get_lobby_spawn_pos() -> Vector2:
 	if is_instance_valid(_map_grid) and _map_grid.has_method("get_lobby_spawn_pos_world"):

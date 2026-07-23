@@ -353,13 +353,25 @@ func _on_poi_arrived() -> void:
 	var poi_def = _get_poi_def(_current_poi_id)
 	var income: int = poi_def.get("visit_income", 0)
 	
+	var poi_room = _get_poi_room_node(_current_poi_id)
+	var party := _get_my_party()
+	
+	if is_instance_valid(party):
+		var bonus = 0
+		if income > 0:
+			bonus += 2 # Base bonus (war vorher 5, reduziert für Balancing)
+			
+		if is_instance_valid(poi_room) and poi_room.has_method("has_trait"):
+			if poi_room.has_trait("wlan"): bonus += 1
+			if poi_room.has_trait("klima"): bonus += 1
+			
+		if bonus > 0:
+			party.modify_satisfaction(bonus)
+
 	# Einnahmen buchen (falls Eintritt/Basis-Kosten existieren)
 	if income > 0:
 		# Budget abziehen (per Member – jeder hat seinen eigenen Geldbeutel)
 		_guest_member.spending_budget = max(0, _guest_member.spending_budget - income)
-		var party := _get_my_party()
-		if is_instance_valid(party):
-			party.satisfaction = min(100, party.satisfaction + 5)
 		
 		# Einnahme buchen
 		# Einnahme buchen
@@ -370,7 +382,6 @@ func _on_poi_arrived() -> void:
 		
 		# FloatingValue Signal senden
 		var spawn_pos = global_position
-		var poi_room = _get_poi_room_node(_current_poi_id)
 		if is_instance_valid(poi_room):
 			var sz = poi_room.call("get_tile_size") if poi_room.has_method("get_tile_size") else Vector2i(1, 1)
 			spawn_pos = poi_room.global_position + Vector2(sz.x * 16.0, sz.y * 16.0)
@@ -452,8 +463,17 @@ func start_checkout() -> void:
 		_room_door_world = _map_grid.tile_to_world(exit_tile)
 		global_position = _room_door_world
 	
-	# Lobby bereits offen? → direkt zum Ausgang
-	if _get_open_pois().has("lobby"):
+	# Lobby-Rezeption bereits offen? → direkt zum Ausgang
+	var reception_open = false
+	var lobby_def = _get_poi_def("lobby")
+	if not lobby_def.is_empty():
+		var time = GameState.get_time_in_minutes()
+		var r_from = lobby_def.get("reception_open_from", 420)
+		var r_to = lobby_def.get("reception_open_to", 1320)
+		if time >= r_from and time < r_to:
+			reception_open = true
+
+	if reception_open:
 		_walk_to_exit()
 	else:
 		# Zur Lobby laufen – dort unsichtbar auf Spieler-Checkout warten

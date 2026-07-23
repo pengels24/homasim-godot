@@ -201,7 +201,10 @@
             "M1.1"
           ],
           "unlocks_emojis": "🧑‍💼 📝",
-          "demo_locked": true
+          "demo_locked": false,
+          "unlocks_features": [
+            "ui.techtree.feature.m12_train"
+          ]
         },
         {
           "id": "M1.3",
@@ -215,7 +218,7 @@
             "M1.1"
           ],
           "unlocks_emojis": "⚙️ ⏱️",
-          "demo_locked": true,
+          "demo_locked": false,
           "unlocks_features": [
             "ui.techtree.feature.m13_speed"
           ]
@@ -233,7 +236,10 @@
             "M1.3"
           ],
           "unlocks_emojis": "🏢 📈",
-          "demo_locked": true
+          "demo_locked": false,
+          "unlocks_features": [
+            "ui.techtree.feature.m14_patience"
+          ]
         },
         {
           "id": "P1.1",

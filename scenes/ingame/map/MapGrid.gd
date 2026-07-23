@@ -69,6 +69,7 @@ func _ready() -> void:
 		InputHandler.sig_camera_drag_started.connect(_on_input_drag_started)
 		InputHandler.sig_camera_drag_moved.connect(_on_input_drag_moved)
 		InputHandler.sig_camera_drag_ended.connect(_on_input_drag_ended)
+		InputHandler.sig_camera_reset_requested.connect(func(): center_on_entry(_entry_plot))
 
 		_pan_speed = SettingsManager.camera_pan_speed
 		SettingsManager.sig_camera_pan_speed_changed.connect(func(speed): _pan_speed = speed)

@@ -274,6 +274,7 @@ modal.load.auto.title,Autosaves,Autosaves
 modal.load.button.load,Spielstand laden,Load Game
 modal.reception.title,Rezeption,Reception
 modal.settings.title,Einstellungen,Settings
+dayend.tooltip.parties,%d Reisegruppe(n),%d Party/Parties
 saveslots.title,Spielstand laden,Load Game
 saveslots.quick.title,Quicksave,Quicksave
 saveslots.manual.slot,Slot,Slot
@@ -325,7 +326,7 @@ settings.controls.camera.left,Nach links,Left
 settings.controls.camera.right,Nach rechts,Right
 settings.controls.camera.zoom_in,Hineinzoomen,Zoom In
 settings.controls.camera.zoom_out,Herauszoomen,Zoom Out
-settings.controls.camera.reset,Ansicht zentrieren,Center View
+settings.controls.camera.reset,Ansicht zurücksetzen,Reset View
 settings.controls.group.gameplay,Spielsteuerung,Game Controls
 settings.controls.gameplay.pause,Spiel pausieren,Pause Game
 settings.controls.gameplay.play,Normalgeschwindigkeit,Normal Speed
@@ -781,6 +782,17 @@ ui.techtree.tooltip.unlocks.room,Raum: ###,Room: ###
 ui.techtree.tooltip.unlocks.feature,Feature: ###,Feature: ###
 ui.techtree.feature.z11_speed,+5% Personal-Geschwindigkeit,+5% Staff Speed
 ui.techtree.feature.m13_speed,+15% Personal-Geschwindigkeit,+15% Staff Speed
+ui.techtree.feature.m12_train,+2 Personal-Skill durch Schulung,+2 Staff Skill via Training
+ui.techtree.feature.m14_patience,-20% Geduldsverlust der Gäste,-20% guest patience loss
+ui.staff.train_staff,Schulen (%d €),Train (%d €)
+tx.staff.training,Personal-Schulung,Staff Training
+ui.staff.train_locked,Benötigt Forschung M1.2 (Personalentwicklung),Requires M1.2 Tech (Staff Training)
+ui.staff.train_max,Maximales Level erreicht,Maximum level reached
+ui.staff.confirm.train.title,Mitarbeiter schulen?,Train staff?
+ui.staff.confirm.train.desc,Möchtest du [%s] für %d € auf Schulung schicken? Der Mitarbeiter fällt am Folgetag aus.,Do you want to train [%s] for %d €? The employee will be unavailable the following day.
+ui.staff.confirm.btn.train,Schulen,Train
+ui.staff.status.in_training,In Schulung,In Training
+ui.staff.status.scheduled,Schulung geplant,Training Scheduled
 ui.techtree.tooltip.unlocks.desc,Schaltet frei:\n- ###\n\n,Unlocks:\n- ###\n\n
 ui.techtree.tooltip.unlocks.empty,Schaltet neue Inhalte frei.\n\n,Unlocks new content.\n\n
 ui.techtree.tooltip.requires,Benötigt: ###\n,Requires: ###\n
@@ -897,8 +909,10 @@ codex.guest_nomad.title,Neuer Gästetyp: Digitaler Nomade,New Guest Type: Digita
 codex.guest_nomad.desc,"Bleibt sehr lange (7-14 Nächte). Benötigt WLAN, verbringt den ganzen Tag im Zimmer. Freut sich über Zimmer-Service.","Stays very long (7-14 nights). Needs Wi-Fi, spends the whole day in the room. Happy about room service."
 codex.guest_event.title,Neuer Gästetyp: Event-Teilnehmer,New Guest Type: Event Attendee
 codex.guest_event.desc,"Bleibt nur kurz (1-2 Nächte) für ein Event. Keine besonderen Ansprüche, recht profitabel in der Masse.","Stays only briefly (1-2 nights) for an event. No special demands, quite profitable in mass."
-codex.guest_luxury.title,Neuer Gästetyp: Luxus-Gast,New Guest Type: Luxury Guest
-codex.guest_luxury.desc,"Bleibt 2-5 Nächte. Braucht unbedingt Superior-Zimmer, viel Privatsphäre und Luxus. Extrem hohes Budget, aber sehr kritisch! Liebt Zimmer-Service.","Stays 2-5 nights. Absolutely needs superior room, lots of privacy and luxury. Extremely high budget, but very critical! Loves room service."
+codex.guest_luxury.title,Gäste-Typ: VIP & Luxus,Guest Type: VIP & Luxury
+codex.guest_luxury.desc,Prominente und schwerreiche Gäste. Sie zahlen astronomische Summen für Übernachtungen und Services, sind aber extrem schnell verärgert, wenn die Qualität nicht ihren perfekten Standards entspricht. Sie erwarten eine hohe Luxus-Bewertung der Zimmer.\n\nBudget: Hoch\nGeduld: Sehr niedrig\nAnspruch: Perfektion\nPlatzbedarf: Einzel- oder Doppelzimmer (Suite bevorzugt),Guest Type: VIP & Luxury\n\nCelebrities and ultra-rich guests. They pay astronomical sums for stays and services but are extremely quick to anger if the quality doesn't meet their perfect standards. They expect a high luxury rating for rooms.\n\nBudget: High\nPatience: Very low\nExpectations: Perfection\nSpace Needs: Single or Double room (Suite preferred)
+codex.guest_groups.title,Gäste vs. Gruppen,Guests vs. Groups
+codex.guest_groups.desc,In HO·MA·SIM wird unterschieden zwischen Gästen (Köpfe) und Reisegruppen (Partien). Gäste repräsentieren die absolute Anzahl an Personen in deinem Hotel. Eine Gruppe kann jedoch aus mehreren Gästen bestehen (z.B. eine Familie oder ein Pärchen).\n\nBeispiel: Ein Pärchen teilt sich ein Doppelzimmer. Es zählt als 1 Check-In (Gruppe), bringt aber 2 Gäste (Köpfe) in dein Hotel.,In HO·MA·SIM, there is a distinction between guests (heads) and travel groups (parties). Guests represent the total number of people in your hotel. However, a group can consist of multiple guests (e.g., a family or a couple).\n\nExample: A couple shares a double room. They count as 1 check-in (group) but bring 2 guests (heads) to your hotel.
 finances.time.today,Heute,Today
 finances.time.yesterday,Gestern,Yesterday
 finances.time.all,Alle,All
@@ -1242,3 +1256,4 @@ techtree.management.m14.desc,Konzern-Management! Die Wartegeduld aller Gäste (z
 techtree.prestige.p11.desc,Schaltet das Zufallsereignis-System frei. Es können spontane Reisegruppen oder Messe-Gäste auftauchen, die Zimmer suchen.,Unlocks the random event system. Spontaneous tour groups or trade fair guests looking for rooms can appear.
 techtree.prestige.p12.desc,Schaltet Großveranstaltungen frei. Errichte einen Eventsaal, um massive Mengen an Kurzzeit-Gästen und Prestige anzulocken.,Unlocks large events. Build an event hall to attract massive amounts of short-term guests and prestige.
 techtree.prestige.p13.desc,VIP-Events! Ermöglicht das Anlocken von hochkarätigen Gästen mit extrem hohen Budgets und besonderen Wünschen.,VIP Events! Allows attracting high-profile guests with extremely high budgets and special requests.
+ui.staff.assign.training_locked,In Schulung (Gesperrt),In Training (Locked)

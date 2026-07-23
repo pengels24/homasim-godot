@@ -115,25 +115,31 @@ func _fill_finance_data(day: int) -> void:
 
 # =============================================================================
 func _fill_guest_data() -> void:
-	# Erfolge: Format "Partien / Köpfe"
+	var tt_format = GameState.T("dayend.tooltip.parties", "%d Reisegruppe(n)")
+	
 	if is_instance_valid(_lbl_checkins):
-		_lbl_checkins.text = "%d / %d" % [_guest_mgr.daily_checkin_parties, _guest_mgr.daily_checkin_heads]
+		_lbl_checkins.text = str(_guest_mgr.daily_checkin_heads)
+		_lbl_checkins.tooltip_text = tt_format % _guest_mgr.daily_checkin_parties
 
 	if is_instance_valid(_lbl_checkouts):
-		_lbl_checkouts.text = "%d / %d" % [_guest_mgr.daily_checkout_parties, _guest_mgr.daily_checkout_heads]
+		_lbl_checkouts.text = str(_guest_mgr.daily_checkout_heads)
+		_lbl_checkouts.tooltip_text = tt_format % _guest_mgr.daily_checkout_parties
 
-	# Verluste / Abbrüche
 	if is_instance_valid(_lbl_rage_quits):
-		_lbl_rage_quits.text = "%d / %d" % [_guest_mgr.daily_rage_parties, _guest_mgr.daily_rage_heads]
+		_lbl_rage_quits.text = str(_guest_mgr.daily_rage_heads)
+		_lbl_rage_quits.tooltip_text = tt_format % _guest_mgr.daily_rage_parties
 
 	if is_instance_valid(_lbl_timeouts):
-		_lbl_timeouts.text = "%d / %d" % [_guest_mgr.daily_timeout_parties, _guest_mgr.daily_timeout_heads]
+		_lbl_timeouts.text = str(_guest_mgr.daily_timeout_heads)
+		_lbl_timeouts.tooltip_text = tt_format % _guest_mgr.daily_timeout_parties
 
 	if is_instance_valid(_lbl_rejected):
-		_lbl_rejected.text = "%d / %d" % [_guest_mgr.daily_reject_parties, _guest_mgr.daily_reject_heads]
+		_lbl_rejected.text = str(_guest_mgr.daily_reject_heads)
+		_lbl_rejected.tooltip_text = tt_format % _guest_mgr.daily_reject_parties
 
 	if is_instance_valid(_lbl_declined):
-		_lbl_declined.text = "%d / %d" % [_guest_mgr.daily_declined_parties, _guest_mgr.daily_declined_heads]
+		_lbl_declined.text = str(_guest_mgr.daily_declined_heads)
+		_lbl_declined.tooltip_text = tt_format % _guest_mgr.daily_declined_parties
 
 	var total_parties := _guest_mgr._active.size()
 	var total_heads := 0
@@ -148,10 +154,12 @@ func _fill_guest_data() -> void:
 			leaving_heads += p.members.size()
 
 	if is_instance_valid(_lbl_in_house):
-		_lbl_in_house.text = "%d / %d" % [total_parties, total_heads]
+		_lbl_in_house.text = str(total_heads)
+		_lbl_in_house.tooltip_text = tt_format % total_parties
 
 	if is_instance_valid(_lbl_leaving_tomorrow):
-		_lbl_leaving_tomorrow.text = "%d / %d" % [leaving_parties, leaving_heads]
+		_lbl_leaving_tomorrow.text = str(leaving_heads)
+		_lbl_leaving_tomorrow.tooltip_text = tt_format % leaving_parties
 
 # =============================================================================
 func _on_next_day_pressed() -> void:

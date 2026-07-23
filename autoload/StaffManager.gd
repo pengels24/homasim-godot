@@ -2,6 +2,8 @@ extends Node
 
 signal sig_staff_hired(staff_data: Dictionary)
 signal sig_staff_fired(staff_id: String)
+signal sig_staff_training_started(staff_id: String)
+signal sig_staff_training_ended(staff_data: Dictionary)
 signal sig_applicants_generated()
 signal sig_assignments_changed()
 
@@ -213,6 +215,30 @@ func assign_to_room(staff_id: String, room_id: String) -> void:
 	sig_assignments_changed.emit()
 
 # =============================================================================
+func train_staff(staff_id: String, cost: int) -> bool:
+	if not hired_staff.has(staff_id): return false
+	
+	var current_money = GameState.selected_hotel.get("money", 0)
+	if current_money < cost: return false
+	
+	var s = hired_staff[staff_id]
+	var role = s.get("role", "")
+	var skills = s.get("skills", {})
+	var current_val = skills.get(role, 0)
+	
+	if current_val >= 10: return false
+	
+	GameState.add_money(-cost)
+	if FinanceManager:
+		FinanceManager.add_transaction(-cost, "staff", "tx.staff.training")
+		
+	s["training_state"] = "scheduled"
+	
+	_save_to_hotel()
+	sig_assignments_changed.emit()
+	return true
+
+# =============================================================================
 ## Hebt die Raum-Zuweisung eines Mitarbeiters auf.
 func unassign_from_room(staff_id: String) -> void:
 	if room_assignments.has(staff_id):
@@ -241,10 +267,18 @@ func is_poi_staffed(room_def: Dictionary, room_id: String) -> bool:
 	return _count_role_in_room(room_id, req_role) >= min_s
 
 # =============================================================================
+## Prüft, ob ein Mitarbeiter aktuell arbeitsfähig ist (nicht in Schulung, nicht krank, etc.)
+func is_staff_available(staff: Dictionary) -> bool:
+	if not staff: return false
+	if staff.get("training_state", "none") == "in_training": return false
+	# Hier können später is_sick, on_vacation etc. eingefügt werden
+	return true
+
+# =============================================================================
 func _count_role_in_room(room_id: String, role: String) -> int:
 	var c = 0
 	for s in get_staff_for_room(room_id):
-		if s.get("role", "") == role:
+		if s.get("role", "") == role and is_staff_available(s):
 			c += 1
 	return c
 
@@ -314,19 +348,35 @@ func _process_wages() -> void:
 
 # =============================================================================
 func _process_morale() -> void:
+	# 1. Staff Morale Changes and Training
 	var to_fire = []
-	for staff_id in hired_staff:
-		var staff = hired_staff[staff_id]
-		var current_morale = staff.get("morale", 100)
+	for sid in hired_staff:
+		var s = hired_staff[sid]
+		
+		# Training Check
+		var t_state = s.get("training_state", "none")
+		if t_state == "in_training":
+			s["training_state"] = "none"
+			var role = s.get("role", "")
+			var skills = s.get("skills", {})
+			skills[role] = min(skills.get(role, 0) + 2, 10)
+			s["skills"] = skills
+			sig_staff_training_ended.emit(s)
+		elif t_state == "scheduled":
+			s["training_state"] = "in_training"
+			sig_staff_training_started.emit(sid)
+		
+		# Morale check
+		var current_morale = s.get("morale", 100)
 		
 		# Täglicher Basis-Verfall der Moral (-2)
 		current_morale = max(0, current_morale - 2)
-		staff["morale"] = current_morale
+		s["morale"] = current_morale
 		
 		if current_morale <= 0:
-			to_fire.append(staff_id)
+			to_fire.append(sid)
 		elif current_morale < 20:
-			Toast.show(staff["first_name"] + " droht zu kündigen! (Moral kritisch)", "personal")
+			Toast.show(s["first_name"] + " droht zu kündigen! (Moral kritisch)", "personal")
 			
 	for staff_id in to_fire:
 		Toast.show(hired_staff[staff_id]["first_name"] + " hat gekündigt! (Moral = 0)", "personal")

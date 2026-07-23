@@ -86,6 +86,7 @@ func _populate_list() -> void:
 		var text = GameState.T(title_key) if GameState else title_key
 		var btn = Button.new()
 		btn.text = text
+		btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		_set_btn_style(btn, SB_DARK, SB_DARK_HOVER, SB_DARK_PRESSED)
 		btn.add_theme_font_size_override("font_size", 22)
 		btn.pressed.connect(_on_item_selected.bind(idx))
@@ -112,6 +113,7 @@ func _populate_techtree_list() -> void:
 		var cat_btn = Button.new()
 		var cat_name = GameState.T("techtree.category." + cat, cat.capitalize())
 		cat_btn.text = "▶ " + cat_name
+		cat_btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		_set_btn_style(cat_btn, SB_DARK, SB_DARK_HOVER, SB_DARK_PRESSED)
 		cat_btn.add_theme_font_size_override("font_size", 22)
 		item_list.add_child(cat_btn)
@@ -137,19 +139,23 @@ func _populate_techtree_list() -> void:
 			var tech_btn = Button.new()
 			var tech_name = GameState.T(node.get("name", node.get("id", "")))
 			tech_btn.text = node.get("id", "") + " - " + tech_name
-			_set_btn_style(tech_btn, SB_BLUE, SB_BLUE_HOVER, SB_BLUE_PRESSED)
+			tech_btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
+			_set_btn_style(tech_btn, SB_DARK, SB_DARK_HOVER, SB_DARK_PRESSED)
 			tech_btn.add_theme_font_size_override("font_size", 20)
 			inner_vbox.add_child(tech_btn)
 			
 			tech_btn.pressed.connect(func():
 				_on_tech_selected(node)
 				for c in item_list.get_children():
-					if c is MarginContainer:
+					if c is Button:
+						_set_btn_style(c, SB_DARK, SB_DARK_HOVER, SB_DARK_PRESSED)
+					elif c is MarginContainer:
 						for b in c.get_child(0).get_children():
 							if b is Button:
-								_set_btn_style(b, SB_BLUE, SB_BLUE_HOVER, SB_BLUE_PRESSED)
-				# Highlight clicked button
-				_set_btn_style(tech_btn, SB_DARK, SB_DARK_HOVER, SB_DARK_PRESSED)
+								_set_btn_style(b, SB_DARK, SB_DARK_HOVER, SB_DARK_PRESSED)
+				# Highlight clicked button and its parent category
+				_set_btn_style(tech_btn, SB_BLUE, SB_BLUE_HOVER, SB_BLUE_PRESSED)
+				_set_btn_style(cat_btn, SB_BLUE, SB_BLUE_HOVER, SB_BLUE_PRESSED)
 			)
 
 func _on_tech_selected(node: Dictionary) -> void:

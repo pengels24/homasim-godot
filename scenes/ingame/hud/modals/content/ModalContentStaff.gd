@@ -136,7 +136,12 @@ func _build_tabs() -> void:
 func _update_tab_buttons() -> void:
 	for btn in tab_hbox.get_children():
 		if btn.has_meta("tab_idx"):
-			btn.button_pressed = (btn.get_meta("tab_idx") == _current_tab)
+			var idx = btn.get_meta("tab_idx")
+			btn.button_pressed = (idx == _current_tab)
+			if idx == 0:
+				var max_cap = StaffManager.get_max_staff_capacity() if StaffManager.has_method("get_max_staff_capacity") else 10
+				var hired_count = StaffManager.hired_staff.size() if StaffManager else 0
+				btn.text = GameState.T("ui.staff.tab_team") + " (%d/%d)" % [hired_count, max_cap]
 		elif btn.has_meta("is_refresh_btn"):
 			btn.visible = (_current_tab == 1)
 			var max_ref = StaffManager.MAX_DAILY_REFRESHES
@@ -635,11 +640,18 @@ func _update_details() -> void:
 		_create_2col_row(GameState.T("ui.staff.hire_cost"), "%d €" % int(s.get("hire_cost", 0)), detail_costs, false)
 		_create_2col_row(GameState.T("ui.staff.daily_wage"), "%d €" % int(s.get("daily_wage", 0)), detail_costs, false)
 		if _get_available_poi_roles().has(job):
-			action_btn.text = GameState.T("ui.staff.hire")
-			action_btn.disabled = false
-			action_btn.remove_theme_color_override("font_color")
-			_style_action_btn(action_btn, "green")
-			action_btn.tooltip_text = ""
+			var max_cap = StaffManager.get_max_staff_capacity() if StaffManager.has_method("get_max_staff_capacity") else 10
+			var cur_cap = StaffManager.hired_staff.size() if StaffManager else 0
+			if cur_cap >= max_cap:
+				action_btn.text = GameState.T("toast.staff.limit_reached")
+				action_btn.disabled = true
+				action_btn.modulate = Color(1, 1, 1, 0.5)
+			else:
+				action_btn.text = GameState.T("ui.staff.hire")
+				action_btn.disabled = false
+				action_btn.remove_theme_color_override("font_color")
+				_style_action_btn(action_btn, "green")
+				action_btn.tooltip_text = ""
 		else:
 			action_btn.text = "Kein Arbeitsplatz"
 			action_btn.disabled = true

@@ -31,7 +31,8 @@ func ask(
 	confirm_text:   String = "",
 	cancel_text:    String = "",
 	checkbox_label: String = "",
-	is_destructive: bool = false
+	is_destructive: bool = false,
+	is_info_only:   bool = false
 ) -> void:
 	if confirm_text == "": confirm_text = GameState.T("btn.confirm")
 	if cancel_text == "": cancel_text = GameState.T("btn.cancel")
@@ -45,6 +46,7 @@ func ask(
 	_ack_check.button_pressed = false
 	_ack_check.text           = checkbox_label
 	_btn_confirm.disabled     = has_checkbox
+	_btn_cancel.visible       = not is_info_only
 	
 	if is_destructive:
 		_btn_confirm.add_theme_stylebox_override("normal", preload("res://assets/UI/menu_button_red.tres"))

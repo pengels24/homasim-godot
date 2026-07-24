@@ -494,10 +494,10 @@ levelup.unlock.new_roomtypes,Neue Raumtypen freigeschaltet,New room types unlock
 levelup.unlock.more_plots,Weitere Grundstücke kaufbar,More plots available for purchase
 levelup.unlock.restaurant,Restaurant baubar,Restaurant can be built
 levelup.unlock.research_hint,Büro bauen schaltet das Forschungssystem frei,Building an office unlocks the research system
-levelup.unlock.hr_hint,Personalbüro & Snack-Automat (Lobby) freigeschaltet!,Staff Agency & Snack Machine (Lobby) unlocked!
+levelup.unlock.hr_hint,"Personalbüro, Pausenraum & Snack-Automat freigeschaltet!","Staff Agency, Staff Room & Snack Machine unlocked!"
 levelup.unlock.no_unlocks,Neue Freischaltungen kommen über den Forschungsbaum,New unlocks come through the research tree
 levelup.unlock.l4_gastro,Gastronomie-Forschung verfügbar!\nErforsche Küche & Restaurant im Techtree.,Gastronomy research available!\nUnlock Kitchen & Restaurant in the Tech Tree.
-levelup.unlock.l5_staff_room,Pausenraum verfügbar!\nBaue einen Pausenraum – dein Team wird es dir danken.,Staff Room available!\nBuild a Staff Room – your team will thank you.
+levelup.unlock.l5_milestone,"Level 5 erreicht!\nDein Hotel wächst und gedeiht weiter.","Level 5 reached!\nYour hotel continues to grow and thrive."
 levelup.unlock.l6_guest_needs,Gästebedürfnisse aktiv!\nDeine Gäste haben ab jetzt individuelle Wünsche – erfülle sie für mehr Zufriedenheit.,Guest needs activated!\nYour guests now have individual needs – fulfil them for higher satisfaction.
 levelup.unlock.l7_gourmet_kitchen,Gourmetküche-Forschung verfügbar!\nDer Weg zu den Sternen beginnt im Techtree.,Gourmet Kitchen research available!\nThe path to the stars begins in the Tech Tree.
 levelup.unlock.l8_wellness,Wellness-Forschung verfügbar!\nErforsche Spa, Pool & Co. im Techtree.,Wellness research available!\nUnlock Spa, Pool & more in the Tech Tree.
@@ -1257,3 +1257,5 @@ techtree.prestige.p11.desc,Schaltet das Zufallsereignis-System frei. Es können 
 techtree.prestige.p12.desc,Schaltet Großveranstaltungen frei. Errichte einen Eventsaal, um massive Mengen an Kurzzeit-Gästen und Prestige anzulocken.,Unlocks large events. Build an event hall to attract massive amounts of short-term guests and prestige.
 techtree.prestige.p13.desc,VIP-Events! Ermöglicht das Anlocken von hochkarätigen Gästen mit extrem hohen Budgets und besonderen Wünschen.,VIP Events! Allows attracting high-profile guests with extremely high budgets and special requests.
 ui.staff.assign.training_locked,In Schulung (Gesperrt),In Training (Locked)
+ui.info.staff_capacity.title,Personal-Limit überschritten,Staff Limit Exceeded
+ui.info.staff_capacity.msg,Du hast mehr Personal eingestellt als Pausenräume zur Verfügung stehen. Das Spiel läuft normal weiter aber du musst weitere Pausenräume bauen bevor du neue Mitarbeiter einstellen kannst.,You have hired more staff than you have staff rooms available. The game will continue normally but you must build more staff rooms before hiring new employees.

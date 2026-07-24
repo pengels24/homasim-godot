@@ -26,17 +26,34 @@ func _spawn_all_staff() -> void:
 
 func _spawn_actor(staff_data: Dictionary) -> void:
 	var actor = STAFF_ACTOR_SCENE.instantiate()
-	# Optional: Give it a node name based on staff ID
 	actor.name = "StaffActor_" + str(staff_data.get("id", ""))
-	_map_grid.add_child(actor) # Wir platzieren ihn direkt im Grid fr richtiges Z-Sorting und Koordinaten
+	_map_grid.add_child(actor)
 	actor.configure(staff_data, _map_grid, self)
 	_actors.append(actor)
 	
-	# Spawn-Punkt: Lobby Center
-	var spawn_pos = _get_lobby_spawn_pos()
+	# Spawn-Punkt: Personalraum (Fallback Lobby)
+	var spawn_pos = _get_staff_room_spawn_pos()
+	if spawn_pos == Vector2.INF:
+		spawn_pos = _get_lobby_spawn_pos()
+		
 	spawn_pos += Vector2(randf_range(-12.0, 12.0), randf_range(-12.0, 12.0))
 	actor.global_position = spawn_pos
 	
+func _get_staff_room_spawn_pos() -> Vector2:
+	if is_instance_valid(_map_grid) and _map_grid.has_method("get_placed_rooms"):
+		var candidates = []
+		for r in _map_grid.get_placed_rooms():
+			if r.has_method("get_definition") and r.get_definition().get("id") == "staff_small":
+				candidates.append(r)
+		
+		if candidates.size() > 0:
+			var room = candidates[randi() % candidates.size()]
+			var interior = room.get_node_or_null("Interior")
+			if interior:
+				return interior.global_position
+			return room.global_position
+	return Vector2.INF
+
 func _on_staff_hired(staff_data: Dictionary) -> void:
 	_spawn_actor(staff_data)
 

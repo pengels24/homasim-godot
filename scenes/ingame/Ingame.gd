@@ -66,6 +66,13 @@ func _do_fade_in() -> void:
 	tween.tween_property(fade_rect, "modulate:a", 0.0, 1.0).set_trans(Tween.TRANS_SINE)
 	tween.tween_callback(fade_rect.queue_free)
 	tween.tween_callback(func(): TutorialManager.trigger("welcome"))
+	tween.tween_callback(func():
+		if StaffManager and StaffManager.hired_staff.size() > StaffManager.get_max_staff_capacity():
+			ui_manager.show_info_modal(
+				GameState.T("ui.info.staff_capacity.title", "Personal-Limit überschritten"),
+				GameState.T("ui.info.staff_capacity.msg", "Du hast mehr Personal eingestellt, als Pausenräume zur Verfügung stehen. Das Spiel läuft normal weiter, aber du musst weitere Pausenräume bauen, bevor du neue Mitarbeiter einstellen kannst.")
+			)
+	)
 
 # =============================================================================
 func _start_map() -> void:

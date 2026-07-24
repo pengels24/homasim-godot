@@ -283,8 +283,21 @@ func _count_role_in_room(room_id: String, role: String) -> int:
 	return c
 
 # =============================================================================
+func get_max_staff_capacity() -> int:
+	var count = 0
+	if not GameState.selected_hotel.is_empty():
+		var plots = GameState.selected_hotel.get("plot_built", {})
+		for plot_key in plots.keys():
+			var plot = plots[plot_key]
+			if plot is Dictionary and plot.has("rooms"):
+				for r in plot["rooms"]:
+					if r.get("id") == "staff_small":
+						count += 1
+	return count * 4
+
+# =============================================================================
 func hire_staff(applicant_id: String) -> bool:
-	if hired_staff.size() >= 10:
+	if hired_staff.size() >= get_max_staff_capacity():
 		Toast.show(GameState.T("toast.staff.limit_reached"), "personal")
 		return false
 		
@@ -427,3 +440,36 @@ func _save_to_hotel() -> void:
 	if GameState.selected_hotel != null and not GameState.selected_hotel.is_empty():
 		GameState.selected_hotel["staff"] = get_state()
 		SaveManager.update_hotel(GameState.active_hotel_id, GameState.selected_hotel)
+
+# =============================================================================
+func get_break_thresholds(_staff_id: String) -> Dictionary:
+	var diff_multiplier = GameState.selected_hotel.get("exp_multiplier", 1.0) if GameState.selected_hotel else 1.0
+	
+	# Basis-Werte (Hard / Knechtschaft)
+	var b_start = 40
+	var b_bed = 20
+	var b_accept = 50
+	
+	if diff_multiplier > 1.2:
+		# Casual
+		b_start = 60
+		b_bed = 40
+		b_accept = 70
+	elif diff_multiplier >= 1.0:
+		# Normal
+		b_start = 50
+		b_bed = 30
+		b_accept = 60
+		
+	# Techtree-Boni (Management)
+	var traits = GameState.get_unlocked_traits()
+	if "ui.techtree.feature.m12_train" in traits:
+		b_start += 10
+		b_bed += 10
+		b_accept += 10
+		
+	return {
+		"break_start_threshold": b_start,
+		"bed_preference_threshold": b_bed,
+		"task_accept_threshold": b_accept
+	}

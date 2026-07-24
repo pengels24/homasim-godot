@@ -17,6 +17,8 @@ var _path: Array[Vector2i] = []
 var _target_world_pos: Vector2 = Vector2.ZERO
 var _room_entry_pos: Vector2 = Vector2.INF
 var _extra_target_pos: Vector2 = Vector2.INF
+var _look_at_pos: Vector2 = Vector2.ZERO
+var _resting_timer: float = 0.0
 var _current_room: Node2D = null
 var _arriving_room: Node2D = null
 var _debug_line: Line2D
@@ -131,58 +133,45 @@ func _physics_process(delta: float) -> void:
 			_process_walking(delta, actual_speed)
 		"working":
 			_process_working(delta, speed_mult)
-		"returning":
+		"returning", "walking_to_break":
 			_process_walking(delta, actual_speed)
+		"resting":
+			_process_resting(delta, speed_mult)
 
-func _process_idle() -> void:
-	if is_instance_valid(_debug_line): _debug_line.points = []
-	if not _current_task.is_empty():
-		return # Mache schon was
-		
-	var is_night = false
-	var assigned_room = _get_assigned_room()
-	
-	if is_instance_valid(assigned_room) and assigned_room.has_method("get_definition"):
-		var def = assigned_room.get_definition()
-		if not GameState.is_facility_open(def):
-			is_night = true # Raum ist geschlossen
+func _process_resting(delta: float, speed_mult: float) -> void:
+	_resting_timer += delta * speed_mult
+	if _resting_timer >= 2.0: # Alle 2 Sekunden ein Morale-Tick
+		_resting_timer = 0.0
+		var bonus = 1
+		if is_instance_valid(_current_room) and _current_room.get("id") == "staff_small":
+			pass # Typ prüfen
+		if is_instance_valid(_current_room) and _current_room.has_method("has_free_seat"):
+			var seats = _current_room.get("_seats")
+			if seats:
+				for seat in seats:
+					if seat.get("occupied_by") == get_staff_id():
+						if seat.get("type") == "bed": bonus = 2
+						break
+						
+		var morale = _staff_data.get("morale", 100)
+		if morale < 100:
+			StaffManager.add_morale(get_staff_id(), 2 * bonus, 100)
+			morale = _staff_data.get("morale", 100)
 			
-			# Überstunden-Check: Gibt es noch was zu tun?
-			var room_id = GuestManager._room_key(assigned_room)
-			if GastroManager and GastroManager.has_active_orders_for_room(room_id):
-				is_night = false # Bleibt, bis alle versorgt sind
-	else:
-		# Fallback für Personal ohne feste Raum-Öffnungszeiten (Housekeeping, Maintenance)
-		var current_hour = TimeManager.get_hour()
-		is_night = current_hour >= 22 or current_hour < 7
-	
-	if is_night:
-		# Feierabend: Keine neuen Tasks annehmen, ab in die Lobby
-		if _room_entry_pos == Vector2.INF and _extra_target_pos == Vector2.INF and _target_world_pos == Vector2.ZERO:
-			pass # just for state check, actually we can just check if _sprite.visible is true
-			
-		# Wenn wir schon versteckt sind, mach nichts
-		if not _sprite.visible:
-			return
-			
-		# Wir haben noch kein festes Ziel für die Lobby? Holen wir uns eins
-		if _extra_target_pos == Vector2.INF:
-			_extra_target_pos = _controller._get_lobby_spawn_pos()
-			
-		if global_position.distance_to(_extra_target_pos) > 10.0:
-			if _state != "returning":
-				_start_path_to_lobby()
-				# Überschreibe _room_entry_pos in _start_path_to_lobby mit unserem gecachten _extra_target_pos
-				_room_entry_pos = _extra_target_pos
-				_state = "returning"
+		if morale >= 100:
+			if is_instance_valid(_current_room) and _current_room.has_method("leave_seat"):
+				_current_room.leave_seat(get_staff_id())
+			_state = "idle"
+			_sprite.rotation = 0
 			_think_timer = 1.0
-		else:
-			# FIX: Sobald der MA seinen Spot in der Lobby erreicht hat, versteckt er sich
-			_sprite.visible = false
-			_think_timer = 1.0
-			_extra_target_pos = Vector2.INF # Reset für nächste Schicht
-		return
-		
+
+	if _state == "resting":
+		var thresholds = StaffManager.get_break_thresholds(get_staff_id()) if StaffManager and StaffManager.has_method("get_break_thresholds") else {}
+		var accept_t = thresholds.get("task_accept_threshold", 50)
+		if _staff_data.get("morale", 100) >= accept_t:
+			_check_for_tasks()
+
+func _check_for_tasks() -> bool:
 	var my_job = get_job_type()
 	var tasks = TaskManager._tasks
 	
@@ -201,7 +190,6 @@ func _process_idle() -> void:
 					is_match = true
 			
 			if is_match:
-
 				t.status = "assigned"
 				t.assigned_to = get_staff_id()
 				_current_task = t
@@ -228,6 +216,12 @@ func _process_idle() -> void:
 					target_room = t.target
 					
 				if is_instance_valid(target_room):
+					# Wenn er gerade Pause gemacht hat, Sitz aufgeben!
+					if _state == "resting":
+						if is_instance_valid(_current_room) and _current_room.has_method("leave_seat"):
+							_current_room.leave_seat(get_staff_id())
+						_sprite.rotation = 0
+						
 					_start_path_to_room(target_room, extra_pos)
 					if _path.size() > 0:
 						_state = "walking"
@@ -235,10 +229,8 @@ func _process_idle() -> void:
 						_think_timer = 1.0 # Denkt kurz nach, bevor er losrennt
 					else:
 						print("[StaffActor] Path failed to target_room: ", target_room.name, " from current_room: ", _current_room.name if _current_room else "none")
-						# Kein Weg?
 						_current_task = {}
 						t.status = "open"
-						# ANG-Fix: Move unreachable task to the back of the queue so he doesn't loop infinitely on it!
 						var t_idx = TaskManager._tasks.find(t)
 						if t_idx != -1:
 							TaskManager._tasks.remove_at(t_idx)
@@ -247,10 +239,118 @@ func _process_idle() -> void:
 					print("[StaffActor] Target room invalid for task: ", t.type)
 					_current_task = {}
 					t.status = "open"
-				break
+				return true
+	return false
+
+func _process_idle() -> void:
+	if is_instance_valid(_debug_line): _debug_line.points = []
+	if not _current_task.is_empty():
+		return # Mache schon was
+		
+	var is_night = false
+	var assigned_room = _get_assigned_room()
+	
+	if is_instance_valid(assigned_room) and assigned_room.has_method("get_definition"):
+		var def = assigned_room.get_definition()
+		if not GameState.is_facility_open(def):
+			is_night = true # Raum ist geschlossen
+			
+			# Überstunden-Check: Gibt es noch was zu tun?
+			var room_id = GuestManager._room_key(assigned_room)
+			if GastroManager and GastroManager.has_active_orders_for_room(room_id):
+				is_night = false # Bleibt, bis alle versorgt sind
+	else:
+		# Fallback für Personal ohne feste Raum-Öffnungszeiten (Housekeeping, Maintenance)
+		var current_hour = TimeManager.get_hour()
+		is_night = current_hour >= 22 or current_hour < 7
+	
+	if is_night:
+		if _state == "resting":
+			return # Schon im Feierabend / sitzt im Pausenraum
+			
+		# Feierabend: Keine neuen Tasks annehmen, ab in den Pausenraum
+		if not _sprite.visible and _state == "idle":
+			return # Schon versteckt (Fallback)
+			
+		if _state != "walking_to_break":
+			var break_room = null
+			if is_instance_valid(_map_grid) and _map_grid.has_method("get_placed_rooms"):
+				var best_dist = INF
+				for room in _map_grid.get_placed_rooms():
+					if room.has_method("get_definition") and room.get_definition().get("id") == "staff_small":
+						if room.has_method("has_free_seat") and room.has_free_seat():
+							var d = global_position.distance_to(room.global_position)
+							if d < best_dist:
+								best_dist = d
+								break_room = room
+			
+			if is_instance_valid(break_room):
+				var seat_info = break_room.call("claim_seat", get_staff_id(), true) # prefer_bed = true (Nacht = Schlafen)
+				if not seat_info.is_empty():
+					var pos = seat_info.get("pos", Vector2.INF)
+					_look_at_pos = seat_info.get("look_at", Vector2.ZERO)
+					_arriving_room = break_room
+					_start_path_to_room(break_room, pos)
+					if _path.size() > 0:
+						_state = "walking_to_break"
+						_sprite.visible = true
+					else:
+						_sprite.visible = false
+					_think_timer = 1.0
+					return
+					
+			# Fallback zur Lobby wenn alle Personalräume voll sind
+			if _extra_target_pos == Vector2.INF:
+				_extra_target_pos = _controller._get_lobby_spawn_pos()
 				
-	# Wenn er keinen neuen Job gefunden hat (state ist immer noch idle), geht er an seinen Arbeitsplatz oder in die Lobby zurück
+			if global_position.distance_to(_extra_target_pos) > 10.0:
+				if _state != "returning":
+					_start_path_to_lobby()
+					_room_entry_pos = _extra_target_pos
+					_state = "returning"
+				_think_timer = 1.0
+			else:
+				_sprite.visible = false
+				_think_timer = 1.0
+				_extra_target_pos = Vector2.INF
+		return
+		
+	var found_task = _check_for_tasks()
+	if found_task:
+		return
+		
+	# Wenn er keinen neuen Job gefunden hat (state ist immer noch idle), geht er an seinen Arbeitsplatz oder in die Pause
 	if _state == "idle":
+		var morale = _staff_data.get("morale", 100)
+		var thresholds = StaffManager.get_break_thresholds(get_staff_id()) if StaffManager and StaffManager.has_method("get_break_thresholds") else {}
+		var break_start_t = thresholds.get("break_start_threshold", 40)
+		var bed_t = thresholds.get("bed_preference_threshold", 20)
+		
+		# Pause einlegen?
+		if morale < break_start_t and not is_night:
+			var break_room = null
+			if is_instance_valid(_map_grid) and _map_grid.has_method("get_placed_rooms"):
+				for room in _map_grid.get_placed_rooms():
+					if room.has_method("get_definition") and room.get_definition().get("id") == "staff_small":
+						if room.has_method("has_free_seat") and room.has_free_seat():
+							break_room = room
+							break
+			
+			if is_instance_valid(break_room):
+				var want_bed = morale < bed_t
+				var seat_info = break_room.call("claim_seat", get_staff_id(), want_bed)
+				if not seat_info.is_empty():
+					var pos = seat_info.get("pos", Vector2.INF)
+					_look_at_pos = seat_info.get("look_at", Vector2.ZERO)
+					_arriving_room = break_room
+					_start_path_to_room(break_room, pos)
+					if _path.size() > 0:
+						_state = "walking_to_break"
+						_sprite.visible = true
+						_think_timer = 1.0
+						return
+		
+		# Kein Job, keine Pause -> Arbeitsplatz oder Chillen
 		var room = _get_assigned_room()
 		
 		if room != null and not is_night:
@@ -467,6 +567,15 @@ func _process_walking(delta: float, speed: float) -> void:
 			elif _state == "returning":
 				_state = "idle"
 				_current_room = _get_assigned_room()
+			elif _state == "walking_to_break":
+				_state = "resting"
+				if is_instance_valid(_arriving_room):
+					_current_room = _arriving_room
+					_arriving_room = null
+				if _look_at_pos != Vector2.ZERO:
+					_sprite.rotation = _sprite.global_position.angle_to_point(_look_at_pos)
+				else:
+					_sprite.rotation = 0
 			return
 
 	var move_dist = speed * delta

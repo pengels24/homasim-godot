@@ -167,6 +167,7 @@ Phase 5: Events & Prestige     ← Braucht 4.1 (G1.4 Gourmetküche)
 ## 🔮 Spätere Features (nach Alpha / Beta)
 
 - **Savegames - Actor-State-Serialisierung (ANG-314):** Beim Laden eines Spielstands exakte Positionen, Pathfinding und Timer (Gäste & Staff), offene Putz-Tasks und Gastro-Bestellungen wiederherstellen, um Immersion-Breaks zu verhindern. Erst implementieren, wenn alle State-Machines feature-complete sind.
+- **Rework: New Game UI (Erweiterte Spieleinstellungen / Seite 2):** Vergrößerung des Fensters (ggf. mit Tabs oder 2. Seite) um feinere Anpassungen von Startkapital, Mitarbeiter-Schwellenwerten (Pausenverhalten) und anderen Startbedingungen zu ermöglichen.
 - **Personalflure:** Kommt mit Nav-Rework (3 Ebenen: Gäste / Personal / Rauminneres + feineres Grid)
 - **Begehbare Räume:** Abhängig von Nav-Rework
 - **Zoning:** Mitarbeiter-Zonen auf der Karte (im Wiki skizziert)

@@ -268,7 +268,7 @@ func _on_hotel_level_up(new_level: int) -> void:
 			reward_money = 4000
 			reward_fp    = 600
 		5:
-			unlock_text  = GameState.T("levelup.unlock.l5_staff_room")
+			unlock_text  = GameState.T("levelup.unlock.l5_milestone")
 			reward_money = 5000
 			reward_fp    = 750
 		6:

@@ -1,0 +1,318 @@
+[gd_scene format=3 uid="uid://b58ngkf1rwoud"]
+
+[ext_resource type="Script" uid="uid://xqvtb5ua5ycu" path="res://scenes/ingame/rooms/staff_small/StaffSmall.gd" id="1_xqwof"]
+[ext_resource type="Texture2D" uid="uid://crdtfcp7i2spt" path="res://assets/tiles/Furniture/furniture_staff_small.aseprite" id="2_vnbbi"]
+
+[sub_resource type="Gradient" id="Gradient_2hw84"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_kdks4"]
+gradient = SubResource("Gradient_2hw84")
+
+[sub_resource type="Gradient" id="Gradient_qfmep"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_gouwv"]
+gradient = SubResource("Gradient_qfmep")
+
+[sub_resource type="Gradient" id="Gradient_evq2g"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_f8fa0"]
+gradient = SubResource("Gradient_evq2g")
+
+[sub_resource type="Gradient" id="Gradient_0kbel"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ugc3f"]
+gradient = SubResource("Gradient_0kbel")
+
+[sub_resource type="Gradient" id="Gradient_066q5"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_lv322"]
+gradient = SubResource("Gradient_066q5")
+
+[sub_resource type="Gradient" id="Gradient_cfvov"]
+offsets = PackedFloat32Array(0.4383378)
+colors = PackedColorArray(0.8509804, 0.62352943, 0.4, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_bco61"]
+gradient = SubResource("Gradient_cfvov")
+
+[sub_resource type="Gradient" id="Gradient_kdks4"]
+offsets = PackedFloat32Array(0.47066015, 0.5)
+colors = PackedColorArray(0.8509804, 0.62352943, 0.4, 1, 0.23137255, 0.23921569, 0.3019608, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6ma2u"]
+gradient = SubResource("Gradient_kdks4")
+
+[node name="StafftSmall" type="Node2D" unique_id=1555162851]
+script = ExtResource("1_xqwof")
+
+[node name="Ground" type="Node2D" parent="." unique_id=523780683]
+
+[node name="BaseFloor" type="Sprite2D" parent="Ground" unique_id=281127663]
+position = Vector2(24, 24)
+scale = Vector2(0.188, 48)
+texture = SubResource("GradientTexture1D_kdks4")
+
+[node name="WallLeft" type="Sprite2D" parent="Ground" unique_id=597280766]
+position = Vector2(1, 24)
+rotation = 3.1415927
+scale = Vector2(0.008, 48)
+texture = SubResource("GradientTexture1D_gouwv")
+
+[node name="WallRight" type="Sprite2D" parent="Ground" unique_id=1466592147]
+position = Vector2(47, 24)
+scale = Vector2(0.008, 48)
+skew = -0.00032782555
+texture = SubResource("GradientTexture1D_f8fa0")
+
+[node name="WallTop" type="Sprite2D" parent="Ground" unique_id=1374892124]
+position = Vector2(24, 1)
+rotation = 4.712389
+scale = Vector2(0.008, 48)
+texture = SubResource("GradientTexture1D_ugc3f")
+
+[node name="WallBottom" type="Sprite2D" parent="Ground" unique_id=60990802]
+position = Vector2(24, 47)
+rotation = 1.5707964
+scale = Vector2(0.008, 48)
+texture = SubResource("GradientTexture1D_lv322")
+
+[node name="Interior" type="Node2D" parent="." unique_id=455419346]
+
+[node name="Floor" type="Sprite2D" parent="Interior" unique_id=815949936]
+position = Vector2(24, 24)
+scale = Vector2(0.172, 44)
+texture = SubResource("GradientTexture1D_bco61")
+
+[node name="Furniture" type="Node2D" parent="Interior" unique_id=103375456]
+
+[node name="Living" type="Node2D" parent="Interior/Furniture" unique_id=155591077]
+
+[node name="Couch" type="Node2D" parent="Interior/Furniture/Living" unique_id=2029151998]
+
+[node name="Couch1" type="Sprite2D" parent="Interior/Furniture/Living/Couch" unique_id=880729060]
+position = Vector2(5, 19)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(64, 0, 16, 16)
+
+[node name="Couch2" type="Sprite2D" parent="Interior/Furniture/Living/Couch" unique_id=10589028]
+position = Vector2(13, 23)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(80, 0, 16, 16)
+
+[node name="Chairs" type="Node2D" parent="Interior/Furniture/Living" unique_id=945595005]
+
+[node name="Chair1" type="Sprite2D" parent="Interior/Furniture/Living/Chairs" unique_id=1630462299]
+unique_name_in_owner = true
+position = Vector2(4, 17)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(96, 0, 16, 16)
+
+[node name="Chair2" type="Sprite2D" parent="Interior/Furniture/Living/Chairs" unique_id=1778098052]
+unique_name_in_owner = true
+position = Vector2(9, 23)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(96, 0, 16, 16)
+
+[node name="Chair3" type="Sprite2D" parent="Interior/Furniture/Living/Chairs" unique_id=132585239]
+unique_name_in_owner = true
+position = Vector2(15, 23)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(96, 0, 16, 16)
+
+[node name="Chair4" type="Sprite2D" parent="Interior/Furniture/Living/Chairs" unique_id=1259947136]
+unique_name_in_owner = true
+position = Vector2(21, 16)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(32, 16, 16, 16)
+
+[node name="Flowers" type="Node2D" parent="Interior/Furniture/Living" unique_id=533381503]
+
+[node name="Plant1" type="Sprite2D" parent="Interior/Furniture/Living/Flowers" unique_id=116212206]
+position = Vector2(22, 4)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(16, 0, 16, 16)
+
+[node name="Plant2" type="Sprite2D" parent="Interior/Furniture/Living/Flowers" unique_id=282617739]
+position = Vector2(21, 44)
+rotation = -1.5707964
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(16, 0, 16, 16)
+
+[node name="Basket" type="Sprite2D" parent="Interior/Furniture/Living" unique_id=427877734]
+position = Vector2(31, 37)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(32, 0, 16, 16)
+
+[node name="Table" type="Sprite2D" parent="Interior/Furniture/Living" unique_id=1175104645]
+unique_name_in_owner = true
+position = Vector2(13, 16)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(16, 16, 16, 16)
+
+[node name="TV" type="Sprite2D" parent="Interior/Furniture/Living" unique_id=1133467453]
+position = Vector2(11, 4)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(48, 0, 16, 16)
+
+[node name="Case" type="Sprite2D" parent="Interior/Furniture/Living" unique_id=95178031]
+position = Vector2(21, 30)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Kitchen" type="Node2D" parent="Interior/Furniture" unique_id=884293715]
+
+[node name="InnerKithen" type="Sprite2D" parent="Interior/Furniture/Kitchen" unique_id=362399933]
+position = Vector2(40, 7)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(0, 16, 16, 16)
+
+[node name="Freezer" type="Sprite2D" parent="Interior/Furniture/Kitchen" unique_id=756258872]
+position = Vector2(31, 4)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(112, 0, 16, 16)
+
+[node name="Room1" type="Node2D" parent="Interior/Furniture" unique_id=1690758182]
+
+[node name="Wall1" type="Sprite2D" parent="Interior/Furniture/Room1" unique_id=1322391192]
+position = Vector2(39, 13)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(112, 16, 16, 16)
+
+[node name="Wall2" type="Sprite2D" parent="Interior/Furniture/Room1" unique_id=1860104313]
+position = Vector2(30, 17)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(0, 32, 16, 16)
+
+[node name="Wall3" type="Sprite2D" parent="Interior/Furniture/Room1" unique_id=1554242029]
+position = Vector2(30, 27)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(16, 32, 16, 16)
+
+[node name="Wall4" type="Sprite2D" parent="Interior/Furniture/Room1" unique_id=825494889]
+position = Vector2(31, 35)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(32, 32, 16, 16)
+
+[node name="Bed1" type="Sprite2D" parent="Interior/Furniture/Room1" unique_id=309182790]
+unique_name_in_owner = true
+position = Vector2(41, 17)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(80, 16, 16, 16)
+
+[node name="Bed2" type="Sprite2D" parent="Interior/Furniture/Room1" unique_id=1829642917]
+unique_name_in_owner = true
+position = Vector2(41, 30)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(80, 16, 16, 16)
+
+[node name="BedTable1" type="Sprite2D" parent="Interior/Furniture/Room1" unique_id=1480426206]
+position = Vector2(32, 16)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(48, 16, 16, 16)
+
+[node name="BedTable2" type="Sprite2D" parent="Interior/Furniture/Room1" unique_id=2077834439]
+position = Vector2(32, 32)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(48, 16, 16, 16)
+
+[node name="BedCase1" type="Sprite2D" parent="Interior/Furniture/Room1" unique_id=186952457]
+position = Vector2(45, 24)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(96, 16, 16, 16)
+
+[node name="Room2" type="Node2D" parent="Interior/Furniture" unique_id=1192285848]
+
+[node name="Wall5" type="Sprite2D" parent="Interior/Furniture/Room2" unique_id=875831561]
+position = Vector2(9, 26)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(112, 16, 16, 16)
+
+[node name="Wall6" type="Sprite2D" parent="Interior/Furniture/Room2" unique_id=431484704]
+position = Vector2(18, 29)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(48, 32, 16, 16)
+
+[node name="Wall7" type="Sprite2D" parent="Interior/Furniture/Room2" unique_id=142820776]
+position = Vector2(18, 39)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(64, 32, 16, 16)
+
+[node name="Bed3" type="Sprite2D" parent="Interior/Furniture/Room2" unique_id=952960353]
+unique_name_in_owner = true
+position = Vector2(8, 30)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(64, 16, 16, 16)
+
+[node name="Bed4" type="Sprite2D" parent="Interior/Furniture/Room2" unique_id=1980745332]
+unique_name_in_owner = true
+position = Vector2(8, 43)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(64, 16, 16, 16)
+
+[node name="BedTable3" type="Sprite2D" parent="Interior/Furniture/Room2" unique_id=566271589]
+position = Vector2(15, 29)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(48, 16, 16, 16)
+
+[node name="BedTable4" type="Sprite2D" parent="Interior/Furniture/Room2" unique_id=418837629]
+position = Vector2(15, 45)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(48, 16, 16, 16)
+
+[node name="BedCase2" type="Sprite2D" parent="Interior/Furniture/Room2" unique_id=1570198830]
+position = Vector2(4, 37)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(96, 16, 16, 16)
+
+[node name="Bathroom" type="Sprite2D" parent="Interior/Furniture" unique_id=1485738157]
+position = Vector2(40, 40)
+texture = ExtResource("2_vnbbi")
+region_enabled = true
+region_rect = Rect2(80, 32, 16, 16)
+
+[node name="Door" type="Sprite2D" parent="." unique_id=1927835578]
+position = Vector2(1.0000042, 7.999992)
+rotation = 3.1415927
+scale = Vector2(0.008, 6)
+texture = SubResource("GradientTexture1D_6ma2u")

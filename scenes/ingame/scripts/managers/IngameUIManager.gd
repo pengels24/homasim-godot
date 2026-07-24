@@ -12,6 +12,7 @@ var _schedule_mgr: IngameScheduleManager
 var _guest_mgr: GuestManager
 var _reception: Control
 var _quit_confirm: Node
+var _info_modal: Node
 var _came_from_pause: bool = false
 var _modal_is_pausing: bool = false
 
@@ -542,6 +543,28 @@ func _on_quit_confirmed() -> void:
 
 	# Alle offenen Tickets löschen – beim nächsten Start wird neu geprüft
 	TaskManager.clear_all_tasks()
+
+# =============================================================================
+func show_info_modal(title: String, message: String, btn_text: String = "") -> void:
+	if not is_instance_valid(_info_modal):
+		_info_modal = CONFIRM_SCENE.instantiate()
+		_hud.add_child(_info_modal)
+		
+	_set_modal_pausing(true)
+	
+	if not _info_modal.confirmed.is_connected(_on_info_modal_closed):
+		_info_modal.confirmed.connect(_on_info_modal_closed)
+	if not _info_modal.cancelled.is_connected(_on_info_modal_closed):
+		_info_modal.cancelled.connect(_on_info_modal_closed)
+
+	_info_modal.ask(
+		title, message,
+		btn_text if btn_text != "" else GameState.T("btn.ok", "Verstanden"),
+		"", "", false, true # is_info_only = true
+	)
+
+func _on_info_modal_closed() -> void:
+	_set_modal_pausing(false)
 
 	get_tree().paused = false
 

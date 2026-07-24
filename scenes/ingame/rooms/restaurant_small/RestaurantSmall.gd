@@ -10,7 +10,7 @@ static func get_definition() -> Dictionary:
 		"label": "RE",
 		"name": "roomdef.name.long.restaurant_small",
 		"category": "gastro",
-		"icon": "res://assets/icons/angelus2010/Rooms/ang-restaurant.aseprite",
+		"icon": "res://assets/icons/angelus2010/Rooms/ang-restaurant-small.aseprite",
 		"nightly_price": 0,
 		"locked": false,
 		"in_build_menu": true,

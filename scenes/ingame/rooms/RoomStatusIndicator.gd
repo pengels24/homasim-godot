@@ -89,5 +89,9 @@ func hide_progress(worker_id: String) -> void:
 	if _active_progress.is_empty():
 		progress_bar.visible = false
 		progress_bar.value = 0.0
+		
+		var has_icons = icon_clean.visible or icon_repair.visible or icon_demolish.visible or (icon_unstaffed and icon_unstaffed.visible)
+		if not has_icons:
+			hide()
 	
 	size = Vector2.ZERO

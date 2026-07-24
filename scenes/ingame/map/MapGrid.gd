@@ -750,8 +750,19 @@ func _set_camera_limits() -> void:
 # =============================================================================
 func _apply_zoom(delta: float) -> void:
 	_clear_saved_view()
-	var new_zoom: float = clampf(camera.zoom.x + delta, ZOOM_MIN, ZOOM_MAX)
+	var old_zoom = camera.zoom.x
+	var new_zoom: float = clampf(old_zoom + delta, ZOOM_MIN, ZOOM_MAX)
+	if old_zoom == new_zoom:
+		return
+		
+	var mouse_screen_pos = get_viewport().get_mouse_position()
+	var vp_size = get_viewport_rect().size
+	var mouse_offset_screen = mouse_screen_pos - (vp_size / 2.0)
+	
 	camera.zoom = Vector2(new_zoom, new_zoom)
+	
+	# Kamera verschieben, damit der Punkt unter der Maus fixiert bleibt
+	camera.global_position += mouse_offset_screen * (1.0 / old_zoom - 1.0 / new_zoom)
 
 
 # =============================================================================

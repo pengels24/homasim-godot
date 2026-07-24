@@ -54,6 +54,7 @@ gradient = SubResource("Gradient_kdks4")
 
 [node name="StafftSmall" type="Node2D" unique_id=1555162851]
 script = ExtResource("1_xqwof")
+base_size = Vector2i(3, 3)
 
 [node name="Ground" type="Node2D" parent="." unique_id=523780683]
 
@@ -310,6 +311,20 @@ position = Vector2(40, 40)
 texture = ExtResource("2_vnbbi")
 region_enabled = true
 region_rect = Rect2(80, 32, 16, 16)
+
+[node name="WayPoints" type="Node2D" parent="Interior" unique_id=719845401]
+
+[node name="WayPoint1" type="Node2D" parent="Interior/WayPoints" unique_id=2117403158]
+unique_name_in_owner = true
+position = Vector2(7, 9)
+
+[node name="WayPoint2" type="Node2D" parent="Interior/WayPoints" unique_id=599907539]
+unique_name_in_owner = true
+position = Vector2(23, 9)
+
+[node name="WayPoint3" type="Node2D" parent="Interior/WayPoints" unique_id=1479210231]
+unique_name_in_owner = true
+position = Vector2(38, 9)
 
 [node name="Door" type="Sprite2D" parent="." unique_id=1927835578]
 position = Vector2(1.0000042, 7.999992)

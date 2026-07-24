@@ -92,7 +92,8 @@ func setup(room: Node2D) -> void:
 	
 func _on_color_changed(color: Color) -> void:
 	if is_instance_valid(_target_room):
-		_target_room.set("custom_color", color.to_html(false))
+		if "custom_color" in _target_room:
+			_target_room.set("custom_color", color)
 	
 func _process(delta: float) -> void:
 	_update_timer += delta

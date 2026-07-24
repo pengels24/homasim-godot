@@ -285,14 +285,13 @@ func _count_role_in_room(room_id: String, role: String) -> int:
 # =============================================================================
 func get_max_staff_capacity() -> int:
 	var count = 0
-	if not GameState.selected_hotel.is_empty():
-		var plots = GameState.selected_hotel.get("plot_built", {})
-		for plot_key in plots.keys():
-			var plot = plots[plot_key]
-			if plot is Dictionary and plot.has("rooms"):
-				for r in plot["rooms"]:
-					if r.get("id") == "staff_small":
-						count += 1
+	if SaveManager.has_method("get_built_plots"):
+		var plots = SaveManager.get_built_plots(GameState.active_hotel_id)
+		for plot in plots:
+			var rooms: Array = plot.get("rooms", [])
+			for r in rooms:
+				if r.get("room_type_id") == "staff_small":
+					count += 1
 	return count * 4
 
 # =============================================================================
@@ -462,7 +461,7 @@ func get_break_thresholds(_staff_id: String) -> Dictionary:
 		b_accept = 60
 		
 	# Techtree-Boni (Management)
-	var traits = GameState.get_unlocked_traits()
+	var traits = TechtreeManager.unlocked_techs if TechtreeManager else []
 	if "ui.techtree.feature.m12_train" in traits:
 		b_start += 10
 		b_bed += 10

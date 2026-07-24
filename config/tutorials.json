@@ -83,35 +83,35 @@
             "category": "codex",
             "title_key": "codex.guest_single.title",
             "desc_key": "codex.guest_single.desc",
-            "image": "res://assets/icons/guests/user.svg"
+            "image": "res://assets/guesttypes/gt-icon-single.aseprite"
         },
         {
             "id": "guest_couple",
             "category": "codex",
             "title_key": "codex.guest_couple.title",
             "desc_key": "codex.guest_couple.desc",
-            "image": "res://assets/icons/guests/users.svg"
+            "image": "res://assets/guesttypes/gt-icon-couple.aseprite"
         },
         {
             "id": "guest_business",
             "category": "codex",
             "title_key": "codex.guest_business.title",
             "desc_key": "codex.guest_business.desc",
-            "image": "res://assets/icons/guests/briefcase.svg"
+            "image": "res://assets/guesttypes/gt-icon-business.aseprite"
         },
         {
             "id": "guest_family",
             "category": "codex",
             "title_key": "codex.guest_family.title",
             "desc_key": "codex.guest_family.desc",
-            "image": "res://assets/icons/guests/van.svg"
+            "image": "res://assets/guesttypes/gt-icon-family.aseprite"
         },
         {
             "id": "guest_budget",
             "category": "codex",
             "title_key": "codex.guest_budget.title",
             "desc_key": "codex.guest_budget.desc",
-            "image": "res://assets/icons/guests/wallet-minimal.svg"
+            "image": "res://assets/guesttypes/gt-icon-budget.aseprite"
         },
         {
             "id": "guest_nomad",
@@ -125,7 +125,7 @@
             "category": "codex",
             "title_key": "codex.guest_event.title",
             "desc_key": "codex.guest_event.desc",
-            "image": "res://assets/icons/guests/sunset.svg"
+            "image": "res://assets/guesttypes/gt-icon-event.aseprite"
         },
         {
             "id": "guest_luxury",

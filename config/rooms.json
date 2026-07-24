@@ -39,6 +39,11 @@
       "id": "restaurant_small",
       "scene_path": "res://scenes/ingame/rooms/restaurant_small/Restaurant_Small.tscn",
       "script_path": "res://scenes/ingame/rooms/restaurant_small/RestaurantSmall.gd"
+    },
+    {
+      "id": "staff_small",
+      "scene_path": "res://scenes/ingame/rooms/staff_small/Staff_Small.tscn",
+      "script_path": "res://scenes/ingame/rooms/staff_small/StaffSmall.gd"
     }
   ]
 }

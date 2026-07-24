@@ -194,9 +194,9 @@ func _get_guest_name_for_room(room_id: String) -> Array:
 
 func _set_status_color(lbl: Label, value: int) -> void:
 	if value < 30:
-		lbl.add_theme_color_override("font_color", Color.RED)
+		lbl.add_theme_color_override("font_color", Color("#b02e3b"))
 	elif value < 70:
-		lbl.add_theme_color_override("font_color", Color.YELLOW)
+		lbl.add_theme_color_override("font_color", Color("#EAB308"))
 	else:
 		lbl.add_theme_color_override("font_color", Color("#CCCCCC"))
 

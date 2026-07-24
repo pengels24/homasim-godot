@@ -197,20 +197,21 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 	lbl_energy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lbl_energy.size_flags_stretch_ratio = 1.0
 	if energy_val < 30:
-		lbl_energy.add_theme_color_override("font_color", Color.RED)
+		lbl_energy.add_theme_color_override("font_color", Color("#b02e3b"))
 	else:
 		lbl_energy.add_theme_color_override("font_color", font_color)
 		
 	# Satisfaction
 	var lbl_sat = Label.new()
-	lbl_sat.text = "%d%%" % int(party.satisfaction)
+	var sat = party.satisfaction
+	lbl_sat.text = "%d%%" % int(sat)
 	lbl_sat.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	lbl_sat.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lbl_sat.size_flags_stretch_ratio = 1.0
-	if party.satisfaction < 30:
-		lbl_sat.add_theme_color_override("font_color", Color.RED)
-	elif party.satisfaction > 80:
-		lbl_sat.add_theme_color_override("font_color", Color.GREEN)
+	if sat < 50:
+		lbl_sat.add_theme_color_override("font_color", Color("#b02e3b"))
+	elif sat > 80:
+		lbl_sat.add_theme_color_override("font_color", Color("#366e4d"))
 	else:
 		lbl_sat.add_theme_color_override("font_color", font_color)
 		
@@ -317,6 +318,7 @@ func _refresh_live_data() -> void:
 		var goal_text_short = "---"
 		var goal_text_long = "---"
 		var energy_val = member.saturation if "saturation" in member else 100.0
+		var sat = party.satisfaction
 		
 		if actor:
 			var state = actor.get("current_state")
@@ -370,20 +372,20 @@ func _refresh_live_data() -> void:
 		row.lbl_goal.text = goal_text_short
 		row.lbl_energy.text = "%d%%" % int(energy_val)
 		if energy_val < 30:
-			row.lbl_energy.add_theme_color_override("font_color", Color.RED)
+			row.lbl_energy.add_theme_color_override("font_color", Color("#b02e3b"))
 		else:
 			row.lbl_energy.add_theme_color_override("font_color", Color("#CCCCCC"))
 			
-		row.lbl_sat.text = "%d%%" % int(party.satisfaction)
-		if party.satisfaction < 30:
-			row.lbl_sat.add_theme_color_override("font_color", Color.RED)
-		elif party.satisfaction > 80:
-			row.lbl_sat.add_theme_color_override("font_color", Color.GREEN)
+		row.lbl_sat.text = "%d%%" % int(sat)
+		if sat < 50:
+			row.lbl_sat.add_theme_color_override("font_color", Color("#b02e3b"))
+		elif sat > 80:
+			row.lbl_sat.add_theme_color_override("font_color", Color("#366e4d"))
 		else:
 			row.lbl_sat.add_theme_color_override("font_color", Color("#CCCCCC"))
 			
 		if _selected_guest and member.id == (_selected_guest.get("id") if "id" in _selected_guest else ""):
-			detail_satisfaction_val.text = "%d%%" % party.satisfaction
+			detail_satisfaction_val.text = "%d%%" % sat
 			detail_status_val.text = goal_text_long
 
 func _on_goto_pressed() -> void:

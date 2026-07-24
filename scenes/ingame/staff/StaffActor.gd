@@ -26,6 +26,7 @@ var _debug_line: Line2D
 var _base_speed := 40.0
 
 func _ready() -> void:
+	add_to_group("staff_actors")
 	_work_audio = AudioStreamPlayer.new()
 	_work_audio.bus = "Sound"
 	add_child(_work_audio)
@@ -364,7 +365,7 @@ func _process_idle() -> void:
 				_sprite.visible = true
 				# Im Raum chillen - ab und zu ein bisschen umhergehen
 				# Barkeeper: immer am Tresen stehen bleiben
-				if my_job == "bartender" and is_instance_valid(_current_room) and _current_room.has_method("get_bartender_stand_pos"):
+				if get_job_type() == "bartender" and is_instance_valid(_current_room) and _current_room.has_method("get_bartender_stand_pos"):
 					var stand_pos = _current_room.get_bartender_stand_pos()
 					if global_position.distance_to(stand_pos) > 6.0:
 						_target_world_pos = stand_pos
@@ -381,14 +382,14 @@ func _process_idle() -> void:
 					var wander_center = global_position
 					var max_radius = 16.0
 					
-					if my_job == "waiter" and is_instance_valid(_current_room) and _current_room.has_method("get_waiter_stand_pos"):
+					if get_job_type() == "waiter" and is_instance_valid(_current_room) and _current_room.has_method("get_waiter_stand_pos"):
 						wander_center = _current_room.get_waiter_stand_pos()
 						max_radius = 12.0
 						
 					var offset = Vector2(randf_range(-max_radius, max_radius), randf_range(-max_radius, max_radius))
 					var target = wander_center + offset
 					
-					if my_job == "waiter" and is_instance_valid(_current_room) and _current_room.has_method("get_waiter_stand_pos"):
+					if get_job_type() == "waiter" and is_instance_valid(_current_room) and _current_room.has_method("get_waiter_stand_pos"):
 						# Waiter bleibt strikt in seinem Radius um den Standpunkt
 						_target_world_pos = target
 						_state = "walking"
@@ -402,22 +403,76 @@ func _process_idle() -> void:
 							_path = [_target_world_pos]
 					_think_timer = 2.0 + randf() * 2.0
 		else:
-			if _room_entry_pos == Vector2.INF and _extra_target_pos == Vector2.INF and _target_world_pos == Vector2.ZERO:
-				pass
-			if not _sprite.visible:
-				return
-			if _extra_target_pos == Vector2.INF:
-				_extra_target_pos = _controller._get_lobby_spawn_pos()
-				
-			if global_position.distance_to(_extra_target_pos) > 10.0:
-				if _state != "returning":
-					_start_path_to_lobby()
-					_room_entry_pos = _extra_target_pos
-					_state = "returning"
-				_think_timer = 1.0
+			var break_room = null
+			if is_instance_valid(_map_grid) and _map_grid.has_method("get_placed_rooms"):
+				for r in _map_grid.get_placed_rooms():
+					if r.has_method("get_definition") and r.get_definition().get("id") == "staff_small":
+						break_room = r
+						break
+			
+			if is_instance_valid(break_room):
+				# Sitzplatz im Pausenraum suchen (nur wenn Moral nicht voll ist, sonst stehen sie auch mal rum)
+				var seat_info = {}
+				if _staff_data.get("morale", 100) < 95:
+					seat_info = break_room.call("claim_seat", get_staff_id(), false)
+				if not seat_info.is_empty():
+					var pos = seat_info.get("pos", Vector2.INF)
+					_look_at_pos = seat_info.get("look_at", Vector2.ZERO)
+					_arriving_room = break_room
+					_start_path_to_room(break_room, pos)
+					if _path.size() > 0:
+						_state = "walking_to_break"
+						_sprite.visible = true
+					_think_timer = 1.0
+				else:
+					if _current_room != break_room:
+						_arriving_room = break_room
+						var extra_pos = Vector2.INF
+						if break_room.has_method("get_waypoints"):
+							var wps = break_room.get_waypoints()
+							if wps.size() > 0:
+								extra_pos = wps[0] # wp1
+						_start_path_to_room(break_room, extra_pos)
+						if _path.size() > 0:
+							_state = "returning"
+							_sprite.visible = true
+						_think_timer = 1.0
+					else:
+						_sprite.visible = true
+						if randf() < 0.1:
+							if break_room.has_method("get_waypoints"):
+								var wps = break_room.get_waypoints()
+								if wps.size() > 0:
+									var wp = wps[randi() % wps.size()]
+									_target_world_pos = wp + Vector2(randf_range(-3.0, 3.0), randf_range(-3.0, 3.0))
+									_state = "walking"
+									_path = [_target_world_pos]
+							else:
+								var sz = break_room.get_tile_size() * 16.0 if break_room.has_method("get_tile_size") else Vector2(48.0, 48.0)
+								var r_rect = Rect2(break_room.global_position + Vector2(4.0, 4.0), Vector2(sz.x * break_room.global_scale.x - 8.0, sz.y * break_room.global_scale.y - 8.0))
+								var target = break_room.global_position + Vector2(randf_range(8.0, sz.x - 8.0), randf_range(8.0, sz.y - 8.0))
+								if r_rect.has_point(target):
+									_target_world_pos = target
+									_state = "walking"
+									_path = [_target_world_pos]
+						_think_timer = 5.0 + randf() * 5.0
 			else:
-				_sprite.visible = false
-				_think_timer = 1.0
+				if _room_entry_pos == Vector2.INF and _extra_target_pos == Vector2.INF and _target_world_pos == Vector2.ZERO:
+					pass
+				if not _sprite.visible:
+					return
+				if _extra_target_pos == Vector2.INF:
+					_extra_target_pos = _controller._get_lobby_spawn_pos()
+					
+				if global_position.distance_to(_extra_target_pos) > 10.0:
+					if _state != "returning":
+						_start_path_to_lobby()
+						_room_entry_pos = _extra_target_pos
+						_state = "returning"
+					_think_timer = 1.0
+				else:
+					_sprite.visible = false
+					_think_timer = 1.0
 				_extra_target_pos = Vector2.INF
 
 func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void:
@@ -523,12 +578,22 @@ func _process_walking(delta: float, speed: float) -> void:
 					_target_world_pos = _extra_target_pos
 					_extra_target_pos = Vector2.INF
 				else:
-					_target_world_pos = global_position
+					pass # Don't lose the exact target position!
+		else:
+			if _room_entry_pos != Vector2.INF:
+				_target_world_pos = _room_entry_pos
+				_room_entry_pos = Vector2.INF
+			elif _extra_target_pos != Vector2.INF:
+				_target_world_pos = _extra_target_pos
+				_extra_target_pos = Vector2.INF
+			else:
+				pass # Don't lose the exact target position!
 		
 		# Update dist for new target
 		dist_to_target = current_pos.distance_to(_target_world_pos)
 		
 		if _path.is_empty() and dist_to_target < 5.0:
+			global_position = _target_world_pos # Snap exactly to target (e.g. seat or table)
 			if _state == "walking":
 				_state = "working"
 				if not _current_task.is_empty() and _current_task.type == "serve_meal" and not _current_task.has("fetched"):
@@ -566,16 +631,20 @@ func _process_walking(delta: float, speed: float) -> void:
 						_arriving_room = null
 			elif _state == "returning":
 				_state = "idle"
-				_current_room = _get_assigned_room()
+				if is_instance_valid(_arriving_room):
+					_current_room = _arriving_room
+					_arriving_room = null
+				else:
+					_current_room = _get_assigned_room()
 			elif _state == "walking_to_break":
 				_state = "resting"
 				if is_instance_valid(_arriving_room):
 					_current_room = _arriving_room
 					_arriving_room = null
 				if _look_at_pos != Vector2.ZERO:
-					_sprite.rotation = _sprite.global_position.angle_to_point(_look_at_pos)
+					_sprite.rotation = _sprite.global_position.angle_to_point(_look_at_pos) + PI / 2.0
 				else:
-					_sprite.rotation = 0
+					_sprite.rotation = PI / 2.0 # Default auf rechts drehen wenn man sitzt
 			return
 
 	var move_dist = speed * delta

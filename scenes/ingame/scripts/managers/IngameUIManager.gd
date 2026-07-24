@@ -535,16 +535,6 @@ func _on_pause_quit() -> void:
 
 
 # =============================================================================
-func _on_quit_confirmed() -> void:
-	TimeManager.sig_save_requested.emit(TimeManager.get_game_time())
-	var hotel_id: int = GameState.active_hotel_id
-	if hotel_id >= 0:
-		SaveManager.save_auto(hotel_id)
-
-	# Alle offenen Tickets löschen – beim nächsten Start wird neu geprüft
-	TaskManager.clear_all_tasks()
-
-# =============================================================================
 func show_info_modal(title: String, message: String, btn_text: String = "") -> void:
 	if not is_instance_valid(_info_modal):
 		_info_modal = CONFIRM_SCENE.instantiate()
@@ -559,12 +549,22 @@ func show_info_modal(title: String, message: String, btn_text: String = "") -> v
 
 	_info_modal.ask(
 		title, message,
-		btn_text if btn_text != "" else GameState.T("btn.ok", "Verstanden"),
+		btn_text if btn_text != "" else GameState.T("daystart.btn.ok", "Verstanden"),
 		"", "", false, true # is_info_only = true
 	)
 
 func _on_info_modal_closed() -> void:
 	_set_modal_pausing(false)
+
+# =============================================================================
+func _on_quit_confirmed() -> void:
+	TimeManager.sig_save_requested.emit(TimeManager.get_game_time())
+	var hotel_id: int = GameState.active_hotel_id
+	if hotel_id >= 0:
+		SaveManager.save_auto(hotel_id)
+
+	# Alle offenen Tickets löschen – beim nächsten Start wird neu geprüft
+	TaskManager.clear_all_tasks()
 
 	get_tree().paused = false
 

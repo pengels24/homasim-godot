@@ -30,6 +30,7 @@ var SB_BLUE_PRESSED = preload("res://assets/UI/menu_button_blue_pressed.tres")
 
 var SB_DARK = preload("res://assets/UI/menu_button_darkblue.tres")
 var SB_DARK_HOVER = preload("res://assets/UI/menu_button_darkblue_hover.tres")
+var SB_DARK_DISABLED = preload("res://assets/UI/menu_button_darkblue_disabled.tres")
 
 var SB_GREEN = preload("res://assets/UI/menu_button_green.tres")
 var SB_GREEN_HOVER = preload("res://assets/UI/menu_button_green_hover.tres")
@@ -56,6 +57,8 @@ func _style_action_btn(btn: Button, type: String) -> void:
 		btn.add_theme_stylebox_override("hover", SB_RED_HOVER)
 		btn.add_theme_stylebox_override("pressed", SB_RED_PRESSED)
 		btn.add_theme_stylebox_override("focus", SB_RED)
+	elif type == "disabled":
+		btn.add_theme_stylebox_override("disabled", SB_DARK_DISABLED)
 
 func _ready() -> void:
 	var ingame = get_tree().get_root().get_node_or_null("Ingame")
@@ -307,12 +310,11 @@ func _refresh_list() -> void:
 			lbl_morale.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			lbl_morale.size_flags_stretch_ratio = 1.5
 			if item.get("morale", 100) < 50:
-				lbl_morale.add_theme_color_override("font_color", Color.RED)
+				lbl_morale.add_theme_color_override("font_color", Color("#b02e3b"))
 			elif item.get("morale", 100) > 80:
-				lbl_morale.add_theme_color_override("font_color", Color.GREEN)
+				lbl_morale.add_theme_color_override("font_color", Color("#366e4d"))
 			else:
 				lbl_morale.add_theme_color_override("font_color", list_font_color)
-			
 			# Status (Stretch 2.0)
 			var lbl_status = Label.new()
 			lbl_status.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -429,12 +431,11 @@ func _create_progress_row(label_text: String, current_val: float, max_val: float
 	progress.add_theme_stylebox_override("background", sb_bg)
 	
 	var sb_fg = StyleBoxFlat.new()
-	sb_fg.bg_color = Color.GOLD
+	sb_fg.bg_color = Color("#EAB308")
 	if is_percent and current_val < 50:
-		sb_fg.bg_color = Color.RED
+		sb_fg.bg_color = Color("#b02e3b")
 	elif is_percent and current_val > 80:
-		sb_fg.bg_color = Color.GREEN
-		
+		sb_fg.bg_color = Color("#366e4d")
 	sb_fg.corner_radius_top_left = 4
 	sb_fg.corner_radius_top_right = 4
 	sb_fg.corner_radius_bottom_right = 4
@@ -491,9 +492,9 @@ func _refresh_live_data() -> void:
 		var m = item.get("morale", 100)
 		lbl_morale.text = "%d%%" % m
 		if m < 50:
-			lbl_morale.add_theme_color_override("font_color", Color.RED)
+			lbl_morale.add_theme_color_override("font_color", Color("#b02e3b"))
 		elif m > 80:
-			lbl_morale.add_theme_color_override("font_color", Color.GREEN)
+			lbl_morale.add_theme_color_override("font_color", Color("#366e4d"))
 		else:
 			lbl_morale.add_theme_color_override("font_color", list_font_color)
 			
@@ -642,10 +643,17 @@ func _update_details() -> void:
 		if _get_available_poi_roles().has(job):
 			var max_cap = StaffManager.get_max_staff_capacity() if StaffManager.has_method("get_max_staff_capacity") else 10
 			var cur_cap = StaffManager.hired_staff.size() if StaffManager else 0
-			if cur_cap >= max_cap:
-				action_btn.text = GameState.T("toast.staff.limit_reached")
+			var is_training = (s.get("training_state", "none") != "none")
+			if is_training:
+				action_btn.text = GameState.T("ui.staff.assign.training_locked")
 				action_btn.disabled = true
-				action_btn.modulate = Color(1, 1, 1, 0.5)
+				action_btn.modulate = Color(1, 1, 1, 1.0)
+				_style_action_btn(action_btn, "disabled")
+			elif cur_cap >= max_cap:
+				action_btn.text = GameState.T("toast.staff.limit_reached") % max_cap
+				action_btn.disabled = true
+				action_btn.modulate = Color(1, 1, 1, 1.0)
+				_style_action_btn(action_btn, "disabled")
 			else:
 				action_btn.text = GameState.T("ui.staff.hire")
 				action_btn.disabled = false
@@ -655,7 +663,8 @@ func _update_details() -> void:
 		else:
 			action_btn.text = "Kein Arbeitsplatz"
 			action_btn.disabled = true
-			_style_action_btn(action_btn, "red")
+			action_btn.modulate = Color(1, 1, 1, 1.0)
+			_style_action_btn(action_btn, "disabled")
 			action_btn.tooltip_text = "Dieser Beruf benötigt einen entsprechenden Arbeitsplatz (POI), der noch nicht gebaut wurde."
 		
 	var skills = s.get("skills", {})

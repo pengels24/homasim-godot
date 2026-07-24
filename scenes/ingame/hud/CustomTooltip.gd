@@ -133,6 +133,27 @@ func _update_content() -> void:
 			guests_label.show()
 		else:
 			guests_label.hide()
+	elif def.get("is_staff_poi", false) and _target_room.has_method("get_live_details"):
+		status = "" # Remove "Frei" for staff rooms
+		var details = _target_room.get_live_details()
+		if details.size() > 0:
+			var txt_trans = GameState.T("room.tooltip.staff_present")
+			if txt_trans == "room.tooltip.staff_present":
+				txt_trans = "Personal anwesend: %d"
+			var txt = txt_trans % details.size()
+			var staff_names = []
+			for row in details:
+				staff_names.append("👤 " + row.get("left", ""))
+			
+			var display_names = staff_names.slice(0, 5)
+			txt += "\n" + "\n".join(display_names)
+			if staff_names.size() > 5:
+				txt += "\n" + (GameState.T("room.tooltip.and_more") % (staff_names.size() - 5))
+			
+			guests_label.text = txt
+			guests_label.show()
+		else:
+			guests_label.hide()
 	else:
 		# GuestManager direkt befragen (nicht mehr über room._guest_mgr)
 		var ingame = get_tree().get_root().get_node_or_null("Ingame")

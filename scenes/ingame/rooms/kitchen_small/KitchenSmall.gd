@@ -10,7 +10,7 @@ static func get_definition() -> Dictionary:
 		"label": "KÜ",
 		"name": "roomdef.name.long.kitchen_small",
 		"category": "gastro",
-		"icon": "res://assets/icons/angelus2010/Rooms/ang-kitchen.aseprite",
+		"icon": "res://assets/icons/angelus2010/Rooms/ang-kitchen-small.aseprite",
 		"nightly_price": 0,
 		"locked": false,
 		"in_build_menu": true,

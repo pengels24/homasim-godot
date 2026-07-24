@@ -670,7 +670,7 @@ staff.tooltip.motivation,Motivation: %d / 10,Motivation: %d / 10
 staff.tooltip.motivation_unknown,Motivation: Unbekannt,Motivation: Unknown
 staff.tooltip.status,Status: ,Status: 
 staff.tooltip.target,Ziel: ,Target: 
-staff.tooltip.state.idle,Bereit (Wartet),Ready (Waiting)
+staff.tooltip.state.idle,Bereit | Wartet,Ready | Waiting
 staff.tooltip.target.staffroom,Personalraum,Staff Room
 staff.tooltip.state.returning,Rückkehr,Returning
 staff.tooltip.state.walking,Unterwegs,Walking
@@ -1259,3 +1259,6 @@ techtree.prestige.p13.desc,VIP-Events! Ermöglicht das Anlocken von hochkarätig
 ui.staff.assign.training_locked,In Schulung (Gesperrt),In Training (Locked)
 ui.info.staff_capacity.title,Personal-Limit überschritten,Staff Limit Exceeded
 ui.info.staff_capacity.msg,Du hast mehr Personal eingestellt als Pausenräume zur Verfügung stehen. Das Spiel läuft normal weiter aber du musst weitere Pausenräume bauen bevor du neue Mitarbeiter einstellen kannst.,You have hired more staff than you have staff rooms available. The game will continue normally but you must build more staff rooms before hiring new employees.
+
+roomdef.name.long.staff_small,Personalraum,Staff Room
+room.tooltip.staff_present,Personal anwesend: %d,Staff present: %d

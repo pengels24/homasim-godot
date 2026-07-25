@@ -670,7 +670,7 @@ staff.tooltip.motivation,Motivation: %d / 10,Motivation: %d / 10
 staff.tooltip.motivation_unknown,Motivation: Unbekannt,Motivation: Unknown
 staff.tooltip.status,Status: ,Status: 
 staff.tooltip.target,Ziel: ,Target: 
-staff.tooltip.state.idle,Bereit | Wartet,Ready | Waiting
+staff.tooltip.state.idle,Wartet,Waiting
 staff.tooltip.target.staffroom,Personalraum,Staff Room
 staff.tooltip.state.returning,Rückkehr,Returning
 staff.tooltip.state.walking,Unterwegs,Walking

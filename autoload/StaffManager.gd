@@ -472,3 +472,8 @@ func get_break_thresholds(_staff_id: String) -> Dictionary:
 		"bed_preference_threshold": b_bed,
 		"task_accept_threshold": b_accept
 	}
+
+func can_demolish_staff_room(capacity_to_remove: int = 4) -> bool:
+	var current_staff_count = hired_staff.size()
+	var new_max_capacity = max(0, get_max_staff_capacity() - capacity_to_remove)
+	return current_staff_count <= new_max_capacity

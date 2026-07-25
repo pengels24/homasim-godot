@@ -70,7 +70,19 @@ func _ready() -> void:
 # STAFF INTERACTION
 # =============================================================================
 
+func get_occupied_count() -> int:
+	var unique = {}
+	for seat in _seats:
+		if seat["occupied_by"] != "":
+			unique[seat["occupied_by"]] = true
+	return unique.size()
+
 func has_free_seat() -> bool:
+	var def = get_definition()
+	var cap = def.get("capacity", 4)
+	if get_occupied_count() >= cap:
+		return false
+		
 	for seat in _seats:
 		if seat["occupied_by"] == "":
 			return true
@@ -78,6 +90,13 @@ func has_free_seat() -> bool:
 
 ## Belegt einen freien Platz und gibt Position und Blickrichtung zurück.
 func claim_seat(staff_id: String, prefer_bed: bool = false) -> Dictionary:
+	leave_seat(staff_id) # Falls er schon einen Platz hat, diesen freigeben
+	
+	var def = get_definition()
+	var cap = def.get("capacity", 4)
+	if get_occupied_count() >= cap:
+		return {}
+		
 	var target_seat = null
 	
 	# 1. Bevorzugten Typ suchen

@@ -266,6 +266,12 @@ func _on_demolish_pressed() -> void:
 	var def = {}
 	if room.has_method("get_definition"):
 		def = room.get_definition()
+		
+	if def.get("is_staff_poi", false) and def.get("capacity", 0) > 0:
+		if StaffManager and not StaffManager.can_demolish_staff_room(def.get("capacity", 4)):
+			if is_instance_valid(Toast): Toast.show(GameState.T("toast.room.staff_capacity_error", "Personal abbauen bevor abgerissen wird!"), "build", false)
+			close()
+			return
 	var room_name = GameState.T(def.get("name", "Zimmer"))
 	var room_number = room.get("room_number")
 	if room_number and str(room_number) != "":

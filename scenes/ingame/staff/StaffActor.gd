@@ -14,6 +14,7 @@ var _work_timer_max: float = 20.0
 var _think_timer: float = 0.0
 var _work_audio: AudioStreamPlayer
 var _path: Array[Vector2i] = []
+var _world_path: Array[Vector2] = []
 var _target_world_pos: Vector2 = Vector2.ZERO
 var _room_entry_pos: Vector2 = Vector2.INF
 var _extra_target_pos: Vector2 = Vector2.INF
@@ -34,6 +35,7 @@ func _ready() -> void:
 	
 	if has_node("ClickArea"):
 		var ca = get_node("ClickArea")
+		ca.z_index = 10
 		if not ca.input_event.is_connected(_on_click_area_input_event):
 			ca.input_event.connect(_on_click_area_input_event)
 			
@@ -46,6 +48,7 @@ func _on_hour_passed(_hour: int) -> void:
 
 func _on_click_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		get_viewport().set_input_as_handled()
 		GameState.sig_staff_clicked.emit(self)
 
 func configure(staff_data: Dictionary, map_grid: Node2D, controller: Node) -> void:
@@ -311,13 +314,17 @@ func _process_idle() -> void:
 					_look_at_pos = seat_info.get("look_at", Vector2.ZERO)
 					_arriving_room = break_room
 					if _current_room == break_room:
-						_target_world_pos = pos
-						_path = []
+						if break_room.has_method("get_local_path"):
+							_world_path = break_room.get_local_path(global_position, pos)
+						else:
+							_world_path = [global_position, pos]
+						if _world_path.size() > 0:
+							_target_world_pos = _world_path[0]
 						_state = "walking_to_break"
 						_sprite.visible = true
 					else:
 						_start_path_to_room(break_room, pos)
-						if _path.size() > 0:
+						if _world_path.size() > 0:
 							_state = "walking_to_break"
 							_sprite.visible = true
 						else:
@@ -370,14 +377,18 @@ func _process_idle() -> void:
 					_look_at_pos = seat_info.get("look_at", Vector2.ZERO)
 					_arriving_room = break_room
 					if _current_room == break_room:
-						_target_world_pos = pos
-						_path = []
+						if break_room.has_method("get_local_path"):
+							_world_path = break_room.get_local_path(global_position, pos)
+						else:
+							_world_path = [global_position, pos]
+						if _world_path.size() > 0:
+							_target_world_pos = _world_path[0]
 						_state = "walking_to_break"
 						_sprite.visible = true
 						return
 					else:
 						_start_path_to_room(break_room, pos)
-						if _path.size() > 0:
+						if _world_path.size() > 0:
 							_state = "walking_to_break"
 							_sprite.visible = true
 							_think_timer = 1.0
@@ -450,13 +461,17 @@ func _process_idle() -> void:
 					_look_at_pos = seat_info.get("look_at", Vector2.ZERO)
 					_arriving_room = break_room
 					if _current_room == break_room:
-						_target_world_pos = pos
-						_path = []
+						if break_room.has_method("get_local_path"):
+							_world_path = break_room.get_local_path(global_position, pos)
+						else:
+							_world_path = [global_position, pos]
+						if _world_path.size() > 0:
+							_target_world_pos = _world_path[0]
 						_state = "walking_to_break"
 						_sprite.visible = true
 					else:
 						_start_path_to_room(break_room, pos)
-						if _path.size() > 0:
+						if _world_path.size() > 0:
 							_state = "walking_to_break"
 							_sprite.visible = true
 					_think_timer = 1.0
@@ -469,7 +484,7 @@ func _process_idle() -> void:
 							if wps.size() > 0:
 								extra_pos = wps[0] # wp1
 						_start_path_to_room(break_room, extra_pos)
-						if _path.size() > 0:
+						if _world_path.size() > 0:
 							_state = "returning"
 							_sprite.visible = true
 						_think_timer = 1.0
@@ -480,17 +495,25 @@ func _process_idle() -> void:
 								var wps = break_room.get_waypoints()
 								if wps.size() > 0:
 									var wp = wps[randi() % wps.size()]
-									_target_world_pos = wp + Vector2(randf_range(-3.0, 3.0), randf_range(-3.0, 3.0))
+									if break_room.has_method("get_local_path"):
+										_world_path = break_room.get_local_path(global_position, wp + Vector2(randf_range(-3.0, 3.0), randf_range(-3.0, 3.0)))
+									else:
+										_world_path = [global_position, wp + Vector2(randf_range(-3.0, 3.0), randf_range(-3.0, 3.0))]
+									if _world_path.size() > 0:
+										_target_world_pos = _world_path[0]
 									_state = "walking"
-									_path = [_target_world_pos]
 							else:
 								var sz = break_room.get_tile_size() * 16.0 if break_room.has_method("get_tile_size") else Vector2(48.0, 48.0)
 								var r_rect = Rect2(break_room.global_position + Vector2(4.0, 4.0), Vector2(sz.x * break_room.global_scale.x - 8.0, sz.y * break_room.global_scale.y - 8.0))
 								var target = break_room.global_position + Vector2(randf_range(8.0, sz.x - 8.0), randf_range(8.0, sz.y - 8.0))
 								if r_rect.has_point(target):
-									_target_world_pos = target
+									if break_room.has_method("get_local_path"):
+										_world_path = break_room.get_local_path(global_position, target)
+									else:
+										_world_path = [global_position, target]
+									if _world_path.size() > 0:
+										_target_world_pos = _world_path[0]
 									_state = "walking"
-									_path = [_target_world_pos]
 						_think_timer = 5.0 + randf() * 5.0
 			else:
 				if _room_entry_pos == Vector2.INF and _extra_target_pos == Vector2.INF and _target_world_pos == Vector2.ZERO:
@@ -539,18 +562,28 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 	_extra_target_pos = extra_pos
 	
 	_path = _map_grid.call("get_path_between_tiles", start_tile, end_tile)
+	_world_path.clear()
 	if _path.size() > 0:
+		for t in _path:
+			_world_path.append(_map_grid.call("tile_to_world", t))
+			
 		if is_instance_valid(_current_room):
-			# First step: walk to the door of the current room
-			_target_world_pos = _map_grid.call("tile_to_world", start_tile)
 			_current_room = null # Left the room
 		else:
 			if _path.size() > 1 and _path[0] == start_tile:
-				_path.pop_front()
-			if _path.size() > 0:
-				_target_world_pos = _map_grid.call("tile_to_world", _path[0])
-			else:
-				_target_world_pos = global_position
+				_world_path.pop_front()
+				
+		if _world_path.size() > 0:
+			var door_world = _world_path[_world_path.size() - 1]
+			if extra_pos != Vector2.INF:
+				if is_instance_valid(room) and room.has_method("get_local_path"):
+					var local_path = room.get_local_path(door_world, extra_pos)
+					_world_path.append_array(local_path)
+				else:
+					_world_path.append(extra_pos)
+			_target_world_pos = _world_path[0]
+		else:
+			_target_world_pos = global_position
 	else:
 		var astar = _map_grid.get("astar") if _map_grid else null
 		var s_solid = astar.is_point_solid(start_tile) if astar else false
@@ -584,17 +617,21 @@ func _start_path_to_lobby() -> void:
 	_extra_target_pos = Vector2.INF
 	
 	_path = _map_grid.call("get_path_between_tiles", start_tile, end_tile)
+	_world_path.clear()
 	if _path.size() > 0:
+		for t in _path:
+			_world_path.append(_map_grid.call("tile_to_world", t))
+			
 		if is_instance_valid(_current_room):
-			_target_world_pos = _map_grid.call("tile_to_world", start_tile)
 			_current_room = null
 		else:
 			if _path.size() > 1 and _path[0] == start_tile:
-				_path.pop_front()
-			if _path.size() > 0:
-				_target_world_pos = _map_grid.call("tile_to_world", _path[0])
-			else:
-				_target_world_pos = global_position
+				_world_path.pop_front()
+				
+		if _world_path.size() > 0:
+			_target_world_pos = _world_path[0]
+		else:
+			_target_world_pos = global_position
 
 func _process_walking(delta: float, speed: float) -> void:
 	var current_pos: Vector2 = global_position
@@ -602,10 +639,10 @@ func _process_walking(delta: float, speed: float) -> void:
 	
 	if dist_to_target < 5.0:
 		# Next tile
-		if _path.size() > 0:
-			_path.pop_front()
-			if _path.size() > 0:
-				_target_world_pos = _map_grid.call("tile_to_world", _path[0])
+		if _world_path.size() > 0:
+			_world_path.pop_front()
+			if _world_path.size() > 0:
+				_target_world_pos = _world_path[0]
 			else:
 				if _room_entry_pos != Vector2.INF:
 					_target_world_pos = _room_entry_pos
@@ -628,7 +665,7 @@ func _process_walking(delta: float, speed: float) -> void:
 		# Update dist for new target
 		dist_to_target = current_pos.distance_to(_target_world_pos)
 		
-		if _path.is_empty() and dist_to_target < 5.0:
+		if _world_path.is_empty() and dist_to_target < 5.0:
 			global_position = _target_world_pos # Snap exactly to target (e.g. seat or table)
 			if _state == "walking":
 				_state = "working"

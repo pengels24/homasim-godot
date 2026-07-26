@@ -2,7 +2,7 @@ extends Node2D
 class_name GuestActor
 
 # --- Zustände ---
-enum State { IDLE, WALKING, IN_ROOM, IN_POI, AWAITING_CHECKOUT, LEAVING, STUDYING_MENU, WAITING_FOR_FOOD, EATING }
+enum State { IDLE, WALKING, IN_ROOM, IN_POI, AWAITING_CHECKOUT, LEAVING, STUDYING_MENU, WAITING_FOR_FOOD, EATING, SITTING, SLEEPING }
 
 var current_state: State = State.IDLE
 var _guest_member: GuestMember
@@ -38,6 +38,7 @@ func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null, guest
 	_guest_manager = guest_manager
 	
 	name = "GuestActor_" + member.id
+	add_to_group("guest_actors")
 	avatar.setup(member)
 	_base_speed = max(10.0, 40.0 + member.speed_offset)
 	
@@ -48,10 +49,15 @@ func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null, guest
 	if start_room != null:
 		# Wenn mit Startraum gespawnt (z.B. nach Laden), setze Position auf die Zimmertür!
 		_target_room = start_room
+		_target_room = start_room
 		var exit_tile = _get_room_exit_tile(start_room)
 		var door_world = _map_grid.tile_to_world(exit_tile)
-		global_position = door_world
 		_room_door_world = door_world  # sofort cachen!
+		if start_room.has_method("get_room_entry_pos"):
+			global_position = start_room.get_room_entry_pos(_map_grid)
+		else:
+			global_position = door_world
+			
 		_change_state(State.IN_ROOM)
 	else:
 		_change_state(State.IDLE)
@@ -62,12 +68,14 @@ func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null, guest
 	if has_node("ClickArea"):
 		var ca = get_node("ClickArea")
 		ca.process_mode = Node.PROCESS_MODE_ALWAYS
+		ca.z_index = 10 # Sicherstellen, dass Gäste über dem Raum-ClickArea liegen
 		if not ca.input_event.is_connected(_on_click_area_input_event):
 			ca.input_event.connect(_on_click_area_input_event)
 
 # =============================================================================
 func _on_click_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		get_viewport().set_input_as_handled()
 		GameState.sig_guest_clicked.emit(self)
 
 
@@ -80,7 +88,7 @@ func _process(delta: float) -> void:
 			$HungryIcon.visible = false
 
 	match current_state:
-		State.IN_ROOM, State.IN_POI, State.STUDYING_MENU, State.EATING, State.IDLE:
+		State.IN_ROOM, State.IN_POI, State.STUDYING_MENU, State.EATING, State.IDLE, State.SITTING, State.SLEEPING:
 			_process_waiting(delta)
 		State.WAITING_FOR_FOOD, State.AWAITING_CHECKOUT:
 			_process_impatient(delta)
@@ -233,13 +241,30 @@ func _decide_next_action() -> void:
 	if TimeManager:
 		current_hour = TimeManager.get_hour()
 		
-	if current_hour >= 22 or current_hour < 6:
-		open_pois.erase("lobby")
+	if current_hour >= 23 or current_hour < 6:
+		# Nachtruhe! Ab ins Zimmer und schlafen.
+		open_pois.clear()
+		if current_state == State.SLEEPING:
+			_action_timer = randf_range(30.0, 60.0)
+			return
+		elif current_state == State.IN_ROOM or current_state == State.SITTING:
+			_wander_in_room(_target_room, true) # true = force sleep
+			return
+		else:
+			_walk_to_room(_target_room, State.IN_ROOM)
+			return
 	
 	# Kein offener POI? Gast wartet etwas und probiert es später wieder
 	if open_pois.is_empty():
-		_action_timer = randf_range(15.0, 45.0)
-		return
+		if current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING:
+			_wander_in_room(_target_room)
+			return
+		elif current_state != State.WALKING and current_state != State.IDLE:
+			_walk_to_room(_target_room, State.IN_ROOM)
+			return
+		else:
+			_action_timer = randf_range(15.0, 45.0)
+			return
 	
 	# Mögliche Ziele: Zimmer + alle offenen POIs
 	var possible_targets: Array[String] = ["room"]
@@ -248,8 +273,12 @@ func _decide_next_action() -> void:
 	var chosen: String = possible_targets.pick_random()
 	
 	# Vermeide, dass der Gast ans selbe Ziel geht wie er schon ist
-	if chosen == "room" and current_state == State.IN_ROOM:
-		chosen = open_pois.pick_random() if not open_pois.is_empty() else "room"
+	if chosen == "room" and (current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING):
+		if not open_pois.is_empty() and randf() > 0.3:
+			chosen = open_pois.pick_random()
+		else:
+			_wander_in_room(_target_room)
+			return
 	elif current_state == State.IN_POI and chosen == _current_poi_id:
 		chosen = "room"
 	
@@ -292,6 +321,16 @@ func wake_up() -> void:
 # =============================================================================
 func _change_state(new_state: State) -> void:
 	var old_state = current_state
+	
+	if old_state == State.SITTING or old_state == State.SLEEPING:
+		if is_instance_valid(_target_room):
+			if old_state == State.SITTING and _target_room.has_method("room_leave_seat"):
+				_target_room.room_leave_seat(_guest_member.id)
+			elif old_state == State.SLEEPING and _target_room.has_method("room_leave_bed"):
+				_target_room.room_leave_bed(_guest_member.id)
+		# Reset avatar visualization if needed
+		avatar.rotation = 0
+		
 	current_state = new_state
 	
 	if old_state == State.IN_ROOM and (current_state == State.WALKING or current_state == State.LEAVING):
@@ -304,7 +343,11 @@ func _change_state(new_state: State) -> void:
 		_on_poi_arrived()
 	
 	match current_state:
-		State.IN_ROOM, State.IN_POI:
+		State.IN_ROOM:
+			_wander_in_room(_target_room, false, true) # sofort loslaufen, aber Initial-Timer setzen
+			avatar.visible = true
+			if has_node("ClickArea"): get_node("ClickArea").input_pickable = true
+		State.IN_POI:
 			_action_timer = randf_range(45.0, 120.0)
 			avatar.visible = false
 			if has_node("ClickArea"): get_node("ClickArea").input_pickable = false
@@ -607,7 +650,7 @@ func _walk_to_room(room: Node2D, finish_state: State) -> void:
 	if room.has_method("get_room_entry_pos"):
 		extra_pos = room.get_room_entry_pos(_map_grid)
 		
-	_execute_walk(path_tiles, finish_state, door_world, extra_pos)
+	_execute_walk(path_tiles, finish_state, door_world, extra_pos, room)
 
 
 ## Generischer Walk zu einem beliebigen POI (Bar, Spa, Restaurant, Lobby ...)
@@ -646,14 +689,12 @@ func _walk_to_poi(poi_id: String) -> void:
 	
 	# Start-Tile berechnen (gecachte Türposition verwenden!)
 	var start_tile: Vector2i
-	if current_state == State.IN_ROOM:
+	if current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING:
 		if _room_door_world != Vector2.INF:
-			global_position = _room_door_world
-			start_tile = _get_current_tile()
+			start_tile = _map_grid.world_to_tile(_room_door_world)
 		elif is_instance_valid(_target_room):
 			var t_exit_tile = _get_room_exit_tile(_target_room)
 			_room_door_world = _map_grid.tile_to_world(t_exit_tile)
-			global_position = _room_door_world
 			start_tile = t_exit_tile
 		else:
 			start_tile = _get_current_tile()
@@ -669,7 +710,17 @@ func _walk_to_poi(poi_id: String) -> void:
 	_change_state(State.WALKING)
 	_current_poi_id = poi_id
 	var door_world = _map_grid.tile_to_world(exit_tile)
-	_execute_walk(path_tiles, State.IN_POI, door_world)
+	
+	var target_room = null
+	if poi_id == "lobby" or poi_id == "vending_machine":
+		target_room = _get_lobby_room()
+	else:
+		for r in _map_grid.active_rooms:
+			if is_instance_valid(r) and r.call("get_definition").get("id", "") == poi_id:
+				target_room = r
+				break
+				
+	_execute_walk(path_tiles, State.IN_POI, door_world, Vector2.INF, target_room)
 
 
 
@@ -695,11 +746,6 @@ func _walk_to_exit() -> void:
 			
 	var exit_tile := Vector2i(exit_x, exit_y)
 	
-	# Nur aus dem Zimmer heraus die gecachte Türposition setzen.
-	# Bei complete_checkout() ist der Gast bereits an der Lobby – NICHT überschreiben!
-	if current_state != State.LEAVING and _room_door_world != Vector2.INF:
-		global_position = _room_door_world
-	
 	# Da die Lobby nun ins AStar-Grid eingebunden ist (Clearance = 4, Hindernisse = 1),
 	# findet get_path_between_tiles selbstständig einen Weg um Tische herum.
 	var path_tiles = _map_grid.get_path_between_tiles(_get_current_tile(), exit_tile)
@@ -713,13 +759,26 @@ func _walk_to_exit() -> void:
 
 
 # =============================================================================
-func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: Vector2, extra_target_pos: Vector2 = Vector2.INF) -> void:
+func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: Vector2, extra_target_pos: Vector2 = Vector2.INF, target_room: Node2D = null) -> void:
 	var world_path: Array[Vector2] = []
+	
+	# NEU: Animierter "Walk out of Room", statt Teleportation
+	# Wenn wir aktuell im Zimmer (oder an einem Sitzplatz) sind, berechnen wir zuerst den lokalen Pfad zur Tür!
+	if (current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING) and is_instance_valid(_target_room):
+		if _target_room.has_method("get_local_path") and _target_room.has_method("get_room_entry_pos"):
+			var entry_pos = _target_room.get_room_entry_pos(_map_grid)
+			var local_path_out = _target_room.get_local_path(global_position, entry_pos)
+			world_path.append_array(local_path_out)
+			
 	for tile in path_tiles:
 		world_path.append(_map_grid.tile_to_world(tile))
 		
 	if extra_target_pos != Vector2.INF:
-		world_path.append(extra_target_pos)
+		if is_instance_valid(target_room) and target_room.has_method("get_local_path"):
+			var local_path = target_room.get_local_path(face_pos, extra_target_pos)
+			world_path.append_array(local_path)
+		else:
+			world_path.append(extra_target_pos)
 		
 	if _active_tween and _active_tween.is_valid():
 		_active_tween.kill()
@@ -728,7 +787,8 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 	
 	if TimeManager:
 		if not TimeManager.is_paused():
-			_active_tween.set_speed_scale(TimeManager.user_speed)
+			var speed = TimeManager.user_speed
+			_active_tween.set_speed_scale(speed)
 		else:
 			_active_tween.set_speed_scale(0.0)
 		
@@ -801,3 +861,84 @@ func _get_room_exit_tile(room: Node2D) -> Vector2i:
 	var px: int = int(room.get_parent().name.split("_")[1])
 	var py: int = int(room.get_parent().name.split("_")[2])
 	return _map_grid._exit_global(px, py, tx, ty, sz.x, sz.y, rot, off)
+# =============================================================================
+func _wander_in_room(room: Node2D, force_sleep: bool = false, initial_wait: bool = false) -> void:
+	if not is_instance_valid(room):
+		_action_timer = 5.0
+		return
+		
+	var target = Vector2.INF
+	var next_state = State.IN_ROOM
+	
+	if force_sleep:
+		if room.has_method("has_free_room_bed") and room.has_free_room_bed():
+			target = room.room_claim_bed(_guest_member.id)
+			next_state = State.SLEEPING
+	else:
+		var r = randf()
+		if r < 0.1 and room.has_method("has_free_room_bed") and room.has_free_room_bed():
+			target = room.room_claim_bed(_guest_member.id)
+			next_state = State.SLEEPING
+		elif r < 0.5 and room.has_method("has_free_room_seat") and room.has_free_room_seat():
+			target = room.room_claim_seat(_guest_member.id)
+			next_state = State.SITTING
+			
+	if target == Vector2.INF and room.has_method("get_random_walkable_local_pos"):
+		target = room.get_random_walkable_local_pos()
+		next_state = State.IN_ROOM
+		
+	if target == Vector2.INF:
+		_action_timer = randf_range(10.0, 30.0)
+		return
+		
+	var local_path = []
+	if room.has_method("get_local_path"):
+		local_path = room.get_local_path(global_position, target)
+		
+	if local_path.is_empty():
+		local_path.append(target)
+		
+	_change_state(State.WALKING)
+	
+	if _active_tween and _active_tween.is_valid():
+		_active_tween.kill()
+		
+	_active_tween = create_tween()
+	
+	if TimeManager:
+		if not TimeManager.is_paused():
+			_active_tween.set_speed_scale(TimeManager.user_speed)
+		else:
+			_active_tween.set_speed_scale(0.0)
+			
+	var current_pos = global_position
+	_active_tween.tween_interval(1.0)
+	
+	for point in local_path:
+		var dist = current_pos.distance_to(point)
+		var duration = dist / _base_speed
+		_active_tween.tween_callback(func(): avatar.rotation = global_position.angle_to_point(point))
+		_active_tween.tween_property(self, "global_position", point, duration)
+		current_pos = point
+		
+	_active_tween.tween_callback(func(): 
+		if next_state == State.SLEEPING or next_state == State.SITTING:
+			avatar.rotation = 0
+			if next_state == State.SITTING and is_instance_valid(_target_room):
+				# Table suchen
+				var table = _target_room.get_node_or_null("%Table")
+				if not table:
+					table = _target_room.get_node_or_null("Interior/Furniture/Table")
+				if is_instance_valid(table):
+					avatar.rotation = avatar.global_position.angle_to_point(table.global_position)
+		_change_state(next_state)
+	)
+	
+	_active_tween.tween_callback(func(): 
+		if initial_wait:
+			_action_timer = randf_range(45.0, 120.0)
+		elif TimeManager:
+			_action_timer = 15.0 * TimeManager.SECONDS_PER_GAME_MINUTE
+		else:
+			_action_timer = 60.0
+	)

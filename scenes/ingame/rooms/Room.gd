@@ -70,6 +70,61 @@ func set_overlay_color(color: Color) -> void:
 		_overlay_rect.visible = true
 		_overlay_rect.color = color
 
+# =============================================================================
+# FURNITURE INTERACTION (Seats & Beds)
+# =============================================================================
+var _room_seats: Array[Dictionary] = []
+var _room_beds: Array[Dictionary] = []
+
+func _find_furniture_recursive(node: Node) -> void:
+	for child in node.get_children():
+		var n = child.name.to_lower()
+		# Blocker ignorieren!
+		if "navblocker" in n:
+			_find_furniture_recursive(child)
+			continue
+			
+		if "chair" in n:
+			_room_seats.append({"node": child, "occupied_by": ""})
+		elif "bed" in n:
+			_room_beds.append({"node": child, "occupied_by": ""})
+			
+		_find_furniture_recursive(child)
+
+func has_free_room_seat() -> bool:
+	for s in _room_seats:
+		if s["occupied_by"] == "": return true
+	return false
+
+func room_claim_seat(guest_id: String) -> Vector2:
+	for s in _room_seats:
+		if s["occupied_by"] == "":
+			s["occupied_by"] = guest_id
+			return s["node"].global_position
+	return Vector2.INF
+
+func room_leave_seat(guest_id: String) -> void:
+	for s in _room_seats:
+		if s["occupied_by"] == guest_id:
+			s["occupied_by"] = ""
+
+func has_free_room_bed() -> bool:
+	for b in _room_beds:
+		if b["occupied_by"] == "": return true
+	return false
+
+func room_claim_bed(guest_id: String) -> Vector2:
+	for b in _room_beds:
+		if b["occupied_by"] == "":
+			b["occupied_by"] = guest_id
+			return b["node"].global_position
+	return Vector2.INF
+
+func room_leave_bed(guest_id: String) -> void:
+	for b in _room_beds:
+		if b["occupied_by"] == guest_id:
+			b["occupied_by"] = ""
+
 # ── Definition (von Unterklassen überschreiben) ───────────────────────────────
 
 
@@ -104,6 +159,11 @@ func _ready() -> void:
 	room_type_id = def.get("id", "")
 	
 	_create_interaction_area()
+	_build_local_nav()
+	
+	var interior = get_node_or_null("Interior")
+	if interior:
+		_find_furniture_recursive(interior)
 	
 	if TimeManager and not TimeManager.sig_hour_passed.is_connected(_on_hour_passed):
 		TimeManager.sig_hour_passed.connect(_on_hour_passed)
@@ -185,16 +245,30 @@ func get_room_entry_pos(map_grid: Node) -> Vector2:
 	var exit_tile = get_target_tile(map_grid)
 	var exit_pos = map_grid.tile_to_world(exit_tile)
 	
-	# Gehe vom Exit-Tile in den Raum hinein (je nach Tür-Ausrichtung)
-	# 32 Pixel (2 Tiles) tief rein.
+	# Gehe vom Exit-Tile in den Raum hinein (24 Pixel = 1.5 Tiles)
 	var entry_offset := Vector2(0, 0)
+	var rx = 0.0
+	var ry = 0.0
 	match door_rotation:
-		0: entry_offset = Vector2(32, 0)   # Tür ist links -> wir gehen nach rechts rein
-		1: entry_offset = Vector2(0, 32)   # Tür ist oben -> wir gehen nach unten rein
-		2: entry_offset = Vector2(-32, 0)  # Tür ist rechts -> wir gehen nach links rein
-		3: entry_offset = Vector2(0, -32)  # Tür ist unten -> wir gehen nach oben rein
+		0: 
+			entry_offset = Vector2(22, 0)
+			rx = randf_range(0.0, 6.0)
+			ry = randf_range(-2.0, 2.0)
+		1: 
+			entry_offset = Vector2(0, 22)
+			rx = randf_range(-2.0, 2.0)
+			ry = randf_range(0.0, 6.0)
+		2: 
+			entry_offset = Vector2(-22, 0)
+			rx = randf_range(-6.0, 0.0)
+			ry = randf_range(-2.0, 2.0)
+		3: 
+			entry_offset = Vector2(0, -22)
+			rx = randf_range(-2.0, 2.0)
+			ry = randf_range(-6.0, 0.0)
 		
-	return exit_pos + entry_offset
+		
+	return exit_pos + entry_offset + Vector2(rx, ry)
 
 
 # =============================================================================
@@ -404,6 +478,17 @@ func _create_interaction_area() -> void:
 func _on_interaction_area_input(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if InputHandler.current_mode == InputHandler.InputMode.NORMAL:
+			# Prüfen, ob wir versehentlich einen Gast oder Staff anklicken (die liegen optisch drüber)
+			var space = get_world_2d().direct_space_state
+			var query = PhysicsPointQueryParameters2D.new()
+			query.position = get_global_mouse_position()
+			query.collide_with_areas = true
+			var hits = space.intersect_point(query)
+			for hit in hits:
+				var parent = hit.collider.get_parent()
+				if parent and (parent.is_in_group("guest_actors") or parent.is_in_group("staff_actors")):
+					return # Ignorieren, der Gast/Staff fängt den Klick selbst!
+					
 			get_viewport().set_input_as_handled()
 			GameState.sig_room_clicked.emit(self)
 
@@ -502,6 +587,9 @@ func _apply_visuals() -> void:
 		if rect:
 			rect.size = Vector2(sz.x * TILE_PX, sz.y * TILE_PX)
 			_interaction_collision.position = rect.size / 2.0
+			
+	# 4. NavGrid aktualisieren, da Blocker nun rotiert sein könnten
+	_build_local_nav()
 
 
 # =============================================================================
@@ -560,3 +648,108 @@ func _update_indicator() -> void:
 	var is_critical_clean = (cleanliness_level == 0)
 	var is_critical_repair = (maintenance_level == 0)
 	_status_indicator.set_status(show_broom, show_wrench, is_pending_demolish, staff_status, is_service_requested, is_repair_requested, is_critical_clean, is_critical_repair)
+
+
+# ── Lokale Navigation (Raum-intern) ──────────────────────────────────────────
+
+var _local_astar: AStar2D = null
+const LOCAL_NAV_CELL_SIZE = 4.0
+
+func _find_nav_blockers_recursive(node: Node, result: Array) -> void:
+	for child in node.get_children():
+		if "NavBlocker" in child.name or child.is_in_group("nav_blocker"):
+			if child is Control or child is ReferenceRect or child is ColorRect:
+				result.append(child)
+		_find_nav_blockers_recursive(child, result)
+
+func _build_local_nav() -> void:
+	var blockers = []
+	_find_nav_blockers_recursive(self, blockers)
+	if blockers.is_empty():
+		return # Keine lokale Navigation nötig für leere Räume
+		
+	_local_astar = AStar2D.new()
+	var sz = get_tile_size() * float(TILE_PX)
+	var cells_x = int(sz.x / LOCAL_NAV_CELL_SIZE)
+	var cells_y = int(sz.y / LOCAL_NAV_CELL_SIZE)
+	
+	# Punkte generieren
+	for y in cells_y:
+		for x in cells_x:
+			var id = y * cells_x + x
+			# Mittig in der 4x4 Zelle
+			var p = Vector2(x * LOCAL_NAV_CELL_SIZE + LOCAL_NAV_CELL_SIZE / 2.0, y * LOCAL_NAV_CELL_SIZE + LOCAL_NAV_CELL_SIZE / 2.0)
+			
+			var is_blocked = false
+			var p_global = to_global(p)
+			for b in blockers:
+				if b is Control or b is ReferenceRect or b is ColorRect:
+					var p_local = b.get_global_transform().affine_inverse() * p_global
+					if Rect2(Vector2.ZERO, b.size).has_point(p_local):
+						is_blocked = true
+						break
+					
+			if not is_blocked:
+				_local_astar.add_point(id, p)
+				
+	# Punkte verbinden (orthogonal & diagonal)
+	for y in cells_y:
+		for x in cells_x:
+			var id = y * cells_x + x
+			if not _local_astar.has_point(id):
+				continue
+				
+			for dy in [-1, 0, 1]:
+				for dx in [-1, 0, 1]:
+					if dx == 0 and dy == 0: continue
+					var nx = x + dx
+					var ny = y + dy
+					if nx >= 0 and nx < cells_x and ny >= 0 and ny < cells_y:
+						var nid = ny * cells_x + nx
+						if _local_astar.has_point(nid):
+							if not _local_astar.are_points_connected(id, nid):
+								_local_astar.connect_points(id, nid, true)
+	queue_redraw()
+
+func get_local_path(start_world: Vector2, end_world: Vector2) -> Array[Vector2]:
+	if _local_astar == null:
+		return [start_world, end_world]
+		
+	var start_local = to_local(start_world)
+	var end_local = to_local(end_world)
+	
+	var start_id = _local_astar.get_closest_point(start_local)
+	var end_id = _local_astar.get_closest_point(end_local)
+	
+	if start_id == -1 or end_id == -1:
+		return [start_world, end_world]
+		
+	var path_local = _local_astar.get_point_path(start_id, end_id)
+	var path_world: Array[Vector2] = []
+	for p in path_local:
+		path_world.append(to_global(p))
+		
+	if path_world.size() > 0:
+		path_world[0] = start_world
+		path_world[path_world.size() - 1] = end_world
+		
+	return path_world
+
+func get_random_walkable_local_pos() -> Vector2:
+	if _local_astar == null or _local_astar.get_point_count() == 0:
+		return Vector2.INF
+	var ids = _local_astar.get_point_ids()
+	if ids.is_empty():
+		return Vector2.INF
+	var random_id = ids[randi() % ids.size()]
+	return to_global(_local_astar.get_point_position(random_id))
+
+func _draw() -> void:
+	if OS.is_debug_build() and _local_astar != null:
+		# Punkte und Verbindungen zeichnen (Rot)
+		for id in _local_astar.get_point_ids():
+			var p1 = _local_astar.get_point_position(id)
+			draw_circle(p1, 1.0, Color(1, 0, 0, 0.5))
+			for cid in _local_astar.get_point_connections(id):
+				var p2 = _local_astar.get_point_position(cid)
+				draw_line(p1, p2, Color(1, 0, 0, 0.2), 0.5)

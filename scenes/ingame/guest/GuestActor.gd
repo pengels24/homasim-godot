@@ -382,19 +382,23 @@ func _on_poi_arrived() -> void:
 				if EffectManager: EffectManager.spawn_exp_text(lobby.VENDING_MACHINE_EXP, global_position + Vector2(0, -32))
 				
 				# Gast macht einen Schritt zur Seite, wird wieder sichtbar und isst
-				_change_state(State.EATING)
+				var target_pos = lobby.get_snack_eating_target_world()
+				var start_tile = _get_current_tile()
+				var end_tile = _map_grid.world_to_tile(target_pos)
+				var path = _map_grid.get_path_between_tiles(start_tile, end_tile)
 				
-				# Gast weicht lokal relativ zu seiner Blickrichtung zurück und zur Seite (links)
-				var local_step = Vector2(
-					randf_range(-5.0, -1.0), # Nur ein winziges Stück zurück
-					randf_range(-25.0, -10.0) # Ausschließlich nach links aus seiner Sicht (negatives lokales Y)
-				)
-				var target_pos = global_position + local_step.rotated(avatar.rotation)
-				
-				if _active_tween and _active_tween.is_valid():
-					_active_tween.kill()
-				_active_tween = create_tween()
-				_active_tween.tween_property(self, "global_position", target_pos, 0.5)
+				if path.is_empty():
+					# Fallback: Nur lokaler Schritt
+					var local_step = Vector2(randf_range(-5.0, -1.0), randf_range(-25.0, -10.0))
+					target_pos = global_position + local_step.rotated(avatar.rotation)
+					_change_state(State.EATING)
+					if _active_tween and _active_tween.is_valid():
+						_active_tween.kill()
+					_active_tween = create_tween()
+					_active_tween.tween_property(self, "global_position", target_pos, 0.5)
+				else:
+					_change_state(State.WALKING)
+					_execute_walk(path, State.EATING, target_pos, target_pos)
 				
 				return
 		

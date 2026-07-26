@@ -545,7 +545,7 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 			_target_world_pos = _map_grid.call("tile_to_world", start_tile)
 			_current_room = null # Left the room
 		else:
-			if _path[0] == start_tile:
+			if _path.size() > 1 and _path[0] == start_tile:
 				_path.pop_front()
 			if _path.size() > 0:
 				_target_world_pos = _map_grid.call("tile_to_world", _path[0])
@@ -589,7 +589,7 @@ func _start_path_to_lobby() -> void:
 			_target_world_pos = _map_grid.call("tile_to_world", start_tile)
 			_current_room = null
 		else:
-			if _path[0] == start_tile:
+			if _path.size() > 1 and _path[0] == start_tile:
 				_path.pop_front()
 			if _path.size() > 0:
 				_target_world_pos = _map_grid.call("tile_to_world", _path[0])

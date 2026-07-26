@@ -124,6 +124,25 @@ func get_vending_target(map_grid: Node) -> Vector2i:
 		return map_grid.world_to_tile(_vending_target.global_position)
 	return get_target_tile(map_grid)
 
+func get_snack_eating_target_world() -> Vector2:
+	# Essenspunkt ist oben mittig über den Tischen (lokal ca. x=32, y=8)
+	return global_position + Vector2(32.0, 8.0)
+
+func get_solid_tiles() -> Array[Vector2i]:
+	var solid: Array[Vector2i] = []
+	# Zentrum (Tische)
+	solid.append(Vector2i(1, 1))
+	solid.append(Vector2i(2, 1))
+	solid.append(Vector2i(1, 2))
+	solid.append(Vector2i(2, 2))
+	
+	# Ecken (Wände mit Pflanzen)
+	solid.append(Vector2i(0, 0))
+	solid.append(Vector2i(3, 0))
+	solid.append(Vector2i(0, 3))
+	solid.append(Vector2i(3, 3))
+	return solid
+
 func buy_snack(budget: int) -> bool:
 	if budget >= VENDING_MACHINE_PRICE:
 		GameState.add_money(VENDING_MACHINE_PRICE)

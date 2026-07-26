@@ -9,6 +9,8 @@
 - **Beine vertreten:** Personal, das längere Zeit auf Stühlen pausiert, dreht nun ab und zu eine kleine Runde durch den Pausenraum, um sich die Beine zu vertreten.
 
 ## Bugfixes
+- **Gast-Lobby-Pfad:** Gäste liefen durch die optischen Wände der Lobby, wenn sie um die Tische herum navigierten. Die 4 Ecken der Lobby wurden nun im Grid als massiv markiert, sodass die Gäste durch die Türen/Lücken gehen.
+- **Personal-Pfad-Bug (eingefroren):** Hausmeister blieben vor dem Pausenraum im "Wartet"-Status hängen, wenn sie exakt auf dem Start/Ziel-Tile standen, da der Pfad fälschlicherweise geleert und somit ein Fehler beim Pathfinding angenommen wurde.
 - **Farben froh:** Ein Fehler wurde behoben, bei dem der Colorpicker im Personalraum die ausgewählte Farbe ignorierte und die Listeneinträge weiß blieben.
 - **Keine schwarzen Kästen mehr:** Ein visueller Fehler wurde korrigiert, bei dem über arbeitendem Personal nach Beendigung der Arbeit ein leeres schwarzes Kästchen (Artefakt) in der Welt zurückblieb.
 - **Wegpunkt System:** Es gab Korrekturen an den Wegpunkten, sodass sich Personal nun sicherer und gezielter in den Räumen bewegt.

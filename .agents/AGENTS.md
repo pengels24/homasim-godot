@@ -11,13 +11,14 @@ Bevor du UI-Ãnderungen durchfÃ¼hrst, musst du zwingend das Dokument `wiki/0
 
 **Am Ende jeder Session oder auf explizite Aufforderung** einen Changelog erstellen:
 
-- Datei: `changelog/gd-0.1.XX.md` â Versionsnummer **immer aus `/version.txt` lesen** (nie raten, nie selbst erhÃ¶hen â es sei denn Peter sagt explizit âVersion erhÃ¶hen")
-- Changelog-Nummer = aktuelle Version (z.B. `v0.1.28gd` â `gd-0.1.28.md`)
-- Format: Abschnitte: `Features & Verbesserungen`, `Bugfixes`, `Technische Ãnderungen`
+- Datei: `changelog/gd-0.1.XX.md` â€“ Versionsnummer **immer aus `/version.txt` lesen** (nie raten, nie selbst erhÃ¶hen â€“ es sei denn Peter sagt explizit â€žVersion erhÃ¶hen")
+- Changelog-Nummer = aktuelle Version (z.B. `v0.1.28gd` â†’ `gd-0.1.28.md`)
+- Format: Abschnitte: `Features & Verbesserungen`, `Bugfixes`, `Technische Ã„nderungen`
 - **WICHTIG:** Ab sofort kurze, prÃ¤gnante Stichpunkte! Nicht zu detailliert, da der Changelog direkt als Upload-Notice bei itch.io verwendet wird.
-- **Kein Abschnitt âOffene Backlog-Issues"** â der bleibt weg
+- **Kein Abschnitt â€žOffene Backlog-Issues"** â€“ der bleibt weg
 - Datum im Format `YYYY-MM-DD` (tagesbezogen)
-- Der Changelog dient als Grundlage fÃ¼r Social Media Posts und itch.io Updates â prÃ¤gnant, auf Deutsch, spielernah formulieren
+- Der Changelog dient als Grundlage fÃ¼r Social Media Posts und itch.io Updates â†’ prÃ¤gnant, auf Deutsch, spielernah formulieren
+- **WICHTIGSTE REGEL ZUM BACKLOG:** Bevor du den Changelog erstellst und comittest, MUSST du zwingend `wiki/alpha_backlog.md` (oder wo auch immer der aktuelle Backlog liegt) aktualisieren! Hake erledigte Punkte ab (✅) und trage alle ungeplanten Features/Bugfixes der Session als Ergänzung in die aktuelle Phase ein. Speichere das Backlog, erstelle dann den Changelog.
 - Nach dem Changelog: `git add -A; git commit -m "core: gd-0.1.XX changelog + session changes"`
 
 ---

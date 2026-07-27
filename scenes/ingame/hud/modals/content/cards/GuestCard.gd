@@ -71,7 +71,7 @@ func populate(party: GuestParty, mode: Mode, is_new: bool = false, guest_mgr: Gu
 			var night_str = GameState.T("guest.nights.single") if party.stay_days == 1 else GameState.T("guest.nights.plural") % str(party.stay_days)
 			_details_label.text = GameState.T("guest.nights.remaining") + night_str + " | " + GameState.T(party.get_type_name())
 			mouse_filter = Control.MOUSE_FILTER_IGNORE
-			_build_active_tooltip()
+			_build_active_tooltip(guest_mgr)
 
 		Mode.CHECKOUT:
 			var est_price: float
@@ -193,7 +193,7 @@ func _build_waiting_tooltip(def: Dictionary) -> void:
 
 
 # =============================================================================
-func _build_active_tooltip() -> void:
+func _build_active_tooltip(guest_mgr: GuestManager) -> void:
 	var def: Dictionary = GuestDefinitions.ALL.get(current_party.type, {})
 	var type_name: String = GameState.T(def.get("name", ""))
 
@@ -214,6 +214,27 @@ func _build_active_tooltip() -> void:
 		var role_key: String = "guest.member.type." + str(member.role)
 		var display_role: String = GameState.T(role_key)
 		tt += "• %s (%s)\n" % [member.name, display_role]
+		
+	# 3. Status der Anforderungen im aktuellen Zimmer
+	var reqs: Array = def.get("requirements", [])
+	if not reqs.is_empty():
+		tt += "\n" + GameState.T("guest.tooltip.requirements") + "\n"
+		
+		# Referenz auf den Manager, um den Raum zu holen
+		var room = null
+		if is_instance_valid(guest_mgr):
+			room = guest_mgr._get_room_node(current_party.room_id)
+		
+		for req in reqs:
+			var req_name = GameState.T("guest.req." + req)
+			var has_req = false
+			if is_instance_valid(room) and room.has_method("has_trait"):
+				has_req = room.has_trait(req)
+				
+			if has_req:
+				tt += "✅ %s\n" % req_name
+			else:
+				tt += "❌ %s\n" % req_name
 
 	tooltip_text = tt
 

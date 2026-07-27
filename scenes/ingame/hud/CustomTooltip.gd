@@ -58,8 +58,15 @@ func _process(delta: float) -> void:
 		var final_y = pos_on_screen.y
 		
 		# Fallback: Wenn es links aus dem Bild ragt, packen wir es nach rechts!
-		if final_x < 0:
+		if final_x < 10:
 			final_x = pos_on_screen.x + width_on_screen + 10
+			
+		# Oben und unten im Viewport halten
+		var vp_rect = get_viewport_rect().size
+		if final_y < 10:
+			final_y = 10
+		elif final_y + size.y > vp_rect.y - 10:
+			final_y = vp_rect.y - size.y - 10
 			
 		position = Vector2(final_x, final_y)
 

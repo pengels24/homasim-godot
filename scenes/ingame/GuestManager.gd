@@ -536,7 +536,8 @@ func get_match_type(party: GuestParty, room: Node2D) -> String:
 	var type_ok:  bool = rtype in def.get("allowed_rooms",   [])
 	var preferred: bool = rtype in def.get("preferred_rooms", [])
 
-	var reqs_met: bool = true
+	var reqs = def.get("requirements", [])
+	var reqs_met: bool = _check_requirements(room, reqs)
 
 	if not type_ok:
 		return "disabled"
@@ -841,13 +842,14 @@ func load_from_dict(d: Dictionary) -> void:
 # ── Hilfsmethoden ─────────────────────────────────────────────────────────────
 
 # =============================================================================
-func _check_requirements(_room: Node2D, reqs: Array) -> bool:
+func _check_requirements(room: Node2D, reqs: Array) -> bool:
 	if reqs.is_empty():
 		return true
 
-	# Räume haben noch kein Requirements-System – für jetzt immer false wenn Reqs vorhanden
-	# wird erweitert wenn Room-Ausstattung implementiert ist
-	return false
+	for req in reqs:
+		if not room.has_method("has_trait") or not room.has_trait(req):
+			return false
+	return true
 
 
 # =============================================================================
@@ -864,6 +866,19 @@ func process_midnight_penalties(day: int) -> void:
 		)
 	_waiting.clear()
 
+	# 1.5 Tägliche Zufriedenheitsstrafe für fehlende Requirements in belegten Zimmern
+	for party: GuestParty in _active:
+		var room = _get_room_node(party.room_id)
+		if is_instance_valid(room):
+			var def = party.get_type_def()
+			var reqs = def.get("requirements", [])
+			var missing_count = 0
+			for req in reqs:
+				if not room.has_method("has_trait") or not room.has_trait(req):
+					missing_count += 1
+			if missing_count > 0:
+				party.modify_satisfaction(-10 * missing_count)
+				
 	# 2. Wut-Checkout für ignorierte Gäste am Tresen
 	# Strafen passieren erst ab Tag 2, da an Tag 1 noch niemand abreisen kann.
 	if day > 1:

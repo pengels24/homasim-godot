@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Stand: 2026-07-15
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.43 | Stand: 2026-07-27
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -66,7 +66,8 @@ Konzept aus `wiki/02_features/06_personal_und_aufgabensystem.md`:
 *Baut auf Moral-System aus Phase 1 auf.*
 
 ### 3.1 Personalraum (Staff Room)
-> 🎨 **TODO: Pixel-Art Asset "Pausenraum" muss noch erstellt werden (Peter)** – analog zu Küche/Restaurant via Duplicate-Workflow.
+**Status:** ✅ Erledigt (Szene existiert, Mitarbeiter nutzen Stühle, Tooltips und Zuweisungen funktionieren).
+
 **Konzept:** Aus `wiki/02_features/06_personal_und_aufgabensystem.md`
 
 - Neuer Raumtyp: Mitarbeiter wechseln in `IDLE`-State → suchen nächsten freien Personalraum
@@ -76,20 +77,13 @@ Konzept aus `wiki/02_features/06_personal_und_aufgabensystem.md`:
 - **Auswirkung auf 1.3:** `morale`-Anstieg durch Personalraum erst hier vollständig implementieren
 
 ### 3.2 Tiefere Gästewerte / Gästebedürfnisse
-**Status:** `requirements`-Array in `GuestDefinitions.gd` **bereits vorhanden und befüllt!**
+**Status:** ✅ Erledigt (Check-In prüft Raum-Traits, UI Tooltip zeigt rot/grün Status, täglicher Zufriedenheits-Abzug greift).
 
-Bestehende Requirements (bereits im Code):
-- `"wlan"` → Geschäftsreisender, Nomade
-- `"desk"` → Geschäftsreisender  
-- `"comfort"` → Paar
-- `"space"`, `"pool"` → Familie
-- `"luxury"`, `"privacy"` → Luxus-Gast
+Zimmer-Typen bekommen Eigenschaften (z.B. `"wlan"`, `"desk"`). Wenn Gäste einchecken, wird abgeglichen, ob das Zimmer ihre Anforderungen erfüllt. Fehlt etwas (z.B. WLAN für den Geschäftsreisenden), sinkt die Zufriedenheit und wir zeigen das im UI an. Die Basisdaten dafür (z.B. `"wlan"` beim Geschäftsreisenden) existieren bereits im Code.
 
-**Was gebaut werden muss:**
-1. Zimmer-Typen bekommen `"provides": ["wlan", "desk"]`-Array in ihrer Config
-2. Beim Check-in: Abgleich `requirements` ↔ `provides` → fehlende Requirements notieren
-3. Täglich: Für jedes fehlende Requirement sinkt `satisfaction` um X Punkte
-4. UI: Im Gäste-Dossier (Gästeliste-Modal) anzeigen was fehlt
+**Ungeplante Fixes der Session:**
+- ✅ **GuestActor Wegfindung:** Bug behoben, durch den Gäste beim Verlassen des Zimmers geradewegs durch Wände liefen (Status-Machine Bug mit `previous_state` behoben).
+- ✅ **CustomTooltip:** Position wird nun auf den Viewport geclempt, sodass der Tooltip nicht mehr oben aus dem Bild rutscht.
 
 ---
 

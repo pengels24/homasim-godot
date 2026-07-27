@@ -5,6 +5,7 @@ class_name GuestActor
 enum State { IDLE, WALKING, IN_ROOM, IN_POI, AWAITING_CHECKOUT, LEAVING, STUDYING_MENU, WAITING_FOR_FOOD, EATING, SITTING, SLEEPING }
 
 var current_state: State = State.IDLE
+var previous_state: State = State.IDLE
 var _guest_member: GuestMember
 var _map_grid: Node # MapGrid Referenz
 var _guest_manager: GuestManager = null  # Referenz für Budget & POI-Tracking
@@ -321,6 +322,7 @@ func wake_up() -> void:
 # =============================================================================
 func _change_state(new_state: State) -> void:
 	var old_state = current_state
+	previous_state = old_state
 	
 	if old_state == State.SITTING or old_state == State.SLEEPING:
 		if is_instance_valid(_target_room):
@@ -763,8 +765,8 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 	var world_path: Array[Vector2] = []
 	
 	# NEU: Animierter "Walk out of Room", statt Teleportation
-	# Wenn wir aktuell im Zimmer (oder an einem Sitzplatz) sind, berechnen wir zuerst den lokalen Pfad zur Tür!
-	if (current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING) and is_instance_valid(_target_room):
+	# Wenn wir aktuell (oder kurz davor) im Zimmer (oder an einem Sitzplatz) sind, berechnen wir zuerst den lokalen Pfad zur Tür!
+	if (previous_state == State.IN_ROOM or previous_state == State.SITTING or previous_state == State.SLEEPING) and is_instance_valid(_target_room):
 		if _target_room.has_method("get_local_path") and _target_room.has_method("get_room_entry_pos"):
 			var entry_pos = _target_room.get_room_entry_pos(_map_grid)
 			var local_path_out = _target_room.get_local_path(global_position, entry_pos)

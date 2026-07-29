@@ -7,8 +7,8 @@ extends VBoxContainer
 @onready var texture_rect: TextureRect = %TextureRect
 
 var _tutorials: Array = []
-var _tabs: Array = ["tutorial", "tipps", "codex", "forschung"]
-var _tab_labels: Array = ["ui.tutorial.tab.tutorial", "ui.tutorial.tab.tipps", "ui.tutorial.tab.codex", "ui.tutorial.tab.forschung"]
+var _tabs: Array = ["tutorial", "tipps", "rooms", "codex", "forschung"]
+var _tab_labels: Array = ["ui.tutorial.tab.tutorial", "ui.tutorial.tab.tipps", "ui.tutorial.tab.rooms", "ui.tutorial.tab.codex", "ui.tutorial.tab.forschung"]
 var _current_tab: String = "tutorial"
 var _tab_buttons: Array[Button] = []
 
@@ -42,7 +42,10 @@ func _load_data() -> void:
 	if _current_tab == "forschung":
 		_tutorials = []
 	elif TutorialManager:
-		_tutorials = TutorialManager.get_unlocked_data(_current_tab)
+		if _current_tab == "rooms":
+			_tutorials = TutorialManager.get_all_data_for_category(_current_tab)
+		else:
+			_tutorials = TutorialManager.get_unlocked_data(_current_tab)
 	else:
 		_tutorials = []
 		

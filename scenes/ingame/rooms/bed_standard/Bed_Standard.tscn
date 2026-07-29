@@ -136,40 +136,35 @@ region_rect = Rect2(80, 0, 16, 16)
 
 [node name="NavBlocker" type="Node2D" parent="Interior/Furniture" unique_id=105635289]
 
-[node name="NavBlockerBed" type="ColorRect" parent="Interior/Furniture/NavBlocker" unique_id=1853639939 groups=["nav_blocker"]]
+[node name="NavBlockerBed" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=264380386 groups=["nav_blocker"]]
 offset_left = 24.0
 offset_top = 1.0
 offset_right = 31.0
 offset_bottom = 13.0
-color = Color(1, 0, 0, 0.5)
 
-[node name="NavBlockerBath" type="ColorRect" parent="Interior/Furniture/NavBlocker" unique_id=1374007412 groups=["nav_blocker"]]
+[node name="NavBlockerBath" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1833737921 groups=["nav_blocker"]]
 offset_left = 17.0
 offset_top = 17.0
 offset_right = 31.0
 offset_bottom = 31.0
-color = Color(1, 0, 0, 0.5)
 
-[node name="NavBlockerTable" type="ColorRect" parent="Interior/Furniture/NavBlocker" unique_id=1710712499 groups=["nav_blocker"]]
+[node name="NavBlockerTable" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1260413636 groups=["nav_blocker"]]
 offset_left = 5.0
 offset_top = 14.0
 offset_right = 13.0
 offset_bottom = 20.0
-color = Color(1, 0, 0, 0.5)
 
-[node name="NavBlockerChair1" type="ColorRect" parent="Interior/Furniture/NavBlocker" unique_id=191623914 groups=["nav_blocker"]]
+[node name="NavBlockerChair1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1472398813 groups=["nav_blocker"]]
 offset_left = 7.0
 offset_top = 9.0
 offset_right = 11.0
 offset_bottom = 13.0
-color = Color(1, 0, 0, 0.5)
 
-[node name="NavBlockerTV" type="ColorRect" parent="Interior/Furniture/NavBlocker" unique_id=343249140 groups=["nav_blocker"]]
+[node name="NavBlockerTV" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=723907615 groups=["nav_blocker"]]
 offset_left = 4.0
 offset_top = 26.0
 offset_right = 15.0
 offset_bottom = 31.0
-color = Color(1, 0, 0, 0.5)
 
 [node name="Door" type="Sprite2D" parent="." unique_id=449780305]
 position = Vector2(1, 8)

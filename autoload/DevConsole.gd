@@ -123,12 +123,21 @@ func _execute(cmd: String) -> void:
 			_log("  add-exp:500       – Addiert EXP hinzu", CLR_INFO)
 			_log("  set-level:5       – Setzt das Hotel-Level", CLR_INFO)
 			_log("  set-fp:1000       – Setzt die Forschungspunkte", CLR_INFO)
+			_log("  unlock-all-tutorials - Schaltet alle Tutorials im Codex frei", CLR_INFO)
 			_log("  reset-tutorial    – Setzt alle gesehenen Tutorials zurück", CLR_INFO)
 
 		"reset-tutorial":
 			if TutorialManager:
 				TutorialManager.reset_all()
 				_log("Alle Tutorials wurden zurückgesetzt.", CLR_OK)
+			else:
+				_log("Fehler: TutorialManager nicht gefunden.", CLR_ERR)
+		"unlock-all-tutorials":
+			if TutorialManager:
+				for id in TutorialManager.tutorial_registry.keys():
+					if not TutorialManager.unlocked_tutorials.has(id):
+						TutorialManager.unlocked_tutorials.append(id)
+				_log("Alle Tutorials freigeschaltet.", CLR_OK)
 			else:
 				_log("Fehler: TutorialManager nicht gefunden.", CLR_ERR)
 

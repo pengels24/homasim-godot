@@ -359,6 +359,12 @@ func _generate_party() -> GuestParty:
 		TutorialManager.trigger("guest_" + type_id)
 
 	var party := GuestParty.new(party_id, type_id)
+	
+	# Start-Zufriedenheit würfeln (Müde von der Anreise)
+	party.satisfaction = randi_range(50, 80)
+	if TechtreeManager and TechtreeManager.is_tech_unlocked("W1.1"):
+		party.satisfaction += 10 # W1.1 Wellness-Körbchen Bonus
+		
 	var def: Dictionary = GuestDefinitions.ALL[type_id]
 	party.stay_days = randi_range(def["min_stay"], def["max_stay"])
 	party.total_stay_days = party.stay_days
@@ -717,6 +723,10 @@ func _finalize_checkout(party: GuestParty, payout: int, auto: bool) -> void:
 	
 	if not auto:
 		sig_party_checked_out_physically.emit(party)
+		
+	# Update quests
+	if QuestManager.has_method("on_guest_checkout"):
+		QuestManager.on_guest_checkout(party.type)
 
 	var msg := ""
 	var log_type := "guest"

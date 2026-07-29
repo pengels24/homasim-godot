@@ -115,7 +115,7 @@ func _update_content() -> void:
 		else:
 			status = GameState.T("room.tooltip.understaffed")
 			
-		if def.get("is_guest_poi", true):
+		if def.get("is_poi", false):
 			var current_visitors = 0
 			var visitor_names = []
 			var ingame = get_tree().get_root().get_node_or_null("Ingame")
@@ -123,7 +123,7 @@ func _update_content() -> void:
 				var ctrl = ingame.get("_guest_controller")
 				if ctrl:
 					for actor in ctrl._actors.values():
-						var valid_states = [actor.State.IN_POI, actor.State.STUDYING_MENU, actor.State.WAITING_FOR_FOOD, actor.State.EATING]
+						var valid_states = [actor.State.IN_POI, actor.State.STUDYING_MENU, actor.State.WAITING_FOR_FOOD, actor.State.EATING, actor.State.AWAITING_CHECKOUT]
 						if actor.current_state in valid_states and actor._current_poi_id == def.get("id", ""):
 							current_visitors += 1
 							if is_instance_valid(actor._guest_member):

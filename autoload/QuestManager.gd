@@ -107,6 +107,41 @@ func on_room_built(room_id: String) -> void:
 		SaveManager.save_quick(GameState.active_hotel_id)
 
 # =============================================================================
+func on_guest_checkout(guest_type: String) -> void:
+	if GameState.selected_hotel.is_empty(): return
+	var quest_state = GameState.selected_hotel.get("quests", {})
+	var changed = false
+	
+	for cat_id in quest_state:
+		var cat_data = quest_state[cat_id]
+		var targets_state = cat_data.get("targets", {})
+		
+		for t_id in targets_state:
+			var t_state = targets_state[t_id]
+			if t_state["state"] != "active": continue
+			
+			var t_def = flat_targets[t_id]
+			
+			var req_tech = t_def.get("requires_tech", "")
+			if req_tech != "" and not TechtreeManager.is_tech_unlocked(req_tech):
+				continue
+			
+			if t_def["type"] == "serve_guests" and t_def["target_id"] == guest_type:
+				t_state["progress"] += 1
+				var max_val = t_def.get("target_count", 1)
+				sig_quest_progress_updated.emit(t_id, t_state["progress"], max_val)
+				
+				if t_state["progress"] >= max_val:
+					t_state["state"] = "claimable"
+					sig_quest_claimable.emit(t_id)
+					Toast.show(GameState.T("toast.quest.completed", GameState.T(t_def.get("name", ""))), "quest")
+				changed = true
+				
+	if changed:
+		SaveManager.save_quick(GameState.active_hotel_id)
+
+
+# =============================================================================
 func on_room_demolished(room_id: String, _unique_id: String = "") -> void:
 	if GameState.selected_hotel.is_empty(): return
 	var quest_state = GameState.selected_hotel.get("quests", {})

@@ -174,6 +174,392 @@
           ]
         }
       }
+    },
+    "guests": {
+      "ranks": {
+        "1": {
+          "reward_fp": 500,
+          "reward_money": 5000,
+          "targets": [
+            {
+              "id": "q_serve_single_10",
+              "name": "quest.guest.single.10.name",
+              "description": "quest.guest.single.10.desc",
+              "type": "serve_guests",
+              "target_id": "single",
+              "target_count": 10,
+              "reward_fp": 50,
+              "reward_money": 500,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_serve_couple_10",
+              "name": "quest.guest.couple.10.name",
+              "description": "quest.guest.couple.10.desc",
+              "type": "serve_guests",
+              "target_id": "couple",
+              "target_count": 10,
+              "reward_fp": 50,
+              "reward_money": 500,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_serve_budget_10",
+              "name": "quest.guest.budget.10.name",
+              "description": "quest.guest.budget.10.desc",
+              "type": "serve_guests",
+              "target_id": "budget",
+              "target_count": 10,
+              "reward_fp": 50,
+              "reward_money": 500,
+              "requires_tech": ""
+            }
+          ]
+        },
+        "2": {
+          "reward_fp": 1000,
+          "reward_money": 10000,
+          "targets": [
+            {
+              "id": "q_serve_single_25",
+              "name": "quest.guest.single.25.name",
+              "description": "quest.guest.single.25.desc",
+              "type": "serve_guests",
+              "target_id": "single",
+              "target_count": 25,
+              "reward_fp": 100,
+              "reward_money": 1000,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_serve_couple_25",
+              "name": "quest.guest.couple.25.name",
+              "description": "quest.guest.couple.25.desc",
+              "type": "serve_guests",
+              "target_id": "couple",
+              "target_count": 25,
+              "reward_fp": 100,
+              "reward_money": 1000,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_serve_budget_25",
+              "name": "quest.guest.budget.25.name",
+              "description": "quest.guest.budget.25.desc",
+              "type": "serve_guests",
+              "target_id": "budget",
+              "target_count": 25,
+              "reward_fp": 100,
+              "reward_money": 1000,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_serve_family_10",
+              "name": "quest.guest.family.10.name",
+              "description": "quest.guest.family.10.desc",
+              "type": "serve_guests",
+              "target_id": "family",
+              "target_count": 10,
+              "reward_fp": 100,
+              "reward_money": 1000,
+              "requires_tech": "Z1.2"
+            },
+            {
+              "id": "q_serve_business_10",
+              "name": "quest.guest.business.10.name",
+              "description": "quest.guest.business.10.desc",
+              "type": "serve_guests",
+              "target_id": "business",
+              "target_count": 10,
+              "reward_fp": 100,
+              "reward_money": 1000,
+              "requires_tech": "Z1.1"
+            },
+            {
+              "id": "q_serve_event_10",
+              "name": "quest.guest.event.10.name",
+              "description": "quest.guest.event.10.desc",
+              "type": "serve_guests",
+              "target_id": "event",
+              "target_count": 10,
+              "reward_fp": 100,
+              "reward_money": 1000,
+              "requires_tech": "P1.1"
+            }
+          ]
+        },
+        "3": {
+          "reward_fp": 2000,
+          "reward_money": 20000,
+          "targets": [
+            {
+              "id": "q_serve_single_50",
+              "name": "quest.guest.single.50.name",
+              "description": "quest.guest.single.50.desc",
+              "type": "serve_guests",
+              "target_id": "single",
+              "target_count": 50,
+              "reward_fp": 200,
+              "reward_money": 2000,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_serve_couple_50",
+              "name": "quest.guest.couple.50.name",
+              "description": "quest.guest.couple.50.desc",
+              "type": "serve_guests",
+              "target_id": "couple",
+              "target_count": 50,
+              "reward_fp": 200,
+              "reward_money": 2000,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_serve_budget_50",
+              "name": "quest.guest.budget.50.name",
+              "description": "quest.guest.budget.50.desc",
+              "type": "serve_guests",
+              "target_id": "budget",
+              "target_count": 50,
+              "reward_fp": 200,
+              "reward_money": 2000,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_serve_family_25",
+              "name": "quest.guest.family.25.name",
+              "description": "quest.guest.family.25.desc",
+              "type": "serve_guests",
+              "target_id": "family",
+              "target_count": 25,
+              "reward_fp": 200,
+              "reward_money": 2000,
+              "requires_tech": "Z1.2"
+            },
+            {
+              "id": "q_serve_business_25",
+              "name": "quest.guest.business.25.name",
+              "description": "quest.guest.business.25.desc",
+              "type": "serve_guests",
+              "target_id": "business",
+              "target_count": 25,
+              "reward_fp": 200,
+              "reward_money": 2000,
+              "requires_tech": "Z1.1"
+            },
+            {
+              "id": "q_serve_event_25",
+              "name": "quest.guest.event.25.name",
+              "description": "quest.guest.event.25.desc",
+              "type": "serve_guests",
+              "target_id": "event",
+              "target_count": 25,
+              "reward_fp": 200,
+              "reward_money": 2000,
+              "requires_tech": "P1.1"
+            },
+            {
+              "id": "q_serve_nomad_10",
+              "name": "quest.guest.nomad.10.name",
+              "description": "quest.guest.nomad.10.desc",
+              "type": "serve_guests",
+              "target_id": "nomad",
+              "target_count": 10,
+              "reward_fp": 200,
+              "reward_money": 2000,
+              "requires_tech": "M1.1"
+            },
+            {
+              "id": "q_serve_luxury_10",
+              "name": "quest.guest.luxury.10.name",
+              "description": "quest.guest.luxury.10.desc",
+              "type": "serve_guests",
+              "target_id": "luxury",
+              "target_count": 10,
+              "reward_fp": 200,
+              "reward_money": 2000,
+              "requires_tech": "Z1.3"
+            }
+          ]
+        },
+        "4": {
+          "reward_fp": 3000,
+          "reward_money": 30000,
+          "targets": [
+            {
+              "id": "q_serve_single_100",
+              "name": "quest.guest.single.100.name",
+              "description": "quest.guest.single.100.desc",
+              "type": "serve_guests",
+              "target_id": "single",
+              "target_count": 100,
+              "reward_fp": 300,
+              "reward_money": 3000,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_serve_couple_100",
+              "name": "quest.guest.couple.100.name",
+              "description": "quest.guest.couple.100.desc",
+              "type": "serve_guests",
+              "target_id": "couple",
+              "target_count": 100,
+              "reward_fp": 300,
+              "reward_money": 3000,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_serve_budget_100",
+              "name": "quest.guest.budget.100.name",
+              "description": "quest.guest.budget.100.desc",
+              "type": "serve_guests",
+              "target_id": "budget",
+              "target_count": 100,
+              "reward_fp": 300,
+              "reward_money": 3000,
+              "requires_tech": ""
+            },
+            {
+              "id": "q_serve_family_50",
+              "name": "quest.guest.family.50.name",
+              "description": "quest.guest.family.50.desc",
+              "type": "serve_guests",
+              "target_id": "family",
+              "target_count": 50,
+              "reward_fp": 300,
+              "reward_money": 3000,
+              "requires_tech": "Z1.2"
+            },
+            {
+              "id": "q_serve_business_50",
+              "name": "quest.guest.business.50.name",
+              "description": "quest.guest.business.50.desc",
+              "type": "serve_guests",
+              "target_id": "business",
+              "target_count": 50,
+              "reward_fp": 300,
+              "reward_money": 3000,
+              "requires_tech": "Z1.1"
+            },
+            {
+              "id": "q_serve_event_50",
+              "name": "quest.guest.event.50.name",
+              "description": "quest.guest.event.50.desc",
+              "type": "serve_guests",
+              "target_id": "event",
+              "target_count": 50,
+              "reward_fp": 300,
+              "reward_money": 3000,
+              "requires_tech": "P1.1"
+            },
+            {
+              "id": "q_serve_nomad_25",
+              "name": "quest.guest.nomad.25.name",
+              "description": "quest.guest.nomad.25.desc",
+              "type": "serve_guests",
+              "target_id": "nomad",
+              "target_count": 25,
+              "reward_fp": 300,
+              "reward_money": 3000,
+              "requires_tech": "M1.1"
+            },
+            {
+              "id": "q_serve_luxury_25",
+              "name": "quest.guest.luxury.25.name",
+              "description": "quest.guest.luxury.25.desc",
+              "type": "serve_guests",
+              "target_id": "luxury",
+              "target_count": 25,
+              "reward_fp": 300,
+              "reward_money": 3000,
+              "requires_tech": "Z1.3"
+            }
+          ]
+        },
+        "5": {
+          "reward_fp": 5000,
+          "reward_money": 50000,
+          "targets": [
+            {
+              "id": "q_serve_family_100",
+              "name": "quest.guest.family.100.name",
+              "description": "quest.guest.family.100.desc",
+              "type": "serve_guests",
+              "target_id": "family",
+              "target_count": 100,
+              "reward_fp": 500,
+              "reward_money": 5000,
+              "requires_tech": "Z1.2"
+            },
+            {
+              "id": "q_serve_business_100",
+              "name": "quest.guest.business.100.name",
+              "description": "quest.guest.business.100.desc",
+              "type": "serve_guests",
+              "target_id": "business",
+              "target_count": 100,
+              "reward_fp": 500,
+              "reward_money": 5000,
+              "requires_tech": "Z1.1"
+            },
+            {
+              "id": "q_serve_event_100",
+              "name": "quest.guest.event.100.name",
+              "description": "quest.guest.event.100.desc",
+              "type": "serve_guests",
+              "target_id": "event",
+              "target_count": 100,
+              "reward_fp": 500,
+              "reward_money": 5000,
+              "requires_tech": "P1.1"
+            },
+            {
+              "id": "q_serve_nomad_50",
+              "name": "quest.guest.nomad.50.name",
+              "description": "quest.guest.nomad.50.desc",
+              "type": "serve_guests",
+              "target_id": "nomad",
+              "target_count": 50,
+              "reward_fp": 500,
+              "reward_money": 5000,
+              "requires_tech": "M1.1"
+            },
+            {
+              "id": "q_serve_luxury_50",
+              "name": "quest.guest.luxury.50.name",
+              "description": "quest.guest.luxury.50.desc",
+              "type": "serve_guests",
+              "target_id": "luxury",
+              "target_count": 50,
+              "reward_fp": 500,
+              "reward_money": 5000,
+              "requires_tech": "Z1.3"
+            },
+            {
+              "id": "q_serve_nomad_100",
+              "name": "quest.guest.nomad.100.name",
+              "description": "quest.guest.nomad.100.desc",
+              "type": "serve_guests",
+              "target_id": "nomad",
+              "target_count": 100,
+              "reward_fp": 1000,
+              "reward_money": 10000,
+              "requires_tech": "M1.1"
+            },
+            {
+              "id": "q_serve_luxury_100",
+              "name": "quest.guest.luxury.100.name",
+              "description": "quest.guest.luxury.100.desc",
+              "type": "serve_guests",
+              "target_id": "luxury",
+              "target_count": 100,
+              "reward_fp": 1000,
+              "reward_money": 10000,
+              "requires_tech": "Z1.3"
+            }
+          ]
+        }
+      }
     }
   }
 }

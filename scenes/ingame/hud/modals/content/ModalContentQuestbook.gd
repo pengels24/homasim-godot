@@ -192,8 +192,8 @@ func _populate_quests() -> void:
 		return
 	else:
 		var curr_rank = ranks_def[_active_rank_id]
-		var r_fp = curr_rank.get("reward_fp", 0)
-		var r_money = curr_rank.get("reward_money", 0)
+		var r_fp = int(curr_rank.get("reward_fp", 0))
+		var r_money = int(curr_rank.get("reward_money", 0))
 		rank_reward_label.text = GameState.T("ui.quests.reward_rank", r_fp, GameState.format_money(r_money))
 	
 	if cat_state.get("rank_claimable", false) and str(current_rank) == _active_rank_id:
@@ -282,9 +282,11 @@ func _populate_quests() -> void:
 			
 			var reward_lbl = Label.new()
 			reward_lbl.theme_type_variation = &"ValueLabel"
-			reward_lbl.text = GameState.T("ui.quests.reward_quest", int(t_def.get("reward_fp", 0)), GameState.format_money(t_def.get("reward_money", 0)))
-			reward_lbl.add_theme_color_override("font_color", Color.PALE_GREEN)
-			vbox.add_child(reward_lbl)
+			if t_def.has("reward_fp") or t_def.has("reward_money"):
+				reward_lbl.text = GameState.T("ui.quests.reward_quest", int(t_def.get("reward_fp", 0)), GameState.format_money(int(t_def.get("reward_money", 0))))
+				reward_lbl.show()
+				reward_lbl.add_theme_color_override("font_color", Color.PALE_GREEN)
+				vbox.add_child(reward_lbl)
 		
 		var btn = Button.new()
 		btn.custom_minimum_size = Vector2(180, 50)

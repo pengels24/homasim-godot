@@ -17,6 +17,7 @@ static func get_definition() -> Dictionary:
 		"req_level": 2, # Personal wird ab Level 2 freigeschaltet
 		"req_tech": "",
 		"max_beds": 0,
+		"capacity": 4,
 		"is_poi": false,
 		"is_staff_poi": true,
 		"adults_only": false,

@@ -54,8 +54,7 @@ var _occ_h: int
 # ── Debugging ─────────────────────────────────────────────────────────────────
 @warning_ignore("unused_private_class_variable")
 var _show_debug_grid: bool = false
-@warning_ignore("unused_private_class_variable")
-var _debug_path: Array[Vector2i] = []
+var _debug_paths: Array[Array] = []
 
 var is_miniature: bool = false
 
@@ -122,13 +121,21 @@ func tile_to_world(tile_coord: Vector2i) -> Vector2:
 ## Gibt ein Array von globalen Tile-Koordinaten (Vector2i) für die Bewegung zurück.
 func get_path_between_tiles(start_tile: Vector2i, end_tile: Vector2i) -> Array[Vector2i]:
 	if not astar.is_in_boundsv(start_tile) or not astar.is_in_boundsv(end_tile):
+		print("[MapGrid] Path failed: OOB. start: ", start_tile, " end: ", end_tile)
 		return []
 		
 	# Kein Spam im Debug-Log: Leere Pfade werden ohnehin von den Aufrufern abgefangen!
 	if astar.is_point_solid(start_tile) or astar.is_point_solid(end_tile):
+		print("[MapGrid] Path failed: SOLID. start: ", start_tile, " solid: ", astar.is_point_solid(start_tile), " end: ", end_tile, " solid: ", astar.is_point_solid(end_tile))
 		return []
 		
 	var path = astar.get_id_path(start_tile, end_tile)
+	if path.is_empty():
+		print("[MapGrid] Path failed: NO PATH FOUND by AStar. start: ", start_tile, " end: ", end_tile)
+	else:
+		_debug_paths.append(path)
+		if _debug_paths.size() > 50:
+			_debug_paths.pop_front()
 	return path
 
 
@@ -442,6 +449,26 @@ func _is_built(x: int, y: int) -> bool:
 		return false
 	return _grid[y][x].visible
 
+func _process(delta: float) -> void:
+	if _show_debug_grid:
+		queue_redraw()
+
+func _draw() -> void:
+	if not _show_debug_grid: return
+	
+	# Draw solid tiles
+	for y in astar.region.size.y:
+		for x in astar.region.size.x:
+			if astar.is_point_solid(Vector2i(x, y)):
+				draw_rect(Rect2(x * TILE_PX, y * TILE_PX, TILE_PX, TILE_PX), Color(1.0, 0.0, 0.0, 0.5))
+				
+	# Draw debug paths
+	for path in _debug_paths:
+		if path.size() > 1:
+			var points = PackedVector2Array()
+			for tile in path:
+				points.append(tile_to_world(tile))
+			draw_polyline(points, Color.RED, 2.0)
 
 # =============================================================================
 func _exit_outside_parcel(px: int, py: int, exit: Vector2i, door_rot: int) -> bool:
@@ -576,8 +603,9 @@ func _occ_mark_clearance(gx: int, gy: int, w: int, h: int) -> void:
 		for dx in w:
 			var idx := (gy + dy) * _occ_w + (gx + dx)
 			if idx >= 0 and idx < _occ.size():
-				_occ[idx] = 4 # 4 = Freizuhaltende Zone (Begehbar, aber Bauverbot)
-				_sync_astar_cell(gx + dx, gy + dy)
+				if _occ[idx] == 0:
+					_occ[idx] = 4 # 4 = Freizuhaltende Zone (Begehbar, aber Bauverbot)
+					_sync_astar_cell(gx + dx, gy + dy)
 
 
 # =============================================================================
@@ -690,34 +718,19 @@ func _mark_lobby_on_parcel(parcel_x: int, parcel_y: int) -> void:
 
 	var lobby_rect: Rect2i = parcel.get_lobby_tile_rect()
 	if lobby_rect.has_area():
-		# Grundfläche der Lobby ist freizuhalten (4), damit das Pathfinding durchkommt
-		_occ_mark_clearance(gx + lobby_rect.position.x, gy + lobby_rect.position.y,
-			lobby_rect.size.x, lobby_rect.size.y)
-		
 		var lobby = parcel.get_lobby()
-		if lobby and lobby.has_method("get_solid_tiles"):
-			var solid_tiles = lobby.get_solid_tiles()
-			var tile_offset_x = int(lobby.position.x / TILE_PX)
-			var tile_offset_y = int(lobby.position.y / TILE_PX)
-			for t in solid_tiles:
-				var ax = gx + tile_offset_x + t.x
-				var ay = gy + tile_offset_y + t.y
-				_occ_mark(ax, ay, 1, 1)
-		
-		# Lobby-Innenraum teuer machen: AStar bevorzugt Umwege durch Korridore.
-		# weight_scale=8 → 4 Lobby-Tiles (4×8=32) kosten mehr als Umweg außen herum.
-		const LOBBY_WEIGHT := 8.0
-		for dy in lobby_rect.size.y:
-			for dx in lobby_rect.size.x:
-				var ax = gx + lobby_rect.position.x + dx
-				var ay = gy + lobby_rect.position.y + dy
-				astar.set_point_weight_scale(Vector2i(ax, ay), LOBBY_WEIGHT)
-
-	var clearance: Rect2i = parcel.get_lobby_clearance_rect()
-	if clearance.has_area():
-		# --- NEU: Nutzen unserer Clearance-Funktion statt des normalen _occ_mark ---
-		_occ_mark_clearance(gx + clearance.position.x, gy + clearance.position.y,
-			clearance.size.x, clearance.size.y)
+		if is_instance_valid(lobby):
+			if not active_rooms.has(lobby):
+				active_rooms.append(lobby)
+			
+			# Grundfläche der Lobby als Raum-Körper markieren (wie normale Räume)
+			_occ_mark(gx + lobby_rect.position.x, gy + lobby_rect.position.y,
+				lobby_rect.size.x, lobby_rect.size.y)
+				
+			# Tür-Exit markieren, falls die Lobby ein Target-Tile hat
+			if lobby.has_method("get_target_tile"):
+				var exit = lobby.get_target_tile(self)
+				_occ_mark_exit(exit.x, exit.y)
 
 
 # =============================================================================

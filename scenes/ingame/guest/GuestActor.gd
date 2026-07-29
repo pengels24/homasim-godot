@@ -134,13 +134,7 @@ func _process_waiting(delta: float) -> void:
 			if is_instance_valid(poi_room_node) and poi_room_node.has_method("leave_seat"):
 				poi_room_node.leave_seat(_guest_member.id)
 			
-			# Gast steht mitten im Restaurant → zuerst auf das Exit-Tile des POI setzen,
-			# damit AStar einen gültigen Startpunkt hat (wie beim Verlassen des Zimmers)
-			if is_instance_valid(poi_room_node) and poi_room_node.has_method("get_target_tile"):
-				var poi_exit_tile = poi_room_node.get_target_tile(_map_grid)
-				global_position = _map_grid.tile_to_world(poi_exit_tile)
-			
-			_current_poi_id = "" # POI verlassen, bevor der Walk startet
+			# Der Weg aus dem POI wird nun sauber über local_path_out in _execute_walk animiert!
 			if is_instance_valid(_target_room):
 				_walk_to_room(_target_room, State.IN_ROOM)
 			else:
@@ -280,7 +274,7 @@ func _decide_next_action() -> void:
 		else:
 			_wander_in_room(_target_room)
 			return
-	elif current_state == State.IN_POI and chosen == _current_poi_id:
+	elif (current_state == State.IN_POI or current_state == State.EATING) and chosen == _current_poi_id:
 		chosen = "room"
 	
 
@@ -335,10 +329,7 @@ func _change_state(new_state: State) -> void:
 		
 	current_state = new_state
 	
-	if old_state == State.IN_ROOM and (current_state == State.WALKING or current_state == State.LEAVING):
-		SoundManager.play("door_close")
-	elif current_state == State.IN_ROOM and (old_state == State.WALKING or old_state == State.IDLE):
-		SoundManager.play("door_close")
+	# Türsounds werden nun framegenau über _execute_walk getriggert, nicht mehr hier pauschal beim State-Wechsel
 	
 	# POI-Ankunft: Einnahmen & Boost verarbeiten
 	if new_state == State.IN_POI:
@@ -346,7 +337,7 @@ func _change_state(new_state: State) -> void:
 	
 	match current_state:
 		State.IN_ROOM:
-			_wander_in_room(_target_room, false, true) # sofort loslaufen, aber Initial-Timer setzen
+			_action_timer = randf_range(15.0, 30.0)
 			avatar.visible = true
 			if has_node("ClickArea"): get_node("ClickArea").input_pickable = true
 		State.IN_POI:
@@ -354,9 +345,9 @@ func _change_state(new_state: State) -> void:
 			avatar.visible = false
 			if has_node("ClickArea"): get_node("ClickArea").input_pickable = false
 		State.AWAITING_CHECKOUT:
-			# Unsichtbar am Schalter warten – kein Timer, Spieler löst aus
+			# Sichtbar in der Lobby am Checkout warten
 			_action_timer = 0.0
-			avatar.visible = false
+			avatar.visible = true
 			if has_node("ClickArea"): get_node("ClickArea").input_pickable = false
 		State.STUDYING_MENU:
 			_action_timer = randf_range(5.0, 10.0)
@@ -428,23 +419,8 @@ func _on_poi_arrived() -> void:
 				
 				# Gast macht einen Schritt zur Seite, wird wieder sichtbar und isst
 				var target_pos = lobby.get_snack_eating_target_world()
-				var start_tile = _get_current_tile()
-				var end_tile = _map_grid.world_to_tile(target_pos)
-				var path = _map_grid.get_path_between_tiles(start_tile, end_tile)
-				
-				if path.is_empty():
-					# Fallback: Nur lokaler Schritt
-					var local_step = Vector2(randf_range(-5.0, -1.0), randf_range(-25.0, -10.0))
-					target_pos = global_position + local_step.rotated(avatar.rotation)
-					_change_state(State.EATING)
-					if _active_tween and _active_tween.is_valid():
-						_active_tween.kill()
-					_active_tween = create_tween()
-					_active_tween.tween_property(self, "global_position", target_pos, 0.5)
-				else:
-					_change_state(State.WALKING)
-					_execute_walk(path, State.EATING, target_pos, target_pos)
-				
+				_change_state(State.WALKING)
+				_execute_walk([], State.EATING, global_position, target_pos, lobby)
 				return
 		
 		# Falls Automat nicht klappt
@@ -535,6 +511,9 @@ func _get_poi_room_id(poi_id: String) -> String:
 # =============================================================================
 ## Gibt den Node eines POIs anhand seiner Definition-ID zurück.
 func _get_poi_room_node(poi_id: String) -> Node2D:
+	if poi_id == "lobby" or poi_id == "vending_machine":
+		return _get_lobby_room()
+		
 	for room in _map_grid.active_rooms:
 		if not is_instance_valid(room): continue
 		var def = room.call("get_definition")
@@ -554,40 +533,37 @@ func _get_my_party() -> GuestParty:
 # =============================================================================
 func start_checkout() -> void:
 	_is_checkout_walk = true
-	_change_state(State.WALKING)  # sichtbar machen
 	
-	# Startposition: immer von der Zimmertür (nie aus SOLID-Tile)
-	if _room_door_world != Vector2.INF:
-		global_position = _room_door_world
-	elif is_instance_valid(_target_room):
-		var exit_tile = _get_room_exit_tile(_target_room)
-		_room_door_world = _map_grid.tile_to_world(exit_tile)
-		global_position = _room_door_world
+	var lobby = _get_lobby_room()
+	if not is_instance_valid(lobby):
+		queue_free()
+		return
+		
+	var exit_tile = lobby.get_target_tile(_map_grid)
+	var start_tile: Vector2i = _get_logical_start_tile()
 	
-	# Lobby-Rezeption bereits offen? → direkt zum Ausgang
-	var reception_open = false
-	var lobby_def = _get_poi_def("lobby")
-	if not lobby_def.is_empty():
-		var time = GameState.get_time_in_minutes()
-		var r_from = lobby_def.get("reception_open_from", 420)
-		var r_to = lobby_def.get("reception_open_to", 1320)
-		if time >= r_from and time < r_to:
-			reception_open = true
-
-	if reception_open:
-		_walk_to_exit()
-	else:
-		# Zur Lobby laufen – dort unsichtbar auf Spieler-Checkout warten
-		var start_tile = _get_current_tile()
-		var lobby_tile = _get_lobby_tile()
-		var path_tiles = _map_grid.get_path_between_tiles(start_tile, lobby_tile)
-		if path_tiles.is_empty():
-# 			push_warning("[GuestActor] Kein Pfad zur Lobby für Checkout!")
-			queue_free()
-			return
-		var lobby_world = _map_grid.tile_to_world(lobby_tile)
-		_current_poi_id = "lobby"
-		_execute_walk(path_tiles, State.AWAITING_CHECKOUT, lobby_world)
+	_change_state(State.WALKING)
+		
+	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
+	if path_tiles.is_empty():
+		print("[GuestActor] Checkout failed for ", _guest_member.id, ". Path empty from ", start_tile, " to ", exit_tile, ". current_state=", current_state)
+		queue_free()
+		return
+		
+	_current_poi_id = "lobby"
+	var door_world = _map_grid.tile_to_world(exit_tile)
+	
+	# Hole Warteposition für den Checkout (lokal in der Lobby)
+	var wait_pos = Vector2.INF
+	if lobby.has_method("get_checkout_wait_pos"):
+		wait_pos = lobby.get_checkout_wait_pos()
+		
+	# Jitter damit die Gäste nicht alle exakt auf demselben Pixel stehen
+	var jitter = Vector2(randf_range(-6.0, 6.0), randf_range(-10.0, 10.0))
+	if wait_pos != Vector2.INF:
+		wait_pos += jitter
+		
+	_execute_walk(path_tiles, State.AWAITING_CHECKOUT, door_world, wait_pos, lobby)
 
 
 # =============================================================================
@@ -628,7 +604,7 @@ func _walk_to_room(room: Node2D, finish_state: State) -> void:
 		_action_timer = 5.0
 		return
 		
-	var start_tile = _get_current_tile()
+	var start_tile = _get_logical_start_tile()
 	var exit_tile = room.get_target_tile(_map_grid)
 	
 	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
@@ -640,8 +616,6 @@ func _walk_to_room(room: Node2D, finish_state: State) -> void:
 		return
 		
 	_change_state(State.WALKING)
-	if finish_state == State.IN_ROOM:
-		_current_poi_id = "" # Ziel ist das Zimmer, nicht mehr der alte POI
 		
 	var door_world = _map_grid.tile_to_world(exit_tile)
 	# Tür-Position fürs Zielzimmer cachen (erstmalig oder bei Zimmerwechsel)
@@ -653,6 +627,9 @@ func _walk_to_room(room: Node2D, finish_state: State) -> void:
 		extra_pos = room.get_room_entry_pos(_map_grid)
 		
 	_execute_walk(path_tiles, finish_state, door_world, extra_pos, room)
+
+	if finish_state == State.IN_ROOM:
+		_current_poi_id = "" # Ziel ist das Zimmer, nicht mehr der alte POI
 
 
 ## Generischer Walk zu einem beliebigen POI (Bar, Spa, Restaurant, Lobby ...)
@@ -667,41 +644,26 @@ func _walk_to_poi(poi_id: String) -> void:
 			_action_timer = randf_range(5.0, 15.0)
 			return
 	
+	var target_room: Node2D = null
 	var exit_tile: Vector2i
 	
-	if poi_id == "lobby":
-		exit_tile = _get_lobby_tile()
-	elif poi_id == "vending_machine":
-		exit_tile = _get_vending_tile()
+	if poi_id == "lobby" or poi_id == "vending_machine":
+		target_room = _get_lobby_room()
 	else:
-		var poi_room: Node2D = null
 		for room in _map_grid.active_rooms:
 			if not is_instance_valid(room): continue
 			var def = room.call("get_definition")
 			if def.get("id", "") == poi_id:
-				poi_room = room
+				target_room = room
 				break
+				
+	if not is_instance_valid(target_room):
+		_action_timer = 5.0
+		return
 		
-		if not is_instance_valid(poi_room):
-# 			push_warning("[GuestActor] POI '%s' nicht gefunden!" % poi_id)
-			_action_timer = 5.0
-			return
-			
-		exit_tile = poi_room.get_target_tile(_map_grid)
+	exit_tile = target_room.get_target_tile(_map_grid)
 	
-	# Start-Tile berechnen (gecachte Türposition verwenden!)
-	var start_tile: Vector2i
-	if current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING:
-		if _room_door_world != Vector2.INF:
-			start_tile = _map_grid.world_to_tile(_room_door_world)
-		elif is_instance_valid(_target_room):
-			var t_exit_tile = _get_room_exit_tile(_target_room)
-			_room_door_world = _map_grid.tile_to_world(t_exit_tile)
-			start_tile = t_exit_tile
-		else:
-			start_tile = _get_current_tile()
-	else:
-		start_tile = _get_current_tile()
+	var start_tile: Vector2i = _get_logical_start_tile()
 	
 	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
 	if path_tiles.is_empty():
@@ -713,51 +675,27 @@ func _walk_to_poi(poi_id: String) -> void:
 	_current_poi_id = poi_id
 	var door_world = _map_grid.tile_to_world(exit_tile)
 	
-	var target_room = null
-	if poi_id == "lobby" or poi_id == "vending_machine":
-		target_room = _get_lobby_room()
-	else:
-		for r in _map_grid.active_rooms:
-			if is_instance_valid(r) and r.call("get_definition").get("id", "") == poi_id:
-				target_room = r
-				break
-				
-	_execute_walk(path_tiles, State.IN_POI, door_world, Vector2.INF, target_room)
+	var extra_pos = Vector2.INF
+	if poi_id == "vending_machine" and target_room.has_method("get_vending_target_world"):
+		extra_pos = target_room.get_vending_target_world()
+		
+	_execute_walk(path_tiles, State.IN_POI, door_world, extra_pos, target_room)
 
 
 
 # =============================================================================
 func _walk_to_exit() -> void:
-	var lt = _get_lobby_tile()
-	var entry_parcel: Node2D = _map_grid._grid[_map_grid._entry_plot.y][_map_grid._entry_plot.x]
-	
-	var exit_x: int = lt.x - 1
-	var exit_y: int = lt.y
-	
-	match entry_parcel.entrance_dir:
-		"top":
-			exit_y = _map_grid._entry_plot.y * _map_grid.PARCEL_SZ
-		"bottom":
-			exit_y = (_map_grid._entry_plot.y + 1) * _map_grid.PARCEL_SZ - 1
-		"left":
-			exit_x = _map_grid._entry_plot.x * _map_grid.PARCEL_SZ
-			exit_y = lt.y - 1
-		"right":
-			exit_x = (_map_grid._entry_plot.x + 1) * _map_grid.PARCEL_SZ - 1
-			exit_y = lt.y - 1
-			
-	var exit_tile := Vector2i(exit_x, exit_y)
-	
-	# Da die Lobby nun ins AStar-Grid eingebunden ist (Clearance = 4, Hindernisse = 1),
-	# findet get_path_between_tiles selbstständig einen Weg um Tische herum.
-	var path_tiles = _map_grid.get_path_between_tiles(_get_current_tile(), exit_tile)
-	if path_tiles.is_empty():
-		# Falls kein Weg gefunden wird, verschwinden sie einfach sofort
+	var lobby = _get_lobby_room()
+	if not is_instance_valid(lobby):
 		queue_free()
 		return
 		
+	var exit_tile = lobby.get_target_tile(_map_grid)
 	var door_world = _map_grid.tile_to_world(exit_tile)
-	_execute_walk(path_tiles, State.LEAVING, door_world)
+	
+	# _execute_walk wird automatisch den local_path_out der Lobby nutzen,
+	# da der Gast sich im Status AWAITING_CHECKOUT befindet!
+	_execute_walk([], State.LEAVING, door_world, Vector2.INF, lobby)
 
 
 # =============================================================================
@@ -765,17 +703,38 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 	var world_path: Array[Vector2] = []
 	
 	# NEU: Animierter "Walk out of Room", statt Teleportation
-	# Wenn wir aktuell (oder kurz davor) im Zimmer (oder an einem Sitzplatz) sind, berechnen wir zuerst den lokalen Pfad zur Tür!
-	if (previous_state == State.IN_ROOM or previous_state == State.SITTING or previous_state == State.SLEEPING) and is_instance_valid(_target_room):
-		if _target_room.has_method("get_local_path") and _target_room.has_method("get_room_entry_pos"):
-			var entry_pos = _target_room.get_room_entry_pos(_map_grid)
-			var local_path_out = _target_room.get_local_path(global_position, entry_pos)
-			world_path.append_array(local_path_out)
+	# Nur nach draußen laufen, wenn wir auch wirklich den Raum verlassen (path_tiles > 0)
+	if path_tiles.size() > 0:
+		if (previous_state == State.IN_ROOM or previous_state == State.SITTING or previous_state == State.SLEEPING) and is_instance_valid(_target_room):
+			if _target_room.has_method("get_local_path") and _target_room.has_method("get_room_entry_pos"):
+				var entry_pos = _target_room.get_room_entry_pos(_map_grid)
+				var local_path_out = _target_room.get_local_path(global_position, entry_pos)
+				world_path.append_array(local_path_out)
+		elif (previous_state == State.IN_POI or previous_state == State.AWAITING_CHECKOUT or previous_state == State.EATING) and not _current_poi_id.is_empty():
+			var poi_room = _get_poi_room_node(_current_poi_id)
+			if is_instance_valid(poi_room) and poi_room.has_method("get_local_path") and poi_room.has_method("get_room_entry_pos"):
+				var entry_pos = poi_room.get_room_entry_pos(_map_grid)
+				var local_path_out = poi_room.get_local_path(global_position, entry_pos)
+				world_path.append_array(local_path_out)
+				print("[GuestActor] Generated local_path_out from POI: ", local_path_out.size(), " points. poi_id=", _current_poi_id)
+			else:
+				print("[GuestActor] POI Room invalid or missing methods! poi_id=", _current_poi_id)
+		else:
+			print("[GuestActor] Skipped local_path_out. prev_state=", previous_state, " poi_id=", _current_poi_id)
 			
+	if _map_grid and "is_miniature" in _map_grid and not _map_grid.is_miniature:
+		_map_grid._debug_paths.append(path_tiles)
+			
+	var door_index_out := -1
+	if world_path.size() > 0:
+		door_index_out = world_path.size() - 1
+
 	for tile in path_tiles:
 		world_path.append(_map_grid.tile_to_world(tile))
 		
+	var door_index_in := -1
 	if extra_target_pos != Vector2.INF:
+		door_index_in = world_path.size() - 1
 		if is_instance_valid(target_room) and target_room.has_method("get_local_path"):
 			var local_path = target_room.get_local_path(face_pos, extra_target_pos)
 			world_path.append_array(local_path)
@@ -799,6 +758,7 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 	# Denkpause: 1 Sekunde stehen bleiben, bevor er losläuft
 	_active_tween.tween_interval(1.0)
 	
+	var p_idx = 0
 	for point in world_path:
 		var dist = current_pos.distance_to(point)
 		var duration = dist / _base_speed
@@ -806,6 +766,13 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 		_active_tween.tween_callback(func(): avatar.rotation = global_position.angle_to_point(point))
 		_active_tween.tween_property(self, "global_position", point, duration)
 		current_pos = point
+		
+		if p_idx == door_index_out or p_idx == door_index_in:
+			_active_tween.tween_callback(func():
+				if SettingsManager.play_door_sounds:
+					SoundManager.play("door_close")
+			)
+		p_idx += 1
 		
 	_active_tween.tween_callback(func(): avatar.rotation = global_position.angle_to_point(face_pos))
 	_active_tween.tween_interval(0.3)
@@ -815,7 +782,11 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 		_active_tween.tween_callback(queue_free)
 	else:
 		_active_tween.tween_callback(func(): _change_state(finish_state))
-
+		
+	_active_tween.tween_callback(func(): 
+		if _map_grid and "is_miniature" in _map_grid and not _map_grid.is_miniature:
+			_map_grid._debug_paths.erase(path_tiles)
+	)
 
 # =============================================================================
 func _on_time_speed_changed(is_paused: bool, speed: float) -> void:
@@ -830,23 +801,24 @@ func _on_time_speed_changed(is_paused: bool, speed: float) -> void:
 # --- Helfer-Methoden für Koordinaten ---
 # =============================================================================
 
+func _get_logical_start_tile() -> Vector2i:
+	if current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING or current_state == State.IDLE:
+		if _room_door_world != Vector2.INF:
+			return _map_grid.world_to_tile(_room_door_world)
+		elif is_instance_valid(_target_room):
+			var t_exit_tile = _get_room_exit_tile(_target_room)
+			_room_door_world = _map_grid.tile_to_world(t_exit_tile)
+			return t_exit_tile
+	elif (current_state == State.IN_POI or current_state == State.EATING) and not _current_poi_id.is_empty():
+		var poi_room = _get_poi_room_node(_current_poi_id)
+		if is_instance_valid(poi_room) and poi_room.has_method("get_target_tile"):
+			return poi_room.get_target_tile(_map_grid)
+	
+	return _get_current_tile()
+
 func _get_current_tile() -> Vector2i:
 	return _map_grid.world_to_tile(global_position)
 
-func _get_lobby_tile() -> Vector2i:
-	var entry_parcel: Node2D = _map_grid._grid[_map_grid._entry_plot.y][_map_grid._entry_plot.x]
-	var clearance: Rect2i = entry_parcel.get_lobby_clearance_rect()
-	var lx: int = int(_map_grid._entry_plot.x * _map_grid.PARCEL_SZ) + clearance.position.x + int(clearance.size.x / 2.0)
-	var ly: int = int(_map_grid._entry_plot.y * _map_grid.PARCEL_SZ) + clearance.position.y + int(clearance.size.y / 2.0)
-	return Vector2i(lx, ly)
-
-func _get_vending_tile() -> Vector2i:
-	var entry_parcel: Node2D = _map_grid._grid[_map_grid._entry_plot.y][_map_grid._entry_plot.x]
-	if entry_parcel and entry_parcel.has_method("get_lobby"):
-		var lobby = entry_parcel.get_lobby()
-		if is_instance_valid(lobby) and lobby.has_method("get_vending_target"):
-			return lobby.get_vending_target(_map_grid)
-	return _get_lobby_tile()
 
 func _get_lobby_room() -> Node2D:
 	var entry_parcel: Node2D = _map_grid._grid[_map_grid._entry_plot.y][_map_grid._entry_plot.x]

@@ -141,6 +141,16 @@ func _init_audio_tab() -> void:
 	_setup_slider(slider_bg,     lbl_bg,     SettingsManager.music_volume,  _on_bg_vol_changed)
 	_setup_slider(slider_menu,   lbl_menu,   SettingsManager.menu_music_volume, _on_menu_vol_changed)
 	_setup_slider(slider_sounds, lbl_sounds, SettingsManager.sound_volume,  _on_sounds_vol_changed)
+	
+	var btn_door_l: Button = %ButtonDoorSoundsLeft
+	var btn_door_r: Button = %ButtonDoorSoundsRight
+	var lbl_door_val: Label = %ButtonDoorSounds
+	var lbl_door: Label = %LabelDoorSounds
+	lbl_door.text = GameState.T("settings.audio.door_sounds")
+	
+	_setup_selector("doorsounds", btn_door_l, btn_door_r, lbl_door_val,
+		[GameState.T("label.off"), GameState.T("label.on")], [false, true],
+		SettingsManager.play_door_sounds, _on_door_sounds_toggled)
 
 
 # =============================================================================
@@ -302,6 +312,9 @@ func _on_sounds_vol_changed(val: float) -> void:
 	SettingsManager.sound_volume = val
 	SettingsManager.save()
 
+func _on_door_sounds_toggled(pressed: bool) -> void:
+	SettingsManager.play_door_sounds = pressed
+	SettingsManager.save()
 
 # =============================================================================
 func _on_toast_changed(val: float) -> void:

@@ -96,9 +96,8 @@ func _on_service_pressed() -> void:
 func open(room: Node2D) -> void:
 	if InputHandler.current_mode != InputHandler.InputMode.NORMAL:
 		return
-	# ANG-211: Lobby ist Systemraum – kein Aktionsmenü
-	if room.get("room_type_id") == "lobby":
-		return
+	# Lobby ist Systemraum – Menü erlauben (für RoomMonitor Info), aber bestimmte Buttons ausblenden
+	var is_lobby = (room.get("room_type_id") == "lobby")
 		
 	_target_room = room
 	if _target_room.has_method("set_highlight"):
@@ -108,8 +107,17 @@ func open(room: Node2D) -> void:
 	if is_pending == null:
 		is_pending = false
 	btn_service.disabled = is_pending
+	btn_service.visible = true
+	
 	if is_instance_valid(btn_repair):
 		btn_repair.disabled = is_pending
+		btn_repair.visible = true
+		
+	btn_demolish.visible = not is_lobby
+	
+	for child in btn_demolish.get_parent().get_children():
+		if child is HSeparator:
+			child.visible = not is_lobby
 		
 	btn_wlan.visible = false
 	btn_klima.visible = false

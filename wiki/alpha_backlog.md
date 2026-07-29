@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.43 | Stand: 2026-07-27
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.48 | Stand: 2026-07-29
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -9,6 +9,13 @@
 - **Personalflure:** Kommen NICHT in die Alpha. Grund: würde auf altem 1-Layer-Nav aufbauen → Brückencode. Kommen zusammen mit dem Nav-Rework (3 Layer: Gäste / Personal / Rauminneres + feineres Grid).
 - **Küche/Restaurant Alpha:** Nur eine Tür (Gäste-Eingang). Zweite Tür (Personaleingang) kommt mit Personalflur-Feature.
 - **Branching:** `master` = TechDemo-Bugfixes. `dev` = Alpha-Entwicklung. Nach TechDemo-Fix immer kurz `git merge master` in `dev`.
+
+---
+
+## 🛠️ Ungeplante Fixes & Features (Aktuelle Session)
+- **ANG-324:** Abriss-Blockade für Pausenräume eingebaut (Max. Kapazität vs. Staff-Count).
+- **ANG-325 / ANG-326:** Gäste-Quests für jeden Gasttyp eingebaut (10, 25, 50, 100).
+- Float-Rundungsfehler bei Forschungspunkten gefixt & Währungssymbole ergänzt.
 
 ---
 
@@ -82,6 +89,10 @@ Konzept aus `wiki/02_features/06_personal_und_aufgabensystem.md`:
 Zimmer-Typen bekommen Eigenschaften (z.B. `"wlan"`, `"desk"`). Wenn Gäste einchecken, wird abgeglichen, ob das Zimmer ihre Anforderungen erfüllt. Fehlt etwas (z.B. WLAN für den Geschäftsreisenden), sinkt die Zufriedenheit und wir zeigen das im UI an. Die Basisdaten dafür (z.B. `"wlan"` beim Geschäftsreisenden) existieren bereits im Code.
 
 **Ungeplante Fixes der Session:**
+- ✅ ANG-324: Exploit-Fix – Pausenräume können nicht mehr abgerissen werden, wenn dadurch das Kapazitätslimit unter die Anzahl des eingestellten Personals fällt.
+- ✅ ANG-320: Tutorial-Texte ergänzt, Räume-Kategorie im Codex hinzugefügt, Wiki-Dokumentation für Räume samt Navigation Points erstellt.
+- ✅ Fix: Crash beim Laden von leeren Personalräumen.
+- ✅ Fix: Lobby war nicht korrekt als Nav-Raum definiert.
 - ✅ **GuestActor Wegfindung:** Bug behoben, durch den Gäste beim Verlassen des Zimmers geradewegs durch Wände liefen (Status-Machine Bug mit `previous_state` behoben).
 - ✅ **CustomTooltip:** Position wird nun auf den Viewport geclempt, sodass der Tooltip nicht mehr oben aus dem Bild rutscht.
 

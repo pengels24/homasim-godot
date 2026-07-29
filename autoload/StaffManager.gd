@@ -284,15 +284,18 @@ func _count_role_in_room(room_id: String, role: String) -> int:
 
 # =============================================================================
 func get_max_staff_capacity() -> int:
-	var count = 0
+	var total_capacity = 0
 	if SaveManager.has_method("get_built_plots"):
 		var plots = SaveManager.get_built_plots(GameState.active_hotel_id)
 		for plot in plots:
 			var rooms: Array = plot.get("rooms", [])
 			for r in rooms:
-				if r.get("room_type_id") == "staff_small":
-					count += 1
-	return count * 4
+				var type_id = r.get("room_type_id", "")
+				if GameState.room_registry.has(type_id):
+					var def = GameState.room_registry[type_id].get("def", {})
+					if def.get("is_staff_poi", false):
+						total_capacity += def.get("capacity", 0)
+	return total_capacity
 
 # =============================================================================
 func hire_staff(applicant_id: String) -> bool:

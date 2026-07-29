@@ -17,7 +17,7 @@
           "cost_fp": 100,
           "cost_money": 1000,
           "dependencies": [],
-          "unlocks_emojis": "🛏️ 🚿",
+          "unlocks_emojis": "\ud83d\udecf\ufe0f \ud83d\udebf",
           "demo_locked": false,
           "unlocks_features": [
             "ui.techtree.feature.z11_speed"
@@ -34,7 +34,7 @@
           "dependencies": [
             "Z1.1"
           ],
-          "unlocks_emojis": "📺 🛋️",
+          "unlocks_emojis": "\ud83d\udcfa \ud83d\udecb\ufe0f",
           "demo_locked": false
         },
         {
@@ -48,7 +48,7 @@
           "dependencies": [
             "Z1.1"
           ],
-          "unlocks_emojis": "⭐ 🍾",
+          "unlocks_emojis": "\u2b50 \ud83c\udf7e",
           "demo_locked": false
         },
         {
@@ -62,7 +62,7 @@
           "dependencies": [
             "Z1.1"
           ],
-          "unlocks_emojis": "📶 💻",
+          "unlocks_emojis": "\ud83d\udcf6 \ud83d\udcbb",
           "demo_locked": false
         },
         {
@@ -76,7 +76,7 @@
           "dependencies": [
             "Z1.1"
           ],
-          "unlocks_emojis": "❄️ 🌬️",
+          "unlocks_emojis": "\u2744\ufe0f \ud83c\udf2c\ufe0f",
           "demo_locked": false
         },
         {
@@ -88,7 +88,7 @@
           "cost_fp": 100,
           "cost_money": 1000,
           "dependencies": [],
-          "unlocks_emojis": "🍔 ☕",
+          "unlocks_emojis": "\ud83c\udf54 \u2615",
           "demo_locked": false
         },
         {
@@ -102,7 +102,7 @@
           "dependencies": [
             "G1.1"
           ],
-          "unlocks_emojis": "🍳 🥗",
+          "unlocks_emojis": "\ud83c\udf73 \ud83e\udd57",
           "demo_locked": false
         },
         {
@@ -116,7 +116,7 @@
           "dependencies": [
             "G1.1"
           ],
-          "unlocks_emojis": "🍷 🥩",
+          "unlocks_emojis": "\ud83c\udf77 \ud83e\udd69",
           "demo_locked": false
         },
         {
@@ -131,7 +131,7 @@
             "G1.2",
             "G1.3"
           ],
-          "unlocks_emojis": "⭐ 🍽️",
+          "unlocks_emojis": "\u2b50 \ud83c\udf7d\ufe0f",
           "demo_locked": true
         },
         {
@@ -143,8 +143,11 @@
           "cost_fp": 100,
           "cost_money": 1000,
           "dependencies": [],
-          "unlocks_emojis": "🧖 💆",
-          "demo_locked": true
+          "unlocks_emojis": "\ud83e\uddd6 \ud83d\udc86",
+          "demo_locked": true,
+          "unlocks_features": [
+            "ui.techtree.feature.w11_bonus"
+          ]
         },
         {
           "id": "W1.2",
@@ -157,22 +160,28 @@
           "dependencies": [
             "W1.1"
           ],
-          "unlocks_emojis": "🏊 🌳",
-          "demo_locked": true
+          "unlocks_emojis": "\ud83c\udfca \ud83c\udf33",
+          "demo_locked": true,
+          "unlocks_features": [
+            "ui.techtree.feature.w12_pool"
+          ]
         },
         {
           "id": "W1.3",
           "name": "techtree.wellness.w13",
           "category": "wellness",
-          "col": 2,
-          "row": 0,
+          "col": 1,
+          "row": 1,
           "cost_fp": 500,
           "cost_money": 5000,
           "dependencies": [
-            "W1.2"
+            "W1.1"
           ],
-          "unlocks_emojis": "⭐ 🧘",
-          "demo_locked": true
+          "unlocks_emojis": "\u2b50 \ud83e\uddd8",
+          "demo_locked": true,
+          "unlocks_features": [
+            "ui.techtree.feature.w13_spa"
+          ]
         },
         {
           "id": "M1.1",
@@ -183,7 +192,7 @@
           "cost_fp": 100,
           "cost_money": 1000,
           "dependencies": [],
-          "unlocks_emojis": "💼 📊",
+          "unlocks_emojis": "\ud83d\udcbc \ud83d\udcca",
           "demo_locked": false,
           "unlocks_features": [
             "tutorial.sim_browser.title"
@@ -200,7 +209,7 @@
           "dependencies": [
             "M1.1"
           ],
-          "unlocks_emojis": "🧑‍💼 📝",
+          "unlocks_emojis": "\ud83e\uddd1\u200d\ud83d\udcbc \ud83d\udcdd",
           "demo_locked": false,
           "unlocks_features": [
             "ui.techtree.feature.m12_train"
@@ -217,7 +226,7 @@
           "dependencies": [
             "M1.1"
           ],
-          "unlocks_emojis": "⚙️ ⏱️",
+          "unlocks_emojis": "\u2699\ufe0f \u23f1\ufe0f",
           "demo_locked": false,
           "unlocks_features": [
             "ui.techtree.feature.m13_speed"
@@ -235,7 +244,7 @@
             "M1.2",
             "M1.3"
           ],
-          "unlocks_emojis": "🏢 📈",
+          "unlocks_emojis": "\ud83c\udfe2 \ud83d\udcc8",
           "demo_locked": false,
           "unlocks_features": [
             "ui.techtree.feature.m14_patience"
@@ -250,8 +259,11 @@
           "cost_fp": 100,
           "cost_money": 1000,
           "dependencies": [],
-          "unlocks_emojis": "🎪 🎤",
-          "demo_locked": true
+          "unlocks_emojis": "\ud83c\udfaa \ud83c\udfa4",
+          "demo_locked": true,
+          "unlocks_features": [
+            "ui.techtree.feature.p11_events"
+          ]
         },
         {
           "id": "P1.2",
@@ -264,8 +276,11 @@
           "dependencies": [
             "P1.1"
           ],
-          "unlocks_emojis": "🏟️ 🎇",
-          "demo_locked": true
+          "unlocks_emojis": "\ud83c\udfdf\ufe0f \ud83c\udf87",
+          "demo_locked": true,
+          "unlocks_features": [
+            "ui.techtree.feature.p12_conference"
+          ]
         },
         {
           "id": "P1.3",
@@ -278,8 +293,31 @@
           "dependencies": [
             "P1.2"
           ],
-          "unlocks_emojis": "🎭 🎵",
-          "demo_locked": true
+          "unlocks_emojis": "\ud83c\udfad \ud83c\udfb5",
+          "demo_locked": true,
+          "unlocks_features": [
+            "ui.techtree.feature.p13_vip"
+          ]
+        },
+        {
+          "id": "W1.4",
+          "name": "techtree.wellness.w14",
+          "category": "wellness",
+          "col": 2,
+          "row": 0,
+          "cost_fp": 750,
+          "cost_money": 7500,
+          "dependencies": [
+            "W1.2",
+            "W1.3"
+          ],
+          "unlocks_emojis": "\ud83c\udfcb\ufe0f \ud83d\udd52",
+          "demo_locked": true,
+          "unlocks_features": [
+            "ui.techtree.feature.w14_fitness",
+            "ui.techtree.feature.w14_hours",
+            "ui.techtree.feature.w14_package"
+          ]
         }
       ]
     },

@@ -41,6 +41,7 @@ static func get_definition() -> Dictionary:
 		"req_tech": "",
 		"max_beds": 0,
 		"is_poi": true,
+		"is_guest_poi": false,
 		"open_from": 0,
 		"open_to": 0,
 		"reception_open_from": 420,
@@ -72,25 +73,25 @@ func get_target_tile(map_grid: Node) -> Vector2i:
 	var tile = map_grid.world_to_tile(global_position)
 	var gx = tile.x
 	var gy = tile.y
-	# Lobby 4×4 – Exit-Tile direkt vor dem Eingang (nachgewiesen navigierbar)
+	# Für Gäste IM Hotel ist das Ziel-Tile VOR der Innentür der Lobby, nicht auf der Straße!
 	match entrance_dir:
-		"top":    return Vector2i(gx,     gy - 1)  # Korridor über Lobby
-		"bottom": return Vector2i(gx,     gy + 4)  # Korridor unter Lobby
-		"left":   return Vector2i(gx - 1, gy)      # Korridor links der Lobby
-		"right":  return Vector2i(gx + 4, gy)      # Korridor rechts der Lobby
-	return tile  # Fallback
+		"top":    return Vector2i(gx + 1, gy + 4) # Innentür unten
+		"bottom": return Vector2i(gx + 1, gy - 1) # Innentür oben
+		"left":   return Vector2i(gx + 4, gy + 1) # Innentür rechts
+		"right":  return Vector2i(gx - 1, gy + 1) # Innentür links
+	return tile
 
 func get_room_entry_pos(map_grid: Node) -> Vector2:
 	var tile = map_grid.world_to_tile(global_position)
 	var gx = tile.x
 	var gy = tile.y
-	# Arbeitsposition = 1 Tile innerhalb des Eingangs
+	# The wait area for guests checking out is inside the inner doors.
 	match entrance_dir:
-		"top":    return map_grid.tile_to_world(Vector2i(gx + 1, gy + 1))
-		"bottom": return map_grid.tile_to_world(Vector2i(gx + 1, gy + 2))
-		"left":   return map_grid.tile_to_world(Vector2i(gx + 1, gy + 1))
-		"right":  return map_grid.tile_to_world(Vector2i(gx + 2, gy + 1))
-	return map_grid.tile_to_world(Vector2i(gx + 2, gy + 2))  # Fallback: Lobby-Mitte
+		"top":    return map_grid.tile_to_world(Vector2i(gx + 1, gy + 3)) # Inner doors at bottom
+		"bottom": return map_grid.tile_to_world(Vector2i(gx + 1, gy + 0)) # Inner doors at top
+		"left":   return map_grid.tile_to_world(Vector2i(gx + 3, gy + 1)) # Inner doors at right
+		"right":  return map_grid.tile_to_world(Vector2i(gx + 0, gy + 1)) # Inner doors at left
+	return map_grid.tile_to_world(Vector2i(gx + 3, gy + 1))
 
 
 # =============================================================================
@@ -105,43 +106,58 @@ func configure(data: Dictionary) -> void:
 
 
 # =============================================================================
+func _on_hotel_level_changed(_new_level: int) -> void:
+	_apply_visuals()
+
+# =============================================================================
+var _room_receptions: Array[Node] = []
+var _room_snack_points: Array[Node] = []
+
+func _find_special_nodes(node: Node) -> void:
+	for child in node.get_children():
+		var n = child.name.to_lower()
+		if "navblocker" in n:
+			_find_special_nodes(child)
+			continue
+		if "reception" in n:
+			_room_receptions.append(child)
+		elif "snackpoint" in n:
+			_room_snack_points.append(child)
+		_find_special_nodes(child)
+
 func _ready() -> void:
 	super._ready()
+	_find_special_nodes(self)
 	if not GameState.sig_hotel_level_changed.is_connected(_on_hotel_level_changed):
 		GameState.sig_hotel_level_changed.connect(_on_hotel_level_changed)
 
-func _on_hotel_level_changed(_new_level: int) -> void:
-	_apply_visuals()
+# =============================================================================
+func get_checkout_wait_pos() -> Vector2:
+	if _room_receptions.is_empty():
+		return global_position + Vector2(32.0, 32.0) # Fallback center
+	
+	# Zufälligen Reception-Point wählen
+	var r = _room_receptions[randi() % _room_receptions.size()]
+	return r.global_position
+
 
 
 # =============================================================================
 ## VENDING MACHINE API
-func get_vending_target(map_grid: Node) -> Vector2i:
+## VENDING MACHINE API
+func get_vending_target_world() -> Vector2:
 	if not is_instance_valid(_vending_target):
 		_vending_target = get_node_or_null("%VendingTargetPoint")
 		
 	if is_instance_valid(_vending_target):
-		return map_grid.world_to_tile(_vending_target.global_position)
-	return get_target_tile(map_grid)
+		return _vending_target.global_position
+	return global_position + Vector2(32.0, 32.0) # Fallback
 
 func get_snack_eating_target_world() -> Vector2:
-	# Essenspunkt ist oben mittig über den Tischen (lokal ca. x=32, y=8)
-	return global_position + Vector2(32.0, 8.0)
-
-func get_solid_tiles() -> Array[Vector2i]:
-	var solid: Array[Vector2i] = []
-	# Zentrum (Tische)
-	solid.append(Vector2i(1, 1))
-	solid.append(Vector2i(2, 1))
-	solid.append(Vector2i(1, 2))
-	solid.append(Vector2i(2, 2))
-	
-	# Ecken (Wände mit Pflanzen)
-	solid.append(Vector2i(0, 0))
-	solid.append(Vector2i(3, 0))
-	solid.append(Vector2i(0, 3))
-	solid.append(Vector2i(3, 3))
-	return solid
+	if _room_snack_points.is_empty():
+		return global_position + Vector2(32.0, 8.0) # Fallback
+	var sp = _room_snack_points[randi() % _room_snack_points.size()]
+	return sp.global_position
 
 func buy_snack(budget: int) -> bool:
 	if budget >= VENDING_MACHINE_PRICE:
@@ -170,3 +186,30 @@ func _apply_visuals() -> void:
 	_wall_bottom.visible = (entrance_dir == "bottom")
 	_wall_left.visible   = (entrance_dir == "left")
 	_wall_right.visible  = (entrance_dir == "right")
+
+# =============================================================================
+func get_live_details() -> Array[Dictionary]:
+	var details: Array[Dictionary] = []
+	
+	if Engine.is_editor_hint(): return details
+	
+	var gm = get_tree().get_first_node_in_group("guest_manager")
+	if not gm: return details
+	
+	# Zeige Gäste an, die sich gerade in der Lobby befinden (z.B. am Automaten oder beim Checkout)
+	for guest_actor in get_tree().get_nodes_in_group("guest_actors"):
+		if guest_actor._current_poi_id == "lobby" or guest_actor.current_state == 8: # 8 = AWAITING_CHECKOUT
+			var guest_name = guest_actor.get_node("NameLabel").text if guest_actor.has_node("NameLabel") else "Gast"
+			var status = "Wartet..."
+			if guest_actor.current_state == 8: # AWAITING_CHECKOUT
+				status = GameState.T("poi.lobby.checking_out")
+			elif guest_actor.current_state == 4: # IN_POI
+				status = GameState.T("poi.lobby.vending")
+				
+			details.append({
+				"name": guest_name,
+				"status": status,
+				"icon": "res://assets/UI/icons/icon_guest.png"
+			})
+			
+	return details

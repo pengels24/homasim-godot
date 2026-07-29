@@ -44,11 +44,15 @@ func _on_party_checked_in(party: GuestParty, room: Node2D) -> void:
 		return
 		
 	var entry_parcel: Node2D = _map_grid._grid[_map_grid._entry_plot.y][_map_grid._entry_plot.x]
-	var clearance: Rect2i = entry_parcel.get_lobby_clearance_rect()
-	var lx: int = int(_map_grid._entry_plot.x * _map_grid.PARCEL_SZ) + clearance.position.x + int(clearance.size.x / 2.0)
-	var ly: int = int(_map_grid._entry_plot.y * _map_grid.PARCEL_SZ) + clearance.position.y + int(clearance.size.y / 2.0)
+	var base_pos = Vector2.ZERO
+	if is_instance_valid(entry_parcel) and entry_parcel.has_method("get_lobby"):
+		var lobby = entry_parcel.get_lobby()
+		if is_instance_valid(lobby) and lobby.has_method("get_target_tile"):
+			base_pos = _map_grid.tile_to_world(lobby.get_target_tile(_map_grid))
 	
-	var base_pos = _map_grid.tile_to_world(Vector2i(lx, ly))
+	if base_pos == Vector2.ZERO:
+		base_pos = _map_grid.tile_to_world(Vector2i(_map_grid._entry_plot.x * _map_grid.PARCEL_SZ, _map_grid._entry_plot.y * _map_grid.PARCEL_SZ))
+	
 	
 	# room_id extrahieren, da _create_actor diese braucht falls room mal invalid wird
 	var rnum: String = str(room.get("room_number"))
@@ -95,10 +99,12 @@ func _on_party_checked_out_physically(party: GuestParty) -> void:
 # =============================================================================
 func _get_lobby_spawn_pos() -> Vector2:
 	var entry_parcel: Node2D = _map_grid._grid[_map_grid._entry_plot.y][_map_grid._entry_plot.x]
-	var clearance: Rect2i = entry_parcel.get_lobby_clearance_rect()
-	var lx: int = int(_map_grid._entry_plot.x * _map_grid.PARCEL_SZ) + clearance.position.x + int(clearance.size.x / 2.0)
-	var ly: int = int(_map_grid._entry_plot.y * _map_grid.PARCEL_SZ) + clearance.position.y + int(clearance.size.y / 2.0)
-	return _map_grid.tile_to_world(Vector2i(lx, ly))
+	if entry_parcel and entry_parcel.has_method("get_lobby"):
+		var lobby = entry_parcel.get_lobby()
+		if is_instance_valid(lobby) and lobby.has_method("get_target_tile"):
+			return _map_grid.tile_to_world(lobby.get_target_tile(_map_grid))
+			
+	return _map_grid.tile_to_world(Vector2i(_map_grid._entry_plot.x * _map_grid.PARCEL_SZ, _map_grid._entry_plot.y * _map_grid.PARCEL_SZ))
 
 
 # =============================================================================
@@ -144,3 +150,31 @@ func send_lobby_guests_to_rooms() -> void:
 	for actor in _actors.values():
 		if is_instance_valid(actor):
 			actor.send_back_to_room()
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and event.keycode == KEY_T and event.ctrl_pressed:
+		print("=========================================")
+		print("  GUEST ACTOR DUMP (CTRL+T)  ")
+		print("=========================================")
+		print("Active Parties in Manager: ", _guest_manager._active.size())
+		print("Checkout Parties in Manager: ", _guest_manager._checkout.size())
+		
+		for p in _guest_manager._active:
+			print(" - Party %s (Room: %s) Nights: %d" % [p.id, p.room_id, p.stay_days])
+			for m in p.members:
+				var status = "No Actor!"
+				if _actors.has(m.id):
+					var a = _actors[m.id]
+					status = "Actor State: %d, POI: %s, Pos: %s" % [a.current_state, a._current_poi_id, str(a.global_position)]
+				print("   * Guest %s: %s" % [m.id, status])
+				
+		print("--- CHECKOUT PARTIES ---")
+		for p in _guest_manager._checkout:
+			print(" - Checkout Party %s (Room: %s)" % [p.id, p.room_id])
+			for m in p.members:
+				var status = "No Actor!"
+				if _actors.has(m.id):
+					var a = _actors[m.id]
+					status = "Actor State: %d, POI: %s, Pos: %s" % [a.current_state, a._current_poi_id, str(a.global_position)]
+				print("   * Guest %s: %s" % [m.id, status])
+		print("=========================================")

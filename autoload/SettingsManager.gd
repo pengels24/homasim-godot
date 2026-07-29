@@ -30,6 +30,8 @@ var master_volume: float = 1.0  # 0.0 – 1.0
 var music_volume: float = 0.2  # 0.0 – 1.0
 var menu_music_volume: float = 0.2  # 0.0 – 1.0
 var sound_volume: float = 0.5  # 0.0 – 1.0
+var play_door_sounds: bool = true
+
 
 # ── Oberfläche ────────────────────────────────────────────────────────────────
 var ui_scale: float  = 1.0       # 0.75 / 1.0 / 1.25 / 1.5
@@ -218,6 +220,7 @@ func save() -> void:
 	cfg.set_value("audio", "music_volume", music_volume)
 	cfg.set_value("audio", "menu_music_volume", menu_music_volume)
 	cfg.set_value("audio", "sound_volume", sound_volume)
+	cfg.set_value("audio", "play_door_sounds", play_door_sounds)
 	cfg.set_value("ui", "scale", ui_scale)
 	cfg.set_value("ui", "toast_duration", toast_duration)
 	cfg.set_value("ui", "hud_side", hud_side)
@@ -260,6 +263,7 @@ func _load() -> void:
 	music_volume = cfg.get_value("audio",    "music_volume",              music_volume)
 	menu_music_volume = cfg.get_value("audio",    "menu_music_volume",         menu_music_volume)
 	sound_volume = cfg.get_value("audio",    "sound_volume",              sound_volume)
+	play_door_sounds = cfg.get_value("audio", "play_door_sounds", true)
 	ui_scale = cfg.get_value("ui",       "scale",          ui_scale)
 	toast_duration = cfg.get_value("ui", "toast_duration", 3.5)
 	hud_side = cfg.get_value("ui", "hud_side", "center")

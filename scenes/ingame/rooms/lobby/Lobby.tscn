@@ -221,6 +221,92 @@ texture = ExtResource("6_y7m36")
 region_enabled = true
 region_rect = Rect2(64, 16, 16, 16)
 
+[node name="Chairs" type="Node2D" parent="Interior/Furniture" unique_id=951885163]
+
+[node name="Chair1" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=17735549]
+unique_name_in_owner = true
+position = Vector2(9, 5)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(96, 16, 16, 16)
+
+[node name="Chair2" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=712451943]
+unique_name_in_owner = true
+position = Vector2(4, 5)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(96, 16, 16, 16)
+
+[node name="Chair3" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=72619273]
+unique_name_in_owner = true
+position = Vector2(4, 10)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(96, 16, 16, 16)
+
+[node name="Chair4" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=440943231]
+unique_name_in_owner = true
+position = Vector2(54, 5)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(96, 16, 16, 16)
+
+[node name="Chair5" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=324328201]
+unique_name_in_owner = true
+position = Vector2(59, 5)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(96, 16, 16, 16)
+
+[node name="Chair6" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1775181480]
+unique_name_in_owner = true
+position = Vector2(59, 10)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(96, 16, 16, 16)
+
+[node name="Chair7" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1183935864]
+unique_name_in_owner = true
+position = Vector2(4, 55)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(96, 16, 16, 16)
+
+[node name="Chair8" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1417667842]
+unique_name_in_owner = true
+position = Vector2(4, 60)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(96, 16, 16, 16)
+
+[node name="Chair9" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1318312937]
+unique_name_in_owner = true
+position = Vector2(9, 60)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(96, 16, 16, 16)
+
+[node name="Chair10" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1957197028]
+unique_name_in_owner = true
+position = Vector2(59, 55)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(96, 16, 16, 16)
+
+[node name="Chair11" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=969901205]
+unique_name_in_owner = true
+position = Vector2(59, 60)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(96, 16, 16, 16)
+
+[node name="Chair12" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1085051179]
+unique_name_in_owner = true
+position = Vector2(54, 60)
+texture = ExtResource("6_y7m36")
+region_enabled = true
+region_rect = Rect2(96, 16, 16, 16)
+
 [node name="Sofa" type="Node2D" parent="Interior/Furniture" unique_id=1604123786]
 
 [node name="Sofa TL" type="Sprite2D" parent="Interior/Furniture/Sofa" unique_id=1504985298]
@@ -279,28 +365,28 @@ texture = ExtResource("6_y7m36")
 region_enabled = true
 region_rect = Rect2(112, 0, 16, 16)
 
-[node name="Chairs" type="Node2D" parent="Interior/Furniture" unique_id=542426889]
+[node name="Deskchairs" type="Node2D" parent="Interior/Furniture/Desk" unique_id=542426889]
 
-[node name="Chair TL" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=704657898]
-position = Vector2(25, 25)
+[node name="Seat1" type="Sprite2D" parent="Interior/Furniture/Desk/Deskchairs" unique_id=704657898]
+position = Vector2(24, 24)
 texture = ExtResource("6_y7m36")
 region_enabled = true
 region_rect = Rect2(64, 0, 16, 16)
 
-[node name="Chair TR" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=830523600]
-position = Vector2(39, 25)
+[node name="Seat2" type="Sprite2D" parent="Interior/Furniture/Desk/Deskchairs" unique_id=830523600]
+position = Vector2(40, 24)
 texture = ExtResource("6_y7m36")
 region_enabled = true
 region_rect = Rect2(64, 0, 16, 16)
 
-[node name="Chair BL" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=27151063]
-position = Vector2(25, 39)
+[node name="Seat3" type="Sprite2D" parent="Interior/Furniture/Desk/Deskchairs" unique_id=27151063]
+position = Vector2(24, 40)
 texture = ExtResource("6_y7m36")
 region_enabled = true
 region_rect = Rect2(64, 0, 16, 16)
 
-[node name="Chair BR" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=864058465]
-position = Vector2(39, 39)
+[node name="Seat4" type="Sprite2D" parent="Interior/Furniture/Desk/Deskchairs" unique_id=864058465]
+position = Vector2(40, 40)
 texture = ExtResource("6_y7m36")
 region_enabled = true
 region_rect = Rect2(64, 0, 16, 16)
@@ -337,17 +423,106 @@ region_rect = Rect2(80, 0, 16, 16)
 [node name="VendingTargetPoint" type="Node2D" parent="Interior/Furniture" unique_id=1661513051]
 unique_name_in_owner = true
 z_index = 1
-position = Vector2(8, 41)
+position = Vector2(8, 42)
 
 [node name="VendingMachine" type="Sprite2D" parent="Interior/Furniture" unique_id=627436589]
 unique_name_in_owner = true
-visible = false
 z_index = 1
 position = Vector2(14, 42)
 rotation = 1.5707964
 texture = ExtResource("6_y7m36")
 region_enabled = true
 region_rect = Rect2(80, 16, 16, 16)
+
+[node name="NavBlocker" type="Node2D" parent="Interior/Furniture" unique_id=83432947]
+
+[node name="NavBlockerSofaBL1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=61860068 groups=["nav_blocker"]]
+z_index = 1
+offset_left = 1.0
+offset_top = 52.0
+offset_right = 7.0
+offset_bottom = 63.0
+
+[node name="NavBlockerSofaBL2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=782958225 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 57.0
+offset_right = 12.0
+offset_bottom = 63.0
+
+[node name="NavBlockerSofaTR1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1184428682 groups=["nav_blocker"]]
+offset_left = 52.0
+offset_top = 1.0
+offset_right = 63.0
+offset_bottom = 7.0
+
+[node name="NavBlockerSofaTR2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1152391246 groups=["nav_blocker"]]
+offset_left = 57.0
+offset_top = 1.0
+offset_right = 63.0
+offset_bottom = 12.0
+
+[node name="NavBlockerSofaTL1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1708285675 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 12.0
+offset_bottom = 7.0
+
+[node name="NavBlockerSofaTL2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=590967556 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 7.0
+offset_bottom = 12.0
+
+[node name="NavBlockerSofaBR1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1973908267 groups=["nav_blocker"]]
+offset_left = 52.0
+offset_top = 57.0
+offset_right = 63.0
+offset_bottom = 63.0
+
+[node name="NavBlockerSofaBR2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=128159686 groups=["nav_blocker"]]
+offset_left = 57.0
+offset_top = 52.0
+offset_right = 63.0
+offset_bottom = 63.0
+
+[node name="NavBlockerReception" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=936381301 groups=["nav_blocker"]]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 48.0
+offset_bottom = 48.0
+
+[node name="NavBlockerSnackOMat" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1810662326 groups=["nav_blocker"]]
+z_index = 1
+offset_left = 11.0
+offset_top = 36.0
+offset_right = 16.0
+offset_bottom = 48.0
+
+[node name="WayPoints" type="Node2D" parent="Interior/Furniture" unique_id=1798352345]
+
+[node name="Reception1" type="Marker2D" parent="Interior/Furniture/WayPoints" unique_id=354704976]
+position = Vector2(24, 13)
+
+[node name="Reception2" type="Marker2D" parent="Interior/Furniture/WayPoints" unique_id=492966919]
+position = Vector2(40, 13)
+
+[node name="Reception3" type="Marker2D" parent="Interior/Furniture/WayPoints" unique_id=1463255966]
+position = Vector2(24, 51)
+
+[node name="Reception4" type="Marker2D" parent="Interior/Furniture/WayPoints" unique_id=1987245139]
+position = Vector2(40, 51)
+
+[node name="SnackPoint1" type="Node2D" parent="Interior/Furniture/WayPoints" unique_id=756475137]
+position = Vector2(11, 24)
+
+[node name="SnackPoint2" type="Node2D" parent="Interior/Furniture/WayPoints" unique_id=1956707594]
+position = Vector2(52, 24)
+
+[node name="SnackPoint3" type="Node2D" parent="Interior/Furniture/WayPoints" unique_id=1448707202]
+position = Vector2(32, 9)
+
+[node name="SnackPoint4" type="Node2D" parent="Interior/Furniture/WayPoints" unique_id=934576517]
+position = Vector2(32, 54)
 
 [node name="Door" type="Node2D" parent="." unique_id=145803355]
 

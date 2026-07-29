@@ -71,21 +71,6 @@ func get_lobby_tile_rect() -> Rect2i:
 
 
 # =============================================================================
-func get_lobby_clearance_rect() -> Rect2i:
-	if not has_entrance:
-		return Rect2i()
-	var lp := _lobby_position()
-	var lx: int = int(lp.x / TILE_PX)
-	var ly: int = int(lp.y / TILE_PX)
-	match entrance_dir:
-		"top":    return Rect2i(lx, ly + LOBBY_TILES, LOBBY_TILES, 1)
-		"bottom": return Rect2i(lx, ly - 1,           LOBBY_TILES, 1)
-		"left":   return Rect2i(lx + LOBBY_TILES, ly,  1, LOBBY_TILES)
-		"right":  return Rect2i(lx - 1, ly,            1, LOBBY_TILES)
-	return Rect2i()
-
-
-# =============================================================================
 func get_lobby() -> Node2D:
 	for child in get_children():
 		if child.get("room_type_id") == "lobby":

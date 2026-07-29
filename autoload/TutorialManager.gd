@@ -113,3 +113,11 @@ func get_unlocked_data(category: String = "") -> Array:
 			if category == "" or tut.get("category", "tutorial") == category:
 				result.append(tut)
 	return result
+
+func get_all_data_for_category(category: String = "") -> Array:
+	var result = []
+	for t_id in tutorial_registry.keys():
+		var tut = tutorial_registry[t_id]
+		if category == "" or tut.get("category", "tutorial") == category:
+			result.append(tut)
+	return result

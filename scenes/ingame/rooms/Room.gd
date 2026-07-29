@@ -33,6 +33,10 @@ var floor_num: int = 1
 var cleanliness_level: int = 100
 var maintenance_level: int = 100
 var is_service_requested: bool = false
+var is_built := false
+var is_active := false
+
+const SHOW_DEBUG_PATHS := false # Umschalter für das rote Wegnetz im Raum
 var is_pending_demolish: bool = false:
 	set(value):
 		is_pending_demolish = value
@@ -656,6 +660,8 @@ var _local_astar: AStar2D = null
 const LOCAL_NAV_CELL_SIZE = 4.0
 
 func _find_nav_blockers_recursive(node: Node, result: Array) -> void:
+	if "visible" in node and not node.visible:
+		return
 	for child in node.get_children():
 		if "NavBlocker" in child.name or child.is_in_group("nav_blocker"):
 			if child is Control or child is ReferenceRect or child is ColorRect:
@@ -745,7 +751,7 @@ func get_random_walkable_local_pos() -> Vector2:
 	return to_global(_local_astar.get_point_position(random_id))
 
 func _draw() -> void:
-	if OS.is_debug_build() and _local_astar != null:
+	if SHOW_DEBUG_PATHS and OS.is_debug_build() and _local_astar != null:
 		# Punkte und Verbindungen zeichnen (Rot)
 		for id in _local_astar.get_point_ids():
 			var p1 = _local_astar.get_point_position(id)

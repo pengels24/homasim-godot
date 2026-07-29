@@ -8,7 +8,8 @@ enum InputMode {
 	BUILD,       # Bau-Modus aktiv
 	MODAL,       # Modal offen (Rezeption, Settings, Techtree) - hintergrund blockiert!
 	PAUSE,       # Pause-Menü offen
-	CONSOLE      # Dev-Konsole offen
+	CONSOLE,     # Dev-Konsole offen
+	BUY_PLOT     # Parzellen-Kaufmodus
 }
 
 var current_mode: InputMode = InputMode.NORMAL

@@ -208,11 +208,29 @@ func get_built_plots(hotel_id: int) -> Array:
 
 
 # =============================================================================
+func get_active_plots(hotel_id: int) -> Array:
+	return get_plots(hotel_id).filter(func(p: Dictionary) -> bool: return p["is_built"] or p.get("is_constructing", false))
+
+
+# =============================================================================
+func set_plot_constructing(hotel_id: int, x: int, y: int, end_time: float) -> void:
+	var hotel := get_hotel(hotel_id)
+	for p in hotel.get("plots", []):
+		if p["x"] == x and p["y"] == y:
+			p["is_constructing"] = true
+			p["construction_end_time"] = end_time
+			break
+	_save_hotel(hotel)
+
+
+# =============================================================================
 func set_plot_built(hotel_id: int, x: int, y: int, entrance_dir: String = "") -> void:
 	var hotel := get_hotel(hotel_id)
 	for p in hotel.get("plots", []):
 		if p["x"] == x and p["y"] == y:
 			p["is_built"]     = true
+			p["is_constructing"] = false
+			p["construction_end_time"] = 0.0
 			p["entrance_dir"] = entrance_dir
 			break
 	_save_hotel(hotel)
@@ -595,6 +613,8 @@ func _init_plots(cols: int, rows: int) -> Array:
 				"x":            col,
 				"y":            row,
 				"is_built":     false,
+				"is_constructing": false,
+				"construction_end_time": 0.0,
 				"entrance_dir": "",
 				"rooms":        [],
 			})

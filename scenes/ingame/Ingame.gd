@@ -76,21 +76,21 @@ func _do_fade_in() -> void:
 
 # =============================================================================
 func _start_map() -> void:
-	var built: Array = SaveManager.get_built_plots(_hotel.get("id", -1))
+	var active_plots: Array = SaveManager.get_active_plots(_hotel.get("id", -1))
 
-	if built.is_empty():
+	if active_plots.is_empty():
 		if GameState.is_tutorial_mode:
-			built = [{ "x": 2, "y": 0, "is_built": true, "entrance_dir": "top" }]
+			active_plots = [{ "x": 2, "y": 0, "is_built": true, "entrance_dir": "top" }]
 		else:
-			built = [{ "x": 1, "y": 0, "is_built": true, "entrance_dir": "" }]
+			active_plots = [{ "x": 1, "y": 0, "is_built": true, "entrance_dir": "" }]
 
-	var entry     := Vector2i(built[0]["x"], built[0]["y"])
-	var enter_dir : String = built[0].get("entrance_dir", "")
+	var entry     := Vector2i(active_plots[0]["x"], active_plots[0]["y"])
+	var enter_dir : String = active_plots[0].get("entrance_dir", "")
 
 	if enter_dir == "":
 		enter_dir = _derive_direction(entry.x, entry.y)
 
-	map_grid.build_map(built, entry, enter_dir)
+	map_grid.build_map(active_plots, entry, enter_dir)
 
 
 # =============================================================================

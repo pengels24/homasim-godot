@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.48 | Stand: 2026-07-29
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.49 | Stand: 2026-07-29
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -95,6 +95,10 @@ Zimmer-Typen bekommen Eigenschaften (z.B. `"wlan"`, `"desk"`). Wenn Gäste einch
 - ✅ Fix: Lobby war nicht korrekt als Nav-Raum definiert.
 - ✅ **GuestActor Wegfindung:** Bug behoben, durch den Gäste beim Verlassen des Zimmers geradewegs durch Wände liefen (Status-Machine Bug mit `previous_state` behoben).
 - ✅ **CustomTooltip:** Position wird nun auf den Viewport geclempt, sodass der Tooltip nicht mehr oben aus dem Bild rutscht.
+- ✅ **ANG-332:** Feature-Issue für "Weitere Parzelle" Reward im LevelUp-Screen angelegt.
+- ✅ **Parzellen-Kauf-UI:** Progressbar komplett auf `ParzelleBuildUI.tscn` (Tooltip-Style) umgestellt. Inklusive 3.0-Scaling auf dem CenterContainer, um den Kamera-Zoom (0.33) exakt auszugleichen und pixel-perfect Font-Rendering zu garantieren.
+- ✅ **MapGrid:** Beim Beenden des Parzellen-Kauf-Modus wird die Kamera jetzt via `center_on_entry()` zentriert (identisch zur HOME-Taste).
+- ✅ **Loca-Fix:** Die fehlenden Übersetzungen (`tx.plot_buy`, `ui.confirm.plot_buy_title`, `ui.confirm.plot_buy_desc`) für den Parzellenkauf wurden in `language.csv` nachgetragen. Floating-Value-Anzeige nach Kauf integriert.
 
 ---
 

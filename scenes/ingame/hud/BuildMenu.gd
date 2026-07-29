@@ -140,6 +140,17 @@ func _display_category_buttons() -> void:
 	_category_btns["demolish"] = dem_btn
 	dem_btn.pressed.connect(func(): _show_category("demolish"))
 
+	# NEU: Parzelle Kaufen Button
+	var plot_inst = button_template.instantiate()
+	category_grid.add_child(plot_inst)
+	var plot_btn: Button = plot_inst.get_node("%MenuButton") as Button
+	plot_btn.focus_mode = Control.FOCUS_NONE
+	plot_btn.icon = load("res://assets/icons/HUDTop/house.svg") # Kann später ein Map-Icon werden
+	plot_btn.text = ""
+	plot_btn.tooltip_text = GameState.T("ui.buildmenu.buy_plot", "Parzelle kaufen")
+	_category_btns["buy_plot"] = plot_btn
+	plot_btn.pressed.connect(func(): _show_category("buy_plot"))
+
 # # =============================================================================
 # ## Erstellt die oberen Knöpfe für die Kategorien (Zimmer, Gastro etc.)
 # func _display_category_buttons() -> void:
@@ -188,6 +199,11 @@ func _show_category(cat_name: String) -> void:
 	if cat_name == "demolish":
 		_set_breadcrumb(" > " + GameState.T("ui.buildmenu.demolish", "Abriss"))
 		sig_tool_selected.emit("demolish")
+		return
+
+	if cat_name == "buy_plot":
+		_set_breadcrumb(" > " + GameState.T("ui.buildmenu.buy_plot", "Parzelle kaufen"))
+		sig_tool_selected.emit("buy_plot")
 		return
 
 	var cat_label = GameState.T("room_category." + cat_name.to_lower())

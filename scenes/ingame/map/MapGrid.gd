@@ -392,7 +392,14 @@ func get_world_root() -> Node2D:
 # =============================================================================
 func _show_built_parcels(built_plots: Array) -> void:
 	for plot in built_plots:
-		_grid[plot["y"]][plot["x"]].visible = true
+		var p = _grid[plot["y"]][plot["x"]]
+		p.visible = true
+		if plot.get("is_constructing", false):
+			p.is_constructing = true
+			p.construction_end_time = plot.get("construction_end_time", 0.0)
+			if p.build_overlay: p.build_overlay.visible = true
+		else:
+			p.is_built = true
 
 
 # =============================================================================
@@ -447,7 +454,7 @@ func _restore_rooms(built_plots: Array) -> void:
 func _is_built(x: int, y: int) -> bool:
 	if x < 0 or x >= grid_cols or y < 0 or y >= grid_rows:
 		return false
-	return _grid[y][x].visible
+	return _grid[y][x].is_built
 
 func _process(delta: float) -> void:
 	if _show_debug_grid:
@@ -688,7 +695,7 @@ func _update_all_floor_neighbors() -> void:
 			var parcel: Node2D = _grid[py][px]
 			if not parcel.visible:
 				continue
-			for child: Node2D in parcel.get_children():
+			for child: Node in parcel.get_children():
 				if not child.has_method("get_tile_size"):
 					continue
 				var sz: Vector2i  = child.get_tile_size()
@@ -789,11 +796,15 @@ func _clear_saved_view() -> void:
 
 # =============================================================================
 func _on_input_camera_pan(dir_delta: Vector2) -> void:
+	if is_instance_valid(_buy_overlay_root):
+		return
 	camera.position += dir_delta * _pan_speed / camera.zoom.x
 
 
 # =============================================================================
 func _on_input_camera_zoom(step: float) -> void:
+	if is_instance_valid(_buy_overlay_root):
+		return
 	# Wenn der Wert extrem klein ist, kommt er aus der _process (Tastatur-Delta)
 	if abs(step) < 0.5:
 		# Tastatur-Zoom drosseln, indem wir es verkleinern
@@ -805,6 +816,8 @@ func _on_input_camera_zoom(step: float) -> void:
 
 # =============================================================================
 func _on_input_drag_started(mouse_pos: Vector2) -> void:
+	if is_instance_valid(_buy_overlay_root):
+		return
 	_drag_active = true
 	_drag_origin = mouse_pos
 	_cam_origin = camera.position
@@ -866,7 +879,6 @@ func get_lobby_spawn_pos_world() -> Vector2:
 func get_target_tile(room: Node2D) -> Vector2i:
 	if room.has_method("get_target_tile"):
 		return room.get_target_tile(self)
-	# Fallback: Zentrum
 	if room.has_method("get_rect"):
 		var rct = room.get_rect()
 		return world_to_tile(room.to_global(rct.position + rct.size * 0.5))
@@ -874,6 +886,162 @@ func get_target_tile(room: Node2D) -> Vector2i:
 		var sz = room.get_tile_size() * 16.0
 		return world_to_tile(room.global_position + Vector2(sz.x, sz.y) * 0.5)
 	return world_to_tile(room.global_position)
+
+
+# ── Plot Buy Mode ────────────────────────────────────────────────────────────
+
+var _buy_overlay_root: Node2D
+
+func enter_buy_mode() -> void:
+	if is_instance_valid(_buy_overlay_root):
+		_buy_overlay_root.queue_free()
+	_buy_overlay_root = Node2D.new()
+	_buy_overlay_root.process_mode = Node.PROCESS_MODE_ALWAYS
+	$WorldRoot.add_child(_buy_overlay_root)
+	
+	# Zoom out further to show entire map (including behind UI)
+	camera.zoom = Vector2(0.33, 0.33)
+	var map_center = Vector2((grid_cols * PARCEL_SZ * TILE_PX) / 2.0, (grid_rows * PARCEL_SZ * TILE_PX) / 2.0)
+	camera.global_position = map_center * SCALE
+	
+	var active_plots = SaveManager.get_active_plots(GameState.active_hotel_id)
+	var built_count = active_plots.size()
+	var plot_price = int(4000 * (1 << (built_count - 1)) if built_count > 0 else 4000)
+	
+	var current_level = GameState.get_level()
+	var max_plots = 1 + max(0, (current_level - 2) / 2)
+	
+	for y in grid_rows:
+		for x in grid_cols:
+			var p = _grid[y][x]
+			p.set_buy_mode(true)
+			
+			if p.is_built:
+				continue
+				
+			var overlay = ColorRect.new()
+			overlay.size = Vector2(PARCEL_SZ * TILE_PX, PARCEL_SZ * TILE_PX)
+			overlay.position = p.position
+			
+			if p.is_constructing:
+				overlay.color = Color(0.15, 0.4, 0.15, 0.5) # Darker green transparent
+				var lbl = Label.new()
+				lbl.theme = load("res://assets/ui/default_theme.tres")
+				lbl.add_theme_font_size_override("font_size", 34)
+				lbl.text = TranslationServer.translate("plot.under_construction")
+				lbl.size = overlay.size
+				lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+				lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+				overlay.add_child(lbl)
+				_buy_overlay_root.add_child(overlay)
+				continue
+				
+			var is_adjacent = false
+			if x > 0 and (_grid[y][x-1].is_built or _grid[y][x-1].is_constructing): is_adjacent = true
+			if x < grid_cols-1 and (_grid[y][x+1].is_built or _grid[y][x+1].is_constructing): is_adjacent = true
+			if y > 0 and (_grid[y-1][x].is_built or _grid[y-1][x].is_constructing): is_adjacent = true
+			if y < grid_rows-1 and (_grid[y+1][x].is_built or _grid[y+1][x].is_constructing): is_adjacent = true
+			
+			if is_adjacent:
+				if built_count >= max_plots:
+					overlay.color = Color(1.0, 0.0, 0.0, 0.15) # Red transparent
+					var lbl = Label.new()
+					lbl.theme = load("res://assets/ui/default_theme.tres")
+					lbl.add_theme_font_size_override("font_size", 34)
+					
+					var required_level = 2 + built_count * 2
+					if required_level <= 10:
+						lbl.text = GameState.T("plot.locked_level", "Level %d benötigt") % required_level
+					else:
+						lbl.text = GameState.T("plot.max_reached", "Max. Parzellen")
+						
+					lbl.size = overlay.size
+					lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+					lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+					overlay.add_child(lbl)
+				else:
+					overlay.color = Color(1.0, 0.64, 0.0, 0.15) # Orange transparent
+					var btn = Button.new()
+					btn.theme = load("res://assets/ui/default_theme.tres")
+					btn.text = GameState.T("plot.buy", "Kaufen") + "\n%s €" % GameState.format_money(plot_price)
+					btn.add_theme_font_size_override("font_size", 34)
+					btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+					btn.size = Vector2(180, 80)
+					btn.position = (overlay.size - btn.size) / 2.0
+					btn.pressed.connect(func(): _on_plot_buy_clicked(x, y, plot_price))
+					
+					var normal_style = load("res://assets/ui/menu_button_blue.tres")
+					if normal_style:
+						btn.add_theme_stylebox_override("normal", normal_style)
+						btn.add_theme_stylebox_override("hover", load("res://assets/ui/menu_button_blue_hover.tres"))
+						btn.add_theme_stylebox_override("pressed", load("res://assets/ui/menu_button_blue_pressed.tres"))
+					
+					overlay.add_child(btn)
+			else:
+				overlay.color = Color(1.0, 0.0, 0.0, 0.08) # Red transparent
+				var lbl = Label.new()
+				lbl.theme = load("res://assets/ui/default_theme.tres")
+				lbl.add_theme_font_size_override("font_size", 34)
+				lbl.text = GameState.T("plot.not_available", "Nicht verfügbar")
+				lbl.size = overlay.size
+				lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+				lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+				overlay.add_child(lbl)
+				
+			_buy_overlay_root.add_child(overlay)
+
+
+func exit_buy_mode() -> void:
+	if is_instance_valid(_buy_overlay_root):
+		_buy_overlay_root.queue_free()
+		
+	for y in grid_rows:
+		for x in grid_cols:
+			if is_instance_valid(_grid[y][x]):
+				_grid[y][x].set_buy_mode(false)
+				
+	if _entry_plot != Vector2i(-1, -1):
+		center_on_entry(_entry_plot)
+
+
+func _on_plot_buy_clicked(x: int, y: int, price: int) -> void:
+	if int(GameState.selected_hotel.get("money", 0)) < price:
+		if is_instance_valid(Toast): Toast.show(GameState.T("ui.toast.not_enough_money", "Nicht genug Geld!"), "money", false)
+		return
+		
+	var confirm_scene = load("res://scenes/shared/ConfirmModal.tscn")
+	var confirm = confirm_scene.instantiate()
+	var ui_root = get_parent().get_node_or_null("HUD")
+	if not ui_root:
+		ui_root = self
+	ui_root.add_child(confirm)
+	
+	confirm.confirmed.connect(func():
+		if FinanceManager:
+			FinanceManager.add_transaction(-price, "building", "tx.plot_buy|" + str(x) + "," + str(y))
+		else:
+			GameState.add_money(-price)
+			
+		var center_px = (PARCEL_SZ * TILE_PX) / 2.0
+		var spawn_pos = Vector2(x * PARCEL_SZ * TILE_PX + center_px, y * PARCEL_SZ * TILE_PX + center_px) * SCALE
+		if EffectManager:
+			EffectManager.spawn_money_text(-price, spawn_pos)
+			
+		var p = _grid[y][x]
+		p.start_construction(GameState.active_hotel_id, TimeManager.get_game_time() + 1440)
+		
+		if is_instance_valid(Toast): Toast.show(GameState.T("ui.toast.plot_bought", "Parzelle gekauft! Bau beginnt."), "build")
+		
+		# Refresh overlay
+		exit_buy_mode()
+		enter_buy_mode()
+		
+		confirm.queue_free()
+	)
+	
+	confirm.cancelled.connect(func(): confirm.queue_free())
+	confirm.ask(GameState.T("ui.confirm.plot_buy_title", "Parzelle kaufen?"), GameState.T("ui.confirm.plot_buy_desc", "Möchtest du diese Parzelle für %s € kaufen?") % GameState.format_money(price), GameState.T("plot.buy", "Kaufen"))
+
 
 # =============================================================================
 func get_room_exit_tile(room: Node2D) -> Vector2i:

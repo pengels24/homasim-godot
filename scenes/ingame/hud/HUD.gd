@@ -415,7 +415,7 @@ func set_build_mode_visuals(p_building: bool) -> void:
 	if hint:
 		if p_building:
 			var build_menu = $BottomBarContainer/BuildMenu
-			if build_menu and build_menu._current_category == "demolish":
+			if build_menu and build_menu._current_category in ["demolish", "buy_plot"]:
 				hint.hide_hints()
 			else:
 				hint.show_hints()
@@ -442,7 +442,7 @@ func set_overlay_legend_visuals(type: String) -> void:
 func _on_build_tool_selected(action_id: String) -> void:
 	var hint = find_child("BuildHintPanel", true, false)
 	if hint and _is_building:
-		if action_id == "demolish":
+		if action_id in ["demolish", "buy_plot"]:
 			hint.hide_hints()
 		else:
 			hint.show_hints()

@@ -203,6 +203,11 @@ func on_exit_pressed() -> void:
 		else:
 			close_build_menu() # Then exit build mode completely
 		return
+	if InputHandler.current_mode == InputHandler.InputMode.BUY_PLOT:
+		if is_instance_valid(_map_grid):
+			_map_grid.exit_buy_mode()
+		close_build_menu()
+		return
 	if is_instance_valid(_sim_browser) and _sim_browser.visible:
 		close_sim_browser()
 		return

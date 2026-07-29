@@ -79,6 +79,14 @@ func start_demolish() -> void:
 func _on_tool_selected(action: String) -> void:
 	if action == "demolish":
 		start_demolish()
+	elif action == "buy_plot":
+		start_buy_plot()
+
+
+# =============================================================================
+func start_buy_plot() -> void:
+	InputHandler.current_mode = InputHandler.InputMode.BUY_PLOT
+	_map_grid.enter_buy_mode()
 
 
 # =============================================================================

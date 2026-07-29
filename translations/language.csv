@@ -1197,7 +1197,7 @@ staff.role.kitchen_helper,Küchenhilfe,Kitchen Helper
 staff.role.waiter,Bedienung,Waiter
 ui.staff.assign.free_slot,Freier Arbeitsplatz,Free Workspace
 ui.staff.assign.unassign,Personal freistellen,Unassign staff
-ui.staff.assign.not_available,(Nicht verfügbar),(Not available)
+ui.staff.assign.not_available,(Benötigt),(Locked)
 recipe.name.softdrink,Softdrink,Softdrink
 recipe.name.toast_hawaii,Toast Hawaii,Toast Hawaii
 recipe.name.chips_bowl,Schale Chips,Bowl of Chips
@@ -1339,3 +1339,15 @@ quest.guest.luxury.50.name,50 Luxus-Gäste bedienen,Serve 50 Luxury Guests
 quest.guest.luxury.50.desc,Bediene insgesamt 50 Luxus-Gäste erfolgreich.,Successfully serve a total of 50 Luxury Guests.
 quest.guest.luxury.100.name,100 Luxus-Gäste bedienen,Serve 100 Luxury Guests
 quest.guest.luxury.100.desc,Bediene insgesamt 100 Luxus-Gäste erfolgreich.,Successfully serve a total of 100 Luxury Guests.
+
+ui.buildmenu.buy_plot,Parzelle kaufen,Buy Plot
+plot.buy,Kaufen,Buy
+plot.not_available,Nicht verfügbar,Not available
+ui.toast.not_enough_money,Nicht genug Geld!,Not enough money!
+ui.toast.plot_bought,Parzelle gekauft! Bau beginnt.,Plot bought! Construction starts.
+tx.plot_buy,Parzelle %s gekauft,Plot %s bought
+ui.confirm.plot_buy_title,Parzelle kaufen?,Buy Plot?
+ui.confirm.plot_buy_desc,Möchtest du diese Parzelle für %s € kaufen?,Do you want to buy this plot for %s €?
+plot.locked_level,Level %d benötigt,Requires Level %d
+plot.max_reached,Max. Parzellen,Max Plots
+plot.under_construction,Gekauft - im Bau,Purchased - Building

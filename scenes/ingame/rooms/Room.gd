@@ -83,8 +83,10 @@ var _room_beds: Array[Dictionary] = []
 func _find_furniture_recursive(node: Node) -> void:
 	for child in node.get_children():
 		var n = child.name.to_lower()
-		# Blocker ignorieren!
+		# Blocker ignorieren und Maus-Events durchreichen lassen!
 		if "navblocker" in n:
+			if child is Control:
+				child.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			_find_furniture_recursive(child)
 			continue
 			

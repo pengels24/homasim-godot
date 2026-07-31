@@ -291,6 +291,11 @@ func _on_hotel_level_up(new_level: int) -> void:
 			unlock_text  = GameState.T("levelup.unlock.l10_tier2")
 			reward_money = 15000
 			reward_fp    = 2000
+	# Parzellen-Erweiterung (jede gerade Stufe ab Level 4)
+	if new_level >= 4 and new_level % 2 == 0:
+		if unlock_text != "":
+			unlock_text += "\n\n"
+		unlock_text += "+ " + GameState.T("levelup.unlock.more_plots")
 
 	%LevelUpModal.setup(new_level, reward_money, reward_fp, unlock_text)
 	%LevelUpModal.open()
@@ -385,6 +390,14 @@ func _on_time_speed_changed(is_paused: bool, speed: float) -> void:
 
 
 # =============================================================================
+func _process(delta: float) -> void:
+	if state_border and state_border.visible and EventManager and EventManager.is_event_active() and not _is_building and not _is_paused:
+		var time = Time.get_ticks_msec() / 1000.0
+		state_border.modulate.a = 0.5 + 0.5 * sin(time * 3.0)
+	elif state_border:
+		state_border.modulate.a = 1.0
+
+# =============================================================================
 func update_state_visuals() -> void:
 	if not is_instance_valid(state_border) or not is_instance_valid(pause_label):
 		return
@@ -394,6 +407,9 @@ func update_state_visuals() -> void:
 		state_border.visible = true
 	elif _is_paused:
 		state_border.border_color = Color.WHITE
+		state_border.visible = true
+	elif EventManager and EventManager.is_event_active():
+		state_border.border_color = Color(0.6, 0.2, 0.8) # Purple
 		state_border.visible = true
 	else:
 		state_border.visible = false

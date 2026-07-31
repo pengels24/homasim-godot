@@ -27,7 +27,7 @@ func setup(new_level: int, money_reward: int, fp_reward: int, unlock_text: Strin
 		%Unlock.visible = false
 	else:
 		%Unlock.visible = true
-		%Unlock.text = unlock_text + " ist nun verfügbar!"
+		%Unlock.text = unlock_text
 
 
 # =============================================================================

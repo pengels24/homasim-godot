@@ -368,6 +368,11 @@ func _generate_tooltip(tech_id: String) -> String:
 	if is_demo_locked:
 		tt += GameState.T("ui.techtree.demo_locked") + "\n\n"
 		
+	var desc_key = n.get("name", tech_id) + ".desc"
+	var desc_text = GameState.T(desc_key)
+	if desc_text != desc_key and desc_text != "":
+		tt += _wrap_text(desc_text, 70) + "\n\n"
+		
 	var unlocks = []
 	for t in TechtreeManager.tech_registry.values():
 		if tech_id in t.get("dependencies", []):
@@ -384,14 +389,17 @@ func _generate_tooltip(tech_id: String) -> String:
 			
 	if unlocks.size() > 0:
 		var joined = "\n- ".join(unlocks)
-		tt += GameState.T("ui.techtree.tooltip.unlocks.desc", joined)
-	else:
-		tt += GameState.T("ui.techtree.tooltip.unlocks.empty")
+		tt += GameState.T("ui.techtree.tooltip.unlocks.desc", joined).strip_edges(false, true) + "\n\n"
 	
 	tt += "Voraussetzungen:\n"
-	tt += ("✅ " if _has_fp else "❌ ") + "%d / %d FP\n" % [cur_fp, cost_fp]
-	tt += ("✅ " if _has_money else "❌ ") + "%d / %d €\n" % [cur_money, cost_money]
+	var tier_id = n.get("tier", "1")
+	var req_level = int(TechtreeManager.tiers_config.get(tier_id, {}).get("gate", {}).get("req_level", 0))
+	if req_level > 0:
+		var has_level = GameState.selected_hotel.get("level", 1) >= req_level
+		tt += ("✅ " if has_level else "❌ ") + GameState.T("ui.techtree.req.level", req_level).strip_edges() + "\n"
 	
+	tt += ("✅ " if _has_fp else "❌ ") + "%d / %d FP\n" % [cur_fp, cost_fp]
+	tt += ("✅ " if _has_money else "❌ ") + "%s / %s €\n" % [GameState.format_money(cur_money), GameState.format_money(cost_money)]
 	for d in _deps:
 		var dep_name = d + " " + GameState.T(TechtreeManager.get_tech_node(d).get("name", d))
 		var is_dep_unlocked = TechtreeManager.is_tech_unlocked(d)
@@ -406,3 +414,22 @@ func _on_tech_unlocked(_tech_id: String) -> void:
 # =============================================================================
 func _on_tier_unlocked(_tier_id: String) -> void:
 	_build_ui()
+
+# =============================================================================
+func _wrap_text(text: String, max_len: int = 60) -> String:
+	var result = []
+	for p in text.split("\n"):
+		var words = p.split(" ")
+		var current_line = ""
+		for w in words:
+			if current_line.length() + w.length() > max_len:
+				result.append(current_line)
+				current_line = w
+			else:
+				if current_line == "":
+					current_line = w
+				else:
+					current_line += " " + w
+		if current_line != "":
+			result.append(current_line)
+	return "\n".join(result)

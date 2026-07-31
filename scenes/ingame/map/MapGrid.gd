@@ -397,7 +397,7 @@ func _show_built_parcels(built_plots: Array) -> void:
 		if plot.get("is_constructing", false):
 			p.is_constructing = true
 			p.construction_end_time = plot.get("construction_end_time", 0.0)
-			if p.build_overlay: p.build_overlay.visible = true
+			# build_ui_panel.visible wird in Parzelle._process automatisch gesetzt
 		else:
 			p.is_built = true
 
@@ -994,6 +994,7 @@ func enter_buy_mode() -> void:
 func exit_buy_mode() -> void:
 	if is_instance_valid(_buy_overlay_root):
 		_buy_overlay_root.queue_free()
+	_buy_overlay_root = null  # Sofort nullen → Zoom ist im gleichen Frame wieder aktiv
 		
 	for y in grid_rows:
 		for x in grid_cols:

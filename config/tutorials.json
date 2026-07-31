@@ -79,6 +79,18 @@
             "desc_key": "tutorial.tip_fast_forward.desc"
         },
         {
+            "id": "gourmet_kitchen",
+            "category": "tipps",
+            "title_key": "tutorial.gourmet_kitchen.title",
+            "desc_key": "tutorial.gourmet_kitchen.desc"
+        },
+        {
+            "id": "events",
+            "category": "tipps",
+            "title_key": "tutorial.events.title",
+            "desc_key": "tutorial.events.desc"
+        },
+        {
             "id": "guest_single",
             "category": "codex",
             "title_key": "codex.guest_single.title",
@@ -135,6 +147,13 @@
             "image": "res://assets/icons/guests/user-star.svg"
         },
         {
+            "id": "guest_vip",
+            "category": "codex",
+            "title_key": "codex.guest_vip.title",
+            "desc_key": "codex.guest_vip.desc",
+            "image": "res://assets/icons/guests/user-star.svg"
+        },
+        {
             "id": "guest_groups",
             "category": "codex",
             "title_key": "codex.guest_groups.title",
@@ -146,63 +165,70 @@
             "category": "rooms",
             "title_key": "tutorial.room_lobby.title",
             "desc_key": "tutorial.room_lobby.desc",
-            "image": "res://assets/tiles/Furniture/furniture_lobby.aseprite"
+            "image": "res://assets/roomtypes/lobby.aseprite"
         },
         {
             "id": "room_bed_standard",
             "category": "rooms",
             "title_key": "tutorial.room_bed_standard.title",
             "desc_key": "tutorial.room_bed_standard.desc",
-            "image": "res://assets/icons/angelus2010/Rooms/ang-bed-single.aseprite"
+            "image": "res://assets/roomtypes/bed_standard.aseprite"
         },
         {
             "id": "room_bed_double",
             "category": "rooms",
             "title_key": "tutorial.room_bed_double.title",
             "desc_key": "tutorial.room_bed_double.desc",
-            "image": "res://assets/icons/angelus2010/Rooms/ang-bed-double.aseprite"
+            "image": "res://assets/roomtypes/bed_double_landscape.aseprite"
         },
         {
             "id": "room_bed_family",
             "category": "rooms",
             "title_key": "tutorial.room_bed_family.title",
             "desc_key": "tutorial.room_bed_family.desc",
-            "image": "res://assets/icons/angelus2010/Rooms/ang-bed-family.aseprite"
+            "image": "res://assets/roomtypes/bed_family.aseprite"
         },
         {
             "id": "room_bed_superior",
             "category": "rooms",
             "title_key": "tutorial.room_bed_superior.title",
             "desc_key": "tutorial.room_bed_superior.desc",
-            "image": "res://assets/icons/angelus2010/Rooms/ang-bed-superior.aseprite"
+            "image": "res://assets/roomtypes/bed_superior.aseprite"
         },
         {
             "id": "room_bar",
             "category": "rooms",
             "title_key": "tutorial.room_bar.title",
             "desc_key": "tutorial.room_bar.desc",
-            "image": "res://assets/icons/angelus2010/Rooms/ang-bar.aseprite"
+            "image": "res://assets/roomtypes/bar.aseprite"
         },
         {
             "id": "room_kitchen_small",
             "category": "rooms",
             "title_key": "tutorial.room_kitchen_small.title",
             "desc_key": "tutorial.room_kitchen_small.desc",
-            "image": "res://assets/icons/angelus2010/Rooms/ang-kitchen-small.aseprite"
+            "image": "res://assets/roomtypes/kittchen_small.aseprite"
         },
         {
             "id": "room_restaurant_small",
             "category": "rooms",
             "title_key": "tutorial.room_restaurant_small.title",
             "desc_key": "tutorial.room_restaurant_small.desc",
-            "image": "res://assets/icons/angelus2010/Rooms/ang-restaurant-small.aseprite"
+            "image": "res://assets/roomtypes/restaurant_small.aseprite"
         },
         {
             "id": "room_staff_small",
             "category": "rooms",
             "title_key": "tutorial.room_staff_small.title",
             "desc_key": "tutorial.room_staff_small.desc",
-            "image": "res://assets/icons/angelus2010/Rooms/ang-sraff-small.aseprite"
+            "image": "res://assets/roomtypes/staff_small.aseprite"
+        },
+        {
+            "id": "codex_poi",
+            "category": "real_codex",
+            "title_key": "codex.poi.title",
+            "desc_key": "codex.poi.desc",
+            "image": "res://assets/icons/guests/map-pin.svg"
         }
     ]
 }

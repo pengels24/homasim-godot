@@ -465,7 +465,7 @@ func get_break_thresholds(_staff_id: String) -> Dictionary:
 		
 	# Techtree-Boni (Management)
 	var traits = TechtreeManager.unlocked_techs if TechtreeManager else []
-	if "ui.techtree.feature.m12_train" in traits:
+	if "ui.techtree.feature.m1_2_train" in traits:
 		b_start += 10
 		b_bed += 10
 		b_accept += 10

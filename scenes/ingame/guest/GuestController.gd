@@ -16,6 +16,8 @@ func setup(guest_manager: GuestManager, map_grid: Node) -> void:
 		_guest_manager.sig_party_checked_in.connect(_on_party_checked_in)
 		_guest_manager.sig_party_moving_to_checkout.connect(_on_party_moving_to_checkout)
 		_guest_manager.sig_party_checked_out_physically.connect(_on_party_checked_out_physically)
+		_guest_manager.sig_party_arrived.connect(_on_party_arrived)
+		_guest_manager.sig_party_rejected.connect(_on_party_rejected)
 
 
 # =============================================================================
@@ -37,6 +39,21 @@ func spawn_active_guests() -> void:
 				# Da sie schon im Checkout sind, müssen sie direkt loslaufen
 				actor.start_checkout()
 
+
+# =============================================================================
+func _on_party_arrived(party: GuestParty) -> void:
+	var spawn_pos = _get_lobby_spawn_pos()
+	for i in range(party.members.size()):
+		var member = party.members[i]
+		var actor = _create_actor(member, "lobby", null)
+		actor.start_waiting_in_lobby(spawn_pos, i * 0.8)
+
+func _on_party_rejected(party: GuestParty) -> void:
+	for member in party.members:
+		var guest_id = member.id
+		if _actors.has(guest_id):
+			var actor = _actors[guest_id]
+			actor.complete_checkout(actor.global_position)
 
 # =============================================================================
 func _on_party_checked_in(party: GuestParty, room: Node2D) -> void:
@@ -62,11 +79,13 @@ func _on_party_checked_in(party: GuestParty, room: Node2D) -> void:
 	
 	for i in range(party.members.size()):
 		var member = party.members[i]
-		
-		var actor = _create_actor(member, rkey, null) # null als start_room -> Startet an Rezeption
-		
-		var offset := Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
-		actor.start_checkin(room, base_pos + offset, i * 0.8)
+		var guest_id = member.id
+		var actor = _actors.get(guest_id, null)
+		if not is_instance_valid(actor):
+			# Fallback, falls er irgendwie noch keinen Actor hat
+			actor = _create_actor(member, rkey, null)
+			
+		actor.start_checkin(room, actor.global_position, i * 0.8)
 
 
 # =============================================================================

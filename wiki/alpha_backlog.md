@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.49 | Stand: 2026-07-29
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.50 | Stand: 2026-07-29
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -16,6 +16,10 @@
 - **ANG-324:** Abriss-Blockade für Pausenräume eingebaut (Max. Kapazität vs. Staff-Count).
 - **ANG-325 / ANG-326:** Gäste-Quests für jeden Gasttyp eingebaut (10, 25, 50, 100).
 - Float-Rundungsfehler bei Forschungspunkten gefixt & Währungssymbole ergänzt.
+- ✅ **ParzelleBuildUI – Komplettüberarbeitung:** Panel auf CanvasLayer (Screen-Space) umgestellt, Theme-Variations wie CustomTooltip, `process_mode = ALWAYS` für Pause-Support, `build_overlay` (world-space, blockierend) entfernt, Zoom-Fix in `exit_buy_mode` (`_buy_overlay_root = null`).
+- ✅ **Techtree-Texte automatisiert:** Kosten, Voraussetzungen und "Schaltet frei" generieren sich nun komplett dynamisch für Tooltips und den Codex aus der `techtree.json`.
+- ✅ **CSV-Reparatur:** Fehlerhaftes Parsing durch rohe Zeilenumbrüche behoben. Hardcodierte Voraussetzungen aus `language.csv` entfernt.
+- ✅ **UI-Fixes:** Float-Werte für Level und FP-Kosten zu sauberen Integern konvertiert. Leerzeichen bei Level-Strings gefixt.
 
 ---
 
@@ -89,6 +93,8 @@ Konzept aus `wiki/02_features/06_personal_und_aufgabensystem.md`:
 Zimmer-Typen bekommen Eigenschaften (z.B. `"wlan"`, `"desk"`). Wenn Gäste einchecken, wird abgeglichen, ob das Zimmer ihre Anforderungen erfüllt. Fehlt etwas (z.B. WLAN für den Geschäftsreisenden), sinkt die Zufriedenheit und wir zeigen das im UI an. Die Basisdaten dafür (z.B. `"wlan"` beim Geschäftsreisenden) existieren bereits im Code.
 
 **Ungeplante Fixes der Session:**
+- [x] **Techtree UI:** Tooltips zeigen nun echte Raumbeschreibungen und nutzen manuelles Word-Wrapping, um Layout-Bugs von Godot zu umgehen.
+- [x] **Codex:** POI-Eintrag hinzugefügt und Tutorial-UI auf Echt-Daten-Binding umgestellt.
 - ✅ ANG-324: Exploit-Fix – Pausenräume können nicht mehr abgerissen werden, wenn dadurch das Kapazitätslimit unter die Anzahl des eingestellten Personals fällt.
 - ✅ ANG-320: Tutorial-Texte ergänzt, Räume-Kategorie im Codex hinzugefügt, Wiki-Dokumentation für Räume samt Navigation Points erstellt.
 - ✅ Fix: Crash beim Laden von leeren Personalräumen.

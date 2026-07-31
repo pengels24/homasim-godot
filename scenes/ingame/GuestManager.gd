@@ -6,6 +6,9 @@ signal checkout_forgotten(count: int)
 signal sig_party_checked_in(party: GuestParty, room: Node2D) # <--- NEU
 signal sig_party_moving_to_checkout(party: GuestParty, room_id: String)
 signal sig_party_checked_out_physically(party: GuestParty)
+signal sig_guests_spawned(count)
+signal sig_party_arrived(party: GuestParty)
+signal sig_party_rejected(party: GuestParty)
 
 # ── Konfiguration ─────────────────────────────────────────────────────────────
 var _hotel:	Dictionary
@@ -303,6 +306,10 @@ func generate_daily_schedule(start_time: int) -> Array:
 ## Gibt die Anzahl der generierten KÖPFE (Gäste) zurück.
 func spawn_guests(amount: int = -1) -> int:
 	var party_count := amount if amount > 0 else 1
+	
+	if amount <= 0 and EventManager != null and EventManager.is_event_active():
+		party_count = randi_range(2, 3)
+		
 	var total_heads := 0
 	
 	_daily_spawned_parties += party_count
@@ -310,6 +317,7 @@ func spawn_guests(amount: int = -1) -> int:
 	for _i in party_count:
 		var party := _generate_party()
 		_waiting.append(party)
+		sig_party_arrived.emit(party)
 
 		# Zählt die tatsächlichen Personen in der Gruppe
 		total_heads += party.members.size()
@@ -463,14 +471,30 @@ func _weighted_random_type() -> String:
 		pool.append("family")
 	if has_superior:
 		pool.append("luxury")
+		if GameState.has_techtree_unlocked("P1.3"):
+			pool.append("vip")
 		
 	if pool.is_empty():
 		pool.append("single")
 
 	var total := 0
+	var chances = {}
+	
 	for key: String in pool:
 		if GuestDefinitions.ALL.has(key):
-			total += int(GuestDefinitions.ALL[key]["spawn_chance"])
+			var chance = int(GuestDefinitions.ALL[key]["spawn_chance"])
+			
+			if EventManager != null and EventManager.is_event_active():
+				var ev = EventManager.get_active_event()
+				if ev == EventManager.EventType.TRADE_FAIR and key == "business":
+					chance = int(chance * 2.0)
+				elif ev == EventManager.EventType.CONCERT and key == "event":
+					chance = int(chance * 2.0)
+				elif ev == EventManager.EventType.HOLIDAY and key == "family":
+					chance = int(chance * 2.0)
+					
+			chances[key] = chance
+			total += chance
 
 	if total <= 0:
 		return "single"
@@ -479,8 +503,8 @@ func _weighted_random_type() -> String:
 	var acc  := 0
 
 	for key: String in pool:
-		if GuestDefinitions.ALL.has(key):
-			acc += int(GuestDefinitions.ALL[key]["spawn_chance"])
+		if chances.has(key):
+			acc += chances[key]
 			if roll < acc:
 				return key
 
@@ -519,6 +543,7 @@ func _tick_patience() -> void:
 
 		_waiting.erase(party)
 		party.state = "gone"
+		sig_party_rejected.emit(party)
 		ActivityLog.add(
 			"guest_left",
 			GameState.T("log.guest.left_angry", party.get_display_name()),
@@ -628,6 +653,7 @@ func do_checkin(party: GuestParty, room: Node2D) -> void:
 # =============================================================================
 func reject_party(party: GuestParty) -> void:
 	party.state = "gone"
+	sig_party_rejected.emit(party)
 	_waiting.erase(party)
 
 	# NEU: Statistik füttern
@@ -656,6 +682,7 @@ func clear_waiting_guests_with_penalty() -> void:
 		var penalty: int = 20 # ANG-255: Harte Strafe pauschal -20
 		total_penalty += penalty
 		party.state = "gone"
+		sig_party_rejected.emit(party)
 
 		ActivityLog.add(
 			"guest",
@@ -868,6 +895,7 @@ func process_midnight_penalties(day: int) -> void:
 	# 1. Wartende Gäste an der Eingangstür verjagen
 	for party: GuestParty in _waiting:
 		party.state = "gone"
+		sig_party_rejected.emit(party)
 		ActivityLog.add(
 			"guest_left",
 			GameState.T("log.guest.left_end_of_day", party.get_display_name()),
@@ -1009,6 +1037,7 @@ func process_morning_routine() -> void:
 ## Wird vom UI aufgerufen, wenn ein Gast einen Aufpreis/Deal ablehnt
 func guest_declined_offer(party: GuestParty) -> void:
 	party.state = "gone"
+	sig_party_rejected.emit(party)
 	_waiting.erase(party)
 
 	# NEU: Statistik für gescheiterte Verhandlungen

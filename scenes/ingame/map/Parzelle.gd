@@ -20,37 +20,42 @@ var has_entrance: bool   = false
 var entrance_dir: String = ""
 
 # ── UI ────────────────────────────────────────────────────────────────────────
-var build_overlay: ColorRect
 var build_ui_panel: Control
+var _ui_canvas: CanvasLayer  # Screen-Space → nie verwaschen, nie blockierend
 const PARZELLE_BUILD_UI = preload("res://scenes/ingame/map/ParzelleBuildUI.tscn")
 
 func _ready() -> void:
-	build_overlay = ColorRect.new()
-	build_overlay.color = Color(0, 0, 0, 0.6)
-	build_overlay.size = Vector2(PARCEL_TILES * TILE_PX, PARCEL_TILES * TILE_PX)
-	build_overlay.visible = false
-	add_child(build_overlay)
+	# Panel-Updates müssen auch im Pause-Modus laufen
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	
+	# Panel auf CanvasLayer → Screen-Space, kein Blur, kein Mouse-Blocking
+	_ui_canvas = CanvasLayer.new()
+	_ui_canvas.layer = 10
+	add_child(_ui_canvas)
 	
 	build_ui_panel = PARZELLE_BUILD_UI.instantiate()
-	
-	var center = CenterContainer.new()
-	center.size = build_overlay.size
-	center.pivot_offset = center.size / 2.0
-	center.scale = Vector2(3.0, 3.0)
-	center.add_child(build_ui_panel)
-	
-	build_overlay.add_child(center)
+	build_ui_panel.visible = false
+	_ui_canvas.add_child(build_ui_panel)
 	
 var _in_buy_mode: bool = false
 func set_buy_mode(active: bool) -> void:
+	# _process steuert Visibility von overlay + panel automatisch via _in_buy_mode
 	_in_buy_mode = active
-	if is_constructing:
-		build_overlay.visible = not _in_buy_mode
-
 
 
 func _process(_delta: float) -> void:
 	if is_constructing:
+		# Visibility: Panel nur im normalen Spielbetrieb (nicht während Buy-Mode)
+		var should_show := not _in_buy_mode
+		if build_ui_panel.visible != should_show:
+			build_ui_panel.visible = should_show
+		
+		# Screen-Space Zentrierung (wie CustomTooltip) – läuft nur wenn sichtbar
+		if build_ui_panel.visible:
+			var center_local := Vector2(PARCEL_TILES * TILE_PX, PARCEL_TILES * TILE_PX) / 2.0
+			var screen_pos := get_global_transform_with_canvas() * center_local
+			build_ui_panel.position = screen_pos - build_ui_panel.size / 2.0
+		
 		var current_time = TimeManager.get_game_time()
 		if current_time >= construction_end_time:
 			buy(GameState.active_hotel_id)
@@ -65,6 +70,7 @@ func _process(_delta: float) -> void:
 			
 			var remaining = int(construction_end_time - current_time)
 			build_ui_panel.update_progress(progress, remaining)
+
 
 
 # ── Public API ────────────────────────────────────────────────────────────────
@@ -89,21 +95,22 @@ func start_construction(hotel_id: int, end_time: float) -> void:
 	is_constructing = true
 	construction_end_time = end_time
 	visible = true
-	build_overlay.visible = not _in_buy_mode
-	var map = get_parent().get_parent()
+	# build_ui_panel.visible wird in _process automatisch gesetzt
 	var _gx = int(name.split("_")[1])
 	var _gy = int(name.split("_")[2])
 	SaveManager.set_plot_constructing(hotel_id, _gx, _gy, end_time)
+
 
 # =============================================================================
 func buy(hotel_id: int) -> void:
 	is_built = true
 	visible  = true
 	is_constructing = false
-	if build_overlay: build_overlay.visible = false
+	if build_ui_panel: build_ui_panel.visible = false  # _process ist off, manuell
 	var _gx = int(name.split("_")[1])
 	var _gy = int(name.split("_")[2])
 	SaveManager.set_plot_built(hotel_id, _gx, _gy)
+
 
 
 # =============================================================================

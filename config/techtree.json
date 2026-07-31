@@ -1,334 +1,345 @@
-{
-  "tiers": {
-    "1": {
-      "gate": {
-        "cost_fp": 0,
-        "req_level": 3,
-        "req_stars": 0,
-        "req_items_unlocked": 0
-      },
-      "nodes": [
-        {
-          "id": "Z1.1",
-          "name": "techtree.zimmer.z11",
-          "category": "zimmer",
-          "col": 0,
-          "row": 0,
-          "cost_fp": 100,
-          "cost_money": 1000,
-          "dependencies": [],
-          "unlocks_emojis": "\ud83d\udecf\ufe0f \ud83d\udebf",
-          "demo_locked": false,
-          "unlocks_features": [
-            "ui.techtree.feature.z11_speed"
-          ]
-        },
-        {
-          "id": "Z1.2",
-          "name": "techtree.zimmer.z12",
-          "category": "zimmer",
-          "col": 1,
-          "row": 0,
-          "cost_fp": 200,
-          "cost_money": 2500,
-          "dependencies": [
-            "Z1.1"
-          ],
-          "unlocks_emojis": "\ud83d\udcfa \ud83d\udecb\ufe0f",
-          "demo_locked": false
-        },
-        {
-          "id": "Z1.3",
-          "name": "techtree.zimmer.z13",
-          "category": "zimmer",
-          "col": 1,
-          "row": 1,
-          "cost_fp": 300,
-          "cost_money": 5000,
-          "dependencies": [
-            "Z1.1"
-          ],
-          "unlocks_emojis": "\u2b50 \ud83c\udf7e",
-          "demo_locked": false
-        },
-        {
-          "id": "Z1.4",
-          "name": "techtree.zimmer.wlan",
-          "category": "zimmer",
-          "col": 2,
-          "row": 0,
-          "cost_fp": 150,
-          "cost_money": 1500,
-          "dependencies": [
-            "Z1.1"
-          ],
-          "unlocks_emojis": "\ud83d\udcf6 \ud83d\udcbb",
-          "demo_locked": false
-        },
-        {
-          "id": "Z1.5",
-          "name": "techtree.zimmer.klima",
-          "category": "zimmer",
-          "col": 2,
-          "row": 1,
-          "cost_fp": 200,
-          "cost_money": 2000,
-          "dependencies": [
-            "Z1.1"
-          ],
-          "unlocks_emojis": "\u2744\ufe0f \ud83c\udf2c\ufe0f",
-          "demo_locked": false
-        },
-        {
-          "id": "G1.1",
-          "name": "techtree.gastro.g11",
-          "category": "gastronomie",
-          "col": 0,
-          "row": 0,
-          "cost_fp": 100,
-          "cost_money": 1000,
-          "dependencies": [],
-          "unlocks_emojis": "\ud83c\udf54 \u2615",
-          "demo_locked": false
-        },
-        {
-          "id": "G1.2",
-          "name": "techtree.gastro.g12",
-          "category": "gastronomie",
-          "col": 1,
-          "row": 0,
-          "cost_fp": 250,
-          "cost_money": 2500,
-          "dependencies": [
-            "G1.1"
-          ],
-          "unlocks_emojis": "\ud83c\udf73 \ud83e\udd57",
-          "demo_locked": false
-        },
-        {
-          "id": "G1.3",
-          "name": "techtree.gastro.g13",
-          "category": "gastronomie",
-          "col": 1,
-          "row": 1,
-          "cost_fp": 500,
-          "cost_money": 5000,
-          "dependencies": [
-            "G1.1"
-          ],
-          "unlocks_emojis": "\ud83c\udf77 \ud83e\udd69",
-          "demo_locked": false
-        },
-        {
-          "id": "G1.4",
-          "name": "techtree.gastro.g14",
-          "category": "gastronomie",
-          "col": 2,
-          "row": 0,
-          "cost_fp": 1000,
-          "cost_money": 10000,
-          "dependencies": [
-            "G1.2",
-            "G1.3"
-          ],
-          "unlocks_emojis": "\u2b50 \ud83c\udf7d\ufe0f",
-          "demo_locked": true
-        },
-        {
-          "id": "W1.1",
-          "name": "techtree.wellness.w11",
-          "category": "wellness",
-          "col": 0,
-          "row": 0,
-          "cost_fp": 100,
-          "cost_money": 1000,
-          "dependencies": [],
-          "unlocks_emojis": "\ud83e\uddd6 \ud83d\udc86",
-          "demo_locked": true,
-          "unlocks_features": [
-            "ui.techtree.feature.w11_bonus"
-          ]
-        },
-        {
-          "id": "W1.2",
-          "name": "techtree.wellness.w12",
-          "category": "wellness",
-          "col": 1,
-          "row": 0,
-          "cost_fp": 250,
-          "cost_money": 2500,
-          "dependencies": [
-            "W1.1"
-          ],
-          "unlocks_emojis": "\ud83c\udfca \ud83c\udf33",
-          "demo_locked": true,
-          "unlocks_features": [
-            "ui.techtree.feature.w12_pool"
-          ]
-        },
-        {
-          "id": "W1.3",
-          "name": "techtree.wellness.w13",
-          "category": "wellness",
-          "col": 1,
-          "row": 1,
-          "cost_fp": 500,
-          "cost_money": 5000,
-          "dependencies": [
-            "W1.1"
-          ],
-          "unlocks_emojis": "\u2b50 \ud83e\uddd8",
-          "demo_locked": true,
-          "unlocks_features": [
-            "ui.techtree.feature.w13_spa"
-          ]
-        },
-        {
-          "id": "M1.1",
-          "name": "techtree.management.m11",
-          "category": "management",
-          "col": 0,
-          "row": 0,
-          "cost_fp": 100,
-          "cost_money": 1000,
-          "dependencies": [],
-          "unlocks_emojis": "\ud83d\udcbc \ud83d\udcca",
-          "demo_locked": false,
-          "unlocks_features": [
-            "tutorial.sim_browser.title"
-          ]
-        },
-        {
-          "id": "M1.2",
-          "name": "techtree.management.m12",
-          "category": "management",
-          "col": 1,
-          "row": 0,
-          "cost_fp": 250,
-          "cost_money": 2500,
-          "dependencies": [
-            "M1.1"
-          ],
-          "unlocks_emojis": "\ud83e\uddd1\u200d\ud83d\udcbc \ud83d\udcdd",
-          "demo_locked": false,
-          "unlocks_features": [
-            "ui.techtree.feature.m12_train"
-          ]
-        },
-        {
-          "id": "M1.3",
-          "name": "techtree.management.m13",
-          "category": "management",
-          "col": 1,
-          "row": 1,
-          "cost_fp": 500,
-          "cost_money": 5000,
-          "dependencies": [
-            "M1.1"
-          ],
-          "unlocks_emojis": "\u2699\ufe0f \u23f1\ufe0f",
-          "demo_locked": false,
-          "unlocks_features": [
-            "ui.techtree.feature.m13_speed"
-          ]
-        },
-        {
-          "id": "M1.4",
-          "name": "techtree.management.m14",
-          "category": "management",
-          "col": 2,
-          "row": 0,
-          "cost_fp": 1000,
-          "cost_money": 10000,
-          "dependencies": [
-            "M1.2",
-            "M1.3"
-          ],
-          "unlocks_emojis": "\ud83c\udfe2 \ud83d\udcc8",
-          "demo_locked": false,
-          "unlocks_features": [
-            "ui.techtree.feature.m14_patience"
-          ]
-        },
-        {
-          "id": "P1.1",
-          "name": "techtree.prestige.p11",
-          "category": "prestige",
-          "col": 0,
-          "row": 0,
-          "cost_fp": 100,
-          "cost_money": 1000,
-          "dependencies": [],
-          "unlocks_emojis": "\ud83c\udfaa \ud83c\udfa4",
-          "demo_locked": true,
-          "unlocks_features": [
-            "ui.techtree.feature.p11_events"
-          ]
-        },
-        {
-          "id": "P1.2",
-          "name": "techtree.prestige.p12",
-          "category": "prestige",
-          "col": 1,
-          "row": 0,
-          "cost_fp": 250,
-          "cost_money": 2500,
-          "dependencies": [
-            "P1.1"
-          ],
-          "unlocks_emojis": "\ud83c\udfdf\ufe0f \ud83c\udf87",
-          "demo_locked": true,
-          "unlocks_features": [
-            "ui.techtree.feature.p12_conference"
-          ]
-        },
-        {
-          "id": "P1.3",
-          "name": "techtree.prestige.p13",
-          "category": "prestige",
-          "col": 2,
-          "row": 0,
-          "cost_fp": 500,
-          "cost_money": 5000,
-          "dependencies": [
-            "P1.2"
-          ],
-          "unlocks_emojis": "\ud83c\udfad \ud83c\udfb5",
-          "demo_locked": true,
-          "unlocks_features": [
-            "ui.techtree.feature.p13_vip"
-          ]
-        },
-        {
-          "id": "W1.4",
-          "name": "techtree.wellness.w14",
-          "category": "wellness",
-          "col": 2,
-          "row": 0,
-          "cost_fp": 750,
-          "cost_money": 7500,
-          "dependencies": [
-            "W1.2",
-            "W1.3"
-          ],
-          "unlocks_emojis": "\ud83c\udfcb\ufe0f \ud83d\udd52",
-          "demo_locked": true,
-          "unlocks_features": [
-            "ui.techtree.feature.w14_fitness",
-            "ui.techtree.feature.w14_hours",
-            "ui.techtree.feature.w14_package"
-          ]
-        }
-      ]
-    },
-    "2": {
-      "gate": {
-        "cost_fp": 500,
-        "req_level": 10,
-        "req_stars": 1,
-        "req_items_unlocked": 5
-      },
-      "nodes": []
-    }
-  }
+﻿{
+    "tiers":  {
+                  "1":  {
+                            "gate":  {
+                                         "cost_fp":  0,
+                                         "req_level":  3,
+                                         "req_stars":  0,
+                                         "req_items_unlocked":  0
+                                     },
+                            "nodes":  [
+                                          {
+                                              "id":  "Z1.1",
+                                              "name":  "techtree.zimmer.z1_1",
+                                              "category":  "zimmer",
+                                              "col":  0,
+                                              "row":  0,
+                                              "cost_fp":  100,
+                                              "cost_money":  1000,
+                                              "dependencies":  [
+
+                                                               ],
+                                              "unlocks_emojis":  "🛏️ 🚿",
+                                              "demo_locked":  false,
+                                              "unlocks_features":  [
+                                                                       "ui.techtree.feature.z1_1_speed"
+                                                                   ]
+                                          },
+                                          {
+                                              "id":  "Z1.2",
+                                              "name":  "techtree.zimmer.z1_2",
+                                              "category":  "zimmer",
+                                              "col":  1,
+                                              "row":  0,
+                                              "cost_fp":  200,
+                                              "cost_money":  2500,
+                                              "dependencies":  [
+                                                                   "Z1.1"
+                                                               ],
+                                              "unlocks_emojis":  "📺 🛋️",
+                                              "demo_locked":  false
+                                          },
+                                          {
+                                              "id":  "Z1.3",
+                                              "name":  "techtree.zimmer.z1_3",
+                                              "category":  "zimmer",
+                                              "col":  1,
+                                              "row":  1,
+                                              "cost_fp":  300,
+                                              "cost_money":  5000,
+                                              "dependencies":  [
+                                                                   "Z1.1"
+                                                               ],
+                                              "unlocks_emojis":  "⭐ 🍾",
+                                              "demo_locked":  false
+                                          },
+                                          {
+                                              "id":  "Z1.4",
+                                              "name":  "techtree.zimmer.wlan",
+                                              "category":  "zimmer",
+                                              "col":  2,
+                                              "row":  0,
+                                              "cost_fp":  150,
+                                              "cost_money":  1500,
+                                              "dependencies":  [
+                                                                   "Z1.1"
+                                                               ],
+                                              "unlocks_emojis":  "📶 💻",
+                                              "demo_locked":  false
+                                          },
+                                          {
+                                              "id":  "Z1.5",
+                                              "name":  "techtree.zimmer.klima",
+                                              "category":  "zimmer",
+                                              "col":  2,
+                                              "row":  1,
+                                              "cost_fp":  200,
+                                              "cost_money":  2000,
+                                              "dependencies":  [
+                                                                   "Z1.1"
+                                                               ],
+                                              "unlocks_emojis":  "❄️ 🌬️",
+                                              "demo_locked":  false
+                                          },
+                                          {
+                                              "id":  "G1.1",
+                                              "name":  "techtree.gastro.g1_1",
+                                              "category":  "gastronomie",
+                                              "col":  0,
+                                              "row":  0,
+                                              "cost_fp":  100,
+                                              "cost_money":  1000,
+                                              "dependencies":  [
+
+                                                               ],
+                                              "unlocks_emojis":  "🍔 ☕",
+                                              "demo_locked":  false
+                                          },
+                                          {
+                                              "id":  "G1.2",
+                                              "name":  "techtree.gastro.g1_2",
+                                              "category":  "gastronomie",
+                                              "col":  1,
+                                              "row":  0,
+                                              "cost_fp":  250,
+                                              "cost_money":  2500,
+                                              "dependencies":  [
+                                                                   "G1.1"
+                                                               ],
+                                              "unlocks_emojis":  "🍳 🥗",
+                                              "demo_locked":  false
+                                          },
+                                          {
+                                              "id":  "G1.3",
+                                              "name":  "techtree.gastro.g1_3",
+                                              "category":  "gastronomie",
+                                              "col":  1,
+                                              "row":  1,
+                                              "cost_fp":  500,
+                                              "cost_money":  5000,
+                                              "dependencies":  [
+                                                                   "G1.1"
+                                                               ],
+                                              "unlocks_emojis":  "🍷 🥩",
+                                              "demo_locked":  false
+                                          },
+                                          {
+                                              "id":  "G1.4",
+                                              "name":  "techtree.gastro.g1_4",
+                                              "category":  "gastronomie",
+                                              "col":  2,
+                                              "row":  0,
+                                              "cost_fp":  1000,
+                                              "cost_money":  10000,
+                                              "dependencies":  [
+                                                                   "G1.2",
+                                                                   "G1.3"
+                                                               ],
+                                              "unlocks_emojis":  "⭐ 🍽️",
+                                              "demo_locked":  true
+                                          },
+                                          {
+                                              "id":  "W1.1",
+                                              "name":  "techtree.wellness.w1_1",
+                                              "category":  "wellness",
+                                              "col":  0,
+                                              "row":  0,
+                                              "cost_fp":  100,
+                                              "cost_money":  1000,
+                                              "dependencies":  [
+
+                                                               ],
+                                              "unlocks_emojis":  "🧖 💆",
+                                              "demo_locked":  true,
+                                              "unlocks_features":  [
+                                                                       "ui.techtree.feature.w1_1_bonus"
+                                                                   ]
+                                          },
+                                          {
+                                              "id":  "W1.2",
+                                              "name":  "techtree.wellness.w1_2",
+                                              "category":  "wellness",
+                                              "col":  1,
+                                              "row":  0,
+                                              "cost_fp":  250,
+                                              "cost_money":  2500,
+                                              "dependencies":  [
+                                                                   "W1.1"
+                                                               ],
+                                              "unlocks_emojis":  "🏊 🌳",
+                                              "demo_locked":  true,
+                                              "unlocks_features":  [
+
+                                                                   ]
+                                          },
+                                          {
+                                              "id":  "W1.3",
+                                              "name":  "techtree.wellness.w1_3",
+                                              "category":  "wellness",
+                                              "col":  1,
+                                              "row":  1,
+                                              "cost_fp":  500,
+                                              "cost_money":  5000,
+                                              "dependencies":  [
+                                                                   "W1.1"
+                                                               ],
+                                              "unlocks_emojis":  "⭐ 🧘",
+                                              "demo_locked":  true,
+                                              "unlocks_features":  [
+
+                                                                   ]
+                                          },
+                                          {
+                                              "id":  "M1.1",
+                                              "name":  "techtree.management.m1_1",
+                                              "category":  "management",
+                                              "col":  0,
+                                              "row":  0,
+                                              "cost_fp":  100,
+                                              "cost_money":  1000,
+                                              "dependencies":  [
+
+                                                               ],
+                                              "unlocks_emojis":  "💼 📊",
+                                              "demo_locked":  false,
+                                              "unlocks_features":  [
+                                                                       "tutorial.sim_browser.title"
+                                                                   ]
+                                          },
+                                          {
+                                              "id":  "M1.2",
+                                              "name":  "techtree.management.m1_2",
+                                              "category":  "management",
+                                              "col":  1,
+                                              "row":  0,
+                                              "cost_fp":  250,
+                                              "cost_money":  2500,
+                                              "dependencies":  [
+                                                                   "M1.1"
+                                                               ],
+                                              "unlocks_emojis":  "🧑‍💼 📝",
+                                              "demo_locked":  false,
+                                              "unlocks_features":  [
+                                                                       "ui.techtree.feature.m1_2_train"
+                                                                   ]
+                                          },
+                                          {
+                                              "id":  "M1.3",
+                                              "name":  "techtree.management.m1_3",
+                                              "category":  "management",
+                                              "col":  1,
+                                              "row":  1,
+                                              "cost_fp":  500,
+                                              "cost_money":  5000,
+                                              "dependencies":  [
+                                                                   "M1.1"
+                                                               ],
+                                              "unlocks_emojis":  "⚙️ ⏱️",
+                                              "demo_locked":  false,
+                                              "unlocks_features":  [
+                                                                       "ui.techtree.feature.m1_3_speed"
+                                                                   ]
+                                          },
+                                          {
+                                              "id":  "M1.4",
+                                              "name":  "techtree.management.m1_4",
+                                              "category":  "management",
+                                              "col":  2,
+                                              "row":  0,
+                                              "cost_fp":  1000,
+                                              "cost_money":  10000,
+                                              "dependencies":  [
+                                                                   "M1.2",
+                                                                   "M1.3"
+                                                               ],
+                                              "unlocks_emojis":  "🏢 📈",
+                                              "demo_locked":  false,
+                                              "unlocks_features":  [
+                                                                       "ui.techtree.feature.m1_4_patience"
+                                                                   ]
+                                          },
+                                          {
+                                              "id":  "P1.1",
+                                              "name":  "techtree.prestige.p1_1",
+                                              "category":  "prestige",
+                                              "col":  0,
+                                              "row":  0,
+                                              "cost_fp":  100,
+                                              "cost_money":  1000,
+                                              "dependencies":  [
+
+                                                               ],
+                                              "unlocks_emojis":  "🎪 🎤",
+                                              "demo_locked":  false,
+                                              "unlocks_features":  [
+                                                                       "ui.techtree.feature.p1_1_events"
+                                                                   ]
+                                          },
+                                          {
+                                              "id":  "P1.2",
+                                              "name":  "techtree.prestige.p1_2",
+                                              "category":  "prestige",
+                                              "col":  1,
+                                              "row":  0,
+                                              "cost_fp":  250,
+                                              "cost_money":  2500,
+                                              "dependencies":  [
+                                                                   "P1.1"
+                                                               ],
+                                              "unlocks_emojis":  "🏟️ 🎇",
+                                              "demo_locked":  true,
+                                              "unlocks_features":  [
+
+                                                                   ]
+                                          },
+                                          {
+                                              "id":  "P1.3",
+                                              "name":  "techtree.prestige.p1_3",
+                                              "category":  "prestige",
+                                              "col":  2,
+                                              "row":  0,
+                                              "cost_fp":  500,
+                                              "cost_money":  5000,
+                                              "dependencies":  [
+                                                                   "P1.2"
+                                                               ],
+                                              "unlocks_emojis":  "🎭 🎵",
+                                              "demo_locked":  true,
+                                              "unlocks_features":  [
+                                                                       "ui.techtree.feature.p1_3_vip"
+                                                                   ]
+                                          },
+                                          {
+                                              "id":  "W1.4",
+                                              "name":  "techtree.wellness.w1_4",
+                                              "category":  "wellness",
+                                              "col":  2,
+                                              "row":  0,
+                                              "cost_fp":  750,
+                                              "cost_money":  7500,
+                                              "dependencies":  [
+                                                                   "W1.2",
+                                                                   "W1.3"
+                                                               ],
+                                              "unlocks_emojis":  "🏋️ 🕒",
+                                              "demo_locked":  true,
+                                              "unlocks_features":  [
+                                                                       "ui.techtree.feature.w1_4_hours",
+                                                                       "ui.techtree.feature.w1_4_package"
+                                                                   ]
+                                          }
+                                      ]
+                        },
+                  "2":  {
+                            "gate":  {
+                                         "cost_fp":  500,
+                                         "req_level":  10,
+                                         "req_stars":  1,
+                                         "req_items_unlocked":  5
+                                     },
+                            "nodes":  [
+
+                                      ]
+                        }
+              }
 }

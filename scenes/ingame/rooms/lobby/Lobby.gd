@@ -81,6 +81,18 @@ func get_target_tile(map_grid: Node) -> Vector2i:
 		"right":  return Vector2i(gx - 1, gy + 1) # Innentür links
 	return tile
 
+func get_street_tile(map_grid: Node) -> Vector2i:
+	var tile = map_grid.world_to_tile(global_position)
+	var gx = tile.x
+	var gy = tile.y
+	# Für abreisende Gäste ist das Ziel-Tile auf der Straße
+	match entrance_dir:
+		"top":    return Vector2i(gx + 1, gy - 1) # Straße oben
+		"bottom": return Vector2i(gx + 1, gy + 4) # Straße unten
+		"left":   return Vector2i(gx - 1, gy + 1) # Straße links
+		"right":  return Vector2i(gx + 4, gy + 1) # Straße rechts
+	return tile
+
 func get_room_entry_pos(map_grid: Node) -> Vector2:
 	var tile = map_grid.world_to_tile(global_position)
 	var gx = tile.x

@@ -1,25 +1,39 @@
 # Status Quo - HO·MA·SIM Godot
+> Übersicht über alle integrierten und fertiggestellten Systeme im Spiel. Dies ist KEIN Changelog, sondern eine Inventar-Liste des aktuellen Funktionsumfangs.
 
-## 1. Aktueller Stand (Architektur & Core-Features)
-*   **Version:** Alpha v0.1.49 (Branch: `dev`)
-*   **Game-Loop:** Funktioniert. Gäste kommen, mieten Zimmer, schlafen, gehen zu POIs (Restaurant, Bar, Lobby) und checken wieder aus.
-*   **Personal-System:** Funktioniert. Personal hat Schichten, wird müde, nutzt Personalräume zur Erholung (Moral-System aktiv). Zuweisung zu POIs (Küche, Bar, Restaurant) klappt.
-*   **Gastro-System:** Kompletter Loop intakt (Küche nimmt Bestellungen an, Koch kocht, Bedienung liefert ans Restaurant/die Bar, Gäste essen und zahlen).
-*   **Wirtschaft:** Einnahmen (Gäste, Gastro) und Ausgaben (Gehalt, Baukosten) laufen stabil über den `FinanceManager`.
+## 🏢 Räume & Einrichtungen
+- [x] **Lobby / Rezeption:** Gäste checken ein und aus.
+- [x] **Gästezimmer:** Funktionieren. 4 Kategorien integriert (`Standard`, `Double`, `Family`, `Superior`). Inklusive Betten, Bad, Schmutz, Reparatur-Status und Gästebedürfnissen.
+- [x] **Personalraum:** Funktioniert (`staff_small`). Personal regeneriert Moral.
+- [x] **Küche:** Funktioniert (`kitchen_small`). Nimmt Bestellungen an und kocht.
+- [x] **Restaurant:** Funktioniert (`restaurant_small`). Gäste essen und zahlen.
+- [x] **Bar:** Funktioniert (`bar`). Gastro-Loop aktiv.
 
-## 2. Bekannte "Baustellen" (Works in Progress)
-*   **Lobby / Pathfinding (TOP URGENT - ANG-327):** 
-    *   *Problem:* Das 16x16 globale Navigations-Grid kollidiert stark mit der Inneneinrichtung der Lobby (Tische, Automaten).
-    *   *Lösung:* Die Lobby muss aus dem `MapGrid` ausgegliedert und wie ein normales Zimmer mit eigenem lokalem `RoomNavigator` ausgestattet werden. Das ermöglicht pixelgenaues Pathfinding im Raum.
-*   **Gäste-Verhalten (Wegfindung):**
-    *   Gäste nutzen nun korrekt die Lobby-Türen zum Warten (inklusive Scatter/Jitter-Effekt) und gehen beim Checkout über die Vordertür raus. Das Pathfinding innerhalb der Lobby und am Snack-Automaten wurde durch einen sauberen Übergang von `local_path_out` und `path_tiles` stark verbessert (Teleport-Bugs behoben).
-*   **Techtree (Phase 4):**
-    *   Die Freischalt-Knoten für Level 1-10 sind implementiert. Es fehlen noch die Inhalte für die Gourmet-Sterne, das Management und weitere Prestige-Events.
-*   **Parzellen-System:**
-    *   Der Kauf von neuen Parzellen (Expansion) ist voll funktionsfähig. Die Kosten steigen exponentiell an (4k, 8k, 16k...).
-    *   Ein Level-Cap (Max Parzellen abhängig vom Hotel-Level) ist aktiv. Das HUD beim Bau der Parzellen nutzt nun saubere `.tscn` (Tooltip-Style) mit Camera-Zoom-Kompensation für gestochen scharfes Pixel-Rendering.
+## 🧑‍🤝‍🧑 Akteure & KI
+- [x] **Gäste:** Checken ein, nutzen POIs (Essen/Trinken), haben Bedürfnisse (WLAN etc.), zahlen, checken aus.
+- [x] **Geduldssystem:** Gäste haben einen Geduldsfaden. Warten sie zu lange (z. B. auf Essen), brechen sie die Aktion ab und verlieren Zufriedenheit.
+- [x] **Reinigungskraft:** Putzt Zimmer automatisch nach Checkout (`housekeeping`).
+- [x] **Hausmeister:** Repariert kaputte Objekte (`maintenance`).
+- [x] **Barkeeper:** Betreut die Bar und mixt Getränke (`bartender`).
+- [x] **Koch:** Bereitet Mahlzeiten in der Küche zu (`chef`).
+- [x] **Küchenhilfe:** Unterstützt den Koch (`kitchen_helper`).
+- [x] **Bedienung:** Bringt Essen von der Küche ins Restaurant/Bar (`waiter`).
 
-## 3. Direktiven & Workflow
-*   **Linear-Tickets:** Keine neuen Features ohne Ticket!
-*   **Changelog:** Nach jeder Session in `changelog/` protokollieren.
-*   **Backlog:** `wiki/alpha_backlog.md` ist die Master-Liste der aktuellen Phase.
+## ⚙️ Core-Systeme & Mechaniken
+- [x] **Visuelle Simulation (Wusel-Faktor):** Keine reine Tabellen-Verwaltung! Alle Gäste und Mitarbeiter bewegen sich physisch durch das Hotel, navigieren durch Räume, nutzen Objekte und füllen das Spiel sichtbar mit Leben.
+- [x] **Finanzen:** Einnahmen (Gastro/Zimmer) & Ausgaben (Gehalt/Baukosten) werden abgerechnet.
+- [x] **Zeit-System:** Tag/Nacht-Zyklus, Fast-Forward, Pausieren funktioniert.
+- [x] **Bausystem:** Räume können platziert und abgerissen werden.
+- [x] **Parzellen / Map-Expansion:** Kauf neuer Map-Flächen funktioniert (inkl. Bau-Timer und Screen-Space-UI).
+- [x] **Techtree:** Grundgerüst (Forschungspunkte, Level-Gates) steht und schaltet Features frei.
+- [x] **Moral-System:** Personal verliert Moral bei Überarbeitung, kündigt bei 0, regeneriert im Personalraum.
+- [x] **Level & EXP:** EXP-Bedarf steigt exponentiell bis Level 10. Startschwierigkeit (Boost) ist wählbar.
+
+## 📊 UI & Management-Tools
+- [x] **Gästeliste:** Übersicht aller aktuellen Gäste inkl. Filter, Live-Vorschau (PiP) und Kamera-Sprung zum Gast.
+- [x] **Raumliste:** Übersicht aller Räume (Zustand, Sauberkeit) inkl. Live-Vorschau (PiP) und Kamera-Sprung.
+- [x] **Personalverwaltung:** Übersichtliches Menü zum Einstellen, Entlassen, Weiterbilden und Zuweisen von Mitarbeitern auf bestimmte Räume.
+- [x] **Questbook:** Verfolgt und belohnt aktive Meilensteine und Ziele (z. B. "Beherberge 25 Geschäftsreisende").
+- [x] **Tutorialsystem & Codex:** Kontext-sensitive Erklärungen bei neuen Features sowie ein Lexikon zum Nachschlagen aller Mechaniken.
+- [x] **Activity Log:** Chronologisches Protokoll aller wichtigen Ereignisse im Hotel (Level-Ups, Defekte, Abreisen).
+- [x] **Live-Monitore für POI:** Separate verschiebbare Fenster mit Aktivitäten und Gästelisten des jeweiligen POI.

@@ -30,4 +30,3 @@
 - **ANG-155** – Security / Server-seitige Validierung
 - **ANG-156** – Export-Targets Steam
 - **ANG-152** – Settings-Screen (ALT+S)
-- **ANG-149** – Tutorial-Szene

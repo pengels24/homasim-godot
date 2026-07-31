@@ -2,7 +2,7 @@ extends Node2D
 class_name GuestActor
 
 # --- Zustände ---
-enum State { IDLE, WALKING, IN_ROOM, IN_POI, AWAITING_CHECKOUT, LEAVING, STUDYING_MENU, WAITING_FOR_FOOD, EATING, SITTING, SLEEPING }
+enum State { IDLE, WALKING, IN_ROOM, IN_POI, AWAITING_CHECKOUT, LEAVING, STUDYING_MENU, WAITING_FOR_FOOD, EATING, SITTING, SLEEPING, WAITING_IN_LINE }
 
 var current_state: State = State.IDLE
 var previous_state: State = State.IDLE
@@ -47,6 +47,17 @@ func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null, guest
 		if not GastroManager.sig_order_served.is_connected(_on_order_served):
 			GastroManager.sig_order_served.connect(_on_order_served)
 	
+	var party = _get_my_party()
+	if party and party.type == "vip":
+		var vip_node = Sprite2D.new()
+		vip_node.name = "VIPOverlay"
+		vip_node.texture = preload("res://assets/icons/guests/user-star.svg")
+		vip_node.modulate = Color(1.0, 0.84, 0.0)
+		vip_node.scale = Vector2(0.6, 0.6)
+		vip_node.position = Vector2(0, -32)
+		vip_node.z_index = 50
+		add_child(vip_node)
+	
 	if start_room != null:
 		# Wenn mit Startraum gespawnt (z.B. nach Laden), setze Position auf die Zimmertür!
 		_target_room = start_room
@@ -82,6 +93,12 @@ func _on_click_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: 
 
 # =============================================================================
 func _process(delta: float) -> void:
+	if has_node("VIPOverlay"):
+		var vip_node = get_node("VIPOverlay")
+		var t = Time.get_ticks_msec() / 1000.0
+		var s = 0.6 + sin(t * 4.0) * 0.1
+		vip_node.scale = Vector2(s, s)
+
 	if has_node("HungryIcon"):
 		if avatar.visible and _guest_member.saturation <= 50:
 			$HungryIcon.visible = true
@@ -91,7 +108,7 @@ func _process(delta: float) -> void:
 	match current_state:
 		State.IN_ROOM, State.IN_POI, State.STUDYING_MENU, State.EATING, State.IDLE, State.SITTING, State.SLEEPING:
 			_process_waiting(delta)
-		State.WAITING_FOR_FOOD, State.AWAITING_CHECKOUT:
+		State.WAITING_FOR_FOOD, State.AWAITING_CHECKOUT, State.WAITING_IN_LINE:
 			_process_impatient(delta)
 
 
@@ -306,7 +323,7 @@ func wake_up() -> void:
 		_action_timer = randf_range(5.0, 30.0)
 		return
 	
-	if current_state == State.LEAVING or current_state == State.AWAITING_CHECKOUT:
+	if current_state == State.LEAVING or current_state == State.WAITING_IN_LINE:
 		return
 	_action_timer = randf_range(5.0, 30.0)
 
@@ -395,6 +412,10 @@ func _on_order_served(_order_id: String, guest_id: String, recipe_id: String) ->
 		
 		# Sättigung wiederherstellen
 		_guest_member.saturation = min(100, _guest_member.saturation + sat)
+		
+		var party = _get_my_party()
+		if GameState.has_techtree_unlocked("G1.4") and party:
+			party.satisfaction = min(100, party.satisfaction + 5)
 		
 		# Essen-Status aktivieren
 		_change_state(State.EATING)
@@ -569,7 +590,9 @@ func start_checkout() -> void:
 # =============================================================================
 ## Spieler hat Checkout bestätigt: Gast erscheint an der Lobby und läuft raus.
 func complete_checkout(spawn_pos: Vector2) -> void:
-	global_position = spawn_pos  # vor Lobby-Eingang erscheinen
+	if current_state == State.IDLE or global_position == Vector2.ZERO:
+		global_position = spawn_pos  # Notfall-Spawn, z.B. bei Reload
+		
 	_change_state(State.LEAVING)  # sichtbar
 	_walk_to_exit()
 
@@ -583,9 +606,40 @@ func send_back_to_room() -> void:
 
 
 # =============================================================================
+func start_waiting_in_lobby(spawn_pos: Vector2, delay: float) -> void:
+	global_position = spawn_pos
+	_change_state(State.WALKING)
+	
+	if delay > 0.0:
+		var wait_time = delay
+		if TimeManager and not TimeManager.is_paused():
+			wait_time = delay / max(1.0, TimeManager.user_speed)
+		await get_tree().create_timer(wait_time).timeout
+		
+	var lobby = _get_lobby_room()
+	if is_instance_valid(lobby) and lobby.has_method("get_checkout_wait_pos"):
+		var target_world = lobby.get_checkout_wait_pos()
+		var offset = Vector2(randf_range(-6.0, 6.0), randf_range(-6.0, 6.0))
+		_walk_to_world_pos(target_world + offset, State.WAITING_IN_LINE)
+
+func _walk_to_world_pos(target_pos: Vector2, finish_state: State) -> void:
+	if not is_instance_valid(_map_grid):
+		return
+	_change_state(State.WALKING)
+	var start_tile = _get_logical_start_tile()
+	var exit_tile = _map_grid.world_to_tile(target_pos)
+	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
+	if path_tiles.is_empty():
+		path_tiles = [start_tile, exit_tile]
+	_execute_walk(path_tiles, finish_state, target_pos, target_pos)
+
 func start_checkin(room: Node2D, spawn_pos: Vector2, delay: float) -> void:
 	_target_room = room
-	global_position = spawn_pos
+	
+	# Fallback, falls Actor noch nicht in der Lobby ist
+	if current_state != State.WAITING_IN_LINE and current_state != State.WALKING:
+		global_position = spawn_pos
+		
 	_change_state(State.WALKING)
 	
 	# Warte die Check-in-Schlange ab (Zeitskalierung beachten)
@@ -690,7 +744,7 @@ func _walk_to_exit() -> void:
 		queue_free()
 		return
 		
-	var exit_tile = lobby.get_target_tile(_map_grid)
+	var exit_tile = lobby.get_street_tile(_map_grid)
 	var door_world = _map_grid.tile_to_world(exit_tile)
 	
 	# _execute_walk wird automatisch den local_path_out der Lobby nutzen,
@@ -703,8 +757,8 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 	var world_path: Array[Vector2] = []
 	
 	# NEU: Animierter "Walk out of Room", statt Teleportation
-	# Nur nach draußen laufen, wenn wir auch wirklich den Raum verlassen (path_tiles > 0)
-	if path_tiles.size() > 0:
+	# Nur nach draußen laufen, wenn wir auch wirklich den Raum verlassen (path_tiles > 0) ODER das Hotel verlassen
+	if path_tiles.size() > 0 or finish_state == State.LEAVING:
 		if (previous_state == State.IN_ROOM or previous_state == State.SITTING or previous_state == State.SLEEPING) and is_instance_valid(_target_room):
 			if _target_room.has_method("get_local_path") and _target_room.has_method("get_room_entry_pos"):
 				var entry_pos = _target_room.get_room_entry_pos(_map_grid)
@@ -714,6 +768,11 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 			var poi_room = _get_poi_room_node(_current_poi_id)
 			if is_instance_valid(poi_room) and poi_room.has_method("get_local_path") and poi_room.has_method("get_room_entry_pos"):
 				var entry_pos = poi_room.get_room_entry_pos(_map_grid)
+				
+				# Wenn wir das Hotel verlassen, gehen wir zum Haupteingang statt zur Innentür!
+				if finish_state == State.LEAVING and _current_poi_id == "lobby":
+					entry_pos = face_pos
+					
 				var local_path_out = poi_room.get_local_path(global_position, entry_pos)
 				world_path.append_array(local_path_out)
 				print("[GuestActor] Generated local_path_out from POI: ", local_path_out.size(), " points. poi_id=", _current_poi_id)

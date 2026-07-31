@@ -129,4 +129,20 @@ const ALL: Dictionary = {
 		"base_exp": 50,
 		"rep_penalty": 15
 	},
+	"vip": {
+		"name":            "VIP",
+		"allowed_rooms":   ["bed_superior"],
+		"preferred_rooms": ["bed_superior"],
+		"requirements":    ["luxury", "privacy"],
+		"spawn_chance":    5,
+		"min_stay":        1,
+		"max_stay":        3,
+		"min_base_price":  300,
+		"max_base_price":  600,
+		"min_daily_budget": 150,
+		"max_daily_budget": 300,
+		"icon":            "res://assets/icons/guests/user-star.svg",
+		"base_exp": 100,
+		"rep_penalty": 30
+	},
 }

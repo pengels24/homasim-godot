@@ -497,7 +497,7 @@ levelup.unlock.research_hint,Büro bauen schaltet das Forschungssystem frei,Buil
 levelup.unlock.hr_hint,"Personalbüro, Pausenraum & Snack-Automat freigeschaltet!","Staff Agency, Staff Room & Snack Machine unlocked!"
 levelup.unlock.no_unlocks,Neue Freischaltungen kommen über den Forschungsbaum,New unlocks come through the research tree
 levelup.unlock.l4_gastro,Gastronomie-Forschung verfügbar!\nErforsche Küche & Restaurant im Techtree.,Gastronomy research available!\nUnlock Kitchen & Restaurant in the Tech Tree.
-levelup.unlock.l5_milestone,"Level 5 erreicht!\nDein Hotel wächst und gedeiht weiter.","Level 5 reached!\nYour hotel continues to grow and thrive."
+levelup.unlock.l5_milestone,Level 5 erreicht!\nDein Hotel wächst und gedeiht weiter.,Level 5 reached!\nYour hotel continues to grow and thrive.
 levelup.unlock.l6_guest_needs,Gästebedürfnisse aktiv!\nDeine Gäste haben ab jetzt individuelle Wünsche – erfülle sie für mehr Zufriedenheit.,Guest needs activated!\nYour guests now have individual needs – fulfil them for higher satisfaction.
 levelup.unlock.l7_gourmet_kitchen,Gourmetküche-Forschung verfügbar!\nDer Weg zu den Sternen beginnt im Techtree.,Gourmet Kitchen research available!\nThe path to the stars begins in the Tech Tree.
 levelup.unlock.l8_wellness,Wellness-Forschung verfügbar!\nErforsche Spa, Pool & Co. im Techtree.,Wellness research available!\nUnlock Spa, Pool & more in the Tech Tree.
@@ -526,25 +526,25 @@ techtree.confirm.cancel,Abbrechen,Cancel
 techtree.node.tooltip.unlock,Klicken zum Erforschen,Click to Research
 techtree.gastro.bar.name,Bar,Bar
 techtree.gastro.bar.desc,Eine kleine Bar für Gäste die noch nicht müde sind.,A cozy bar for guests who aren't tired yet.
-techtree.zimmer.z11,Komfort-Grundlagen,Comfort Basics
-techtree.zimmer.z12,Familienzimmer,Family Rooms
-techtree.zimmer.z13,Superior-Zimmer,Superior Rooms
-techtree.zimmer.z14,Premium-Upgrade,Premium Upgrade
-techtree.zimmer.z15,Luxus Suite,Luxury Suite
-techtree.gastro.g11,Basis-Gastronomie,Basic Gastronomy
-techtree.gastro.g12,Erweiterte Gastronomie,Extended Gastronomy
-techtree.gastro.g13,Gehobene Küche,Fine Dining
-techtree.gastro.g14,Kulinarische Exzellenz,Culinary Excellence
-techtree.wellness.w11,Basis-Wellness,Basic Wellness
-techtree.wellness.w12,Außenbereich,Outdoor Area
-techtree.wellness.w13,Premium-Spa,Premium Spa
-techtree.management.m11,Betriebsgrundlagen,Operations Basics
-techtree.management.m12,Erw. Personalverwaltung,Ext. Staff Management
-techtree.management.m13,Prozessoptimierung,Process Optimization
-techtree.management.m14,Konzern-Management,Corporate Management
-techtree.prestige.p11,Veranstaltungen,Events
-techtree.prestige.p12,Konferenzen,Conferences
-techtree.prestige.p13,VIP-Betreuung,VIP Support
+techtree.zimmer.z1_1,Komfort-Grundlagen,Comfort Basics
+techtree.zimmer.z1_2,Familienzimmer,Family Rooms
+techtree.zimmer.z1_3,Superior-Zimmer,Superior Rooms
+techtree.zimmer.z1_4,Premium-Upgrade,Premium Upgrade
+techtree.zimmer.z1_5,Luxus Suite,Luxury Suite
+techtree.gastro.g1_1,Basis-Gastronomie,Basic Gastronomy
+techtree.gastro.g1_2,Erweiterte Gastronomie,Extended Gastronomy
+techtree.gastro.g1_3,Gehobene Küche,Fine Dining
+techtree.gastro.g1_4,Kulinarische Exzellenz,Culinary Excellence
+techtree.wellness.w1_1,Basis-Wellness,Basic Wellness
+techtree.wellness.w1_2,Hallenbad,Indoor Pool
+techtree.wellness.w1_3,Premium-Spa / Sauna,Premium Spa / Sauna
+techtree.management.m1_1,Betriebsgrundlagen,Operations Basics
+techtree.management.m1_2,Erw. Personalverwaltung,Ext. Staff Management
+techtree.management.m1_3,Prozessoptimierung,Process Optimization
+techtree.management.m1_4,Konzern-Management,Corporate Management
+techtree.prestige.p1_1,Veranstaltungen,Events
+techtree.prestige.p1_2,Konferenzen,Conferences
+techtree.prestige.p1_3,VIP-Betreuung,VIP Support
 ui.techtree.researched, (Erforscht), (Researched)
 ui.techtree.cost.tt,FP: ### | : ***,RP: ### | : ***
 quest.single.1.name,Kleine Schritte,Small Steps
@@ -780,10 +780,10 @@ ui.techtree.btn.cancel,Abbrechen,Cancel
 ui.techtree.tooltip.unlocks.tech,Forschung: ###,Research: ###
 ui.techtree.tooltip.unlocks.room,Raum: ###,Room: ###
 ui.techtree.tooltip.unlocks.feature,Feature: ###,Feature: ###
-ui.techtree.feature.z11_speed,+5% Personal-Geschwindigkeit,+5% Staff Speed
-ui.techtree.feature.m13_speed,+15% Personal-Geschwindigkeit,+15% Staff Speed
-ui.techtree.feature.m12_train,+2 Personal-Skill durch Schulung,+2 Staff Skill via Training
-ui.techtree.feature.m14_patience,-20% Geduldsverlust der Gäste,-20% guest patience loss
+ui.techtree.feature.z1_1_speed,+5% Personal-Geschwindigkeit,+5% Staff Speed
+ui.techtree.feature.m1_3_speed,+15% Personal-Geschwindigkeit,+15% Staff Speed
+ui.techtree.feature.m1_2_train,+2 Personal-Skill durch Schulung,+2 Staff Skill via Training
+ui.techtree.feature.m1_4_patience,-20% Geduldsverlust der Gäste,-20% guest patience loss
 ui.staff.train_staff,Schulen (%d €),Train (%d €)
 tx.staff.training,Personal-Schulung,Staff Training
 ui.staff.train_locked,Benötigt Forschung M1.2 (Personalentwicklung),Requires M1.2 Tech (Staff Training)
@@ -895,19 +895,19 @@ settings.controls.ui.finances,Finanzen / Kassenbuch,Finances / Cashbook
 hud.bottom.finances_tt,Finanzen / Kassenbuch ###,Finances / Cashbook ###
 
 modal.finances.title,Kassenbuch & Finanzen,Cashbook & Finances
-codex.guest_single.title,Neuer Gästetyp: Single,New Guest Type: Single
+codex.guest_single.title,Single,Single
 codex.guest_single.desc,"Bleibt meist 1-3 Nächte. Erwartet ein einfaches Standard-Zimmer. Hat keine besonderen Ansprüche, zahlt aber auch nicht so viel.","Usually stays 1-3 nights. Expects a simple standard room. Has no special demands, but doesn't pay as much either."
-codex.guest_couple.title,Neuer Gästetyp: Paar,New Guest Type: Couple
+codex.guest_couple.title,Paar,Couple
 codex.guest_couple.desc,Paare bleiben meist 1-4 Nächte. Brauchen ein Doppel- oder Superior-Zimmer und schätzen Komfort.,Couples usually stay 1-4 nights. Need a double or superior room and appreciate comfort.
-codex.guest_business.title,Neuer Gästetyp: Geschäftsreisender,New Guest Type: Business Traveler
+codex.guest_business.title,Geschäftsreisender,Business Traveler
 codex.guest_business.desc,Bleibt 1-3 Nächte. Benötigt zwingend WLAN und einen Schreibtisch (Desk). Hohe Ausgaben-Bereitschaft!,Stays 1-3 nights. Mandatory need for Wi-Fi and a desk. High spending willingness!
-codex.guest_family.title,Neuer Gästetyp: Familie,New Guest Type: Family
+codex.guest_family.title,Familie,Family
 codex.guest_family.desc,"Bleiben 2-5 Nächte. Brauchen ein großes Familienzimmer, schätzen Platz und lieben den Pool.","Stay 2-5 nights. Need a large family room, appreciate space and love the pool."
-codex.guest_budget.title,Neuer Gästetyp: Budgetreisender,New Guest Type: Budget Traveler
+codex.guest_budget.title,Budgetreisender,Budget Traveler
 codex.guest_budget.desc,"Bleibt 1-2 Nächte. Sehr genügsam, bucht einfache Standard-Zimmer, gibt aber abseits davon kaum Geld aus.","Stays 1-2 nights. Very frugal, books simple standard rooms, but hardly spends money otherwise."
-codex.guest_nomad.title,Neuer Gästetyp: Digitaler Nomade,New Guest Type: Digital Nomad
+codex.guest_nomad.title,Digitaler Nomade,Digital Nomad
 codex.guest_nomad.desc,"Bleibt sehr lange (7-14 Nächte). Benötigt WLAN, verbringt den ganzen Tag im Zimmer. Freut sich über Zimmer-Service.","Stays very long (7-14 nights). Needs Wi-Fi, spends the whole day in the room. Happy about room service."
-codex.guest_event.title,Neuer Gästetyp: Event-Teilnehmer,New Guest Type: Event Attendee
+codex.guest_event.title,Event-Teilnehmer,Event Attendee
 codex.guest_event.desc,"Bleibt nur kurz (1-2 Nächte) für ein Event. Keine besonderen Ansprüche, recht profitabel in der Masse.","Stays only briefly (1-2 nights) for an event. No special demands, quite profitable in mass."
 codex.guest_luxury.title,Gäste-Typ: VIP & Luxus,Guest Type: VIP & Luxury
 codex.guest_luxury.desc,Prominente und schwerreiche Gäste. Sie zahlen astronomische Summen für Übernachtungen und Services, sind aber extrem schnell verärgert, wenn die Qualität nicht ihren perfekten Standards entspricht. Sie erwarten eine hohe Luxus-Bewertung der Zimmer.\n\nBudget: Hoch\nGeduld: Sehr niedrig\nAnspruch: Perfektion\nPlatzbedarf: Einzel- oder Doppelzimmer (Suite bevorzugt),Guest Type: VIP & Luxury\n\nCelebrities and ultra-rich guests. They pay astronomical sums for stays and services but are extremely quick to anger if the quality doesn't meet their perfect standards. They expect a high luxury rating for rooms.\n\nBudget: High\nPatience: Very low\nExpectations: Perfection\nSpace Needs: Single or Double room (Suite preferred)
@@ -987,7 +987,7 @@ tutorial.step.5,"Wähle ein Einzelzimmer und platziere es. Nutze [R] zum Rotiere
 tutorial.step.6,Super! Wir brauchen aber mehr als ein Zimmer. Baue noch ein weiteres Einzelzimmer daneben.,Great! But we need more than one room. Build another single room next to it.
 tutorial.step.7,Super! Schließe nun das Baumenü (z.B. mit einem Klick auf das X oder per ESC).,"Great! Now close the build menu (e.g., by clicking the X or pressing ESC)."
 tutorial.step.8,"Die Rezeption hat, wie auch andere POI (Points of Interest), Öffnungszeiten. Sie öffnet um 7 Uhr und schließt um 22 Uhr.\nWährend dieser Zeit kommen neue Gäste an und bestehende Gäste nutzen diese POI für ihren Tagesablauf.","The reception, like other POIs (Points of Interest), has opening hours. It opens at 7 AM and closes at 10 PM.\nDuring this time, new guests arrive and existing guests use these POIs for their daily routines."
-tutorial.step.9,"Starte nun die Zeit (oben rechts im Menü oder mit der [1]), um das Hotel zum Leben zu erwecken!","Now start the time (top right in the menu or with [1]) to bring the hotel to life!"
+tutorial.step.9,"Starte nun die Zeit (oben rechts im Menü oder mit der [1]), um das Hotel zum Leben zu erwecken!",Now start the time (top right in the menu or with [1]) to bring the hotel to life!
 tutorial.step.10_wait,"Warte nun, bis die Rezeption um 7 Uhr öffnet.",Now wait until the reception opens at 7 AM.
 tutorial.step.11,"Um neue Räume und Funktionen freizuschalten, musst du das Level des Hotels erhöhen.\nHierfür benötigst du EXP. Diese bekommst du für den jeweils ersten Bau eines neuen Zimmertyps und für Ereignisse im Hotelbetrieb (Check-In, Check-Out, u.a.).","To unlock new rooms and features, you need to increase the hotel's level.\nFor this, you need EXP. You get EXP for the first construction of a new room type and for events in hotel operations (Check-In, Check-Out, etc.)."
 tutorial.step.12,"Baue nun, um noch einmal extra EXP zu bekommen, ein erstes Doppelzimmer.","To get some extra EXP, build your first double room now."
@@ -1164,16 +1164,16 @@ settings.gameplay.camera_pan_speed,Kamera-Geschwindigkeit,Camera Pan Speed
 menu.btn.credits,Credits,Credits
 menu.idcard.change_profile,Profil wechseln,Change Profile
 menu.idcard.create_profile,Neues Profil anlegen,Create Profile
-menu.quit_confirm.title,"Zurück zum Desktop","Return to Desktop"
-menu.quit_confirm.desc,"Möchtest du das Spiel wirklich beenden?","Do you really want to quit the game?"
-overlay.cat.zimmer,"Zimmer","Rooms"
-overlay.cat.gastro,"Gastro","Dining"
-overlay.cat.infra,"Infrastruktur","Infrastructure"
-overlay.cat.service,"Service","Service"
-overlay.occ.free,"Frei","Free"
-overlay.occ.dirty,"Dreckig / Checkout","Dirty / Checkout"
-overlay.occ.occupied,"Belegt","Occupied"
-overlay.occ.reserved,"Reserviert","Reserved"
+menu.quit_confirm.title,Zurück zum Desktop,Return to Desktop
+menu.quit_confirm.desc,Möchtest du das Spiel wirklich beenden?,Do you really want to quit the game?
+overlay.cat.zimmer,Zimmer,Rooms
+overlay.cat.gastro,Gastro,Dining
+overlay.cat.infra,Infrastruktur,Infrastructure
+overlay.cat.service,Service,Service
+overlay.occ.free,Frei,Free
+overlay.occ.dirty,Dreckig / Checkout,Dirty / Checkout
+overlay.occ.occupied,Belegt,Occupied
+overlay.occ.reserved,Reserviert,Reserved
 
 guest.req.space,Platz,Space
 guest.req.pool,Pool,Pool
@@ -1189,7 +1189,7 @@ log.guest.perfect_day,Tagesabschluss (Perfekter Tag! +100 EXP),End of Day (Perfe
 hud.top.right.tooltip.activity_log,Ereignisse ###,Events ###
 
 tutorial.gastro.title,Gastronomie & Küche,Gastronomy & Kitchen
-tutorial.gastro.desc,"Mit einer Küche und einem Restaurant versorgst du deine Gäste mit Essen.\n\nBeachte:\n- Das Restaurant erfordert eine funktionierende Küche.\n- Ein Koch kann jeweils eine Mahlzeit gleichzeitig zubereiten.\n- Küchenhilfen beschleunigen das Kochen.\n- Die Bedienung bringt das Essen aus der Küche an den Tisch und räumt später ab.\n\nStelle sicher dass genug Personal für den Ansturm bereitsteht!","With a kitchen and a restaurant you provide food for your guests.\n\nNote:\n- The restaurant requires a functioning kitchen.\n- A chef can prepare one meal at a time.\n- Kitchen helpers speed up the cooking process.\n- The waiter brings the food from the kitchen to the table and cleans up later.\n\nMake sure you have enough staff ready for the rush!"
+tutorial.gastro.desc,Mit einer Küche und einem Restaurant versorgst du deine Gäste mit Essen.\n\nBeachte:\n- Das Restaurant erfordert eine funktionierende Küche.\n- Ein Koch kann jeweils eine Mahlzeit gleichzeitig zubereiten.\n- Küchenhilfen beschleunigen das Kochen.\n- Die Bedienung bringt das Essen aus der Küche an den Tisch und räumt später ab.\n\nStelle sicher dass genug Personal für den Ansturm bereitsteht!,With a kitchen and a restaurant you provide food for your guests.\n\nNote:\n- The restaurant requires a functioning kitchen.\n- A chef can prepare one meal at a time.\n- Kitchen helpers speed up the cooking process.\n- The waiter brings the food from the kitchen to the table and cleans up later.\n\nMake sure you have enough staff ready for the rush!
 ui.staff.refresh_applicants,Neue Bewerber,New Applicants
 
 staff.role.chef,Koch,Chef
@@ -1227,8 +1227,8 @@ poi.restaurant.eating,Isst gerade,Eating
 ui.staff.assign.free,Frei,Free
 techtree.zimmer.wlan,WLAN (Internet),WIFI (Internet)
 techtree.zimmer.klima,Klimaanlage,Air Conditioning
-techtree.zimmer.wlan.desc,Schaltet das WLAN-Upgrade für Gästezimmer frei.,Unlocks the WIFI upgrade for guest rooms.
-techtree.zimmer.klima.desc,Schaltet das Klimaanlagen-Upgrade für Gästezimmer frei.,Unlocks the Air Conditioning upgrade for guest rooms.
+techtree.zimmer.wlan.desc,Bleibe immer verbunden. Schnelles Internet ist heutzutage ein Muss. Kann als Upgrade in Gästezimmern und öffentlichen Räumen (POI) installiert werden.,Always stay connected. Fast internet is a must nowadays. Can be installed as an upgrade in guest rooms and public areas (POI).
+techtree.zimmer.klima.desc,Ein kühler Kopf an heißen Tagen. Eine angenehme Raumtemperatur sorgt für Höchstwertungen. Kann als Upgrade in Gästezimmern und öffentlichen Räumen (POI) installiert werden.,A cool head on hot days. A pleasant room temperature ensures top ratings. Can be installed as an upgrade in guest rooms and public areas (POI).
 reception.tooltip.type,Gästetyp:,Guest Type:
 ui.staff.pay_bonus,Bonus zahlen (100 €),Pay Bonus (100 €)
 toast.staff.bonus_received,%s hat einen Bonus erhalten!,%s received a bonus!
@@ -1239,40 +1239,40 @@ techtree.category.gastronomie,Gastronomie,Gastronomy
 techtree.category.wellness,Wellness,Wellness
 techtree.category.management,Management,Management
 techtree.category.prestige,Prestige,Prestige
-techtree.zimmer.z11.desc,Schaltet den Zimmer-Zweig frei. Der Basis-Komfort sorgt zudem dafür, dass dein Service-Personal 5% schneller arbeitet.,Unlocks the room branch. Base comfort also allows your service staff to work 5% faster.
-techtree.zimmer.z12.desc,Schaltet Familienzimmer frei. Diese sind lukrativer und erfordern ein Doppelbett sowie ein Einzelbett.,Unlocks family rooms. More lucrative and require a double bed and a single bed.
-techtree.zimmer.z13.desc,Schaltet Superior-Zimmer frei. Diese bringen mehr Einnahmen, benötigen aber einen TV und ein Sofa.,Unlocks superior rooms. Generates more income but requires a TV and a sofa.
-techtree.gastro.g11.desc,Schaltet die kleine Küche und das kleine Restaurant frei. Bietet einfache Mahlzeiten für hungrige Gäste.,Unlocks the small kitchen and restaurant. Offers simple meals for hungry guests.
-techtree.gastro.g12.desc,Schaltet die große Küche und das große Restaurant frei. Bietet mehr Kapazität und Vielfalt auf der Speisekarte.,Unlocks the large kitchen and restaurant. Offers more capacity and menu variety.
-techtree.gastro.g13.desc,Schaltet die Bar frei. Eine zusätzliche Einnahmequelle für den Abend, bei der Gäste Cocktails genießen können.,Unlocks the bar. An additional evening income source where guests can enjoy cocktails.
-techtree.gastro.g14.desc,Erweitert die Küche zur Gourmetküche. Zieht Gastro-Kritiker an, die bei gutem Service lukrative Gourmetsterne vergeben.,Upgrades to a gourmet kitchen. Attracts food critics who award lucrative gourmet stars for good service.
-techtree.wellness.w11.desc,Schaltet das Spa / den Massageraum frei. Ein neuer Bereich, der die Zufriedenheit und das Luxusbedürfnis deiner Gäste drastisch steigert.,Unlocks the spa/massage room. A new area that drastically increases the satisfaction and luxury needs of your guests.
-techtree.wellness.w12.desc,Schaltet den Pool-Bereich frei. Ein absolutes Muss für Familien, um Punktabzüge bei der Zufriedenheit zu vermeiden.,Unlocks the pool area. An absolute must for families to avoid satisfaction penalties.
-techtree.wellness.w13.desc,Schaltet das Wellness-Paket an der Rezeption frei. Gäste zahlen 30% mehr für ihr Zimmer und nutzen Spa & Pool priorisiert.,Unlocks the wellness package at reception. Guests pay 30% more for their room and prioritize spa & pool usage.
-techtree.management.m11.desc,Schaltet das Planungsbüro frei. Der Arbeitsplatz deiner Manager, um Forschungspunkte (FP) für den Techtree zu generieren.,Unlocks the planning office. The workplace for your managers to generate research points (RP) for the tech tree.
-techtree.management.m12.desc,Schaltet das Schulungssystem für Personal frei. Mitarbeiter können gegen Bezahlung weitergebildet werden, um ihre Skills zu erhöhen.,Unlocks the staff training system. Employees can be trained for a fee to increase their skills.
-techtree.management.m13.desc,Prozessoptimierung! Dein gesamtes Personal arbeitet durch bessere Abläufe ab sofort 15% schneller.,Process optimization! All your staff now work 15% faster due to better workflows.
-techtree.management.m14.desc,Konzern-Management! Die Wartegeduld aller Gäste (z.B. an der Rezeption) sinkt ab sofort 20% langsamer.,Corporate Management! The waiting patience of all guests (e.g. at reception) now decreases 20% slower.
-techtree.prestige.p11.desc,Schaltet das Zufallsereignis-System frei. Es können spontane Reisegruppen oder Messe-Gäste auftauchen, die Zimmer suchen.,Unlocks the random event system. Spontaneous tour groups or trade fair guests looking for rooms can appear.
-techtree.prestige.p12.desc,Schaltet Großveranstaltungen frei. Errichte einen Eventsaal, um massive Mengen an Kurzzeit-Gästen und Prestige anzulocken.,Unlocks large events. Build an event hall to attract massive amounts of short-term guests and prestige.
-techtree.prestige.p13.desc,VIP-Events! Ermöglicht das Anlocken von hochkarätigen Gästen mit extrem hohen Budgets und besonderen Wünschen.,VIP Events! Allows attracting high-profile guests with extremely high budgets and special requests.
+techtree.zimmer.z1_1.desc,Eine solide Basis für jedes gute Hotel. Zufriedenes Personal arbeitet effizienter und legt den Grundstein für deinen Erfolg.,A solid foundation for any good hotel. Satisfied staff work more efficiently and lay the groundwork for your success.,Unlocks the room branch. Base comfort also allows your service staff to work 5% faster.
+techtree.zimmer.z1_2.desc,"Mehr Platz für die ganze Familie. Ein größeres Raumangebot lockt Reisegruppen an, die Wert auf gemeinsame Zeit legen.",More space for the whole family. A larger room offering attracts travel groups who value time together.
+techtree.zimmer.z1_3.desc,"Für Gäste mit gehobenen Ansprüchen. Bessere Ausstattung bedeutet höhere Einnahmen, aber auch kritischere Blicke beim Service.","For guests with high standards. Better amenities mean higher income, but also a more critical eye on the service.",Unlocks superior rooms. Generates more income but requires a TV and a sofa.
+techtree.gastro.g1_1.desc,"Der perfekte Ort, um den Abend ausklingen zu lassen. Exzellente Drinks an der Bar lockern den Geldbeutel der Gäste spürbar.",The perfect place to end the evening. Excellent drinks at the bar noticeably loosen the guests wallets.
+techtree.gastro.g1_2.desc,Ein hungriger Gast ist ein unzufriedener Gast. Mit einer grundlegenden Verpflegung aus der eigenen Küche sicherst du das Überleben – und die Laune – deiner Kundschaft.,"A hungry guest is a dissatisfied guest. With basic catering from your own kitchen, you ensure the survival - and the mood - of your clientele."
+techtree.gastro.g1_3.desc,"Mehr Platz, mehr Tische. Ein eigenes kleines Restaurant bewältigt den Ansturm zur Stoßzeit deutlich besser und bringt das Hotel auf die kulinarische Landkarte.","More space, more tables. A dedicated small restaurant handles the rush hour crowd much better and puts the hotel on the culinary map.",Unlocks the bar. An additional evening income source where guests can enjoy cocktails.
+techtree.gastro.g1_4.desc,"Ein Paradies für Feinschmecker. Wer hier speist, erwartet Perfektion – und verteilt bei entsprechendem Service begehrte Gourmetsterne.",A paradise for foodies. Those who dine here expect perfection - and award coveted gourmet stars for appropriate service.,Upgrades to a gourmet kitchen. Attracts food critics who award lucrative gourmet stars for good service.
+techtree.wellness.w1_1.desc,"Eine Oase der Ruhe. Ein hauseigenes Spa bietet den Gästen die nötige Entspannung, sodass sie ihren Aufenthalt direkt mit einem Lächeln beginnen.","An oasis of tranquility. An in-house spa offers guests the necessary relaxation, allowing them to start their stay with a smile.",Unlocks the spa/massage room. A new area that drastically increases the satisfaction and luxury needs of your guests.
+techtree.wellness.w1_2.desc,"Wasser marsch! Ein eigenes Hallenbad ist ein absoluter Publikumsmagnet, ganz unabhängig von Wind und Wetter.","Water ahoy! A dedicated indoor pool is an absolute crowd magnet, regardless of wind and weather.",Unlocks the pool area. An absolute must for families to avoid satisfaction penalties.
+techtree.wellness.w1_3.desc,Heiß begehrt. Eine großzügige Sauna ergänzt das Spa-Angebot perfekt und erfüllt selbst die höchsten Erwartungen gestresster Gäste.,Highly sought after. A spacious sauna perfectly complements the spa offering and meets even the highest expectations of stressed guests.
+techtree.management.m1_1.desc,"Die Digitalisierung hält Einzug. Mit dem SimBrowser öffnet sich die Tür zum Online-Markt für Buchungen, Gästebewertungen und gezieltes Marketing.","Digitalization has arrived. The SimBrowser opens the door to the online market for bookings, guest reviews, and targeted marketing.",Unlocks the planning office. The workplace for your managers to generate research points (RP) for the tech tree.
+techtree.management.m1_2.desc,Investiere in dein wichtigstes Gut. Regelmäßige Schulungen machen deine Mitarbeiter effizienter und stressresistenter.,Invest in your most important asset. Regular training makes your employees more efficient and stress-resistant.,Unlocks the staff training system. Employees can be trained for a fee to increase their skills.
+techtree.management.m1_3.desc,"Perfekt abgestimmte Laufwege und Handgriffe. Jeder im Team weiß genau, was zu tun ist, was den gesamten Hotelbetrieb beschleunigt.","Perfectly coordinated paths and movements. Everyone in the team knows exactly what to do, which accelerates the entire hotel operation."
+techtree.management.m1_4.desc,"Ein straffes Management wirkt Wunder. Selbst in Stoßzeiten bleibt das Personal ruhig, was sich direkt auf die Geduld wartender Gäste überträgt.","Tight management works wonders. Even during rush hours, the staff remains calm, which directly transfers to the patience of waiting guests."
+techtree.prestige.p1_1.desc,Mach dein Hotel zum Dreh- und Angelpunkt der Region. Ob Reisegruppen oder Messen – hier ist immer etwas los.,Make your hotel the hub of the region. Whether travel groups or trade fairs – there is always something going on here.,Unlocks the random event system. Spontaneous tour groups or trade fair guests looking for rooms can appear.
+techtree.prestige.p1_2.desc,"Große Reden, großes Publikum. Ein eigener Eventsaal ist ein Magnet für Business-Gäste und spült massiv Prestige in die Kassen.","Big speeches, big audience. A dedicated event hall is a magnet for business guests and flushes massive prestige into the coffers.",Unlocks large events. Build an event hall to attract massive amounts of short-term guests and prestige.
+techtree.prestige.p1_3.desc,Roter Teppich und Champagner. Lockt Gäste mit exklusivem Geschmack und extrem hohen Budgets an – Diskretion vorausgesetzt!,Red carpet and champagne. Attracts guests with exclusive taste and extremely high budgets - discretion required!
 ui.staff.assign.training_locked,In Schulung (Gesperrt),In Training (Locked)
 ui.info.staff_capacity.title,Personal-Limit überschritten,Staff Limit Exceeded
 ui.info.staff_capacity.msg,Du hast mehr Personal eingestellt als Pausenräume zur Verfügung stehen. Das Spiel läuft normal weiter aber du musst weitere Pausenräume bauen bevor du neue Mitarbeiter einstellen kannst.,You have hired more staff than you have staff rooms available. The game will continue normally but you must build more staff rooms before hiring new employees.
 
 roomdef.name.long.staff_small,Personalraum,Staff Room
 room.tooltip.staff_present,Personal anwesend: %d,Staff present: %d
-ui.techtree.feature.w11_bonus,+10 Start-Zufriedenheit,+10 Starting Satisfaction
-techtree.wellness.w14,Ganzheitliche Wellness,Holistic Wellness
-techtree.wellness.w14.desc,"Schaltet den kleinen Fitnessraum frei und erweitert die Öffnungszeiten für das Hallenbad. Ermöglicht später zudem lukrative All-Inclusive Wellness-Buchungen über das Online-Portal.\n\nVoraussetzungen: Level 3 | Hallenbad (W1.2), Premium-Spa (W1.3)\nKosten: 750 FP | 7.500 €","Unlocks the small fitness room and extends the opening hours for the indoor pool. Also allows lucrative all-inclusive wellness bookings via the online portal later on.\n\nRequirements: Level 3 | Indoor Pool (W1.2), Premium Spa (W1.3)\nCost: 750 FP | 7,500 $"
-ui.techtree.feature.w12_pool,Raum: Hallenbad (Indoor-Pool),Room: Indoor Pool
-ui.techtree.feature.w13_spa,Raum: Premium-Spa / Sauna,Room: Premium Spa / Sauna
-ui.techtree.feature.w14_fitness,Raum: Fitnessraum (Klein),Room: Fitness Room (Small)
-ui.techtree.feature.w14_hours,Erweiterte Öffnungszeiten für Hallenbad,Extended indoor pool hours
-ui.techtree.feature.w14_package,Wellness-Paket (+30% Einnahmen),Wellness Package (+30% Income)
-ui.techtree.feature.p11_events,Reisegruppen & Messe-Events,Travel Groups & Events
-ui.techtree.feature.p12_conference,Konferenzraum,Conference Room
-ui.techtree.feature.p13_vip,VIP-Gäste,VIP Guests
+ui.techtree.feature.w1_1_bonus,+5% Start-Zufriedenheit,+5% Starting Satisfaction
+techtree.wellness.w1_4,Ganzheitliche Wellness,Holistic Wellness
+techtree.wellness.w1_4.desc,Körper und Geist im Einklang. Moderne Fitnessgeräte und umfassende Wellness-Pakete runden das Erholungsangebot ab und machen dein Hotel zur ersten Wahl für Aktivurlauber.,Body and mind in harmony. Modern fitness equipment and comprehensive wellness packages complete the recreational offering and make your hotel the first choice for active vacationers.
+ui.techtree.feature.w1_2_pool,Raum: Hallenbad (Indoor-Pool),Room: Indoor Pool
+ui.techtree.feature.w1_3_spa,Raum: Premium-Spa / Sauna,Room: Premium Spa / Sauna
+ui.techtree.feature.w1_4_fitness,Raum: Fitnessraum (Klein),Room: Fitness Room (Small)
+ui.techtree.feature.w1_4_hours,Erweiterte Öffnungszeiten für Hallenbad,Extended indoor pool hours
+ui.techtree.feature.w1_4_package,Wellness-Paket (+30% Einnahmen - ab Tier 2 via SimBrowser),Wellness Package (+30% Income - Tier 2 via SimBrowser)
+ui.techtree.feature.p1_1_events,Reisegruppen & Messe-Events,Travel Groups & Events
+ui.techtree.feature.p1_2_conference,Konferenzraum,Conference Room
+ui.techtree.feature.p1_3_vip,VIP-Gäste,VIP Guests
 ui.tutorial.tab.rooms,Räume,Rooms
 room_category.guests,Gäste,Guests
 quest.guest.single.10.name,10 Single-Gäste bedienen,Serve 10 Single Guests
@@ -1351,3 +1351,146 @@ ui.confirm.plot_buy_desc,Möchtest du diese Parzelle für %s € kaufen?,Do you 
 plot.locked_level,Level %d benötigt,Requires Level %d
 plot.max_reached,Max. Parzellen,Max Plots
 plot.under_construction,Gekauft - im Bau,Purchased - Building
+tutorial.room_lobby.title,Lobby,Lobby
+tutorial.room_lobby.desc,"Das Herzstück und der zentrale Empfangsbereich des Hotels. 
+Hier kommen neue Gäste an, werden empfangen, warten auf Zuweisung ihres Zimmers und checken bei Abreise wieder aus. 
+
+Funktion: Die Rezeption wird anfangs vom Spieler bedient, im späteren Spielverlauf kann hier Personal (Rezeptionist) eingesetzt werden. Der Snack-Automat im Foyer dient als erste kleine Nahrungsquelle für Gäste. Die Lobby fungiert als zentraler Verteiler für alle Wegführungen im Hotel.
+
+Kosten: 0 € (Von Beginn an fest verbaut)
+
+Voraussetzungen: Keine (Standard)","Das Herzstück und der zentrale Empfangsbereich des Hotels. 
+Hier kommen neue Gäste an, werden empfangen, warten auf Zuweisung ihres Zimmers und checken bei Abreise wieder aus. 
+
+Funktion: Die Rezeption wird anfangs vom Spieler bedient, im späteren Spielverlauf kann hier Personal (Rezeptionist) eingesetzt werden. Der Snack-Automat im Foyer dient als erste kleine Nahrungsquelle für Gäste. Die Lobby fungiert als zentraler Verteiler für alle Wegführungen im Hotel.
+
+Kosten: 0 € (Von Beginn an fest verbaut)
+
+Voraussetzungen: Keine (Standard)"
+tutorial.room_bed_standard.title,Einzelzimmer,Single Room
+tutorial.room_bed_standard.desc,"Ein einfaches und günstiges Zimmer für preisbewusste Gäste und Alleinreisende.
+
+Funktion: Dient als grundlegender Schlaf- und Rückzugsort. Es ist die bevorzugte Wahl für Alleinreisende, Budget-Gäste, Geschäftsreisende, digitale Nomaden und Event-Gäste. Paare oder Familien buchen dieses Zimmer nicht.
+
+Kosten: 2.000 € (Basis-Einnahmen: 80 € / Nacht)
+
+Voraussetzungen: Keine (Standard)","Ein einfaches und günstiges Zimmer für preisbewusste Gäste und Alleinreisende.
+
+Funktion: Dient als grundlegender Schlaf- und Rückzugsort. Es ist die bevorzugte Wahl für Alleinreisende, Budget-Gäste, Geschäftsreisende, digitale Nomaden und Event-Gäste. Paare oder Familien buchen dieses Zimmer nicht.
+
+Kosten: 2.000 € (Basis-Einnahmen: 80 € / Nacht)
+
+Voraussetzungen: Keine (Standard)"
+tutorial.room_bed_double.title,Doppelzimmer,Double Room
+tutorial.room_bed_double.desc,"Ein geräumigeres Zimmer, das auf Paare ausgerichtet ist, aber auch als Ausweichzimmer für Singles genutzt werden kann.
+
+Funktion: Bietet Platz für zwei Personen und bringt durch den höheren Standard deutlich bessere Übernachtungseinnahmen als das Einzelzimmer (130 € / Nacht). Es ist die absolute Präferenz für Paare, kann aber auch von anderen Standard-Gästen gebucht werden. Dies führt an der Rezeption allerdings zu einer Rückfrage bezüglich des höheren Preises (Erfolgschance). Lehnt der Gast den Aufpreis ab, verlässt er das Hotel.
+
+Kosten: 3.500 €
+
+Voraussetzungen: Keine (Standard)","Ein geräumigeres Zimmer, das auf Paare ausgerichtet ist, aber auch als Ausweichzimmer für Singles genutzt werden kann.
+
+Funktion: Bietet Platz für zwei Personen und bringt durch den höheren Standard deutlich bessere Übernachtungseinnahmen als das Einzelzimmer (130 € / Nacht). Es ist die absolute Präferenz für Paare, kann aber auch von anderen Standard-Gästen gebucht werden. Dies führt an der Rezeption allerdings zu einer Rückfrage bezüglich des höheren Preises (Erfolgschance). Lehnt der Gast den Aufpreis ab, verlässt er das Hotel.
+
+Kosten: 3.500 €
+
+Voraussetzungen: Keine (Standard)"
+tutorial.room_bed_family.title,Familienzimmer,Family Room
+tutorial.room_bed_family.desc,"Ein großer Schlafraum, der exklusiv für Familien reserviert ist.
+
+Funktion: Bietet genug Platz für Familien (Eltern mit 1 bis 3 Kindern, also insgesamt 3 bis 5 Personen). Ist sehr lukrativ (200 € / Nacht). 
+
+Referenzen zu anderen Räumen: Familien haben oftmals höhere Platzansprüche und verlangen nach einem Pool im Hotel, um Unzufriedenheit zu vermeiden.
+
+Kosten: 6.000 €
+
+Voraussetzungen: Techtree Z1.2 (Familienzimmer)","Ein großer Schlafraum, der exklusiv für Familien reserviert ist.
+
+Funktion: Bietet genug Platz für Familien (Eltern mit 1 bis 3 Kindern, also insgesamt 3 bis 5 Personen). Ist sehr lukrativ (200 € / Nacht). 
+
+Referenzen zu anderen Räumen: Familien haben oftmals höhere Platzansprüche und verlangen nach einem Pool im Hotel, um Unzufriedenheit zu vermeiden.
+
+Kosten: 6.000 €
+
+Voraussetzungen: Techtree Z1.2 (Familienzimmer)"
+tutorial.room_bed_superior.title,Superior-Zimmer,Superior Room
+tutorial.room_bed_superior.desc,"Die gehobene Luxus-Klasse unter den Zimmern für VIP-Gäste und Luxusreisende.
+
+Funktion: Erfüllt hohe Ansprüche an Luxus und Privatsphäre. Bringt mit 400 € / Nacht mit die höchsten Einnahmen im Spiel, wird aber ausschließlich von den sehr seltenen Luxus-Gästen und VIPs gebucht. 
+
+Kosten: 15.000 €
+
+Voraussetzungen: Techtree Z1.3 (Superior-Zimmer)","Die gehobene Luxus-Klasse unter den Zimmern für VIP-Gäste und Luxusreisende.
+
+Funktion: Erfüllt hohe Ansprüche an Luxus und Privatsphäre. Bringt mit 400 € / Nacht mit die höchsten Einnahmen im Spiel, wird aber ausschließlich von den sehr seltenen Luxus-Gästen und VIPs gebucht. 
+
+Kosten: 15.000 €
+
+Voraussetzungen: Techtree Z1.3 (Superior-Zimmer)"
+tutorial.room_bar.title,Bar,Bar
+tutorial.room_bar.desc,"Ein Treffpunkt für gesellige Gäste, der ab 12:00 Uhr mittags bis in die Nacht geöffnet ist (Adults only).
+
+Funktion: Generiert zusätzliche Einnahmen (15 € Basis) durch den Verkauf von Getränken. Die Bar erfordert zwingend einen Barkeeper (Personal), um überhaupt öffnen zu können.
+
+Referenzen zu anderen Räumen: Wenn im Hotel zusätzlich eine funktionierende kleine Küche (inklusive Koch) vorhanden ist, können Gäste an der Bar optional auch Essen bestellen, wofür allerdings eine zusätzliche Servicekraft (Bedienung) an der Bar eingeteilt werden muss.
+
+Kosten: 1.800 €
+
+Voraussetzungen: Techtree G1.1 (Basis-Gastronomie)","Ein Treffpunkt für gesellige Gäste, der ab 12:00 Uhr mittags bis in die Nacht geöffnet ist (Adults only).
+
+Funktion: Generiert zusätzliche Einnahmen (15 € Basis) durch den Verkauf von Getränken. Die Bar erfordert zwingend einen Barkeeper (Personal), um überhaupt öffnen zu können.
+
+Referenzen zu anderen Räumen: Wenn im Hotel zusätzlich eine funktionierende kleine Küche (inklusive Koch) vorhanden ist, können Gäste an der Bar optional auch Essen bestellen, wofür allerdings eine zusätzliche Servicekraft (Bedienung) an der Bar eingeteilt werden muss.
+
+Kosten: 1.800 €
+
+Voraussetzungen: Techtree G1.1 (Basis-Gastronomie)"
+tutorial.room_kitchen_small.title,Kleine Küche,Small Kitchen
+tutorial.room_kitchen_small.desc,"Das logistische Herz der Gastronomie. Hier essen keine Gäste, hier wird nur gearbeitet!
+
+Funktion: Die Küche bereitet Mahlzeiten zu. Sie erfordert zwingend einen Koch (Personal). Optional kann eine Bedienung eingeteilt werden, die die Kochgeschwindigkeit erhöht. Ohne eine aktive Küche können weder im Restaurant noch an der Bar Mahlzeiten verkauft werden.
+
+Kosten: 3.000 €
+
+Voraussetzungen: Techtree G1.2 (Erweiterte Gastronomie)","Das logistische Herz der Gastronomie. Hier essen keine Gäste, hier wird nur gearbeitet!
+
+Funktion: Die Küche bereitet Mahlzeiten zu. Sie erfordert zwingend einen Koch (Personal). Optional kann eine Bedienung eingeteilt werden, die die Kochgeschwindigkeit erhöht. Ohne eine aktive Küche können weder im Restaurant noch an der Bar Mahlzeiten verkauft werden.
+
+Kosten: 3.000 €
+
+Voraussetzungen: Techtree G1.2 (Erweiterte Gastronomie)"
+tutorial.room_restaurant_small.title,Kleines Restaurant,Small Restaurant
+tutorial.room_restaurant_small.desc,"Ein Speisesaal für deine Gäste, der durch seine Öffnungszeiten (07:00 bis 22:00 Uhr) auch als Frühstücksraum genutzt wird, und in dem warme Mahlzeiten serviert werden.
+
+Funktion: Bietet Platz für bis zu 20 Gäste gleichzeitig. Gäste setzen sich hierher, um ihren Hunger zu stillen (generiert Einnahmen pro Gericht). 
+
+Referenzen zu anderen Räumen: Ein Restaurant funktioniert niemals alleine! Es benötigt zwingend eine aktive Küche (mit Koch), die das Essen zubereitet, sowie eigenes Servicepersonal (Bedienung) im Restaurant, welches das Essen an die Tische bringt.
+
+Kosten: 5.000 €
+
+Voraussetzungen: Techtree G1.3 (Gehobene Küche)","Ein Speisesaal für deine Gäste, der durch seine Öffnungszeiten (07:00 bis 22:00 Uhr) auch als Frühstücksraum genutzt wird, und in dem warme Mahlzeiten serviert werden.
+
+Funktion: Bietet Platz für bis zu 20 Gäste gleichzeitig. Gäste setzen sich hierher, um ihren Hunger zu stillen (generiert Einnahmen pro Gericht). 
+
+Referenzen zu anderen Räumen: Ein Restaurant funktioniert niemals alleine! Es benötigt zwingend eine aktive Küche (mit Koch), die das Essen zubereitet, sowie eigenes Servicepersonal (Bedienung) im Restaurant, welches das Essen an die Tische bringt.
+
+Kosten: 5.000 €
+
+Voraussetzungen: Techtree G1.3 (Gehobene Küche)"
+tutorial.room_staff_small.title,Kleiner Personalraum,Small Staff Room
+tutorial.room_staff_small.desc,"Ein zwingend notwendiger Rückzugsort für deine Angestellten.
+
+Funktion: Ohne Personalraum lässt sich gar kein Personal einstellen! Jeder gebaute Personalraum erhöht dein Limit für einstellbares Personal um 4. Zudem verliert Personal durch die Arbeit stetig an Moral. Im Personalraum machen erschöpfte Mitarbeiter Pause, um ihre Moral wieder aufzufüllen. Sinkt die Moral in den Keller, arbeiten sie ineffizient oder stellen die Arbeit komplett ein.
+
+Kosten: 2.500 €
+
+Voraussetzungen: Level 2 (Personal-Freischaltung)","Ein zwingend notwendiger Rückzugsort für deine Angestellten.
+
+Funktion: Ohne Personalraum lässt sich gar kein Personal einstellen! Jeder gebaute Personalraum erhöht dein Limit für einstellbares Personal um 4. Zudem verliert Personal durch die Arbeit stetig an Moral. Im Personalraum machen erschöpfte Mitarbeiter Pause, um ihre Moral wieder aufzufüllen. Sinkt die Moral in den Keller, arbeiten sie ineffizient oder stellen die Arbeit komplett ein.
+
+Kosten: 2.500 €
+
+Voraussetzungen: Level 2 (Personal-Freischaltung)"
+ui.tutorial.tab.guests,Gäste,Guests
+codex.poi.title,Point of Interest (POI),Point of Interest (POI)
+codex.poi.desc,"Ein Point of Interest (POI) ist ein öffentlicher Bereich im Hotel, der für alle Gäste zugänglich ist, wie zum Beispiel die Lobby, Flure oder Aufenthaltsbereiche. Im Gegensatz zu Gästezimmern, die exklusiv gebucht werden, können POIs durch Upgrades (wie z.B. WLAN oder Klimaanlagen) aufgewertet werden, um die allgemeine Zufriedenheit aller Gäste im Hotel zu steigern.","A Point of Interest (POI) is a public area in the hotel accessible to all guests, such as the lobby, corridors, or lounge areas. Unlike guest rooms, which are booked exclusively, POIs can be upgraded (e.g., with Wi-Fi or air conditioning) to increase the overall satisfaction of all guests in the hotel."

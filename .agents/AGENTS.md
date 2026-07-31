@@ -48,3 +48,6 @@
 - **`GameState`**: User-State, Unlocks (Level), Translation-Helper.
 - **`Api`**: ZukÃ¼nftiges PHP-Backend (aktuell lokal).
 - Vor dem Coden prÃ¼fen, ob es schon LÃ¶sungen via Autoload gibt.
+
+## Status Quo Direktive
+- **STRIKTE REGEL für status_quo.md**: In das Status Quo Dokument kommen NIEMALS ToDos, unfertige Punkte oder '[ ]' Boxen. Es ist eine reine Inventar-Liste von Dingen, die bereits effektiv fertiggestellt und voll funktionsfähig sind.

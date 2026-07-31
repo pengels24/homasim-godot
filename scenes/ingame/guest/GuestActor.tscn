@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cmq0hprhggre1" path="res://assets/icons/cooking-pot.svg" id="3_pot"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_click"]
-radius = 16.0
+radius = 6.0
 
 [node name="GuestActor" type="Node2D"]
 script = ExtResource("1_act")

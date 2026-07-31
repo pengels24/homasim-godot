@@ -7,8 +7,8 @@ extends VBoxContainer
 @onready var texture_rect: TextureRect = %TextureRect
 
 var _tutorials: Array = []
-var _tabs: Array = ["tutorial", "tipps", "rooms", "codex", "forschung"]
-var _tab_labels: Array = ["ui.tutorial.tab.tutorial", "ui.tutorial.tab.tipps", "ui.tutorial.tab.rooms", "ui.tutorial.tab.codex", "ui.tutorial.tab.forschung"]
+var _tabs: Array = ["tutorial", "tipps", "rooms", "codex", "forschung", "real_codex"]
+var _tab_labels: Array = ["ui.tutorial.tab.tutorial", "ui.tutorial.tab.tipps", "ui.tutorial.tab.rooms", "ui.tutorial.tab.guests", "ui.tutorial.tab.forschung", "ui.tutorial.tab.codex"]
 var _current_tab: String = "tutorial"
 var _tab_buttons: Array[Button] = []
 
@@ -44,6 +44,8 @@ func _load_data() -> void:
 	elif TutorialManager:
 		if _current_tab == "rooms":
 			_tutorials = TutorialManager.get_all_data_for_category(_current_tab)
+		elif _current_tab == "real_codex":
+			_tutorials = TutorialManager.get_all_data_for_category(_current_tab)
 		else:
 			_tutorials = TutorialManager.get_unlocked_data(_current_tab)
 	else:
@@ -55,8 +57,6 @@ func _load_data() -> void:
 		_clear_display()
 		title_label.text = GameState.T("ui.tutorial.tab.forschung", "Forschung")
 		desc_label.text = GameState.T("ui.tutorial.forschung.intro", "Wähle links eine Kategorie, um alle Forschungs-Projekte zu sehen.")
-		texture_rect.texture = preload("res://assets/icons/HUDBottom/flask-conical.svg")
-		texture_rect.show()
 	elif _tutorials.size() > 0:
 		_on_item_selected(0)
 	else:
@@ -172,8 +172,59 @@ func _on_tech_selected(node: Dictionary) -> void:
 	if desc_text == desc_key:
 		desc_text = "Keine Beschreibung verfügbar."
 		
+	# 1. Unlocks ("Schaltet frei") sammeln
+	var unlocks = []
+	for t in TechtreeManager.tech_registry.values():
+		if tech_id in t.get("dependencies", []):
+			unlocks.append(GameState.T("ui.techtree.tooltip.unlocks.tech", GameState.T(t.get("name", t.get("id", "")))))
+	
+	for r in GameState.room_registry.values():
+		var r_def = r.get("def", {})
+		if r_def.get("req_tech", "") == tech_id:
+			unlocks.append(GameState.T("ui.techtree.tooltip.unlocks.room", GameState.T(r_def.get("name", "Raum"))))
+			
+	var custom_features = node.get("unlocks_features", [])
+	for f in custom_features:
+		unlocks.append(GameState.T("ui.techtree.tooltip.unlocks.feature", GameState.T(f)))
+		
+	if unlocks.size() > 0:
+		var joined = "\n- ".join(unlocks)
+		desc_text += "\n\n" + GameState.T("ui.techtree.tooltip.unlocks.desc", joined).strip_edges(false, true)
+		
+	# 2. Voraussetzungen
+	var tier_id = node.get("tier", "1")
+	var req_level = int(TechtreeManager.tiers_config.get(tier_id, {}).get("gate", {}).get("req_level", 0))
+	var deps = node.get("dependencies", [])
+	
+	var req_parts = []
+	if req_level > 0:
+		req_parts.append("Level " + str(req_level))
+		
+	if deps.size() > 0:
+		var deps_names = []
+		for d in deps:
+			var dep_name = GameState.T(TechtreeManager.get_tech_node(d).get("name", d))
+			deps_names.append(dep_name + " (" + d + ")")
+		req_parts.append(", ".join(deps_names))
+		
+	if req_parts.size() > 0:
+		desc_text += "\n\nVoraussetzungen: " + " | ".join(req_parts)
+		
+	# 3. Kosten
+	var cost_fp = int(node.get("cost_fp", 0))
+	var cost_money = int(node.get("cost_money", 0))
+	var cost_parts = []
+	if cost_fp > 0:
+		cost_parts.append(str(cost_fp) + " FP")
+	if cost_money > 0:
+		cost_parts.append(GameState.format_money(cost_money) + " €")
+		
+	if cost_parts.size() > 0:
+		desc_text += "\nKosten: " + " | ".join(cost_parts)
+		
 	desc_label.text = desc_text
 	texture_rect.texture = preload("res://assets/icons/angelus2010/HUDBottom/ang-flask.aseprite")
+	texture_rect.custom_minimum_size = Vector2(0, 245)
 	texture_rect.show()
 
 func _on_item_selected(index: int) -> void:
@@ -186,6 +237,11 @@ func _on_item_selected(index: int) -> void:
 	
 	title_label.text = GameState.T(title_key) if GameState else title_key
 	desc_label.text = GameState.T(desc_key) if GameState else desc_key
+	
+	if _current_tab in ["codex", "rooms", "forschung"]:
+		texture_rect.custom_minimum_size = Vector2(0, 245)
+	else:
+		texture_rect.custom_minimum_size = Vector2(0, 350)
 	
 	if image_path != "":
 		texture_rect.texture = load(image_path)

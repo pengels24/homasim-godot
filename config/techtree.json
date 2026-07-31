@@ -161,10 +161,7 @@
                         "W1.1"
                     ],
                     "unlocks_emojis": "🏊 🌳",
-                    "demo_locked": true,
-                    "unlocks_features": [
-                        "ui.techtree.feature.w1_2_pool"
-                    ]
+                    "demo_locked": true
                 },
                 {
                     "id": "W1.3",
@@ -178,10 +175,7 @@
                         "W1.1"
                     ],
                     "unlocks_emojis": "⭐ 🧘",
-                    "demo_locked": true,
-                    "unlocks_features": [
-                        "ui.techtree.feature.w1_3_spa"
-                    ]
+                    "demo_locked": true
                 },
                 {
                     "id": "M1.1",
@@ -277,10 +271,7 @@
                         "P1.1"
                     ],
                     "unlocks_emojis": "🏟️ 🎇",
-                    "demo_locked": true,
-                    "unlocks_features": [
-                        "ui.techtree.feature.p1_2_conference"
-                    ]
+                    "demo_locked": true
                 },
                 {
                     "id": "P1.3",

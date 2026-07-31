@@ -169,9 +169,16 @@ func _ready() -> void:
 	_create_interaction_area()
 	_build_local_nav()
 	
+	# Stelle sicher, dass ALLE Control-Nodes im Raum (NavBlocker, Betten, Stühle) 
+	# keine Hover-Events abfangen - wichtig für Multi-Tile Räume!
+	_apply_mouse_filter_recursive(self)
+	
 	var interior = get_node_or_null("Interior")
 	if interior:
 		_find_furniture_recursive(interior)
+	elif has_node("Landscape") and has_node("Portrait"):
+		# Für Multi-Tile-Räume wie BedDouble vorerst die Landscape-Möbel registrieren
+		_find_furniture_recursive(get_node("Landscape/Interior"))
 	
 	if TimeManager and not TimeManager.sig_hour_passed.is_connected(_on_hour_passed):
 		TimeManager.sig_hour_passed.connect(_on_hour_passed)
@@ -180,6 +187,12 @@ func _ready() -> void:
 		
 	if StaffManager and not StaffManager.sig_assignments_changed.is_connected(_update_indicator):
 		StaffManager.sig_assignments_changed.connect(_update_indicator)
+
+func _apply_mouse_filter_recursive(node: Node) -> void:
+	for child in node.get_children():
+		if child is Control:
+			child.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_apply_mouse_filter_recursive(child)
 
 # =============================================================================
 func can_build_path(_door_idx: int) -> bool:
@@ -534,7 +547,7 @@ func get_valid_door_combos() -> Array[Vector2i]:
 		var n := mini(wall_len[rot], 5)
 		for off: int in range(n):
 			if named.is_empty() or slots[off] in named:
-				result.append(Vector2i(rot, off))
+																																	result.append(Vector2i(rot, off))
 	return result
 
 

@@ -82,11 +82,13 @@ var _room_beds: Array[Dictionary] = []
 
 func _find_furniture_recursive(node: Node) -> void:
 	for child in node.get_children():
+		# Generell alle UI-Eigenschaften von Möbeln (Blocker, Betten, Stühle) für die Maus ignorieren
+		if child is Control:
+			child.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			
 		var n = child.name.to_lower()
-		# Blocker ignorieren und Maus-Events durchreichen lassen!
+		# Blocker überspringen (nicht als interaktive Möbelstücke zählen)
 		if "navblocker" in n:
-			if child is Control:
-				child.mouse_filter = Control.MOUSE_FILTER_IGNORE
 			_find_furniture_recursive(child)
 			continue
 			

@@ -414,7 +414,7 @@ func _on_order_served(_order_id: String, guest_id: String, recipe_id: String) ->
 		_guest_member.saturation = min(100, _guest_member.saturation + sat)
 		
 		var party = _get_my_party()
-		if GameState.has_techtree_unlocked("G1.4") and party:
+		if TechtreeManager and TechtreeManager.is_tech_unlocked("G1.4") and party:
 			party.satisfaction = min(100, party.satisfaction + 5)
 		
 		# Essen-Status aktivieren

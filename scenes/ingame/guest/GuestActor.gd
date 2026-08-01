@@ -441,7 +441,7 @@ func _on_poi_arrived() -> void:
 				# Gast macht einen Schritt zur Seite, wird wieder sichtbar und isst
 				var target_pos = lobby.get_snack_eating_target_world()
 				_change_state(State.WALKING)
-				_execute_walk([], State.EATING, global_position, target_pos, lobby)
+				_execute_walk([] as Array[Vector2i], State.EATING, global_position, target_pos, lobby)
 				return
 		
 		# Falls Automat nicht klappt
@@ -628,9 +628,10 @@ func _walk_to_world_pos(target_pos: Vector2, finish_state: State) -> void:
 	_change_state(State.WALKING)
 	var start_tile = _get_logical_start_tile()
 	var exit_tile = _map_grid.world_to_tile(target_pos)
-	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
+	var path_tiles: Array[Vector2i] = _map_grid.get_path_between_tiles(start_tile, exit_tile)
 	if path_tiles.is_empty():
-		path_tiles = [start_tile, exit_tile]
+		path_tiles.append(start_tile)
+		path_tiles.append(exit_tile)
 	_execute_walk(path_tiles, finish_state, target_pos, target_pos)
 
 func start_checkin(room: Node2D, spawn_pos: Vector2, delay: float) -> void:
@@ -749,7 +750,7 @@ func _walk_to_exit() -> void:
 	
 	# _execute_walk wird automatisch den local_path_out der Lobby nutzen,
 	# da der Gast sich im Status AWAITING_CHECKOUT befindet!
-	_execute_walk([], State.LEAVING, door_world, Vector2.INF, lobby)
+	_execute_walk([] as Array[Vector2i], State.LEAVING, door_world, Vector2.INF, lobby)
 
 
 # =============================================================================

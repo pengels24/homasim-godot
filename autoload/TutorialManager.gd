@@ -116,8 +116,42 @@ func get_unlocked_data(category: String = "") -> Array:
 
 func get_all_data_for_category(category: String = "") -> Array:
 	var result = []
+	
+	if category == "rooms" and GameState:
+		for r_id in GameState.room_registry:
+			var def = GameState.room_registry[r_id].get("def", {})
+			if not def.get("in_build_menu", false):
+				continue
+				
+			var img_path = "res://assets/roomtypes/" + r_id + ".aseprite"
+			if r_id == "kitchen_small":
+				img_path = "res://assets/roomtypes/kittchen_small.aseprite"
+				
+			if not ResourceLoader.exists(img_path):
+				img_path = def.get("icon", "")
+				
+			var entry = {
+				"id": "room_" + r_id,
+				"category": "rooms",
+				"title_key": def.get("name", "tutorial.room_" + r_id + ".title"),
+				"desc_key": "tutorial.room_" + r_id + ".desc",
+				"image": img_path
+			}
+			result.append(entry)
+			
 	for t_id in tutorial_registry.keys():
 		var tut = tutorial_registry[t_id]
 		if category == "" or tut.get("category", "tutorial") == category:
-			result.append(tut)
+			# Skip if it's already dynamically added
+			var already_added = false
+			for r in result:
+				if r.get("id", "") == tut.get("id", ""):
+					already_added = true
+					# Optional: Merge specific properties like custom title_key or desc_key if they differ in json
+					if tut.has("desc_key"): r["desc_key"] = tut["desc_key"]
+					if tut.has("title_key"): r["title_key"] = tut["title_key"]
+					break
+			if not already_added:
+				result.append(tut)
+				
 	return result

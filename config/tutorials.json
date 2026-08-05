@@ -228,7 +228,7 @@
             "category": "real_codex",
             "title_key": "codex.poi.title",
             "desc_key": "codex.poi.desc",
-            "image": "res://assets/icons/guests/map-pin.svg"
+            "image": "res://assets/icons/HUDBottom/map-pin.svg"
         }
     ]
 }

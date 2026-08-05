@@ -236,7 +236,15 @@ func _on_item_selected(index: int) -> void:
 	var image_path = tut.get("image", "")
 	
 	title_label.text = GameState.T(title_key) if GameState else title_key
-	desc_label.text = GameState.T(desc_key) if GameState else desc_key
+	var desc_text = GameState.T(desc_key) if GameState else desc_key
+	
+	if desc_text == desc_key:
+		if _current_tab == "rooms":
+			desc_text = "Für diesen Raum ist noch kein detaillierter Codex-Eintrag vorhanden."
+		else:
+			desc_text = "Keine Beschreibung verfügbar."
+			
+	desc_label.text = desc_text
 	
 	if _current_tab in ["codex", "rooms", "forschung"]:
 		texture_rect.custom_minimum_size = Vector2(0, 245)

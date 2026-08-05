@@ -71,6 +71,19 @@ func get_game_time() -> int:
 
 
 # =============================================================================
+## Gibt die Tageszeit als absoluten Wert zurück: Tag × 1440 + aktuelle Spielminute.
+## Überlebt Tageswechsel, ideal für tagesübergreifende Timer (z.B. Parzellenba).
+func get_absolute_time() -> int:
+	var day: int = int(_hotel_ref.get("day", 1))
+	return day * 1440 + get_game_time()
+
+
+# =============================================================================
+func get_day() -> int:
+	return int(_hotel_ref.get("day", 1))
+
+
+# =============================================================================
 func get_hour() -> int:
 	return _game_hour
 

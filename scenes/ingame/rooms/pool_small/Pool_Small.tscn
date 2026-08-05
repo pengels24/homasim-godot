@@ -1,0 +1,399 @@
+[gd_scene format=3 uid="uid://bmrmlx1iye48v"]
+
+[ext_resource type="Script" path="res://scenes/ingame/rooms/pool_small/PoolSmall.gd" id="1_n4qyx"]
+[ext_resource type="Texture2D" uid="uid://bw1q4tu6dwrv1" path="res://assets/tiles/Furniture/furniture_pool_small.aseprite" id="2_dwwtj"]
+
+[sub_resource type="Gradient" id="Gradient_2hw84"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_kdks4"]
+gradient = SubResource("Gradient_2hw84")
+
+[sub_resource type="Gradient" id="Gradient_qfmep"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_gouwv"]
+gradient = SubResource("Gradient_qfmep")
+
+[sub_resource type="Gradient" id="Gradient_evq2g"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_f8fa0"]
+gradient = SubResource("Gradient_evq2g")
+
+[sub_resource type="Gradient" id="Gradient_0kbel"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ugc3f"]
+gradient = SubResource("Gradient_0kbel")
+
+[sub_resource type="Gradient" id="Gradient_066q5"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.9607843, 0.972549, 0.98039216, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_lv322"]
+gradient = SubResource("Gradient_066q5")
+
+[sub_resource type="Gradient" id="Gradient_cfvov"]
+offsets = PackedFloat32Array(0.4383378)
+colors = PackedColorArray(0.67058825, 0.78039217, 0.8509804, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_bco61"]
+gradient = SubResource("Gradient_cfvov")
+
+[sub_resource type="Gradient" id="Gradient_kdks4"]
+offsets = PackedFloat32Array(0.47066015, 0.5)
+colors = PackedColorArray(0.67058825, 0.78039217, 0.8509804, 1, 0.23137255, 0.23921569, 0.3019608, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6ma2u"]
+gradient = SubResource("Gradient_kdks4")
+
+[node name="PoolSmall" type="Node2D" unique_id=1555162851]
+script = ExtResource("1_n4qyx")
+base_size = Vector2i(3, 3)
+
+[node name="Ground" type="Node2D" parent="." unique_id=523780683]
+
+[node name="BaseFloor" type="Sprite2D" parent="Ground" unique_id=281127663]
+position = Vector2(24, 24)
+scale = Vector2(0.188, 48)
+texture = SubResource("GradientTexture1D_kdks4")
+
+[node name="WallLeft" type="Sprite2D" parent="Ground" unique_id=597280766]
+position = Vector2(1, 24)
+rotation = 3.1415927
+scale = Vector2(0.008, 48)
+texture = SubResource("GradientTexture1D_gouwv")
+
+[node name="WallRight" type="Sprite2D" parent="Ground" unique_id=1466592147]
+position = Vector2(47, 24)
+scale = Vector2(0.008, 48)
+skew = -0.00032782555
+texture = SubResource("GradientTexture1D_f8fa0")
+
+[node name="WallTop" type="Sprite2D" parent="Ground" unique_id=1374892124]
+position = Vector2(24, 1)
+rotation = 4.712389
+scale = Vector2(0.008, 48)
+texture = SubResource("GradientTexture1D_ugc3f")
+
+[node name="WallBottom" type="Sprite2D" parent="Ground" unique_id=60990802]
+position = Vector2(24, 47)
+rotation = 1.5707964
+scale = Vector2(0.008, 48)
+texture = SubResource("GradientTexture1D_lv322")
+
+[node name="Interior" type="Node2D" parent="." unique_id=455419346]
+
+[node name="Floor" type="Sprite2D" parent="Interior" unique_id=815949936]
+position = Vector2(24, 24)
+scale = Vector2(0.172, 44)
+texture = SubResource("GradientTexture1D_bco61")
+
+[node name="Furniture" type="Node2D" parent="Interior" unique_id=103375456]
+
+[node name="Loungers" type="Node2D" parent="Interior/Furniture" unique_id=945595005]
+
+[node name="LoungerGreen" type="Sprite2D" parent="Interior/Furniture/Loungers" unique_id=1801971945]
+position = Vector2(7, 6)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(0, 16, 16, 16)
+
+[node name="LoungerLila" type="Sprite2D" parent="Interior/Furniture/Loungers" unique_id=460182304]
+position = Vector2(40, 6)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(112, 0, 16, 16)
+
+[node name="LoungerRed1" type="Sprite2D" parent="Interior/Furniture/Loungers" unique_id=499316286]
+position = Vector2(7, 41)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(80, 0, 16, 16)
+
+[node name="LoungerRed2" type="Sprite2D" parent="Interior/Furniture/Loungers" unique_id=296914203]
+position = Vector2(18, 41)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(80, 0, 16, 16)
+
+[node name="LoungerOrange1" type="Sprite2D" parent="Interior/Furniture/Loungers" unique_id=653972107]
+position = Vector2(29, 41)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(96, 0, 16, 16)
+
+[node name="LoungerOrange2" type="Sprite2D" parent="Interior/Furniture/Loungers" unique_id=1329688079]
+position = Vector2(40, 41)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(96, 0, 16, 16)
+
+[node name="Pool" type="Node2D" parent="Interior/Furniture" unique_id=214580954]
+
+[node name="Pool1" type="Sprite2D" parent="Interior/Furniture/Pool" unique_id=1538985942]
+position = Vector2(11, 15)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(48, 16, 16, 16)
+
+[node name="Pool2" type="Sprite2D" parent="Interior/Furniture/Pool" unique_id=1872051696]
+position = Vector2(24, 15)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(64, 16, 16, 16)
+
+[node name="Pool3" type="Sprite2D" parent="Interior/Furniture/Pool" unique_id=580894699]
+position = Vector2(37, 15)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(48, 16, 16, 16)
+
+[node name="Pool4" type="Sprite2D" parent="Interior/Furniture/Pool" unique_id=355849761]
+position = Vector2(11, 24)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(80, 16, 16, 16)
+
+[node name="Pool5" type="Sprite2D" parent="Interior/Furniture/Pool" unique_id=613937505]
+position = Vector2(24, 24)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(96, 16, 16, 16)
+
+[node name="Pool6" type="Sprite2D" parent="Interior/Furniture/Pool" unique_id=58376335]
+position = Vector2(37, 24)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(112, 16, 16, 16)
+
+[node name="Pool7" type="Sprite2D" parent="Interior/Furniture/Pool" unique_id=1995111681]
+position = Vector2(11, 33)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(48, 16, 16, 16)
+
+[node name="Pool8" type="Sprite2D" parent="Interior/Furniture/Pool" unique_id=1460232254]
+position = Vector2(24, 33)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(64, 16, 16, 16)
+
+[node name="Pool9" type="Sprite2D" parent="Interior/Furniture/Pool" unique_id=1560861674]
+position = Vector2(37, 33)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(48, 16, 16, 16)
+
+[node name="Pool10" type="Sprite2D" parent="Interior/Furniture/Pool" unique_id=634567597]
+position = Vector2(23, 14)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(16, 16, 16, 16)
+
+[node name="Chairs" type="Node2D" parent="Interior/Furniture" unique_id=62303135]
+
+[node name="Chair1" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=648898592]
+position = Vector2(6, 42)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Chair2" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=2098728311]
+position = Vector2(17, 42)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Chair3" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1657344206]
+position = Vector2(28, 42)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(16, 0, 16, 16)
+
+[node name="Chair4" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=449079882]
+position = Vector2(39, 42)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(16, 0, 16, 16)
+
+[node name="Chair5" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=891556108]
+position = Vector2(43, 7)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(32, 0, 16, 16)
+
+[node name="Chair6" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=49715982]
+position = Vector2(6, 7)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(48, 0, 16, 16)
+
+[node name="Chair7" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1753082121]
+position = Vector2(23, 16)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(32, 16, 16, 16)
+
+[node name="Chair8" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=401820907]
+position = Vector2(33, 22)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(64, 0, 16, 16)
+
+[node name="Chair9" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=44518567]
+position = Vector2(31, 27)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(64, 0, 16, 16)
+
+[node name="Chair10" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=669450826]
+position = Vector2(24, 27)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(64, 0, 16, 16)
+
+[node name="Chair11" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=516161624]
+position = Vector2(23, 22)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(64, 0, 16, 16)
+
+[node name="Chair12" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1951851359]
+position = Vector2(17, 27)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(64, 0, 16, 16)
+
+[node name="Chair13" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1991864931]
+position = Vector2(14, 22)
+texture = ExtResource("2_dwwtj")
+region_enabled = true
+region_rect = Rect2(64, 0, 16, 16)
+
+[node name="NavBlocker" type="Node2D" parent="Interior/Furniture" unique_id=464467690]
+
+[node name="NavBlockerBottom1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=2085281155 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 42.0
+offset_right = 47.0
+offset_bottom = 47.0
+
+[node name="NavBlockerBottom2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1975716276 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 37.0
+offset_right = 8.0
+offset_bottom = 42.0
+
+[node name="NavBlockerBottom3" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=356559970 groups=["nav_blocker"]]
+offset_left = 14.0
+offset_top = 37.0
+offset_right = 19.0
+offset_bottom = 42.0
+
+[node name="NavBlockerBottom4" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=395102901 groups=["nav_blocker"]]
+offset_left = 25.0
+offset_top = 37.0
+offset_right = 30.0
+offset_bottom = 42.0
+
+[node name="NavBlockerBottom5" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=506619797 groups=["nav_blocker"]]
+offset_left = 36.0
+offset_top = 37.0
+offset_right = 41.0
+offset_bottom = 42.0
+
+[node name="NavBlockerPool1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=722174599 groups=["nav_blocker"]]
+offset_left = 15.0
+offset_top = 31.0
+offset_right = 40.0
+offset_bottom = 32.0
+
+[node name="NavBlockerPool2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=808979083 groups=["nav_blocker"]]
+offset_left = 8.0
+offset_top = 31.0
+offset_right = 11.0
+offset_bottom = 32.0
+
+[node name="NavBlockerPool3" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1695157097 groups=["nav_blocker"]]
+offset_left = 8.0
+offset_top = 16.0
+offset_right = 9.0
+offset_bottom = 32.0
+
+[node name="NavBlockerPool4" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1945862619 groups=["nav_blocker"]]
+offset_left = 8.0
+offset_top = 16.0
+offset_right = 11.0
+offset_bottom = 17.0
+
+[node name="NavBlockerPool5" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=2000873400 groups=["nav_blocker"]]
+offset_left = 15.0
+offset_top = 16.0
+offset_right = 21.0
+offset_bottom = 17.0
+
+[node name="NavBlockerPool6" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1986064534 groups=["nav_blocker"]]
+offset_left = 21.0
+offset_top = 14.0
+offset_right = 25.0
+offset_bottom = 18.0
+
+[node name="NavBlockerPool7" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1074902531 groups=["nav_blocker"]]
+offset_left = 25.0
+offset_top = 16.0
+offset_right = 33.0
+offset_bottom = 17.0
+
+[node name="NavBlockerPool8" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=971237461 groups=["nav_blocker"]]
+offset_left = 37.0
+offset_top = 16.0
+offset_right = 40.0
+offset_bottom = 17.0
+
+[node name="NavBlockerPool9" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1762813067 groups=["nav_blocker"]]
+offset_left = 39.0
+offset_top = 16.0
+offset_right = 40.0
+offset_bottom = 22.0
+
+[node name="NavBlockerPool10" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=742091056 groups=["nav_blocker"]]
+offset_left = 39.0
+offset_top = 26.0
+offset_right = 40.0
+offset_bottom = 32.0
+
+[node name="NavBlockerTop1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=139942634 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 12.0
+offset_bottom = 6.0
+
+[node name="NavBlockerTop2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=377459707 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 8.0
+offset_bottom = 11.0
+
+[node name="NavBlockerTop3" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1303533774 groups=["nav_blocker"]]
+offset_left = 36.0
+offset_top = 1.0
+offset_right = 47.0
+offset_bottom = 6.0
+
+[node name="NavBlockerTop4" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1448197964 groups=["nav_blocker"]]
+offset_left = 40.0
+offset_top = 1.0
+offset_right = 47.0
+offset_bottom = 11.0
+
+[node name="Door" type="Sprite2D" parent="." unique_id=1927835578]
+position = Vector2(1, 8)
+rotation = 3.1415927
+scale = Vector2(0.008, 6)
+texture = SubResource("GradientTexture1D_6ma2u")

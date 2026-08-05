@@ -44,6 +44,26 @@
       "id": "staff_small",
       "scene_path": "res://scenes/ingame/rooms/staff_small/Staff_Small.tscn",
       "script_path": "res://scenes/ingame/rooms/staff_small/StaffSmall.gd"
+    },
+    {
+      "id": "pool_small",
+      "scene_path": "res://scenes/ingame/rooms/pool_small/Pool_Small.tscn",
+      "script_path": "res://scenes/ingame/rooms/pool_small/PoolSmall.gd"
+    },
+    {
+      "id": "spa_small",
+      "scene_path": "res://scenes/ingame/rooms/spa_small/Spa_Small.tscn",
+      "script_path": "res://scenes/ingame/rooms/spa_small/SpaSmall.gd"
+    },
+    {
+      "id": "gym_small",
+      "scene_path": "res://scenes/ingame/rooms/gym_small/Gym_Small.tscn",
+      "script_path": "res://scenes/ingame/rooms/gym_small/GymSmall.gd"
+    },
+    {
+      "id": "conference_small",
+      "scene_path": "res://scenes/ingame/rooms/conference_small/Conference_Small.tscn",
+      "script_path": "res://scenes/ingame/rooms/conference_small/ConferenceSmall.gd"
     }
   ]
 }

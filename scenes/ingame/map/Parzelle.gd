@@ -25,6 +25,9 @@ var _ui_canvas: CanvasLayer  # Screen-Space → nie verwaschen, nie blockierend
 const PARZELLE_BUILD_UI = preload("res://scenes/ingame/map/ParzelleBuildUI.tscn")
 
 func _ready() -> void:
+	if has_node("Ground"):
+		$Ground.z_index = -1
+		
 	# Panel-Updates müssen auch im Pause-Modus laufen
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
@@ -39,41 +42,75 @@ func _ready() -> void:
 	
 var _in_buy_mode: bool = false
 func set_buy_mode(active: bool) -> void:
-	# _process steuert Visibility von overlay + panel automatisch via _in_buy_mode
 	_in_buy_mode = active
+
+var _was_constructing: bool = false  # für queue_redraw() Trigger
 
 
 func _process(_delta: float) -> void:
 	if is_constructing:
-		# Visibility: Panel nur im normalen Spielbetrieb (nicht während Buy-Mode)
-		var should_show := not _in_buy_mode
-		if build_ui_panel.visible != should_show:
-			build_ui_panel.visible = should_show
+		# Progressbar IMMER anzeigen während des Baus (auch im Buy-Modus)
+		if not build_ui_panel.visible:
+			build_ui_panel.visible = true
 		
-		# Screen-Space Zentrierung (wie CustomTooltip) – läuft nur wenn sichtbar
-		if build_ui_panel.visible:
-			var center_local := Vector2(PARCEL_TILES * TILE_PX, PARCEL_TILES * TILE_PX) / 2.0
-			var screen_pos := get_global_transform_with_canvas() * center_local
-			build_ui_panel.position = screen_pos - build_ui_panel.size / 2.0
+		# Screen-Space Zentrierung
+		var center_local := Vector2(PARCEL_TILES * TILE_PX, PARCEL_TILES * TILE_PX) / 2.0
+		var screen_pos := get_global_transform_with_canvas() * center_local
+		build_ui_panel.position = screen_pos - build_ui_panel.size / 2.0
 		
-		var current_time = TimeManager.get_game_time()
+		var current_time = TimeManager.get_absolute_time()
 		if current_time >= construction_end_time:
 			buy(GameState.active_hotel_id)
 			var map = get_parent().get_parent()
+			# Occupancy-Grid für die neue Parzelle freischalten (sonst: alle Tiles SOLID)
+			if map.has_method("_mark_parcel_walls"):
+				var gx := int(name.get_slice("_", 1))
+				var gy := int(name.get_slice("_", 2))
+				map._mark_parcel_walls(gx, gy)
 			if map.has_method("_configure_walls"):
 				map._configure_walls()
 			if map.has_method("_update_all_floor_neighbors"):
 				map._update_all_floor_neighbors()
+			queue_redraw()  # Overlay entfernen
 		else:
 			var start_time = construction_end_time - 1440
 			var progress = clampf(float(current_time - start_time) / 1440.0, 0.0, 1.0)
-			
 			var remaining = int(construction_end_time - current_time)
 			build_ui_panel.update_progress(progress, remaining)
+			queue_redraw()  # Overlay aktuell halten
+	else:
+		if _was_constructing:
+			_was_constructing = false
+			queue_redraw()
+
+# =============================================================================
+# Bau-Overlay: Gelb-schwarze Schraffur während is_constructing
+func _draw() -> void:
+	if not is_constructing:
+		return
+	
+	var size := Vector2(PARCEL_TILES * TILE_PX, PARCEL_TILES * TILE_PX)
+	
+	# Halbtransparentes dunkles Basisräume
+	draw_rect(Rect2(Vector2.ZERO, size), Color(0.1, 0.1, 0.1, 0.45))
+	
+	# Diagonale gelb-schwarze Warnstreifen
+	var stripe_w: int = 8
+	var stripe_gap: int = 8
+	var total: int = int(size.x + size.y)
+	var sx: int = int(size.x)
+	var sy: int = int(size.y)
+	var i: int = 0
+	while i < total:
+		var x1: int = clampi(i - sy, 0, sx)
+		var y1: int = clampi(sy - i, 0, sy)
+		var x2: int = clampi(i, 0, sx)
+		var y2: int = 0
+		if x2 > x1:
+			draw_line(Vector2(x1, y1), Vector2(x2, y2), Color(0.95, 0.75, 0.05, 0.5), float(stripe_w))
+		i += stripe_w + stripe_gap
 
 
-
-# ── Public API ────────────────────────────────────────────────────────────────
 
 # =============================================================================
 func configure(neighbors: Dictionary) -> void:
@@ -139,6 +176,12 @@ func get_lobby_tile_rect() -> Rect2i:
 		return Rect2i()
 	var lp := _lobby_position()
 	return Rect2i(int(lp.x / TILE_PX), int(lp.y / TILE_PX), LOBBY_TILES, LOBBY_TILES)
+
+
+# =============================================================================
+## Alias – MapGrid ruft diese Variante beim Platzierungscheck auf
+func get_lobby_clearance_rect() -> Rect2i:
+	return get_lobby_tile_rect()
 
 
 # =============================================================================

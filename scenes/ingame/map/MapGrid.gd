@@ -167,6 +167,10 @@ func build_map(built_plots: Array, entry_plot: Vector2i, enter_dir: String) -> v
 	call_deferred("_mark_lobby_on_parcel", entry_plot.x, entry_plot.y)
 	_restore_rooms(built_plots)
 	center_on_entry(entry_plot)
+	# Nochmal nach einem Frame: Migration kann Baustellen sofort fertigstellen,
+	# daher Wände nach _process-Initialisierung neu konfigurieren
+	call_deferred("_configure_walls")
+	call_deferred("_update_all_floor_neighbors")
 
 
 # =============================================================================
@@ -182,11 +186,17 @@ func center_on_entry(entry_plot: Vector2i) -> void:
 func get_placement_error(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 		room_w: int, room_h: int, door_rot: int, door_off: int) -> String:
 
-	if tile_x < 0 or tile_y < 0 or tile_x + room_w > PARCEL_SZ or tile_y + room_h > PARCEL_SZ:
-		return "build.error.out_of_bounds" # "Außerhalb der Parzelle"
-		
 	var gx := parcel_x * PARCEL_SZ + tile_x
 	var gy := parcel_y * PARCEL_SZ + tile_y
+	
+	for dy in room_h:
+		for dx in room_w:
+			if gx + dx < 0 or gy + dy < 0:
+				return "build.error.out_of_bounds"
+			var px = floori((gx + dx) / float(PARCEL_SZ))
+			var py = floori((gy + dy) / float(PARCEL_SZ))
+			if not _is_built(px, py):
+				return "build.error.out_of_bounds" # "Außerhalb der Parzelle"
 
 	if not _occ_free_for_room(gx, gy, room_w, room_h):
 		return "build.error.blocked" # "Bauplatz blockiert"
@@ -217,12 +227,23 @@ func get_placement_error(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 	# Startpunkt (Lobby) berechnen
 	var entry_parcel: Node2D = _grid[_entry_plot.y][_entry_plot.x]
 	var clearance: Rect2i = entry_parcel.get_lobby_clearance_rect()
+	# Wenn Lobby noch nicht initialisiert, Reachability-Check überspringen
+	var error_msg := ""
+	if not clearance.has_area():
+		for sim_p in sim_coords:
+			astar.set_point_solid(sim_p, false)
+		return error_msg
 	var start_x := (_entry_plot.x * PARCEL_SZ) + clearance.position.x + int(clearance.size.x / 2.0)
 	var start_y := (_entry_plot.y * PARCEL_SZ) + clearance.position.y + int(clearance.size.y / 2.0)
 	var lobby_tile := Vector2i(start_x, start_y)
+	# Absicherung: Lobby-Tile muss begehbar sein
+	if astar.is_point_solid(lobby_tile):
+		for sim_p in sim_coords:
+			astar.set_point_solid(sim_p, false)
+		return error_msg
+
 
 	# 2. PRÜFUNG: Teste alle aktiven Zimmer
-	var error_msg := ""
 	for room: Node2D in active_rooms:
 		# Ignoriere Zimmer, die gerade abgerissen werden oder ungültig sind
 		if not is_instance_valid(room):
@@ -396,7 +417,16 @@ func _show_built_parcels(built_plots: Array) -> void:
 		p.visible = true
 		if plot.get("is_constructing", false):
 			p.is_constructing = true
-			p.construction_end_time = plot.get("construction_end_time", 0.0)
+			var saved_end: float = plot.get("construction_end_time", 0.0)
+			# Migration: Alte Baustellen-Saves nutzen tagesrelative Minuten (<= 2880).
+			# Neue Saves nutzen absoluten Wert (Tag × 1440 + Minute, also >> 2880 ab Tag 3+).
+			# Wenn der gespeicherte Wert suspekt klein ist, sofort fertigstellen.
+			var current_abs := TimeManager.get_absolute_time()
+			if saved_end < current_abs - 1440:
+				# Offensichtlich alter oder abgelaufener Wert → sofort fertig
+				p.construction_end_time = current_abs - 1
+			else:
+				p.construction_end_time = saved_end
 			# build_ui_panel.visible wird in Parzelle._process automatisch gesetzt
 		else:
 			p.is_built = true
@@ -410,10 +440,10 @@ func _configure_walls() -> void:
 			if not parzelle.visible:
 				continue
 			parzelle.configure({
-				"top":    _is_built(x, y - 1),
-				"bottom": _is_built(x, y + 1),
-				"left":   _is_built(x - 1, y),
-				"right":  _is_built(x + 1, y),
+				"top":    _is_visible(x, y - 1),
+				"bottom": _is_visible(x, y + 1),
+				"left":   _is_visible(x - 1, y),
+				"right":  _is_visible(x + 1, y),
 			})
 
 
@@ -456,7 +486,16 @@ func _is_built(x: int, y: int) -> bool:
 		return false
 	return _grid[y][x].is_built
 
-func _process(delta: float) -> void:
+
+# =============================================================================
+## Nur für Wanddarstellung: zählt auch Baustellen als 'vorhanden'
+func _is_visible(x: int, y: int) -> bool:
+	if x < 0 or x >= grid_cols or y < 0 or y >= grid_rows:
+		return false
+	var p = _grid[y][x]
+	return p.is_built or p.is_constructing
+
+func _process(_delta: float) -> void:
 	if _show_debug_grid:
 		queue_redraw()
 
@@ -478,13 +517,12 @@ func _draw() -> void:
 			draw_polyline(points, Color.RED, 2.0)
 
 # =============================================================================
-func _exit_outside_parcel(px: int, py: int, exit: Vector2i, door_rot: int) -> bool:
-	match door_rot:
-		0: return exit.x < px * PARCEL_SZ
-		2: return exit.x >= (px + 1) * PARCEL_SZ
-		1: return exit.y < py * PARCEL_SZ
-		3: return exit.y >= (py + 1) * PARCEL_SZ
-	return false
+func _exit_outside_parcel(_px: int, _py: int, exit: Vector2i, _door_rot: int) -> bool:
+	if exit.x < 0 or exit.y < 0:
+		return true
+	var exit_px = floori(exit.x / float(PARCEL_SZ))
+	var exit_py = floori(exit.y / float(PARCEL_SZ))
+	return not _is_built(exit_px, exit_py)
 
 
 # =============================================================================
@@ -635,7 +673,9 @@ func remove_room(room: Node2D) -> void:
 	if room.has_method("get_definition"):
 		var def = room.get_definition()
 		var unique_id = ""
-		var gm = get_tree().get_first_node_in_group("guest_manager") if is_inside_tree() else null
+		var gm = null
+		if is_inside_tree():
+			gm = get_tree().get_first_node_in_group("guest_manager")
 		if is_instance_valid(gm) and gm.has_method("_room_key"):
 			unique_id = gm._room_key(room)
 		if def and def.has("id"):
@@ -909,7 +949,7 @@ func enter_buy_mode() -> void:
 	var plot_price = int(4000 * (1 << (built_count - 1)) if built_count > 0 else 4000)
 	
 	var current_level = GameState.get_level()
-	var max_plots = 1 + max(0, (current_level - 2) / 2)
+	var max_plots = 1 + max(0, floori((current_level - 2) / 2.0))
 	
 	for y in grid_rows:
 		for x in grid_cols:
@@ -1029,7 +1069,7 @@ func _on_plot_buy_clicked(x: int, y: int, price: int) -> void:
 			EffectManager.spawn_money_text(-price, spawn_pos)
 			
 		var p = _grid[y][x]
-		p.start_construction(GameState.active_hotel_id, TimeManager.get_game_time() + 1440)
+		p.start_construction(GameState.active_hotel_id, TimeManager.get_absolute_time() + 1440)
 		
 		if is_instance_valid(Toast): Toast.show(GameState.T("ui.toast.plot_bought", "Parzelle gekauft! Bau beginnt."), "build")
 		

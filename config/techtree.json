@@ -1,4 +1,4 @@
-﻿{
+{
     "tiers": {
         "1": {
             "gate": {
@@ -160,8 +160,7 @@
                     "dependencies": [
                         "W1.1"
                     ],
-                    "unlocks_emojis": "🏊 🌳",
-                    "demo_locked": true
+                    "unlocks_emojis": "🏊 🌳"
                 },
                 {
                     "id": "W1.3",
@@ -174,8 +173,7 @@
                     "dependencies": [
                         "W1.1"
                     ],
-                    "unlocks_emojis": "⭐ 🧘",
-                    "demo_locked": true
+                    "unlocks_emojis": "⭐ 🧘"
                 },
                 {
                     "id": "M1.1",
@@ -271,7 +269,7 @@
                         "P1.1"
                     ],
                     "unlocks_emojis": "🏟️ 🎇",
-                    "demo_locked": true
+                    "demo_locked": false
                 },
                 {
                     "id": "P1.3",
@@ -303,7 +301,6 @@
                         "W1.3"
                     ],
                     "unlocks_emojis": "🏋️ 🕒",
-                    "demo_locked": true,
                     "unlocks_features": [
                         "ui.techtree.feature.w1_4_hours",
                         "ui.techtree.feature.w1_4_package"

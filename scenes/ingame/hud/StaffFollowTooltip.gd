@@ -78,6 +78,12 @@ func _update_target_text() -> void:
 		"returning":
 			s_text += GameState.T("staff.tooltip.state.returning")
 			t_text += GameState.T("staff.tooltip.target.staffroom")
+		"walking_to_break":
+			s_text += GameState.T("staff.tooltip.state.walking_to_break")
+			t_text += GameState.T("staff.tooltip.target.staffroom")
+		"resting":
+			s_text += GameState.T("staff.tooltip.state.resting")
+			t_text += GameState.T("staff.tooltip.target.staffroom")
 		"walking":
 			s_text += GameState.T("staff.tooltip.state.walking")
 			t_text += _format_task_target()

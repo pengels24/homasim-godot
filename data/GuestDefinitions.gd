@@ -100,7 +100,7 @@ const ALL: Dictionary = {
 	"event": {
 		"name":            "Event-Teilnehmer",
 		"allowed_rooms":   ["bed_standard", "bed_double"],
-		"preferred_rooms": ["bed_standard", "bed_double"],
+		"preferred_rooms": ["bed_standard"],
 		"requirements":    [],
 		"spawn_chance":    10,
 		"min_stay":        1,

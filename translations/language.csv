@@ -1494,3 +1494,18 @@ Voraussetzungen: Level 2 (Personal-Freischaltung)"
 ui.tutorial.tab.guests,Gäste,Guests
 codex.poi.title,Point of Interest (POI),Point of Interest (POI)
 codex.poi.desc,"Ein Point of Interest (POI) ist ein öffentlicher Bereich im Hotel, der für alle Gäste zugänglich ist, wie zum Beispiel die Lobby, Flure oder Aufenthaltsbereiche. Im Gegensatz zu Gästezimmern, die exklusiv gebucht werden, können POIs durch Upgrades (wie z.B. WLAN oder Klimaanlagen) aufgewertet werden, um die allgemeine Zufriedenheit aller Gäste im Hotel zu steigern.","A Point of Interest (POI) is a public area in the hotel accessible to all guests, such as the lobby, corridors, or lounge areas. Unlike guest rooms, which are booked exclusively, POIs can be upgraded (e.g., with Wi-Fi or air conditioning) to increase the overall satisfaction of all guests in the hotel."
+roomdef.name.long.pool_small,Hallenbad,Indoor Pool
+roomdef.name.short.pool_small,Pool,Pool
+roomdef.desc.pool_small,Ein eigener Poolbereich.,A dedicated pool area.
+roomdef.name.long.spa_small,Wellness-Oase,Wellness Oasis
+roomdef.name.short.spa_small,Spa,Spa
+roomdef.desc.spa_small,Ein Ort der Entspannung.,A place of relaxation.
+roomdef.name.long.gym_small,Fitness-Studio,Fitness Studio
+roomdef.name.short.gym_small,Gym,Gym
+roomdef.desc.gym_small,Fitness-Ger�te f�r G�ste.,Fitness equipment for guests.
+roomdef.name.long.conference_small,Tagungsraum,Conference Room
+roomdef.name.short.conference_small,Konferenz,Conference
+roomdef.desc.conference_small,Bietet Platz f�r Meetings.,Offers space for meetings.
+staff.tooltip.state.walking_to_break,Geht in Pause,Walking to break
+staff.tooltip.state.resting,Pause,Resting
+room_category.business,Business,Business

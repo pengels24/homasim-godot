@@ -107,6 +107,12 @@ Zimmer-Typen bekommen Eigenschaften (z.B. `"wlan"`, `"desk"`). Wenn Gäste einch
 - ✅ **Parzellen-Kauf-UI:** Progressbar komplett auf `ParzelleBuildUI.tscn` (Tooltip-Style) umgestellt. Inklusive 3.0-Scaling auf dem CenterContainer, um den Kamera-Zoom (0.33) exakt auszugleichen und pixel-perfect Font-Rendering zu garantieren.
 - ✅ **MapGrid:** Beim Beenden des Parzellen-Kauf-Modus wird die Kamera jetzt via `center_on_entry()` zentriert (identisch zur HOME-Taste).
 - ✅ **Loca-Fix:** Die fehlenden Übersetzungen (`tx.plot_buy`, `ui.confirm.plot_buy_title`, `ui.confirm.plot_buy_desc`) für den Parzellenkauf wurden in `language.csv` nachgetragen. Floating-Value-Anzeige nach Kauf integriert.
+- ✅ **MapGrid-Erweiterung:** Verschmelzung der Parzellen-Grids implementiert, sodass gekaufte Parzellen zu einem großen nahtlosen Grid zusammengefügt werden (Verschiebung des Nullpunkts entfällt, Koordinaten sind global eindeutig).
+- ✅ **MapGrid.tscn:** Z-Index des `FloorLayer` (Rasen) auf -2 gesetzt, damit dieser nicht mehr durch die Beton-Böden wächst.
+- ✅ **Loca-Fix:** Die Kategorie `room_category.business` in `language.csv` ergänzt.
+- ✅ **Techtree:** Demo-Lock für den Raum P1.2 (Konferenzraum) entfernt.
+- ✅ **Codex:** Die Raum-Liste in "Tutorials & Codex" generiert sich nun dynamisch aus dem `room_registry`, statt manuell gepflegt werden zu müssen. Vorschaubilder und Tooltip-Beschreibungen werden sauber verknüpft (mit Fallbacks).
+- ✅ **Bugfixes & Warnings:** Fehlerhaften Icon-Pfad für `map-pin.svg` korrigiert sowie diverse Godot-Warnungen (Integer-Division, Ternary-Kompatibilität, ungenutzte Parameter) in `MapGrid.gd` behoben.
 
 ---
 

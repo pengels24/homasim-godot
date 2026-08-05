@@ -870,10 +870,9 @@ func _update_overlays() -> void:
 					color = Color(1.0, 0.0, 0.0, factor * 0.75)
 					
 			"occupancy":
-				var is_poi = def.get("is_poi", false)
-				if is_poi:
-					# POIs sind dauerhaft grau
-					color = Color(0.5, 0.5, 0.5, 0.75)
+				var cat = def.get("category", "")
+				if cat != "zimmer":
+					color = Color(0, 0, 0, 0) # Keine Einfärbung für Nicht-Zimmer
 				else:
 					var rid = room.get("room_number")
 					if rid != null and _guest_mgr and _guest_mgr._room_assign.has(rid):

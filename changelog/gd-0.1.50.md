@@ -60,3 +60,11 @@
 - **Techtree Freischaltungen:** Funktionale Nodes (W1.1 Wellness-Bonus, P1.3 VIP-Gaeste und G1.4 Gourmetkueche) wurden aus dem demo_locked Status befreit und koennen nun erforscht werden.
 - **Techtree Tooltips:** Die hartkodierten Platzhalter-Features fuer kuenftige Raeume (W1.2, W1.3, P1.2) aus den unlocks_features der JSON entfernt, da diese automatisch durch die Raum-Logik befuellt werden.
 - **Room Hover Bug:** Einen Fehler behoben, bei dem Moebelstuecke (NavBlocker, Betten, Stuehle) die Mauseingaben blockierten und so den Raum-Hover-Effekt unterbrachen. Der Mouse-Filter wird nun fuer alle Moebel dynamisch und rekursiv auf IGNORE gesetzt - dies funktioniert nun auch fuer Multi-Tile Raeume wie das Doppelzimmer korrekt.
+- **Grid-Verschmelzung (ANG-332):** Kaufbare Parzellen werden nun nicht mehr als separates Grid berechnet. Das MapGrid verschmilzt alle gekauften Parzellen dynamisch zu einem einzigen großen Grid. Der Nullpunkt wird beim Kauf einer Parzelle links/oben vom Hotel neu berechnet, wodurch Koordinaten für Räume, Wegfindung und Gäste global eindeutig bleiben.
+- **Tutorials & Codex (Dynamisch):** Die Liste der verfügbaren Räume im Codex wird nicht länger manuell gepflegt, sondern generiert sich zur Laufzeit automatisch aus den Definitionen aller baubaren Räume (inkl. automatischer Fallback-Icons und Text-Zuordnungen).
+- **Techtree P1.2:** Der Konferenzraum hat seinen Demo-Lock verloren und ist nun in der Alpha regulär erforsch- und baubar.
+- **Bugfixes & Polish:**
+    - FloorLayer (Rasen) hat nun Z-Index -2 und wächst nicht mehr optisch durch Hotel-Flure.
+    - oom_category.business (Übersetzung) ergänzt.
+    - Fehlerhafter Pfad für map-pin.svg im Codex behoben.
+    - Ungenutzte Parameter, Integer-Division-Warnungen und Ternary-Operator Typenwarnungen in MapGrid.gd und BuildCursor.gd beseitigt.

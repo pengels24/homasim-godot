@@ -12,7 +12,8 @@ enum EventType {
 	NONE,
 	TRADE_FAIR, # Fachmesse
 	CONCERT,    # Konzert
-	HOLIDAY     # Feiertag
+	HOLIDAY,    # Feiertag
+	CONFERENCE  # Tages-Konferenz (P1.2)
 }
 
 var active_event: EventType = EventType.NONE
@@ -23,7 +24,7 @@ func _ready() -> void:
 
 # =============================================================================
 func _on_morning_struck() -> void:
-	if not GameState.has_techtree_unlocked("P1.1"):
+	if not TechtreeManager or not TechtreeManager.is_tech_unlocked("P1.1"):
 		return
 		
 	# Wenn ein Event läuft, Tage reduzieren
@@ -39,12 +40,28 @@ func _on_morning_struck() -> void:
 
 # =============================================================================
 func start_random_event() -> void:
+	var can_conference = false
+	if TechtreeManager and TechtreeManager.is_tech_unlocked("P1.2"):
+		# Prüfen ob ein conference_small existiert
+		var hm = get_tree().get_first_node_in_group("MapGrid")
+		if hm and "active_rooms" in hm:
+			for room in hm.active_rooms:
+				if is_instance_valid(room) and room.has_method("get_definition"):
+					if room.get_definition().get("id") == "conference_small":
+						can_conference = true
+						break
+
 	var roll = randf()
-	if roll < 0.33:
+	
+	if can_conference and roll < 0.25: # 25% Chance für Konferenz, falls möglich
+		active_event = EventType.CONFERENCE
+		event_days_remaining = 1
+		_notify_event("Tageskonferenz!", "Ein Bus mit Tagungsgästen ist angekommen.")
+	elif roll < 0.40:
 		active_event = EventType.TRADE_FAIR
 		event_days_remaining = 2
 		_notify_event("Fachmesse in der Stadt!", "Viele Geschäftsreisende suchen heute Zimmer.")
-	elif roll < 0.66:
+	elif roll < 0.70:
 		active_event = EventType.CONCERT
 		event_days_remaining = 1
 		_notify_event("Großes Konzert!", "Event-Gäste sind in der Stadt unterwegs.")

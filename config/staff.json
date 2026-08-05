@@ -92,6 +92,28 @@
                 "speed": [4, 8],
                 "motivation": [4, 8]
             }
+        },
+        "lifeguard": {
+            "name": "BademeisterIn",
+            "desc": "Sorgt für Sicherheit am Pool und betreut die Gäste im Hallenbad.",
+            "daily_wage": 65,
+            "hire_cost": 210,
+            "base_skills": {
+                "vigilance": [4, 9],
+                "fitness": [5, 10],
+                "motivation": [4, 8]
+            }
+        },
+        "wellness_counselor": {
+            "name": "Spa-Fachkraft",
+            "desc": "Verwöhnt die Gäste im Premium-Spa mit exzellenten Behandlungen.",
+            "daily_wage": 75,
+            "hire_cost": 260,
+            "base_skills": {
+                "empathy": [5, 9],
+                "treatment_quality": [5, 10],
+                "motivation": [4, 8]
+            }
         }
     },
     "names": {

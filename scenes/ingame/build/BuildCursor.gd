@@ -140,14 +140,11 @@ func _process(_delta: float) -> void:
 
 	var min_x := float(WALK_PX + _current_parcel.x * PARCEL_PX)
 	var min_y := float(WALK_PX + _current_parcel.y * PARCEL_PX)
-	_ghost.position = Vector2(
-		clampf(topleft.x, min_x, min_x + float(PARCEL_PX - room_w_px)),
-		clampf(topleft.y, min_y, min_y + float(PARCEL_PX - room_h_px))
-	)
+	_ghost.position = topleft
 
 	var new_tile := Vector2i(
-		int((_ghost.position.x - min_x) / TILE_PX),
-		int((_ghost.position.y - min_y) / TILE_PX)
+		floori((_ghost.position.x - min_x) / TILE_PX),
+		floori((_ghost.position.y - min_y) / TILE_PX)
 	)
 
 	if new_tile != _tile_pos:
@@ -257,17 +254,16 @@ func _advance_door_combo() -> void:
 # =============================================================================
 func _try_place() -> void:
 	var mouse_local := (get_parent() as Node2D).to_local(get_global_mouse_position())
-	var min_x := float(WALK_PX + _current_parcel.x * PARCEL_PX)
-	var min_y := float(WALK_PX + _current_parcel.y * PARCEL_PX)
-	if mouse_local.x < min_x or mouse_local.x > min_x + PARCEL_PX or \
-			mouse_local.y < min_y or mouse_local.y > min_y + PARCEL_PX:
-		return
-
+	
 	var room_w_px := _room_w * TILE_PX
 	var room_h_px := _room_h * TILE_PX
-	var sx := clampf(snappedf(mouse_local.x - room_w_px / 2.0, float(TILE_PX)), min_x, min_x + float(PARCEL_PX - room_w_px))
-	var sy := clampf(snappedf(mouse_local.y - room_h_px / 2.0, float(TILE_PX)), min_y, min_y + float(PARCEL_PX - room_h_px))
-	var place_tile := Vector2i(int((sx - min_x) / TILE_PX), int((sy - min_y) / TILE_PX))
+	var sx := snappedf(mouse_local.x - room_w_px / 2.0, float(TILE_PX))
+	var sy := snappedf(mouse_local.y - room_h_px / 2.0, float(TILE_PX))
+	
+	var min_x := float(WALK_PX + _current_parcel.x * PARCEL_PX)
+	var min_y := float(WALK_PX + _current_parcel.y * PARCEL_PX)
+	
+	var place_tile := Vector2i(floori((sx - min_x) / TILE_PX), floori((sy - min_y) / TILE_PX))
 	if _map_grid.is_placement_valid(
 			_current_parcel.x, _current_parcel.y,
 			place_tile.x, place_tile.y,

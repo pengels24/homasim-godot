@@ -358,8 +358,8 @@ func has_bookable_rooms() -> bool:
 
 
 # =============================================================================
-func _generate_party() -> GuestParty:
-	var type_id  := _weighted_random_type()
+func _generate_party(force_type_id: String = "") -> GuestParty:
+	var type_id = force_type_id if force_type_id != "" else _weighted_random_type()
 	var party_id := "P%04d" % _next_party_id
 	_next_party_id += 1
 	
@@ -904,6 +904,23 @@ func process_midnight_penalties(day: int) -> void:
 		)
 	_waiting.clear()
 
+	# NEU: Tagesgäste (Konferenz) verlassen das Hotel
+	var day_guests = []
+	for party: GuestParty in _active:
+		if party.total_stay_days == 0:
+			day_guests.append(party)
+			
+	for party in day_guests:
+		party.state = "gone"
+		_active.erase(party)
+		sig_party_checked_out_physically.emit(party)
+		ActivityLog.add(
+			"guest_left",
+			GameState.T("Tagesgäste sind abgereist", party.get_display_name()),
+			day,
+			TimeManager.get_game_time(),
+		)
+
 	# 1.5 Tägliche Zufriedenheitsstrafe für fehlende Requirements in belegten Zimmern
 	for party: GuestParty in _active:
 		var room = _get_room_node(party.room_id)
@@ -1008,7 +1025,56 @@ func process_morning_routine() -> void:
 	# === Gäste werden über Nacht hungrig ===
 	for party: GuestParty in _active:
 		for member: GuestMember in party.members:
-			member.saturation = max(0, member.saturation - 25)
+			var night_hunger = randi_range(15, 40)
+			member.saturation = max(0, member.saturation - night_hunger)
+
+	# NEU: Tagesgäste für Konferenz spawnen
+	if EventManager and EventManager.is_event_active() and EventManager.active_event == EventManager.EventType.CONFERENCE:
+		var conf_room = null
+		if is_instance_valid(_map_grid):
+			for room in _map_grid.active_rooms:
+				if is_instance_valid(room) and room.has_method("get_definition"):
+					if room.get_definition().get("id") == "conference_small":
+						conf_room = room
+						break
+		if conf_room:
+			# Generiere 6-12 Tagesgäste für die Konferenz (entspricht der Anzahl an Stühlen/Pult)
+			var amount = randi_range(6, 12)
+			var total_event_income = 0
+			
+			for i in range(amount):
+				var party = _generate_party("business")
+				party.stay_days = 2 # Künstlich hoch, damit sie morgens nicht direkt auschecken
+				party.total_stay_days = 0 # Markierung als Tagesgast
+				
+				# Room ID generieren wie in GuestController erwartet (z.B. "conference_small_10_5")
+				var rx = int(conf_room.get("x_pos"))
+				var ry = int(conf_room.get("y_pos"))
+				var conf_rkey = "%s_%d_%d" % ["conference_small", rx, ry]
+				party.room_id = conf_rkey
+				
+				_active.append(party)
+				
+				# Signal emitten, damit der GuestController die Actors an der Lobby spawnt!
+				# Wir verwenden sig_party_checked_in, um den Actor-Spawn zu triggern,
+				# übergeben als room den conf_room.
+				sig_party_checked_in.emit(party, conf_room)
+				
+				# Statistik
+				daily_checkin_parties += 1
+				daily_checkin_heads += party.members.size()
+				
+				# Event-Pauschale berechnen (z.B. 150 pro Kopf)
+				total_event_income += 150 * party.members.size()
+				
+			if total_event_income > 0:
+				if FinanceManager:
+					FinanceManager.add_transaction(total_event_income, "room", "tx.event_income|Konferenz")
+				else:
+					GameState.add_money(total_event_income)
+				
+				if EffectManager:
+					EffectManager.spawn_money_text(total_event_income, conf_room.global_position + Vector2(0, -64))
 
 	var moving: Array = []
 

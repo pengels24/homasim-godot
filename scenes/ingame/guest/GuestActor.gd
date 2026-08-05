@@ -132,8 +132,12 @@ func _process_waiting(delta: float) -> void:
 	if _action_timer <= 0.0:
 		return # Gast ruht – kein Timer-Countdown
 		
-	# Normaler Gast: POI schließt – zurück ins Zimmer
-	if current_state == State.IN_POI and not _is_current_poi_open():
+	# Normaler Gast: POI schließt -> zurück ins Zimmer, ABER wer schon bestellt hat oder isst, darf bleiben!
+	if current_state in [State.IN_POI, State.STUDYING_MENU] and not _current_poi_id.is_empty() and not _is_current_poi_open():
+		if current_state == State.STUDYING_MENU:
+			var poi_room_node = _get_poi_room_node(_current_poi_id)
+			if is_instance_valid(poi_room_node) and poi_room_node.has_method("leave_seat"):
+				poi_room_node.leave_seat(_guest_member.id)
 		send_back_to_room()
 		return
 		
@@ -169,6 +173,18 @@ func _process_waiting(delta: float) -> void:
 			else:
 				# Gast hat nur Getränk bekommen oder nichts bestellt -> wechselt direkt in EATING (Trink-Timer)
 				_change_state(State.EATING)
+		elif current_state == State.IN_POI and _current_poi_id == "pool_small" and randf() < 0.5:
+			# Gast bleibt im Pool, wechselt aber den Platz (Liege <-> Wasser)
+			var room_node = _get_poi_room_node(_current_poi_id)
+			if is_instance_valid(room_node) and room_node.has_method("claim_seat"):
+				if room_node.has_method("leave_seat"):
+					room_node.leave_seat(_guest_member.id)
+				var new_pos = room_node.claim_seat(_guest_member.id)
+				if new_pos != Vector2.ZERO:
+					global_position = new_pos
+					_action_timer = randf_range(30.0, 60.0)
+					return
+			_decide_next_action()
 		else:
 			_decide_next_action()
 
@@ -195,6 +211,13 @@ func _get_open_pois() -> Array[String]:
 		# Kinder dürfen nicht in adults_only POIs
 		if def.get("adults_only", false) and _guest_member.is_child:
 			continue
+		
+		# Erlaubte Gäste-Typen prüfen (z.B. Konferenzraum nur für Business)
+		var allowed_types = def.get("allowed_guest_types", [])
+		if not allowed_types.is_empty():
+			var party = _get_my_party()
+			if not is_instance_valid(party) or not allowed_types.has(party.type):
+				continue
 		
 		var room_id: String = def.get("id", "")
 		
@@ -260,10 +283,15 @@ func _decide_next_action() -> void:
 			_action_timer = randf_range(30.0, 60.0)
 			return
 		elif current_state == State.IN_ROOM or current_state == State.SITTING:
-			_wander_in_room(_target_room, true) # true = force sleep
+			if is_instance_valid(_target_room):
+				_wander_in_room(_target_room, true) # true = force sleep
 			return
 		else:
-			_walk_to_room(_target_room, State.IN_ROOM)
+			if is_instance_valid(_target_room):
+				_walk_to_room(_target_room, State.IN_ROOM)
+			else:
+				_change_state(State.LEAVING)
+				_walk_to_exit()
 			return
 	
 	# Kein offener POI? Gast wartet etwas und probiert es später wieder
@@ -272,7 +300,11 @@ func _decide_next_action() -> void:
 			_wander_in_room(_target_room)
 			return
 		elif current_state != State.WALKING and current_state != State.IDLE:
-			_walk_to_room(_target_room, State.IN_ROOM)
+			if is_instance_valid(_target_room):
+				_walk_to_room(_target_room, State.IN_ROOM)
+			else:
+				_change_state(State.LEAVING)
+				_walk_to_exit()
 			return
 		else:
 			_action_timer = randf_range(15.0, 45.0)
@@ -296,8 +328,12 @@ func _decide_next_action() -> void:
 	
 
 	
-	if chosen == "room" and is_instance_valid(_target_room):
-		_walk_to_room(_target_room, State.IN_ROOM)
+	if chosen == "room":
+		if is_instance_valid(_target_room):
+			_walk_to_room(_target_room, State.IN_ROOM)
+		else:
+			_change_state(State.LEAVING)
+			_walk_to_exit()
 	else:
 		_walk_to_poi(chosen)
 
@@ -432,7 +468,8 @@ func _on_poi_arrived() -> void:
 		if is_instance_valid(lobby) and lobby.has_method("buy_snack"):
 			if lobby.buy_snack(_guest_member.spending_budget):
 				_guest_member.spending_budget = max(0, _guest_member.spending_budget - lobby.VENDING_MACHINE_PRICE)
-				_guest_member.saturation = min(100, _guest_member.saturation + lobby.VENDING_MACHINE_SATURATION)
+				var actual_sat = lobby.VENDING_MACHINE_SATURATION + randi_range(-5, 10) # Bricht die Sättigungs-Zyklen auf
+				_guest_member.saturation = min(100, _guest_member.saturation + actual_sat)
 				
 				FinanceManager.add_transaction(lobby.VENDING_MACHINE_PRICE, "gastro", "tx.poi_income|" + _guest_member.name + "|Snack-Automat")
 				if EffectManager: EffectManager.spawn_money_text(lobby.VENDING_MACHINE_PRICE, global_position + Vector2(0, -48))
@@ -600,7 +637,7 @@ func complete_checkout(spawn_pos: Vector2) -> void:
 # =============================================================================
 ## Wird um 22:00 Uhr aufgerufen: Gast kehrt aus POI ins Zimmer zurück
 func send_back_to_room() -> void:
-	if current_state == State.IN_POI:
+	if current_state in [State.IN_POI, State.STUDYING_MENU, State.WAITING_FOR_FOOD, State.EATING]:
 		_walk_to_room(_target_room, State.IN_ROOM)
 
 
@@ -663,7 +700,7 @@ func _walk_to_room(room: Node2D, finish_state: State) -> void:
 	var exit_tile = room.get_target_tile(_map_grid)
 	
 	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
-	if path_tiles.is_empty():
+	if path_tiles.is_empty() and start_tile != exit_tile:
 # 		push_warning("[GuestActor] Check-In Pfad nicht gefunden! Start: %s Exit: %s" % [str(start_tile), str(exit_tile)])
 		# Notfall-Teleport zur Tür, damit der nächste Pfad-Versuch funktioniert
 		global_position = _map_grid.tile_to_world(exit_tile)
@@ -721,11 +758,13 @@ func _walk_to_poi(poi_id: String) -> void:
 	var start_tile: Vector2i = _get_logical_start_tile()
 	
 	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
-	if path_tiles.is_empty():
-# 		push_warning("[GuestActor] Pfad zu POI '%s' nicht gefunden!" % poi_id)
-		_action_timer = 5.0
+	if path_tiles.is_empty() and start_tile != exit_tile:
+# 		push_warning("[GuestActor] Pfad nicht gefunden! Start: %s Exit: %s" % [str(start_tile), str(exit_tile)])
+		# Notfall-Teleport zur Tür, damit der nächste Pfad-Versuch funktioniert
+		global_position = _map_grid.tile_to_world(exit_tile)
+		_change_state(State.IN_POI)
 		return
-	
+		
 	_change_state(State.WALKING)
 	_current_poi_id = poi_id
 	var door_world = _map_grid.tile_to_world(exit_tile)

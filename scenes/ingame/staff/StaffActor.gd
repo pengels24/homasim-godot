@@ -428,6 +428,12 @@ func _process_idle() -> void:
 					if get_job_type() == "waiter" and is_instance_valid(_current_room) and _current_room.has_method("get_waiter_stand_pos"):
 						wander_center = _current_room.get_waiter_stand_pos()
 						max_radius = 12.0
+					elif get_job_type() == "lifeguard" and is_instance_valid(_current_room) and _current_room.has_method("get_lifeguard_stand_pos"):
+						wander_center = _current_room.get_lifeguard_stand_pos()
+						if randf() < 0.7:
+							max_radius = 4.0 # Am Hochsitz
+						else:
+							max_radius = 30.0 # Patrouille
 						
 					var offset = Vector2(randf_range(-max_radius, max_radius), randf_range(-max_radius, max_radius))
 					var target = wander_center + offset

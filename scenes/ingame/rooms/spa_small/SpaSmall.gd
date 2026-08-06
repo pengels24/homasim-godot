@@ -29,7 +29,7 @@ static func get_definition() -> Dictionary:
 		"max_staff": 1,
 		"open_from": 540, # 09:00
 		"open_to": 1200,  # 20:00
-		"valid_door_slots": ["L1", "L2", "L3", "R1", "R2", "R3", "T1", "T2", "T3", "B1", "B2", "B3"],
+		"valid_door_slots": ["L2"],
 		"cleanliness_level": 100,
 		"maintenance_level": 100,
 		"is_service_requested": false

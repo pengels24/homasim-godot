@@ -68,3 +68,4 @@
     - oom_category.business (Übersetzung) ergänzt.
     - Fehlerhafter Pfad für map-pin.svg im Codex behoben.
     - Ungenutzte Parameter, Integer-Division-Warnungen und Ternary-Operator Typenwarnungen in MapGrid.gd und BuildCursor.gd beseitigt.
+- **Multi-Tile-Room Nav-Bug:** Fehlerhafte Registrierung von Möbeln (Betten) in gedrehten Räumen (Portrait) behoben. Das Spiel griff versehentlich immer auf die Möbel des Landscape-Nodes zu, wodurch Betten physikalisch außerhalb der Räume (auf dem Flur) lagen und Gäste fälschlicherweise durch Wände auf den Flur schlafen geschickt wurden.

@@ -20,6 +20,7 @@
 - ✅ **Techtree-Texte automatisiert:** Kosten, Voraussetzungen und "Schaltet frei" generieren sich nun komplett dynamisch für Tooltips und den Codex aus der `techtree.json`.
 - ✅ **CSV-Reparatur:** Fehlerhaftes Parsing durch rohe Zeilenumbrüche behoben. Hardcodierte Voraussetzungen aus `language.csv` entfernt.
 - ✅ **UI-Fixes:** Float-Werte für Level und FP-Kosten zu sauberen Integern konvertiert. Leerzeichen bei Level-Strings gefixt.
+- ✅ **Multi-Tile-Room Nav-Bug:** Fehlerhafte Registrierung von Möbeln (Betten) in gedrehten Räumen (Portrait) in `Room.gd` behoben, die Gäste fälschlicherweise durch die Wand auf den Flur schlafen schickte.
 
 ---
 

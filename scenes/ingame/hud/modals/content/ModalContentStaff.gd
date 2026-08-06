@@ -520,7 +520,7 @@ func _update_details() -> void:
 		return
 		
 	var s = _selected_staff
-	detail_name.text = s.get("first_name", "") + " " + s.get("last_name", "") + " (" + str(s.get("age", 30)) + " J.)"
+	detail_name.text = s.get("first_name", "") + " " + s.get("last_name", "")
 	detail_role.text = GameState.T("ui.staff.job") + GameState.T("staff.role." + s.get("role", ""))
 	action_btn.visible = true
 	
@@ -666,6 +666,15 @@ func _update_details() -> void:
 			action_btn.modulate = Color(1, 1, 1, 1.0)
 			_style_action_btn(action_btn, "disabled")
 			action_btn.tooltip_text = "Dieser Beruf benötigt einen entsprechenden Arbeitsplatz (POI), der noch nicht gebaut wurde."
+		
+	var age_str = str(s.get("age", 30)) + " " + GameState.T("ui.staff.years", "Jahre")
+	_create_2col_row(GameState.T("ui.staff.age", "Alter"), age_str, detail_stats, false)
+	
+	if _current_tab == 0:
+		var hired_day = s.get("hired_day", TimeManager.get_day())
+		var tenure = max(0, TimeManager.get_day() - hired_day)
+		var tenure_str = str(tenure) + " " + GameState.T("ui.staff.days", "Tag(e)")
+		_create_2col_row(GameState.T("ui.staff.tenure", "Zugehörigkeit"), tenure_str, detail_stats, false)
 		
 	var skills = s.get("skills", {})
 	for skill_name in skills.keys():

@@ -24,10 +24,17 @@ var _current_room: Node2D = null
 var _arriving_room: Node2D = null
 var _debug_line: Line2D
 
-var _base_speed := 40.0
+var _base_speed := 10.0 # Zeitlupe für Debug
+
 
 func _ready() -> void:
 	add_to_group("staff_actors")
+	
+	_debug_line = Line2D.new()
+	_debug_line.width = 2.0
+	_debug_line.z_index = 100
+	add_child(_debug_line)
+	
 	_work_audio = AudioStreamPlayer.new()
 	_work_audio.bus = "Sound"
 	add_child(_work_audio)
@@ -406,7 +413,6 @@ func _process_idle() -> void:
 				_think_timer = 1.0
 			else:
 				_sprite.visible = true
-				# Im Raum chillen - ab und zu ein bisschen umhergehen
 				# Barkeeper: immer am Tresen stehen bleiben
 				if get_job_type() == "bartender" and is_instance_valid(_current_room) and _current_room.has_method("get_bartender_stand_pos"):
 					var stand_pos = _current_room.get_bartender_stand_pos()
@@ -420,6 +426,40 @@ func _process_idle() -> void:
 							var dir = _current_room.get_bartender_look_dir()
 							_sprite.rotation = dir.angle() + PI / 2.0
 					_think_timer = 2.0
+				elif get_job_type() == "lifeguard" and is_instance_valid(_current_room) and _current_room.has_method("get_lifeguard_stand_pos"):
+					# 70% Zeit auf Hochsitz sitzen, 30% Patrouille
+					if randf() < 0.7 and _current_room.has_method("is_lifeguard_chair_free"):
+						var chair_pos = _current_room.get_lifeguard_stand_pos()
+						if global_position.distance_to(chair_pos) > 6.0:
+							# Zum Hochsitz gehen
+							if _current_room.has_method("get_local_path"):
+								var lp = _current_room.get_local_path(global_position, chair_pos)
+								if lp.size() > 0:
+									_current_room.call("claim_lifeguard_chair", get_staff_id())
+									_world_path = lp
+									_target_world_pos = _world_path[0]
+									_state = "walking"
+									_path = []
+						else:
+							# Sitzt schon dort — claim sicherstellen, leicht drehen
+							_current_room.call("claim_lifeguard_chair", get_staff_id())
+							_sprite.rotation = PI / 2.0 # schaut nach rechts (Blick über Pool)
+					else:
+						# Patrouille um den Pool
+						if _current_room.has_method("leave_lifeguard_chair"):
+							_current_room.call("leave_lifeguard_chair", get_staff_id())
+						if _current_room.has_method("get_local_path"):
+							var sz = _current_room.get_tile_size() * 16.0
+							var patrol_target = _current_room.global_position + Vector2(
+								randf_range(8.0, sz.x - 8.0),
+								randf_range(8.0, sz.y - 8.0))
+							var lp = _current_room.get_local_path(global_position, patrol_target)
+							if lp.size() > 0:
+								_world_path = lp
+								_target_world_pos = _world_path[0]
+								_state = "walking"
+								_path = []
+					_think_timer = 3.0 + randf() * 4.0
 				elif randf() < 0.3:
 					# Andere Rollen: im Raum umherwandern (Chill-Verhalten)
 					var wander_center = global_position
@@ -428,22 +468,20 @@ func _process_idle() -> void:
 					if get_job_type() == "waiter" and is_instance_valid(_current_room) and _current_room.has_method("get_waiter_stand_pos"):
 						wander_center = _current_room.get_waiter_stand_pos()
 						max_radius = 12.0
-					elif get_job_type() == "lifeguard" and is_instance_valid(_current_room) and _current_room.has_method("get_lifeguard_stand_pos"):
-						wander_center = _current_room.get_lifeguard_stand_pos()
-						if randf() < 0.7:
-							max_radius = 4.0 # Am Hochsitz
-						else:
-							max_radius = 30.0 # Patrouille
-						
+					
 					var offset = Vector2(randf_range(-max_radius, max_radius), randf_range(-max_radius, max_radius))
 					var target = wander_center + offset
 					
-					if get_job_type() == "waiter" and is_instance_valid(_current_room) and _current_room.has_method("get_waiter_stand_pos"):
-						# Waiter bleibt strikt in seinem Radius um den Standpunkt
-						_target_world_pos = target
-						_state = "walking"
-						_path = [_target_world_pos]
+					if is_instance_valid(_current_room) and _current_room.has_method("get_local_path"):
+						# NavBlocker-respektierender Pfad
+						var local_path = _current_room.get_local_path(global_position, target)
+						if local_path.size() > 0:
+							_world_path = local_path
+							_target_world_pos = _world_path[0]
+							_state = "walking"
+							_path = []
 					elif is_instance_valid(_current_room) and _current_room.has_method("get_tile_size"):
+						# Fallback: direkter Weg wenn kein local_nav vorhanden
 						var sz = _current_room.get_tile_size() * 16.0
 						var r_rect = Rect2(_current_room.global_position + Vector2(4.0, 4.0), Vector2(sz.x * _current_room.global_scale.x - 8.0, sz.y * _current_room.global_scale.y - 8.0))
 						if r_rect.has_point(target):
@@ -451,6 +489,8 @@ func _process_idle() -> void:
 							_state = "walking"
 							_path = [_target_world_pos]
 					_think_timer = 2.0 + randf() * 2.0
+
+
 		else:
 			var break_room = null
 			if is_instance_valid(_map_grid) and _map_grid.has_method("get_placed_rooms"):
@@ -551,9 +591,13 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 					_current_room = r
 					break
 
+	var local_path_out: Array[Vector2] = []
 	var start_tile: Vector2i
 	if is_instance_valid(_current_room):
 		start_tile = _current_room.get_target_tile(_map_grid)
+		if _current_room.has_method("get_room_entry_pos") and _current_room.has_method("get_local_path"):
+			var entry_pos = _current_room.get_room_entry_pos(_map_grid)
+			local_path_out = _current_room.get_local_path(global_position, entry_pos)
 	else:
 		start_tile = _map_grid.call("world_to_tile", global_position)
 		
@@ -569,6 +613,10 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 	
 	_path = _map_grid.call("get_path_between_tiles", start_tile, end_tile)
 	_world_path.clear()
+	
+	if local_path_out.size() > 0:
+		_world_path.append_array(local_path_out)
+	
 	if _path.size() > 0:
 		for t in _path:
 			_world_path.append(_map_grid.call("tile_to_world", t))
@@ -588,6 +636,11 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 				else:
 					_world_path.append(extra_pos)
 			_target_world_pos = _world_path[0]
+			
+			# The local path is now fully integrated into _world_path.
+			# Clear the fallback targets so _process_walking doesn't loop back to them!
+			_room_entry_pos = Vector2.INF
+			_extra_target_pos = Vector2.INF
 		else:
 			_target_world_pos = global_position
 	else:
@@ -611,8 +664,12 @@ func _start_path_to_lobby() -> void:
 					break
 
 	var start_tile: Vector2i
+	var local_path_out: Array[Vector2] = []
 	if is_instance_valid(_current_room):
 		start_tile = _current_room.get_target_tile(_map_grid)
+		if _current_room.has_method("get_room_entry_pos") and _current_room.has_method("get_local_path"):
+			var entry_pos = _current_room.get_room_entry_pos(_map_grid)
+			local_path_out = _current_room.get_local_path(global_position, entry_pos)
 	else:
 		start_tile = _map_grid.call("world_to_tile", global_position)
 		
@@ -624,6 +681,10 @@ func _start_path_to_lobby() -> void:
 	
 	_path = _map_grid.call("get_path_between_tiles", start_tile, end_tile)
 	_world_path.clear()
+	
+	if local_path_out.size() > 0:
+		_world_path.append_array(local_path_out)
+		
 	if _path.size() > 0:
 		for t in _path:
 			_world_path.append(_map_grid.call("tile_to_world", t))
@@ -636,6 +697,10 @@ func _start_path_to_lobby() -> void:
 				
 		if _world_path.size() > 0:
 			_target_world_pos = _world_path[0]
+			# The entry path is now fully integrated into _world_path.
+			# Clear the fallback targets so _process_walking doesn't loop back to them!
+			_room_entry_pos = Vector2.INF
+			_extra_target_pos = Vector2.INF
 		else:
 			_target_world_pos = global_position
 

@@ -38,7 +38,7 @@ static func get_definition() -> Dictionary:
 		"max_staff": 1,
 		"open_from": open_f,
 		"open_to": open_t,
-		"valid_door_slots": ["L1", "L2", "L3", "R1", "R2", "R3", "T1", "T2", "T3", "B1", "B2", "B3"],
+		"valid_door_slots": ["L2"],
 		"cleanliness_level": 100,
 		"maintenance_level": 100,
 		"is_service_requested": false
@@ -89,8 +89,29 @@ func _apply_visuals() -> void:
 	super._apply_visuals()
 
 func get_lifeguard_stand_pos() -> Vector2:
-	# Beispiel: Rechter Rand des Pools, Mitte
-	return global_position + Vector2(100.0, 72.0)
+	# ChairSpecial-Node verwenden wenn vorhanden
+	var chair = get_node_or_null("Interior/Furniture/Chairs/ChairSpecial")
+	if is_instance_valid(chair):
+		return chair.global_position
+	return global_position + Vector2(24.0, 16.0)
+
+func claim_lifeguard_chair(staff_id: String) -> bool:
+	for s in _room_seats_staff_only:
+		if s["occupied_by"] == "":
+			s["occupied_by"] = staff_id
+			return true
+	return false
+
+func leave_lifeguard_chair(staff_id: String) -> void:
+	for s in _room_seats_staff_only:
+		if s["occupied_by"] == staff_id:
+			s["occupied_by"] = ""
+
+func is_lifeguard_chair_free() -> bool:
+	for s in _room_seats_staff_only:
+		if s["occupied_by"] == "":
+			return true
+	return false
 
 # =============================================================================
 # LIVE-MONITOR

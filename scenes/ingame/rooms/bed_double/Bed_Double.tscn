@@ -99,6 +99,7 @@ script = ExtResource("1_g681v")
 base_size = Vector2i(3, 2)
 
 [node name="Landscape" type="Node2D" parent="." unique_id=272879892]
+visible = false
 
 [node name="Ground" type="Node2D" parent="Landscape" unique_id=445309638]
 
@@ -221,7 +222,7 @@ region_rect = Rect2(48, 0, 16, 16)
 
 [node name="NavBlockerBed" type="ReferenceRect" parent="Landscape/Interior/Furniture/NavBlocker" unique_id=1824243829 groups=["nav_blocker"]]
 offset_left = 35.0
-offset_top = 4.0
+offset_top = 1.0
 offset_right = 47.0
 offset_bottom = 13.0
 
@@ -238,7 +239,7 @@ offset_right = 15.0
 offset_bottom = 24.0
 
 [node name="NavBlockerTV" type="ReferenceRect" parent="Landscape/Interior/Furniture/NavBlocker" unique_id=1398268057 groups=["nav_blocker"]]
-offset_left = 5.0
+offset_left = 1.0
 offset_top = 26.0
 offset_right = 16.0
 offset_bottom = 31.0
@@ -267,8 +268,13 @@ offset_top = 19.0
 offset_right = 20.0
 offset_bottom = 23.0
 
+[node name="NavBlockerPlant" type="ReferenceRect" parent="Landscape/Interior/Furniture/NavBlocker" unique_id=1191029348 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 5.0
+offset_bottom = 5.0
+
 [node name="Portrait" type="TileMapLayer" parent="." unique_id=1619843191]
-visible = false
 
 [node name="Ground" type="Node2D" parent="Portrait" unique_id=255117826]
 
@@ -402,7 +408,7 @@ region_rect = Rect2(48, 0, 16, 16)
 [node name="NavBlockerBed" type="ReferenceRect" parent="Portrait/Interior/Furniture/NavBlocker" unique_id=321961432 groups=["nav_blocker"]]
 offset_left = 19.0
 offset_top = 35.0
-offset_right = 28.0
+offset_right = 31.0
 offset_bottom = 47.0
 
 [node name="NavBlockerBath" type="ReferenceRect" parent="Portrait/Interior/Furniture/NavBlocker" unique_id=1484016803 groups=["nav_blocker"]]
@@ -419,7 +425,7 @@ offset_bottom = 15.0
 
 [node name="NavBlockerTV" type="ReferenceRect" parent="Portrait/Interior/Furniture/NavBlocker" unique_id=1515642230 groups=["nav_blocker"]]
 offset_left = 1.0
-offset_top = 5.0
+offset_top = 1.0
 offset_right = 6.0
 offset_bottom = 16.0
 
@@ -446,6 +452,12 @@ offset_left = 9.0
 offset_top = 16.0
 offset_right = 13.0
 offset_bottom = 20.0
+
+[node name="NavBlockerPlant" type="ReferenceRect" parent="Portrait/Interior/Furniture/NavBlocker" unique_id=279677567 groups=["nav_blocker"]]
+offset_left = 27.0
+offset_top = 1.0
+offset_right = 31.0
+offset_bottom = 5.0
 
 [node name="Door" type="Sprite2D" parent="." unique_id=1595754863]
 position = Vector2(1, 8)

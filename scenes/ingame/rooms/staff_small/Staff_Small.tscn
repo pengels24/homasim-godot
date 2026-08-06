@@ -312,6 +312,182 @@ texture = ExtResource("2_vnbbi")
 region_enabled = true
 region_rect = Rect2(80, 32, 16, 16)
 
+[node name="NavBlocker" type="Node2D" parent="Interior/Furniture" unique_id=1268157104]
+
+[node name="NavBlockerKitchen1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1042082799 groups=["nav_blocker"]]
+offset_left = 29.0
+offset_top = 1.0
+offset_right = 47.0
+offset_bottom = 7.0
+
+[node name="NavBlockerBath" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=781197550 groups=["nav_blocker"]]
+offset_left = 33.0
+offset_top = 33.0
+offset_right = 47.0
+offset_bottom = 47.0
+
+[node name="NavBlockerTable" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1969652496 groups=["nav_blocker"]]
+offset_left = 8.0
+offset_top = 13.0
+offset_right = 18.0
+offset_bottom = 19.0
+
+[node name="NavBlockerChair1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=612838389 groups=["nav_blocker"]]
+offset_left = 19.0
+offset_top = 14.0
+offset_right = 23.0
+offset_bottom = 18.0
+
+[node name="NavBlockerTV" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=243487554 groups=["nav_blocker"]]
+offset_left = 6.0
+offset_top = 1.0
+offset_right = 17.0
+offset_bottom = 6.0
+
+[node name="NavBlockerPlant" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=631961195 groups=["nav_blocker"]]
+offset_left = 20.0
+offset_top = 1.0
+offset_right = 23.0
+offset_bottom = 5.0
+
+[node name="NavBlockerKitchen2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1670181158 groups=["nav_blocker"]]
+offset_left = 42.0
+offset_top = 1.0
+offset_right = 47.0
+offset_bottom = 13.0
+
+[node name="NavBlockerCouch1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=2048741928 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 13.0
+offset_right = 7.0
+offset_bottom = 26.0
+
+[node name="NavBlockerCouch2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1567352928 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 20.0
+offset_right = 19.0
+offset_bottom = 26.0
+
+[node name="NavBlockerBed1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=2111389331 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 27.0
+offset_right = 13.0
+offset_bottom = 33.0
+
+[node name="NavBlockerBed2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1222489303 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 40.0
+offset_right = 13.0
+offset_bottom = 47.0
+
+[node name="NavBlockerChairSmall1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1471736830 groups=["nav_blocker"]]
+offset_left = 13.0
+offset_top = 26.0
+offset_right = 18.0
+offset_bottom = 30.0
+
+[node name="NavBlockerChairSmall2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=354275136 groups=["nav_blocker"]]
+offset_left = 13.0
+offset_top = 43.0
+offset_right = 18.0
+offset_bottom = 47.0
+
+[node name="NavBlockerChairSmall3" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=290070435 groups=["nav_blocker"]]
+offset_left = 30.0
+offset_top = 30.0
+offset_right = 35.0
+offset_bottom = 34.0
+
+[node name="NavBlockerBed3" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1675622170 groups=["nav_blocker"]]
+offset_left = 35.0
+offset_top = 27.0
+offset_right = 47.0
+offset_bottom = 34.0
+
+[node name="NavBlockerBed4" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1929937170 groups=["nav_blocker"]]
+offset_left = 35.0
+offset_top = 13.0
+offset_right = 47.0
+offset_bottom = 20.0
+
+[node name="NavBlockerChairSmall4" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=431629463 groups=["nav_blocker"]]
+offset_left = 30.0
+offset_top = 13.0
+offset_right = 35.0
+offset_bottom = 17.0
+
+[node name="NavBlockerTableSmall1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1739474970 groups=["nav_blocker"]]
+offset_left = 43.0
+offset_top = 20.0
+offset_right = 47.0
+offset_bottom = 27.0
+
+[node name="NavBlockerTableSmall2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=172588254 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 33.0
+offset_right = 5.0
+offset_bottom = 40.0
+
+[node name="NavBlockerBasket" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=825337119 groups=["nav_blocker"]]
+offset_left = 29.0
+offset_top = 34.0
+offset_right = 33.0
+offset_bottom = 39.0
+
+[node name="NavBlockerPlant2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=990177758 groups=["nav_blocker"]]
+offset_left = 18.0
+offset_top = 43.0
+offset_right = 22.0
+offset_bottom = 47.0
+
+[node name="NavBlockerCase" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=527822517 groups=["nav_blocker"]]
+offset_left = 18.0
+offset_top = 25.0
+offset_right = 22.0
+offset_bottom = 34.0
+
+[node name="NavBlockerWall1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=554754456 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 25.0
+offset_right = 19.0
+offset_bottom = 27.0
+
+[node name="NavBlockerWall2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1439874 groups=["nav_blocker"]]
+offset_left = 17.0
+offset_top = 25.0
+offset_right = 19.0
+offset_bottom = 34.0
+
+[node name="NavBlockerWall3" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=34634964 groups=["nav_blocker"]]
+offset_left = 17.0
+offset_top = 39.0
+offset_right = 19.0
+offset_bottom = 47.0
+
+[node name="NavBlockerWall4" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1455858777 groups=["nav_blocker"]]
+offset_left = 29.0
+offset_top = 33.0
+offset_right = 33.0
+offset_bottom = 35.0
+
+[node name="NavBlockerWall5" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1874737404 groups=["nav_blocker"]]
+offset_left = 29.0
+offset_top = 26.0
+offset_right = 31.0
+offset_bottom = 35.0
+
+[node name="NavBlockerWall6" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1461078562 groups=["nav_blocker"]]
+offset_left = 29.0
+offset_top = 12.0
+offset_right = 31.0
+offset_bottom = 21.0
+
+[node name="NavBlockerWall7" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=844795364 groups=["nav_blocker"]]
+offset_left = 29.0
+offset_top = 12.0
+offset_right = 47.0
+offset_bottom = 14.0
+
 [node name="WayPoints" type="Node2D" parent="Interior" unique_id=719845401]
 
 [node name="WayPoint1" type="Node2D" parent="Interior/WayPoints" unique_id=2117403158]

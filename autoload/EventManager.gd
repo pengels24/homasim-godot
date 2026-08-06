@@ -95,8 +95,9 @@ func _notify_event(title: String, _desc: String) -> void:
 	if hud and hud.has_method("show_toast"):
 		hud.show_toast(title)
 		
-	# Ins Activity Log eintragen (über Signal oder direkten Aufruf)
-	GameState.sig_activity_logged.emit(title, "event")
+	# Ins Activity Log eintragen
+	if ActivityLog and TimeManager:
+		ActivityLog.add("event", title, TimeManager.get_day(), TimeManager.get_game_time())
 
 # =============================================================================
 func is_event_active() -> bool:

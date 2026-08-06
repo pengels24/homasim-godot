@@ -29,7 +29,7 @@ func setup(staff: StaffActor) -> void:
 		elif role == "reception":
 			label_role.text = GameState.T("staff.tooltip.role.reception")
 		else:
-			label_role.text = GameState.T("staff.tooltip.role.prefix") + role.capitalize()
+			label_role.text = GameState.T("staff.role." + role)
 			
 		var skills = data.get("skills", {})
 		var motivation = skills.get("motivation", 5)

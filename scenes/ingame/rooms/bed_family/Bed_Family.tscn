@@ -323,7 +323,7 @@ offset_right = 23.0
 offset_bottom = 10.0
 
 [node name="NavBlockerTV" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=2124702666 groups=["nav_blocker"]]
-offset_left = 4.0
+offset_left = 1.0
 offset_top = 1.0
 offset_right = 15.0
 offset_bottom = 6.0
@@ -373,11 +373,11 @@ offset_bottom = 47.0
 [node name="NavBlockerBedK1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=261152229 groups=["nav_blocker"]]
 offset_left = 31.0
 offset_top = 1.0
-offset_right = 37.0
+offset_right = 39.0
 offset_bottom = 13.0
 
 [node name="NavBlockerBedK2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=707130665 groups=["nav_blocker"]]
-offset_left = 40.0
+offset_left = 39.0
 offset_top = 1.0
 offset_right = 47.0
 offset_bottom = 13.0
@@ -446,6 +446,18 @@ offset_bottom = 32.0
 offset_left = 16.0
 offset_top = 37.0
 offset_right = 18.0
+offset_bottom = 47.0
+
+[node name="NavBlockerPlant1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1110070901 groups=["nav_blocker"]]
+offset_left = 16.0
+offset_top = 22.0
+offset_right = 19.0
+offset_bottom = 25.0
+
+[node name="NavBlockerPlant2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1334112685 groups=["nav_blocker"]]
+offset_left = 18.0
+offset_top = 43.0
+offset_right = 21.0
 offset_bottom = 47.0
 
 [node name="Door" type="Sprite2D" parent="." unique_id=1927835578]

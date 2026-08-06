@@ -325,6 +325,10 @@ func hire_staff(applicant_id: String) -> bool:
 		GameState.add_money(-cost)
 	
 	daily_applicants.remove_at(applicant_idx)
+	if TimeManager:
+		applicant["hired_day"] = TimeManager.get_day()
+	else:
+		applicant["hired_day"] = 1
 	hired_staff[applicant["id"]] = applicant
 	
 	# Speichern

@@ -59,18 +59,26 @@ func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null, guest
 		add_child(vip_node)
 	
 	if start_room != null:
-		# Wenn mit Startraum gespawnt (z.B. nach Laden), setze Position auf die Zimmertür!
-		_target_room = start_room
 		_target_room = start_room
 		var exit_tile = _get_room_exit_tile(start_room)
 		var door_world = _map_grid.tile_to_world(exit_tile)
 		_room_door_world = door_world  # sofort cachen!
+		
+		var is_night = false
+		if TimeManager and (TimeManager.get_hour() >= 23 or TimeManager.get_hour() < 7):
+			is_night = true
+			
 		if start_room.has_method("get_room_entry_pos"):
 			global_position = start_room.get_room_entry_pos(_map_grid)
 		else:
 			global_position = door_world
+
 			
 		_change_state(State.IN_ROOM)
+		
+		# Wenn es Nacht ist, Timer auf fast Null setzen, damit sie direkt ins Bett laufen
+		if is_night:
+			_action_timer = 0.5
 	else:
 		_change_state(State.IDLE)
 		
@@ -110,6 +118,7 @@ func _process(delta: float) -> void:
 			_process_waiting(delta)
 		State.WAITING_FOR_FOOD, State.AWAITING_CHECKOUT, State.WAITING_IN_LINE:
 			_process_impatient(delta)
+
 
 
 # =============================================================================

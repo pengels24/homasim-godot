@@ -36,7 +36,7 @@ var is_service_requested: bool = false
 var is_built := false
 var is_active := false
 
-const SHOW_DEBUG_PATHS := false # Umschalter für das rote Wegnetz im Raum
+const SHOW_DEBUG_PATHS := true # Umschalter für das rote Wegnetz im Raum
 var is_pending_demolish: bool = false:
 	set(value):
 		is_pending_demolish = value
@@ -79,6 +79,7 @@ func set_overlay_color(color: Color) -> void:
 # =============================================================================
 var _room_seats: Array[Dictionary] = []
 var _room_beds: Array[Dictionary] = []
+var _room_seats_staff_only: Array[Dictionary] = [] # z.B. Bademeisterhochsitz
 
 func _find_furniture_recursive(node: Node) -> void:
 	for child in node.get_children():
@@ -92,7 +93,10 @@ func _find_furniture_recursive(node: Node) -> void:
 			_find_furniture_recursive(child)
 			continue
 			
-		if "chair" in n:
+		if "chairspecial" in n:
+			# Nur für Staff (z.B. Bademeisterhochsitz) - Gäste dürfen hier nicht sitzen
+			_room_seats_staff_only.append({"node": child, "occupied_by": ""})
+		elif "chair" in n:
 			_room_seats.append({"node": child, "occupied_by": ""})
 		elif "bed" in n:
 			_room_beds.append({"node": child, "occupied_by": ""})
@@ -173,12 +177,7 @@ func _ready() -> void:
 	# keine Hover-Events abfangen - wichtig für Multi-Tile Räume!
 	_apply_mouse_filter_recursive(self)
 	
-	var interior = get_node_or_null("Interior")
-	if interior:
-		_find_furniture_recursive(interior)
-	elif has_node("Landscape") and has_node("Portrait"):
-		# Für Multi-Tile-Räume wie BedDouble vorerst die Landscape-Möbel registrieren
-		_find_furniture_recursive(get_node("Landscape/Interior"))
+	_refresh_furniture()
 	
 	if TimeManager and not TimeManager.sig_hour_passed.is_connected(_on_hour_passed):
 		TimeManager.sig_hour_passed.connect(_on_hour_passed)
@@ -187,6 +186,12 @@ func _ready() -> void:
 		
 	if StaffManager and not StaffManager.sig_assignments_changed.is_connected(_update_indicator):
 		StaffManager.sig_assignments_changed.connect(_update_indicator)
+		
+	if SHOW_DEBUG_PATHS:
+		var debug_node = Node2D.new()
+		debug_node.z_index = 100
+		add_child(debug_node)
+		debug_node.draw.connect(_on_debug_draw.bind(debug_node))
 
 func _apply_mouse_filter_recursive(node: Node) -> void:
 	for child in node.get_children():
@@ -611,6 +616,26 @@ func _apply_visuals() -> void:
 			
 	# 4. NavGrid aktualisieren, da Blocker nun rotiert sein könnten
 	_build_local_nav()
+	_refresh_furniture()
+
+# =============================================================================
+func _refresh_furniture() -> void:
+	_room_seats.clear()
+	_room_beds.clear()
+	_room_seats_staff_only.clear()
+	
+	var interior = get_node_or_null("Interior")
+	if interior:
+		_find_furniture_recursive(interior)
+	elif has_node("Landscape") and has_node("Portrait"):
+		if room_rotation % 2 == 1:
+			var interior_portrait = get_node_or_null("Portrait/Interior")
+			if interior_portrait:
+				_find_furniture_recursive(interior_portrait)
+		else:
+			var interior_landscape = get_node_or_null("Landscape/Interior")
+			if interior_landscape:
+				_find_furniture_recursive(interior_landscape)
 
 
 # =============================================================================
@@ -674,7 +699,7 @@ func _update_indicator() -> void:
 # ── Lokale Navigation (Raum-intern) ──────────────────────────────────────────
 
 var _local_astar: AStar2D = null
-const LOCAL_NAV_CELL_SIZE = 4.0
+const LOCAL_NAV_CELL_SIZE := 4.0
 
 func _find_nav_blockers_recursive(node: Node, result: Array) -> void:
 	if "visible" in node and not node.visible:
@@ -755,6 +780,8 @@ func get_local_path(start_world: Vector2, end_world: Vector2) -> Array[Vector2]:
 	if path_world.size() > 0:
 		path_world[0] = start_world
 		path_world[path_world.size() - 1] = end_world
+	else:
+		return [start_world, end_world]
 		
 	return path_world
 
@@ -767,12 +794,24 @@ func get_random_walkable_local_pos() -> Vector2:
 	var random_id = ids[randi() % ids.size()]
 	return to_global(_local_astar.get_point_position(random_id))
 
-func _draw() -> void:
-	if SHOW_DEBUG_PATHS and OS.is_debug_build() and _local_astar != null:
-		# Punkte und Verbindungen zeichnen (Rot)
-		for id in _local_astar.get_point_ids():
-			var p1 = _local_astar.get_point_position(id)
-			draw_circle(p1, 1.0, Color(1, 0, 0, 0.5))
-			for cid in _local_astar.get_point_connections(id):
-				var p2 = _local_astar.get_point_position(cid)
-				draw_line(p1, p2, Color(1, 0, 0, 0.2), 0.5)
+func _on_debug_draw(canvas: Node2D) -> void:
+	if SHOW_DEBUG_PATHS:
+		var blockers = []
+		_find_nav_blockers_recursive(self, blockers)
+		for b in blockers:
+			if b is Control or b is ReferenceRect or b is ColorRect:
+				var b_trans = get_global_transform().affine_inverse() * b.get_global_transform()
+				var p1 = b_trans * Vector2(0, 0)
+				var p2 = b_trans * Vector2(b.size.x, 0)
+				var p3 = b_trans * b.size
+				var p4 = b_trans * Vector2(0, b.size.y)
+				canvas.draw_polygon(PackedVector2Array([p1, p2, p3, p4]), PackedColorArray([Color(1, 0, 0, 0.5), Color(1, 0, 0, 0.5), Color(1, 0, 0, 0.5), Color(1, 0, 0, 0.5)]))
+				
+		if _local_astar != null:
+			# Punkte und Verbindungen zeichnen (Grün für offene Wege)
+			for id in _local_astar.get_point_ids():
+				var p1 = _local_astar.get_point_position(id)
+				canvas.draw_circle(p1, 1.0, Color(0, 1, 0, 0.8))
+				for cid in _local_astar.get_point_connections(id):
+					var p2 = _local_astar.get_point_position(cid)
+					canvas.draw_line(p1, p2, Color(0, 1, 0, 0.4), 0.5)

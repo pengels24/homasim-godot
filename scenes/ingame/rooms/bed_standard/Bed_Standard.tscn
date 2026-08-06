@@ -161,10 +161,16 @@ offset_right = 11.0
 offset_bottom = 13.0
 
 [node name="NavBlockerTV" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=723907615 groups=["nav_blocker"]]
-offset_left = 4.0
+offset_left = 1.0
 offset_top = 26.0
-offset_right = 15.0
+offset_right = 17.0
 offset_bottom = 31.0
+
+[node name="NavBlockerPlant" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=2103806140 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 5.0
+offset_bottom = 5.0
 
 [node name="Door" type="Sprite2D" parent="." unique_id=449780305]
 position = Vector2(1, 8)

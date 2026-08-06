@@ -214,10 +214,54 @@ region_enabled = true
 region_rect = Rect2(0, 16, 16, 16)
 
 [node name="BartenderArea" type="Node2D" parent="Interior/Furniture" unique_id=1225697230]
-position = Vector2(4, 16)
+position = Vector2(5, 16)
 
 [node name="WaiterArea" type="Node2D" parent="Interior/Furniture" unique_id=1835926908]
 position = Vector2(20, 18)
+
+[node name="NavBlocker" type="Node2D" parent="Interior/Furniture" unique_id=32121876]
+
+[node name="NavBlockerPlant1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=162370024 groups=["nav_blocker"]]
+offset_left = 27.0
+offset_top = 13.0
+offset_right = 31.0
+offset_bottom = 16.0
+
+[node name="NavBlockerTable1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1271197825 groups=["nav_blocker"]]
+offset_left = 25.0
+offset_top = 21.0
+offset_right = 31.0
+offset_bottom = 31.0
+
+[node name="NavBlockerCounter2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=781601496 groups=["nav_blocker"]]
+offset_left = 7.0
+offset_top = 6.0
+offset_right = 12.0
+offset_bottom = 31.0
+
+[node name="NavBlockerCounter1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1680968793 groups=["nav_blocker"]]
+offset_left = 7.0
+offset_top = 6.0
+offset_right = 22.0
+offset_bottom = 11.0
+
+[node name="NavBlockerBackLeft" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=395725867 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 4.0
+offset_bottom = 31.0
+
+[node name="NavBlockerBackTop" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=117135894 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 1.0
+offset_right = 19.0
+offset_bottom = 4.0
+
+[node name="NavBlockerPlant2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1256446087 groups=["nav_blocker"]]
+offset_left = 17.0
+offset_top = 27.0
+offset_right = 20.0
+offset_bottom = 31.0
 
 [node name="Door" type="Sprite2D" parent="." unique_id=1048250083]
 z_index = 1

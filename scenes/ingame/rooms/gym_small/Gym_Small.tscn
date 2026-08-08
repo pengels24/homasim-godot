@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cp6s2tddg8xkf"]
 
-[ext_resource type="Script" path="res://scenes/ingame/rooms/gym_small/GymSmall.gd" id="1_6iy58"]
+[ext_resource type="Script" uid="uid://b3bfkrge2tkfq" path="res://scenes/ingame/rooms/gym_small/GymSmall.gd" id="1_6iy58"]
 [ext_resource type="Texture2D" uid="uid://en1ld0hjxwk4" path="res://assets/tiles/Furniture/furniture_gym_small.aseprite" id="2_kqxg4"]
 
 [sub_resource type="Gradient" id="Gradient_fo40m"]
@@ -357,6 +357,9 @@ offset_top = 16.0
 offset_right = 13.0
 offset_bottom = 31.0
 
+[node name="ServicePoint" type="Marker2D" parent="Landscape/Interior/Furniture" unique_id=530092554]
+position = Vector2(26, 17)
+
 [node name="Portrait" type="TileMapLayer" parent="." unique_id=1619843191]
 visible = false
 
@@ -628,6 +631,9 @@ offset_left = 1.0
 offset_top = 1.0
 offset_right = 16.0
 offset_bottom = 13.0
+
+[node name="ServicePoint" type="Marker2D" parent="Portrait/Interior/Furniture" unique_id=1770928231]
+position = Vector2(15, 26)
 
 [node name="Door" type="Sprite2D" parent="." unique_id=1595754863]
 position = Vector2(1, 8)

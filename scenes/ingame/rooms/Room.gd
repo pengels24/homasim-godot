@@ -36,7 +36,7 @@ var is_service_requested: bool = false
 var is_built := false
 var is_active := false
 
-const SHOW_DEBUG_PATHS := true # Umschalter für das rote Wegnetz im Raum
+const SHOW_DEBUG_PATHS := false # Umschalter für das rote Wegnetz im Raum
 var is_pending_demolish: bool = false:
 	set(value):
 		is_pending_demolish = value
@@ -96,9 +96,9 @@ func _find_furniture_recursive(node: Node) -> void:
 		if "chairspecial" in n:
 			# Nur für Staff (z.B. Bademeisterhochsitz) - Gäste dürfen hier nicht sitzen
 			_room_seats_staff_only.append({"node": child, "occupied_by": ""})
-		elif "chair" in n:
+		elif "chair" in n and n != "chairs":
 			_room_seats.append({"node": child, "occupied_by": ""})
-		elif "bed" in n:
+		elif "bed" in n and n != "beds":
 			_room_beds.append({"node": child, "occupied_by": ""})
 			
 		_find_furniture_recursive(child)
@@ -109,6 +109,9 @@ func has_free_room_seat() -> bool:
 	return false
 
 func room_claim_seat(guest_id: String) -> Vector2:
+	for s in _room_seats:
+		if s["occupied_by"] == guest_id:
+			return s["node"].global_position
 	for s in _room_seats:
 		if s["occupied_by"] == "":
 			s["occupied_by"] = guest_id
@@ -126,6 +129,9 @@ func has_free_room_bed() -> bool:
 	return false
 
 func room_claim_bed(guest_id: String) -> Vector2:
+	for b in _room_beds:
+		if b["occupied_by"] == guest_id:
+			return b["node"].global_position
 	for b in _room_beds:
 		if b["occupied_by"] == "":
 			b["occupied_by"] = guest_id
@@ -267,6 +273,43 @@ func get_target_tile(map_grid: Node) -> Vector2i:
 
 # =============================================================================
 ## Berechnet die exakte Pixel-Koordinate ca. 32px (2 Tiles) im Raum drinnen.
+func get_service_position() -> Vector2:
+	# 1. Unique Name (Rückwärtskompatibilität)
+	var marker = get_node_or_null("%ServicePoint")
+	if marker:
+		return marker.global_position
+
+	# 2. Suche in allen Branches nach dem Marker (ohne %)
+	var markers = find_children("ServicePoint", "Marker2D")
+	if markers.is_empty():
+		markers = find_children("ServicePoint", "Node2D")
+		
+	for m in markers:
+		var is_active = true
+		var parent = m.get_parent()
+		while parent != self and is_instance_valid(parent):
+			if "visible" in parent and not parent.visible:
+				is_active = false
+				break
+			parent = parent.get_parent()
+		if is_active:
+			return m.global_position
+			
+	# 3. Fallback auf Interior-Mitte
+	var interior = get_node_or_null("Interior")
+	if interior and interior.visible:
+		return interior.global_position + Vector2(16, 16)
+		
+	# Fallback für asymmetrische Räume, falls Interior nicht existiert
+	if has_node("Landscape") and get_node("Landscape").visible:
+		var l_int = get_node_or_null("Landscape/Interior")
+		if l_int: return l_int.global_position + Vector2(16, 16)
+	if has_node("Portrait") and get_node("Portrait").visible:
+		var p_int = get_node_or_null("Portrait/Interior")
+		if p_int: return p_int.global_position + Vector2(16, 16)
+		
+	return global_position + Vector2(16, 16)
+
 func get_room_entry_pos(map_grid: Node) -> Vector2:
 	var exit_tile = get_target_tile(map_grid)
 	var exit_pos = map_grid.tile_to_world(exit_tile)
@@ -710,10 +753,23 @@ func _find_nav_blockers_recursive(node: Node, result: Array) -> void:
 				result.append(child)
 		_find_nav_blockers_recursive(child, result)
 
+func _find_nav_weights_recursive(node: Node, result: Array) -> void:
+	if "visible" in node and not node.visible:
+		return
+	for child in node.get_children():
+		if "NavWeight" in child.name or child.is_in_group("nav_weight"):
+			if child is Control or child is ReferenceRect or child is ColorRect:
+				result.append(child)
+		_find_nav_weights_recursive(child, result)
+
 func _build_local_nav() -> void:
 	var blockers = []
 	_find_nav_blockers_recursive(self, blockers)
-	if blockers.is_empty():
+	var weights = []
+	_find_nav_weights_recursive(self, weights)
+	var solid_tiles = get_solid_tiles()
+	
+	if blockers.is_empty() and solid_tiles.is_empty():
 		return # Keine lokale Navigation nötig für leere Räume
 		
 	_local_astar = AStar2D.new()
@@ -729,16 +785,36 @@ func _build_local_nav() -> void:
 			var p = Vector2(x * LOCAL_NAV_CELL_SIZE + LOCAL_NAV_CELL_SIZE / 2.0, y * LOCAL_NAV_CELL_SIZE + LOCAL_NAV_CELL_SIZE / 2.0)
 			
 			var is_blocked = false
-			var p_global = to_global(p)
-			for b in blockers:
-				if b is Control or b is ReferenceRect or b is ColorRect:
-					var p_local = b.get_global_transform().affine_inverse() * p_global
-					if Rect2(Vector2.ZERO, b.size).has_point(p_local):
-						is_blocked = true
-						break
+			
+			# 1. Prüfe Wände (TileMapLayer)
+			var tile_pos := Vector2i(int(p.x / TILE_PX), int(p.y / TILE_PX))
+			if solid_tiles.has(tile_pos):
+				is_blocked = true
+				
+			# 2. Prüfe NavBlocker (Möbel)
+			if not is_blocked:
+				var p_global = to_global(p)
+				for b in blockers:
+					if b is Control or b is ReferenceRect or b is ColorRect:
+						var p_local = b.get_global_transform().affine_inverse() * p_global
+						if Rect2(Vector2.ZERO, b.size).has_point(p_local):
+							is_blocked = true
+							break
 					
 			if not is_blocked:
 				_local_astar.add_point(id, p)
+				
+				# 3. Prüfe NavWeight (Wasser etc)
+				var is_weighted = false
+				var p_global = to_global(p)
+				for w in weights:
+					if w is Control or w is ReferenceRect or w is ColorRect:
+						var p_local = w.get_global_transform().affine_inverse() * p_global
+						if Rect2(Vector2.ZERO, w.size).has_point(p_local):
+							is_weighted = true
+							break
+				if is_weighted:
+					_local_astar.set_point_weight_scale(id, 50.0)
 				
 	# Punkte verbinden (orthogonal & diagonal)
 	for y in cells_y:
@@ -778,8 +854,8 @@ func get_local_path(start_world: Vector2, end_world: Vector2) -> Array[Vector2]:
 		path_world.append(to_global(p))
 		
 	if path_world.size() > 0:
-		path_world[0] = start_world
-		path_world[path_world.size() - 1] = end_world
+		path_world.insert(0, start_world)
+		path_world.append(end_world)
 	else:
 		return [start_world, end_world]
 		

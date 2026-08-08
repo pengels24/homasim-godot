@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dvhxgn5nn0hkm"]
 
-[ext_resource type="Script" path="res://scenes/ingame/rooms/spa_small/SpaSmall.gd" id="1_p7sr0"]
+[ext_resource type="Script" uid="uid://cvfkcxof6q4am" path="res://scenes/ingame/rooms/spa_small/SpaSmall.gd" id="1_p7sr0"]
 [ext_resource type="Texture2D" uid="uid://cib286rvk60gy" path="res://assets/tiles/Furniture/furniture_spa_small.aseprite" id="2_hd7xq"]
 
 [sub_resource type="Gradient" id="Gradient_2hw84"]
@@ -518,6 +518,9 @@ offset_left = 37.0
 offset_top = 14.0
 offset_right = 41.0
 offset_bottom = 17.0
+
+[node name="ServicePoint" type="Marker2D" parent="Interior/Furniture" unique_id=1038073404]
+position = Vector2(27, 26)
 
 [node name="Door" type="Sprite2D" parent="." unique_id=1927835578]
 position = Vector2(1, 8)

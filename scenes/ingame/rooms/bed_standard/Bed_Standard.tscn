@@ -172,6 +172,9 @@ offset_top = 1.0
 offset_right = 5.0
 offset_bottom = 5.0
 
+[node name="ServicePoint" type="Marker2D" parent="Interior/Furniture" unique_id=256166460]
+position = Vector2(17, 8)
+
 [node name="Door" type="Sprite2D" parent="." unique_id=449780305]
 position = Vector2(1, 8)
 rotation = 3.1415927

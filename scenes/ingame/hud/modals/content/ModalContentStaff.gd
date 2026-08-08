@@ -407,6 +407,7 @@ func _create_2col_row(label_text: String, value_text: String, parent: Node, is_b
 
 func _create_progress_row(label_text: String, current_val: float, max_val: float, is_percent: bool, parent: Node) -> void:
 	var hbox = HBoxContainer.new()
+	hbox.add_theme_constant_override("separation", 12)
 	
 	var lbl_left = Label.new()
 	lbl_left.text = label_text

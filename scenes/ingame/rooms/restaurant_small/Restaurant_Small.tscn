@@ -410,6 +410,9 @@ offset_top = 28.0
 offset_right = 5.0
 offset_bottom = 31.0
 
+[node name="ServicePoint" type="Marker2D" parent="Interior/Furniture" unique_id=1313855581]
+position = Vector2(24, 32)
+
 [node name="Door" type="Sprite2D" parent="." unique_id=1927835578]
 position = Vector2(47.000004, 23.999996)
 scale = Vector2(0.008, 6)

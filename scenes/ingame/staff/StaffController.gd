@@ -31,23 +31,34 @@ func _spawn_actor(staff_data: Dictionary) -> void:
 	actor.configure(staff_data, _map_grid, self)
 	_actors.append(actor)
 	
-	# Spawn-Punkt: Personalraum (Fallback Lobby)
+	# Spawn-Punkt: Personalraum mit freier Kapazität -> Lobby
 	var spawn_pos = _get_staff_room_spawn_pos()
+		
 	if spawn_pos == Vector2.INF:
 		spawn_pos = _get_lobby_spawn_pos()
 		
-	spawn_pos += Vector2(randf_range(-12.0, 12.0), randf_range(-12.0, 12.0))
+	# Nur noch ein sehr kleiner Scatter, damit sie nicht exakt 100% clippen
+	spawn_pos += Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
 	actor.global_position = spawn_pos
-	
+
 func _get_staff_room_spawn_pos() -> Vector2:
 	if is_instance_valid(_map_grid) and _map_grid.has_method("get_placed_rooms"):
 		var candidates = []
+		var all_staff_rooms = []
 		for r in _map_grid.get_placed_rooms():
 			if r.has_method("get_definition") and r.get_definition().get("id") == "staff_small":
-				candidates.append(r)
+				all_staff_rooms.append(r)
+				if r.has_method("has_free_seat") and r.has_free_seat():
+					candidates.append(r)
 		
+		# Fallback auf beliebigen Personalraum, wenn alle voll sind
+		if candidates.size() == 0:
+			candidates = all_staff_rooms
+			
 		if candidates.size() > 0:
 			var room = candidates[randi() % candidates.size()]
+			if room.has_method("get_service_position"):
+				return room.get_service_position()
 			var interior = room.get_node_or_null("Interior")
 			if interior:
 				return interior.global_position

@@ -22,6 +22,7 @@ static func get_definition() -> Dictionary:
 		"icon": "res://assets/icons/angelus2010/Rooms/ang-pool-small.aseprite",
 		"nightly_price": 0,
 		"locked": false,
+		"max_guests": 8,
 		"in_build_menu": true,
 		"req_level": 4,
 		"req_tech": "W1.2",
@@ -95,6 +96,12 @@ func get_lifeguard_stand_pos() -> Vector2:
 		return chair.global_position
 	return global_position + Vector2(24.0, 16.0)
 
+func get_lifeguard_look_dir() -> float:
+	var chair = get_node_or_null("Interior/Furniture/Chairs/ChairSpecial")
+	if is_instance_valid(chair):
+		return chair.global_rotation
+	return PI / 2.0
+
 func claim_lifeguard_chair(staff_id: String) -> bool:
 	for s in _room_seats_staff_only:
 		if s["occupied_by"] == "":
@@ -107,11 +114,34 @@ func leave_lifeguard_chair(staff_id: String) -> void:
 		if s["occupied_by"] == staff_id:
 			s["occupied_by"] = ""
 
-func is_lifeguard_chair_free() -> bool:
+func is_lifeguard_chair_free(staff_id: String = "") -> bool:
 	for s in _room_seats_staff_only:
-		if s["occupied_by"] == "":
+		if s["occupied_by"] == "" or (staff_id != "" and s["occupied_by"] == staff_id):
 			return true
 	return false
+
+# =============================================================================
+
+func claim_seat(guest_id: String) -> Vector2:
+	for s in _room_seats:
+		if s["occupied_by"] == guest_id:
+			return s["node"].global_position
+			
+	var free_seats = []
+	for s in _room_seats:
+		if s["occupied_by"] == "":
+			free_seats.append(s)
+			
+	if free_seats.size() > 0:
+		var s = free_seats[randi() % free_seats.size()]
+		s["occupied_by"] = guest_id
+		return s["node"].global_position
+		
+	return Vector2.INF
+func leave_seat(guest_id: String) -> void:
+	for s in _room_seats:
+		if s["occupied_by"] == guest_id:
+			s["occupied_by"] = ""
 
 # =============================================================================
 # LIVE-MONITOR
@@ -130,8 +160,8 @@ func get_live_details() -> Array[Dictionary]:
 			
 			var status_text = "Schwimmt / Sonnt sich"
 			details.append({
-				"label": guest_name,
-				"value": status_text,
+				"left": guest_name,
+				"right": status_text,
 				"color": Color("#06b6d4")
 			})
 			

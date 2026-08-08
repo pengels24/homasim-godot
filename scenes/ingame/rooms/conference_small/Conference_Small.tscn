@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bvmkf37pqfidq"]
 
-[ext_resource type="Script" path="res://scenes/ingame/rooms/conference_small/ConferenceSmall.gd" id="1_lhbxr"]
+[ext_resource type="Script" uid="uid://bkhggt1wab3xa" path="res://scenes/ingame/rooms/conference_small/ConferenceSmall.gd" id="1_lhbxr"]
 [ext_resource type="Texture2D" uid="uid://d2jh7vtcbwl2k" path="res://assets/tiles/Furniture/furniture_conference_small.aseprite" id="2_onwgc"]
 
 [sub_resource type="Gradient" id="Gradient_fo40m"]
@@ -325,6 +325,9 @@ offset_left = 44.0
 offset_top = 1.0
 offset_right = 47.0
 offset_bottom = 31.0
+
+[node name="ServicePoint" type="Marker2D" parent="Landscape/Interior/Furniture" unique_id=1016833660]
+position = Vector2(10, 16)
 
 [node name="Portrait" type="TileMapLayer" parent="." unique_id=1619843191]
 visible = false

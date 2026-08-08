@@ -13,6 +13,7 @@ static func get_definition() -> Dictionary:
 		"icon": "res://assets/icons/angelus2010/Rooms/ang-conference-small.aseprite",
 		"nightly_price": 0,
 		"locked": false,
+		"max_guests": 12,
 		"in_build_menu": true,
 		"req_level": 5,
 		"req_tech": "P1.2",
@@ -115,3 +116,36 @@ func get_live_details() -> Array[Dictionary]:
 			
 	return details
 
+# =============================================================================
+# Speaker Logic
+# =============================================================================
+var current_speaker_id: String = ""
+
+func claim_podium(guest_id: String) -> Vector2:
+	if current_speaker_id == "":
+		for s in _room_seats:
+			if s["node"].name == "Chair12" and s["occupied_by"] == "":
+				current_speaker_id = guest_id
+				s["occupied_by"] = guest_id
+				return s["node"].global_position
+	return Vector2.INF
+
+func leave_podium(guest_id: String) -> void:
+	if current_speaker_id == guest_id:
+		current_speaker_id = ""
+		for s in _room_seats:
+			if s["node"].name == "Chair12" and s["occupied_by"] == guest_id:
+				s["occupied_by"] = ""
+
+func claim_seat(guest_id: String) -> Vector2:
+	# Only allow normal chairs 1-11
+	for s in _room_seats:
+		if s["occupied_by"] == "" and s["node"].name != "Chair12":
+			s["occupied_by"] = guest_id
+			return s["node"].global_position
+	return Vector2.INF
+
+func leave_seat(guest_id: String) -> void:
+	for s in _room_seats:
+		if s["occupied_by"] == guest_id and s["node"].name != "Chair12":
+			s["occupied_by"] = ""

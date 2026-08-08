@@ -51,3 +51,6 @@
 
 ## Status Quo Direktive
 - **STRIKTE REGEL f�r status_quo.md**: In das Status Quo Dokument kommen NIEMALS ToDos, unfertige Punkte oder '[ ]' Boxen. Es ist eine reine Inventar-Liste von Dingen, die bereits effektiv fertiggestellt und voll funktionsf�hig sind.
+
+## 🎨 Szenen-Änderungen (.tscn)
+- **STRIKTE DIREKTIVE:** Keine direkten scriptseitigen Änderungen am visuellen Aufbau von .tscn-Dateien (z.B. Nodes hinzufügen, verschieben, Eigenschaften ändern) ohne ausdrückliche Freigabe. Wenn visuelle Änderungen nötig sind, definiere klar, was getan werden muss, und der User übernimmt die Anpassung im Godot-Editor. Dies verhindert "Kraut und Rüben" im Design.

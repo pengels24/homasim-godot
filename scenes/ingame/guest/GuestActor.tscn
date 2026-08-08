@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scenes/ingame/guest/GuestActor.gd" id="1_act"]
 [ext_resource type="PackedScene" uid="uid://dvwf0ma4rn7ns" path="res://scenes/ingame/guest/guestavatar/GuestAvatar.tscn" id="2_ava"]
 
-[ext_resource type="Texture2D" uid="uid://cmq0hprhggre1" path="res://assets/icons/cooking-pot.svg" id="3_pot"]
+[ext_resource type="Texture2D" uid="uid://bpt5xg7rcoavq" path="res://assets/icons/angelus2010/ang-guest-hungry.aseprite" id="3_hungry"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_click"]
 radius = 6.0
@@ -20,7 +20,6 @@ shape = SubResource("CircleShape2D_click")
 
 [node name="HungryIcon" type="Sprite2D" parent="."]
 visible = false
-modulate = Color(1, 0, 0, 1)
-position = Vector2(0, -6)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("3_pot")
+position = Vector2(0, -4)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("3_hungry")

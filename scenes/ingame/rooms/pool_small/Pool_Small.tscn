@@ -392,6 +392,13 @@ offset_top = 1.0
 offset_right = 47.0
 offset_bottom = 11.0
 
+[node name="NavWeightWater" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1821834970 groups=["nav_weight"]]
+offset_left = 10.0
+offset_top = 18.0
+offset_right = 38.0
+offset_bottom = 30.0
+border_color = Color(0.6313296, 0.5260541, 0.11913981, 1)
+
 [node name="Door" type="Sprite2D" parent="." unique_id=1927835578]
 position = Vector2(1, 8)
 rotation = 3.1415927

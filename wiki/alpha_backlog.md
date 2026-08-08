@@ -12,7 +12,17 @@
 
 ---
 
-## 🛠️ Ungeplante Fixes & Features (Aktuelle Session)
+## 🐞 Ungeplante Fixes & Features (Aktuelle Session)
+- **POI-Verhalten & Wellness-Logik:** Rekursions-Bug in `GuestActor.gd` behoben, durch den Gäste den Pool sofort wieder verließen. Tiefere Logik für Wellness-Aufenthalte implementiert (1-3 Ingame-Stunden Dauer, alle 15-30 Minuten Platzwechsel). POI-Limitierung für Gäste hinzugefügt (`max_guests`). Schließzeiten der POIs werden beim Aufenthalt berücksichtigt.
+- **Konferenzraum-Logik:** Chair12 als dediziertes Rednerpult konfiguriert. Gäste rotieren nun dynamisch ans Pult (10-15 Min Vortrag) und räumen den Platz danach für den nächsten.
+- **Bademeister-Sitzposition:** `PoolSmall.gd` Rotation des Hochsitzes korrigiert (`+ PI/2.0`). Die optische Fehlplatzierung im Wasser liegt am Sprite-Offset.
+- **Gym & Spa Initialisierung:** `claim_seat` in `GymSmall.gd` und `SpaSmall.gd` ergänzt, um fehlgeschlagene Sitzplatzsuche der Gäste zu verhindern.
+- **Küchenpersonal Pathfinding:** Interne Grid-Auflösung (`LOCAL_NAV_CELL_SIZE`) in Räumen von 8 auf 4 Pixel erhöht. Damit wurde behoben, dass das Küchen-Wegenetz durch große NavBlocker (Herd/Fritteusen) im 8x8-Raster komplett unterbrochen wurde.
+- **NavBlocker Debug-Overlay:** Das interne Debug-Overlay (`SHOW_DEBUG_PATHS`) zeichnet rote Kollisionsboxen und AStar-Punkte nun maßstabsgetreu auf einem CanvasLayer (`z_index = 100`) über den Möbeln und respektiert Raumrotationen korrekt.
+- **Lokale Wegfindung Fixes:** Bug behoben, bei dem kurze Wege die Start-/Endpunkte überschrieben haben (`path_world[0]`). Die Wegfindung fügt Start- und Endpunkte nun korrekt ein.
+- **StaffActor Wegfindung:** Mitarbeiter nutzen nun korrekt das interne AStar-Netz des Raumes, um zu ihrem `get_work_position`-Ziel zu navigieren, anstatt die Möbel auf einer geraden Luftlinie zu durchqueren.
+- **KitchenSmall WorkArea:** `%ChefWorkArea` Marker wird nun korrekt ausgelesen und als dynamischer Arbeitsplatz mit Fallback (Raummitte) genutzt.
+- **ServicePoint System:** Neues `%ServicePoint` Marker-System für Räume eingeführt (`Room.get_service_position()`). Reinigungskräfte und Hausmeister laufen nun in das Zimmer hinein zum Marker (oder in die Raummitte), anstatt von außen durch die Tür zu wischen.
 - **ANG-324:** Abriss-Blockade für Pausenräume eingebaut (Max. Kapazität vs. Staff-Count).
 - **ANG-325 / ANG-326:** Gäste-Quests für jeden Gasttyp eingebaut (10, 25, 50, 100).
 - Float-Rundungsfehler bei Forschungspunkten gefixt & Währungssymbole ergänzt.
@@ -20,6 +30,9 @@
 - ✅ **Techtree-Texte automatisiert:** Kosten, Voraussetzungen und "Schaltet frei" generieren sich nun komplett dynamisch für Tooltips und den Codex aus der `techtree.json`.
 - ✅ **CSV-Reparatur:** Fehlerhaftes Parsing durch rohe Zeilenumbrüche behoben. Hardcodierte Voraussetzungen aus `language.csv` entfernt.
 - ✅ **UI-Fixes:** Float-Werte für Level und FP-Kosten zu sauberen Integern konvertiert. Leerzeichen bei Level-Strings gefixt.
+- ✅ **GuestActor Pool Exit:** Bug behoben (Geisterschweben), durch den Gäste beim Verlassen des Pools fälschlicherweise den Restaurant-AStar für den Pool-Raum nutzten.
+- ✅ **Bademeister Patrouille:** Radius-Berechnung in `StaffActor.gd` korrigiert (Plot-Tiles x 32px), damit er das gesamte Pool-Areal nutzt und nicht nur das obere linke Viertel und dadurch in Möbel navigiert.
+- ✅ **Rezeptions-UI Check-In:** Logik im Check-In-Modal aufgeteilt (`ask_price` vs `ask_requirements`) und neuen Tooltip (`Kompromiss - Gast fragen`) für fehlende Voraussetzungen / falschen Zimmertyp integriert.
 - ✅ **Multi-Tile-Room Nav-Bug:** Fehlerhafte Registrierung von Möbeln (Betten) in gedrehten Räumen (Portrait) in `Room.gd` behoben, die Gäste fälschlicherweise durch die Wand auf den Flur schlafen schickte.
 
 ---

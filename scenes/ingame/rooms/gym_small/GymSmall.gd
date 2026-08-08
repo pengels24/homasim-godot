@@ -13,6 +13,7 @@ static func get_definition() -> Dictionary:
 		"icon": "res://assets/icons/angelus2010/Rooms/ang-gym-small.aseprite",
 		"nightly_price": 0,
 		"locked": false,
+		"max_guests": 6,
 		"in_build_menu": true,
 		"req_level": 4,
 		"req_tech": "W1.4",
@@ -89,6 +90,14 @@ func _apply_visuals() -> void:
 			interior.rotation = PI if room_rotation == 2 else 0.0
 
 	super._apply_visuals()
+
+func claim_seat(guest_id: String) -> Vector2:
+	return room_claim_seat(guest_id)
+	
+func leave_seat(guest_id: String) -> void:
+	for s in _room_seats:
+		if s["occupied_by"] == guest_id:
+			s["occupied_by"] = ""
 
 # =============================================================================
 # LIVE-MONITOR

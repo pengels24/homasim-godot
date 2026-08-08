@@ -8,6 +8,9 @@
 - [x] **Küche:** Funktioniert (`kitchen_small`). Nimmt Bestellungen an und kocht.
 - [x] **Restaurant:** Funktioniert (`restaurant_small`). Gäste essen und zahlen.
 - [x] **Bar:** Funktioniert (`bar`). Gastro-Loop aktiv.
+- [x] **Pool:** Funktioniert (`pool_small`). Gäste entspannen und baden. Bademeister patrouilliert.
+- [x] **Konferenzraum:** Funktioniert (`conference_small`). Tagesgäste (Business) halten und hören Vorträge.
+- [x] **Gym & Spa:** Funktionieren (`gym_small`, `spa_small`). Wellness-Angebote mit Intervallen.
 
 ## 🧑‍🤝‍🧑 Akteure & KI
 - [x] **Gäste:** Checken ein, nutzen POIs (Essen/Trinken), haben Bedürfnisse (WLAN etc.), zahlen, checken aus.
@@ -28,6 +31,7 @@
 - [x] **Techtree:** Grundgerüst (Forschungspunkte, Level-Gates) steht und schaltet Features frei.
 - [x] **Moral-System:** Personal verliert Moral bei Überarbeitung, kündigt bei 0, regeneriert im Personalraum.
 - [x] **Level & EXP:** EXP-Bedarf steigt exponentiell bis Level 10. Startschwierigkeit (Boost) ist wählbar.
+- [x] **Soundsystem:** Hintergrundmusik (Playlist via JSON) und situative Sounds (Türklappern, Besen, Schraubenschlüssel, etc.) sind implementiert.
 
 ## 📊 UI & Management-Tools
 - [x] **Gästeliste:** Übersicht aller aktuellen Gäste inkl. Filter, Live-Vorschau (PiP) und Kamera-Sprung zum Gast.

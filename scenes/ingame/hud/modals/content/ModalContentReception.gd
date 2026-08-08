@@ -378,9 +378,12 @@ func _update_checkin_button() -> void:
 			_btn_checkin.text = GameState.T("checkin.btn.confirm")
 			_apply_btn_styles(_btn_checkin, style_green_normal, style_green_hover, style_green_pressed, style_rec_disabled)
 
-		"ask_price", "ask_requirements":
-			# NEU: Kein Zwischenzustand mehr. Es ist immer der goldene Würfel-Button!
+		"ask_price":
 			_btn_checkin.text = GameState.T("checkin.btn.roll")
+			_apply_btn_styles(_btn_checkin, style_gold_normal, style_gold_hover, style_gold_pressed, style_rec_disabled)
+
+		"ask_requirements":
+			_btn_checkin.text = GameState.T("checkin.btn.roll_req")
 			_apply_btn_styles(_btn_checkin, style_gold_normal, style_gold_hover, style_gold_pressed, style_rec_disabled)
 
 		"disabled", _:

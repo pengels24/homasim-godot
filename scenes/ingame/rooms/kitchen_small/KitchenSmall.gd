@@ -118,6 +118,36 @@ func _check_for_new_orders() -> void:
 		GastroManager.claim_order(order_id, _room_id)
 		_active_cook_timers[order_id] = prep_time / chef_speed
 
+func get_work_position(_staff_id: String) -> Vector2:
+	# 1. Unique Name
+	var marker = get_node_or_null("%ChefWorkArea")
+	if marker:
+		return marker.global_position + Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
+		
+	# 2. Suche ohne %
+	var markers = find_children("ChefWorkArea", "Marker2D")
+	if markers.is_empty():
+		markers = find_children("ChefWorkArea", "Node2D")
+		
+	for m in markers:
+		var is_active = true
+		var parent = m.get_parent()
+		while parent != self and is_instance_valid(parent):
+			if "visible" in parent and not parent.visible:
+				is_active = false
+				break
+			parent = parent.get_parent()
+		if is_active:
+			return m.global_position + Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
+	
+	# Fallback, falls der Marker falsch geschrieben wurde oder nicht existiert:
+	var interior = get_node_or_null("Interior")
+	if interior:
+		return interior.global_position + Vector2(16, 16) # Mitte der Küche
+	
+	return global_position + Vector2(16, 16)
+
+
 func _process_cooking(delta: float) -> void:
 	var finished_orders = []
 	for order_id in _active_cook_timers.keys():

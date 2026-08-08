@@ -1509,3 +1509,8 @@ roomdef.desc.conference_small,Bietet Platz für Meetings.,Offers space for meetin
 staff.tooltip.state.walking_to_break,Geht in Pause,Walking to break
 staff.tooltip.state.resting,Pause,Resting
 room_category.business,Business,Business
+
+staff.role.lifeguard,Bademeister,Lifeguard
+ui.staff.age,Alter,Age
+ui.staff.years,Jahre,Years
+checkin.btn.roll_req,Kompromiss - Gast fragen,Compromise - Ask Guest

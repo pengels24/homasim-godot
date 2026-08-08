@@ -372,6 +372,7 @@ func _generate_party(force_type_id: String = "") -> GuestParty:
 	party.satisfaction = randi_range(50, 80)
 	if TechtreeManager and TechtreeManager.is_tech_unlocked("W1.1"):
 		party.satisfaction += 10 # W1.1 Wellness-Körbchen Bonus
+		print("[Tech] W1.1 Wellness-Körbchen Bonus! Start-Zufriedenheit: ", party.satisfaction, "%")
 		
 	var def: Dictionary = GuestDefinitions.ALL[type_id]
 	party.stay_days = randi_range(def["min_stay"], def["max_stay"])

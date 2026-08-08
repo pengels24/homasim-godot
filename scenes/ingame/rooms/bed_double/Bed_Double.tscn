@@ -99,7 +99,6 @@ script = ExtResource("1_g681v")
 base_size = Vector2i(3, 2)
 
 [node name="Landscape" type="Node2D" parent="." unique_id=272879892]
-visible = false
 
 [node name="Ground" type="Node2D" parent="Landscape" unique_id=445309638]
 
@@ -274,7 +273,11 @@ offset_top = 1.0
 offset_right = 5.0
 offset_bottom = 5.0
 
+[node name="ServicePoint" type="Marker2D" parent="Landscape/Interior/Furniture" unique_id=519403959]
+position = Vector2(26, 18)
+
 [node name="Portrait" type="TileMapLayer" parent="." unique_id=1619843191]
+visible = false
 
 [node name="Ground" type="Node2D" parent="Portrait" unique_id=255117826]
 
@@ -458,6 +461,9 @@ offset_left = 27.0
 offset_top = 1.0
 offset_right = 31.0
 offset_bottom = 5.0
+
+[node name="ServicePoint" type="Marker2D" parent="Portrait/Interior/Furniture" unique_id=1086572412]
+position = Vector2(12, 26)
 
 [node name="Door" type="Sprite2D" parent="." unique_id=1595754863]
 position = Vector2(1, 8)

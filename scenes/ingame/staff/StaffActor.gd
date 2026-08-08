@@ -27,13 +27,16 @@ var _debug_line: Line2D
 var _base_speed := 10.0 # Zeitlupe für Debug
 
 
+const SHOW_DEBUG_PATHS := false
+
 func _ready() -> void:
 	add_to_group("staff_actors")
 	
-	_debug_line = Line2D.new()
-	_debug_line.width = 2.0
-	_debug_line.z_index = 100
-	add_child(_debug_line)
+	if SHOW_DEBUG_PATHS:
+		_debug_line = Line2D.new()
+		_debug_line.width = 2.0
+		_debug_line.z_index = 100
+		add_child(_debug_line)
 	
 	_work_audio = AudioStreamPlayer.new()
 	_work_audio.bus = "Sound"
@@ -233,6 +236,8 @@ func _check_for_tasks() -> bool:
 						for room in _map_grid.get_placed_rooms():
 							if is_instance_valid(room) and GuestManager._room_key(room) == kitchen_id:
 								target_room = room
+								if target_room.has_method("get_service_position"):
+									extra_pos = target_room.get_service_position()
 								break
 					if not is_instance_valid(target_room):
 						target_room = t.target.get("room") # Fallback directly to restaurant
@@ -242,6 +247,8 @@ func _check_for_tasks() -> bool:
 					extra_pos = t.target.get("pos", Vector2.INF)
 				elif is_instance_valid(t.target) and t.target is Node2D:
 					target_room = t.target
+					if target_room.has_method("get_service_position"):
+						extra_pos = target_room.get_service_position()
 					
 				if is_instance_valid(target_room):
 					# Wenn er gerade Pause gemacht hat, Sitz aufgeben!
@@ -276,7 +283,21 @@ func _is_shift_over() -> bool:
 	
 	if is_instance_valid(assigned_room) and assigned_room.has_method("get_definition"):
 		var def = assigned_room.get_definition()
-		if not GameState.is_facility_open(def):
+		var is_open = GameState.is_facility_open(def)
+		
+		# 10 Ingame-Minuten Vorlauf für das Personal, damit sie pünktlich da sind
+		if not is_open:
+			var current_time = TimeManager.get_game_time()
+			var future_time = (current_time + 10) % 1440
+			var open_from = def.get("open_from", 0)
+			var open_to = def.get("open_to", 0)
+			if open_from != 0 or open_to != 0:
+				if open_from < open_to:
+					is_open = future_time >= open_from and future_time < open_to
+				else:
+					is_open = future_time >= open_from or future_time < open_to
+					
+		if not is_open:
 			is_night = true # Raum ist geschlossen
 			
 			# Überstunden-Check: Gibt es noch was zu tun?
@@ -285,8 +306,9 @@ func _is_shift_over() -> bool:
 				is_night = false # Bleibt, bis alle versorgt sind
 	else:
 		# Fallback für Personal ohne feste Raum-Öffnungszeiten (Housekeeping, Maintenance)
-		var current_hour = TimeManager.get_hour()
-		is_night = current_hour >= 22 or current_hour < 7
+		var current_time = TimeManager.get_game_time()
+		# Schicht ist von 07:00 (420) bis 22:00 (1320). Vorlauf 10 Minuten: Start um 06:50 (410).
+		is_night = current_time >= 1320 or current_time < 410
 		
 	return is_night
 
@@ -413,6 +435,31 @@ func _process_idle() -> void:
 				_think_timer = 1.0
 			else:
 				_sprite.visible = true
+				
+				# Hat der Raum einen festen Arbeitsplatz für diese Rolle?
+				if is_instance_valid(_current_room) and _current_room.has_method("get_work_position"):
+					var work_pos = _current_room.get_work_position(get_staff_id())
+					if work_pos != Vector2.INF:
+						if global_position.distance_to(work_pos) > 6.0:
+							if _current_room.has_method("get_local_path"):
+								var lp = _current_room.get_local_path(global_position, work_pos)
+								if lp.size() > 0:
+									_world_path = lp
+									_target_world_pos = _world_path[0]
+									_state = "walking"
+									_path = []
+							else:
+								_target_world_pos = work_pos
+								_state = "walking"
+								_path = [_target_world_pos]
+						else:
+							# Steht am Platz
+							if _current_room.has_method("get_work_look_dir"):
+								var dir = _current_room.get_work_look_dir(get_staff_id())
+								_sprite.rotation = dir.angle() + PI / 2.0
+						_think_timer = 2.0
+						return
+				
 				# Barkeeper: immer am Tresen stehen bleiben
 				if get_job_type() == "bartender" and is_instance_valid(_current_room) and _current_room.has_method("get_bartender_stand_pos"):
 					var stand_pos = _current_room.get_bartender_stand_pos()
@@ -428,7 +475,7 @@ func _process_idle() -> void:
 					_think_timer = 2.0
 				elif get_job_type() == "lifeguard" and is_instance_valid(_current_room) and _current_room.has_method("get_lifeguard_stand_pos"):
 					# 70% Zeit auf Hochsitz sitzen, 30% Patrouille
-					if randf() < 0.7 and _current_room.has_method("is_lifeguard_chair_free"):
+					if randf() < 0.7 and _current_room.has_method("is_lifeguard_chair_free") and _current_room.call("is_lifeguard_chair_free", get_staff_id()):
 						var chair_pos = _current_room.get_lifeguard_stand_pos()
 						if global_position.distance_to(chair_pos) > 6.0:
 							# Zum Hochsitz gehen
@@ -443,13 +490,17 @@ func _process_idle() -> void:
 						else:
 							# Sitzt schon dort — claim sicherstellen, leicht drehen
 							_current_room.call("claim_lifeguard_chair", get_staff_id())
-							_sprite.rotation = PI / 2.0 # schaut nach rechts (Blick über Pool)
+							if _current_room.has_method("get_lifeguard_look_dir"):
+								_sprite.rotation = _current_room.get_lifeguard_look_dir()
+							else:
+								_sprite.rotation = PI
+							_think_timer = 3.0 + randf() * 4.0
 					else:
 						# Patrouille um den Pool
 						if _current_room.has_method("leave_lifeguard_chair"):
 							_current_room.call("leave_lifeguard_chair", get_staff_id())
 						if _current_room.has_method("get_local_path"):
-							var sz = _current_room.get_tile_size() * 16.0
+							var sz = _current_room.get_tile_size() * 32.0
 							var patrol_target = _current_room.global_position + Vector2(
 								randf_range(8.0, sz.x - 8.0),
 								randf_range(8.0, sz.y - 8.0))
@@ -459,7 +510,7 @@ func _process_idle() -> void:
 								_target_world_pos = _world_path[0]
 								_state = "walking"
 								_path = []
-					_think_timer = 3.0 + randf() * 4.0
+								_think_timer = 3.0 + randf() * 4.0
 				elif randf() < 0.3:
 					# Andere Rollen: im Raum umherwandern (Chill-Verhalten)
 					var wander_center = global_position
@@ -647,11 +698,58 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 		var astar = _map_grid.get("astar") if _map_grid else null
 		var s_solid = astar.is_point_solid(start_tile) if astar else false
 		var e_solid = astar.is_point_solid(end_tile) if astar else false
-		print("[StaffActor] _start_path_to_room FAILED: start=", start_tile, " (solid:", s_solid, ") end=", end_tile, " (solid:", e_solid, ") room=", room.name if room else "null")
+		# print("[StaffActor] _start_path_to_room FAILED: start=", start_tile, " (solid:", s_solid, ") end=", end_tile, " (solid:", e_solid, ") room=", room.name if room else "null")
 		if is_instance_valid(_debug_line):
 			_debug_line.default_color = Color.RED
 			var e_world = _map_grid.call("tile_to_world", end_tile)
 			_debug_line.points = [Vector2.ZERO, e_world - global_position]
+			
+		# EMERGENCY FALLBACK: Wenn der Mitarbeiter auf einem Solid-Tile steht (z.B. durch NavBlocker),
+		# setzen wir ihn minimal um auf den ServicePoint des Raumes (oder Lobby) und berechnen den Pfad neu!
+		var unstuck_pos = global_position
+		if is_instance_valid(_current_room) and _current_room.has_method("get_service_position"):
+			unstuck_pos = _current_room.get_service_position()
+		elif is_instance_valid(_map_grid):
+			unstuck_pos = _controller._get_lobby_spawn_pos()
+			
+		global_position = unstuck_pos
+		start_tile = _map_grid.call("world_to_tile", unstuck_pos) if is_instance_valid(_map_grid) else start_tile
+		
+		if is_instance_valid(_map_grid):
+			_path = _map_grid.call("get_path_between_tiles", start_tile, end_tile)
+			
+		if _path.size() > 0:
+			_world_path.clear()
+			if local_path_out.size() > 0:
+				_world_path.append_array(local_path_out)
+			for t in _path:
+				_world_path.append(_map_grid.call("tile_to_world", t))
+			
+			if _path.size() > 1 and _path[0] == start_tile:
+				_world_path.pop_front()
+				
+			if _world_path.size() > 0:
+				var door_world = _world_path[_world_path.size() - 1]
+				if extra_pos != Vector2.INF:
+					if is_instance_valid(room) and room.has_method("get_local_path"):
+						var local_path = room.get_local_path(door_world, extra_pos)
+						_world_path.append_array(local_path)
+					else:
+						_world_path.append(extra_pos)
+				_target_world_pos = _world_path[0]
+				_room_entry_pos = Vector2.INF
+				_extra_target_pos = Vector2.INF
+			else:
+				_target_world_pos = global_position
+		else:
+			# Absoluter Mega-Notfall: Geht wirklich nicht (z.B. Ziel ist eingemauert) -> Teleport, um FPS zu retten
+			global_position = _map_grid.call("tile_to_world", end_tile) if is_instance_valid(_map_grid) else end_tile * 16
+			_target_world_pos = global_position
+			if extra_pos != Vector2.INF:
+				_extra_target_pos = extra_pos
+			_state = "walking" 
+			_path = [end_tile]
+		return
 
 func _start_path_to_lobby() -> void:
 	if not is_instance_valid(_current_room) and is_instance_valid(_map_grid) and _map_grid.has_method("get_placed_rooms"):
@@ -703,6 +801,44 @@ func _start_path_to_lobby() -> void:
 			_extra_target_pos = Vector2.INF
 		else:
 			_target_world_pos = global_position
+	else:
+		# EMERGENCY FALLBACK: Wenn der Mitarbeiter feststeckt
+		var unstuck_pos = global_position
+		if is_instance_valid(_current_room) and _current_room.has_method("get_service_position"):
+			unstuck_pos = _current_room.get_service_position()
+		elif is_instance_valid(_map_grid):
+			unstuck_pos = _controller._get_lobby_spawn_pos()
+			
+		global_position = unstuck_pos
+		start_tile = _map_grid.call("world_to_tile", unstuck_pos) if is_instance_valid(_map_grid) else start_tile
+		
+		if is_instance_valid(_map_grid):
+			_path = _map_grid.call("get_path_between_tiles", start_tile, end_tile)
+			
+		if _path.size() > 0:
+			_world_path.clear()
+			if local_path_out.size() > 0:
+				_world_path.append_array(local_path_out)
+			for t in _path:
+				_world_path.append(_map_grid.call("tile_to_world", t))
+			
+			if _path.size() > 1 and _path[0] == start_tile:
+				_world_path.pop_front()
+				
+			if _world_path.size() > 0:
+				_target_world_pos = _world_path[0]
+				_room_entry_pos = Vector2.INF
+				_extra_target_pos = Vector2.INF
+			else:
+				_target_world_pos = global_position
+		else:
+			# Mega-Notfall
+			global_position = spawn_pos
+			_target_world_pos = spawn_pos
+			_room_entry_pos = Vector2.INF
+			_extra_target_pos = Vector2.INF
+			_state = "returning"
+			_path = [_map_grid.call("world_to_tile", spawn_pos)] if is_instance_valid(_map_grid) else [Vector2i.ZERO]
 
 func _process_walking(delta: float, speed: float) -> void:
 	var current_pos: Vector2 = global_position

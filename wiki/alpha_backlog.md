@@ -13,6 +13,9 @@
 ---
 
 ## 🐞 Ungeplante Fixes & Features (Aktuelle Session)
+- **Pool-Patrouille Bademeister:** `get_patrol_target()` in `PoolSmall.gd` implementiert, sodass der Bademeister (`StaffActor`) nun sicher am Beckenrand patrouilliert, statt durchs Wasser zu laufen.
+- **Lobby-Spawn Pathfinding-Fix:** Zufalls-Offset beim Warten an der Rezeption (`GuestActor.gd`) reduziert, um Pathing-Fehler (`SOLID`) durch Kollision mit NavBlockern (Tresen) zu verhindern.
+- **Debugger-Cleanup:** Godot-Warnings beim Start behoben (Shadowed Variables `is_active`/`ready`, Unused Signals in GameState/GuestManager, Integer Division in ParzelleBuildUI, sowie leere Tween-Errors in GuestActor gefixt).
 - **POI-Verhalten & Wellness-Logik:** Rekursions-Bug in `GuestActor.gd` behoben, durch den Gäste den Pool sofort wieder verließen. Tiefere Logik für Wellness-Aufenthalte implementiert (1-3 Ingame-Stunden Dauer, alle 15-30 Minuten Platzwechsel). POI-Limitierung für Gäste hinzugefügt (`max_guests`). Schließzeiten der POIs werden beim Aufenthalt berücksichtigt.
 - **Konferenzraum-Logik:** Chair12 als dediziertes Rednerpult konfiguriert. Gäste rotieren nun dynamisch ans Pult (10-15 Min Vortrag) und räumen den Platz danach für den nächsten.
 - **Bademeister-Sitzposition:** `PoolSmall.gd` Rotation des Hochsitzes korrigiert (`+ PI/2.0`). Die optische Fehlplatzierung im Wasser liegt am Sprite-Offset.
@@ -105,12 +108,13 @@ Konzept aus `wiki/02_features/06_personal_und_aufgabensystem.md`:
 **Status:** ✅ Erledigt (Check-In prüft Raum-Traits, UI Tooltip zeigt rot/grün Status, täglicher Zufriedenheits-Abzug greift).
 
 Zimmer-Typen bekommen Eigenschaften (z.B. `"wlan"`, `"desk"`). Wenn Gäste einchecken, wird abgeglichen, ob das Zimmer ihre Anforderungen erfüllt. Fehlt etwas (z.B. WLAN für den Geschäftsreisenden), sinkt die Zufriedenheit und wir zeigen das im UI an. Die Basisdaten dafür (z.B. `"wlan"` beim Geschäftsreisenden) existieren bereits im Code.
-
-**Ungeplante Fixes der Session:**
 - [x] **Room Hover Bug:** Moebelstuecke (speziell in Multi-Tile-Raeumen) blockieren keine Mauseingaben mehr fuer den Raum-Tooltip.
 - [x] **Techtree Nodes:** Funktionale Phase-4-Nodes aus dem Demo-Lock befreit und Platzhalter entfernt.
 - [x] **Techtree UI:** Tooltips zeigen nun echte Raumbeschreibungen und nutzen manuelles Word-Wrapping, um Layout-Bugs von Godot zu umgehen.
 - [x] **Codex:** POI-Eintrag hinzugefügt und Tutorial-UI auf Echt-Daten-Binding umgestellt.
+- [x] **GuestActor Teleport Fix:** Fehlerhaftes Teleportieren (Hide/Fade) von Gästen im Restaurant behoben. Das versehentliche Töten von Tweens im State-Change durch `call_deferred` unterbunden.
+- [x] **StaffActor Patrouillen Fix:** Die Kellner blieben am Restaurant-Rand stecken (bzw. liefen durch Tische). Fallback-Mittelpunkte werden nun rotiert `to_global()` ausgewertet und die Such-Logik für AStar-begehbare Punkte nutzt nun korrekt das bereits gelieferte globale Ergebnis `get_random_walkable_local_pos()`.
+- [x] **StaffActor Bademeister Fix:** `get_patrol_target()` in `PoolSmall.gd` implementiert, sodass der Bademeister (`StaffActor`) nun sicher am Beckenrand patrouilliert, statt durchs Wasser zu laufen.
 - ✅ ANG-324: Exploit-Fix – Pausenräume können nicht mehr abgerissen werden, wenn dadurch das Kapazitätslimit unter die Anzahl des eingestellten Personals fällt.
 - ✅ ANG-320: Tutorial-Texte ergänzt, Räume-Kategorie im Codex hinzugefügt, Wiki-Dokumentation für Räume samt Navigation Points erstellt.
 - ✅ Fix: Crash beim Laden von leeren Personalräumen.

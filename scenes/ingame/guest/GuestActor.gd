@@ -802,20 +802,24 @@ func send_back_to_room() -> void:
 
 # =============================================================================
 func start_waiting_in_lobby(spawn_pos: Vector2, delay: float) -> void:
+	_current_poi_id = "lobby"
 	global_position = spawn_pos
-	_change_state(State.WALKING)
+	modulate.a = 0.0  # Unsichtbar bis er an der Reception steht
+	_change_state(State.WAITING_IN_LINE)
 	
+	# Staffelung fuer Partymitglieder
 	if delay > 0.0:
 		var wait_time = delay
 		if TimeManager and not TimeManager.is_paused():
 			wait_time = delay / max(1.0, TimeManager.user_speed)
 		await get_tree().create_timer(wait_time).timeout
-		
+	
+	# Gast an einem Reception-Waypoint platzieren und sichtbar machen
 	var lobby = _get_lobby_room()
 	if is_instance_valid(lobby) and lobby.has_method("get_checkout_wait_pos"):
-		var target_world = lobby.get_checkout_wait_pos()
-		var offset = Vector2(randf_range(-6.0, 6.0), randf_range(-6.0, 6.0))
-		_walk_to_world_pos(target_world + offset, State.WAITING_IN_LINE)
+		var reception_pos = lobby.get_checkout_wait_pos()
+		global_position = reception_pos + Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
+	modulate.a = 1.0  # Jetzt sichtbar an der Reception
 
 func _walk_to_world_pos(target_pos: Vector2, finish_state: State) -> void:
 	if not is_instance_valid(_map_grid):
@@ -855,6 +859,15 @@ func _walk_to_room(room: Node2D, finish_state: State) -> void:
 		return
 		
 	var start_tile = _get_logical_start_tile()
+	
+	# Sonderfall: Gast kommt aus der Lobby-Rezeption (WAITING_IN_LINE).
+	# Das globale AStar muss von der Lobby-Innentür starten (nicht von der soliden Reception).
+	# Der lokale Weg (Reception → Innentür) wird in _execute_walk animiert.
+	if previous_state == State.WAITING_IN_LINE:
+		_current_poi_id = "lobby"
+		var lobby_room = _get_lobby_room()
+		if is_instance_valid(lobby_room) and lobby_room.has_method("get_target_tile"):
+			start_tile = lobby_room.get_target_tile(_map_grid)
 	var exit_tile = room.get_target_tile(_map_grid)
 	
 	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
@@ -865,8 +878,12 @@ func _walk_to_room(room: Node2D, finish_state: State) -> void:
 		_change_state(finish_state)
 		return
 		
+	# previous_state sichern: _change_state() würde es überschreiben,
+	# aber _execute_walk braucht den Original-Zustand für local_path_out.
+	var saved_previous_state = previous_state
 	_change_state(State.WALKING)
-		
+	previous_state = saved_previous_state  # wiederherstellen
+	
 	var door_world = _map_grid.tile_to_world(exit_tile)
 	# Tür-Position fürs Zielzimmer cachen (erstmalig oder bei Zimmerwechsel)
 	if finish_state == State.IN_ROOM:
@@ -962,7 +979,7 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 				var entry_pos = _target_room.get_room_entry_pos(_map_grid)
 				var local_path_out = _target_room.get_local_path(global_position, entry_pos)
 				world_path.append_array(local_path_out)
-		elif (previous_state == State.IN_POI or previous_state == State.AWAITING_CHECKOUT or previous_state == State.EATING) and not _current_poi_id.is_empty():
+		elif (previous_state == State.IN_POI or previous_state == State.AWAITING_CHECKOUT or previous_state == State.EATING or previous_state == State.WAITING_IN_LINE) and not _current_poi_id.is_empty():
 			var poi_room = _get_poi_room_node(_current_poi_id)
 			if is_instance_valid(poi_room) and poi_room.has_method("get_local_path") and poi_room.has_method("get_room_entry_pos"):
 				var entry_pos = poi_room.get_room_entry_pos(_map_grid)

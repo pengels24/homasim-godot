@@ -38,6 +38,16 @@ func spawn_active_guests() -> void:
 				var actor = _create_actor(member, party.room_id, room)
 				# Da sie schon im Checkout sind, müssen sie direkt loslaufen
 				actor.start_checkout()
+	
+	# Auch wartende Gäste an der Rezeption sichtbar machen (nach Reload)
+	# Diese haben bereits gewartet aber wurden noch nicht eingecheckt.
+	for party in _guest_manager._waiting:
+		for member in party.members:
+			var guest_id = member.id
+			if not _actors.has(guest_id):
+				var actor = _create_actor(member, "lobby", null)
+				# Delay 0 = sofort sichtbar an der Reception (kein Staffel-Warten nötig)
+				actor.start_waiting_in_lobby(_get_lobby_spawn_pos(), 0.0)
 
 
 # =============================================================================

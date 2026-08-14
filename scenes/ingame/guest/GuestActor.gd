@@ -200,25 +200,7 @@ func _process_waiting(delta: float) -> void:
 					room_node.leave_seat(_guest_member.id)
 				var new_pos = room_node.claim_seat(_guest_member.id)
 				if new_pos != Vector2.ZERO and new_pos != Vector2.INF:
-					if _active_tween and _active_tween.is_valid():
-						_active_tween.kill()
-					_active_tween = create_tween()
-					var speed_scale = TimeManager.user_speed if TimeManager and not TimeManager.is_paused() else 1.0
-					_active_tween.set_speed_scale(speed_scale)
-					
-					var local_path = []
-					if room_node.has_method("get_local_path"):
-						local_path = room_node.get_local_path(global_position, new_pos)
-					if local_path.is_empty():
-						local_path.append(new_pos)
-					
-					var curr_pos = global_position
-					for p in local_path:
-						var dur = curr_pos.distance_to(p) / _base_speed
-						if dur > 0.0:
-							_active_tween.tween_callback(func(): avatar.rotation = global_position.angle_to_point(p))
-							_active_tween.tween_property(self, "global_position", p, dur)
-						curr_pos = p
+					_execute_poi_move(new_pos, room_node)
 						
 					_action_timer = randf_range(15.0, 30.0) * TimeManager.SECONDS_PER_GAME_MINUTE # Nächster Wechsel in 15-30 Ingame-Minuten
 					return
@@ -236,7 +218,7 @@ func _process_waiting(delta: float) -> void:
 						room_node.leave_podium(_guest_member.id)
 					var new_pos = room_node.claim_seat(_guest_member.id)
 					if new_pos != Vector2.INF and new_pos != Vector2.ZERO:
-						global_position = new_pos
+						_execute_poi_move(new_pos, room_node)
 						_action_timer = randf_range(1.0, 3.0) # Als Zuhörer ab jetzt regelmäßig prüfen
 					else:
 						_decide_next_action()
@@ -249,7 +231,7 @@ func _process_waiting(delta: float) -> void:
 							# Ich bin der neue Redner!
 							if room_node.has_method("leave_seat"):
 								room_node.leave_seat(_guest_member.id)
-							global_position = pod_pos
+							_execute_poi_move(pod_pos, room_node)
 							_action_timer = randf_range(10.0, 15.0) * TimeManager.SECONDS_PER_GAME_MINUTE # 10-15 Ingame-Minuten reden
 							return
 					# Podium belegt, weiter zuhören
@@ -262,6 +244,26 @@ func _process_waiting(delta: float) -> void:
 					room_node.leave_seat(_guest_member.id)
 			_decide_next_action()
 
+func _execute_poi_move(target_pos: Vector2, room_node: Node) -> void:
+	if _active_tween and _active_tween.is_valid():
+		_active_tween.kill()
+	_active_tween = create_tween()
+	var speed_scale = TimeManager.user_speed if TimeManager and not TimeManager.is_paused() else 1.0
+	_active_tween.set_speed_scale(speed_scale)
+	
+	var local_path = []
+	if room_node.has_method("get_local_path"):
+		local_path = room_node.get_local_path(global_position, target_pos)
+	if local_path.is_empty():
+		local_path.append(target_pos)
+	
+	var curr_pos = global_position
+	for p in local_path:
+		var dur = curr_pos.distance_to(p) / _base_speed
+		if dur > 0.0:
+			_active_tween.tween_callback(func(): avatar.rotation = global_position.angle_to_point(p))
+			_active_tween.tween_property(self, "global_position", p, dur)
+		curr_pos = p
 
 # =============================================================================
 func _get_open_pois() -> Array[String]:
@@ -694,7 +696,7 @@ func _on_poi_arrived() -> void:
 				_active_tween.tween_property(self, "global_position", p, dur)
 			curr_pos = p
 			
-		if _current_poi_id != "pool_small" and _current_poi_id != "gym_small" and _current_poi_id != "spa_small":
+		if _current_poi_id != "pool_small" and _current_poi_id != "gym_small" and _current_poi_id != "spa_small" and _current_poi_id != "conference_small":
 			_active_tween.tween_callback(func(): _change_state(State.STUDYING_MENU))
 		return
 	else:
@@ -979,7 +981,7 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 				var entry_pos = _target_room.get_room_entry_pos(_map_grid)
 				var local_path_out = _target_room.get_local_path(global_position, entry_pos)
 				world_path.append_array(local_path_out)
-		elif (previous_state == State.IN_POI or previous_state == State.AWAITING_CHECKOUT or previous_state == State.EATING or previous_state == State.WAITING_IN_LINE) and not _current_poi_id.is_empty():
+		elif (previous_state == State.IN_POI or previous_state == State.AWAITING_CHECKOUT or previous_state == State.EATING or previous_state == State.STUDYING_MENU or previous_state == State.WAITING_FOR_FOOD or previous_state == State.WAITING_IN_LINE) and not _current_poi_id.is_empty():
 			var poi_room = _get_poi_room_node(_current_poi_id)
 			if is_instance_valid(poi_room) and poi_room.has_method("get_local_path") and poi_room.has_method("get_room_entry_pos"):
 				var entry_pos = poi_room.get_room_entry_pos(_map_grid)

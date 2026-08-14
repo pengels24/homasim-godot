@@ -219,7 +219,8 @@ func _process_waiting(delta: float) -> void:
 					var new_pos = room_node.claim_seat(_guest_member.id)
 					if new_pos != Vector2.INF and new_pos != Vector2.ZERO:
 						_execute_poi_move(new_pos, room_node)
-						_action_timer = randf_range(1.0, 3.0) # Als Zuhörer ab jetzt regelmäßig prüfen
+						# Pause nach dem Reden, damit man nicht sofort wieder ans Pult rennt
+						_action_timer = randf_range(10.0, 15.0) * TimeManager.SECONDS_PER_GAME_MINUTE
 					else:
 						_decide_next_action()
 					return

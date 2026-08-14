@@ -68,8 +68,56 @@
 - **Gym & Spa Initialisierung:** `claim_seat` in `GymSmall.gd` und `SpaSmall.gd` ergänzt, um fehlgeschlagene Sitzplatzsuche der Gäste zu verhindern.
 - **GuestActor Pool Exit:** Bug behoben (Geisterschweben), durch den Gäste beim Verlassen des Pools fälschlicherweise den Restaurant-AStar für den Pool-Raum nutzten.
 - **Bademeister Patrouille:** Radius-Berechnung in `StaffActor.gd` korrigiert (Plot-Tiles x 32px), damit er das gesamte Pool-Areal nutzt und nicht nur das obere linke Viertel und dadurch in Möbel navigiert.
+- **RoomStatusIndicator Fix:** ProgressBar-Mindestbreite in `RoomStatusIndicator.tscn` auf 24 Pixel gesetzt, um das Kollabieren auf eine 0-Pixel schwarze Linie zu verhindern, falls keine Icons sichtbar sind.
+- **Max Guests POI Limits:** Physische Bestuhlungslimits in `RestaurantSmall.gd` (20) und `Bar.gd` (8) programmatisch über `max_guests` im `get_data()` Dictionary formalisiert.
+- **POI Checkliste:** `25_checklist_neuer_poi.md` im Wiki angelegt.
+- **Bar Pathfinding & Logik-Fixes:** Barkeeper-Luftlinien-Wegfindung in `StaffActor.gd` auf korrektes Raumnavi (`get_local_path()`) umgestellt. `NavBlocker` in der Bar um 1 Pixel verschoben, um 4-Pixel-Korridor freizumachen. Rotations-Fehler in `Bar.gd` durch `to_global()` proaktiv gepatcht.
 - **Rezeptions-UI Check-In:** Logik im Check-In-Modal aufgeteilt (`ask_price` vs `ask_requirements`) und neuen Tooltip (`Kompromiss - Gast fragen`) für fehlende Voraussetzungen / falschen Zimmertyp integriert.
 - **Pool-Patrouille Bademeister:** `get_patrol_target()` in `PoolSmall.gd` implementiert, sodass der Bademeister (`StaffActor`) nun sicher am Beckenrand patrouilliert, statt durchs Wasser zu laufen.
 - **Debugger-Cleanup:** Godot-Warnings beim Start behoben (Shadowed Variables `is_active`/`ready`, Unused Signals in GameState/GuestManager, Integer Division in ParzelleBuildUI, sowie leere Tween-Errors in GuestActor gefixt).
-- **GuestActor Teleport Fix:** Fehlerhaftes Teleportieren (Hide/Fade) von Gästen im Restaurant behoben. Das versehentliche Töten von Tweens im State-Change durch `call_deferred` unterbunden.
 - **StaffActor Patrouillen Fix:** Die Kellner blieben am Restaurant-Rand stecken (bzw. liefen durch Tische). Fallback-Mittelpunkte werden nun rotiert `to_global()` ausgewertet und die Such-Logik für AStar-begehbare Punkte nutzt nun korrekt das bereits gelieferte globale Ergebnis `get_random_walkable_local_pos()`.
+- **UI & Font Colors:** Harte Farbcodierungen in Skripten (`GuestFollowTooltip.gd` & `ModalContentGuestList.gd`) entfernt und stattdessen `StyleBoxFlat`-Ressourcen für Needs-Bars in den `.tscn`s eingerichtet. Schriftfarbe der Prozentzahlen in den Balken auf dunkelgrau gesetzt.
+- **Language CSV Encoding:** UTF-8 BOM Fehler behoben, welcher Umlautfehler bei 'Spaß' verursachte. Lokalisierte Keys ("HU", "DU", "EN", "SP") hinzugefügt.
+- **Gästelisten Live-Sync Fix:** `ModalContentGuestList.gd` komplett überarbeitet, sodass die Gästeliste und der Detailbereich nun 100% synchron und fehlerfrei aktualisiert werden. Der ID-Vergleichs-Bug `member.id == _selected_guest.get("id")` (der Gast hat keine "id") wurde zu einem direkten Actor-Vergleich korrigiert. Zudem aktualisiert die Liste nun auch das Budget (`member.spending_budget`) live pro Frame und wertet die States wie EATING/SLEEPING korrekt zum jeweiligen `_current_poi_id` bzw. Zimmer auf.
+
+---
+
+### Wellness & Gästebedürfnisse (Session 2026-08-11)
+
+- **POI Need-Restoration:** `need_restoration`-Dictionary in POI-Definitionen (Spa, Pool, Gym, Bar) vollständig implementiert. Gäste erhalten beim Verlassen eines POIs die definierten Stat-Veränderungen (`energy`, `fun`, `saturation`, `thirst`). Negative Werte (z.B. `energy: -10` für Schwimmen) werden korrekt angewandt – Gäste werden nach intensiver Aktivität spürbar müder.
+- **SpaSmall Kapazität:** Max. Gäste-Kapazität von 4 auf 6 erhöht.
+- **SpaSmall Patrouille:** Patrol-Intervall des Bademeister-äquivalents auf 20 Sekunden gesetzt, um unnötige Unruhe zu vermeiden.
+
+### Gast-Pathfinding & Spawn (Session 2026-08-11)
+
+- **Gast Spawn-Fix (Lobby) – Root Cause behoben:** `Path failed: SOLID`-Fehler beim Gäste-Spawn vollständig eliminiert. Die Ursache: Reception-Waypoints (Tresen-Wartepunkte) liegen ausserhalb der Lobby-Clearance und sind daher im globalen AStar als solid markiert. Der bisherige Code versuchte, Gäste zu diesen solid Tiles zu bewegen → Fehler.
+  - **Neue Lösung:** `start_waiting_in_lobby()` platziert neue Gäste nun direkt (Teleport) an einem Reception-Waypoint. Kein Walk-Pfad nötig, da das Rezeptions-Modal den Bildschirm verdeckt. Zusätzlich: Gäste erscheinen jetzt sofort sichtbar in der Lobby, sobald die Toast-Meldung „Neue Gäste" erscheint.
+  - **Check-in Flow:** Nach Check-in nutzen Gäste die lokale Lobby-Navigation (NavMesh) zur Innentür, dann den globalen AStar durch den Korridor zum Zimmer.
+- **GuestActor `_execute_walk`:** `State.WAITING_IN_LINE` in den Bedingungsblock für lokalen Pfad-aus-Raum aufgenommen, damit der Lobby-LOCAL-Pfad korrekt beim Check-in triggert.
+- **GuestActor `_walk_to_room`:** Wenn der Gast aus dem `WAITING_IN_LINE`-State kommt (an der Rezeption), wird `lobby.get_target_tile()` als Startpunkt für den globalen AStar-Pfad genutzt (statt des solid Waypoint-Tiles).
+- **MapGrid:** `is_tile_walkable(tile)` und `find_nearest_walkable_tile(tile, max_radius)` als public Hilfsmethoden ergänzt.
+
+### Quests & Systeme (Session 2026-08-13)
+
+- **Quests & QuestManager (ANG-336):** Neue Quests für Gastronomie (Baue Bar, Küche, Restaurant, Koche/Serviere X Gerichte) in `quests.json` hinzugefügt und dynamisches Quest-Tracking (`_increment_quest_progress`, `_check_quest_threshold`) im `QuestManager` implementiert (z.B. für POI Nutzung, Tagesabschluss, gekochtes Essen).
+- **Events & DevConsole:** Event-Status wird nun im Savegame (`event_data`) über `SaveManager` und `EventManager` gespeichert. `DevConsole` um `set-conference:on/off` (manuelles Triggern des Tagungs-Events) und `add-guest-budget` erweitert.
+- **Icons & Assets:** Zahlreiche neue Pixel-Art Icons für Räume (Bar, Betten, Konferenzraum, Gym, Spa) und das Overlay-Toolbar (Brush, Cat, Usage, Value, Wrench) hinzugefügt.
+- **Dokumentations-Richtlinien:** `AGENTS.md` um Dokumentationspflicht nach Tests erweitert. `update_doku` Skill angepasst.
+
+### Bugfixes & Persistenz (Session 2026-08-13 – Abend)
+
+- **Upgrade-Persistenz Fix (`acquired_traits`):** Zimmer-Upgrades (WLAN, Klima) gingen nach Speichern und Neuladen verloren. Root Cause: `Ingame.gd` rief nach dem Laden nochmals `room.configure({guest_manager: ...})` auf alle platzierten Räume auf, was in `Room.gd` den `else`-Zweig triggerte und `acquired_traits = []` resetzte – obwohl die Traits korrekt aus dem Savegame geladen wurden. Fix: `configure()` setzt `acquired_traits` nur noch zurück, wenn der Key `acquired_traits` tatsächlich im übergebenen Dictionary enthalten ist (`elif data.has("acquired_traits"):`).
+
+### UI-Verbesserungen (Session 2026-08-13 – Abend)
+
+- **POI Tooltip – Öffnungszeiten:** Tooltip geöffneter POIs zeigt jetzt die konkreten Öffnungszeiten: „🍺 Geöffnet (08:00 - 22:00 Uhr)" statt dem generischen „🍺 Geöffnet".
+
+### Lobby Check-In Flow (Session 2026-08-14)
+
+- **Gast sichtbar an Rezeption:** `start_waiting_in_lobby()` platziert Gäste nun sofort per Teleport an einem zufälligen `receptionX`-Waypoint in der Lobby. Der Gast ist unsichtbar während der Staffelung (delay) und erscheint dann direkt sichtbar stehend an der Rezeption (`WAITING_IN_LINE`). Kein fehlerhafter Walk-Pfad durch die solide Lobby-Fläche mehr.
+- **Check-in Walk korrekt:** Nach Bestätigung des Check-ins nutzt der Gast die **lokale Lobby-Navigation** (Room.gd AStar2D) von seiner receptionX-Position zur Lobby-Innentür, dann den **globalen Korridorpfad** zum Zimmer. Kein Durchlaufen von Möbeln oder Wänden mehr.
+- **`previous_state` Fix in `_walk_to_room`:** `_change_state(WALKING)` überschrieb `previous_state` (von `WAITING_IN_LINE` auf `WALKING`), bevor `_execute_walk` ihn auslesen konnte. Fix: `previous_state` wird vor dem `_change_state`-Aufruf gesichert und danach wiederhergestellt.
+- **Reload-Fix:** `GuestController.spawn_active_guests()` iteriert nun auch über `_guest_manager._waiting` und platziert wartende Gäste nach einem Spielstand-Reload sichtbar an der Rezeption.
+
+### Offen / Nächste Session
+- **WLAN/Klima-Overlays in OverlayToolbar:** Zwei neue Overlay-Buttons (WLAN-Abdeckung, Klima-Abdeckung) mit Rot/Grün-Indikator pro Raum in die HUD-Toolbar integrieren.

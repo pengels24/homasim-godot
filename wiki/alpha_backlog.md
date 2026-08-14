@@ -12,10 +12,18 @@
 
 ---
 
-## 🐞 Ungeplante Fixes & Features (Aktuelle Session)
-- **Pool-Patrouille Bademeister:** `get_patrol_target()` in `PoolSmall.gd` implementiert, sodass der Bademeister (`StaffActor`) nun sicher am Beckenrand patrouilliert, statt durchs Wasser zu laufen.
-- **Lobby-Spawn Pathfinding-Fix:** Zufalls-Offset beim Warten an der Rezeption (`GuestActor.gd`) reduziert, um Pathing-Fehler (`SOLID`) durch Kollision mit NavBlockern (Tresen) zu verhindern.
-- **Debugger-Cleanup:** Godot-Warnings beim Start behoben (Shadowed Variables `is_active`/`ready`, Unused Signals in GameState/GuestManager, Integer Division in ParzelleBuildUI, sowie leere Tween-Errors in GuestActor gefixt).
+## 🛠 Ungeplante Fixes & Features (Aktuelle Session)
+- **Upgrade-Persistenz Fix (acquired_traits):** Tief verwurzelter Bug behoben, durch den gekaufte Zimmer-Upgrades (WLAN, Klima) nach dem Speichern und Neuladen verloren gingen. Ursache: `Ingame.gd` rief nach dem Laden nochmals `configure({guest_manager: ...})` auf alle Räume auf und wischte damit die bereits geladenen Traits weg. Lösung: `configure()` in `Room.gd` setzt `acquired_traits` nur noch zurück, wenn der Key `acquired_traits` tatsächlich im übergebenen Dictionary enthalten ist.
+- **POI Tooltip – Öffnungszeiten:** Der Tooltip geöffneter POIs zeigt nun die Öffnungszeiten an ("🍺 Geöffnet (08:00 - 22:00 Uhr)") statt nur "Geöffnet".
+- **DevConsole & EventManager:** Savegame-Support für Events und manuelle Trigger (set-conference) für Testzwecke in DevConsole.
+- **Assets:** Neue Pixel-Art Icons für Räume und Overlay-Tools hinzugefügt.
+- **Dokumentation:** `AGENTS.md` um Dokumentationspflicht erweitert.
+- **POI Need-Restoration:** `need_restoration` für POI-Aufenthalte implementiert. Gäste erhalten nach Besuch im Spa, Pool, Gym, Bar Stat-Veränderungen (energy, fun, saturation, thirst). Negative Werte (z.B. Energie sinkt nach Schwimmen) werden korrekt angewandt.
+- **SpaSmall Kapazität & Patrouille:** Max. Gäste von 4 auf 6 erhöht. Patrol-Intervall auf 20 Sekunden gesetzt.
+- **Gast Spawn-Fix (Lobby):** `Path failed: SOLID`-Fehler beim Gäste-Spawn vollständig behoben. Ursache: Reception-Waypoints liegen physisch ausserhalb der Lobby-Clearance (= im globalen AStar solid). Lösung: Gäste werden beim Spawn direkt an einem Reception-Waypoint platziert (kein Walk-Pfad nötig, da Rezeptionsmodal alles verdeckt). Nach Check-in nutzen sie lokale Lobby-Navigation zur Innentür, dann globaler AStar zum Zimmer.
+- **GuestActor _execute_walk:** `WAITING_IN_LINE` in den Check für lokalen Pfad-aus-Raum aufgenommen, damit Lobby-LOCAL-Navigation beim Check-in korrekt triggert.
+- **MapGrid Hilfsfunktionen:** `is_tile_walkable()` und `find_nearest_walkable_tile()` als public Hilfsmethoden ergänzt (für zukünftige Fallback-Szenarien).
+- **GuestActor Logging:** SPA-ENTRY Debug-Prints (energy/fun/sat/thirst bei Eintritt) hinzugefügt für Needs-Verifikation.
 - **POI-Verhalten & Wellness-Logik:** Rekursions-Bug in `GuestActor.gd` behoben, durch den Gäste den Pool sofort wieder verließen. Tiefere Logik für Wellness-Aufenthalte implementiert (1-3 Ingame-Stunden Dauer, alle 15-30 Minuten Platzwechsel). POI-Limitierung für Gäste hinzugefügt (`max_guests`). Schließzeiten der POIs werden beim Aufenthalt berücksichtigt.
 - **Konferenzraum-Logik:** Chair12 als dediziertes Rednerpult konfiguriert. Gäste rotieren nun dynamisch ans Pult (10-15 Min Vortrag) und räumen den Platz danach für den nächsten.
 - **Bademeister-Sitzposition:** `PoolSmall.gd` Rotation des Hochsitzes korrigiert (`+ PI/2.0`). Die optische Fehlplatzierung im Wasser liegt am Sprite-Offset.
@@ -37,6 +45,7 @@
 - ✅ **Bademeister Patrouille:** Radius-Berechnung in `StaffActor.gd` korrigiert (Plot-Tiles x 32px), damit er das gesamte Pool-Areal nutzt und nicht nur das obere linke Viertel und dadurch in Möbel navigiert.
 - ✅ **Rezeptions-UI Check-In:** Logik im Check-In-Modal aufgeteilt (`ask_price` vs `ask_requirements`) und neuen Tooltip (`Kompromiss - Gast fragen`) für fehlende Voraussetzungen / falschen Zimmertyp integriert.
 - ✅ **Multi-Tile-Room Nav-Bug:** Fehlerhafte Registrierung von Möbeln (Betten) in gedrehten Räumen (Portrait) in `Room.gd` behoben, die Gäste fälschlicherweise durch die Wand auf den Flur schlafen schickte.
+- checkmark **Lobby Check-In Flow (2026-08-14):** Gaeste erscheinen sofort sichtbar an receptionX (WAITING_IN_LINE). Nach Check-in: lokale Lobby-Navigation zur Innentuer, dann globaler Korridor-AStar zum Zimmer. Root Cause: _change_state(WALKING) in _walk_to_room ueberschrieb previous_state vor _execute_walk. Fix: save/restore. Reload-Fix: spawn_active_guests() iteriert nun auch _waiting.
 
 ---
 
@@ -112,7 +121,11 @@ Zimmer-Typen bekommen Eigenschaften (z.B. `"wlan"`, `"desk"`). Wenn Gäste einch
 - [x] **Techtree Nodes:** Funktionale Phase-4-Nodes aus dem Demo-Lock befreit und Platzhalter entfernt.
 - [x] **Techtree UI:** Tooltips zeigen nun echte Raumbeschreibungen und nutzen manuelles Word-Wrapping, um Layout-Bugs von Godot zu umgehen.
 - [x] **Codex:** POI-Eintrag hinzugefügt und Tutorial-UI auf Echt-Daten-Binding umgestellt.
-- [x] **GuestActor Teleport Fix:** Fehlerhaftes Teleportieren (Hide/Fade) von Gästen im Restaurant behoben. Das versehentliche Töten von Tweens im State-Change durch `call_deferred` unterbunden.
+- [x] **RoomStatusIndicator Fix:** ProgressBar-Mindestbreite in `RoomStatusIndicator.tscn` auf 24 Pixel gesetzt, um das Kollabieren auf eine 0-Pixel schwarze Linie zu verhindern, falls keine Icons sichtbar sind.
+- **Max Guests POI Limits:** Physische Bestuhlungslimits in `RestaurantSmall.gd` (20) und `Bar.gd` (8) programmatisch über `max_guests` im `get_data()` Dictionary formalisiert.
+- **POI Checkliste:** `25_checklist_neuer_poi.md` im Wiki angelegt.
+- **Bar Pathfinding & Logik-Fixes:** Barkeeper-Luftlinien-Wegfindung in `StaffActor.gd` auf korrektes Raumnavi (`get_local_path()`) umgestellt. `NavBlocker` in der Bar um 1 Pixel verschoben, um 4-Pixel-Korridor freizumachen. Rotations-Fehler in `Bar.gd` durch `to_global()` proaktiv gepatcht.
+- **GuestActor Teleport Fix:** Fehlerhaftes Teleportieren (Hide/Fade) von Gästen im Restaurant behoben. Das versehentliche Töten von Tweens im State-Change durch `call_deferred` unterbunden.
 - [x] **StaffActor Patrouillen Fix:** Die Kellner blieben am Restaurant-Rand stecken (bzw. liefen durch Tische). Fallback-Mittelpunkte werden nun rotiert `to_global()` ausgewertet und die Such-Logik für AStar-begehbare Punkte nutzt nun korrekt das bereits gelieferte globale Ergebnis `get_random_walkable_local_pos()`.
 - [x] **StaffActor Bademeister Fix:** `get_patrol_target()` in `PoolSmall.gd` implementiert, sodass der Bademeister (`StaffActor`) nun sicher am Beckenrand patrouilliert, statt durchs Wasser zu laufen.
 - ✅ ANG-324: Exploit-Fix – Pausenräume können nicht mehr abgerissen werden, wenn dadurch das Kapazitätslimit unter die Anzahl des eingestellten Personals fällt.

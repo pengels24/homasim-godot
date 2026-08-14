@@ -45,8 +45,9 @@
 - ✅ **Bademeister Patrouille:** Radius-Berechnung in `StaffActor.gd` korrigiert (Plot-Tiles x 32px), damit er das gesamte Pool-Areal nutzt und nicht nur das obere linke Viertel und dadurch in Möbel navigiert.
 - ✅ **Rezeptions-UI Check-In:** Logik im Check-In-Modal aufgeteilt (`ask_price` vs `ask_requirements`) und neuen Tooltip (`Kompromiss - Gast fragen`) für fehlende Voraussetzungen / falschen Zimmertyp integriert.
 - ✅ **Multi-Tile-Room Nav-Bug:** Fehlerhafte Registrierung von Möbeln (Betten) in gedrehten Räumen (Portrait) in `Room.gd` behoben, die Gäste fälschlicherweise durch die Wand auf den Flur schlafen schickte.
-- checkmark **Lobby Check-In Flow (2026-08-14):** Gaeste erscheinen sofort sichtbar an receptionX (WAITING_IN_LINE). Nach Check-in: lokale Lobby-Navigation zur Innentuer, dann globaler Korridor-AStar zum Zimmer. Root Cause: _change_state(WALKING) in _walk_to_room ueberschrieb previous_state vor _execute_walk. Fix: save/restore. Reload-Fix: spawn_active_guests() iteriert nun auch _waiting.
-
+- ✅ **Lobby Check-In Flow (2026-08-14):** Gäste erscheinen sofort sichtbar an `receptionX` (`WAITING_IN_LINE`). Nach Check-in: lokale Lobby-Navigation zur Innentür, dann globaler Korridor-AStar zum Zimmer. Root Cause: `_change_state(WALKING)` in `_walk_to_room` überschrieb `previous_state` vor `_execute_walk`. Fix: save/restore. Reload-Fix: `spawn_active_guests()` iteriert nun auch `_waiting`.
+- ✅ **Conference Flow & Tweens (2026-08-14):** Instant-Teleport zum Rednerpult (`Chair12`) durch animierten `_execute_poi_move()` Tween ersetzt. Cooldown von 10-15 Ingame-Minuten nach dem Reden eingebaut, damit der Redner nach dem Zurücktreten nicht sofort wieder ans Pult rennt.
+- ✅ **POI Leave Pathing Fix (2026-08-14):** Gäste, die im Status `STUDYING_MENU` oder `WAITING_FOR_FOOD` einen POI verließen (z.B. weil dieser schließt), ignorierten das lokale AStar-Grid und liefen Luftlinie durch Wände (`Skipped local_path_out`). Diese Gastro-States wurden in `_execute_walk` zur lokalen Pfadgenerierung hinzugefügt.
 ---
 
 ## 🧱 Phase 1 – Fundament (v0.1.40–41)

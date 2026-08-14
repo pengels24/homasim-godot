@@ -119,5 +119,10 @@
 - **`previous_state` Fix in `_walk_to_room`:** `_change_state(WALKING)` überschrieb `previous_state` (von `WAITING_IN_LINE` auf `WALKING`), bevor `_execute_walk` ihn auslesen konnte. Fix: `previous_state` wird vor dem `_change_state`-Aufruf gesichert und danach wiederhergestellt.
 - **Reload-Fix:** `GuestController.spawn_active_guests()` iteriert nun auch über `_guest_manager._waiting` und platziert wartende Gäste nach einem Spielstand-Reload sichtbar an der Rezeption.
 
+
+### Conference Flow & POI Pathing Fixes (Session 2026-08-14)
+- **Conference Flow & Tweens:** Instant-Teleport zum Rednerpult (Chair12) durch animierten _execute_poi_move() Tween ersetzt. Cooldown von 10-15 Ingame-Minuten nach dem Reden eingebaut, damit der Redner nach dem Zurücktreten nicht sofort wieder ans Pult rennt.
+- **POI Leave Pathing Fix:** Gäste, die im Status STUDYING_MENU oder WAITING_FOR_FOOD einen POI verließen (z.B. weil dieser schließt), ignorierten das lokale AStar-Grid und liefen Luftlinie durch Wände (Skipped local_path_out). Diese Gastro-States wurden in _execute_walk zur lokalen Pfadgenerierung hinzugefügt.
+
 ### Offen / Nächste Session
 - **WLAN/Klima-Overlays in OverlayToolbar:** Zwei neue Overlay-Buttons (WLAN-Abdeckung, Klima-Abdeckung) mit Rot/Grün-Indikator pro Raum in die HUD-Toolbar integrieren.

@@ -185,6 +185,9 @@ func _setup_subsystems() -> void:
 	if _hotel.has("guest_data"):
 		_guest_mgr.load_from_dict(_hotel["guest_data"])
 		
+	if EventManager and _hotel.has("event_data"):
+		EventManager.load_from_dict(_hotel["event_data"])
+		
 	# Jetzt, wo die Daten da sind, können wir die Gäste spawnen
 	if _guest_controller:
 		_guest_controller.spawn_active_guests()

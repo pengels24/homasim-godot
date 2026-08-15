@@ -1,10 +1,43 @@
-[gd_scene load_steps=5 format=3 uid="uid://c3tvvbrpkefmg"]
+[gd_scene load_steps=9 format=3 uid="uid://c3tvvbrpkefmg"]
 
 [ext_resource type="Script" path="res://scenes/ingame/hud/modals/content/ModalContentGuestList.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://cxp1abc2def3g" path="res://scenes/shared/PipCamera.tscn" id="2_pip"]
 [ext_resource type="Theme" path="res://assets/UI/menu_button_blue.tres" id="3_theme"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.55, 0.55, 0.55, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hunger"]
+bg_color = Color(0.1, 0.6, 0.1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_thirst"]
+bg_color = Color(0.2, 0.5, 0.9, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_energy"]
+bg_color = Color(0.8, 0.8, 0.1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fun"]
+bg_color = Color(0.8, 0.2, 0.8, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="ModalContentGuestList" type="MarginContainer"]
 custom_minimum_size = Vector2(1600, 600)
@@ -42,6 +75,10 @@ theme_override_constants/margin_bottom = 8
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 10
+
+[node name="SpacerIcon" type="Control" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(32, 0)
+layout_mode = 2
 
 [node name="LblName" type="Label" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -199,6 +236,112 @@ layout_mode = 2
 theme_type_variation = &"ValueLabel"
 text = "---"
 
+[node name="DetailNeeds" type="GridContainer" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox"]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 4
+columns = 2
+
+[node name="NeedHunger" type="ProgressBar" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox/DetailNeeds"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TooltipProgressBar"
+theme_override_styles/background = SubResource("StyleBoxFlat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hunger")
+value = 100.0
+show_percentage = false
+
+[node name="LblHunger" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox/DetailNeeds/NeedHunger"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"TooltipText"
+theme_override_colors/font_color = Color(0.15, 0.15, 0.15, 1)
+text = "Hunger: 100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NeedThirst" type="ProgressBar" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox/DetailNeeds"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TooltipProgressBar"
+theme_override_styles/background = SubResource("StyleBoxFlat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_thirst")
+value = 100.0
+show_percentage = false
+
+[node name="LblThirst" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox/DetailNeeds/NeedThirst"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"TooltipText"
+theme_override_colors/font_color = Color(0.15, 0.15, 0.15, 1)
+text = "Durst: 100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NeedEnergy" type="ProgressBar" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox/DetailNeeds"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TooltipProgressBar"
+theme_override_styles/background = SubResource("StyleBoxFlat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_energy")
+value = 100.0
+show_percentage = false
+
+[node name="LblEnergy" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox/DetailNeeds/NeedEnergy"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"TooltipText"
+theme_override_colors/font_color = Color(0.15, 0.15, 0.15, 1)
+text = "Energie: 100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NeedFun" type="ProgressBar" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox/DetailNeeds"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TooltipProgressBar"
+theme_override_styles/background = SubResource("StyleBoxFlat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fun")
+value = 100.0
+show_percentage = false
+
+[node name="LblFun" type="Label" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox/DetailNeeds/NeedFun"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"TooltipText"
+theme_override_colors/font_color = Color(0.15, 0.15, 0.15, 1)
+text = "Spaß: 100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Spacer" type="Control" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -208,3 +351,4 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "Gehe zu Gast"
+

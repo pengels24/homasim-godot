@@ -24,7 +24,9 @@ Die Methode `_process_idle()` ist das Gehirn des Angestellten. Sie triggert, wen
    Ist der Mitarbeiter z.B. Koch oder Bedienung und seinem Restaurant/Küche zugewiesen, prüft er über den `GastroManager`, ob es Bestellungen gibt, die zubereitet oder serviert werden müssen.
 3. **Globale Tasks (Putzen / Reparieren)**:
    Für Zimmermädchen (`cleaner`) oder Hausmeister (`handyman`) fragt der Actor beim `StaffController` nach dem nächsten freien Job. Der Controller verwaltet eine Liste an offenen Tasks (Dreckige Zimmer, kaputte Betten).
-4. **Feierabend / Warten**:
+4. **Patrouillen-Jobs (Bademeister)**:
+   Für Wellness-Bereiche (wie `pool_small`) wird der zugewiesene Mitarbeiter (z.B. Bademeister) nicht stationär an einem Tresen stehen, sondern auf Basis von Wegpunkten patrouillieren. Hierfür ruft er am zugewiesenen Raum `get_patrol_target()` ab, um einen sicheren Wegpunkt (z.B. nicht im Wasser) zu finden.
+5. **Feierabend / Warten**:
    Gibt es absolut nichts zu tun, läuft der Mitarbeiter an seinen zugewiesenen Platz (z.B. hinter den Tresen der Bar) oder in die Lobby und wartet (`returning` -> `idle`).
 
 ## 4. Moral-System (Morale)

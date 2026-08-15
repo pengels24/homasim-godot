@@ -351,9 +351,15 @@ offset_top = 22.0
 offset_right = 21.0
 offset_bottom = 31.0
 
-[node name="NavBlockerBeatplace" type="ReferenceRect" parent="Landscape/Interior/Furniture/NavBlocker" unique_id=1821055209 groups=["nav_blocker"]]
+[node name="NavBlockerBeatplace1" type="ReferenceRect" parent="Landscape/Interior/Furniture/NavBlocker" unique_id=1821055209 groups=["nav_blocker"]]
 offset_left = 1.0
 offset_top = 16.0
+offset_right = 3.0
+offset_bottom = 31.0
+
+[node name="NavBlockerBeatplace2" type="ReferenceRect" parent="Landscape/Interior/Furniture/NavBlocker" unique_id=329234632 groups=["nav_blocker"]]
+offset_left = 1.0
+offset_top = 29.0
 offset_right = 13.0
 offset_bottom = 31.0
 

@@ -14,6 +14,8 @@ func _ready() -> void:
 	_load_quests_db()
 	GameState.sig_room_built.connect(on_room_built)
 	GameState.sig_room_demolished.connect(on_room_demolished)
+	if TimeManager:
+		TimeManager.sig_day_ended.connect(_on_day_ended_hook)
 
 # =============================================================================
 func _load_quests_db() -> void:
@@ -69,7 +71,27 @@ func _activate_rank(cat_id: String, rank_id: String) -> void:
 	var ranks = quests_db["categories"][cat_id].get("ranks", {})
 	if ranks.has(rank_id):
 		for t in ranks[rank_id].get("targets", []):
-			cat_state["targets"][t["id"]] = { "progress": 0, "state": "active" }
+			var t_id = t["id"]
+			var t_def = flat_targets[t_id]
+			var start_prog = 0
+			var max_val = t_def.get("target_count", 1)
+			
+			if t_def["type"] == "build_room":
+				var room_count = 0
+				for room in GameState.selected_hotel.get("rooms", []):
+					if room.get("type") == t_def["target_id"]:
+						room_count += 1
+				start_prog = min(room_count, max_val)
+			else:
+				var stats = GameState.selected_hotel.get("quest_stats", {})
+				var stat_key = t_def["type"]
+				if t_def.get("target_id", "") != "":
+					stat_key += "_" + t_def["target_id"]
+				start_prog = min(stats.get(stat_key, 0), max_val)
+				
+			cat_state["targets"][t_id] = { "progress": start_prog, "state": "active" }
+			if start_prog >= max_val:
+				cat_state["targets"][t_id]["state"] = "claimable"
 
 # =============================================================================
 func on_room_built(room_id: String) -> void:
@@ -139,6 +161,138 @@ func on_guest_checkout(guest_type: String) -> void:
 				
 	if changed:
 		SaveManager.save_quick(GameState.active_hotel_id)
+		
+	_increment_quest_progress("total_guests", "")
+
+
+# =============================================================================
+func _increment_quest_progress(quest_type: String, target_id: String, amount: int = 1) -> void:
+	if GameState.selected_hotel.is_empty(): return
+	
+	if not GameState.selected_hotel.has("quest_stats"):
+		GameState.selected_hotel["quest_stats"] = {}
+		
+	var stat_key = quest_type
+	if target_id != "":
+		stat_key += "_" + target_id
+		
+	var current_val = GameState.selected_hotel["quest_stats"].get(stat_key, 0)
+	current_val += amount
+	GameState.selected_hotel["quest_stats"][stat_key] = current_val
+	
+	var quest_state = GameState.selected_hotel.get("quests", {})
+	var changed = false
+	
+	for cat_id in quest_state:
+		var cat_data = quest_state[cat_id]
+		var targets_state = cat_data.get("targets", {})
+		
+		for t_id in targets_state:
+			var t_state = targets_state[t_id]
+			if t_state["state"] != "active": continue
+			
+			var t_def = flat_targets[t_id]
+			
+			var req_tech = t_def.get("requires_tech", "")
+			if req_tech != "" and not TechtreeManager.is_tech_unlocked(req_tech):
+				continue
+			
+			if t_def["type"] == quest_type and (t_def.get("target_id", "") == target_id or target_id == ""):
+				var max_val = t_def.get("target_count", 1)
+				if t_state["progress"] < max_val:
+					t_state["progress"] = min(current_val, max_val)
+					sig_quest_progress_updated.emit(t_id, t_state["progress"], max_val)
+					changed = true
+					
+				if t_state["progress"] >= max_val and t_state["state"] == "active":
+					t_state["state"] = "claimable"
+					sig_quest_claimable.emit(t_id)
+					Toast.show(GameState.T("toast.quest.completed", GameState.T(t_def.get("name", ""))), "quest")
+					changed = true
+					
+	if changed:
+		SaveManager.save_quick(GameState.active_hotel_id)
+
+# =============================================================================
+func _check_quest_threshold(quest_type: String, target_id: String, current_value: float) -> void:
+	if GameState.selected_hotel.is_empty(): return
+	var quest_state = GameState.selected_hotel.get("quests", {})
+	var changed = false
+	
+	for cat_id in quest_state:
+		var cat_data = quest_state[cat_id]
+		var targets_state = cat_data.get("targets", {})
+		
+		for t_id in targets_state:
+			var t_state = targets_state[t_id]
+			if t_state["state"] != "active": continue
+			
+			var t_def = flat_targets[t_id]
+			
+			var req_tech = t_def.get("requires_tech", "")
+			if req_tech != "" and not TechtreeManager.is_tech_unlocked(req_tech):
+				continue
+			
+			if t_def["type"] == quest_type and (t_def.get("target_id", "") == target_id or target_id == ""):
+				var target_val = float(t_def.get("target_count", 1))
+				
+				# Only update progress UI if it increased
+				if t_state["progress"] < current_value:
+					t_state["progress"] = min(current_value, target_val)
+					sig_quest_progress_updated.emit(t_id, t_state["progress"], target_val)
+					changed = true
+
+				if current_value >= target_val:
+					t_state["state"] = "claimable"
+					t_state["progress"] = target_val
+					sig_quest_claimable.emit(t_id)
+					sig_quest_progress_updated.emit(t_id, t_state["progress"], target_val)
+					Toast.show(GameState.T("toast.quest.completed", GameState.T(t_def.get("name", ""))), "quest")
+					changed = true
+				
+	if changed:
+		SaveManager.save_quick(GameState.active_hotel_id)
+
+# =============================================================================
+func on_poi_used(poi_id: String) -> void:
+	_increment_quest_progress("use_poi", poi_id)
+
+func on_food_cooked(amount: int = 1) -> void:
+	_increment_quest_progress("cook_food", "", amount)
+
+func on_order_served(poi_id: String) -> void:
+	_increment_quest_progress("serve_order", poi_id)
+
+func on_day_ended(revenue: int, satisfaction: float) -> void:
+	_check_quest_threshold("daily_revenue", "", float(revenue))
+	_check_quest_threshold("satisfaction", "", satisfaction)
+
+func _on_day_ended_hook(day: int) -> void:
+	if GameState.selected_hotel.is_empty(): return
+	var rev = 0
+	var txs = GameState.selected_hotel.get("transactions", [])
+	for tx in txs:
+		if tx.get("day") == day and tx.get("amount", 0) > 0:
+			rev += tx["amount"]
+			
+	var total_sat = 0.0
+	var guest_count = 0
+	var guest_data = GameState.selected_hotel.get("guest_data", {})
+	var active_guests = guest_data.get("active", [])
+	for party in active_guests:
+		total_sat += float(party.get("satisfaction", 100))
+		guest_count += 1
+		
+	var avg_sat = 100.0
+	if guest_count > 0:
+		avg_sat = total_sat / float(guest_count)
+		
+	on_day_ended(rev, avg_sat)
+
+func check_occupancy(is_full: bool) -> void:
+	if is_full:
+		_check_quest_threshold("full_occupancy", "", 1.0)
+
 
 
 # =============================================================================

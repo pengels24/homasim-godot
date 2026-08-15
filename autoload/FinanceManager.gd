@@ -50,6 +50,15 @@ func add_transaction(amount: int, category: String, description: String, log_it:
       if "|" in description:
           var parts := description.split("|")
           var translated := GameState.T(parts[0])
+          
+          # Sicherstellen, dass genügend Platzhalter für die Argumente vorhanden sind
+          var needed_placeholders = parts.size() - 1
+          var actual_placeholders = translated.count("%s")
+          
+          while actual_placeholders < needed_placeholders:
+              translated += " %s"
+              actual_placeholders += 1
+              
           if parts.size() == 2:
               log_desc = translated % parts[1]
           elif parts.size() >= 3:

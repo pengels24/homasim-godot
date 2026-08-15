@@ -37,6 +37,7 @@ static func get_definition() -> Dictionary:
 		"allowed_roles": ["lifeguard"],
 		"min_staff": 1,
 		"max_staff": 1,
+		"need_restoration": {"fun": 80, "energy": -10},
 		"open_from": open_f,
 		"open_to": open_t,
 		"valid_door_slots": ["L2"],
@@ -168,3 +169,23 @@ func get_live_details() -> Array[Dictionary]:
 	return details
 
 
+
+func get_patrol_target() -> Vector2:
+	var side = randi() % 4
+	var rx = 0.0
+	var ry = 0.0
+	match side:
+		0: # top
+			rx = randf_range(8.0, 88.0)
+			ry = randf_range(8.0, 20.0)
+		1: # bottom
+			rx = randf_range(8.0, 88.0)
+			ry = randf_range(76.0, 88.0)
+		2: # left
+			rx = randf_range(8.0, 20.0)
+			ry = randf_range(8.0, 88.0)
+		3: # right
+			rx = randf_range(76.0, 88.0)
+			ry = randf_range(8.0, 88.0)
+
+	return global_position + Vector2(rx, ry)

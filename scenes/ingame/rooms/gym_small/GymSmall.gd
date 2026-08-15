@@ -28,9 +28,10 @@ static func get_definition() -> Dictionary:
 		"allowed_roles": [],
 		"min_staff": 0,
 		"max_staff": 0,
+		"need_restoration": {"fun": 40, "energy": -30},
 		"open_from": 360, # 06:00
 		"open_to": 1320,  # 22:00
-		"valid_door_slots": ["L3"],
+		"valid_door_slots": ["L2"],
 		"cleanliness_level": 100,
 		"maintenance_level": 100,
 		"is_service_requested": false
@@ -116,10 +117,9 @@ func get_live_details() -> Array[Dictionary]:
 			
 			var status_text = "Trainiert"
 			details.append({
-				"label": guest_name,
-				"value": status_text,
+				"left": guest_name,
+				"right": status_text,
 				"color": Color("#f43f5e")
 			})
 			
 	return details
-

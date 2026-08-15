@@ -3,6 +3,41 @@
 [ext_resource type="Script" path="res://scenes/ingame/hud/GuestFollowTooltip.gd" id="1_script"]
 [ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="2_theme"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.55, 0.55, 0.55, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hunger"]
+bg_color = Color(0.1, 0.6, 0.1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_thirst"]
+bg_color = Color(0.2, 0.5, 0.9, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_energy"]
+bg_color = Color(0.8, 0.8, 0.1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fun"]
+bg_color = Color(0.8, 0.2, 0.8, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [node name="GuestFollowTooltip" type="PanelContainer"]
 process_mode = 3
 mouse_filter = 2
@@ -38,8 +73,108 @@ layout_mode = 2
 theme_type_variation = &"TooltipText"
 text = "Zufriedenheit: 100%"
 
-[node name="HungerBar" type="ProgressBar" parent="MarginContainer/VBoxContainer"]
-unique_name_in_owner = true
+[node name="NeedsContainer" type="GridContainer" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 4
+columns = 2
+
+[node name="NeedHunger" type="ProgressBar" parent="MarginContainer/VBoxContainer/NeedsContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 24)
+layout_mode = 2
+size_flags_horizontal = 3
 theme_type_variation = &"TooltipProgressBar"
+theme_override_styles/background = SubResource("StyleBoxFlat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hunger")
 value = 100.0
+show_percentage = false
+
+[node name="LblHunger" type="Label" parent="MarginContainer/VBoxContainer/NeedsContainer/NeedHunger"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"TooltipText"
+theme_override_colors/font_color = Color(0.15, 0.15, 0.15, 1)
+text = "HU: 100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NeedThirst" type="ProgressBar" parent="MarginContainer/VBoxContainer/NeedsContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TooltipProgressBar"
+theme_override_styles/background = SubResource("StyleBoxFlat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_thirst")
+value = 100.0
+show_percentage = false
+
+[node name="LblThirst" type="Label" parent="MarginContainer/VBoxContainer/NeedsContainer/NeedThirst"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"TooltipText"
+theme_override_colors/font_color = Color(0.15, 0.15, 0.15, 1)
+text = "DU: 100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NeedEnergy" type="ProgressBar" parent="MarginContainer/VBoxContainer/NeedsContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TooltipProgressBar"
+theme_override_styles/background = SubResource("StyleBoxFlat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_energy")
+value = 100.0
+show_percentage = false
+
+[node name="LblEnergy" type="Label" parent="MarginContainer/VBoxContainer/NeedsContainer/NeedEnergy"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"TooltipText"
+theme_override_colors/font_color = Color(0.15, 0.15, 0.15, 1)
+text = "EN: 100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NeedFun" type="ProgressBar" parent="MarginContainer/VBoxContainer/NeedsContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TooltipProgressBar"
+theme_override_styles/background = SubResource("StyleBoxFlat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fun")
+value = 100.0
+show_percentage = false
+
+[node name="LblFun" type="Label" parent="MarginContainer/VBoxContainer/NeedsContainer/NeedFun"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"TooltipText"
+theme_override_colors/font_color = Color(0.15, 0.15, 0.15, 1)
+text = "SP: 100%"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -31,7 +31,8 @@ func save_progress(game_time_min: int) -> void:
 		"exp_max": _hotel.get("exp_max", 0), # ANG-fix: fehlte komplett
 		"rep": _hotel.get("rep", 500),       # ANG-fix: fehlte komplett
 		"game_time": game_time_min,
-		"guest_data": _guest_mgr.to_save_dict()
+		"guest_data": _guest_mgr.to_save_dict(),
+		"event_data": EventManager.to_save_dict() if EventManager else {}
 	}
 
 	for key: String in _hotel:

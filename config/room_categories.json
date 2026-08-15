@@ -16,6 +16,14 @@
       "label": "Management",
       "icon": "res://assets/icons/HUDBottom/laptop-minimal.svg"
     },
+    "wellness": {
+      "label": "Wellness",
+      "icon": "res://assets/icons/HUDBottom/parasol.svg"
+    },
+    "business": {
+      "label": "Business",
+      "icon": "res://assets/icons/HUDTop/briefcase.svg"
+    },
     "sonstiges": {
       "label": "Sonstiges",
       "icon": "res://assets/icons/HUDBottom/wrench.svg"

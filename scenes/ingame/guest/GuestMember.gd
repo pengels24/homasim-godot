@@ -33,6 +33,9 @@ var speed_offset: float = 0.0
 var daily_budget: int = 0    # Einmalig bei Check-in gewürfelt
 var spending_budget: int = 0 # Aktuelles Tagesbudget (jeden Morgen reset)
 var saturation: int = 100    # Sättigung / Hunger (100 = satt, <30 = hungrig)
+var thirst: int = 100        # Durst
+var energy: int = 100        # Energie / Schlafbedarf
+var fun: int = 100           # Spaß / Erholung
 
 
 # =============================================================================

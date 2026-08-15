@@ -126,3 +126,14 @@
 
 ### Offen / NÃ¤chste Session
 - **WLAN/Klima-Overlays in OverlayToolbar:** Zwei neue Overlay-Buttons (WLAN-Abdeckung, Klima-Abdeckung) mit Rot/GrÃ¼n-Indikator pro Raum in die HUD-Toolbar integrieren.
+
+### Ingame & Navigation (Aktuelle Session)
+- **Bar/Gastro Einlauf-Animation:** Gäste teleportieren nicht mehr unsichtbar an den Platz, sondern laufen nach dem Eintreten sichtbar durch den Raum zum Hocker.
+- **Gym/Pool/Spa Sichtbarkeit:** Unsichtbarkeit-Bug an Trainingsgeräten und im Wasser behoben.
+- **GuestActor Navigation-Refactoring:** _get_logical_start_tile() komplett überarbeitet. Die Start-Kachel-Ermittlung aus POIs funktioniert nun generisch und robust über _current_poi_id. Verhindert SOLID-Fehler bei unerwarteten Statuswechseln (z. B. Bettzeit um 23:00 Uhr während Wartezeit in Restaurant).
+
+### UI / Finanzen (Aktuelle Session)
+- **Kassenbuch Gastro-Namen:** Fehlende Rezeptnamen in Gastro-Kassenbucheinträgen () repariert (Key 
+ame_key statt 
+ame verwendet).
+- **Kassenbuch Checkout-Details:** Checkout-Logs um Zimmertyp und Aufenthaltsdauer erweitert. ModalContentFinances.gd unterstützt nun dynamische Anzahl an Platzhaltern in der Übersetzung.

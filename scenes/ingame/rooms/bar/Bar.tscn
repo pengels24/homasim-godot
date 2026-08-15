@@ -235,13 +235,13 @@ offset_bottom = 31.0
 
 [node name="NavBlockerCounter2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=781601496 groups=["nav_blocker"]]
 offset_left = 7.0
-offset_top = 6.0
+offset_top = 7.0
 offset_right = 12.0
 offset_bottom = 31.0
 
 [node name="NavBlockerCounter1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1680968793 groups=["nav_blocker"]]
 offset_left = 7.0
-offset_top = 6.0
+offset_top = 7.0
 offset_right = 22.0
 offset_bottom = 11.0
 

@@ -30,5 +30,10 @@ Führe dann folgende Schritte **streng sequenziell** aus:
    - **OHNE `+v`:** Öffne die **bestehende** Datei passend zur aktuellen Version aus `version.txt` und **hänge** die Änderungen der aktuellen Session unter den passenden Kategorien an.
    - Schreibe alle Änderungen sauber formatiert als Bullet-Points.
 
-5. **Abschlussbericht:**
+5. **Wiki Tech-Doku & Raumbeschreibungen aktualisieren:**
+   - Prüfe, ob in der Session grundlegende technische Systeme (z.B. Wegfindung, State-Machines) geändert wurden. Wenn ja, aktualisiere die entsprechenden Dateien in `wiki/04_maintenance/` (z.B. Checklisten oder Modding-Guides).
+   - Prüfe, ob ein neuer Raum/POI (z.B. Bar, Pool, Restaurant) oder Gasttyp erstellt/geändert wurde.
+   - Falls ja, navigiere nach `wiki/rooms/` bzw. in die passenden Beschreibungen und lege dort eine neue `.md`-Datei an (bzw. aktualisiere die bestehende) mit den aktuellen Mechaniken, Navigations-Regeln und Fallbacks des Raumes/Akteurs.
+
+6. **Abschlussbericht:**
    - Antworte dem User mit einer kurzen Zusammenfassung der aktualisierten Dokumente.

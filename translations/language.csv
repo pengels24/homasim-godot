@@ -607,7 +607,7 @@ staff.role.bartender,Barkeeper,Bartender
 staff.skill.cleaning_efficiency,Reinigungstempo,Cleaning Speed
 staff.skill.detail_focus,Detailfokus,Attention to Detail
 staff.skill.motivation,Motivation,Motivation
-staff.skill.repair_knowledge,Reparaturwissen,Repair Knowledge
+staff.skill.repair_knowledge,Fachwissen,Know-How
 staff.stat.stress,Stress,Stress
 settings.controls.reset_all,Standard wiederherstellen,Restore Defaults
 settings.controls.group.build,Baumodus,Build Mode
@@ -636,7 +636,7 @@ bugreporter.status.success,Erfolgreich gesendet! Danke!,Sent successfully! Thank
 bugreporter.status.error.send,Fehler beim Senden! (Code %d),Error sending! (Code %d)
 room.tooltip.free,Frei,Free
 room.tooltip.service_needed,🧹 Service benötigt,🧹 Service Needed
-room.tooltip.open,🍺 Geöffnet,🍺 Open
+room.tooltip.open,🍺 Geöffnet (%s - %s Uhr),🍺 Open (%s - %s)
 room.tooltip.closed_until,🔒 Geschlossen (öffnet um %s),🔒 Closed (opens at %s)
 room.tooltip.understaffed,🔴 Unterbesetzt (Geschlossen),🔴 Understaffed (Closed)
 room.tooltip.current_visitors,Aktuelle Gäste: %d,Current Visitors: %d
@@ -678,7 +678,7 @@ staff.tooltip.state.working,Arbeitet,Working
 staff.tooltip.target.room_work,Raum/Arbeit,Room/Work
 staff.tooltip.target.work,Arbeit,Work
 staff.tooltip.target.position,Position %s,Position %s
-staff.skill.stress_resistance,Stressresistenz,Stress Resistance
+staff.skill.stress_resistance,Belastbarkeit,Resilience
 staff.skill.service,Service,Service
 staff.skill.mixology,Mixen,Mixology
 ui.staff.no_team,Du hast noch kein Personal eingestellt.,You haven't hired any staff yet.
@@ -848,8 +848,8 @@ ui.staff.assign.wrong_role,Falsche Rolle,Wrong Role
 ui.staff.assign.assign,Zuordnen,Assign
 ui.staff.goto,Gehe zu Personal,Go to Staff
 staff.skill.motivation,Motivation,Motivation
-staff.skill.repair_knowledge,Reparaturwissen,Repair Knowledge
-staff.skill.stress_resistance,Stressresistenz,Stress Resistance
+staff.skill.repair_knowledge,Fachwissen,Know-How
+staff.skill.stress_resistance,Belastbarkeit,Resilience
 modal.tutorial.title,Tutorials & Codex,Tutorials & Codex
 modal.staff.title,Personalverwaltung,Staff Management
 modal.techtree.title,Forschung & Technologie,Research & Technology
@@ -1275,70 +1275,70 @@ ui.techtree.feature.p1_2_conference,Konferenzraum,Conference Room
 ui.techtree.feature.p1_3_vip,VIP-Gäste,VIP Guests
 ui.tutorial.tab.rooms,Räume,Rooms
 room_category.guests,Gäste,Guests
-quest.guest.single.10.name,10 Single-Gäste bedienen,Serve 10 Single Guests
-quest.guest.single.10.desc,Bediene insgesamt 10 Single-Gäste erfolgreich.,Successfully serve a total of 10 Single Guests.
-quest.guest.single.25.name,25 Single-Gäste bedienen,Serve 25 Single Guests
-quest.guest.single.25.desc,Bediene insgesamt 25 Single-Gäste erfolgreich.,Successfully serve a total of 25 Single Guests.
-quest.guest.single.50.name,50 Single-Gäste bedienen,Serve 50 Single Guests
-quest.guest.single.50.desc,Bediene insgesamt 50 Single-Gäste erfolgreich.,Successfully serve a total of 50 Single Guests.
-quest.guest.single.100.name,100 Single-Gäste bedienen,Serve 100 Single Guests
-quest.guest.single.100.desc,Bediene insgesamt 100 Single-Gäste erfolgreich.,Successfully serve a total of 100 Single Guests.
-quest.guest.couple.10.name,10 Paare bedienen,Serve 10 Couples
-quest.guest.couple.10.desc,Bediene insgesamt 10 Paare erfolgreich.,Successfully serve a total of 10 Couples.
-quest.guest.couple.25.name,25 Paare bedienen,Serve 25 Couples
-quest.guest.couple.25.desc,Bediene insgesamt 25 Paare erfolgreich.,Successfully serve a total of 25 Couples.
-quest.guest.couple.50.name,50 Paare bedienen,Serve 50 Couples
-quest.guest.couple.50.desc,Bediene insgesamt 50 Paare erfolgreich.,Successfully serve a total of 50 Couples.
-quest.guest.couple.100.name,100 Paare bedienen,Serve 100 Couples
-quest.guest.couple.100.desc,Bediene insgesamt 100 Paare erfolgreich.,Successfully serve a total of 100 Couples.
-quest.guest.budget.10.name,10 Budgetreisende bedienen,Serve 10 Budget Travelers
-quest.guest.budget.10.desc,Bediene insgesamt 10 Budgetreisende erfolgreich.,Successfully serve a total of 10 Budget Travelers.
-quest.guest.budget.25.name,25 Budgetreisende bedienen,Serve 25 Budget Travelers
-quest.guest.budget.25.desc,Bediene insgesamt 25 Budgetreisende erfolgreich.,Successfully serve a total of 25 Budget Travelers.
-quest.guest.budget.50.name,50 Budgetreisende bedienen,Serve 50 Budget Travelers
-quest.guest.budget.50.desc,Bediene insgesamt 50 Budgetreisende erfolgreich.,Successfully serve a total of 50 Budget Travelers.
-quest.guest.budget.100.name,100 Budgetreisende bedienen,Serve 100 Budget Travelers
-quest.guest.budget.100.desc,Bediene insgesamt 100 Budgetreisende erfolgreich.,Successfully serve a total of 100 Budget Travelers.
-quest.guest.family.10.name,10 Familien bedienen,Serve 10 Families
-quest.guest.family.10.desc,Bediene insgesamt 10 Familien erfolgreich.,Successfully serve a total of 10 Families.
-quest.guest.family.25.name,25 Familien bedienen,Serve 25 Families
-quest.guest.family.25.desc,Bediene insgesamt 25 Familien erfolgreich.,Successfully serve a total of 25 Families.
-quest.guest.family.50.name,50 Familien bedienen,Serve 50 Families
-quest.guest.family.50.desc,Bediene insgesamt 50 Familien erfolgreich.,Successfully serve a total of 50 Families.
-quest.guest.family.100.name,100 Familien bedienen,Serve 100 Families
-quest.guest.family.100.desc,Bediene insgesamt 100 Familien erfolgreich.,Successfully serve a total of 100 Families.
-quest.guest.business.10.name,10 Geschäftsreisende bedienen,Serve 10 Business Travelers
-quest.guest.business.10.desc,Bediene insgesamt 10 Geschäftsreisende erfolgreich.,Successfully serve a total of 10 Business Travelers.
-quest.guest.business.25.name,25 Geschäftsreisende bedienen,Serve 25 Business Travelers
-quest.guest.business.25.desc,Bediene insgesamt 25 Geschäftsreisende erfolgreich.,Successfully serve a total of 25 Business Travelers.
-quest.guest.business.50.name,50 Geschäftsreisende bedienen,Serve 50 Business Travelers
-quest.guest.business.50.desc,Bediene insgesamt 50 Geschäftsreisende erfolgreich.,Successfully serve a total of 50 Business Travelers.
-quest.guest.business.100.name,100 Geschäftsreisende bedienen,Serve 100 Business Travelers
-quest.guest.business.100.desc,Bediene insgesamt 100 Geschäftsreisende erfolgreich.,Successfully serve a total of 100 Business Travelers.
-quest.guest.nomad.10.name,10 Digitale Nomaden bedienen,Serve 10 Digital Nomads
-quest.guest.nomad.10.desc,Bediene insgesamt 10 Digitale Nomaden erfolgreich.,Successfully serve a total of 10 Digital Nomads.
-quest.guest.nomad.25.name,25 Digitale Nomaden bedienen,Serve 25 Digital Nomads
-quest.guest.nomad.25.desc,Bediene insgesamt 25 Digitale Nomaden erfolgreich.,Successfully serve a total of 25 Digital Nomads.
-quest.guest.nomad.50.name,50 Digitale Nomaden bedienen,Serve 50 Digital Nomads
-quest.guest.nomad.50.desc,Bediene insgesamt 50 Digitale Nomaden erfolgreich.,Successfully serve a total of 50 Digital Nomads.
-quest.guest.nomad.100.name,100 Digitale Nomaden bedienen,Serve 100 Digital Nomads
-quest.guest.nomad.100.desc,Bediene insgesamt 100 Digitale Nomaden erfolgreich.,Successfully serve a total of 100 Digital Nomads.
-quest.guest.event.10.name,10 Event-Gäste bedienen,Serve 10 Event Guests
-quest.guest.event.10.desc,Bediene insgesamt 10 Event-Gäste erfolgreich.,Successfully serve a total of 10 Event Guests.
-quest.guest.event.25.name,25 Event-Gäste bedienen,Serve 25 Event Guests
-quest.guest.event.25.desc,Bediene insgesamt 25 Event-Gäste erfolgreich.,Successfully serve a total of 25 Event Guests.
-quest.guest.event.50.name,50 Event-Gäste bedienen,Serve 50 Event Guests
-quest.guest.event.50.desc,Bediene insgesamt 50 Event-Gäste erfolgreich.,Successfully serve a total of 50 Event Guests.
-quest.guest.event.100.name,100 Event-Gäste bedienen,Serve 100 Event Guests
-quest.guest.event.100.desc,Bediene insgesamt 100 Event-Gäste erfolgreich.,Successfully serve a total of 100 Event Guests.
-quest.guest.luxury.10.name,10 Luxus-Gäste bedienen,Serve 10 Luxury Guests
-quest.guest.luxury.10.desc,Bediene insgesamt 10 Luxus-Gäste erfolgreich.,Successfully serve a total of 10 Luxury Guests.
-quest.guest.luxury.25.name,25 Luxus-Gäste bedienen,Serve 25 Luxury Guests
-quest.guest.luxury.25.desc,Bediene insgesamt 25 Luxus-Gäste erfolgreich.,Successfully serve a total of 25 Luxury Guests.
-quest.guest.luxury.50.name,50 Luxus-Gäste bedienen,Serve 50 Luxury Guests
-quest.guest.luxury.50.desc,Bediene insgesamt 50 Luxus-Gäste erfolgreich.,Successfully serve a total of 50 Luxury Guests.
-quest.guest.luxury.100.name,100 Luxus-Gäste bedienen,Serve 100 Luxury Guests
-quest.guest.luxury.100.desc,Bediene insgesamt 100 Luxus-Gäste erfolgreich.,Successfully serve a total of 100 Luxury Guests.
+quest.guest.single.10.name,Einsamer Wolf,Einsamer Wolf
+quest.guest.single.10.desc,Beherberge insgesamt 10 Single-Gäste.,Beherberge insgesamt 10 Single-Gäste.
+quest.guest.single.25.name,Solo-Reisende,Solo-Reisende
+quest.guest.single.25.desc,Beherberge insgesamt 25 Single-Gäste.,Beherberge insgesamt 25 Single-Gäste.
+quest.guest.single.50.name,Unabhängigkeit,Unabhängigkeit
+quest.guest.single.50.desc,Beherberge insgesamt 50 Single-Gäste.,Beherberge insgesamt 50 Single-Gäste.
+quest.guest.single.100.name,Die Single-Hochburg,Die Single-Hochburg
+quest.guest.single.100.desc,Beherberge insgesamt 100 Single-Gäste.,Beherberge insgesamt 100 Single-Gäste.
+quest.guest.couple.10.name,Zweisamkeit,Zweisamkeit
+quest.guest.couple.10.desc,Beherberge insgesamt 10 Paare.,Beherberge insgesamt 10 Paare.
+quest.guest.couple.25.name,Romantische Auszeit,Romantische Auszeit
+quest.guest.couple.25.desc,Beherberge insgesamt 25 Paare.,Beherberge insgesamt 25 Paare.
+quest.guest.couple.50.name,Liegt Liebe in der Luft?,Liegt Liebe in der Luft?
+quest.guest.couple.50.desc,Beherberge insgesamt 50 Paare.,Beherberge insgesamt 50 Paare.
+quest.guest.couple.100.name,Flitterwochen-Ziel,Flitterwochen-Ziel
+quest.guest.couple.100.desc,Beherberge insgesamt 100 Paare.,Beherberge insgesamt 100 Paare.
+quest.guest.budget.10.name,Schmales Budget,Schmales Budget
+quest.guest.budget.10.desc,Beherberge insgesamt 10 Budgetreisende.,Beherberge insgesamt 10 Budgetreisende.
+quest.guest.budget.25.name,Sparfüchse,Sparfüchse
+quest.guest.budget.25.desc,Beherberge insgesamt 25 Budgetreisende.,Beherberge insgesamt 25 Budgetreisende.
+quest.guest.budget.50.name,Günstig & Gut,Günstig & Gut
+quest.guest.budget.50.desc,Beherberge insgesamt 50 Budgetreisende.,Beherberge insgesamt 50 Budgetreisende.
+quest.guest.budget.100.name,Backpacker-Paradies,Backpacker-Paradies
+quest.guest.budget.100.desc,Beherberge insgesamt 100 Budgetreisende.,Beherberge insgesamt 100 Budgetreisende.
+quest.guest.family.10.name,Familienausflug,Familienausflug
+quest.guest.family.10.desc,Beherberge insgesamt 10 Familien.,Beherberge insgesamt 10 Familien.
+quest.guest.family.25.name,Bunter Trubel,Bunter Trubel
+quest.guest.family.25.desc,Beherberge insgesamt 25 Familien.,Beherberge insgesamt 25 Familien.
+quest.guest.family.50.name,Großfamilien,Großfamilien
+quest.guest.family.50.desc,Beherberge insgesamt 50 Familien.,Beherberge insgesamt 50 Familien.
+quest.guest.family.100.name,Familien-Resort,Familien-Resort
+quest.guest.family.100.desc,Beherberge insgesamt 100 Familien.,Beherberge insgesamt 100 Familien.
+quest.guest.business.10.name,Geschäftig,Geschäftig
+quest.guest.business.10.desc,Beherberge insgesamt 10 Geschäftsreisende.,Beherberge insgesamt 10 Geschäftsreisende.
+quest.guest.business.25.name,Im Auftrag der Firma,Im Auftrag der Firma
+quest.guest.business.25.desc,Beherberge insgesamt 25 Geschäftsreisende.,Beherberge insgesamt 25 Geschäftsreisende.
+quest.guest.business.50.name,Business Class,Business Class
+quest.guest.business.50.desc,Beherberge insgesamt 50 Geschäftsreisende.,Beherberge insgesamt 50 Geschäftsreisende.
+quest.guest.business.100.name,Das Konferenz-Zentrum,Das Konferenz-Zentrum
+quest.guest.business.100.desc,Beherberge insgesamt 100 Geschäftsreisende.,Beherberge insgesamt 100 Geschäftsreisende.
+quest.guest.nomad.10.name,Digitaler Nomade,Digitaler Nomade
+quest.guest.nomad.10.desc,Beherberge insgesamt 10 Digitale Nomaden.,Beherberge insgesamt 10 Digitale Nomaden.
+quest.guest.nomad.25.name,Remote Worker,Remote Worker
+quest.guest.nomad.25.desc,Beherberge insgesamt 25 Digitale Nomaden.,Beherberge insgesamt 25 Digitale Nomaden.
+quest.guest.nomad.50.name,Workation,Workation
+quest.guest.nomad.50.desc,Beherberge insgesamt 50 Digitale Nomaden.,Beherberge insgesamt 50 Digitale Nomaden.
+quest.guest.nomad.100.name,Kreativ-Hub,Kreativ-Hub
+quest.guest.nomad.100.desc,Beherberge insgesamt 100 Digitale Nomaden.,Beherberge insgesamt 100 Digitale Nomaden.
+quest.guest.event.10.name,Feierlaune,Feierlaune
+quest.guest.event.10.desc,Beherberge insgesamt 10 Event-Gäste.,Beherberge insgesamt 10 Event-Gäste.
+quest.guest.event.25.name,Event-Gäste,Event-Gäste
+quest.guest.event.25.desc,Beherberge insgesamt 25 Event-Gäste.,Beherberge insgesamt 25 Event-Gäste.
+quest.guest.event.50.name,Die große Party,Die große Party
+quest.guest.event.50.desc,Beherberge insgesamt 50 Event-Gäste.,Beherberge insgesamt 50 Event-Gäste.
+quest.guest.event.100.name,Festival-Stimmung,Festival-Stimmung
+quest.guest.event.100.desc,Beherberge insgesamt 100 Event-Gäste.,Beherberge insgesamt 100 Event-Gäste.
+quest.guest.luxury.10.name,Gehobene Ansprüche,Gehobene Ansprüche
+quest.guest.luxury.10.desc,Beherberge insgesamt 10 Luxus-Gäste.,Beherberge insgesamt 10 Luxus-Gäste.
+quest.guest.luxury.25.name,VIP Gäste,VIP Gäste
+quest.guest.luxury.25.desc,Beherberge insgesamt 25 Luxus-Gäste.,Beherberge insgesamt 25 Luxus-Gäste.
+quest.guest.luxury.50.name,High Society,High Society
+quest.guest.luxury.50.desc,Beherberge insgesamt 50 Luxus-Gäste.,Beherberge insgesamt 50 Luxus-Gäste.
+quest.guest.luxury.100.name,Die Elite,Die Elite
+quest.guest.luxury.100.desc,Beherberge insgesamt 100 Luxus-Gäste.,Beherberge insgesamt 100 Luxus-Gäste.
 
 ui.buildmenu.buy_plot,Parzelle kaufen,Buy Plot
 plot.buy,Kaufen,Buy
@@ -1502,10 +1502,10 @@ roomdef.name.short.spa_small,Spa,Spa
 roomdef.desc.spa_small,Ein Ort der Entspannung.,A place of relaxation.
 roomdef.name.long.gym_small,Fitness-Studio,Fitness Studio
 roomdef.name.short.gym_small,Gym,Gym
-roomdef.desc.gym_small,Fitness-Ger�te f�r G�ste.,Fitness equipment for guests.
+roomdef.desc.gym_small,Fitness-Ger�te f�r G�ste.,Fitness equipment for guests.
 roomdef.name.long.conference_small,Tagungsraum,Conference Room
 roomdef.name.short.conference_small,Konferenz,Conference
-roomdef.desc.conference_small,Bietet Platz f�r Meetings.,Offers space for meetings.
+roomdef.desc.conference_small,Bietet Platz f�r Meetings.,Offers space for meetings.
 staff.tooltip.state.walking_to_break,Geht in Pause,Walking to break
 staff.tooltip.state.resting,Pause,Resting
 room_category.business,Business,Business
@@ -1514,3 +1514,109 @@ staff.role.lifeguard,Bademeister,Lifeguard
 ui.staff.age,Alter,Age
 ui.staff.years,Jahre,Years
 checkin.btn.roll_req,Kompromiss - Gast fragen,Compromise - Ask Guest
+need.hunger.short,HU,HU
+need.thirst.short,DU,TH
+need.energy.short,EN,EN
+need.fun.short,SP,FU
+need.hunger,Hunger,Hunger
+need.thirst,Durst,Thirst
+need.energy,Energie,Energy
+need.fun,Spaß,Fun
+staff.role.wellness_counselor,Spa-Fachkraft,Wellness Counselor
+ui.staff.tenure,Zugehörigkeit,Tenure
+ui.staff.days,Tag(e),Day(s)
+staff.skill.cooking,Kochkunst,Cooking
+staff.skill.speed,Tempo,Speed
+staff.skill.vigilance,Wachsamkeit,Vigilance
+staff.skill.fitness,Fitness,Fitness
+staff.skill.empathy,Empathie,Empathy
+staff.skill.treatment_quality,Behandlung,Treatment
+quest.build.bar.1.name,Baue eine Bar,Baue eine Bar
+quest.build.bar.1.desc,Errichte eine Bar (min. 1 Tresen und Platz zum Stehen).,Errichte eine Bar (min. 1 Tresen und Platz zum Stehen).
+quest.build.kitchen.1.name,Baue eine Küche,Baue eine Küche
+quest.build.kitchen.1.desc,Errichte eine funktionale Küche für dein Hotel.,Errichte eine funktionale Küche für dein Hotel.
+quest.build.restaurant.1.name,Baue ein Restaurant,Baue ein Restaurant
+quest.build.restaurant.1.desc,Biete deinen Gästen Tische und Stühle für Mahlzeiten.,Biete deinen Gästen Tische und Stühle für Mahlzeiten.
+quest.cook.25.name,Küchen-Lehrling,Küchen-Lehrling
+quest.cook.25.desc,Koche 25 Gerichte.,Koche 25 Gerichte.
+quest.cook.100.name,Küchen-Chef,Küchen-Chef
+quest.cook.100.desc,Koche 100 Gerichte.,Koche 100 Gerichte.
+quest.cook.250.name,Sterne-Koch,Sterne-Koch
+quest.cook.250.desc,Koche 250 Gerichte.,Koche 250 Gerichte.
+quest.serve.50.name,Guter Service,Guter Service
+quest.serve.50.desc,Erledige 50 Bestellungen im Restaurant oder an der Bar.,Erledige 50 Bestellungen im Restaurant oder an der Bar.
+quest.serve.100.name,Routinierter Service,Routinierter Service
+quest.serve.100.desc,Erledige 100 Bestellungen.,Erledige 100 Bestellungen.
+quest.serve.250.name,Perfekter Service,Perfekter Service
+quest.serve.250.desc,Erledige 250 Bestellungen.,Erledige 250 Bestellungen.
+quest.build.pool.name,Baue einen Pool,Baue einen Pool
+quest.build.pool.desc,Errichte einen Poolbereich für deine Gäste.,Errichte einen Poolbereich für deine Gäste.
+quest.build.gym.name,Baue ein Gym,Baue ein Gym
+quest.build.gym.desc,Errichte einen Fitnessraum mit Laufband oder Hantelbank.,Errichte einen Fitnessraum mit Laufband oder Hantelbank.
+quest.build.spa.name,Baue ein Spa,Baue ein Spa
+quest.build.spa.desc,Errichte einen Spa-Bereich mit Sauna oder Massage.,Errichte einen Spa-Bereich mit Sauna oder Massage.
+quest.use.pool.5.name,Kühles Nass,Kühles Nass
+quest.use.pool.5.desc,Lass 5 Gäste den Pool nutzen.,Lass 5 Gäste den Pool nutzen.
+quest.use.pool.25.name,Wasserratten,Wasserratten
+quest.use.pool.25.desc,Lass 25 Gäste den Pool nutzen.,Lass 25 Gäste den Pool nutzen.
+quest.use.pool.50.name,Schwimmfest,Schwimmfest
+quest.use.pool.50.desc,Lass 50 Gäste den Pool nutzen.,Lass 50 Gäste den Pool nutzen.
+quest.use.pool.100.name,Aqua-Aerobic,Aqua-Aerobic
+quest.use.pool.100.desc,Lass 100 Gäste den Pool nutzen.,Lass 100 Gäste den Pool nutzen.
+quest.use.gym.5.name,Aufwärmen,Aufwärmen
+quest.use.gym.5.desc,Lass 5 Gäste das Gym nutzen.,Lass 5 Gäste das Gym nutzen.
+quest.use.gym.25.name,Muskelkater,Muskelkater
+quest.use.gym.25.desc,Lass 25 Gäste das Gym nutzen.,Lass 25 Gäste das Gym nutzen.
+quest.use.gym.50.name,Pumpen,Pumpen
+quest.use.gym.50.desc,Lass 50 Gäste das Gym nutzen.,Lass 50 Gäste das Gym nutzen.
+quest.use.gym.100.name,Ironman,Ironman
+quest.use.gym.100.desc,Lass 100 Gäste das Gym nutzen.,Lass 100 Gäste das Gym nutzen.
+quest.use.spa.5.name,Durchatmen,Durchatmen
+quest.use.spa.5.desc,Lass 5 Gäste das Spa nutzen.,Lass 5 Gäste das Spa nutzen.
+quest.use.spa.25.name,Entspannung pur,Entspannung pur
+quest.use.spa.25.desc,Lass 25 Gäste das Spa nutzen.,Lass 25 Gäste das Spa nutzen.
+quest.use.spa.50.name,Wellness-Oase,Wellness-Oase
+quest.use.spa.50.desc,Lass 50 Gäste das Spa nutzen.,Lass 50 Gäste das Spa nutzen.
+quest.use.spa.100.name,Nirvana,Nirvana
+quest.use.spa.100.desc,Lass 100 Gäste das Spa nutzen.,Lass 100 Gäste das Spa nutzen.
+quest.build.conference.name,Baue Konferenzraum,Baue Konferenzraum
+quest.build.conference.desc,Errichte einen Raum für Meetings und Vorträge.,Errichte einen Raum für Meetings und Vorträge.
+quest.use.conf.5.name,Kleines Meeting,Kleines Meeting
+quest.use.conf.5.desc,Habe 5 Konferenz-Teilnehmer.,Habe 5 Konferenz-Teilnehmer.
+quest.use.conf.25.name,Workshop,Workshop
+quest.use.conf.25.desc,Habe 25 Konferenz-Teilnehmer.,Habe 25 Konferenz-Teilnehmer.
+quest.use.conf.50.name,Symposium,Symposium
+quest.use.conf.50.desc,Habe 50 Konferenz-Teilnehmer.,Habe 50 Konferenz-Teilnehmer.
+quest.use.conf.100.name,Großer Kongress,Großer Kongress
+quest.use.conf.100.desc,Habe 100 Konferenz-Teilnehmer.,Habe 100 Konferenz-Teilnehmer.
+quest.milestone.guests.100.name,100 Gäste,100 Gäste
+quest.milestone.guests.100.desc,Empfange insgesamt 100 Gäste.,Empfange insgesamt 100 Gäste.
+quest.milestone.guests.200.name,200 Gäste,200 Gäste
+quest.milestone.guests.200.desc,Empfange insgesamt 200 Gäste.,Empfange insgesamt 200 Gäste.
+quest.milestone.guests.500.name,500 Gäste,500 Gäste
+quest.milestone.guests.500.desc,Empfange insgesamt 500 Gäste.,Empfange insgesamt 500 Gäste.
+quest.milestone.guests.1000.name,1000 Gäste,1000 Gäste
+quest.milestone.guests.1000.desc,Empfange insgesamt 1000 Gäste.,Empfange insgesamt 1000 Gäste.
+quest.milestone.rev.2500.name,2.500€ Tagesumsatz,2.500€ Tagesumsatz
+quest.milestone.rev.2500.desc,Erreiche einen Tagesumsatz von 2.500€.,Erreiche einen Tagesumsatz von 2.500€.
+quest.milestone.rev.5000.name,5.000€ Tagesumsatz,5.000€ Tagesumsatz
+quest.milestone.rev.5000.desc,Erreiche einen Tagesumsatz von 5.000€.,Erreiche einen Tagesumsatz von 5.000€.
+quest.milestone.rev.7500.name,7.500€ Tagesumsatz,7.500€ Tagesumsatz
+quest.milestone.rev.7500.desc,Erreiche einen Tagesumsatz von 7.500€.,Erreiche einen Tagesumsatz von 7.500€.
+quest.milestone.rev.10000.name,10.000€ Tagesumsatz,10.000€ Tagesumsatz
+quest.milestone.rev.10000.desc,Erreiche einen Tagesumsatz von 10.000€.,Erreiche einen Tagesumsatz von 10.000€.
+quest.milestone.sat.75.name,75% Zufriedenheit,75% Zufriedenheit
+quest.milestone.sat.75.desc,Beende einen Tag mit min. 75% durchschnittlicher Gästezufriedenheit.,Beende einen Tag mit min. 75% durchschnittlicher Gästezufriedenheit.
+quest.milestone.sat.90.name,90% Zufriedenheit,90% Zufriedenheit
+quest.milestone.sat.90.desc,Beende einen Tag mit min. 90% durchschnittlicher Gästezufriedenheit.,Beende einen Tag mit min. 90% durchschnittlicher Gästezufriedenheit.
+quest.milestone.sat.100.name,100% Zufriedenheit,100% Zufriedenheit
+quest.milestone.sat.100.desc,Beende einen Tag mit 100% durchschnittlicher Gästezufriedenheit.,Beende einen Tag mit 100% durchschnittlicher Gästezufriedenheit.
+quest.milestone.occupancy.name,Volle Hütte,Volle Hütte
+quest.milestone.occupancy.desc,Erreiche 100% Zimmerbelegung (alle verfügbaren Zimmer sind gebucht).,Erreiche 100% Zimmerbelegung (alle verfügbaren Zimmer sind gebucht).
+room_category.milestones,Meilensteine,Meilensteine
+quest.guest.vip.10.name,Roter Teppich,Roter Teppich
+quest.guest.vip.10.desc,Beherberge insgesamt 10 VIP-Gäste.,Beherberge insgesamt 10 VIP-Gäste.
+quest.guest.vip.25.name,Sterne-Status,Sterne-Status
+quest.guest.vip.25.desc,Beherberge insgesamt 25 VIP-Gäste.,Beherberge insgesamt 25 VIP-Gäste.
+roomdef.name.long.vending_machine,Getr�nkeautomat,Vending Machine
+roomdef.name.short.vending_machine,Automat,Vending

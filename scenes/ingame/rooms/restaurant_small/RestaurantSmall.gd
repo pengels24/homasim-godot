@@ -18,6 +18,7 @@ static func get_definition() -> Dictionary:
 		"req_tech": "G1.3",
 		"max_beds": 0,
 		"is_poi": true,
+		"max_guests": 20,
 		"visit_income": 0, # Wird durch Rezepte bestimmt
 		"visit_exp": 15,
 		"supply_cost_per_visit": 10,
@@ -28,6 +29,7 @@ static func get_definition() -> Dictionary:
 		"open_from": 420, # 07:00
 		"open_to": 1320,  # 22:00
 		"capacity": 20,   # Max. gleichzeitige Gäste (2 Familien-Tische + 5 kleine Tische = 20 Plätze)
+		"need_restoration": {"hunger": 80, "thirst": 20},
 		"valid_door_slots": ["R2"],
 		"cleanliness_level": 100,
 		"maintenance_level": 100,
@@ -36,11 +38,11 @@ static func get_definition() -> Dictionary:
 
 ## Gibt die globale Standposition für die Bedienung zurück (mittig im Gastraum)
 func get_waiter_stand_pos() -> Vector2:
-	var area = get_node_or_null("Interior/Furniture/WaiterArea")
+	var area = get_node_or_null("ServicePoint")
 	if is_instance_valid(area):
 		return area.global_position
 	# Fallback: Mitte des Raums (ca. 24, 24)
-	return global_position + Vector2(24, 24)
+	return to_global(Vector2(24, 24))
 
 # =============================================================================
 # VARIABLES
@@ -266,4 +268,6 @@ func serve_order_to_seat(order_id: String) -> void:
 		if seat["order_id"] == order_id:
 			if GastroManager:
 				GastroManager.serve_order(order_id)
+			if QuestManager.has_method("on_order_served"):
+				QuestManager.on_order_served(_room_id)
 			break

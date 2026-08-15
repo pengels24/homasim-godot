@@ -9,6 +9,7 @@ func _ready() -> void:
 
 func update_progress(progress: float, remaining_time: int) -> void:
 	build_progress.value = progress * 100
+	@warning_ignore("integer_division")
 	var r_h = remaining_time / 60
 	var r_m = remaining_time % 60
 	time_label.text = "%d%%  |  %dh %dm" % [int(progress * 100), r_h, r_m]

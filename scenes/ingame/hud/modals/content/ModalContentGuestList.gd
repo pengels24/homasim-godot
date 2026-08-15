@@ -12,6 +12,14 @@ class_name ModalContentGuestList
 @onready var detail_status_val: Label = %DetailStatusValue
 @onready var detail_budget_lbl: Label = %DetailBudgetLabel
 @onready var detail_budget_val: Label = %DetailBudgetValue
+@onready var need_hunger: ProgressBar = %NeedHunger
+@onready var need_thirst: ProgressBar = %NeedThirst
+@onready var need_energy: ProgressBar = %NeedEnergy
+@onready var need_fun: ProgressBar = %NeedFun
+@onready var lbl_hunger: Label = %LblHunger
+@onready var lbl_thirst: Label = %LblThirst
+@onready var lbl_energy: Label = %LblEnergy
+@onready var lbl_fun: Label = %LblFun
 @onready var btn_goto: Button = %BtnGoto
 
 var _selected_guest: GuestActor = null
@@ -107,6 +115,22 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 	
 	var font_color = Color("#CCCCCC")
 	
+	# Icon (NEW)
+	var tex_icon = TextureRect.new()
+	var def = party.get_type_def()
+	var icon_path = def.get("icon", "")
+	if icon_path != "" and ResourceLoader.exists(icon_path):
+		tex_icon.texture = load(icon_path)
+	tex_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	tex_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	tex_icon.custom_minimum_size = Vector2(24, 24)
+	tex_icon.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	
+	var icon_margin = MarginContainer.new()
+	icon_margin.add_theme_constant_override("margin_right", 8)
+	icon_margin.add_child(tex_icon)
+	hbox.add_child(icon_margin)
+	
 	# Name
 	var lbl_name = Label.new()
 	lbl_name.text = member.name
@@ -142,42 +166,39 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 	var energy_val = 100.0
 	
 	if actor:
-		# Guests don't have individual energy yet, keeping it at 100%
 		var state = actor.get("current_state")
-		if state == 2: # IN_ROOM
-			var target_room = actor.get("_target_room")
-			if is_instance_valid(target_room) and target_room.has_method("get_definition"):
-				goal_text = target_room.get_definition().get("name", GameState.T("guest.tooltip.room"))
-			else:
-				goal_text = GameState.T("guest.tooltip.room")
-		elif state == 3: # IN_POI
-			var poi_id = actor.get("_current_poi_id")
-			if poi_id != "":
-				var poi_name = poi_id.capitalize()
-				if actor.has_method("_get_poi_def"):
-					var def = actor.call("_get_poi_def", poi_id)
-					if typeof(def) == TYPE_DICTIONARY and def.has("name"):
-						poi_name = GameState.T(def.get("name"))
-				
-				var room_key = ""
-				if actor.has_method("_get_poi_room_id"):
-					room_key = actor.call("_get_poi_room_id", poi_id)
-					
-				if room_key != "" and room_key != "null":
-					goal_text = "in %s %s" % [poi_name, room_key]
-				else:
-					goal_text = "in %s" % poi_name
-			else:
-				goal_text = "POI"
-		elif state == 4: # AWAITING_CHECKOUT
+		var _raw_poi = actor.get("_current_poi_id")
+		var poi_id = _raw_poi if _raw_poi != null else ""
+		var target_room = actor.get("_target_room")
+		
+		if state == 4: # AWAITING_CHECKOUT
 			goal_text = GameState.T("guest.tooltip.reception")
+		elif state == 5: # LEAVING
+			goal_text = GameState.T("guest.tooltip.leaving")
 		elif state == 1: # WALKING
 			if actor.get("_is_checkout_walk"):
 				goal_text = GameState.T("guest.tooltip.walking_reception")
 			else:
-				goal_text = GameState.T("guest.tooltip.walking_room").replace(" (Zimmer)", "") # "Unterwegs"
-		elif state == 5: # LEAVING
-			goal_text = GameState.T("guest.tooltip.leaving")
+				goal_text = GameState.T("guest.tooltip.walking_room").replace(" (Zimmer)", "")
+		elif poi_id != "": # Any POI state
+			var poi_name = poi_id.capitalize()
+			if actor.has_method("_get_poi_def"):
+				var poi_def = actor.call("_get_poi_def", poi_id)
+				if typeof(poi_def) == TYPE_DICTIONARY and poi_def.has("name"):
+					poi_name = GameState.T(poi_def.get("name"))
+			
+			var room_key = ""
+			if actor.has_method("_get_poi_room_id"):
+				room_key = actor.call("_get_poi_room_id", poi_id)
+				
+			if room_key != "" and room_key != "null":
+				goal_text = "in %s %s" % [poi_name, room_key]
+			else:
+				goal_text = "in %s" % poi_name
+		elif is_instance_valid(target_room) and target_room.has_method("get_definition"): # Any Room state
+			goal_text = target_room.get_definition().get("name", GameState.T("guest.tooltip.room"))
+		elif state == 2 or state == 9 or state == 10:
+			goal_text = GameState.T("guest.tooltip.room")
 		else:
 			goal_text = "-"
 			
@@ -190,16 +211,16 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 	lbl_goal.add_theme_color_override("font_color", font_color)
 	
 	# Energy -> Saturation
-	var lbl_energy = Label.new()
+	var row_lbl_energy = Label.new()
 	energy_val = member.saturation if "saturation" in member else 100.0
-	lbl_energy.text = "%d%%" % int(energy_val)
-	lbl_energy.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	lbl_energy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	lbl_energy.size_flags_stretch_ratio = 1.0
+	row_lbl_energy.text = "%d%%" % int(energy_val)
+	row_lbl_energy.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	row_lbl_energy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row_lbl_energy.size_flags_stretch_ratio = 1.0
 	if energy_val < 30:
-		lbl_energy.add_theme_color_override("font_color", Color("#b02e3b"))
+		row_lbl_energy.add_theme_color_override("font_color", Color("#b02e3b"))
 	else:
-		lbl_energy.add_theme_color_override("font_color", font_color)
+		row_lbl_energy.add_theme_color_override("font_color", font_color)
 		
 	# Satisfaction
 	var lbl_sat = Label.new()
@@ -219,7 +240,7 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 	hbox.add_child(lbl_room)
 	hbox.add_child(lbl_budget)
 	hbox.add_child(lbl_goal)
-	hbox.add_child(lbl_energy)
+	hbox.add_child(row_lbl_energy)
 	hbox.add_child(lbl_sat)
 	
 	btn.add_child(margin)
@@ -229,8 +250,9 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 	_active_rows.append({
 		"party": party,
 		"member": member,
+		"lbl_budget": lbl_budget,
 		"lbl_goal": lbl_goal,
-		"lbl_energy": lbl_energy,
+		"lbl_energy": row_lbl_energy,
 		"lbl_sat": lbl_sat
 	})
 
@@ -257,32 +279,52 @@ func _on_guest_selected(party: GuestParty, member: GuestMember, _btn: Button) ->
 		
 		var goal_text = "---"
 		var state = _selected_guest.get("current_state")
-		if state == 2: goal_text = GameState.T("guest.tooltip.room")
-		elif state in [3, 6, 7, 8]:
-			var poi_id = _selected_guest.get("_current_poi_id")
-			if poi_id != "":
-				var poi_name = poi_id.capitalize()
-				if _selected_guest.has_method("_get_poi_def"):
-					var def = _selected_guest.call("_get_poi_def", poi_id)
-					if typeof(def) == TYPE_DICTIONARY and def.has("name"):
-						poi_name = GameState.T(def.get("name"))
-				
-				var room_key = ""
-				if _selected_guest.has_method("_get_poi_room_id"):
-					room_key = _selected_guest.call("_get_poi_room_id", poi_id)
-					
-				if room_key != "" and room_key != "null":
-					goal_text = "in %s %s" % [poi_name, room_key]
-				else:
-					goal_text = "in %s" % poi_name
+		var _raw_poi = _selected_guest.get("_current_poi_id")
+		var poi_id = _raw_poi if _raw_poi != null else ""
+		var target_room = _selected_guest.get("_target_room")
+		
+		if state == 4:
+			goal_text = GameState.T("guest.tooltip.reception")
+		elif state == 5:
+			goal_text = GameState.T("guest.tooltip.leaving")
+		elif state == 1:
+			if _selected_guest.get("_is_checkout_walk"):
+				goal_text = GameState.T("guest.tooltip.walking_reception")
 			else:
-				goal_text = "Aktivität"
-		elif state == 4: goal_text = GameState.T("guest.tooltip.reception")
-		elif state == 1: goal_text = GameState.T("guest.tooltip.walking_room").replace(" (Zimmer)", "")
-		elif state == 5: goal_text = GameState.T("guest.tooltip.leaving")
+				goal_text = GameState.T("guest.tooltip.walking_room").replace(" (Zimmer)", "")
+		elif poi_id != "":
+			var poi_name = poi_id.capitalize()
+			if _selected_guest.has_method("_get_poi_def"):
+				var def = _selected_guest.call("_get_poi_def", poi_id)
+				if typeof(def) == TYPE_DICTIONARY and def.has("name"):
+					poi_name = GameState.T(def.get("name"))
+			
+			var room_key = ""
+			if _selected_guest.has_method("_get_poi_room_id"):
+				room_key = _selected_guest.call("_get_poi_room_id", poi_id)
+				
+			if room_key != "" and room_key != "null":
+				goal_text = "in %s %s" % [poi_name, room_key]
+			else:
+				goal_text = "in %s" % poi_name
+		elif is_instance_valid(target_room) and target_room.has_method("get_definition"):
+			goal_text = target_room.get_definition().get("name", GameState.T("guest.tooltip.room"))
+		elif state == 2 or state == 9 or state == 10:
+			goal_text = GameState.T("guest.tooltip.room")
 		detail_status_val.text = goal_text
+		
+		_update_need_bar(need_hunger, lbl_hunger, GameState.T("need.hunger"), member.saturation)
+		_update_need_bar(need_thirst, lbl_thirst, GameState.T("need.thirst"), member.thirst)
+		_update_need_bar(need_energy, lbl_energy, GameState.T("need.energy"), member.energy)
+		_update_need_bar(need_fun, lbl_fun, GameState.T("need.fun"), member.fun)
 	else:
 		_clear_details()
+
+func _update_need_bar(bar: ProgressBar, lbl: Label, prefix: String, val: int) -> void:
+	if not is_instance_valid(bar): return
+	bar.value = val
+	if is_instance_valid(lbl):
+		lbl.text = "%s: %d%%" % [prefix, val]
 
 func _clear_details() -> void:
 	_selected_guest = null
@@ -295,6 +337,15 @@ func _clear_details() -> void:
 	detail_satisfaction_val.text = "---"
 	detail_budget_val.text = "---"
 	detail_status_val.text = "---"
+	
+	need_hunger.value = 0
+	need_thirst.value = 0
+	need_energy.value = 0
+	need_fun.value = 0
+	if is_instance_valid(lbl_hunger): lbl_hunger.text = "%s: 0%%" % GameState.T("need.hunger.short")
+	if is_instance_valid(lbl_thirst): lbl_thirst.text = "%s: 0%%" % GameState.T("need.thirst.short")
+	if is_instance_valid(lbl_energy): lbl_energy.text = "%s: 0%%" % GameState.T("need.energy.short")
+	if is_instance_valid(lbl_fun):    lbl_fun.text    = "%s: 0%%" % GameState.T("need.fun.short")
 
 func _process(delta: float) -> void:
 	if not is_visible_in_tree():
@@ -322,39 +373,15 @@ func _refresh_live_data() -> void:
 		
 		if actor:
 			var state = actor.get("current_state")
-			if state == 2: # IN_ROOM
-				var target_room = actor.get("_target_room")
-				if is_instance_valid(target_room) and target_room.has_method("get_definition"):
-					goal_text_short = target_room.get_definition().get("name", GameState.T("guest.tooltip.room"))
-				else:
-					goal_text_short = GameState.T("guest.tooltip.room")
-				goal_text_long = goal_text_short
-			elif state in [3, 6, 7, 8]: # IN_POI, STUDYING_MENU, WAITING_FOR_FOOD, EATING
-				var poi_id = actor.get("_current_poi_id")
-				if poi_id != "":
-					var poi_name = poi_id.capitalize()
-					if actor.has_method("_get_poi_def"):
-						var def = actor.call("_get_poi_def", poi_id)
-						if typeof(def) == TYPE_DICTIONARY and def.has("name"):
-							poi_name = GameState.T(def.get("name"))
-					
-					var room_key = ""
-					if actor.has_method("_get_poi_room_id"):
-						room_key = actor.call("_get_poi_room_id", poi_id)
-						
-					if room_key != "" and room_key != "null":
-						goal_text_long = "in %s %s" % [poi_name, room_key]
-					else:
-						goal_text_long = "in %s" % poi_name
-					
-					# Kürzen für die Liste: Alles ab "(" abschneiden
-					goal_text_short = poi_name.split(" (")[0]
-					goal_text_short = "in %s" % goal_text_short
-				else:
-					goal_text_short = "POI"
-					goal_text_long = "POI"
-			elif state == 4: # AWAITING_CHECKOUT
+			var _raw_poi = actor.get("_current_poi_id")
+			var poi_id = _raw_poi if _raw_poi != null else ""
+			var target_room = actor.get("_target_room")
+			
+			if state == 4: # AWAITING_CHECKOUT
 				goal_text_short = GameState.T("guest.tooltip.reception")
+				goal_text_long = goal_text_short
+			elif state == 5: # LEAVING
+				goal_text_short = GameState.T("guest.tooltip.leaving")
 				goal_text_long = goal_text_short
 			elif state == 1: # WALKING
 				if actor.get("_is_checkout_walk"):
@@ -362,8 +389,29 @@ func _refresh_live_data() -> void:
 				else:
 					goal_text_short = GameState.T("guest.tooltip.walking_room").replace(" (Zimmer)", "")
 				goal_text_long = goal_text_short
-			elif state == 5: # LEAVING
-				goal_text_short = GameState.T("guest.tooltip.leaving")
+			elif poi_id != "":
+				var poi_name = poi_id.capitalize()
+				if actor.has_method("_get_poi_def"):
+					var def = actor.call("_get_poi_def", poi_id)
+					if typeof(def) == TYPE_DICTIONARY and def.has("name"):
+						poi_name = GameState.T(def.get("name"))
+				
+				var room_key = ""
+				if actor.has_method("_get_poi_room_id"):
+					room_key = actor.call("_get_poi_room_id", poi_id)
+					
+				if room_key != "" and room_key != "null":
+					goal_text_long = "in %s %s" % [poi_name, room_key]
+				else:
+					goal_text_long = "in %s" % poi_name
+				
+				goal_text_short = poi_name.split(" (")[0]
+				goal_text_short = "in %s" % goal_text_short
+			elif is_instance_valid(target_room) and target_room.has_method("get_definition"):
+				goal_text_short = target_room.get_definition().get("name", GameState.T("guest.tooltip.room"))
+				goal_text_long = goal_text_short
+			elif state == 2 or state == 9 or state == 10:
+				goal_text_short = GameState.T("guest.tooltip.room")
 				goal_text_long = goal_text_short
 			else:
 				goal_text_short = "-"
@@ -376,6 +424,11 @@ func _refresh_live_data() -> void:
 		else:
 			row.lbl_energy.add_theme_color_override("font_color", Color("#CCCCCC"))
 			
+		if member.daily_budget > 0:
+			row.lbl_budget.text = "%d %s" % [member.spending_budget, GameState.T("currency.symbol")]
+		else:
+			row.lbl_budget.text = "---"
+			
 		row.lbl_sat.text = "%d%%" % int(sat)
 		if sat < 50:
 			row.lbl_sat.add_theme_color_override("font_color", Color("#b02e3b"))
@@ -384,9 +437,15 @@ func _refresh_live_data() -> void:
 		else:
 			row.lbl_sat.add_theme_color_override("font_color", Color("#CCCCCC"))
 			
-		if _selected_guest and member.id == (_selected_guest.get("id") if "id" in _selected_guest else ""):
+		if _selected_guest and actor and _selected_guest == actor:
 			detail_satisfaction_val.text = "%d%%" % sat
 			detail_status_val.text = goal_text_long
+			if member.daily_budget > 0:
+				detail_budget_val.text = "%d / %d %s" % [member.spending_budget, member.daily_budget, GameState.T("currency.symbol")]
+			_update_need_bar(need_hunger, lbl_hunger, GameState.T("need.hunger"), member.saturation)
+			_update_need_bar(need_thirst, lbl_thirst, GameState.T("need.thirst"), member.thirst)
+			_update_need_bar(need_energy, lbl_energy, GameState.T("need.energy"), member.energy)
+			_update_need_bar(need_fun, lbl_fun, GameState.T("need.fun"), member.fun)
 
 func _on_goto_pressed() -> void:
 	if not is_instance_valid(_selected_guest):

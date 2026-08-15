@@ -251,6 +251,7 @@ func _execute_poi_move(target_pos: Vector2, room_node: Node) -> void:
 	_active_tween = create_tween()
 	var speed_scale = TimeManager.user_speed if TimeManager and not TimeManager.is_paused() else 1.0
 	_active_tween.set_speed_scale(speed_scale)
+	_active_tween.tween_interval(0.01) # Verhindert "started with no Tweeners" Error
 	
 	var local_path = []
 	if room_node.has_method("get_local_path"):
@@ -521,7 +522,7 @@ func _change_state(new_state: State) -> void:
 				avatar.visible = true
 			else:
 				_action_timer = randf_range(45.0, 120.0)
-				avatar.visible = false
+				avatar.visible = true
 			if has_node("ClickArea"): get_node("ClickArea").input_pickable = avatar.visible
 		State.AWAITING_CHECKOUT:
 			# Sichtbar in der Lobby am Checkout warten
@@ -559,7 +560,7 @@ func _on_order_served(_order_id: String, guest_id: String, recipe_id: String) ->
 			if r.get("id") == recipe_id:
 				price = r.get("price", 0)
 				sat = r.get("saturation", 0)
-				r_name = GameState.T(r.get("name", ""))
+				r_name = GameState.T(r.get("name_key", ""))
 				break
 		
 		# Bezahlen via FinanceManager
@@ -681,6 +682,10 @@ func _on_poi_arrived() -> void:
 		_active_tween = create_tween()
 		var speed_scale = TimeManager.user_speed if TimeManager and not TimeManager.is_paused() else 1.0
 		_active_tween.set_speed_scale(speed_scale)
+		_active_tween.tween_interval(0.01) # Verhindert "started with no Tweeners" Error
+		
+		# Avatar während des Weges zum Platz sichtbar halten!
+		avatar.visible = true
 		
 		var local_path = []
 		if is_instance_valid(room_node) and room_node.has_method("get_local_path"):
@@ -1089,7 +1094,7 @@ func _get_logical_start_tile() -> Vector2i:
 			var t_exit_tile = _get_room_exit_tile(_target_room)
 			_room_door_world = _map_grid.tile_to_world(t_exit_tile)
 			return t_exit_tile
-	elif (current_state == State.IN_POI or current_state == State.EATING) and not _current_poi_id.is_empty():
+	elif not _current_poi_id.is_empty() and current_state != State.WALKING and current_state != State.LEAVING:
 		var poi_room = _get_poi_room_node(_current_poi_id)
 		if is_instance_valid(poi_room) and poi_room.has_method("get_target_tile"):
 			return poi_room.get_target_tile(_map_grid)

@@ -6,6 +6,7 @@ extends HBoxContainer
 @onready var rank_label: Label = %RankLabel
 @onready var rank_reward_label: Label = %RankRewardLabel
 @onready var rank_claim_btn: Button = %RankClaimBtn
+@onready var header_panel: PanelContainer = $MainArea/HeaderPanel
 
 var _active_cat: String = ""
 var _active_rank_id: String = ""
@@ -24,6 +25,7 @@ var SB_GREEN_PRESSED = preload("res://assets/UI/menu_button_green_pressed.tres")
 var SB_DISABLED = preload("res://assets/UI/menu_button_darkblue_disabled.tres")
 
 var SB_QUEST_PANEL: StyleBoxFlat
+var SB_HEADER_PANEL: StyleBoxFlat
 var SB_IND: StyleBoxFlat
 
 func _style_toggle_btn(btn: Button) -> void:
@@ -55,6 +57,11 @@ func _style_action_btn(btn: Button, type: String) -> void:
 # =============================================================================
 func _ready() -> void:
 	
+	_repair_quest_stats()
+	
+	custom_minimum_size = Vector2(1500, 800)
+	$Sidebar.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	
 	SB_IND = StyleBoxFlat.new()
 	SB_IND.bg_color = Color(0.1, 0.8, 0.2, 1.0)
 	SB_IND.border_color = Color(0.1, 0.3, 0.1, 1.0)
@@ -67,8 +74,20 @@ func _ready() -> void:
 	SB_QUEST_PANEL.set_border_width_all(1)
 	SB_QUEST_PANEL.set_corner_radius_all(6)
 	
+	SB_HEADER_PANEL = StyleBoxFlat.new()
+	SB_HEADER_PANEL.bg_color = Color(0.1, 0.12, 0.15, 0.8)
+	SB_HEADER_PANEL.border_color = Color(0.8, 0.65, 0.0, 1.0) # Subtly gold
+	SB_HEADER_PANEL.set_border_width_all(1)
+	SB_HEADER_PANEL.set_corner_radius_all(6)
+	header_panel.add_theme_stylebox_override("panel", SB_HEADER_PANEL)
+	
 	rank_label.theme_type_variation = &"HeaderMedium"
 	rank_reward_label.theme_type_variation = &"ValueLabel"
+	rank_reward_label.add_theme_color_override("font_color", Color.PALE_GREEN)
+	
+	var main_area = $MainArea
+	main_area.add_theme_constant_override("separation", 15)
+	
 	_build_categories()
 	if cat_list.get_child_count() > 0:
 		_select_category("zimmer")
@@ -257,7 +276,11 @@ func _populate_quests() -> void:
 		title.theme_type_variation = &"HeaderMedium"
 		
 		if is_locked:
-			title.text = GameState.T("ui.quests.locked_tech")
+			var tech_name = "???"
+			var tech_def = TechtreeManager.tech_registry.get(req_tech, {})
+			if not tech_def.is_empty():
+				tech_name = GameState.T(tech_def.get("name", "Unknown"))
+			title.text = GameState.T(t_def.get("name", "Unknown")) + " (Benötigt Forschung: " + tech_name + ")"
 			title.add_theme_color_override("font_color", Color.DIM_GRAY)
 			vbox.add_child(title)
 		else:
@@ -267,18 +290,34 @@ func _populate_quests() -> void:
 			else:
 				title.add_theme_color_override("font_color", Color.WHITE)
 			vbox.add_child(title)
-			
+			var max_val = t_def.get("target_count", 1)
+			var prog_val = 0
+			if is_past_rank:
+				prog_val = max_val
+			else:
+				var stat_key = t_def["type"]
+				if t_def.get("target_id", "") != "":
+					stat_key += "_" + t_def["target_id"]
+					
+				if t_def["type"] == "build_room":
+					var room_count = 0
+					for room in GameState.selected_hotel.get("rooms", []):
+						if room.get("type") == t_def["target_id"]:
+							room_count += 1
+					prog_val = room_count
+				else:
+					var stats = GameState.selected_hotel.get("quest_stats", {})
+					prog_val = stats.get(stat_key, 0)
+					
+				if t_state.has("progress"):
+					prog_val = max(prog_val, t_state["progress"])
+					
+				prog_val = min(prog_val, max_val)
+
 			var desc = Label.new()
 			desc.theme_type_variation = &"DescLabel"
-			desc.text = GameState.T(t_def.get("description", ""))
+			desc.text = GameState.T(t_def.get("description", "")) + " (" + str(int(prog_val)) + " / " + str(int(max_val)) + ")"
 			vbox.add_child(desc)
-			
-			var prog_lbl = Label.new()
-			prog_lbl.theme_type_variation = &"DescLabel"
-			var max_val = t_def.get("target_count", 1)
-			var prog_val = max_val if is_past_rank else (0 if is_future_rank else t_state["progress"])
-			prog_lbl.text = GameState.T("ui.quests.progress", int(prog_val), int(max_val))
-			vbox.add_child(prog_lbl)
 			
 			var reward_lbl = Label.new()
 			reward_lbl.theme_type_variation = &"ValueLabel"
@@ -293,15 +332,15 @@ func _populate_quests() -> void:
 		btn.focus_mode = Control.FOCUS_NONE
 		btn.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		
-		if is_locked:
+		if is_future_rank:
+			btn.text = GameState.T("ui.quests.btn.future")
+			btn.disabled = true
+			_style_action_btn(btn, "disabled")
+		elif is_locked:
 			btn.text = GameState.T("ui.quests.btn.locked")
 			btn.disabled = true
 			_style_action_btn(btn, "disabled")
 			btn.add_theme_color_override("font_color", Color.DARK_GRAY)
-		elif is_future_rank:
-			btn.text = GameState.T("ui.quests.btn.future")
-			btn.disabled = true
-			_style_action_btn(btn, "disabled")
 		elif is_past_rank or t_state["state"] == "claimed":
 			btn.text = GameState.T("ui.quests.btn.done")
 			btn.disabled = true
@@ -348,3 +387,22 @@ func _on_rank_claim() -> void:
 	QuestManager.claim_rank(_active_cat)
 	# UI neu aufbauen (da sich der current_rank verschoben hat)
 	_select_category(_active_cat)
+
+func _repair_quest_stats() -> void:
+	if GameState.selected_hotel.is_empty(): return
+	if not GameState.selected_hotel.has("quest_stats"):
+		GameState.selected_hotel["quest_stats"] = {}
+	var stats = GameState.selected_hotel["quest_stats"]
+	var quest_state = GameState.selected_hotel.get("quests", {})
+	for cat_id in quest_state:
+		var targets_state = quest_state[cat_id].get("targets", {})
+		for t_id in targets_state:
+			var t_state = targets_state[t_id]
+			var t_def = QuestManager.flat_targets.get(t_id)
+			if t_def and t_def["type"] != "build_room":
+				var stat_key = t_def["type"]
+				if t_def.get("target_id", "") != "":
+					stat_key += "_" + t_def["target_id"]
+				var p = t_state.get("progress", 0)
+				if p > stats.get(stat_key, 0):
+					stats[stat_key] = p

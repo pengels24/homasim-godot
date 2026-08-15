@@ -146,6 +146,7 @@ func create_tutorial_hotel() -> int:
 		"rep_max": 1000,
 		"fp": 0,
 		"guest_data": {},
+		"event_data": {},
 		"transactions": [],
 		"unlocked_techs": [],
 		"techtree": {},
@@ -498,6 +499,7 @@ func _load_hotel_file(filename: String) -> void:
 		"rep_max": cfg.get_value("hotel", "rep_max", 1000),
 		"fp": cfg.get_value("hotel", "fp", 0),
 		"guest_data": cfg.get_value("hotel", "guest_data", {}),
+		"event_data": cfg.get_value("hotel", "event_data", {}),
 		"transactions": cfg.get_value("hotel", "transactions", []),
 		"unlocked_techs": cfg.get_value("hotel", "unlocked_techs", []),
 		"techtree": cfg.get_value("hotel", "techtree", {}),
@@ -526,7 +528,8 @@ func _save_hotel(hotel: Dictionary) -> void:
 	var keys_to_save = [
 		"profile_id", "name", "grid_cols", "grid_rows", "day", "money", "game_time", "plots", "auto_count", 
 		"level", "stars", "guests_active", "guests_checkin", "guests_checkout", "exp", "exp_max", "rep", "rep_max", "fp", 
-		"guest_data", "transactions", "unlocked_techs", "techtree", "tutorials", "quests", "staff", "built_room_types", "tutorial_step", "activity_log"
+		"guest_data", "event_data", "transactions", "unlocked_techs", "techtree", "tutorials", "quests", "staff", "built_room_types", 
+		"tutorial_step", "activity_log"
 	]
 	for key in keys_to_save:
 		cfg.set_value("hotel", key, hotel.get(key))
@@ -658,6 +661,7 @@ func _take_snapshot(hotel: Dictionary, snap_name: String) -> Dictionary:
 		"rep_max": hotel.get("rep_max", 1000),
 		"fp": hotel.get("fp", 0),
 		"guest_data": hotel.get("guest_data", {}).duplicate(true),
+		"event_data": hotel.get("event_data", {}).duplicate(true),
 		"transactions": hotel.get("transactions", []).duplicate(true),
 		"unlocked_techs": hotel.get("unlocked_techs", []).duplicate(true),
 		"techtree": hotel.get("techtree", {}).duplicate(true),
@@ -699,6 +703,7 @@ func _apply_snapshot(hotel: Dictionary, snap: Dictionary) -> void:
 	hotel["rep_max"] = snap.get("rep_max", 1000)
 	hotel["fp"] = snap.get("fp", 0)
 	hotel["guest_data"] = snap.get("guest_data", {}).duplicate(true)
+	hotel["event_data"] = snap.get("event_data", {}).duplicate(true)
 	hotel["transactions"] = snap.get("transactions", []).duplicate(true)
 	hotel["unlocked_techs"] = snap.get("unlocked_techs", []).duplicate(true)
 	hotel["techtree"] = snap.get("techtree", {}).duplicate(true)

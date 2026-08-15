@@ -13,7 +13,7 @@ static func get_definition() -> Dictionary:
 		"icon": "res://assets/icons/angelus2010/Rooms/ang-spa-small.aseprite",
 		"nightly_price": 0,
 		"locked": false,
-		"max_guests": 4,
+		"max_guests": 6,
 		"in_build_menu": true,
 		"req_level": 4,
 		"req_tech": "W1.3",
@@ -28,8 +28,9 @@ static func get_definition() -> Dictionary:
 		"allowed_roles": ["wellness_counselor"],
 		"min_staff": 1,
 		"max_staff": 1,
-		"open_from": 540, # 09:00
-		"open_to": 1200,  # 20:00
+		"need_restoration": {"energy": 60, "fun": 30},
+		"open_from": 540,   # 09:00
+		"open_to": 1260,    # 21:00
 		"valid_door_slots": ["L2"],
 		"cleanliness_level": 100,
 		"maintenance_level": 100,
@@ -42,6 +43,12 @@ static func get_definition() -> Dictionary:
 const FLOOR_W := 44.0
 const FLOOR_H := 44.0
 const FLOOR_TEX_W := 256.0
+
+## Merkt sich pro Gast ob er zuletzt auf einem Chair oder Bed sass
+var _last_seat_type: Dictionary = {}
+
+## Zaehler fuer get_work_position - steuert ServicePoint vs. Patrouille
+var _work_call_count: int = 0
 
 func set_floor_neighbors(top: bool, right: bool, bottom: bool, left: bool) -> void:
 	var w: Array[bool] = [top, right, bottom, left]
@@ -80,35 +87,91 @@ func _apply_visuals() -> void:
 	
 	super._apply_visuals()
 
+## Wechselt zwischen Chair (Lounge/Sauna) und Bed (Liege) ab.
+## Nutzt _last_seat_type um den Wechsel auch nach leave_seat korrekt durchzufuehren.
 func claim_seat(guest_id: String) -> Vector2:
-	return room_claim_seat(guest_id)
+	# Schon belegt? Aktuelle Position zurueckgeben
+	for s in _room_seats:
+		if s["occupied_by"] == guest_id:
+			return s["node"].global_position
+	for b in _room_beds:
+		if b["occupied_by"] == guest_id:
+			return b["node"].global_position
+	# Letzten Typ lesen: von Chair -> Bed, von Bed -> Chair, erstes Mal -> Chair
+	var last_type: String = _last_seat_type.get(guest_id, "chair")
+	var use_beds := last_type == "chair"
+	var free: Array = []
+	for s in (_room_beds if use_beds else _room_seats):
+		if s["occupied_by"] == "":
+			free.append(s)
+	# Fallback: wenn Zieltyp voll ist
+	if free.is_empty():
+		for s in (_room_seats if use_beds else _room_beds):
+			if s["occupied_by"] == "":
+				free.append(s)
+		use_beds = not use_beds # Fallback-Typ merken
+	if free.is_empty():
+		return Vector2.INF
+	free.shuffle()
+	var chosen = free[0]
+	chosen["occupied_by"] = guest_id
+	_last_seat_type[guest_id] = "bed" if use_beds else "chair"
+	return chosen["node"].global_position
 	
 func leave_seat(guest_id: String) -> void:
 	for s in _room_seats:
 		if s["occupied_by"] == guest_id:
 			s["occupied_by"] = ""
+			_last_seat_type[guest_id] = "chair" # War auf Chair
+	for b in _room_beds:
+		if b["occupied_by"] == guest_id:
+			b["occupied_by"] = ""
+			_last_seat_type[guest_id] = "bed" # War auf Bed
+
+# =============================================================================
+# STAFF: Wellness-Fachkraft navigiert zum ServicePoint (Empfangsbereich)
+# oder patrouilliert den Raum (jeder 4. Aufruf)
+# =============================================================================
+func get_work_position(_staff_id: String) -> Vector2:
+	_work_call_count += 1
+	# Jeder 10. Aufruf (~20 Sek): Patrouille statt ServicePoint
+	if _work_call_count % 10 == 0:
+		return get_patrol_target()
+	var sp_pos := get_service_position()
+	if sp_pos != Vector2.INF:
+		return sp_pos
+	return Vector2.INF
+
+## Zufaellige Patrouille-Position innerhalb des Spa-Raums
+func get_patrol_target() -> Vector2:
+	var sz := get_tile_size() * 32.0
+	return global_position + Vector2(
+		randf_range(12.0, sz.x - 12.0),
+		randf_range(12.0, sz.y - 12.0))
 
 # =============================================================================
 # LIVE-MONITOR
 # =============================================================================
 func get_live_details() -> Array[Dictionary]:
 	var details: Array[Dictionary] = []
+	var gm = get_tree().get_first_node_in_group("guest_manager")
 	
 	for seat in _room_seats:
 		if seat["occupied_by"] != "":
 			var guest_name = "Gast"
-			var gm = get_tree().get_first_node_in_group("guest_manager")
 			if gm:
 				var guest_node = gm.get_guest(seat["occupied_by"])
 				if guest_node:
 					guest_name = guest_node.name
-			
-			var status_text = "Entspannt sich"
-			details.append({
-				"label": guest_name,
-				"value": status_text,
-				"color": Color("#3b82f6")
-			})
-			
+			details.append({"left": guest_name, "right": "Entspannt sich", "color": Color("#3b82f6")})
+	
+	for bed in _room_beds:
+		if bed["occupied_by"] != "":
+			var guest_name = "Gast"
+			if gm:
+				var guest_node = gm.get_guest(bed["occupied_by"])
+				if guest_node:
+					guest_name = guest_node.name
+			details.append({"left": guest_name, "right": "Liegt", "color": Color("#818cf8")})
+	
 	return details
-

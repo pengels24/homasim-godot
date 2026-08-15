@@ -20,7 +20,7 @@ static func get_definition() -> Dictionary:
 		"max_beds": 0,
 		"is_poi": true,
 		"is_guest_poi": true,
-		"visit_income": 0, # Event-Pauschale stattdessen
+		"visit_income": 35, # Wird an Event-Tagen ignoriert
 		"visit_exp": 30,
 		"supply_cost_per_visit": 10,
 		"adults_only": true,
@@ -30,7 +30,7 @@ static func get_definition() -> Dictionary:
 		"max_staff": 0,
 		"open_from": 480,  # 08:00
 		"open_to": 1020,   # 17:00
-		"valid_door_slots": ["L3"],
+		"valid_door_slots": ["L2"],
 		"cleanliness_level": 100,
 		"maintenance_level": 100,
 		"is_service_requested": false,
@@ -109,8 +109,8 @@ func get_live_details() -> Array[Dictionary]:
 			
 			var status_text = "Nimmt teil"
 			details.append({
-				"label": guest_name,
-				"value": status_text,
+				"left": guest_name,
+				"right": status_text,
 				"color": Color("#8b5cf6")
 			})
 			

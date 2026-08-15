@@ -50,6 +50,7 @@ const GAME_STAGE: String = "PRE-ALPHA"
 
 signal sig_hotel_level_up(new_level: int)
 signal sig_techdemo_completed()
+@warning_ignore("unused_signal")
 signal sig_open_codex_tech(tech_id: String)
 
 # interaktion
@@ -61,6 +62,8 @@ signal sig_room_clicked(room: Node2D)
 # globale signale
 @warning_ignore("unused_signal")
 signal sig_dev_spawn_guests(count: int)
+@warning_ignore("unused_signal")
+signal sig_dev_add_guest_budget(amount: int)
 
 signal sig_configs_reloaded()
 

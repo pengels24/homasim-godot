@@ -119,14 +119,33 @@ func _execute(cmd: String) -> void:
 			_log("  get-time:2200     – HHMM → Spielminuten", CLR_INFO)
 			_log("  save              – Quicksave auslösen", CLR_INFO)
 			_log("  spawn-guests:3    – Spawnt 3 neue Gästegruppen", CLR_INFO)
+			_log("  add-guest-budget:150 - Fügt aktiven Gästen Budget hinzu", CLR_INFO)
 			_log("  reload-config     – Lädt die JSoN-Daten aus config neu ein", CLR_INFO)
 			_log("  add-exp:500       – Addiert EXP hinzu", CLR_INFO)
 			_log("  set-level:5       – Setzt das Hotel-Level", CLR_INFO)
 			_log("  set-fp:1000       – Setzt die Forschungspunkte", CLR_INFO)
 			_log("  unlock-all-tutorials - Schaltet alle Tutorials im Codex frei", CLR_INFO)
 			_log("  reset-tutorial    – Setzt alle gesehenen Tutorials zurück", CLR_INFO)
+			_log("  set-conference:on – Startet das Tagungs-Event manuell", CLR_INFO)
+			_log("  set-conference:off– Beendet das Tagungs-Event manuell", CLR_INFO)
 
-		"reset-tutorial":
+		"set-conference":
+			if val_s == "on":
+				if EventManager:
+					EventManager.active_event = EventManager.EventType.CONFERENCE
+					EventManager.event_days_remaining = 1
+					EventManager._notify_event("Tageskonferenz!", "Ein Bus mit Tagungsgästen ist angekommen. (DevConsole)")
+				var gm = get_tree().current_scene.find_child("GuestManager", true, false)
+				if is_instance_valid(gm) and gm.has_method("spawn_conference_guests"):
+					gm.spawn_conference_guests()
+				_log("Konferenz-Event manuell gestartet.", CLR_OK)
+			elif val_s == "off":
+				if EventManager:
+					EventManager.active_event = EventManager.EventType.NONE
+					EventManager.event_days_remaining = 0
+				_log("Konferenz-Event manuell beendet (Gäste bleiben ggf. bis 17 Uhr).", CLR_OK)
+			else:
+				_log("Verwendung: set-conference:on oder set-conference:off", CLR_ERR)
 			if TutorialManager:
 				TutorialManager.reset_all()
 				_log("Alle Tutorials wurden zurückgesetzt.", CLR_OK)
@@ -222,6 +241,15 @@ func _execute(cmd: String) -> void:
 
 			GameState.sig_dev_spawn_guests.emit(count)
 			_log("Befehl zum Spawnen von %d Parteien gesendet." % count, CLR_OK)
+
+		"add-guest-budget":
+			if not val_s.is_valid_int():
+				_log("Fehler: Wert muss eine ganze Zahl sein.", CLR_ERR)
+				return
+			
+			var amount := int(val_s)
+			GameState.sig_dev_add_guest_budget.emit(amount)
+			_log("Budget aller aktiven Gäste um %d erhöht." % amount, CLR_OK)
 
 		"reload-config":
 			GameState.load_room_config()

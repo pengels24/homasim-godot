@@ -25,3 +25,12 @@ Damit der Spieler nicht grundlos 10 Bars baut, haben POIs tägliche Betriebskost
 
 ## 4. Zufriedenheits-Booster
 Der Besuch eines POIs befriedigt die Bedürfnisse des Gastes und steigert seine Zufriedenheit. Dies resultiert beim Checkout in einer deutlich höheren EXP-Ausschüttung. POIs sind also nicht nur für Geld wichtig, sondern zwingend notwendig, um die massiven EXP-Hürden in den höheren Leveln (Level 4+) zu überwinden.
+
+## 5. Dynamische Gäste-Budgets (`spending_budget`)
+Gäste besitzen ein dediziertes Taschengeld (`spending_budget`), das strikt von den Übernachtungskosten (`nightly_price`) getrennt ist. Dieses Taschengeld wird jeden Morgen für den Tagessatz zurückgesetzt und bestimmt, ob sich ein Gast den Besuch in den diversen POIs leisten kann.
+
+Damit Gäste durch das Hinzufügen immer weiterer, teurer POIs (Pool, Spa, Gym, Restaurant) nicht permanent bankrottgehen, wird das **Taschengeld dynamisch berechnet**:
+* **Basis-Taschengeld:** Jeder Gasttyp (z.B. Single, Familie) erhält einen festen Basis-Rahmen (z.B. 40 - 100 €).
+* **Dynamischer Aufschlag:** Beim Einchecken addiert das Spiel den `visit_income` jedes im Hotel *gebauten* POI-Typs auf das Basisbudget. (Ein Raumtyp wird immer nur 1x gezählt, um Exploits durch massenhaften Bau desselben Raums zu verhindern).
+* **Wohlstands-Multiplikator:** Dieser dynamische Aufschlag wird durch einen Gasttyp-spezifischen `poi_budget_multiplier` modifiziert (z.B. `budget`: 0.2, `business`: 1.5, `vip`: 5.0).
+* **Resultat:** Ein Budget-Reisender nutzt trotz Voll-Ausstattung des Hotels nur die günstigsten POIs, während ein VIP oder Luxus-Gast genug Geld in die Kassen spült, um alle POIs des Resorts problemlos mehrfach zu besuchen.

@@ -13,6 +13,7 @@ const ALL: Dictionary = {
 		"max_base_price":  60,
 		"min_daily_budget": 20,
 		"max_daily_budget": 60,
+		"poi_budget_multiplier": 0.8,
 		"icon":            "res://assets/guesttypes/gt-icon-single.aseprite",
 		"base_exp": 20,
 		"rep_penalty": 5
@@ -29,6 +30,7 @@ const ALL: Dictionary = {
 		"max_base_price":  100,
 		"min_daily_budget": 40,
 		"max_daily_budget": 100,
+		"poi_budget_multiplier": 1.0,
 		"icon":            "res://assets/guesttypes/gt-icon-couple.aseprite",
 		"base_exp": 30,
 		"rep_penalty": 5
@@ -45,6 +47,7 @@ const ALL: Dictionary = {
 		"max_base_price":  120,
 		"min_daily_budget": 60,
 		"max_daily_budget": 160,
+		"poi_budget_multiplier": 1.5,
 		"icon":            "res://assets/guesttypes/gt-icon-business.aseprite",
 		"base_exp": 40,
 		"rep_penalty": 10
@@ -61,6 +64,7 @@ const ALL: Dictionary = {
 		"max_base_price":  150,
 		"min_daily_budget": 30,
 		"max_daily_budget": 80,
+		"poi_budget_multiplier": 0.8,
 		"icon":            "res://assets/guesttypes/gt-icon-family.aseprite",
 		"base_exp": 30,
 		"rep_penalty": 5
@@ -77,6 +81,7 @@ const ALL: Dictionary = {
 		"max_base_price":  40,
 		"min_daily_budget": 4,
 		"max_daily_budget": 20,
+		"poi_budget_multiplier": 0.2,
 		"icon":            "res://assets/guesttypes/gt-icon-budget.aseprite",
 		"base_exp": 10,
 		"rep_penalty": 2,
@@ -93,6 +98,7 @@ const ALL: Dictionary = {
 		"max_base_price":  70,
 		"min_daily_budget": 16,
 		"max_daily_budget": 40,
+		"poi_budget_multiplier": 0.6,
 		"icon":            "res://assets/icons/guests/laptop-minimal.svg",
 		"base_exp": 20,
 		"rep_penalty": 5
@@ -109,6 +115,7 @@ const ALL: Dictionary = {
 		"max_base_price":  90,
 		"min_daily_budget": 30,
 		"max_daily_budget": 80,
+		"poi_budget_multiplier": 1.0,
 		"icon":            "res://assets/guesttypes/gt-icon-event.aseprite",
 		"base_exp": 20,
 		"rep_penalty": 5
@@ -125,6 +132,7 @@ const ALL: Dictionary = {
 		"max_base_price":  300,
 		"min_daily_budget": 60,
 		"max_daily_budget": 150,
+		"poi_budget_multiplier": 2.5,
 		"icon":            "res://assets/icons/guests/user-star.svg",
 		"base_exp": 50,
 		"rep_penalty": 15
@@ -141,6 +149,7 @@ const ALL: Dictionary = {
 		"max_base_price":  600,
 		"min_daily_budget": 150,
 		"max_daily_budget": 300,
+		"poi_budget_multiplier": 5.0,
 		"icon":            "res://assets/icons/guests/user-star.svg",
 		"base_exp": 100,
 		"rep_penalty": 30

@@ -20,6 +20,7 @@ static func get_definition() -> Dictionary:
 		"req_tech": "G1.1",
 		"max_beds": 0,
 		"is_poi": true,
+		"max_guests": 8,
 		"visit_income": 15,  # Basis-Eintritt (Getränke)
 		"visit_exp": 10,
 		"supply_cost_per_visit": 5,
@@ -31,6 +32,7 @@ static func get_definition() -> Dictionary:
 		"max_role_limits": {"bartender": 1, "waiter": 1},  # Je max. 1 pro Rolle
 		"open_from": 720,   # 12:00
 		"open_to": 1410,    # 23:30
+		"need_restoration": {"thirst": 70, "fun": 30},
 		"valid_door_slots": ["R1"],
 		"cleanliness_level": 100,
 		"maintenance_level": 100,
@@ -74,7 +76,7 @@ func get_bartender_stand_pos() -> Vector2:
 	# Fallback: Counter-Position wenn kein BartenderArea-Node vorhanden
 	var counter = get_node_or_null("Interior/Furniture/Counter")
 	if is_instance_valid(counter):
-		return counter.global_position + Vector2(0, -8)
+		return counter.to_global(Vector2(0, -8))
 	return global_position
 
 ## Gibt die Blickrichtung für den Barkeeper zurück (zur Tür)
@@ -99,7 +101,7 @@ func get_waiter_stand_pos() -> Vector2:
 	var counter = get_node_or_null("Interior/Furniture/Counter")
 	if is_instance_valid(door) and is_instance_valid(counter):
 		return door.global_position.lerp(counter.global_position, 0.5)
-	return global_position + Vector2(16, 16)
+	return to_global(Vector2(16, 16))
 
 # =============================================================================
 # SEAT MANAGEMENT
@@ -240,6 +242,8 @@ func serve_order_to_seat(order_id: String) -> void:
 		if seat["order_id"] == order_id:
 			if GastroManager:
 				GastroManager.serve_order(order_id)
+				if QuestManager.has_method("on_order_served"):
+					QuestManager.on_order_served(_room_id)
 			break
 
 # =============================================================================

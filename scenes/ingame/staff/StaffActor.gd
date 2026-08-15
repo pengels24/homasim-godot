@@ -464,9 +464,18 @@ func _process_idle() -> void:
 				if get_job_type() == "bartender" and is_instance_valid(_current_room) and _current_room.has_method("get_bartender_stand_pos"):
 					var stand_pos = _current_room.get_bartender_stand_pos()
 					if global_position.distance_to(stand_pos) > 6.0:
-						_target_world_pos = stand_pos
-						_state = "walking"
-						_path = [_target_world_pos]
+						if _current_room.has_method("get_local_path"):
+							var lp = _current_room.get_local_path(global_position, stand_pos)
+							if lp.size() > 0:
+								_world_path = lp
+								_target_world_pos = _world_path[0]
+								_state = "walking"
+								_path = []
+						else:
+							# Fallback
+							_target_world_pos = stand_pos
+							_state = "walking"
+							_path = [_target_world_pos]
 					else:
 						# Steht am Platz -> Rotiere in die gewünschte Richtung
 						if _current_room.has_method("get_bartender_look_dir"):
@@ -500,10 +509,14 @@ func _process_idle() -> void:
 						if _current_room.has_method("leave_lifeguard_chair"):
 							_current_room.call("leave_lifeguard_chair", get_staff_id())
 						if _current_room.has_method("get_local_path"):
-							var sz = _current_room.get_tile_size() * 32.0
-							var patrol_target = _current_room.global_position + Vector2(
-								randf_range(8.0, sz.x - 8.0),
-								randf_range(8.0, sz.y - 8.0))
+							var patrol_target = Vector2.ZERO
+							if _current_room.has_method("get_patrol_target"):
+								patrol_target = _current_room.get_patrol_target()
+							else:
+								var sz = _current_room.get_tile_size() * 32.0
+								patrol_target = _current_room.global_position + Vector2(
+									randf_range(8.0, sz.x - 8.0),
+									randf_range(8.0, sz.y - 8.0))
 							var lp = _current_room.get_local_path(global_position, patrol_target)
 							if lp.size() > 0:
 								_world_path = lp
@@ -522,6 +535,15 @@ func _process_idle() -> void:
 					
 					var offset = Vector2(randf_range(-max_radius, max_radius), randf_range(-max_radius, max_radius))
 					var target = wander_center + offset
+					
+					# Sicherstellen, dass das Ziel auch begehbar ist
+					if is_instance_valid(_current_room) and _current_room.has_method("get_random_walkable_local_pos"):
+						for i in range(5): # Maximal 5 Versuche für einen Punkt in der Nähe
+							var wp_global = _current_room.get_random_walkable_local_pos()
+							if wp_global != Vector2.INF:
+								if wp_global.distance_to(wander_center) <= max_radius:
+									target = wp_global
+									break
 					
 					if is_instance_valid(_current_room) and _current_room.has_method("get_local_path"):
 						# NavBlocker-respektierender Pfad
@@ -696,8 +718,8 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 			_target_world_pos = global_position
 	else:
 		var astar = _map_grid.get("astar") if _map_grid else null
-		var s_solid = astar.is_point_solid(start_tile) if astar else false
-		var e_solid = astar.is_point_solid(end_tile) if astar else false
+		# var s_solid = astar.is_point_solid(start_tile) if astar else false
+		# var e_solid = astar.is_point_solid(end_tile) if astar else false
 		# print("[StaffActor] _start_path_to_room FAILED: start=", start_tile, " (solid:", s_solid, ") end=", end_tile, " (solid:", e_solid, ") room=", room.name if room else "null")
 		if is_instance_valid(_debug_line):
 			_debug_line.default_color = Color.RED

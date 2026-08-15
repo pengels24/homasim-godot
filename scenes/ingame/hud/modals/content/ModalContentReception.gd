@@ -428,6 +428,11 @@ func _execute_checkin_logic(surcharge: bool) -> void:
 	GameState.add_exp(exp_gain)
 
 	_guest_mgr.do_checkin(_sel_party, _sel_room)
+	
+	if QuestManager.has_method("check_occupancy") and _guest_mgr.has_method("get_free_rooms"):
+		if _guest_mgr.get_free_rooms().is_empty():
+			QuestManager.check_occupancy(true)
+			
 	SoundManager.play("reception_checkin")
 	Toast.show(GameState.T("toast.reception.checkin.success"), "guest", false)
 

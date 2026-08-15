@@ -245,3 +245,10 @@ Phase 5: Events & Prestige     â† Braucht 4.1 (G1.4 GourmetkÃ¼che)
 | Personal-System Konzept | `wiki/02_features/06_personal_und_aufgabensystem.md` |
 | Techtree-Architektur Konzept | `wiki/02_features/01_architektur_techtree_und_fp.md` |
 | Raumtypen-Referenz | `wiki/02_features/22_raumtypen_referenz.md` |
+- **Kassenbuch Gastro-Namen:** Fehlende Rezeptnamen in Gastro-Kassenbucheinträgen () repariert (Key 
+ame_key statt 
+ame verwendet).
+- **Kassenbuch Checkout-Details:** Checkout-Logs um Zimmertyp und Aufenthaltsdauer erweitert. ModalContentFinances.gd unterstützt nun beliebig viele Platzhalter in der Übersetzung.
+- **Bar/Gastro Einlauf-Animation:** Gäste teleportieren nicht mehr unsichtbar an den Platz, sondern laufen nach dem Eintreten sichtbar durch den Raum zum Hocker.
+- **Gym/Pool/Spa Sichtbarkeit:** Unsichtbarkeit-Bug an Trainingsgeräten und im Wasser behoben.
+- **GuestActor Navigation-Refactoring:** _get_logical_start_tile() komplett überarbeitet und das Flickwerk hardcodierter Status-Checks (EATING, STUDYING_MENU etc.) entfernt. Start-Kachel-Ermittlung aus POIs funktioniert nun generisch und robust über _current_poi_id, was SOLID-Fehler bei unerwarteten Statuswechseln (z. B. Bettzeit um 23:00 Uhr während Wartezeit) verhindert.

@@ -54,9 +54,9 @@ func has_active_orders_for_room(room_id: String) -> bool:
 	return false
 
 func get_ready_orders_for_restaurant(restaurant_id: String) -> Array:
-	var ready = []
+	var ready_orders_list = []
 	for order_id in active_orders.keys():
 		var order = active_orders[order_id]
 		if order['status'] == 'ready' and order['restaurant_id'] == restaurant_id:
-			ready.append(order_id)
-	return ready
+			ready_orders_list.append(order_id)
+	return ready_orders_list

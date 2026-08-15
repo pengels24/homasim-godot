@@ -105,3 +105,15 @@ func is_event_active() -> bool:
 
 func get_active_event() -> EventType:
 	return active_event
+
+# =============================================================================
+func to_save_dict() -> Dictionary:
+	return {
+		"active_event": active_event,
+		"event_days_remaining": event_days_remaining
+	}
+
+# =============================================================================
+func load_from_dict(data: Dictionary) -> void:
+	active_event = data.get("active_event", EventType.NONE)
+	event_days_remaining = data.get("event_days_remaining", 0)

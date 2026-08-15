@@ -6,6 +6,7 @@ signal checkout_forgotten(count: int)
 signal sig_party_checked_in(party: GuestParty, room: Node2D) # <--- NEU
 signal sig_party_moving_to_checkout(party: GuestParty, room_id: String)
 signal sig_party_checked_out_physically(party: GuestParty)
+@warning_ignore("unused_signal")
 signal sig_guests_spawned(count)
 signal sig_party_arrived(party: GuestParty)
 signal sig_party_rejected(party: GuestParty)
@@ -58,6 +59,7 @@ func configure(hotel: Dictionary, map_grid: Node2D) -> void:
 	_room_definitions = {}
 
 	GameState.sig_dev_spawn_guests.connect(func(count: int): spawn_guests(count))
+	GameState.sig_dev_add_guest_budget.connect(_on_dev_add_guest_budget)
 
 	# NEU: Auf die Uhr hören!
 	if not TimeManager.sig_midnight_struck.is_connected(process_midnight_penalties):
@@ -153,6 +155,53 @@ func get_free_rooms() -> Array:
 
 
 # =============================================================================
+func spawn_conference_guests() -> void:
+	var conf_room = null
+	if is_instance_valid(_map_grid):
+		for room in _map_grid.active_rooms:
+			if is_instance_valid(room) and room.has_method("get_definition"):
+				if room.get_definition().get("id") == "conference_small":
+					conf_room = room
+					break
+	if conf_room:
+		# Generiere 6-12 Tagesgäste für die Konferenz (entspricht der Anzahl an Stühlen/Pult)
+		var amount = randi_range(6, 12)
+		var total_event_income = 0
+		
+		for i in range(amount):
+			var party = _generate_party("business")
+			party.stay_days = 2 # Künstlich hoch, damit sie morgens nicht direkt auschecken
+			party.total_stay_days = 0 # Markierung als Tagesgast
+			
+			# Room ID generieren wie in GuestController erwartet (z.B. "conference_small_10_5")
+			var rx = int(conf_room.get("x_pos"))
+			var ry = int(conf_room.get("y_pos"))
+			var conf_rkey = "%s_%d_%d" % ["conference_small", rx, ry]
+			party.room_id = conf_rkey
+			
+			_active.append(party)
+			
+			# Signal emitten, damit der GuestController die Actors an der Lobby spawnt!
+			sig_party_checked_in.emit(party, conf_room)
+			
+			# Statistik
+			daily_checkin_parties += 1
+			daily_checkin_heads += party.members.size()
+			
+			# Event-Pauschale berechnen (z.B. 150 pro Kopf)
+			total_event_income += 150 * party.members.size()
+			
+		if total_event_income > 0:
+			if FinanceManager:
+				FinanceManager.add_transaction(total_event_income, "room", "tx.event_income|Konferenz")
+			else:
+				GameState.add_money(total_event_income)
+			
+			if EffectManager:
+				EffectManager.spawn_money_text(total_event_income, conf_room.global_position + Vector2(0, -64))
+
+
+# =============================================================================
 ## Prüft, ob ein bestimmtes Zimmer aktuell belegt ist, und gibt die GuestParty zurück
 func get_party_in_room(room: Node2D) -> GuestParty:
 	var rid := _room_key(room)
@@ -216,8 +265,27 @@ func on_hour_passed(_hour: int) -> void:
 
 func _tick_active_guests() -> void:
 	for party: GuestParty in _active:
+		var party_crit_count = 0
+		var party_happy_count = 0
+		
 		for member: GuestMember in party.members:
 			member.saturation = max(0, member.saturation - 5)
+			member.thirst = max(0, member.thirst - 8)
+			member.energy = max(0, member.energy - 4)
+			member.fun = max(0, member.fun - 6)
+			
+			if member.saturation < 20 or member.thirst < 20 or member.energy < 20 or member.fun < 20:
+				party_crit_count += 1
+			elif member.saturation > 70 and member.thirst > 70 and member.energy > 70 and member.fun > 70:
+				party_happy_count += 1
+				
+		# Satisfaction anpassen basierend auf den aggregierten Bedürfnissen
+		if party_crit_count > 0:
+			# Für jedes Gruppenmitglied mit kritischem Bedürfnis -1 bis -2 Zufriedenheit
+			party.modify_satisfaction(-1 * party_crit_count)
+		elif party_happy_count == party.members.size():
+			# Wenn ALLE Mitglieder im grünen Bereich sind, steigt die Zufriedenheit
+			party.modify_satisfaction(1)
 
 
 # =============================================================================
@@ -381,6 +449,8 @@ func _generate_party(force_type_id: String = "") -> GuestParty:
 	party.arrived_day = _hotel.get("day", 1)
 	party.arrived_time = TimeManager.get_game_time()
 
+	var party_speed = randf_range(-10.0, 10.0)
+	
 	match type_id:
 		"couple":
 			var last := NameDatabase.random_last()
@@ -389,8 +459,8 @@ func _generate_party(force_type_id: String = "") -> GuestParty:
 			while f_first == m_first:
 				f_first = NameDatabase.random_female()
 				
-			_add_member(party, m_first, last, "primary", "male", false)
-			_add_member(party, f_first, last, "partner", "female", false)
+			_add_member(party, m_first, last, "primary", "male", false, party_speed)
+			_add_member(party, f_first, last, "partner", "female", false, party_speed)
 
 		"family":
 			var used_firsts: Array[String] = []
@@ -398,13 +468,13 @@ func _generate_party(force_type_id: String = "") -> GuestParty:
 			
 			var m_first = NameDatabase.random_male()
 			used_firsts.append(m_first)
-			_add_member(party, m_first,   last, "primary", "male", false)
+			_add_member(party, m_first,   last, "primary", "male", false, party_speed)
 			
 			var f_first = NameDatabase.random_female()
 			while f_first in used_firsts:
 				f_first = NameDatabase.random_female()
 			used_firsts.append(f_first)
-			_add_member(party, f_first, last, "partner", "female", false)
+			_add_member(party, f_first, last, "partner", "female", false, party_speed)
 			
 			var child_count := randi_range(1, 3)
 
@@ -416,27 +486,30 @@ func _generate_party(force_type_id: String = "") -> GuestParty:
 				
 				var is_boy: bool = randf() > 0.5
 				var child_gender: String = "male" if is_boy else "female"
-				_add_member(party, c_first, last, "child", child_gender, true)
+				_add_member(party, c_first, last, "child", child_gender, true, party_speed)
 
 		_:
 			var last  := NameDatabase.random_last()
 			var is_male: bool = randf() > 0.5
 			var first := NameDatabase.random_male() if is_male else NameDatabase.random_female()
 			var gender: String = "male" if is_male else "female"
-			_add_member(party, first, last, "primary", gender, false)
+			_add_member(party, first, last, "primary", gender, false, party_speed)
 
 	return party
 
 
 # =============================================================================
-func _add_member(party: GuestParty, first: String, last: String, role: String, gender: String, is_child: bool) -> void:
+func _add_member(party: GuestParty, first: String, last: String, role: String, gender: String, is_child: bool, speed: float = -999.0) -> void:
 	var m := GuestMember.new(
 		"M%04d" % _next_member_id,
 		party.id,
 		"%s %s" % [first, last],
 		role,
 		gender,
-		is_child
+		is_child,
+		"", # hair
+		"", # shirt
+		speed
 	)
 	_next_member_id += 1
 	party.members.append(m)
@@ -472,7 +545,7 @@ func _weighted_random_type() -> String:
 		pool.append("family")
 	if has_superior:
 		pool.append("luxury")
-		if GameState.has_techtree_unlocked("P1.3"):
+		if TechtreeManager and TechtreeManager.is_tech_unlocked("P1.3"):
 			pool.append("vip")
 		
 	if pool.is_empty():
@@ -631,8 +704,11 @@ func do_checkin(party: GuestParty, room: Node2D) -> void:
 	
 	var budget_min: int = def.get("min_daily_budget", 10)
 	var budget_max: int = def.get("max_daily_budget", 30)
+	var poi_mult: float = def.get("poi_budget_multiplier", 1.0)
+	var dynamic_poi_budget = _get_dynamic_poi_budget()
+	
 	for member: GuestMember in party.members:
-		var b: int = randi_range(budget_min, budget_max)
+		var b: int = randi_range(budget_min, budget_max) + int(dynamic_poi_budget * poi_mult)
 		if member.is_child:
 			b = int(b * randf_range(0.2, 0.4)) # Kinder: 20–40% des Erwachsenen-Budgets
 		member.daily_budget	= b
@@ -1023,68 +1099,47 @@ func process_morning_routine() -> void:
 	daily_declined_parties = 0
 	daily_declined_heads = 0
 	
-	# === Gäste werden über Nacht hungrig ===
+	# === Gäste werden über Nacht hungrig, durstig und erholen sich ===
 	for party: GuestParty in _active:
 		for member: GuestMember in party.members:
 			var night_hunger = randi_range(15, 40)
 			member.saturation = max(0, member.saturation - night_hunger)
+			member.thirst = max(0, member.thirst - night_hunger)
+			member.fun = max(0, member.fun - 20)
+			# Energie wird über Nacht komplett wiederhergestellt
+			member.energy = 100
 
 	# NEU: Tagesgäste für Konferenz spawnen
 	if EventManager and EventManager.is_event_active() and EventManager.active_event == EventManager.EventType.CONFERENCE:
-		var conf_room = null
-		if is_instance_valid(_map_grid):
-			for room in _map_grid.active_rooms:
-				if is_instance_valid(room) and room.has_method("get_definition"):
-					if room.get_definition().get("id") == "conference_small":
-						conf_room = room
-						break
-		if conf_room:
-			# Generiere 6-12 Tagesgäste für die Konferenz (entspricht der Anzahl an Stühlen/Pult)
-			var amount = randi_range(6, 12)
-			var total_event_income = 0
-			
-			for i in range(amount):
-				var party = _generate_party("business")
-				party.stay_days = 2 # Künstlich hoch, damit sie morgens nicht direkt auschecken
-				party.total_stay_days = 0 # Markierung als Tagesgast
-				
-				# Room ID generieren wie in GuestController erwartet (z.B. "conference_small_10_5")
-				var rx = int(conf_room.get("x_pos"))
-				var ry = int(conf_room.get("y_pos"))
-				var conf_rkey = "%s_%d_%d" % ["conference_small", rx, ry]
-				party.room_id = conf_rkey
-				
-				_active.append(party)
-				
-				# Signal emitten, damit der GuestController die Actors an der Lobby spawnt!
-				# Wir verwenden sig_party_checked_in, um den Actor-Spawn zu triggern,
-				# übergeben als room den conf_room.
-				sig_party_checked_in.emit(party, conf_room)
-				
-				# Statistik
-				daily_checkin_parties += 1
-				daily_checkin_heads += party.members.size()
-				
-				# Event-Pauschale berechnen (z.B. 150 pro Kopf)
-				total_event_income += 150 * party.members.size()
-				
-			if total_event_income > 0:
-				if FinanceManager:
-					FinanceManager.add_transaction(total_event_income, "room", "tx.event_income|Konferenz")
-				else:
-					GameState.add_money(total_event_income)
-				
-				if EffectManager:
-					EffectManager.spawn_money_text(total_event_income, conf_room.global_position + Vector2(0, -64))
+		spawn_conference_guests()
 
 	var moving: Array = []
+	
+	var dynamic_poi_budget = _get_dynamic_poi_budget()
 
 	# Aktive Gäste: stay_days verringern
 	for party: GuestParty in _active:
 		party.stay_days -= 1
-		# Neues Taschengeld für jeden Member individuell
+		
+		var def = GuestDefinitions.ALL.get(party.type, {})
+		var budget_min: int = def.get("min_daily_budget", 10)
+		var budget_max: int = def.get("max_daily_budget", 30)
+		var poi_mult: float = def.get("poi_budget_multiplier", 1.0)
+		var poi_addition: int = int(dynamic_poi_budget * poi_mult)
+		
+		party.daily_budget = 0
+		
+		# Neues Taschengeld für jeden Member individuell anpassen (falls neue POIs gebaut wurden)
 		for member: GuestMember in party.members:
+			var new_b: int = randi_range(budget_min, budget_max) + poi_addition
+			if member.is_child:
+				new_b = int(new_b * randf_range(0.2, 0.4))
+			
+			# Damit es nicht sinkt (falls was abgerissen wurde), nehmen wir das Maximum
+			member.daily_budget = max(member.daily_budget, new_b)
 			member.spending_budget = member.daily_budget
+			party.daily_budget += member.daily_budget
+			
 		party.spending_budget = party.daily_budget  # Party-Summe auch zurücksetzen
 
 		if party.stay_days <= 0:
@@ -1119,3 +1174,39 @@ func guest_declined_offer(party: GuestParty) -> void:
 	)
 
 	parties_changed.emit()
+
+# =============================================================================
+func _on_dev_add_guest_budget(amount: int) -> void:
+	for party in _active:
+		party.spending_budget += amount
+		for member in party.members:
+			member.spending_budget += amount
+	parties_changed.emit()
+
+# =============================================================================
+func _get_dynamic_poi_budget() -> int:
+	if not is_instance_valid(_map_grid):
+		return 0
+		
+	var total_cost: int = 0
+	var seen_poi_types = {}
+	
+	for room in _map_grid.get_placed_rooms():
+		if room.has_method("get_definition"):
+			var def = room.get_definition()
+			if def.get("is_poi") == true:
+				var r_id = def.get("id", "")
+				
+				if r_id == "" or seen_poi_types.has(r_id):
+					continue
+					
+				seen_poi_types[r_id] = true
+				
+				if r_id == "restaurant_small":
+					total_cost += 25
+				elif r_id == "lobby":
+					total_cost += 5
+				else:
+					total_cost += def.get("visit_income", 0)
+					
+	return total_cost

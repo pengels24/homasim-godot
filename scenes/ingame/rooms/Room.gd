@@ -36,7 +36,7 @@ var is_service_requested: bool = false
 var is_built := false
 var is_active := false
 
-const SHOW_DEBUG_PATHS := false # Umschalter für das rote Wegnetz im Raum
+const SHOW_DEBUG_PATHS := true # Umschalter für das rote Wegnetz im Raum
 var is_pending_demolish: bool = false:
 	set(value):
 		is_pending_demolish = value
@@ -112,11 +112,18 @@ func room_claim_seat(guest_id: String) -> Vector2:
 	for s in _room_seats:
 		if s["occupied_by"] == guest_id:
 			return s["node"].global_position
+	var free_seats = []
 	for s in _room_seats:
 		if s["occupied_by"] == "":
-			s["occupied_by"] = guest_id
-			return s["node"].global_position
-	return Vector2.INF
+			free_seats.append(s)
+	
+	if free_seats.is_empty():
+		return Vector2.INF
+		
+	free_seats.shuffle()
+	var chosen = free_seats[0]
+	chosen["occupied_by"] = guest_id
+	return chosen["node"].global_position
 
 func room_leave_seat(guest_id: String) -> void:
 	for s in _room_seats:
@@ -132,11 +139,18 @@ func room_claim_bed(guest_id: String) -> Vector2:
 	for b in _room_beds:
 		if b["occupied_by"] == guest_id:
 			return b["node"].global_position
+	var free_beds = []
 	for b in _room_beds:
 		if b["occupied_by"] == "":
-			b["occupied_by"] = guest_id
-			return b["node"].global_position
-	return Vector2.INF
+			free_beds.append(b)
+			
+	if free_beds.is_empty():
+		return Vector2.INF
+		
+	free_beds.shuffle()
+	var chosen = free_beds[0]
+	chosen["occupied_by"] = guest_id
+	return chosen["node"].global_position
 
 func room_leave_bed(guest_id: String) -> void:
 	for b in _room_beds:
@@ -194,10 +208,10 @@ func _ready() -> void:
 		StaffManager.sig_assignments_changed.connect(_update_indicator)
 		
 	if SHOW_DEBUG_PATHS:
-		var debug_node = Node2D.new()
-		debug_node.z_index = 100
-		add_child(debug_node)
-		debug_node.draw.connect(_on_debug_draw.bind(debug_node))
+		_debug_node = Node2D.new()
+		_debug_node.z_index = 100
+		add_child(_debug_node)
+		_debug_node.draw.connect(_on_debug_draw.bind(_debug_node))
 
 func _apply_mouse_filter_recursive(node: Node) -> void:
 	for child in node.get_children():
@@ -285,14 +299,14 @@ func get_service_position() -> Vector2:
 		markers = find_children("ServicePoint", "Node2D")
 		
 	for m in markers:
-		var is_active = true
+		var is_marker_active = true
 		var parent = m.get_parent()
 		while parent != self and is_instance_valid(parent):
 			if "visible" in parent and not parent.visible:
-				is_active = false
+				is_marker_active = false
 				break
 			parent = parent.get_parent()
-		if is_active:
+		if is_marker_active:
 			return m.global_position
 			
 	# 3. Fallback auf Interior-Mitte
@@ -412,17 +426,38 @@ func configure(data: Dictionary) -> void:
 		var col_str = data.get("custom_color", "ffffff")
 		if typeof(col_str) == TYPE_STRING and col_str != "":
 			custom_color = Color(col_str)
-	
+
 	if data.get("is_new_build", false):
 		if TechtreeManager and TechtreeManager.is_tech_unlocked("Z1.4"):
 			acquired_traits.append("wlan")
 		if TechtreeManager and TechtreeManager.is_tech_unlocked("Z1.5"):
 			acquired_traits.append("klima")
-	else:
-		acquired_traits = data.get("acquired_traits", [])
+	elif data.has("acquired_traits"):
+		# Only reset traits when the data dict actually carries them.
+		# A second configure({guest_manager:...}) must NOT wipe already-loaded traits.
+		acquired_traits = []
+		var loaded_traits = data.get("acquired_traits", [])
+		if typeof(loaded_traits) == TYPE_STRING:
+			if loaded_traits.begins_with("["):
+				var p = JSON.parse_string(loaded_traits)
+				if typeof(p) == TYPE_ARRAY:
+					for t in p:
+						var st = str(t).strip_edges().replace('"', '')
+						if st != "": acquired_traits.append(st)
+			elif loaded_traits != "":
+				for t in loaded_traits.split(","):
+					var st = str(t).strip_edges().replace('"', '')
+					if st != "": acquired_traits.append(st)
+
+
 
 	_apply_visuals()
 	_update_indicator()
+	
+	# Neu aufbauen falls sich Rotation geändert hat
+	_build_local_nav()
+	if SHOW_DEBUG_PATHS and _debug_node:
+		_debug_node.queue_redraw()
 	
 	# Nach dem Laden: Offene Tickets wiederherstellen!
 	if is_service_requested:
@@ -450,7 +485,7 @@ func to_dict() -> Dictionary:
 		"door_offset": door_offset,
 		"room_rotation": room_rotation,
 		"custom_color": custom_color.to_html(false),
-		"acquired_traits": acquired_traits
+		"acquired_traits": ",".join(acquired_traits)
 	}
 
 
@@ -586,7 +621,7 @@ func get_valid_door_slots() -> Array[String]:
 ## Berechnet alle gültigen (door_rotation, door_offset)-Kombos aus Raumgröße + Slot-Deklaration.
 ## door_rotation = Wand (0=L 1=T 2=R 3=B), door_offset = 0-basierter Slot-Index.
 func get_valid_door_combos() -> Array[Vector2i]:
-	var sz := get_tile_size()
+	var sz := base_size
 	var wall_len := [sz.y, sz.x, sz.y, sz.x]  # L/R = Höhe, T/B = Breite
 	var named := get_valid_door_slots()
 	var result: Array[Vector2i] = []
@@ -741,7 +776,8 @@ func _update_indicator() -> void:
 
 # ── Lokale Navigation (Raum-intern) ──────────────────────────────────────────
 
-var _local_astar: AStar2D = null
+var _local_astar: AStar2D
+var _debug_node: Node2D = null
 const LOCAL_NAV_CELL_SIZE := 4.0
 
 func _find_nav_blockers_recursive(node: Node, result: Array) -> void:
@@ -761,6 +797,14 @@ func _find_nav_weights_recursive(node: Node, result: Array) -> void:
 			if child is Control or child is ReferenceRect or child is ColorRect:
 				result.append(child)
 		_find_nav_weights_recursive(child, result)
+
+func _is_node_visible(node: Node) -> bool:
+	var current = node
+	while current and current != self:
+		if "visible" in current and not current.visible:
+			return false
+		current = current.get_parent()
+	return true
 
 func _build_local_nav() -> void:
 	var blockers = []
@@ -796,6 +840,7 @@ func _build_local_nav() -> void:
 				var p_global = to_global(p)
 				for b in blockers:
 					if b is Control or b is ReferenceRect or b is ColorRect:
+						if not _is_node_visible(b): continue
 						var p_local = b.get_global_transform().affine_inverse() * p_global
 						if Rect2(Vector2.ZERO, b.size).has_point(p_local):
 							is_blocked = true
@@ -809,6 +854,7 @@ func _build_local_nav() -> void:
 				var p_global = to_global(p)
 				for w in weights:
 					if w is Control or w is ReferenceRect or w is ColorRect:
+						if not _is_node_visible(w): continue
 						var p_local = w.get_global_transform().affine_inverse() * p_global
 						if Rect2(Vector2.ZERO, w.size).has_point(p_local):
 							is_weighted = true
@@ -876,6 +922,7 @@ func _on_debug_draw(canvas: Node2D) -> void:
 		_find_nav_blockers_recursive(self, blockers)
 		for b in blockers:
 			if b is Control or b is ReferenceRect or b is ColorRect:
+				if not _is_node_visible(b): continue
 				var b_trans = get_global_transform().affine_inverse() * b.get_global_transform()
 				var p1 = b_trans * Vector2(0, 0)
 				var p2 = b_trans * Vector2(b.size.x, 0)

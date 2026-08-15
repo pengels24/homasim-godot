@@ -107,7 +107,11 @@ func _update_content() -> void:
 		var is_staffed = StaffManager.is_poi_staffed(def, room_id)
 		var is_open_now = GameState.is_facility_open(def)
 		if is_staffed and is_open_now:
-			status = GameState.T("room.tooltip.open")
+			var open_from: int = def.get("open_from", 0)
+			var open_to: int = def.get("open_to", 0)
+			var opens_str = GameState.format_game_time(open_from) if open_from > 0 else "00:00"
+			var closes_str = GameState.format_game_time(open_to) if open_to > 0 else "24:00"
+			status = GameState.T("room.tooltip.open") % [opens_str, closes_str]
 		elif is_staffed and not is_open_now:
 			var open_from: int = def.get("open_from", 0)
 			var opens_at := GameState.format_game_time(open_from) if open_from > 0 else "?"
@@ -180,7 +184,12 @@ func _update_content() -> void:
 								presence = GameState.T("room.tooltip.guest_present")
 								break
 							elif actor.current_state in [actor.State.IN_POI, actor.State.STUDYING_MENU, actor.State.WAITING_FOR_FOOD, actor.State.EATING]:
-								presence = GameState.T("room.tooltip.guest_in_poi") % actor._current_poi_id.capitalize()
+								var poi_name = actor._current_poi_id.capitalize()
+								if actor.has_method("_get_poi_def"):
+									var poi_def = actor._get_poi_def(actor._current_poi_id)
+									if poi_def.has("name"):
+										poi_name = GameState.T(poi_def["name"])
+								presence = GameState.T("room.tooltip.guest_in_poi") % poi_name
 								break
 							elif actor.current_state == actor.State.LEAVING or actor.current_state == actor.State.AWAITING_CHECKOUT or (actor.current_state == actor.State.WALKING and actor._is_checkout_walk):
 								presence = GameState.T("room.tooltip.guest_leaving")

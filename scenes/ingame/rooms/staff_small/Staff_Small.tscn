@@ -327,10 +327,10 @@ offset_right = 47.0
 offset_bottom = 47.0
 
 [node name="NavBlockerTable" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1969652496 groups=["nav_blocker"]]
-offset_left = 8.0
+offset_left = 9.0
 offset_top = 13.0
 offset_right = 18.0
-offset_bottom = 19.0
+offset_bottom = 18.0
 
 [node name="NavBlockerChair1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=612838389 groups=["nav_blocker"]]
 offset_left = 19.0
@@ -359,12 +359,12 @@ offset_bottom = 13.0
 [node name="NavBlockerCouch1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=2048741928 groups=["nav_blocker"]]
 offset_left = 1.0
 offset_top = 13.0
-offset_right = 7.0
+offset_right = 6.0
 offset_bottom = 26.0
 
 [node name="NavBlockerCouch2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1567352928 groups=["nav_blocker"]]
 offset_left = 1.0
-offset_top = 20.0
+offset_top = 21.0
 offset_right = 19.0
 offset_bottom = 26.0
 

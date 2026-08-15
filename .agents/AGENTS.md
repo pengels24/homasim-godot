@@ -54,3 +54,6 @@
 
 ## 🎨 Szenen-Änderungen (.tscn)
 - **STRIKTE DIREKTIVE:** Keine direkten scriptseitigen Änderungen am visuellen Aufbau von .tscn-Dateien (z.B. Nodes hinzufügen, verschieben, Eigenschaften ändern) ohne ausdrückliche Freigabe. Wenn visuelle Änderungen nötig sind, definiere klar, was getan werden muss, und der User übernimmt die Anpassung im Godot-Editor. Dies verhindert "Kraut und Rüben" im Design.
+
+## Dokumentationspflicht nach Tests
+Sobald eine �nderung (z.B. in GuestActor.gd oder anderen Kernsystemen) erfolgreich getestet und abgeschlossen ist, MUSS die zugeh�rige Techdoku im wiki/-Ordner aktualisiert werden. Existiert noch keine Doku f�r diesen Bereich, muss aktiv beim User nachgefragt werden, ob eine angelegt werden soll.

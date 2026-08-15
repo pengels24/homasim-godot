@@ -917,5 +917,23 @@ func _update_overlays() -> void:
 				else:
 					# Keine direkte Einnahmequelle (Lobby, Infrastruktur)
 					color = Color(0.6, 0.6, 0.6, 0.75)
+					
+			"wlan":
+				var has_wlan = false
+				if room.has_method("has_trait"):
+					has_wlan = room.has_trait("wlan")
+				if has_wlan:
+					color = Color(0.0, 1.0, 0.0, 0.75)
+				else:
+					color = Color(1.0, 0.0, 0.0, 0.75)
+					
+			"ac":
+				var has_ac = false
+				if room.has_method("has_trait"):
+					has_ac = room.has_trait("klima") or room.has_trait("ac")
+				if has_ac:
+					color = Color(0.0, 1.0, 0.0, 0.75)
+				else:
+					color = Color(1.0, 0.0, 0.0, 0.75)
 
 		room.set_overlay_color(color)

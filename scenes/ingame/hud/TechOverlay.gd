@@ -3,6 +3,8 @@ extends PanelContainer
 @onready var lbl_stats = $MarginContainer/LabelStats
 
 var _update_timer: float = 0.0
+var _dragging: bool = false
+var _drag_offset: Vector2 = Vector2.ZERO
 
 func _ready() -> void:
 	SettingsManager.sig_tech_info_toggled.connect(_on_tech_info_toggled)
@@ -31,3 +33,20 @@ func _update_stats() -> void:
 	
 	var text = "FPS: %d\nRAM: %.1f MB\nDraw Calls: %d\nNodes: %d\nCPU: %.2f ms\nPhys: %.2f ms" % [fps, mem_mb, draws, objs, cpu_ms, phys_ms]
 	lbl_stats.text = text
+
+func _gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
+				_dragging = true
+				_drag_offset = global_position - get_global_mouse_position()
+				get_viewport().set_input_as_handled()
+			else:
+				_dragging = false
+	elif event is InputEventMouseMotion and _dragging:
+		var new_pos = get_global_mouse_position() + _drag_offset
+		var vp = get_viewport_rect().size
+		new_pos.x = clamp(new_pos.x, 0, max(0, vp.x - size.x))
+		new_pos.y = clamp(new_pos.y, 0, max(0, vp.y - size.y))
+		global_position = new_pos
+		get_viewport().set_input_as_handled()

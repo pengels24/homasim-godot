@@ -26,11 +26,13 @@ In `_process_idle()` fällt der Gast Entscheidungen basierend auf seinen Werten 
 4. **Freizeit**: Befindet sich der Gast nicht im Zimmer und hat kein zwingendes Bedürfnis, wählt er zufällig einen geöffneten POI.
 *(Gäste verbringen intern ca. 15 Ingame-Minuten in einem POI, bevor sie weiterziehen oder pausieren).*
 
-## 4. Gastronomie-Integration
+## 4. Gastronomie-Integration & POI-Verhalten
 Ist ein Gast im Restaurant oder an der Bar, durchläuft er eine Mini-State-Machine:
 - **Studying Menu**: Setzt sich hin und braucht einige Sekunden, um das Menü zu lesen. Generiert dann eine `FoodOrder` im `GastroManager`.
 - **Waiting for Food**: Wartet auf die Lieferung. Dauert es zu lange (oder gibt es kein Personal), sinkt die Zufriedenheit stetig (`_process_impatient`).
 - **Eating**: Wenn das Essen geliefert wurde, wird der Sättigungsbalken aufgefüllt und das Geld abgezogen.
+
+*Ausnahme:* Handelt es sich um Wellness-Einrichtungen (wie `pool_small`, `gym_small`, `spa_small`), überspringt der Gast das Bestellen und Verzehren und verbleibt einfach für die POI-Dauer im Status `IN_POI`.
 
 ## 5. Zufriedenheit (Satisfaction) & Bedürfnisse
 Die `satisfaction` ist ein zentraler Wert der **gesamten Gästegruppe** (`GuestParty`).

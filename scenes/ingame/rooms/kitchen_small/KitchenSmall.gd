@@ -130,14 +130,14 @@ func get_work_position(_staff_id: String) -> Vector2:
 		markers = find_children("ChefWorkArea", "Node2D")
 		
 	for m in markers:
-		var is_active = true
+		var is_marker_active = true
 		var parent = m.get_parent()
 		while parent != self and is_instance_valid(parent):
 			if "visible" in parent and not parent.visible:
-				is_active = false
+				is_marker_active = false
 				break
 			parent = parent.get_parent()
-		if is_active:
+		if is_marker_active:
 			return m.global_position + Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
 	
 	# Fallback, falls der Marker falsch geschrieben wurde oder nicht existiert:
@@ -163,6 +163,9 @@ func _process_cooking(delta: float) -> void:
 			
 		if GastroManager:
 			GastroManager.finish_order(order_id)
+			
+		if QuestManager.has_method("on_food_cooked"):
+			QuestManager.on_food_cooked(1)
 
 # =============================================================================
 # Live-Details für Gastro-Monitor

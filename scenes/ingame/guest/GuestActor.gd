@@ -875,9 +875,12 @@ func _walk_to_room(room: Node2D, finish_state: State) -> void:
 	
 	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
 	if path_tiles.is_empty() and start_tile != exit_tile:
-# 		push_warning("[GuestActor] Check-In Pfad nicht gefunden! Start: %s Exit: %s" % [str(start_tile), str(exit_tile)])
+		var g_name = _guest_member.get("name") if _guest_member else "Unbekannt"
+		push_warning("[%s] Pfad nicht gefunden! Start: %s Exit: %s. Führe Notfall-Teleport aus." % [g_name, str(start_tile), str(exit_tile)])
 		# Notfall-Teleport zur Tür, damit der nächste Pfad-Versuch funktioniert
 		global_position = _map_grid.tile_to_world(exit_tile)
+		if finish_state == State.IN_ROOM:
+			_current_poi_id = "" # Notfall: Gast ist im Zimmer, POI leeren!
 		_change_state(finish_state)
 		return
 		

@@ -4,6 +4,7 @@ class_name GuestManager
 signal parties_changed()
 signal checkout_forgotten(count: int)
 signal sig_party_checked_in(party: GuestParty, room: Node2D) # <--- NEU
+signal sig_party_event_arrived(party: GuestParty)
 signal sig_party_moving_to_checkout(party: GuestParty, room_id: String)
 signal sig_party_checked_out_physically(party: GuestParty)
 @warning_ignore("unused_signal")
@@ -74,6 +75,16 @@ func configure(hotel: Dictionary, map_grid: Node2D) -> void:
 	if TaskManager.has_signal("sig_room_cleaned"):
 		if not TaskManager.sig_room_cleaned.is_connected(_on_room_cleaned):
 			TaskManager.sig_room_cleaned.connect(_on_room_cleaned)
+			
+	if not TimeManager.sig_minute_passed.is_connected(_on_minute_passed):
+		TimeManager.sig_minute_passed.connect(_on_minute_passed)
+
+# =============================================================================
+func _on_minute_passed(total_game_minutes: int) -> void:
+	var current_time = TimeManager.get_game_time()
+	if current_time == 450: # 07:30 Uhr (90 Minuten vor 09:00 Uhr)
+		if EventManager and EventManager.is_event_active() and EventManager.active_event == EventManager.EventType.CONFERENCE:
+			spawn_conference_guests()
 
 
 
@@ -156,49 +167,71 @@ func get_free_rooms() -> Array:
 
 # =============================================================================
 func spawn_conference_guests() -> void:
-	var conf_room = null
-	if is_instance_valid(_map_grid):
-		for room in _map_grid.active_rooms:
-			if is_instance_valid(room) and room.has_method("get_definition"):
-				if room.get_definition().get("id") == "conference_small":
-					conf_room = room
-					break
-	if conf_room:
-		# Generiere 6-12 Tagesgäste für die Konferenz (entspricht der Anzahl an Stühlen/Pult)
-		var amount = randi_range(6, 12)
-		var total_event_income = 0
+	if not is_instance_valid(_map_grid):
+		return
 		
-		for i in range(amount):
-			var party = _generate_party("business")
-			party.stay_days = 2 # Künstlich hoch, damit sie morgens nicht direkt auschecken
-			party.total_stay_days = 0 # Markierung als Tagesgast
-			
-			# Room ID generieren wie in GuestController erwartet (z.B. "conference_small_10_5")
-			var rx = int(conf_room.get("x_pos"))
-			var ry = int(conf_room.get("y_pos"))
-			var conf_rkey = "%s_%d_%d" % ["conference_small", rx, ry]
-			party.room_id = conf_rkey
-			
-			_active.append(party)
-			
-			# Signal emitten, damit der GuestController die Actors an der Lobby spawnt!
-			sig_party_checked_in.emit(party, conf_room)
-			
-			# Statistik
-			daily_checkin_parties += 1
-			daily_checkin_heads += party.members.size()
-			
-			# Event-Pauschale berechnen (z.B. 150 pro Kopf)
-			total_event_income += 150 * party.members.size()
-			
-		if total_event_income > 0:
-			if FinanceManager:
-				FinanceManager.add_transaction(total_event_income, "room", "tx.event_income|Konferenz")
-			else:
-				GameState.add_money(total_event_income)
-			
-			if EffectManager:
-				EffectManager.spawn_money_text(total_event_income, conf_room.global_position + Vector2(0, -64))
+	for room in _map_grid.active_rooms:
+		if is_instance_valid(room) and room.has_method("get_definition"):
+			if room.get_definition().get("id") == "conference_small":
+				var rx = int(room.get("x_pos"))
+				var ry = int(room.get("y_pos"))
+				var conf_rkey = "%s_%d_%d" % ["conference_small", rx, ry]
+				
+				# Prüfen, ob wir für diese Konferenz schon Gäste haben (z.B. aus Savegame geladen)
+				var already_has_guests = false
+				for active_party in _active:
+					if active_party.get("event_poi_id") == conf_rkey:
+						already_has_guests = true
+						break
+						
+				if already_has_guests:
+					continue
+					
+				# Generiere 6-12 Tagesgäste für diese spezifische Konferenz
+				var amount = randi_range(6, 12)
+				var total_event_income = 0
+				
+				for i in range(amount):
+					var party = _generate_party("business")
+					party.stay_days = 2 # Künstlich hoch, damit sie morgens nicht direkt auschecken
+					party.total_stay_days = 0 # Markierung als Tagesgast
+					
+					party.room_id = "" # Sie bekommen kein Hotelzimmer!
+					party.event_poi_id = conf_rkey # Zuweisung zum konkreten Konferenzraum
+					
+					# Budget vergeben: Tagesgäste brauchen Geld für Snackautomat/Restaurant in der Pause
+					var def_b = GuestDefinitions.ALL.get("business", {})
+					var budget_min: int = def_b.get("min_daily_budget", 10)
+					var budget_max: int = def_b.get("max_daily_budget", 30)
+					var poi_mult: float = def_b.get("poi_budget_multiplier", 1.0)
+					var dynamic_poi_budget = _get_dynamic_poi_budget()
+					for member: GuestMember in party.members:
+						var b: int = randi_range(budget_min, budget_max) + int(dynamic_poi_budget * poi_mult)
+						member.daily_budget   = b
+						member.spending_budget = b
+					party.daily_budget    = party.members.reduce(func(acc, m): return acc + m.daily_budget, 0)
+					party.spending_budget = party.daily_budget
+					
+					_active.append(party)
+					
+					# Signal emitten, damit der GuestController die Actors an der Lobby spawnt!
+					sig_party_event_arrived.emit(party)
+					
+					# Statistik
+					daily_checkin_parties += 1
+					daily_checkin_heads += party.members.size()
+					
+					# Event-Pauschale berechnen (z.B. 150 pro Kopf)
+					total_event_income += 150 * party.members.size()
+					
+				if total_event_income > 0:
+					if FinanceManager:
+						FinanceManager.add_transaction(total_event_income, "room", "tx.event_income|Konferenz")
+					else:
+						GameState.add_money(total_event_income)
+					
+					if EffectManager:
+						EffectManager.spawn_money_text(total_event_income, room.global_position + Vector2(0, -64))
 
 
 # =============================================================================
@@ -1109,10 +1142,6 @@ func process_morning_routine() -> void:
 			# Energie wird über Nacht komplett wiederhergestellt
 			member.energy = 100
 
-	# NEU: Tagesgäste für Konferenz spawnen
-	if EventManager and EventManager.is_event_active() and EventManager.active_event == EventManager.EventType.CONFERENCE:
-		spawn_conference_guests()
-
 	var moving: Array = []
 	
 	var dynamic_poi_budget = _get_dynamic_poi_budget()
@@ -1181,6 +1210,10 @@ func _on_dev_add_guest_budget(amount: int) -> void:
 		party.spending_budget += amount
 		for member in party.members:
 			member.spending_budget += amount
+			# Falls daily_budget noch 0 ist (z.B. Tagesgäste vor dem Budget-Fix),
+			# wird es ebenfalls gesetzt damit der Tooltip es anzeigen kann
+			if member.daily_budget == 0:
+				member.daily_budget = amount
 	parties_changed.emit()
 
 # =============================================================================

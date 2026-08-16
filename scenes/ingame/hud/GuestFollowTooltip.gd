@@ -23,8 +23,6 @@ func setup(guest: GuestActor) -> void:
 		
 	var member = guest.get("_guest_member")
 	if member:
-		label_name.text = member.name
-		
 		var p: GuestParty = null
 		var ingame = get_tree().get_root().get_node_or_null("Ingame")
 		if ingame:
@@ -36,6 +34,11 @@ func setup(guest: GuestActor) -> void:
 						break
 						
 		if p:
+			if p.room_id == "" and p.event_poi_id != "":
+				label_name.text = member.name + " (Tagesgast)"
+			else:
+				label_name.text = member.name
+				
 			var sat = int(p.satisfaction)
 			var emoji = "🙂"
 			if sat > 80: emoji = "😁"

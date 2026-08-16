@@ -296,6 +296,7 @@ func load_quick(hotel_id: int) -> bool:
 		return false
 	_apply_snapshot(hotel, snap)
 	_save_hotel(hotel)
+	GameState.select_hotel(hotel)
 	return true
 
 
@@ -321,6 +322,7 @@ func load_manual(hotel_id: int, slot: int) -> bool:
 		return false
 	_apply_snapshot(hotel, snap)
 	_save_hotel(hotel)
+	GameState.select_hotel(hotel)
 	return true
 
 
@@ -356,6 +358,7 @@ func load_auto(hotel_id: int, index: int) -> bool:
 		return false
 	_apply_snapshot(hotel, snap)
 	_save_hotel(hotel)
+	GameState.select_hotel(hotel)
 	return true
 
 

@@ -140,7 +140,13 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 	
 	# Room
 	var lbl_room = Label.new()
-	lbl_room.text = party.room_id if party.room_id else GameState.T("guest.state.waiting")
+	if party.room_id == "" and party.event_poi_id != "":
+		# Tagesgast für ein Event: lesbaren Namen anzeigen statt internem Schlüssel
+		lbl_room.text = "Tagesgast"
+	elif party.room_id != "":
+		lbl_room.text = party.room_id
+	else:
+		lbl_room.text = GameState.T("guest.state.waiting")
 	lbl_room.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	lbl_room.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lbl_room.size_flags_stretch_ratio = 1.0
@@ -270,12 +276,22 @@ func _on_guest_selected(party: GuestParty, member: GuestMember, _btn: Button) ->
 		btn_goto.add_theme_stylebox_override("pressed", load("res://assets/UI/menu_button_blue_pressed.tres"))
 		
 		detail_name_lbl.text = member.name
-		detail_room_val.text = party.room_id if party.room_id else GameState.T("none")
+		if party.room_id == "" and party.event_poi_id != "":
+			detail_room_val.text = "Tagesgast"
+			detail_room_val.add_theme_color_override("font_color", Color("#8ab4f8"))
+		elif party.room_id != "":
+			detail_room_val.text = party.room_id
+			detail_room_val.remove_theme_color_override("font_color")
+		else:
+			detail_room_val.text = GameState.T("none")
+			detail_room_val.remove_theme_color_override("font_color")
 		detail_satisfaction_val.text = "%d%%" % party.satisfaction
 		if member.daily_budget > 0:
 			detail_budget_val.text = "%d / %d %s" % [member.spending_budget, member.daily_budget, GameState.T("currency.symbol")]
+			detail_budget_val.remove_theme_color_override("font_color")
 		else:
 			detail_budget_val.text = "---"
+			detail_budget_val.remove_theme_color_override("font_color")
 		
 		var goal_text = "---"
 		var state = _selected_guest.get("current_state")

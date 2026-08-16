@@ -17,18 +17,35 @@ func setup(guest_manager: GuestManager, map_grid: Node) -> void:
 		_guest_manager.sig_party_moving_to_checkout.connect(_on_party_moving_to_checkout)
 		_guest_manager.sig_party_checked_out_physically.connect(_on_party_checked_out_physically)
 		_guest_manager.sig_party_arrived.connect(_on_party_arrived)
+		_guest_manager.sig_party_event_arrived.connect(_on_party_event_arrived)
 		_guest_manager.sig_party_rejected.connect(_on_party_rejected)
 
 
 # =============================================================================
 func spawn_active_guests() -> void:
+	var spawn_pos = _get_lobby_spawn_pos()
+	var event_delay_counter := 0
+	
 	for party in _guest_manager._active:
 		var room = _find_room_by_id(party.room_id)
 		for member in party.members:
 			var guest_id = member.id  # Stabile ID aus dem Savegame
 			if not _actors.has(guest_id):
-				_create_actor(member, party.room_id, room)
-				
+				var actor = _create_actor(member, party.room_id, room)
+				# Event-Gäste (Tagesgäste für Konferenz etc.) haben keine room_id
+				# aber eine event_poi_id – sie müssen an der Rezeption gespawnt werden.
+				# start_waiting_for_event platziert sie visuell an der Rezeption, setzt sie
+				# aber auf IDLE, damit sie sofort POIs nutzen oder zum Event gehen können.
+				if party.room_id == "" and party.event_poi_id != "":
+					actor.start_waiting_for_event(spawn_pos, event_delay_counter * 0.3)
+					event_delay_counter += 1
+				elif room == null:
+					# Fallback: Zimmer nicht gefunden (z.B. abgerissen oder Datenfehler)
+					# → Gast sicher in der Lobby platzieren statt bei (0,0) im Nirgendwo
+					push_warning("[GuestController] Kein Raum für Gast %s (party %s, room_id='%s') – Lobby-Fallback" % [guest_id, party.id, party.room_id])
+					actor.start_waiting_in_lobby(spawn_pos, event_delay_counter * 0.3)
+					event_delay_counter += 1
+			
 	# Auch Gäste spawnen, die bereits im Checkout sind (nach Reload)
 	for party in _guest_manager._checkout:
 		var room = _find_room_by_id(party.room_id)
@@ -64,6 +81,14 @@ func _on_party_rejected(party: GuestParty) -> void:
 		if _actors.has(guest_id):
 			var actor = _actors[guest_id]
 			actor.complete_checkout(actor.global_position)
+
+# =============================================================================
+func _on_party_event_arrived(party: GuestParty) -> void:
+	var spawn_pos = _get_lobby_spawn_pos()
+	for i in range(party.members.size()):
+		var member = party.members[i]
+		var actor = _create_actor(member, "", null)
+		actor.start_waiting_for_event(spawn_pos, i * 0.8)
 
 # =============================================================================
 func _on_party_checked_in(party: GuestParty, room: Node2D) -> void:

@@ -292,12 +292,17 @@ func _get_open_pois() -> Array[String]:
 		
 		# Erlaubte Gäste-Typen prüfen (z.B. Konferenzraum nur für Business)
 		var allowed_types = def.get("allowed_guest_types", [])
+		var party = _get_my_party()
 		if not allowed_types.is_empty():
-			var party = _get_my_party()
 			if not is_instance_valid(party) or not allowed_types.has(party.type):
 				continue
-		
+				
 		var room_id: String = def.get("id", "")
+				
+		# Tagesgäste (ohne Zimmer) dürfen keine exklusiven Hotel-Annehmlichkeiten nutzen!
+		if is_instance_valid(party) and party.room_id == "":
+			if room_id in ["pool_small", "gym_small", "spa_small"]:
+				continue
 		
 		var cost = def.get("visit_income", 0)
 		if room_id in ["restaurant_small", "bar", "kiosk"]:
@@ -401,15 +406,28 @@ func _decide_next_action() -> void:
 			if is_instance_valid(_target_room):
 				_walk_to_room(_target_room, State.IN_ROOM)
 			else:
-				_change_state(State.LEAVING)
-				_walk_to_exit()
+				var party = _get_my_party()
+				if is_instance_valid(party) and party.event_poi_id != "":
+					_walk_to_poi("lobby")
+				else:
+					_change_state(State.LEAVING)
+					_walk_to_exit()
 			return
 		else:
-			_action_timer = randf_range(15.0, 45.0)
+			var party = _get_my_party()
+			if is_instance_valid(party) and party.event_poi_id != "":
+				_action_timer = randf_range(5.0, 10.0)
+			else:
+				_action_timer = randf_range(15.0, 45.0)
 			return
 	
-	# Mögliche Ziele: Zimmer + alle offenen POIs
-	var possible_targets: Array[String] = ["room"]
+	# Mögliche Ziele: Zimmer (falls vorhanden) + alle offenen POIs
+	var possible_targets: Array[String] = []
+	if is_instance_valid(_target_room):
+		possible_targets.append("room")
+	else:
+		possible_targets.append("lobby")
+		
 	possible_targets.append_array(open_pois)
 		
 	var chosen: String = possible_targets.pick_random()
@@ -422,16 +440,30 @@ func _decide_next_action() -> void:
 			_wander_in_room(_target_room)
 			return
 	elif (current_state == State.IN_POI or current_state == State.EATING) and chosen == _current_poi_id:
-		chosen = "room"
-	
-
+		var party = _get_my_party()
+		if is_instance_valid(party) and party.event_poi_id != "":
+			if not open_pois.is_empty() and randf() > 0.3:
+				chosen = open_pois.pick_random()
+			else:
+				var lobby = _get_lobby_room()
+				if is_instance_valid(lobby) and chosen == "lobby":
+					_wander_in_room(lobby)
+				else:
+					_walk_to_poi("lobby")
+				return
+		else:
+			chosen = "room"
 	
 	if chosen == "room":
 		if is_instance_valid(_target_room):
 			_walk_to_room(_target_room, State.IN_ROOM)
 		else:
-			_change_state(State.LEAVING)
-			_walk_to_exit()
+			var party = _get_my_party()
+			if is_instance_valid(party) and party.event_poi_id != "":
+				_walk_to_poi("lobby")
+			else:
+				_change_state(State.LEAVING)
+				_walk_to_exit()
 	else:
 		_walk_to_poi(chosen)
 
@@ -829,6 +861,32 @@ func start_waiting_in_lobby(spawn_pos: Vector2, delay: float) -> void:
 		global_position = reception_pos + Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
 	modulate.a = 1.0  # Jetzt sichtbar an der Reception
 
+func start_waiting_for_event(spawn_pos: Vector2, delay: float) -> void:
+	_current_poi_id = "lobby"
+	global_position = spawn_pos
+	modulate.a = 0.0
+	
+	# Tagesgäste haben kein Zimmer
+	_target_room = null
+	
+	_change_state(State.WALKING)
+	
+	if delay > 0.0:
+		var wait_time = delay
+		if TimeManager and not TimeManager.is_paused():
+			wait_time = delay / max(1.0, TimeManager.user_speed)
+		await get_tree().create_timer(wait_time).timeout
+		
+	var lobby = _get_lobby_room()
+	if is_instance_valid(lobby) and lobby.has_method("get_checkout_wait_pos"):
+		var reception_pos = lobby.get_checkout_wait_pos()
+		global_position = reception_pos + Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
+	modulate.a = 1.0
+	
+	# Status IDLE = Gast wartet auf das Event und fängt an POIs zu suchen
+	_change_state(State.IDLE)
+	_action_timer = randf_range(2.0, 5.0)
+
 func _walk_to_world_pos(target_pos: Vector2, finish_state: State) -> void:
 	if not is_instance_valid(_map_grid):
 		return
@@ -955,9 +1013,22 @@ func _walk_to_poi(poi_id: String) -> void:
 	var door_world = _map_grid.tile_to_world(exit_tile)
 	
 	var extra_pos = Vector2.INF
-	if poi_id == "vending_machine" and target_room.has_method("get_vending_target_world"):
-		extra_pos = target_room.get_vending_target_world()
-		
+	if is_instance_valid(target_room):
+		var seat_pos = Vector2.INF
+		if target_room.has_method("claim_seat"):
+			seat_pos = target_room.claim_seat(_guest_member.id)
+		elif target_room.has_method("has_free_room_seat") and target_room.has_free_room_seat():
+			seat_pos = target_room.room_claim_seat(_guest_member.id)
+			
+		if seat_pos != Vector2.INF and seat_pos != Vector2.ZERO:
+			extra_pos = seat_pos
+		elif poi_id == "lobby" and target_room.has_method("get_free_walkable_pos"):
+			var wander_pos = target_room.get_free_walkable_pos(_map_grid)
+			if wander_pos != Vector2.INF:
+				extra_pos = wander_pos
+		elif poi_id == "vending_machine" and target_room.has_method("get_vending_target_world"):
+			extra_pos = target_room.get_vending_target_world()
+			
 	_execute_walk(path_tiles, State.IN_POI, door_world, extra_pos, target_room)
 	_current_poi_id = poi_id
 
@@ -990,7 +1061,7 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 				var entry_pos = _target_room.get_room_entry_pos(_map_grid)
 				var local_path_out = _target_room.get_local_path(global_position, entry_pos)
 				world_path.append_array(local_path_out)
-		elif (previous_state == State.IN_POI or previous_state == State.AWAITING_CHECKOUT or previous_state == State.EATING or previous_state == State.STUDYING_MENU or previous_state == State.WAITING_FOR_FOOD or previous_state == State.WAITING_IN_LINE) and not _current_poi_id.is_empty():
+		elif (previous_state == State.IDLE or previous_state == State.IN_POI or previous_state == State.AWAITING_CHECKOUT or previous_state == State.EATING or previous_state == State.STUDYING_MENU or previous_state == State.WAITING_FOR_FOOD or previous_state == State.WAITING_IN_LINE) and not _current_poi_id.is_empty():
 			var poi_room = _get_poi_room_node(_current_poi_id)
 			if is_instance_valid(poi_room) and poi_room.has_method("get_local_path") and poi_room.has_method("get_room_entry_pos"):
 				var entry_pos = poi_room.get_room_entry_pos(_map_grid)
@@ -1094,7 +1165,8 @@ func _get_logical_start_tile() -> Vector2i:
 			var t_exit_tile = _get_room_exit_tile(_target_room)
 			_room_door_world = _map_grid.tile_to_world(t_exit_tile)
 			return t_exit_tile
-	elif not _current_poi_id.is_empty() and current_state != State.WALKING and current_state != State.LEAVING:
+			
+	if not _current_poi_id.is_empty() and current_state != State.WALKING and current_state != State.LEAVING:
 		var poi_room = _get_poi_room_node(_current_poi_id)
 		if is_instance_valid(poi_room) and poi_room.has_method("get_target_tile"):
 			return poi_room.get_target_tile(_map_grid)

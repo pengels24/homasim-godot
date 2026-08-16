@@ -6,6 +6,7 @@ var id: String = ""
 var type: String = "" # Schlüssel aus GuestDefinitions.ALL
 var members: Array  = [] # Array[GuestMember]
 var room_id: String = "" # leer bis Check-in (= room_number)
+var event_poi_id: String = "" # Zuweisung für Tagesgäste, die für einen bestimmten POI anreisen (z.B. Konferenz)
 var stay_days: int    = 1
 var total_stay_days: int = 1 # Speichert die ursprünglichen Nächte für die Abrechnung
 var base_price: int  = 0
@@ -66,6 +67,7 @@ func to_dict() -> Dictionary:
 		"type": type,
 		"members": member_arr,
 		"room_id": room_id,
+		"event_poi_id": event_poi_id,
 		"stay_days": stay_days,
 		"total_stay_days": total_stay_days,
 		"base_price": base_price,
@@ -86,6 +88,14 @@ func to_dict() -> Dictionary:
 static func from_dict(d: Dictionary) -> GuestParty:
 	var p := GuestParty.new(d.get("id", ""), d.get("type", ""))
 	p.room_id = d.get("room_id", "")
+	p.event_poi_id = d.get("event_poi_id", "")
+	
+	# Migration alter Savegames: Früher wurde room_id für den Konferenz-Schlüssel verwendet.
+	# Wenn event_poi_id leer ist aber room_id nach einem Event-Raum aussieht → migrieren.
+	if p.event_poi_id == "" and (p.room_id.begins_with("conference_") or p.room_id.begins_with("event_")):
+		p.event_poi_id = p.room_id
+		p.room_id = ""
+	
 	p.stay_days = d.get("stay_days", 1)
 	p.total_stay_days = d.get("total_stay_days", max(1, p.stay_days)) # Fallback für alte Savegames
 	p.base_price = int(d.get("base_price", 0))

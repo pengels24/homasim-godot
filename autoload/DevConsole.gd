@@ -156,6 +156,9 @@ func _execute(cmd: String) -> void:
 				for id in TutorialManager.tutorial_registry.keys():
 					if not TutorialManager.unlocked_tutorials.has(id):
 						TutorialManager.unlocked_tutorials.append(id)
+				if GameState.selected_hotel != null and not GameState.selected_hotel.is_empty():
+					GameState.selected_hotel["tutorials"] = TutorialManager.get_state()
+					SaveManager.update_hotel(GameState.active_hotel_id, GameState.selected_hotel)
 				_log("Alle Tutorials freigeschaltet.", CLR_OK)
 			else:
 				_log("Fehler: TutorialManager nicht gefunden.", CLR_ERR)

@@ -147,6 +147,22 @@ func get_work_position(_staff_id: String) -> Vector2:
 	
 	return global_position + Vector2(16, 16)
 
+func get_service_position() -> Vector2:
+	var marker = get_node_or_null("%PickupPoint")
+	if marker:
+		return marker.global_position
+		
+	var markers = find_children("PickupPoint", "Marker2D")
+	if not markers.is_empty():
+		return markers[0].global_position
+		
+	# Fallback
+	var interior = get_node_or_null("Interior")
+	if interior:
+		return interior.global_position + Vector2(16, 16)
+	
+	return global_position + Vector2(16, 16)
+
 
 func _process_cooking(delta: float) -> void:
 	var finished_orders = []

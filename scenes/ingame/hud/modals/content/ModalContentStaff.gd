@@ -782,8 +782,7 @@ func _on_confirm_accepted() -> void:
 			_refresh_list()
 	elif _pending_action == 5:
 		if StaffManager:
-			if StaffManager.hire_staff(_pending_assign_sid):
-				StaffManager.assign_to_room(_pending_assign_sid, _pending_assign_rid)
+			if StaffManager.hire_staff(_pending_assign_sid, _pending_assign_rid):
 				_refresh_list()
 	elif _pending_action == 6:
 		if StaffManager:

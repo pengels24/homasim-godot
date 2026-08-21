@@ -12,7 +12,7 @@ func activate(map_grid: Node2D) -> void:
 	_map_grid = map_grid
 	Input.set_custom_mouse_cursor(load("res://assets/icons/HUDBottom/hammer.svg"))
 	
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if not is_instance_valid(_map_grid):
 		return
 		

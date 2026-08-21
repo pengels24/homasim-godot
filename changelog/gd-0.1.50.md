@@ -141,3 +141,16 @@
 ame_key statt 
 ame verwendet).
 - **Kassenbuch Checkout-Details:** Checkout-Logs um Zimmertyp und Aufenthaltsdauer erweitert. ModalContentFinances.gd unterstützt nun dynamische Anzahl an Platzhaltern in der Übersetzung.
+
+### Ingame & Navigation (Aktuelle Session 2)
+- **Smart Room / GuestActor State Machine Fix:** Schwerwiegender Bug in GuestActor._process_waiting behoben. Der 'Toter Gast'-Fehler nach dem Laden eines Spielstands entstand, weil der ablaufende Action-Timer im Status IN_ROOM oder IDLE komplett ignoriert wurde, was zu einem ewigen Early-Return im nächsten Frame führte. Es wurde eine Fallback-Logik (else-Branch) hinzugefügt, die _decide_next_action() korrekt aufruft.
+- **Smart Room Migration:** SpaSmall, GymSmall, PoolSmall und ConferenceSmall bereiten sich auf Smart Room Migration vor (Dokumentation aktualisiert).
+- **Guest Spawn:** Gäste spawnen nun am receptionX Wegpunkt und nicht auf der Straße (keine Animation beim Betreten, direktes Warten).
+
+### Ingame & Navigation (Aktuelle Session 3)
+- **Smart-Room API Integration:** Room.gd Basisklasse um generische Methoden (get_available_interactions, claim_interaction, elease_interaction) erweitert. GuestActor._wander_in_room und _change_state darauf umgestellt, um alte Hardcoded-Logik (Betten/Sitze) aufzulösen und Race-Conditions bei der Freigabe von Interaktionen zu vermeiden.
+- **Vending Machine Walk-Target Fix:** Bug in GuestActor._walk_to_poi behoben, der dazu führte, dass Gäste den Getränkeautomaten-POI mit freien Sitzplätzen in der Lobby (Lobby als Room hat has_free_room_seat() == true geerbt) verwechselten und sich stattdessen unten rechts auf einen Sofa-Platz setzten, um dort die Automat-Interaktion (und Animation) abzuspielen. Vending Machine hat nun Priorität vor der Sitzplatz-Suche.
+- **Lobby Special Nodes:** _find_special_nodes in Lobby.gd präzisiert, sodass Container wie Chairs oder Deskchairs nicht mehr fälschlicherweise als SnackPoint registriert werden.
+-   * * S m a r t R o o m   B a r   M i g r a t i o n : * *   G a s t - S i t z p l a t z - Z u w e i s u n g   r e p a r i e r t .   G s t e   s t a p e l n   s i c h   n i c h t   m e h r   a u f   d e m   F a l l b a c k - P u n k t ,   s o n d e r n   b l o c k i e r e n   S i t z p l t z e   s a u b e r   �b e r   c l a i m _ i n t e r a c t i o n ,   b e v o r   s i e   l o s l a u f e n .  
+ -   * * G u e s t A c t o r   S t a t e - F l o w   ( B a r ) : * *   S t a t e   E A T I N G   r u f t   n u n   k o r r e k t   r e l e a s e _ i n t e r a c t i o n   a u f ,   d a m i t   S m a r t R o o m - P l t z e   w i e d e r   f r e i g e g e b e n   w e r d e n .  
+ 

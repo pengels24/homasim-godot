@@ -133,7 +133,7 @@ func _find_special_nodes(node: Node) -> void:
 			continue
 		if "reception" in n:
 			_room_receptions.append(child)
-		elif "snackpoint" in n:
+		elif n.begins_with("snackpoint") or (n.begins_with("chair") and n != "chairs"):
 			_room_snack_points.append(child)
 		_find_special_nodes(child)
 
@@ -144,15 +144,43 @@ func _ready() -> void:
 		GameState.sig_hotel_level_changed.connect(_on_hotel_level_changed)
 
 # =============================================================================
-func get_checkout_wait_pos() -> Vector2:
+func get_checkout_wait_pos(party_id: String = "") -> Vector2:
 	if _room_receptions.is_empty():
 		return global_position + Vector2(32.0, 32.0) # Fallback center
 	
-	# Zufälligen Reception-Point wählen
-	var r = _room_receptions[randi() % _room_receptions.size()]
+	var idx = randi() % _room_receptions.size()
+	if party_id != "":
+		idx = abs(party_id.hash()) % _room_receptions.size()
+		
+	var r = _room_receptions[idx]
 	return r.global_position
 
 
+
+# =============================================================================
+# --- SMART ROOM OVERRIDES ---
+func get_door_world_inside(map_grid: Node, is_leaving_hotel: bool = false) -> Vector2:
+	if is_leaving_hotel:
+		return map_grid.tile_to_world(get_street_tile(map_grid))
+	else:
+		return get_room_entry_pos(map_grid)
+
+func get_door_world_outside(map_grid: Node, is_leaving_hotel: bool = false) -> Vector2:
+	if is_leaving_hotel:
+		return map_grid.tile_to_world(get_street_tile(map_grid))
+	else:
+		return map_grid.tile_to_world(get_target_tile(map_grid))
+
+func get_free_walkable_pos(_map_grid: Node = null) -> Vector2:
+	if _local_astar == null:
+		return get_checkout_wait_pos()
+		
+	var points = _local_astar.get_point_ids()
+	if points.size() > 0:
+		var p_id = points[randi() % points.size()]
+		return to_global(_local_astar.get_point_position(p_id))
+		
+	return get_checkout_wait_pos()
 
 # =============================================================================
 ## VENDING MACHINE API

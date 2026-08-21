@@ -479,6 +479,15 @@ func _restore_rooms(built_plots: Array) -> void:
 			active_rooms.append(room)
 
 	_update_all_floor_neighbors()
+	
+	# Finale Garantie: Alle Exit-Tiles (occ==2) MÜSSEN non-solid sein.
+	# Diese Schleife läuft einmalig nach dem Laden aller Räume und stellt sicher,
+	# dass keine Tür durch die Reihenfolge der Raum-Initialisierung solid geworden ist.
+	if astar:
+		for gy in _occ_h:
+			for gx in _occ_w:
+				if _occ[gy * _occ_w + gx] == 2:
+					astar.set_point_solid(Vector2i(gx, gy), false)
 
 
 # =============================================================================
@@ -496,18 +505,35 @@ func _is_visible(x: int, y: int) -> bool:
 	var p = _grid[y][x]
 	return p.is_built or p.is_constructing
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if _show_debug_grid:
 		queue_redraw()
 
 func _draw() -> void:
 	if not _show_debug_grid: return
 	
-	# Draw solid tiles
+	# Draw solid tiles (ROT)
 	for y in astar.region.size.y:
 		for x in astar.region.size.x:
 			if astar.is_point_solid(Vector2i(x, y)):
 				draw_rect(Rect2(x * TILE_PX, y * TILE_PX, TILE_PX, TILE_PX), Color(1.0, 0.0, 0.0, 0.5))
+	
+	# Draw exit tiles occ==2 (DUNKELBLAU) - diese MÜSSEN non-solid sein!
+	if _occ.size() > 0:
+		for gy in _occ_h:
+			for gx in _occ_w:
+				if _occ[gy * _occ_w + gx] == 2:
+					var is_solid = astar.is_point_solid(Vector2i(gx, gy))
+					# Türen die SOLID sind → Hellrot/Orange (FEHLER!)
+					# Türen die korrekt non-solid → Dunkelblau
+					var color = Color(1.0, 0.5, 0.0, 0.85) if is_solid else Color(0.0, 0.2, 0.9, 0.85)
+					draw_rect(Rect2(gx * TILE_PX, gy * TILE_PX, TILE_PX, TILE_PX), color)
+					# Kleines Kreuz als Marker
+					var cx = gx * TILE_PX + TILE_PX * 0.5
+					var cy = gy * TILE_PX + TILE_PX * 0.5
+					draw_line(Vector2(cx - 4, cy), Vector2(cx + 4, cy), Color.WHITE, 1.5)
+					draw_line(Vector2(cx, cy - 4), Vector2(cx, cy + 4), Color.WHITE, 1.5)
+
 				
 	# Draw debug paths
 	for path in _debug_paths:
@@ -583,6 +609,11 @@ func _occ_mark_exit(gx: int, gy: int) -> void:
 	var idx := gy * _occ_w + gx
 	_occ[idx] = 2
 	_sync_astar_cell(gx, gy)
+	
+	# GANZ WICHTIG: Türen DÜRFEN NIEMALS solid sein, selbst wenn _sync_astar_cell 
+	# durch Clearance-Zonen oder Parzellen-Wände verwirrt wird!
+	if astar:
+		astar.set_point_solid(Vector2i(gx, gy), false)
 
 
 # =============================================================================
@@ -650,7 +681,7 @@ func _occ_mark_clearance(gx: int, gy: int, w: int, h: int) -> void:
 		for dx in w:
 			var idx := (gy + dy) * _occ_w + (gx + dx)
 			if idx >= 0 and idx < _occ.size():
-				if _occ[idx] == 0:
+				if _occ[idx] != 2:
 					_occ[idx] = 4 # 4 = Freizuhaltende Zone (Begehbar, aber Bauverbot)
 					_sync_astar_cell(gx + dx, gy + dy)
 
@@ -904,7 +935,12 @@ func _sync_astar_cell(gx: int, gy: int) -> void:
 	if gx < 0 or gy < 0 or gx >= _occ_w or gy >= _occ_h:
 		return
 	var val = _occ[gy * _occ_w + gx]
-	# 1 = Room Body, 3 = Wall -> Diese blockieren den Weg!
+	# 2 = Exit-Tile (Tür) → NIEMALS solid, egal was danach noch aufgerufen wird!
+	if val == 2:
+		if astar:
+			astar.set_point_solid(Vector2i(gx, gy), false)
+		return
+	# 1 = Room Body, 3 = Wall → Diese blockieren den Weg!
 	var is_solid: bool = (val == 1 or val == 3)
 	astar.set_point_solid(Vector2i(gx, gy), is_solid)
 

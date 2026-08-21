@@ -40,6 +40,7 @@ StaffManager="*res://autoload/StaffManager.gd"
 GastroManager="*res://autoload/GastroManager.gd"
 SoundManager="*res://autoload/SoundManager.gd"
 EventManager="*res://autoload/EventManager.gd"
+DevSocialSharer="*res://autoload/DevSocialSharer.gd"
 
 [display]
 

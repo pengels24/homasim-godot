@@ -180,7 +180,7 @@ func _update_content() -> void:
 						var guest_id = member.id  # Stabile ID – überlebt Save/Load!
 						var actor = ctrl._actors.get(guest_id, null)
 						if is_instance_valid(actor):
-							if actor.current_state == actor.State.IN_ROOM:
+							if actor.current_state in [actor.State.IN_ROOM, actor.State.SITTING, actor.State.SLEEPING]:
 								presence = GameState.T("room.tooltip.guest_present")
 								break
 							elif actor.current_state in [actor.State.IN_POI, actor.State.STUDYING_MENU, actor.State.WAITING_FOR_FOOD, actor.State.EATING]:
@@ -229,7 +229,11 @@ func _update_content() -> void:
 			eq.sort()
 			final_status += "\n" + GameState.T("room.tooltip.equipment", "Ausstattung:") + " " + ", ".join(eq)
 
-	status_label.text = final_status
+	status_label.text = final_status.strip_edges()
+	if status_label.text == "":
+		status_label.hide()
+	else:
+		status_label.show()
 
 	# ANG-211: Lobby ist Systemraum – Sauberkeit/Wartung nicht anzeigen
 	if _target_room.get("room_type_id") != "lobby":

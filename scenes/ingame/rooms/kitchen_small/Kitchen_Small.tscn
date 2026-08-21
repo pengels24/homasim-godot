@@ -97,10 +97,6 @@ position = Vector2(16, 16)
 scale = Vector2(0.109375, 28)
 texture = SubResource("GradientTexture1D_uc7px")
 
-[node name="ChefWorkArea" type="Marker2D" parent="Interior" unique_id=938352826]
-unique_name_in_owner = true
-position = Vector2(17, 11)
-
 [node name="Furniture" type="Node2D" parent="Interior" unique_id=2040187409]
 
 [node name="Units" type="Node2D" parent="Interior/Furniture" unique_id=14534276]
@@ -159,6 +155,10 @@ texture = ExtResource("2_l4611")
 region_enabled = true
 region_rect = Rect2(64, 0, 16, 16)
 
+[node name="ChefWorkArea" type="Marker2D" parent="Interior/Furniture" unique_id=938352826]
+unique_name_in_owner = true
+position = Vector2(17, 11)
+
 [node name="NavBlocker" type="Node2D" parent="Interior/Furniture" unique_id=1775176429]
 
 [node name="NavBlockerFryer" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1036593980 groups=["nav_blocker"]]
@@ -199,6 +199,9 @@ offset_bottom = 13.0
 
 [node name="ServicePoint" type="Marker2D" parent="Interior/Furniture" unique_id=1007799622]
 position = Vector2(18, 10)
+
+[node name="PickupPoint" type="Marker2D" parent="Interior/Furniture" unique_id=1007383870]
+position = Vector2(25, 14)
 
 [node name="Door" type="Sprite2D" parent="." unique_id=1048250083]
 z_index = 1

@@ -83,7 +83,8 @@ func setup(room: Node2D) -> void:
 		
 	if is_instance_valid(room) and room.has_method("get_definition"):
 		var def = room.get_definition()
-		var n = GameState.T("roomdef.name.long." + def.get("id", ""))
+		var name_key = def.get("name", "roomdef.name.long." + def.get("id", ""))
+		var n = GameState.T(name_key)
 		label_title.text = "  ::: Live: " + n
 	else:
 		label_title.text = "  ::: Live-Details"

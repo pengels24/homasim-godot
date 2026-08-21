@@ -8,6 +8,8 @@
 [ext_resource type="Texture2D" uid="uid://cnmlw3opos464" path="res://assets/icons/angelus2010/OverlayToolbar/ang-usage.aseprite" id="6_1hx8q"]
 [ext_resource type="Texture2D" uid="uid://cq1w061nls65i" path="res://assets/icons/angelus2010/OverlayToolbar/ang-cat-ov.aseprite" id="7_2xvye"]
 [ext_resource type="Texture2D" uid="uid://0rg81xk708b5" path="res://assets/icons/angelus2010/OverlayToolbar/ang-value.aseprite" id="8_1hx8q"]
+[ext_resource type="Texture2D" uid="uid://crwu7jeecxajp" path="res://assets/icons/angelus2010/OverlayToolbar/ang-wlan.aseprite" id="9_6pqcr"]
+[ext_resource type="Texture2D" uid="uid://c4ig4o1d0btuj" path="res://assets/icons/angelus2010/OverlayToolbar/ang-clima.aseprite" id="10_oyu5a"]
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_overlay"]
 allow_unpress = true
@@ -44,11 +46,11 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="BtnDirt" type="Button" parent="VBoxContainer/Panel1/MarginContainer" unique_id=1119986969]
-mouse_default_cursor_shape = 2
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Verschmutzung"
 focus_mode = 0
+mouse_default_cursor_shape = 2
 theme_override_styles/pressed = ExtResource("3_jm8q0")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_overlay")
@@ -73,11 +75,11 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="BtnMaint" type="Button" parent="VBoxContainer/Panel2/MarginContainer" unique_id=1419135003]
-mouse_default_cursor_shape = 2
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Raumzustand"
 focus_mode = 0
+mouse_default_cursor_shape = 2
 theme_override_styles/pressed = ExtResource("3_jm8q0")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_overlay")
@@ -102,11 +104,11 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="BtnOcc" type="Button" parent="VBoxContainer/Panel3/MarginContainer" unique_id=144756595]
-mouse_default_cursor_shape = 2
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Belegung"
 focus_mode = 0
+mouse_default_cursor_shape = 2
 theme_override_styles/pressed = ExtResource("3_jm8q0")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_overlay")
@@ -131,11 +133,11 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="BtnCat" type="Button" parent="VBoxContainer/Panel4/MarginContainer" unique_id=1970079428]
-mouse_default_cursor_shape = 2
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Kategorien"
 focus_mode = 0
+mouse_default_cursor_shape = 2
 theme_override_styles/pressed = ExtResource("3_jm8q0")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_overlay")
@@ -160,23 +162,23 @@ theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
 [node name="BtnVal" type="Button" parent="VBoxContainer/Panel5/MarginContainer" unique_id=219836337]
-mouse_default_cursor_shape = 2
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Wertigkeit"
 focus_mode = 0
+mouse_default_cursor_shape = 2
 theme_override_styles/pressed = ExtResource("3_jm8q0")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_overlay")
 icon = ExtResource("8_1hx8q")
 icon_alignment = 1
 
-[node name="Panel6" type="Panel" parent="VBoxContainer"]
+[node name="Panel6" type="Panel" parent="VBoxContainer" unique_id=954536552]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 mouse_filter = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Panel6"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Panel6" unique_id=1738208628]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -188,24 +190,24 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="BtnWlan" type="Button" parent="VBoxContainer/Panel6/MarginContainer"]
-mouse_default_cursor_shape = 2
+[node name="BtnWlan" type="Button" parent="VBoxContainer/Panel6/MarginContainer" unique_id=1244411432]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "WLAN"
 focus_mode = 0
+mouse_default_cursor_shape = 2
 theme_override_styles/pressed = ExtResource("3_jm8q0")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_overlay")
-icon = ExtResource("8_1hx8q")
+icon = ExtResource("9_6pqcr")
 icon_alignment = 1
 
-[node name="Panel7" type="Panel" parent="VBoxContainer"]
+[node name="Panel7" type="Panel" parent="VBoxContainer" unique_id=584539355]
 custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 mouse_filter = 1
 
-[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Panel7"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/Panel7" unique_id=1812674848]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -217,14 +219,14 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="BtnAc" type="Button" parent="VBoxContainer/Panel7/MarginContainer"]
-mouse_default_cursor_shape = 2
+[node name="BtnAc" type="Button" parent="VBoxContainer/Panel7/MarginContainer" unique_id=1063622253]
 unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Klima"
 focus_mode = 0
+mouse_default_cursor_shape = 2
 theme_override_styles/pressed = ExtResource("3_jm8q0")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_overlay")
-icon = ExtResource("8_1hx8q")
+icon = ExtResource("10_oyu5a")
 icon_alignment = 1

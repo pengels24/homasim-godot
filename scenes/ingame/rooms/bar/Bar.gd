@@ -30,7 +30,7 @@ static func get_definition() -> Dictionary:
 		"min_staff": 1,
 		"max_staff": 2,  # Slot 1: bartender (Pflicht), Slot 2: waiter (optional)
 		"max_role_limits": {"bartender": 1, "waiter": 1},  # Je max. 1 pro Rolle
-		"open_from": 720,   # 12:00
+		"open_from": 480,   # DEBUG: 8:00 (Normal 12:00 / 720)
 		"open_to": 1410,    # 23:30
 		"need_restoration": {"thirst": 70, "fun": 30},
 		"valid_door_slots": ["R1"],
@@ -79,17 +79,11 @@ func get_bartender_stand_pos() -> Vector2:
 		return counter.to_global(Vector2(0, -8))
 	return global_position
 
-## Gibt die Blickrichtung für den Barkeeper zurück (zur Tür)
+## Gibt die Blickrichtung für den Barkeeper zurück (zum Servicepoint)
 func get_bartender_look_dir() -> Vector2:
-	var door = get_node_or_null("Door")
-	if is_instance_valid(door):
-		var dir = get_bartender_stand_pos().direction_to(door.global_position)
-		# Auf die nächste der 4 Achsen (Up, Down, Left, Right) einrasten
-		if abs(dir.x) > abs(dir.y):
-			return Vector2(sign(dir.x), 0)
-		else:
-			return Vector2(0, sign(dir.y))
-	return Vector2.DOWN
+	var b_pos = get_bartender_stand_pos()
+	var service_point = get_service_position()
+	return b_pos.direction_to(service_point)
 
 ## Gibt die globale Standposition für die Bedienung zurück (mittig im Gastraum)
 func get_waiter_stand_pos() -> Vector2:
@@ -104,26 +98,36 @@ func get_waiter_stand_pos() -> Vector2:
 	return to_global(Vector2(16, 16))
 
 # =============================================================================
-# SEAT MANAGEMENT
+# SMART ROOM INTERFACE (Replaces legacy SEAT MANAGEMENT)
 # =============================================================================
 
-## Prüft ob ein freier, sauberer Platz existiert
-func has_free_seat() -> bool:
-	for seat in _seats:
+func get_available_interactions(_guest: Node2D) -> Array[Dictionary]:
+	var interactions: Array[Dictionary] = []
+	for i in range(_seats.size()):
+		var seat = _seats[i]
 		if seat["occupied_by"] == "" and seat["status"] == "clean":
-			return true
-	return false
+			interactions.append({
+				"id": "seat_" + str(i),
+				"type": "drink",
+				"target_pos": seat["node"].global_position,
+				"duration": randf_range(30.0, 90.0)
+			})
+	return interactions
 
-## Belegt einen Platz für einen Gast, gibt globale Position des Stuhls zurück
-func claim_seat(guest_id: String) -> Vector2:
-	for seat in _seats:
-		if seat["occupied_by"] == "" and seat["status"] == "clean":
-			seat["occupied_by"] = guest_id
-			return seat["node"].global_position
-	return Vector2.ZERO
+func claim_interaction(guest_id: String, interaction_id: String) -> Dictionary:
+	if interaction_id.begins_with("seat_"):
+		var idx = interaction_id.replace("seat_", "").to_int()
+		if idx >= 0 and idx < _seats.size():
+			var seat = _seats[idx]
+			if seat["occupied_by"] == "" and seat["status"] == "clean":
+				seat["occupied_by"] = guest_id
+				return {
+					"target_pos": seat["node"].global_position,
+					"duration": randf_range(30.0, 90.0)
+				}
+	return {}
 
-## Gast verlässt den Platz – Stuhl wird dreckig, Putztask wird erstellt
-func leave_seat(guest_id: String) -> void:
+func release_interaction(guest_id: String) -> void:
 	for seat in _seats:
 		if seat["occupied_by"] == guest_id:
 			seat["occupied_by"] = ""
@@ -132,6 +136,64 @@ func leave_seat(guest_id: String) -> void:
 			if TaskManager:
 				TaskManager.add_task("clean_table", {"room": self, "pos": seat["node"].global_position})
 			break
+
+# =============================================================================
+# LEGACY COMPATIBILITY SHIMS (für GuestActor der noch die alte API nutzt)
+# =============================================================================
+
+func has_free_seat() -> bool:
+	for seat in _seats:
+		if seat["occupied_by"] == "" and seat["status"] == "clean":
+			return true
+	return false
+
+## Legacy: claim_seat → delegiert an claim_interaction
+func claim_seat(guest_id: String) -> Vector2:
+	var avail = get_available_interactions(null)
+	if avail.size() > 0:
+		var result = claim_interaction(guest_id, avail[0]["id"])
+		return result.get("target_pos", Vector2.ZERO)
+	return Vector2.ZERO
+
+## Legacy: leave_seat → delegiert an release_interaction
+func leave_seat(guest_id: String) -> void:
+	release_interaction(guest_id)
+
+func get_staff_node(role: String, _purpose: String) -> Vector2:
+	var target_global = global_position + Vector2(16, 16)
+	if role == "bartender":
+		target_global = get_bartender_stand_pos()
+	elif role == "waiter":
+		target_global = get_waiter_stand_pos()
+		
+	if _local_astar:
+		var closest = _local_astar.get_closest_point(to_local(target_global))
+		if closest != -1:
+			return to_global(_local_astar.get_point_position(closest))
+	return target_global
+
+func get_work_position(staff_id: String) -> Vector2:
+	if StaffManager and StaffManager.hired_staff.has(staff_id):
+		var role = StaffManager.hired_staff[staff_id].get("role", "")
+		return get_staff_node(role, "work")
+	
+	# Fallback if unknown
+	return get_staff_node("bartender", "work")
+
+func get_free_walkable_pos(_map_grid: Node = null) -> Vector2:
+	if _local_astar == null:
+		return global_position + Vector2(32.0, 32.0) # Fallback center
+		
+	var points = _local_astar.get_point_ids()
+	if points.size() > 0:
+		var p_id = points[randi() % points.size()]
+		return to_global(_local_astar.get_point_position(p_id))
+		
+	return global_position + Vector2(32.0, 32.0)
+
+# =============================================================================
+# LEGACY FALLBACKS (Clean/Dirty Logic for Tasks)
+# =============================================================================
 
 ## Bedienung räumt Tisch ab
 func clean_dirty_seat() -> bool:

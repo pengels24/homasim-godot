@@ -117,7 +117,7 @@ func _update_modulate() -> void:
 # ── Prozess – Ghost folgt Maus ────────────────────────────────────────────────
 
 # =============================================================================
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if not is_instance_valid(_ghost) or not is_instance_valid(_map_grid):
 		return
 

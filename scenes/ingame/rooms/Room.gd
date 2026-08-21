@@ -157,6 +157,90 @@ func room_leave_bed(guest_id: String) -> void:
 		if b["occupied_by"] == guest_id:
 			b["occupied_by"] = ""
 
+# =============================================================================
+# --- SMART ROOM INTERFACE ---
+# =============================================================================
+func get_available_interactions(_actor: Node2D) -> Array[Dictionary]:
+	var interactions: Array[Dictionary] = []
+	for i in range(_room_beds.size()):
+		var b = _room_beds[i]
+		if b["occupied_by"] == "":
+			interactions.append({
+				"id": "bed_" + str(i),
+				"type": "sleep",
+				"target_pos": b["node"].global_position,
+				"duration": randf_range(30.0, 60.0)
+			})
+	for i in range(_room_seats.size()):
+		var s = _room_seats[i]
+		if s["occupied_by"] == "":
+			interactions.append({
+				"id": "seat_" + str(i),
+				"type": "sit",
+				"target_pos": s["node"].global_position,
+				"duration": randf_range(10.0, 20.0)
+			})
+	
+	interactions.append({
+		"id": "wander_center",
+		"type": "wander",
+		"target_pos": get_service_position(),
+		"duration": randf_range(10.0, 20.0)
+	})
+	
+	interactions.append({
+		"id": "wander_random",
+		"type": "wander",
+		"target_pos": get_random_walkable_local_pos(),
+		"duration": randf_range(5.0, 15.0)
+	})
+	return interactions
+
+func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
+	if interaction_id.begins_with("bed_"):
+		var idx = interaction_id.replace("bed_", "").to_int()
+		if idx >= 0 and idx < _room_beds.size():
+			var b = _room_beds[idx]
+			if b["occupied_by"] == "":
+				b["occupied_by"] = actor_id
+				return {
+					"target_pos": b["node"].global_position,
+					"look_at_pos": get_service_position(),
+					"duration": randf_range(30.0, 60.0)
+				}
+	elif interaction_id.begins_with("seat_"):
+		var idx = interaction_id.replace("seat_", "").to_int()
+		if idx >= 0 and idx < _room_seats.size():
+			var s = _room_seats[idx]
+			if s["occupied_by"] == "":
+				s["occupied_by"] = actor_id
+				var table = get_node_or_null("%Table")
+				var look_pos = table.global_position if is_instance_valid(table) else get_service_position()
+				return {
+					"target_pos": s["node"].global_position,
+					"look_at_pos": look_pos,
+					"duration": randf_range(10.0, 20.0)
+				}
+	elif interaction_id == "wander_center":
+		return {
+			"target_pos": get_service_position(),
+			"duration": randf_range(10.0, 20.0)
+		}
+	elif interaction_id == "wander_random":
+		return {
+			"target_pos": get_random_walkable_local_pos(),
+			"duration": randf_range(5.0, 15.0)
+		}
+	return {}
+
+func release_interaction(actor_id: String) -> void:
+	for b in _room_beds:
+		if b["occupied_by"] == actor_id:
+			b["occupied_by"] = ""
+	for s in _room_seats:
+		if s["occupied_by"] == actor_id:
+			s["occupied_by"] = ""
+
 # ── Definition (von Unterklassen überschreiben) ───────────────────────────────
 
 
@@ -323,6 +407,19 @@ func get_service_position() -> Vector2:
 		if p_int: return p_int.global_position + Vector2(16, 16)
 		
 	return global_position + Vector2(16, 16)
+
+## Liefert die globale Koordinate, an der die Raumtür auf der Innenseite liegt.
+func get_door_world_inside(map_grid: Node, _is_leaving_hotel: bool = false) -> Vector2:
+	if has_method("get_room_entry_pos"):
+		return call("get_room_entry_pos", map_grid)
+	return global_position
+
+## Liefert die globale Koordinate, die direkt außerhalb des Raumes liegt.
+func get_door_world_outside(map_grid: Node, _is_leaving_hotel: bool = false) -> Vector2:
+	if has_method("get_target_tile"):
+		var exit_tile = call("get_target_tile", map_grid)
+		return map_grid.tile_to_world(exit_tile)
+	return global_position
 
 func get_room_entry_pos(map_grid: Node) -> Vector2:
 	var exit_tile = get_target_tile(map_grid)

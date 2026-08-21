@@ -17,7 +17,7 @@ func _ready() -> void:
 	if _selection_border:
 		_selection_border.hide()
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if not visible or not is_inside_tree(): return
 	var is_hovered = get_global_rect().has_point(get_global_mouse_position())
 	if is_hovered:

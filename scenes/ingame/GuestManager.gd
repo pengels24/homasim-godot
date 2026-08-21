@@ -80,7 +80,7 @@ func configure(hotel: Dictionary, map_grid: Node2D) -> void:
 		TimeManager.sig_minute_passed.connect(_on_minute_passed)
 
 # =============================================================================
-func _on_minute_passed(total_game_minutes: int) -> void:
+func _on_minute_passed(_total_game_minutes: int) -> void:
 	var current_time = TimeManager.get_game_time()
 	if current_time == 450: # 07:30 Uhr (90 Minuten vor 09:00 Uhr)
 		if EventManager and EventManager.is_event_active() and EventManager.active_event == EventManager.EventType.CONFERENCE:

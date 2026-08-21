@@ -298,7 +298,7 @@ func get_max_staff_capacity() -> int:
 	return total_capacity
 
 # =============================================================================
-func hire_staff(applicant_id: String) -> bool:
+func hire_staff(applicant_id: String, initial_room_id: String = "") -> bool:
 	if hired_staff.size() >= get_max_staff_capacity():
 		Toast.show(GameState.T("toast.staff.limit_reached"), "personal")
 		return false
@@ -331,8 +331,14 @@ func hire_staff(applicant_id: String) -> bool:
 		applicant["hired_day"] = 1
 	hired_staff[applicant["id"]] = applicant
 	
+	if initial_room_id != "":
+		room_assignments[applicant["id"]] = initial_room_id
+	
 	# Speichern
 	_save_to_hotel()
+	
+	if initial_room_id != "":
+		sig_assignments_changed.emit()
 	
 	sig_staff_hired.emit(applicant)
 	Toast.show(applicant["first_name"] + " wurde eingestellt!", "personal", false)

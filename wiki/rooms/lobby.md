@@ -41,3 +41,12 @@ Dieser Raum nutzt ein definiertes Set an Wegpunkten und Markern für das `RoomNa
 **Checkout (Abreise):**
 - `_walk_to_exit()` nutzt `lobby.get_street_tile()` und ein leeres `path_tiles=[]`.
 - `_execute_walk()` navigiert per LOCAL Lobby-Pfad direkt zur Außentür → Despawn.
+
+### 3.3 Vending Machine / Snack Flow
+Der Getränke-/Snackautomat in der Lobby fungiert als Pseudo-POI (`id: "vending_machine"`), der von Gästen aufgesucht werden kann, wenn sie hungrig sind und kein anderer Gastro-POI geöffnet hat.
+
+**Ablauf:**
+1. Gast entscheidet sich für den Snackautomaten und läuft zum **`VendingTargetPoint`** (wichtig: dieser Point hat Priorität vor der generischen `has_free_room_seat` Logik, damit der Gast sich nicht vorher auf einen Lobby-Stuhl setzt).
+2. Am Automat angekommen (`_on_poi_arrived`) triggert die Bezahl-Animation und das Abziehen des Budgets.
+3. Danach sucht sich der Gast dynamisch über `get_snack_eating_target_world()` einen der `SnackPointX`-Marker oder nutzt als Fallback einen freien Sitzplatz (`SeatX`, `ChairX`) in der Lobby, um den Snack zu essen.
+4. Nach Ablauf des Timers (`_action_timer`) verlässt der Gast die Lobby wieder.

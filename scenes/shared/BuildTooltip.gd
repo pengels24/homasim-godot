@@ -6,7 +6,7 @@ extends CanvasLayer
 func _ready() -> void:
 	panel.visible = false
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if panel.visible:
 		# get_viewport().get_mouse_position() liefert unskalierte Screen-Koordinaten!
 		panel.global_position = get_viewport().get_mouse_position() + Vector2(24, 24)

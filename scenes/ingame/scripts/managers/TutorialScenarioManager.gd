@@ -24,7 +24,7 @@ var _has_checked_in: bool = false
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if step_index in [7, 13]:
 		if InputHandler.current_mode != InputHandler.InputMode.BUILD:
 			advance_step()

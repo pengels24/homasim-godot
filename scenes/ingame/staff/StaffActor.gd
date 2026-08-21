@@ -726,52 +726,12 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 			var e_world = _map_grid.call("tile_to_world", end_tile)
 			_debug_line.points = [Vector2.ZERO, e_world - global_position]
 			
-		# EMERGENCY FALLBACK: Wenn der Mitarbeiter auf einem Solid-Tile steht (z.B. durch NavBlocker),
-		# setzen wir ihn minimal um auf den ServicePoint des Raumes (oder Lobby) und berechnen den Pfad neu!
-		var unstuck_pos = global_position
-		if is_instance_valid(_current_room) and _current_room.has_method("get_service_position"):
-			unstuck_pos = _current_room.get_service_position()
-		elif is_instance_valid(_map_grid):
-			unstuck_pos = _controller._get_lobby_spawn_pos()
-			
-		global_position = unstuck_pos
-		start_tile = _map_grid.call("world_to_tile", unstuck_pos) if is_instance_valid(_map_grid) else start_tile
-		
-		if is_instance_valid(_map_grid):
-			_path.assign(_map_grid.call("get_path_between_tiles", start_tile, end_tile))
-			
-		if _path.size() > 0:
-			_world_path.clear()
-			if local_path_out.size() > 0:
-				_world_path.append_array(local_path_out)
-			for t in _path:
-				_world_path.append(_map_grid.call("tile_to_world", t))
-			
-			if _path.size() > 1 and _path[0] == start_tile:
-				_world_path.pop_front()
-				
-			if _world_path.size() > 0:
-				var door_world = _world_path[_world_path.size() - 1]
-				if extra_pos != Vector2.INF:
-					if is_instance_valid(room) and room.has_method("get_local_path"):
-						var local_path = room.get_local_path(door_world, extra_pos)
-						_world_path.append_array(local_path)
-					else:
-						_world_path.append(extra_pos)
-				_target_world_pos = _world_path[0]
-				_room_entry_pos = Vector2.INF
-				_extra_target_pos = Vector2.INF
-			else:
-				_target_world_pos = global_position
-		else:
-			# Absoluter Mega-Notfall: Geht wirklich nicht (z.B. Ziel ist eingemauert) -> Teleport, um FPS zu retten
-			global_position = _map_grid.call("tile_to_world", end_tile) if is_instance_valid(_map_grid) else end_tile * 16
-			_target_world_pos = global_position
-			if extra_pos != Vector2.INF:
-				_extra_target_pos = extra_pos
-			_state = "walking" 
-			_path = [end_tile]
+		# KEIN TELEPORT MEHR: Wenn Pfad nicht gefunden, einfach stehen bleiben
+		# und beim nächsten _think_timer-Tick erneut versuchen.
+		# (Das verhindert den Lobby-Teleport bei frisch gespawnten Staff mit _current_room == null)
+		_think_timer = 2.0 + randf() * 2.0
 		return
+
 
 func _start_path_to_lobby() -> void:
 	if not is_instance_valid(_current_room) and is_instance_valid(_map_grid) and _map_grid.has_method("get_placed_rooms"):
@@ -882,7 +842,10 @@ func _process_walking(delta: float, speed: float) -> void:
 				_target_world_pos = _room_entry_pos
 				_room_entry_pos = Vector2.INF
 			elif _extra_target_pos != Vector2.INF:
-				_target_world_pos = _extra_target_pos
+				# GANZ WICHTIG: Wenn _path.size() == 0 war, sind wir hier OHNE EINEN GLOBULÄREN PFAD hingekommen!
+				# In dem Fall DÜRFEN WIR NICHT durch Wände gleiten!
+				if _path.size() > 0 or current_pos.distance_to(_extra_target_pos) < 32.0:
+					_target_world_pos = _extra_target_pos
 				_extra_target_pos = Vector2.INF
 		
 		# Update dist for new target

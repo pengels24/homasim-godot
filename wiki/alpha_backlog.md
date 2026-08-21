@@ -1,4 +1,4 @@
-﻿# HOÂ·MAÂ·SIM â€“ Alpha Backlog & Roadmap
+# HOÂ·MAÂ·SIM â€“ Alpha Backlog & Roadmap
 > Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.50 | Stand: 2026-07-29
 > Bibel fÃ¼r die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
@@ -13,8 +13,12 @@
 ---
 
 ## ðŸ›  Ungeplante Fixes & Features (Aktuelle Session)
+- **Smart-Room API Integration:** `Room.gd` Basisklasse um generische Methoden (`get_available_interactions`, `claim_interaction`, `release_interaction`) erweitert. `GuestActor._wander_in_room` und `_change_state` darauf umgestellt, um alte Hardcoded-Logik (Betten/Sitze) aufzulösen und Race-Conditions bei der Freigabe von Interaktionen zu vermeiden.
+- **Vending Machine Walk-Target Fix:** Bug in `GuestActor._walk_to_poi` behoben, der dazu führte, dass Gäste den Getränkeautomaten-POI mit freien Sitzplätzen in der Lobby (Lobby als Room hat `has_free_room_seat() == true` geerbt) verwechselten und sich stattdessen unten rechts auf einen Sofa-Platz setzten, um dort die Automat-Interaktion (und Animation) abzuspielen. Vending Machine hat nun Priorität vor der Sitzplatz-Suche.
+- **Lobby Special Nodes:** `_find_special_nodes` in `Lobby.gd` präzisiert, sodass Container wie `Chairs` oder `Deskchairs` nicht mehr fälschlicherweise als `SnackPoint` registriert werden.
+- **Smart Room / GuestActor State Machine Fix (2026-08-16):** Schwerwiegender Bug in `GuestActor._process_waiting` behoben. Der "Toter Gast"-Fehler nach dem Laden eines Spielstands entstand, weil der ablaufende Action-Timer im Status `IN_ROOM` oder `IDLE` komplett ignoriert wurde, was zu einem ewigen Early-Return im nächsten Frame führte. Es wurde eine Fallback-Logik (else-Branch) hinzugefügt, die `_decide_next_action()` korrekt aufruft.
 - **Upgrade-Persistenz Fix (acquired_traits):** Tief verwurzelter Bug behoben, durch den gekaufte Zimmer-Upgrades (WLAN, Klima) nach dem Speichern und Neuladen verloren gingen. Ursache: `Ingame.gd` rief nach dem Laden nochmals `configure({guest_manager: ...})` auf alle RÃ¤ume auf und wischte damit die bereits geladenen Traits weg. LÃ¶sung: `configure()` in `Room.gd` setzt `acquired_traits` nur noch zurÃ¼ck, wenn der Key `acquired_traits` tatsÃ¤chlich im Ã¼bergebenen Dictionary enthalten ist.
-- **POI Tooltip â€“ Ã–ffnungszeiten:** Der Tooltip geÃ¶ffneter POIs zeigt nun die Ã–ffnungszeiten an ("ðŸº GeÃ¶ffnet (08:00 - 22:00 Uhr)") statt nur "GeÃ¶ffnet".
+- **POI Tooltip â€“ Ã–ffnungszeiten:** Der Tooltip geÃ¶ffneter POIs zeigt nun die Ã–ffnungszeiten an ("ðŸ º GeÃ¶ffnet (08:00 - 22:00 Uhr)") statt nur "GeÃ¶ffnet".
 - **DevConsole & EventManager:** Savegame-Support fÃ¼r Events und manuelle Trigger (set-conference) fÃ¼r Testzwecke in DevConsole.
 - **Assets:** Neue Pixel-Art Icons fÃ¼r RÃ¤ume und Overlay-Tools hinzugefÃ¼gt.
 - **Dokumentation:** `AGENTS.md` um Dokumentationspflicht erweitert.
@@ -249,6 +253,6 @@ Phase 5: Events & Prestige     â† Braucht 4.1 (G1.4 GourmetkÃ¼che)
 ame_key statt 
 ame verwendet).
 - **Kassenbuch Checkout-Details:** Checkout-Logs um Zimmertyp und Aufenthaltsdauer erweitert. ModalContentFinances.gd unterstützt nun beliebig viele Platzhalter in der Übersetzung.
-- **Bar/Gastro Einlauf-Animation:** Gäste teleportieren nicht mehr unsichtbar an den Platz, sondern laufen nach dem Eintreten sichtbar durch den Raum zum Hocker.
-- **Gym/Pool/Spa Sichtbarkeit:** Unsichtbarkeit-Bug an Trainingsgeräten und im Wasser behoben.
 - **GuestActor Navigation-Refactoring:** _get_logical_start_tile() komplett überarbeitet und das Flickwerk hardcodierter Status-Checks (EATING, STUDYING_MENU etc.) entfernt. Start-Kachel-Ermittlung aus POIs funktioniert nun generisch und robust über _current_poi_id, was SOLID-Fehler bei unerwarteten Statuswechseln (z. B. Bettzeit um 23:00 Uhr während Wartezeit) verhindert.
+- **SmartRoom Bar Migration:** Gast-Sitzplatz-Zuweisung repariert. Gäste stapeln sich nicht mehr auf dem Fallback-Punkt, sondern blockieren Sitzplätze sauber über `claim_interaction`, bevor sie loslaufen.
+- **GuestActor State-Flow (Bar):** State EATING ruft nun korrekt `release_interaction` auf, damit SmartRoom-Plätze wieder freigegeben werden.

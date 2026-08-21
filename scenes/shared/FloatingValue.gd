@@ -9,7 +9,7 @@ func spawn(text: String, color: Color, from_pos: Vector2, to_pos: Vector2) -> vo
 	$Lbl.add_theme_color_override("font_color", color)
 	$Lbl.add_theme_color_override("font_outline_color", Color(0.0, 0.0, 0.0, 0.85))
 	$Lbl.add_theme_constant_override("outline_size", 3)
-	$Lbl.add_theme_font_size_override("font_size", 15)
+	$Lbl.add_theme_font_size_override("font_size", 28)
 
 	# Positions-Tween: einblenden → steigen → halten → zur HUD fliegen
 	var pos_tween := create_tween()

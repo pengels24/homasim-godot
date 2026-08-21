@@ -13,7 +13,7 @@ var _work_timer: float = 0.0
 var _work_timer_max: float = 20.0
 var _think_timer: float = 0.0
 var _work_audio: AudioStreamPlayer
-var _path: Array[Vector2i] = []
+var _path: Array = []
 var _world_path: Array[Vector2] = []
 var _target_world_pos: Vector2 = Vector2.ZERO
 var _room_entry_pos: Vector2 = Vector2.INF
@@ -684,7 +684,7 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 	# Speichere extra_pos für den allerletzten Schritt (z.B. Tisch im Restaurant)
 	_extra_target_pos = extra_pos
 	
-	_path = _map_grid.call("get_path_between_tiles", start_tile, end_tile)
+	_path.assign(_map_grid.call("get_path_between_tiles", start_tile, end_tile))
 	_world_path.clear()
 	
 	if local_path_out.size() > 0:
@@ -738,7 +738,7 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 		start_tile = _map_grid.call("world_to_tile", unstuck_pos) if is_instance_valid(_map_grid) else start_tile
 		
 		if is_instance_valid(_map_grid):
-			_path = _map_grid.call("get_path_between_tiles", start_tile, end_tile)
+			_path.assign(_map_grid.call("get_path_between_tiles", start_tile, end_tile))
 			
 		if _path.size() > 0:
 			_world_path.clear()
@@ -799,7 +799,7 @@ func _start_path_to_lobby() -> void:
 	_room_entry_pos = spawn_pos
 	_extra_target_pos = Vector2.INF
 	
-	_path = _map_grid.call("get_path_between_tiles", start_tile, end_tile)
+	_path.assign(_map_grid.call("get_path_between_tiles", start_tile, end_tile))
 	_world_path.clear()
 	
 	if local_path_out.size() > 0:
@@ -835,7 +835,7 @@ func _start_path_to_lobby() -> void:
 		start_tile = _map_grid.call("world_to_tile", unstuck_pos) if is_instance_valid(_map_grid) else start_tile
 		
 		if is_instance_valid(_map_grid):
-			_path = _map_grid.call("get_path_between_tiles", start_tile, end_tile)
+			_path.assign(_map_grid.call("get_path_between_tiles", start_tile, end_tile))
 			
 		if _path.size() > 0:
 			_world_path.clear()
@@ -868,19 +868,15 @@ func _process_walking(delta: float, speed: float) -> void:
 	
 	if dist_to_target < 5.0:
 		# Next tile
-		if _world_path.size() > 0:
+		if _world_path.size() > 1:
 			_world_path.pop_front()
-			if _world_path.size() > 0:
-				_target_world_pos = _world_path[0]
-			else:
-				if _room_entry_pos != Vector2.INF:
-					_target_world_pos = _room_entry_pos
-					_room_entry_pos = Vector2.INF
-				elif _extra_target_pos != Vector2.INF:
-					_target_world_pos = _extra_target_pos
-					_extra_target_pos = Vector2.INF
-				else:
-					pass # Don't lose the exact target position!
+			_target_world_pos = _world_path[0]
+		elif _world_path.size() == 1:
+			# Das ist der ALLERLETZTE Punkt auf dem Pfad!
+			# Wenn wir ihn wirklich (fast) berühren (dist < 1.0) poppen wir ihn!
+			# Dann greift der Snap Block unten!
+			if dist_to_target < 1.0:
+				_world_path.pop_front()
 		else:
 			if _room_entry_pos != Vector2.INF:
 				_target_world_pos = _room_entry_pos
@@ -888,8 +884,6 @@ func _process_walking(delta: float, speed: float) -> void:
 			elif _extra_target_pos != Vector2.INF:
 				_target_world_pos = _extra_target_pos
 				_extra_target_pos = Vector2.INF
-			else:
-				pass # Don't lose the exact target position!
 		
 		# Update dist for new target
 		dist_to_target = current_pos.distance_to(_target_world_pos)
@@ -904,8 +898,6 @@ func _process_walking(delta: float, speed: float) -> void:
 					_current_task["fetched"] = true
 				elif not _current_task.is_empty():
 					_state = "working"
-					# Zufälliger Versatz, damit sich überlappende Mitarbeiter optisch trennen
-					global_position += Vector2(randf_range(-6.0, 6.0), randf_range(-6.0, 6.0))
 					var morale = _staff_data.get("morale", 100)
 					var penalty = 0.0
 					if morale < 50:

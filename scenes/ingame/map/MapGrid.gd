@@ -496,7 +496,7 @@ func _is_visible(x: int, y: int) -> bool:
 	var p = _grid[y][x]
 	return p.is_built or p.is_constructing
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if _show_debug_grid:
 		queue_redraw()
 
@@ -571,8 +571,9 @@ func _occ_mark(gx: int, gy: int, w: int, h: int) -> void:
 		for dx in w:
 			var idx := (gy + dy) * _occ_w + (gx + dx)
 			if idx >= 0 and idx < _occ.size():
-				_occ[idx] = 1
-				_sync_astar_cell(gx + dx, gy + dy) # <--- NEU
+				if _occ[idx] != 2: # Tuer-Exit nicht ueberschreiben!
+					_occ[idx] = 1
+					_sync_astar_cell(gx + dx, gy + dy)
 
 
 # =============================================================================

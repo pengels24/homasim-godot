@@ -28,12 +28,20 @@ func _spawn_actor(staff_data: Dictionary) -> void:
 	var actor = STAFF_ACTOR_SCENE.instantiate()
 	actor.name = "StaffActor_" + str(staff_data.get("id", ""))
 	_map_grid.add_child(actor)
-	actor.configure(staff_data, _map_grid, self)
+	
+	var spawn_room = _get_staff_room(staff_data)
+	actor.configure(staff_data, _map_grid, self, spawn_room)
 	_actors.append(actor)
 	
 	# Spawn-Punkt: Personalraum mit freier Kapazität -> Lobby
-	var spawn_pos = _get_staff_room_spawn_pos(staff_data)
-		
+	var spawn_pos = Vector2.INF
+	if is_instance_valid(spawn_room):
+		if spawn_room.has_method("get_service_position"):
+			spawn_pos = spawn_room.get_service_position()
+		else:
+			var interior = spawn_room.get_node_or_null("Interior")
+			spawn_pos = interior.global_position if interior else spawn_room.global_position
+			
 	if spawn_pos == Vector2.INF:
 		spawn_pos = _get_lobby_spawn_pos()
 		
@@ -41,11 +49,12 @@ func _spawn_actor(staff_data: Dictionary) -> void:
 	spawn_pos += Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
 	actor.global_position = spawn_pos
 
-func _get_staff_room_spawn_pos(staff_data: Dictionary) -> Vector2:
+func _get_staff_room(staff_data: Dictionary) -> Node2D:
 	if not is_instance_valid(_map_grid) or not _map_grid.has_method("get_placed_rooms"):
-		return Vector2.INF
+		return null
 		
 	var staff_rooms = []
+	var all_staff_rooms = []
 	var workplace_pos = Vector2.INF
 	
 	# Finde alle Personalräume und den Arbeitsplatz des Mitarbeiters
@@ -57,14 +66,19 @@ func _get_staff_room_spawn_pos(staff_data: Dictionary) -> Vector2:
 		if r.has_method("get_definition"):
 			var def = r.get_definition()
 			if def.get("id") == "staff_small":
-				staff_rooms.append(r)
+				all_staff_rooms.append(r)
+				if r.has_method("has_free_seat") and r.has_free_seat():
+					staff_rooms.append(r)
 				
 		if assigned_room_id != "":
 			if GuestManager._room_key(r) == assigned_room_id:
 				workplace_pos = r.global_position
 				
 	if staff_rooms.size() == 0:
-		return Vector2.INF
+		staff_rooms = all_staff_rooms
+		
+	if staff_rooms.size() == 0:
+		return null
 		
 	var best_room = staff_rooms[randi() % staff_rooms.size()]
 	
@@ -77,12 +91,7 @@ func _get_staff_room_spawn_pos(staff_data: Dictionary) -> Vector2:
 				best_dist = d
 				best_room = r
 				
-	if best_room.has_method("get_service_position"):
-		return best_room.get_service_position()
-	var interior = best_room.get_node_or_null("Interior")
-	if interior:
-		return interior.global_position
-	return best_room.global_position
+	return best_room
 
 func _on_staff_hired(staff_data: Dictionary) -> void:
 	_spawn_actor(staff_data)

@@ -249,10 +249,13 @@ Phase 5: Events & Prestige     â† Braucht 4.1 (G1.4 GourmetkÃ¼che)
 | Personal-System Konzept | `wiki/02_features/06_personal_und_aufgabensystem.md` |
 | Techtree-Architektur Konzept | `wiki/02_features/01_architektur_techtree_und_fp.md` |
 | Raumtypen-Referenz | `wiki/02_features/22_raumtypen_referenz.md` |
-- **Kassenbuch Gastro-Namen:** Fehlende Rezeptnamen in Gastro-Kassenbucheinträgen () repariert (Key 
-ame_key statt 
-ame verwendet).
+- **Kassenbuch Gastro-Namen:** Fehlende Rezeptnamen in Gastro-Kassenbucheinträgen repariert (Key name_key statt name verwendet).
 - **Kassenbuch Checkout-Details:** Checkout-Logs um Zimmertyp und Aufenthaltsdauer erweitert. ModalContentFinances.gd unterstützt nun beliebig viele Platzhalter in der Übersetzung.
-- **GuestActor Navigation-Refactoring:** _get_logical_start_tile() komplett überarbeitet und das Flickwerk hardcodierter Status-Checks (EATING, STUDYING_MENU etc.) entfernt. Start-Kachel-Ermittlung aus POIs funktioniert nun generisch und robust über _current_poi_id, was SOLID-Fehler bei unerwarteten Statuswechseln (z. B. Bettzeit um 23:00 Uhr während Wartezeit) verhindert.
+- **GuestActor Navigation-Refactoring:** `_get_logical_start_tile()` komplett überarbeitet und das Flickwerk hardcodierter Status-Checks (EATING, STUDYING_MENU etc.) entfernt. Start-Kachel-Ermittlung aus POIs funktioniert nun generisch und robust über `_current_poi_id`, was SOLID-Fehler bei unerwarteten Statuswechseln (z. B. Bettzeit um 23:00 Uhr während Wartezeit) verhindert.
 - **SmartRoom Bar Migration:** Gast-Sitzplatz-Zuweisung repariert. Gäste stapeln sich nicht mehr auf dem Fallback-Punkt, sondern blockieren Sitzplätze sauber über `claim_interaction`, bevor sie loslaufen.
 - **GuestActor State-Flow (Bar):** State EATING ruft nun korrekt `release_interaction` auf, damit SmartRoom-Plätze wieder freigegeben werden.
+- **StaffActor Z-Index & Map Sichtbarkeit:** `StaffActor` Z-Index auf 100 erhöht, damit Personal über dem NavGrid gerendert wird. `configure()` Methode angepasst, damit `spawn_room` beim Start übergeben und gespeichert wird, was den verbuggten Lobby-Teleport direkt nach dem Spawn (und das Flackern auf der Karte) verhindert.
+- **StaffActor Logging & State-Machine Bereinigung:** Die Log-Ausgaben im Stil von `GuestActor` in `StaffActor` mittels eines zentralen `_set_state`-Wrappers komplett wiederhergestellt (mit korrektem Vornamen/Nachnamen Parsing). Einen redundanten Mikrosekunden-Switch auf `working` während des "Chillings" (`walking`) behoben.
+- **StaffActor Idle Timer:** Den Timer für den Sitzplatzwechsel im Pausenraum (`_process_resting`) von 2% auf realistische 10% (alle 2 Sekunden) erhöht, damit das Personal lebendiger wirkt.
+- **StaffSmall & Raumsitze-Kapazität:** Kapazitäts-Check `has_free_seat()` bei Personal-Räumen gefixt, um zu verhindern, dass Staff-Actors in einen überfüllten Pausenraum spawnen. Smart-Room Interaktionen in `Room.gd` und `StaffSmall.gd` überprüft.
+- **Staff-Aufgaben Annahme:** Validierung und Logging des Service-Rufen Buttons. Die Wegfindung zu Zielräumen wurde stabilisiert, und Tasks (`clean_room`, `repair_room`) werden zuverlässig angenommen und ausgeführt.

@@ -108,7 +108,8 @@
 - **Tagesgäste (Day Guests) Fixes:** Tagesgäste dürfen keine exklusiven Hotel-Einrichtungen (Pool, Gym, Spa) mehr nutzen. Sie verfallen nun auf die Lobby als Wartebereich zurück anstatt bei ausgebuchten POIs abzureisen. Die Wartezeit bei noch geschlossenen Events wurde von 15-45 auf 5-10 Ingame-Minuten reduziert.
 - **Tagesgäste Spawn:** Spawnen nun unsichtbar und werden korrekt in den Wartebereich (Lobby) teleportiert (start_waiting_for_event).
 - **Tooltip Anpassung:** Tagesgäste werden nun zur eindeutigen Unterscheidung im Tooltip mit dem Zusatz (Tagesgast) markiert.
-- **GuestActor Fallback:** Logik für claim_seat bzw. oom_claim_seat in _walk_to_poi korrigiert und Lobby-Wander-Fallback hinzugefügt. State.IDLE zur lokalen Wegfindungs-Abfrage in _execute_walk hinzugefügt.
+- **GuestActor Fallback:** Logik für claim_seat bzw. 
+oom_claim_seat in _walk_to_poi korrigiert und Lobby-Wander-Fallback hinzugefügt. State.IDLE zur lokalen Wegfindungs-Abfrage in _execute_walk hinzugefügt.
 
 - **Upgrade-Persistenz Fix (`acquired_traits`):** Zimmer-Upgrades (WLAN, Klima) gingen nach Speichern und Neuladen verloren. Root Cause: `Ingame.gd` rief nach dem Laden nochmals `room.configure({guest_manager: ...})` auf alle platzierten RÃ¤ume auf, was in `Room.gd` den `else`-Zweig triggerte und `acquired_traits = []` resetzte â€“ obwohl die Traits korrekt aus dem Savegame geladen wurden. Fix: `configure()` setzt `acquired_traits` nur noch zurÃ¼ck, wenn der Key `acquired_traits` tatsÃ¤chlich im Ã¼bergebenen Dictionary enthalten ist (`elif data.has("acquired_traits"):`).
 
@@ -148,9 +149,28 @@ ame verwendet).
 - **Guest Spawn:** Gäste spawnen nun am receptionX Wegpunkt und nicht auf der Straße (keine Animation beim Betreten, direktes Warten).
 
 ### Ingame & Navigation (Aktuelle Session 3)
-- **Smart-Room API Integration:** Room.gd Basisklasse um generische Methoden (get_available_interactions, claim_interaction, elease_interaction) erweitert. GuestActor._wander_in_room und _change_state darauf umgestellt, um alte Hardcoded-Logik (Betten/Sitze) aufzulösen und Race-Conditions bei der Freigabe von Interaktionen zu vermeiden.
+- **Smart-Room API Integration:** Room.gd Basisklasse um generische Methoden (get_available_interactions, claim_interaction, 
+elease_interaction) erweitert. GuestActor._wander_in_room und _change_state darauf umgestellt, um alte Hardcoded-Logik (Betten/Sitze) aufzulösen und Race-Conditions bei der Freigabe von Interaktionen zu vermeiden.
 - **Vending Machine Walk-Target Fix:** Bug in GuestActor._walk_to_poi behoben, der dazu führte, dass Gäste den Getränkeautomaten-POI mit freien Sitzplätzen in der Lobby (Lobby als Room hat has_free_room_seat() == true geerbt) verwechselten und sich stattdessen unten rechts auf einen Sofa-Platz setzten, um dort die Automat-Interaktion (und Animation) abzuspielen. Vending Machine hat nun Priorität vor der Sitzplatz-Suche.
 - **Lobby Special Nodes:** _find_special_nodes in Lobby.gd präzisiert, sodass Container wie Chairs oder Deskchairs nicht mehr fälschlicherweise als SnackPoint registriert werden.
--   * * S m a r t R o o m   B a r   M i g r a t i o n : * *   G a s t - S i t z p l a t z - Z u w e i s u n g   r e p a r i e r t .   G s t e   s t a p e l n   s i c h   n i c h t   m e h r   a u f   d e m   F a l l b a c k - P u n k t ,   s o n d e r n   b l o c k i e r e n   S i t z p l t z e   s a u b e r   �b e r   c l a i m _ i n t e r a c t i o n ,   b e v o r   s i e   l o s l a u f e n .  
- -   * * G u e s t A c t o r   S t a t e - F l o w   ( B a r ) : * *   S t a t e   E A T I N G   r u f t   n u n   k o r r e k t   r e l e a s e _ i n t e r a c t i o n   a u f ,   d a m i t   S m a r t R o o m - P l t z e   w i e d e r   f r e i g e g e b e n   w e r d e n .  
+-   * * S m a r t R o o m   B a r   M i g r a t i o n : * *   G a s t - S i t z p l a t z - Z u w e i s u n g   r e p a r i e r t .   G s t e   s t a p e l n   s i c h   n i c h t   m e h r   a u f   d e m   F a l l b a c k - P u n k t ,   s o n d e r n   b l o c k i e r e n   S i t z p l t z e   s a u b e r   b e r   c l a i m _ i n t e r a c t i o n ,   b e v o r   s i e   l o s l a u f e n . 
  
+ -   * * G u e s t A c t o r   S t a t e - F l o w   ( B a r ) : * *   S t a t e   E A T I N G   r u f t   n u n   k o r r e k t   r e l e a s e _ i n t e r a c t i o n   a u f ,   d a m i t   S m a r t R o o m - P l t z e   w i e d e r   f r e i g e g e b e n   w e r d e n . 
+ 
+ 
+### Personal & StaffActor Fixes
+- **StaffActor Z-Index & Map Sichtbarkeit:** StaffActor Z-Index auf 100 erhöht, damit Personal über dem NavGrid gerendert wird. configure() Methode angepasst, damit spawn_room beim Start übergeben und gespeichert wird, was den verbuggten Lobby-Teleport direkt nach dem Spawn (und das Flackern auf der Karte) verhindert.
+- **StaffActor Logging & State-Machine Bereinigung:** Die Log-Ausgaben im Stil von GuestActor in StaffActor mittels eines zentralen _set_state-Wrappers komplett wiederhergestellt (mit korrektem Vornamen/Nachnamen Parsing). Einen redundanten Mikrosekunden-Switch auf working während des "Chillings" (walking) behoben.
+- **StaffActor Idle Timer:** Den Timer für den Sitzplatzwechsel im Pausenraum (_process_resting) von 2% auf realistische 10% (alle 2 Sekunden) erhöht, damit das Personal lebendiger wirkt.
+- **StaffSmall & Raumsitze-Kapazität:** Kapazitäts-Check has_free_seat() bei Personal-Räumen gefixt, um zu verhindern, dass Staff-Actors in einen überfüllten Pausenraum spawnen. Smart-Room Interaktionen in Room.gd und StaffSmall.gd überprüft.
+- **Staff-Aufgaben Annahme:** Validierung und Logging des Service-Rufen Buttons. Die Wegfindung zu Zielräumen wurde stabilisiert, und Tasks (clean_room, 
+epair_room) werden zuverlässig angenommen und ausgeführt.
+- **SmartRoom Bar Migration:** Gast-Sitzplatz-Zuweisung repariert. Gäste stapeln sich nicht mehr auf dem Fallback-Punkt, sondern blockieren Sitzplätze sauber über `claim_interaction`, bevor sie loslaufen.
+- **GuestActor State-Flow (Bar):** State EATING ruft nun korrekt `release_interaction` auf, damit SmartRoom-Plätze wieder freigegeben werden.
+
+### Personal & StaffActor Fixes
+- **StaffActor Z-Index & Map Sichtbarkeit:** `StaffActor` Z-Index auf 100 erhöht, damit Personal über dem NavGrid gerendert wird. `configure()` Methode angepasst, damit `spawn_room` beim Start übergeben und gespeichert wird, was den verbuggten Lobby-Teleport direkt nach dem Spawn (und das Flackern auf der Karte) verhindert.
+- **StaffActor Logging & State-Machine Bereinigung:** Die Log-Ausgaben im Stil von `GuestActor` in `StaffActor` mittels eines zentralen `_set_state`-Wrappers komplett wiederhergestellt (mit korrektem Vornamen/Nachnamen Parsing). Einen redundanten Mikrosekunden-Switch auf `working` während des "Chillings" (`walking`) behoben.
+- **StaffActor Idle Timer:** Den Timer für den Sitzplatzwechsel im Pausenraum (`_process_resting`) von 2% auf realistische 10% (alle 2 Sekunden) erhöht, damit das Personal lebendiger wirkt.
+- **StaffSmall & Raumsitze-Kapazität:** Kapazitäts-Check `has_free_seat()` bei Personal-Räumen gefixt, um zu verhindern, dass Staff-Actors in einen überfüllten Pausenraum spawnen. Smart-Room Interaktionen in `Room.gd` und `StaffSmall.gd` überprüft.
+- **Staff-Aufgaben Annahme:** Validierung und Logging des Service-Rufen Buttons. Die Wegfindung zu Zielräumen wurde stabilisiert, und Tasks (`clean_room`, `repair_room`) werden zuverlässig angenommen und ausgeführt.

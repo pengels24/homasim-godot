@@ -121,7 +121,7 @@ func _process(delta: float) -> void:
 		vip_node.scale = Vector2(s, s)
 
 	if has_node("HungryIcon"):
-		if avatar.visible and _guest_member.saturation <= 50:
+		if avatar.visible and _guest_member.saturation <= 40:
 			$HungryIcon.visible = true
 		else:
 			$HungryIcon.visible = false

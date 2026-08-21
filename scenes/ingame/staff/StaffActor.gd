@@ -31,6 +31,7 @@ const SHOW_DEBUG_PATHS := false
 
 func _ready() -> void:
 	add_to_group("staff_actors")
+	z_index = 100
 	
 	if SHOW_DEBUG_PATHS:
 		_debug_line = Line2D.new()
@@ -61,10 +62,11 @@ func _on_click_area_input_event(_viewport: Node, event: InputEvent, _shape_idx: 
 		get_viewport().set_input_as_handled()
 		GameState.sig_staff_clicked.emit(self)
 
-func configure(staff_data: Dictionary, map_grid: Node2D, controller: Node) -> void:
+func configure(staff_data: Dictionary, map_grid: Node2D, controller: Node, spawn_room: Node2D = null) -> void:
 	_staff_data = staff_data
 	_map_grid = map_grid
 	_controller = controller
+	_current_room = spawn_room
 	
 	# Leicht variierende Laufgeschwindigkeit (+/- 10%)
 	_base_speed = 40.0 * randf_range(0.9, 1.1)
@@ -96,8 +98,19 @@ func _update_visuals() -> void:
 	
 	# MA spawnt sofort sichtbar
 
+func _set_state(new_state: String) -> void:
+	_state = new_state
+	var staff_name = "Unknown"
+	if _staff_data:
+		var first = _staff_data.get("firstname", "")
+		var last = _staff_data.get("lastname", "")
+		if first != "" or last != "":
+			staff_name = (first + " " + last).strip_edges()
+	var role = get_job_type()
+	print("[StaffActor] " + staff_name + " (" + role + ") changing to next_state=" + new_state)
+
 func get_staff_id() -> String:
-	return str(_staff_data.get("id", ""))
+	return str(_staff_data.get(")id", ""))
 
 func get_job_type() -> String:
 	return _staff_data.get("role", "housekeeping")
@@ -165,10 +178,10 @@ func _process_resting(delta: float, speed_mult: float) -> void:
 						break
 						
 		# Beine vertreten (wenn auf Stuhl)
-		if bonus == 1 and randf() < 0.02: # ca 2% Chance alle 2 Sekunden -> gelegentliches Aufstehen
+		if bonus == 1 and randf() < 0.10: # 10% Chance alle 2 Sekunden -> gelegentliches Aufstehen
 			if is_instance_valid(_current_room) and _current_room.has_method("leave_seat"):
 				_current_room.leave_seat(get_staff_id())
-			_state = "walking"
+			_set_state("walking")
 			var target = global_position
 			if _current_room.has_method("get_waypoints"):
 				var wps = _current_room.get_waypoints()
@@ -192,7 +205,7 @@ func _process_resting(delta: float, speed_mult: float) -> void:
 				if has_workplace:
 					if is_instance_valid(_current_room) and _current_room.has_method("leave_seat"):
 						_current_room.leave_seat(get_staff_id())
-					_state = "idle"
+					_set_state("idle")
 					_sprite.rotation = 0
 					_think_timer = 1.0
 
@@ -259,7 +272,7 @@ func _check_for_tasks() -> bool:
 						
 					_start_path_to_room(target_room, extra_pos)
 					if _path.size() > 0:
-						_state = "walking"
+						_set_state("walking")
 						_sprite.visible = true  # MA wird sichtbar wenn er losläuft
 						_think_timer = 1.0 # Denkt kurz nach, bevor er losrennt
 					else:
@@ -349,12 +362,12 @@ func _process_idle() -> void:
 							_world_path = [global_position, pos]
 						if _world_path.size() > 0:
 							_target_world_pos = _world_path[0]
-						_state = "walking_to_break"
+						_set_state("walking_to_break")
 						_sprite.visible = true
 					else:
 						_start_path_to_room(break_room, pos)
 						if _world_path.size() > 0:
-							_state = "walking_to_break"
+							_set_state("walking_to_break")
 							_sprite.visible = true
 						else:
 							_sprite.visible = false
@@ -369,7 +382,7 @@ func _process_idle() -> void:
 				if _state != "returning":
 					_start_path_to_lobby()
 					_room_entry_pos = _extra_target_pos
-					_state = "returning"
+					_set_state("returning")
 				_think_timer = 1.0
 			else:
 				_sprite.visible = false
@@ -412,13 +425,13 @@ func _process_idle() -> void:
 							_world_path = [global_position, pos]
 						if _world_path.size() > 0:
 							_target_world_pos = _world_path[0]
-						_state = "walking_to_break"
+						_set_state("walking_to_break")
 						_sprite.visible = true
 						return
 					else:
 						_start_path_to_room(break_room, pos)
 						if _world_path.size() > 0:
-							_state = "walking_to_break"
+							_set_state("walking_to_break")
 							_sprite.visible = true
 							_think_timer = 1.0
 							return
@@ -430,7 +443,7 @@ func _process_idle() -> void:
 			if _current_room != room:
 				_start_path_to_room(room)
 				if _path.size() > 0:
-					_state = "returning"
+					_set_state("returning")
 					_sprite.visible = true
 				_think_timer = 1.0
 			else:
@@ -446,11 +459,11 @@ func _process_idle() -> void:
 								if lp.size() > 0:
 									_world_path = lp
 									_target_world_pos = _world_path[0]
-									_state = "walking"
+									_set_state("walking")
 									_path = []
 							else:
 								_target_world_pos = work_pos
-								_state = "walking"
+								_set_state("walking")
 								_path = [_target_world_pos]
 						else:
 							# Steht am Platz
@@ -469,12 +482,12 @@ func _process_idle() -> void:
 							if lp.size() > 0:
 								_world_path = lp
 								_target_world_pos = _world_path[0]
-								_state = "walking"
+								_set_state("walking")
 								_path = []
 						else:
 							# Fallback
 							_target_world_pos = stand_pos
-							_state = "walking"
+							_set_state("walking")
 							_path = [_target_world_pos]
 					else:
 						# Steht am Platz -> Rotiere in die gewünschte Richtung
@@ -494,7 +507,7 @@ func _process_idle() -> void:
 									_current_room.call("claim_lifeguard_chair", get_staff_id())
 									_world_path = lp
 									_target_world_pos = _world_path[0]
-									_state = "walking"
+									_set_state("walking")
 									_path = []
 						else:
 							# Sitzt schon dort — claim sicherstellen, leicht drehen
@@ -521,7 +534,7 @@ func _process_idle() -> void:
 							if lp.size() > 0:
 								_world_path = lp
 								_target_world_pos = _world_path[0]
-								_state = "walking"
+								_set_state("walking")
 								_path = []
 								_think_timer = 3.0 + randf() * 4.0
 				elif randf() < 0.3:
@@ -551,7 +564,7 @@ func _process_idle() -> void:
 						if local_path.size() > 0:
 							_world_path = local_path
 							_target_world_pos = _world_path[0]
-							_state = "walking"
+							_set_state("walking")
 							_path = []
 					elif is_instance_valid(_current_room) and _current_room.has_method("get_tile_size"):
 						# Fallback: direkter Weg wenn kein local_nav vorhanden
@@ -559,7 +572,7 @@ func _process_idle() -> void:
 						var r_rect = Rect2(_current_room.global_position + Vector2(4.0, 4.0), Vector2(sz.x * _current_room.global_scale.x - 8.0, sz.y * _current_room.global_scale.y - 8.0))
 						if r_rect.has_point(target):
 							_target_world_pos = target
-							_state = "walking"
+							_set_state("walking")
 							_path = [_target_world_pos]
 					_think_timer = 2.0 + randf() * 2.0
 
@@ -586,12 +599,12 @@ func _process_idle() -> void:
 							_world_path = [global_position, pos]
 						if _world_path.size() > 0:
 							_target_world_pos = _world_path[0]
-						_state = "walking_to_break"
+						_set_state("walking_to_break")
 						_sprite.visible = true
 					else:
 						_start_path_to_room(break_room, pos)
 						if _world_path.size() > 0:
-							_state = "walking_to_break"
+							_set_state("walking_to_break")
 							_sprite.visible = true
 					_think_timer = 1.0
 				else:
@@ -604,7 +617,7 @@ func _process_idle() -> void:
 								extra_pos = wps[0] # wp1
 						_start_path_to_room(break_room, extra_pos)
 						if _world_path.size() > 0:
-							_state = "returning"
+							_set_state("returning")
 							_sprite.visible = true
 						_think_timer = 1.0
 					else:
@@ -620,7 +633,7 @@ func _process_idle() -> void:
 										_world_path = [global_position, wp + Vector2(randf_range(-3.0, 3.0), randf_range(-3.0, 3.0))]
 									if _world_path.size() > 0:
 										_target_world_pos = _world_path[0]
-									_state = "walking"
+									_set_state("walking")
 							else:
 								var sz = break_room.get_tile_size() * 16.0 if break_room.has_method("get_tile_size") else Vector2(48.0, 48.0)
 								var r_rect = Rect2(break_room.global_position + Vector2(4.0, 4.0), Vector2(sz.x * break_room.global_scale.x - 8.0, sz.y * break_room.global_scale.y - 8.0))
@@ -632,7 +645,7 @@ func _process_idle() -> void:
 										_world_path = [global_position, target]
 									if _world_path.size() > 0:
 										_target_world_pos = _world_path[0]
-									_state = "walking"
+									_set_state("walking")
 						_think_timer = 5.0 + randf() * 5.0
 			else:
 				if _room_entry_pos == Vector2.INF and _extra_target_pos == Vector2.INF and _target_world_pos == Vector2.ZERO:
@@ -646,7 +659,7 @@ func _process_idle() -> void:
 					if _state != "returning":
 						_start_path_to_lobby()
 						_room_entry_pos = _extra_target_pos
-						_state = "returning"
+						_set_state("returning")
 					_think_timer = 1.0
 				else:
 					_sprite.visible = false
@@ -726,10 +739,51 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 			var e_world = _map_grid.call("tile_to_world", end_tile)
 			_debug_line.points = [Vector2.ZERO, e_world - global_position]
 			
-		# KEIN TELEPORT MEHR: Wenn Pfad nicht gefunden, einfach stehen bleiben
-		# und beim nächsten _think_timer-Tick erneut versuchen.
-		# (Das verhindert den Lobby-Teleport bei frisch gespawnten Staff mit _current_room == null)
-		_think_timer = 2.0 + randf() * 2.0
+		# EMERGENCY FALLBACK: Wenn der Mitarbeiter auf einem Solid-Tile steht (z.B. durch NavBlocker),
+		# setzen wir ihn minimal um auf den ServicePoint des Raumes (oder Lobby) und berechnen den Pfad neu!
+		var unstuck_pos = global_position
+		if is_instance_valid(_current_room) and _current_room.has_method("get_service_position"):
+			unstuck_pos = _current_room.get_service_position()
+		elif is_instance_valid(_map_grid):
+			unstuck_pos = _controller._get_lobby_spawn_pos()
+			
+		global_position = unstuck_pos
+		start_tile = _map_grid.call("world_to_tile", unstuck_pos) if is_instance_valid(_map_grid) else start_tile
+		
+		if is_instance_valid(_map_grid):
+			_path.assign(_map_grid.call("get_path_between_tiles", start_tile, end_tile))
+			
+		if _path.size() > 0:
+			_world_path.clear()
+			if local_path_out.size() > 0:
+				_world_path.append_array(local_path_out)
+			for t in _path:
+				_world_path.append(_map_grid.call("tile_to_world", t))
+			
+			if _path.size() > 1 and _path[0] == start_tile:
+				_world_path.pop_front()
+				
+			if _world_path.size() > 0:
+				var door_world = _world_path[_world_path.size() - 1]
+				if extra_pos != Vector2.INF:
+					if is_instance_valid(room) and room.has_method("get_local_path"):
+						var local_path = room.get_local_path(door_world, extra_pos)
+						_world_path.append_array(local_path)
+					else:
+						_world_path.append(extra_pos)
+				_target_world_pos = _world_path[0]
+				_room_entry_pos = Vector2.INF
+				_extra_target_pos = Vector2.INF
+			else:
+				_target_world_pos = global_position
+		else:
+			# Absoluter Mega-Notfall: Geht wirklich nicht (z.B. Ziel ist eingemauert) -> Teleport, um FPS zu retten
+			global_position = _map_grid.call("tile_to_world", end_tile) if is_instance_valid(_map_grid) else end_tile * 16
+			_target_world_pos = global_position
+			if extra_pos != Vector2.INF:
+				_extra_target_pos = extra_pos
+			_set_state("walking") 
+			_path = [end_tile]
 		return
 
 
@@ -819,7 +873,7 @@ func _start_path_to_lobby() -> void:
 			_target_world_pos = spawn_pos
 			_room_entry_pos = Vector2.INF
 			_extra_target_pos = Vector2.INF
-			_state = "returning"
+			_set_state("returning")
 			_path = [_map_grid.call("world_to_tile", spawn_pos)] if is_instance_valid(_map_grid) else [Vector2i.ZERO]
 
 func _process_walking(delta: float, speed: float) -> void:
@@ -854,13 +908,12 @@ func _process_walking(delta: float, speed: float) -> void:
 		if _world_path.is_empty() and dist_to_target < 5.0:
 			global_position = _target_world_pos # Snap exactly to target (e.g. seat or table)
 			if _state == "walking":
-				_state = "working"
 				if not _current_task.is_empty() and _current_task.type == "serve_meal" and not _current_task.has("fetched"):
-					_state = "working"
+					_set_state("working")
 					_work_timer = 1.0 # 1 Sekunde in der Küche abholen
 					_current_task["fetched"] = true
 				elif not _current_task.is_empty():
-					_state = "working"
+					_set_state("working")
 					var morale = _staff_data.get("morale", 100)
 					var penalty = 0.0
 					if morale < 50:
@@ -881,20 +934,20 @@ func _process_walking(delta: float, speed: float) -> void:
 						_arriving_room = null
 				else:
 					# Nur herumspaziert (chilling), kein Task vorhanden
-					_state = "idle"
+					_set_state("idle")
 					_think_timer = 1.0
 					if is_instance_valid(_arriving_room):
 						_current_room = _arriving_room
 						_arriving_room = null
 			elif _state == "returning":
-				_state = "idle"
+				_set_state("idle")
 				if is_instance_valid(_arriving_room):
 					_current_room = _arriving_room
 					_arriving_room = null
 				else:
 					_current_room = _get_assigned_room()
 			elif _state == "walking_to_break":
-				_state = "resting"
+				_set_state("resting")
 				if is_instance_valid(_arriving_room):
 					_current_room = _arriving_room
 					_arriving_room = null
@@ -970,9 +1023,9 @@ func _process_working(delta: float, speed_mult: float) -> void:
 			var extra_pos = _current_task.target.get("pos")
 			_start_path_to_room(target_room, extra_pos)
 			if _path.size() > 0:
-				_state = "walking"
+				_set_state("walking")
 			else:
-				_state = "working" # Fallback falls schon da
+				_set_state("working") # Fallback falls schon da
 				_work_timer = 1.0
 			return
 			
@@ -986,5 +1039,6 @@ func _process_working(delta: float, speed_mult: float) -> void:
 			_current_task = {}
 		
 		# Prüfen ob es direkt noch einen weiteren Job gibt
-		_state = "idle"
+		_set_state("idle")
 		_process_idle()
+

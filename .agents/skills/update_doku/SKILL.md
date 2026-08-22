@@ -1,39 +1,52 @@
 ---
 name: update_doku
-description: Aktualisiert nach einer Session automatisch den Alpha-Backlog, den Status Quo und das Changelog. Unterstützt Parameter wie "+v" für Versionserhöhungen.
+description: Aktualisiert nach einer Session automatisch den Alpha-Backlog, den Status Quo, das Changelog und die Tech-Doku. Unterstützt den Parameter "+v" für Versionserhöhungen.
 ---
 
 # Update Doku Workflow
 
-Wenn der User diesen Skill aufruft, prüfe sofort, ob Parameter (z.B. `+v`) mitgegeben wurden. 
-Führe dann folgende Schritte **streng sequenziell** aus:
+Wenn der User diesen Skill aufruft, arbeite folgende Schritte **streng sequenziell** ab. 
+**Achtung:** Vermeide PowerShell-Befehle wie `Add-Content` oder `echo >>`, da diese oft das Datei-Encoding (UTF-8) zerstören. Nutze stattdessen deine nativen Code-Edit-Tools (`replace_file_content` etc.) oder Python-Skripte!
+**Wichtig:** Wenn du Python-Skripte zur Textverarbeitung oder Fehlerbehebung erstellst, speichere diese **immer** im Ordner `_work/` (und nicht einfach lose im Workspace oder im `scratch/` Ordner).
 
-1. **Backlog prüfen und aktualisieren:**
-   - Lies `wiki/_dev/alpha_backlog.md` (bzw. `wiki/alpha_backlog.md`).
-   - Hake alle in der aktuellen Session gelösten Aufgaben ab.
-   - Füge neu entstandene, ungeplante Bugs/Fixes unter "Ungeplante Fixes der Session" hinzu.
-   - **VERSIONS-LOGIK:** Erhöhe die Versionsnummer in `wiki/alpha_backlog.md` unter "Aktuell: vX.Y.Z" **sowie in der Datei `version.txt` im Hauptverzeichnis** **NUR**, wenn der Parameter `+v` übergeben wurde! Andernfalls bleibt die Version gleich.
+1. **Versionierung prüfen:**
+   - Hole die aktuelle Version aus der Datei `version.txt` (z.B. `v0.1.50`).
+   - Wenn der Parameter `+v` beim Aufruf des Skills übergeben wurde, erhöhe die Ziffer am Ende (Patch-Version) um +1 (z.B. auf `v0.1.51`) und überschreibe die `version.txt`.
+   - Speichere dir diese finale Version (entweder die alte oder die durch `+v` neu generierte) für die nächsten Schritte.
 
-2. **Linear-Issues prüfen:**
-   - Führe `python _dev/linear_cli.py list` aus und prüfe, ob abgehakte Dinge auch in Linear auf "Done" gesetzt werden müssen (optional, falls vom User gewünscht).
+2. **Changelog schreiben:**
+   - Öffne (oder erstelle) im Ordner `changelog/` die Zieldatei, die zur aktuellen Version passt (z.B. `gd-0.1.50.md` bzw. die neue Version).
+   - Schreibe alle Änderungen, Bugfixes und neuen Features der aktuellen Session sauber formatiert als Bullet-Points (aufgeteilt in Kategorien) in diese Datei.
+   - Falls die Datei schon existiert, hänge die Änderungen unten an.
 
-3. **Status Quo aktualisieren:**
-   - Die Datei `wiki/status_quo.md` ist eine reine Inventar-Liste (Checkliste: Was gibt es und was funktioniert?). Sie ist **kein** zweites Changelog!
-   - Trage hier **ausschließlich** komplett neue, fertiggestellte Räume, Akteure oder Core-Systeme der aktuellen Session ein (als `[x] **Feature:** Funktioniert`).
-   - Keine Bugfixes, kein Refactoring und keine WIP-Notizen eintragen.
+3. **Alpha-Backlog pflegen:**
+   - Lies `wiki/alpha_backlog.md` ein.
+   - Hake Aufgaben ab, die in dieser Session gelöst wurden.
+   - Ergänze ungeplante Tasks, die du repariert hast, in der entsprechenden Sektion.
+   - Ergänze offene/neue Punkte, die während der Session aufgetaucht sind, auf die ToDo-Liste.
 
+4. **Status Quo aktualisieren:**
+   - Prüfe, ob in der Session **neue Core-Systeme, Akteure oder Räume komplett fertiggestellt** wurden.
+   - Trage **NUR DIESE** (fertigen Dinge) in `wiki/status_quo.md` ein. Keine halben Sachen, keine Bugfixes.
 
-4. **Changelog aktualisieren:**
-   - Lies IMMER zuerst die aktuelle Version aus der Datei `version.txt` (z.B. `0.1.50`).
-   - Die Zieldatei im Ordner `changelog/` lautet immer `gd-<version>.md` (z.B. `gd-0.1.50.md`). Versuche NIEMALS die höchste Version über Dateinamen im Ordner zu "erraten"!
-   - **MIT `+v`:** Erhöhe die Version in `version.txt` (wie in Schritt 1 beschrieben), erstelle dann eine **NEUE** Datei für die hochgesetzte Version (z.B. `gd-0.1.51.md`) und schreibe die Änderungen dort hinein.
-   - **OHNE `+v`:** Öffne die **bestehende** Datei passend zur aktuellen Version aus `version.txt` und **hänge** die Änderungen der aktuellen Session unter den passenden Kategorien an.
-   - Schreibe alle Änderungen sauber formatiert als Bullet-Points.
+5. **Wiki Tech-Doku pflegen (Lebenswichtig!):**
+   - Gehe gedanklich die Dateien durch, die du in der Session verändert hast.
+   - Prüfe den Ordner `wiki/` (z.B. `wiki/rooms/` oder `wiki/04_maintenance/`), ob es dort Dokumentationen gibt, die zu diesen Änderungen passen.
+   - Aktualisiere die entsprechenden `.md`-Dateien (z.B. `bar.md`, wenn du Logik an der Bar geändert hast).
+   - Lege neue `.md`-Dateien an, falls völlig neue Mechaniken oder Räume erschaffen wurden, die noch keine Doku haben.
 
-5. **Wiki Tech-Doku & Raumbeschreibungen aktualisieren:**
-   - Prüfe, ob in der Session grundlegende technische Systeme (z.B. Wegfindung, State-Machines) geändert wurden. Wenn ja, aktualisiere die entsprechenden Dateien in `wiki/04_maintenance/` (z.B. Checklisten oder Modding-Guides).
-   - Prüfe, ob ein neuer Raum/POI (z.B. Bar, Pool, Restaurant) oder Gasttyp erstellt/geändert wurde.
-   - Falls ja, navigiere nach `wiki/rooms/` bzw. in die passenden Beschreibungen und lege dort eine neue `.md`-Datei an (bzw. aktualisiere die bestehende) mit den aktuellen Mechaniken, Navigations-Regeln und Fallbacks des Raumes/Akteurs.
+6. **Git Commit (Sauberer Cut):**
+   - Führe `git add .` aus.
+   - Führe einen `git commit -m "core: gd-<version> changelog + session changes (<Kurze Zusammenfassung>)"` aus.
+   - Dies sorgt für den sauberen Cut, wie vom User gewünscht.
 
-6. **Abschlussbericht:**
-   - Antworte dem User mit einer kurzen Zusammenfassung der aktualisierten Dokumente.
+7. **Übergabeprotokoll erstellen (Für den nächsten Agenten/Chat):**
+   - Erstelle oder überschreibe die Datei `_work/uebergabe.md`.
+   - Verfasse dort eine extrem präzise Zusammenfassung der gerade beendeten Session:
+     - Was war der exakte letzte Stand?
+     - Welche Systeme wurden bearbeitet oder refactored?
+     - Was sind die **sofortigen nächsten Schritte** für den nächsten Agenten?
+   - Formuliere es so, dass ein neuer Agent, der diesen Text beim Onboarding liest, sofort nahtlos weiterarbeiten kann.
+
+8. **Abschlussbericht:**
+   - Fasse dem User kurz und knapp in einer Antwort zusammen, was alles geschrieben, dokumentiert und committed wurde.

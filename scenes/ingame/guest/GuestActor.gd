@@ -193,8 +193,9 @@ func _process_waiting(delta: float) -> void:
 			if is_instance_valid(_target_room):
 				_walk_to_room(_target_room, State.IN_ROOM)
 			else:
-				_change_state(State.IDLE)
-				_action_timer = randf_range(5.0, 15.0)
+				# Tagesgäste ohne Zimmer sollen direkt entscheiden wo sie hingehen,
+				# solange der State noch EATING ist. So greift die Sperre, dass sie nicht im selben Raum bleiben!
+				_decide_next_action()
 		elif current_state == State.STUDYING_MENU:
 			var room_node = _get_poi_room_node(_current_poi_id)
 			var ordered = false
@@ -1072,10 +1073,11 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 	var current_room = _get_current_room_node(previous_state)
 	
 	if is_instance_valid(current_room) and current_room.has_method("get_local_path") and current_room.has_method("get_door_world_inside"):
-		# Wenn wir den Raum wirklich verlassen (Pfad ist nicht leer) ODER das Hotel verlassen
-		if path_tiles.size() > 0 or is_leaving_hotel:
+		# Wenn wir in einem Raum sind und ihn verlassen (egal wie lang der Flur-Pfad ist!)
+		if current_room != target_room:
 			var door_inside = current_room.get_door_world_inside(_map_grid, is_leaving_hotel)
-			var local_path_out = current_room.get_local_path(global_position, door_inside)
+			var g_name = _guest_member.id if _guest_member else "Unknown"
+			var local_path_out = current_room.get_local_path(global_position, door_inside, g_name)
 			world_path.append_array(local_path_out)
 			
 	if _map_grid and "is_miniature" in _map_grid and not _map_grid.is_miniature:
@@ -1101,7 +1103,8 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 			if world_path.size() > 0:
 				path_start_pos = target_room.get_door_world_inside(_map_grid, false)
 				
-			var local_path_in = target_room.get_local_path(path_start_pos, extra_target_pos)
+			var g_name = _guest_member.id if _guest_member else "Unknown"
+			var local_path_in = target_room.get_local_path(path_start_pos, extra_target_pos, g_name)
 			world_path.append_array(local_path_in)
 		else:
 			world_path.append(extra_target_pos)
@@ -1167,20 +1170,40 @@ func _on_time_speed_changed(is_paused: bool, speed: float) -> void:
 # =============================================================================
 
 func _get_logical_start_tile() -> Vector2i:
-	if current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING or current_state == State.IDLE:
+	var start_tile: Vector2i = _get_current_tile()
+	
+	if not _current_poi_id.is_empty() and _current_poi_id != "lobby" and current_state != State.WALKING and current_state != State.LEAVING:
+		var poi_room = _get_poi_room_node(_current_poi_id)
+		if is_instance_valid(poi_room) and poi_room.has_method("get_target_tile"):
+			start_tile = poi_room.get_target_tile(_map_grid)
+			
+	elif _current_poi_id.is_empty() and (current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING or current_state == State.IDLE):
 		if _room_door_world != Vector2.INF:
-			return _map_grid.world_to_tile(_room_door_world)
+			start_tile = _map_grid.world_to_tile(_room_door_world)
 		elif is_instance_valid(_target_room):
 			var t_exit_tile = _get_room_exit_tile(_target_room)
 			_room_door_world = _map_grid.tile_to_world(t_exit_tile)
-			return t_exit_tile
-			
-	if not _current_poi_id.is_empty() and current_state != State.WALKING and current_state != State.LEAVING:
-		var poi_room = _get_poi_room_node(_current_poi_id)
-		if is_instance_valid(poi_room) and poi_room.has_method("get_target_tile"):
-			return poi_room.get_target_tile(_map_grid)
+			start_tile = t_exit_tile
 	
-	return _get_current_tile()
+	return _get_closest_walkable_tile(start_tile)
+
+func _get_closest_walkable_tile(tile: Vector2i) -> Vector2i:
+	if not is_instance_valid(_map_grid) or not _map_grid.astar.is_in_boundsv(tile): return tile
+	if not _map_grid.astar.is_point_solid(tile): return tile
+	
+	var dirs = [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0,-1), Vector2i(1,1), Vector2i(-1,-1), Vector2i(1,-1), Vector2i(-1,1)]
+	for d in dirs:
+		var n = tile + d
+		if _map_grid.astar.is_in_boundsv(n) and not _map_grid.astar.is_point_solid(n):
+			return n
+			
+	for dx in range(-2, 3):
+		for dy in range(-2, 3):
+			var n = tile + Vector2i(dx, dy)
+			if _map_grid.astar.is_in_boundsv(n) and not _map_grid.astar.is_point_solid(n):
+				return n
+				
+	return tile
 
 func _get_current_tile() -> Vector2i:
 	return _map_grid.world_to_tile(global_position)

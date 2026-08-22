@@ -102,15 +102,15 @@ func _set_state(new_state: String) -> void:
 	_state = new_state
 	var staff_name = "Unknown"
 	if _staff_data:
-		var first = _staff_data.get("firstname", "")
-		var last = _staff_data.get("lastname", "")
+		var first = _staff_data.get("first_name", "")
+		var last = _staff_data.get("last_name", "")
 		if first != "" or last != "":
 			staff_name = (first + " " + last).strip_edges()
 	var role = get_job_type()
 	print("[StaffActor] " + staff_name + " (" + role + ") changing to next_state=" + new_state)
 
 func get_staff_id() -> String:
-	return str(_staff_data.get(")id", ""))
+	return str(_staff_data.get("id", ""))
 
 func get_job_type() -> String:
 	return _staff_data.get("role", "housekeeping")
@@ -167,14 +167,18 @@ func _process_resting(delta: float, speed_mult: float) -> void:
 	if _resting_timer >= 2.0: # Alle 2 Sekunden ein Morale-Tick
 		_resting_timer = 0.0
 		var bonus = 1
-		if is_instance_valid(_current_room) and _current_room.get("id") == "staff_small":
-			pass # Typ prüfen
 		if is_instance_valid(_current_room) and _current_room.has_method("has_free_seat"):
-			var seats = _current_room.get("_seats")
+			var seats = _current_room.get("_room_seats")
 			if seats:
 				for seat in seats:
 					if seat.get("occupied_by") == get_staff_id():
-						if seat.get("type") == "bed": bonus = 2
+						bonus = 1
+						break
+			var beds = _current_room.get("_room_beds")
+			if beds:
+				for bed in beds:
+					if bed.get("occupied_by") == get_staff_id():
+						bonus = 2
 						break
 						
 		# Beine vertreten (wenn auf Stuhl)

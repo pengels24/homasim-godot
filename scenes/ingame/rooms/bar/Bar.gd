@@ -180,6 +180,13 @@ func get_work_position(staff_id: String) -> Vector2:
 	# Fallback if unknown
 	return get_staff_node("bartender", "work")
 
+func get_work_look_dir(staff_id: String) -> Vector2:
+	if StaffManager and StaffManager.hired_staff.has(staff_id):
+		var role = StaffManager.hired_staff[staff_id].get("role", "")
+		if role == "bartender":
+			return get_bartender_look_dir()
+	return Vector2(0, 1)
+
 func get_free_walkable_pos(_map_grid: Node = null) -> Vector2:
 	if _local_astar == null:
 		return global_position + Vector2(32.0, 32.0) # Fallback center

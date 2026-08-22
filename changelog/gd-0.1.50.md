@@ -174,3 +174,6 @@ epair_room) werden zuverlässig angenommen und ausgeführt.
 - **StaffActor Idle Timer:** Den Timer für den Sitzplatzwechsel im Pausenraum (`_process_resting`) von 2% auf realistische 10% (alle 2 Sekunden) erhöht, damit das Personal lebendiger wirkt.
 - **StaffSmall & Raumsitze-Kapazität:** Kapazitäts-Check `has_free_seat()` bei Personal-Räumen gefixt, um zu verhindern, dass Staff-Actors in einen überfüllten Pausenraum spawnen. Smart-Room Interaktionen in `Room.gd` und `StaffSmall.gd` überprüft.
 - **Staff-Aufgaben Annahme:** Validierung und Logging des Service-Rufen Buttons. Die Wegfindung zu Zielräumen wurde stabilisiert, und Tasks (`clean_room`, `repair_room`) werden zuverlässig angenommen und ausgeführt.
+
+### Ingame & Navigation (Aktuelle Session 4)
+- **GuestActor Navigation:** Fehlendes Exit-Pathing fr Gste repariert, deren Zielort auf dem identischen (oder direkt benachbarten) Global-Grid-Tile lag. Ohne globalen Weg ignorierten Gste die lokale Tr und liefen Luftlinie durch Wnde. _execute_walk prft nun generisch current_room != target_room statt path_tiles.size() > 0.

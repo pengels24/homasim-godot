@@ -978,7 +978,7 @@ func _build_local_nav() -> void:
 								_local_astar.connect_points(id, nid, true)
 	queue_redraw()
 
-func get_local_path(start_world: Vector2, end_world: Vector2) -> Array[Vector2]:
+func get_local_path(start_world: Vector2, end_world: Vector2, actor_id: String = "Unknown") -> Array[Vector2]:
 	if _local_astar == null:
 		return [start_world, end_world]
 		
@@ -1000,6 +1000,8 @@ func get_local_path(start_world: Vector2, end_world: Vector2) -> Array[Vector2]:
 		path_world.insert(0, start_world)
 		path_world.append(end_world)
 	else:
+		if start_id != end_id:
+			print("[AStar Bug] Actor: ", actor_id, " in Room: ", name, " | NO PATH FOUND between start_id: ", start_id, " and end_id: ", end_id, " | start_local: ", start_local, " end_local: ", end_local)
 		return [start_world, end_world]
 		
 	return path_world

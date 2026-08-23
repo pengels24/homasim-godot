@@ -191,10 +191,10 @@ func _process_waiting(delta: float) -> void:
 			
 			# Der Weg aus dem POI wird nun sauber über local_path_out in _execute_walk animiert!
 			if is_instance_valid(_target_room):
+				print("[DEBUG] Gast ", _guest_member.id if _guest_member else "?", " beendet EATING. Ziel: Zimmer ist valid! Rufe _walk_to_room auf.")
 				_walk_to_room(_target_room, State.IN_ROOM)
 			else:
-				# Tagesgäste ohne Zimmer sollen direkt entscheiden wo sie hingehen,
-				# solange der State noch EATING ist. So greift die Sperre, dass sie nicht im selben Raum bleiben!
+				print("[DEBUG] Gast ", _guest_member.id if _guest_member else "?", " beendet EATING. Ziel: Zimmer ist INVALID! Rufe _decide_next_action auf.")
 				_decide_next_action()
 		elif current_state == State.STUDYING_MENU:
 			var room_node = _get_poi_room_node(_current_poi_id)
@@ -268,14 +268,15 @@ func _execute_poi_move(target_pos: Vector2, room_node: Node) -> void:
 
 # =============================================================================
 func _get_current_room_node(state: int = -1) -> Node2D:
+	if not _current_poi_id.is_empty():
+		if _current_poi_id == "lobby":
+			return _get_lobby_room()
+		return _get_poi_room_node(_current_poi_id)
+		
 	var check_state = current_state if state == -1 else state
 	if check_state == State.IN_ROOM or check_state == State.SITTING or check_state == State.SLEEPING:
 		return _target_room
-	if check_state == State.IDLE or check_state == State.IN_POI or check_state == State.EATING or check_state == State.STUDYING_MENU or check_state == State.WAITING_FOR_FOOD or check_state == State.WAITING_IN_LINE or check_state == State.AWAITING_CHECKOUT:
-		if not _current_poi_id.is_empty():
-			if _current_poi_id == "lobby":
-				return _get_lobby_room()
-			return _get_poi_room_node(_current_poi_id)
+		
 	return null
 
 func _get_open_pois() -> Array[String]:
@@ -429,6 +430,7 @@ func _decide_next_action() -> void:
 	possible_targets.append_array(open_pois)
 		
 	var chosen: String = possible_targets.pick_random()
+	print("[DEBUG] Gast ", _guest_member.id if _guest_member else "?", " _decide_next_action -> chosen: ", chosen, " | current_poi: ", _current_poi_id, " | state: ", current_state)
 	
 	# Vermeide, dass der Gast ans selbe Ziel geht wie er schon ist
 	if chosen == "room" and (current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING):
@@ -441,7 +443,17 @@ func _decide_next_action() -> void:
 		var party = _get_my_party()
 		if is_instance_valid(party) and party.event_poi_id != "":
 			if not open_pois.is_empty() and randf() > 0.3:
-				chosen = open_pois.pick_random()
+				var other_pois = open_pois.duplicate()
+				other_pois.erase(_current_poi_id)
+				if not other_pois.is_empty():
+					chosen = other_pois.pick_random()
+				else:
+					var lobby = _get_lobby_room()
+					if is_instance_valid(lobby) and chosen == "lobby":
+						_wander_in_room(lobby)
+					else:
+						_walk_to_poi("lobby")
+					return
 			else:
 				var lobby = _get_lobby_room()
 				if is_instance_valid(lobby) and chosen == "lobby":
@@ -1172,7 +1184,7 @@ func _on_time_speed_changed(is_paused: bool, speed: float) -> void:
 func _get_logical_start_tile() -> Vector2i:
 	var start_tile: Vector2i = _get_current_tile()
 	
-	if not _current_poi_id.is_empty() and _current_poi_id != "lobby" and current_state != State.WALKING and current_state != State.LEAVING:
+	if not _current_poi_id.is_empty() and _current_poi_id != "lobby":
 		var poi_room = _get_poi_room_node(_current_poi_id)
 		if is_instance_valid(poi_room) and poi_room.has_method("get_target_tile"):
 			start_tile = poi_room.get_target_tile(_map_grid)
@@ -1303,7 +1315,7 @@ func _wander_in_room(room: Node2D, force_sleep: bool = false, initial_wait: bool
 		current_pos = point
 		
 	_active_tween.tween_callback(func(): 
-		print("[GuestActor] %s tween finished. changing to next_state=%s (%d)" % [_guest_member.get("name") if _guest_member else "Unknown", get_state_name(next_state), next_state])
+		# print("[GuestActor] %s tween finished. changing to next_state=%s (%d)" % [_guest_member.get("name") if _guest_member else "Unknown", get_state_name(next_state), next_state])
 		if next_state == State.SLEEPING or next_state == State.SITTING:
 			avatar.rotation = 0
 			if next_state == State.SITTING and is_instance_valid(_target_room):

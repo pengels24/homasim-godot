@@ -122,15 +122,23 @@ func tile_to_world(tile_coord: Vector2i) -> Vector2:
 ## Gibt ein Array von globalen Tile-Koordinaten (Vector2i) für die Bewegung zurück.
 func get_path_between_tiles(start_tile: Vector2i, end_tile: Vector2i) -> Array[Vector2i]:
 	if not astar.is_in_boundsv(start_tile) or not astar.is_in_boundsv(end_tile):
-		print("[MapGrid] Path failed: OOB. start: ", start_tile, " end: ", end_tile)
 		return []
 		
-	# Kein Spam im Debug-Log: Leere Pfade werden ohnehin von den Aufrufern abgefangen!
-	if astar.is_point_solid(start_tile) or astar.is_point_solid(end_tile):
-		print("[MapGrid] Path failed: SOLID. start: ", start_tile, " solid: ", astar.is_point_solid(start_tile), " end: ", end_tile, " solid: ", astar.is_point_solid(end_tile))
-		return []
+	var start_was_solid = astar.is_point_solid(start_tile)
+	var end_was_solid = astar.is_point_solid(end_tile)
+	
+	if start_was_solid:
+		astar.set_point_solid(start_tile, false)
+	if end_was_solid:
+		astar.set_point_solid(end_tile, false)
 		
 	var path = astar.get_id_path(start_tile, end_tile)
+	
+	if start_was_solid:
+		astar.set_point_solid(start_tile, true)
+	if end_was_solid:
+		astar.set_point_solid(end_tile, true)
+		
 	if path.is_empty():
 		print("[MapGrid] Path failed: NO PATH FOUND by AStar. start: ", start_tile, " end: ", end_tile)
 	else:

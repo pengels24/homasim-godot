@@ -177,3 +177,8 @@ epair_room) werden zuverlässig angenommen und ausgeführt.
 
 ### Ingame & Navigation (Aktuelle Session 4)
 - **GuestActor Navigation:** Fehlendes Exit-Pathing fr Gste repariert, deren Zielort auf dem identischen (oder direkt benachbarten) Global-Grid-Tile lag. Ohne globalen Weg ignorierten Gste die lokale Tr und liefen Luftlinie durch Wnde. _execute_walk prft nun generisch current_room != target_room statt path_tiles.size() > 0.
+
+### Ingame & Navigation (Aktuelle Session 5)
+- **MapGrid Teleport-Fix:** Workaround fr SOLID Start- und End-Tiles in MapGrid.gd eingebaut. Die Wegfindung schlgt nicht mehr sofort fehl, wenn der Gast auf oder neben einem Hindernis steht, was die unsichtbaren Notfall-Teleports aus Rumen heraus verhindert.
+- **Room.gd INF-Bug:** Fehler in get_local_path behoben, der Gste (z. B. in der Bar) beim ziellosen Eintreten (Vector2.INF) an den hintersten verfgbaren Punkt (hinter den Tresen) fhrte. Gste bleiben nun wie vorgesehen an der Tr stehen, bis sie ein konkretes Ziel haben.
+- **GuestActor Bar Loop:** Logik in _decide_next_action erweitert: Gste whlen nicht mehr ihren aktuellen POI als nchstes Ziel, um Endlos-Schleifen im selben Raum zu vermeiden.

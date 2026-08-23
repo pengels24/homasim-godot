@@ -36,7 +36,7 @@ var is_service_requested: bool = false
 var is_built := false
 var is_active := false
 
-const SHOW_DEBUG_PATHS := true # Umschalter für das rote Wegnetz im Raum
+const SHOW_DEBUG_PATHS := true # Umschalter für das rote/grüne Wegnetz im Raum
 var is_pending_demolish: bool = false:
 	set(value):
 		is_pending_demolish = value
@@ -979,8 +979,8 @@ func _build_local_nav() -> void:
 	queue_redraw()
 
 func get_local_path(start_world: Vector2, end_world: Vector2, actor_id: String = "Unknown") -> Array[Vector2]:
-	if _local_astar == null:
-		return [start_world, end_world]
+	if _local_astar == null or end_world == Vector2.INF:
+		return [start_world]
 		
 	var start_local = to_local(start_world)
 	var end_local = to_local(end_world)

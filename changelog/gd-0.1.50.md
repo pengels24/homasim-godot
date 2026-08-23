@@ -182,3 +182,12 @@ epair_room) werden zuverlässig angenommen und ausgeführt.
 - **MapGrid Teleport-Fix:** Workaround fr SOLID Start- und End-Tiles in MapGrid.gd eingebaut. Die Wegfindung schlgt nicht mehr sofort fehl, wenn der Gast auf oder neben einem Hindernis steht, was die unsichtbaren Notfall-Teleports aus Rumen heraus verhindert.
 - **Room.gd INF-Bug:** Fehler in get_local_path behoben, der Gste (z. B. in der Bar) beim ziellosen Eintreten (Vector2.INF) an den hintersten verfgbaren Punkt (hinter den Tresen) fhrte. Gste bleiben nun wie vorgesehen an der Tr stehen, bis sie ein konkretes Ziel haben.
 - **GuestActor Bar Loop:** Logik in _decide_next_action erweitert: Gste whlen nicht mehr ihren aktuellen POI als nchstes Ziel, um Endlos-Schleifen im selben Raum zu vermeiden.
+
+
+### 23.08.2026 - Pathfinding Fixes (End of Session)
+- **Bugfix:** GuestActor teleportiert bei fehlendem Pfad zur Zimmertür.
+- **Bugfix:** Room.gd ersetzt bei INF-Zielen das Ziel durch einen gültigen AStar Punkt im Raum, um Gäste-Wand-Clipping in der Lobby zu verhindern.
+- **Logs:** `push_warning` für Pfad-Fehlschläge zu regulärem `print` geändert.
+- **Logs:** GuestActor loggt nun reguläre Status-Wechsel (`_change_state`) analog zum StaffActor.
+- **Debug:** MapGrid gibt nun bei AStar-Fehlschlägen auf derselben X-Achse die Tile-Solidity für jedes Tile auf der Achse aus.
+- **Translation:** Fehlender Key `roomdef.name.long.lobby` in `language.csv` ergänzt.

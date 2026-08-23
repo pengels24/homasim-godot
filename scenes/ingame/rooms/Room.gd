@@ -979,9 +979,17 @@ func _build_local_nav() -> void:
 	queue_redraw()
 
 func get_local_path(start_world: Vector2, end_world: Vector2, actor_id: String = "Unknown") -> Array[Vector2]:
-	if _local_astar == null or end_world == Vector2.INF:
+	if _local_astar == null:
 		return [start_world]
 		
+	if end_world == Vector2.INF:
+		var points = _local_astar.get_point_ids()
+		if points.size() > 0:
+			var rand_id = points[randi() % points.size()]
+			end_world = to_global(_local_astar.get_point_position(rand_id))
+		else:
+			return [start_world]
+			
 	var start_local = to_local(start_world)
 	var end_local = to_local(end_world)
 	

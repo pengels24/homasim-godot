@@ -190,11 +190,11 @@ func _process_waiting(delta: float) -> void:
 					poi_room_node.leave_seat(_guest_member.id)
 			
 			# Der Weg aus dem POI wird nun sauber über local_path_out in _execute_walk animiert!
+			# print("[DEBUG] Gast ", _guest_member.id if _guest_member else "?", " beendet EATING. Ziel: Zimmer ist valid! Rufe _walk_to_room auf.")
 			if is_instance_valid(_target_room):
-				print("[DEBUG] Gast ", _guest_member.id if _guest_member else "?", " beendet EATING. Ziel: Zimmer ist valid! Rufe _walk_to_room auf.")
 				_walk_to_room(_target_room, State.IN_ROOM)
 			else:
-				print("[DEBUG] Gast ", _guest_member.id if _guest_member else "?", " beendet EATING. Ziel: Zimmer ist INVALID! Rufe _decide_next_action auf.")
+				# print("[DEBUG] Gast ", _guest_member.id if _guest_member else "?", " beendet EATING. Ziel: Zimmer ist INVALID! Rufe _decide_next_action auf.")
 				_decide_next_action()
 		elif current_state == State.STUDYING_MENU:
 			var room_node = _get_poi_room_node(_current_poi_id)
@@ -430,7 +430,7 @@ func _decide_next_action() -> void:
 	possible_targets.append_array(open_pois)
 		
 	var chosen: String = possible_targets.pick_random()
-	print("[DEBUG] Gast ", _guest_member.id if _guest_member else "?", " _decide_next_action -> chosen: ", chosen, " | current_poi: ", _current_poi_id, " | state: ", current_state)
+	# print("[DEBUG] Gast ", _guest_member.id if _guest_member else "?", " _decide_next_action -> chosen: ", chosen, " | current_poi: ", _current_poi_id, " | state: ", current_state)
 	
 	# Vermeide, dass der Gast ans selbe Ziel geht wie er schon ist
 	if chosen == "room" and (current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING):
@@ -510,6 +510,9 @@ func wake_up() -> void:
 func _change_state(new_state: State) -> void:
 	var old_state = current_state
 	previous_state = old_state
+	
+	var g_name = _guest_member.get("name") if _guest_member else "Unknown"
+	print("[GuestActor] %s changed state: %s -> %s" % [g_name, get_state_name(old_state), get_state_name(new_state)])
 	
 	if old_state == State.SITTING or old_state == State.SLEEPING:
 		if is_instance_valid(_target_room):
@@ -964,7 +967,7 @@ func _walk_to_room(room: Node2D, finish_state: State) -> void:
 	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
 	if path_tiles.is_empty() and start_tile != exit_tile:
 		var g_name = _guest_member.get("name") if _guest_member else "Unbekannt"
-		push_warning("[%s] Pfad nicht gefunden! Start: %s Exit: %s. Führe Notfall-Teleport aus." % [g_name, str(start_tile), str(exit_tile)])
+		print("[%s] Pfad nicht gefunden! Start: %s Exit: %s. Führe Notfall-Teleport aus." % [g_name, str(start_tile), str(exit_tile)])
 		# Notfall-Teleport zur Tür, damit der nächste Pfad-Versuch funktioniert
 		global_position = _map_grid.tile_to_world(exit_tile)
 		if finish_state == State.IN_ROOM:

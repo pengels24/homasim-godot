@@ -260,3 +260,7 @@ Phase 5: Events & Prestige     â† Braucht 4.1 (G1.4 GourmetkÃ¼che)
 - **StaffActor Idle Timer:** Den Timer für den Sitzplatzwechsel im Pausenraum (`_process_resting`) von 2% auf realistische 10% (alle 2 Sekunden) erhöht, damit das Personal lebendiger wirkt.
 - **StaffSmall & Raumsitze-Kapazität:** Kapazitäts-Check `has_free_seat()` bei Personal-Räumen gefixt, um zu verhindern, dass Staff-Actors in einen überfüllten Pausenraum spawnen. Smart-Room Interaktionen in `Room.gd` und `StaffSmall.gd` überprüft.
 - **Staff-Aufgaben Annahme:** Validierung und Logging des Service-Rufen Buttons. Die Wegfindung zu Zielräumen wurde stabilisiert, und Tasks (`clean_room`, `repair_room`) werden zuverlässig angenommen und ausgeführt.
+
+### Session Bugfixes
+- [x] Lobby: Guest clipping / standing in walls
+- [x] MapGrid: Pathfinding debug output for straight-line corridor failures

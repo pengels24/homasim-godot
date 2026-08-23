@@ -141,6 +141,11 @@ func get_path_between_tiles(start_tile: Vector2i, end_tile: Vector2i) -> Array[V
 		
 	if path.is_empty():
 		print("[MapGrid] Path failed: NO PATH FOUND by AStar. start: ", start_tile, " end: ", end_tile)
+		if start_tile.x == end_tile.x:
+			for ty in range(min(start_tile.y, end_tile.y), max(start_tile.y, end_tile.y) + 1):
+				var idx = ty * _occ_w + start_tile.x
+				var val = _occ[idx] if idx >= 0 and idx < _occ.size() else -1
+				print("  -> Tile (", start_tile.x, ", ", ty, ") solid: ", astar.is_point_solid(Vector2i(start_tile.x, ty)), " occ: ", val)
 	else:
 		_debug_paths.append(path)
 		if _debug_paths.size() > 50:

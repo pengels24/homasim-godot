@@ -107,7 +107,7 @@ func _set_state(new_state: String) -> void:
 		if first != "" or last != "":
 			staff_name = (first + " " + last).strip_edges()
 	var role = get_job_type()
-	# print("[StaffActor] " + staff_name + " (" + role + ") changing to next_state=" + new_state)
+	print("[StaffActor] " + staff_name + " (" + role + ") changing to next_state=" + new_state)
 
 func get_staff_id() -> String:
 	return str(_staff_data.get("id", ""))

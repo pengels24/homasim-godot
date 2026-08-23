@@ -1620,3 +1620,4 @@ quest.guest.vip.25.name,Sterne-Status,Sterne-Status
 quest.guest.vip.25.desc,Beherberge insgesamt 25 VIP-Gäste.,Beherberge insgesamt 25 VIP-Gäste.
 roomdef.name.long.vending_machine,Getr�nkeautomat,Vending Machine
 roomdef.name.short.vending_machine,Automat,Vending
+roomdef.name.long.lobby,Lobby,Lobby

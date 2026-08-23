@@ -436,55 +436,6 @@ region_rect = Rect2(80, 16, 16, 16)
 
 [node name="NavBlocker" type="Node2D" parent="Interior/Furniture" unique_id=83432947]
 
-[node name="NavBlockerSofaBL1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=61860068 groups=["nav_blocker"]]
-z_index = 1
-offset_left = 1.0
-offset_top = 52.0
-offset_right = 7.0
-offset_bottom = 63.0
-
-[node name="NavBlockerSofaBL2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=782958225 groups=["nav_blocker"]]
-offset_left = 1.0
-offset_top = 57.0
-offset_right = 12.0
-offset_bottom = 63.0
-
-[node name="NavBlockerSofaTR1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1184428682 groups=["nav_blocker"]]
-offset_left = 52.0
-offset_top = 1.0
-offset_right = 63.0
-offset_bottom = 7.0
-
-[node name="NavBlockerSofaTR2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1152391246 groups=["nav_blocker"]]
-offset_left = 57.0
-offset_top = 1.0
-offset_right = 63.0
-offset_bottom = 12.0
-
-[node name="NavBlockerSofaTL1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1708285675 groups=["nav_blocker"]]
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 12.0
-offset_bottom = 7.0
-
-[node name="NavBlockerSofaTL2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=590967556 groups=["nav_blocker"]]
-offset_left = 1.0
-offset_top = 1.0
-offset_right = 7.0
-offset_bottom = 12.0
-
-[node name="NavBlockerSofaBR1" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=1973908267 groups=["nav_blocker"]]
-offset_left = 52.0
-offset_top = 57.0
-offset_right = 63.0
-offset_bottom = 63.0
-
-[node name="NavBlockerSofaBR2" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=128159686 groups=["nav_blocker"]]
-offset_left = 57.0
-offset_top = 52.0
-offset_right = 63.0
-offset_bottom = 63.0
-
 [node name="NavBlockerReception" type="ReferenceRect" parent="Interior/Furniture/NavBlocker" unique_id=936381301 groups=["nav_blocker"]]
 offset_left = 16.0
 offset_top = 16.0

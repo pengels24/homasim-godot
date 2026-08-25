@@ -52,7 +52,9 @@
 - âœ… **Lobby Check-In Flow (2026-08-14):** GÃ¤ste erscheinen sofort sichtbar an `receptionX` (`WAITING_IN_LINE`). Nach Check-in: lokale Lobby-Navigation zur InnentÃ¼r, dann globaler Korridor-AStar zum Zimmer. Root Cause: `_change_state(WALKING)` in `_walk_to_room` Ã¼berschrieb `previous_state` vor `_execute_walk`. Fix: save/restore. Reload-Fix: `spawn_active_guests()` iteriert nun auch `_waiting`.
 - âœ… **Conference Flow & Tweens (2026-08-14):** Instant-Teleport zum Rednerpult (`Chair12`) durch animierten `_execute_poi_move()` Tween ersetzt. Cooldown von 10-15 Ingame-Minuten nach dem Reden eingebaut, damit der Redner nach dem ZurÃ¼cktreten nicht sofort wieder ans Pult rennt.
 - âœ… **POI Leave Pathing Fix (2026-08-14):** GÃ¤ste, die im Status `STUDYING_MENU` oder `WAITING_FOR_FOOD` einen POI verlieÃŸen (z.B. weil dieser schlieÃŸt), ignorierten das lokale AStar-Grid und liefen Luftlinie durch WÃ¤nde (`Skipped local_path_out`). Diese Gastro-States wurden in `_execute_walk` zur lokalen Pfadgenerierung hinzugefÃ¼gt.
-- 🕒 **Unbestätigter Fix:** Der Bug "Geh durch die Wand beim Verlassen / Teleport-Loop" in der Bar (Wolfgang-Bug) wurde mutmaßlich durch den MapGrid SOLID-Bypass behoben, aber wir behalten ihn im Auge.
+- ✅ **Unbestätigter Fix (jetzt bestätigt):** Der Notfall-Teleport-Bug (Wolfgang/Anton-Bug) beim Verlassen von Lobby-POIs (Snackautomat) ist durch den Root-Cause-Fix in `_get_logical_start_tile()` behoben. `_current_poi_id = "lobby"` wird nun korrekt über `lobby.get_target_tile()` aufgelöst.
+- ✅ **Safety-Fallback:** `_get_logical_start_tile()` fängt verbleibende Edge-Cases ab (solid Start-Tile trotz Berechnung) → Lobby-Innentür als Notfall-Start.
+- ✅ **Debug-System MapGrid:** Pfade haben nun Gastnamen-Labels (visuell + Konsole). `DebugOverlay.gd` deaktiviert (veralteter Overlay-Code). `IN_POI` State-Log zeigt nun den POI-Namen.
 ---
 
 ## ðŸ§± Phase 1 â€“ Fundament (v0.1.40â€“41)

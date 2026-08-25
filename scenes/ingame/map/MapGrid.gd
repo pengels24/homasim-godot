@@ -1,4 +1,4 @@
-extends Node2D
+﻿extends Node2D
 ## Verantwortlichkeit: Spielfeld aufbauen, Parzellen-Sichtbarkeit steuern, Kamera-Input.
 ## ANG-186 – Occupancy Grid: globales Bool-Grid ersetzt per-Parzelle Rect2i-Array.
 
@@ -53,8 +53,9 @@ var _occ_h: int
 
 # ── Debugging ─────────────────────────────────────────────────────────────────
 @warning_ignore("unused_private_class_variable")
-var _show_debug_grid: bool = false
-var _debug_paths: Array[Array] = []
+var _show_debug_grid: bool = true
+var _debug_paths: Array[Dictionary] = []  # {path, label}
+var _failed_paths: Array[Dictionary] = []
 
 var is_miniature: bool = false
 
@@ -120,7 +121,7 @@ func tile_to_world(tile_coord: Vector2i) -> Vector2:
 
 # =============================================================================
 ## Gibt ein Array von globalen Tile-Koordinaten (Vector2i) für die Bewegung zurück.
-func get_path_between_tiles(start_tile: Vector2i, end_tile: Vector2i) -> Array[Vector2i]:
+func get_path_between_tiles(start_tile: Vector2i, end_tile: Vector2i, debug_label: String = "") -> Array[Vector2i]:
 	if not astar.is_in_boundsv(start_tile) or not astar.is_in_boundsv(end_tile):
 		return []
 		
@@ -141,15 +142,25 @@ func get_path_between_tiles(start_tile: Vector2i, end_tile: Vector2i) -> Array[V
 		
 	if path.is_empty():
 		print("[MapGrid] Path failed: NO PATH FOUND by AStar. start: ", start_tile, " end: ", end_tile)
-		if start_tile.x == end_tile.x:
-			for ty in range(min(start_tile.y, end_tile.y), max(start_tile.y, end_tile.y) + 1):
-				var idx = ty * _occ_w + start_tile.x
-				var val = _occ[idx] if idx >= 0 and idx < _occ.size() else -1
-				print("  -> Tile (", start_tile.x, ", ", ty, ") solid: ", astar.is_point_solid(Vector2i(start_tile.x, ty)), " occ: ", val)
+		_failed_paths.append({"start": start_tile, "end": end_tile})
+		if _failed_paths.size() > 5:
+			_failed_paths.pop_front()
+		queue_redraw()
+		print("--- ACTIVE ROOMS DUMP ---")
+		for r in active_rooms:
+			if is_instance_valid(r):
+				var def = r.get_definition() if r.has_method("get_definition") else {}
+				var r_name = def.get("id", "Unknown") if typeof(def) == TYPE_DICTIONARY else "Unknown"
+				var r_pos = world_to_tile(r.global_position)
+				print(" - ", r_name, " at tile ", r_pos)
+		print("-------------------------")
 	else:
-		_debug_paths.append(path)
-		if _debug_paths.size() > 50:
+		var lbl = debug_label if not debug_label.is_empty() else "?"
+		print("[MapGrid] Path OK: ", lbl, " | ", start_tile, " -> ", end_tile, " len=", path.size())
+		_debug_paths.append({"path": path, "label": lbl})
+		if _debug_paths.size() > 10:
 			_debug_paths.pop_front()
+		queue_redraw()
 	return path
 
 
@@ -524,37 +535,49 @@ func _process(_delta: float) -> void:
 
 func _draw() -> void:
 	if not _show_debug_grid: return
-	
-	# Draw solid tiles (ROT)
+	# _draw() laeuft im lokalen Koordinatenraum des MapGrid-Nodes.
+	# tile_to_world() liefert globale Koord. (via $WorldRoot.to_global).
+	# to_local(tile_to_world(tile)) = korrekte lokale Zeichenposition.
+	var p0 := to_local(tile_to_world(Vector2i(0, 0)))
+	var p1 := to_local(tile_to_world(Vector2i(1, 0)))
+	var tile_w := p1.x - p0.x
+	var tile_h := tile_w
+	# Solid tiles (ROT)
 	for y in astar.region.size.y:
 		for x in astar.region.size.x:
 			if astar.is_point_solid(Vector2i(x, y)):
-				draw_rect(Rect2(x * TILE_PX, y * TILE_PX, TILE_PX, TILE_PX), Color(1.0, 0.0, 0.0, 0.5))
-	
-	# Draw exit tiles occ==2 (DUNKELBLAU) - diese MÜSSEN non-solid sein!
+				var c := to_local(tile_to_world(Vector2i(x, y)))
+				draw_rect(Rect2(c.x - tile_w * 0.5, c.y - tile_h * 0.5, tile_w, tile_h), Color(1.0, 0.0, 0.0, 0.5))
+	# Exit tiles occ==2 (BLAU=ok, ORANGE=solid Fehler!)
 	if _occ.size() > 0:
 		for gy in _occ_h:
 			for gx in _occ_w:
 				if _occ[gy * _occ_w + gx] == 2:
 					var is_solid = astar.is_point_solid(Vector2i(gx, gy))
-					# Türen die SOLID sind → Hellrot/Orange (FEHLER!)
-					# Türen die korrekt non-solid → Dunkelblau
 					var color = Color(1.0, 0.5, 0.0, 0.85) if is_solid else Color(0.0, 0.2, 0.9, 0.85)
-					draw_rect(Rect2(gx * TILE_PX, gy * TILE_PX, TILE_PX, TILE_PX), color)
-					# Kleines Kreuz als Marker
-					var cx = gx * TILE_PX + TILE_PX * 0.5
-					var cy = gy * TILE_PX + TILE_PX * 0.5
-					draw_line(Vector2(cx - 4, cy), Vector2(cx + 4, cy), Color.WHITE, 1.5)
-					draw_line(Vector2(cx, cy - 4), Vector2(cx, cy + 4), Color.WHITE, 1.5)
-
-				
-	# Draw debug paths
-	for path in _debug_paths:
+					var c := to_local(tile_to_world(Vector2i(gx, gy)))
+					draw_rect(Rect2(c.x - tile_w * 0.5, c.y - tile_h * 0.5, tile_w, tile_h), color)
+					draw_line(Vector2(c.x - 4, c.y), Vector2(c.x + 4, c.y), Color.WHITE, 1.5)
+					draw_line(Vector2(c.x, c.y - 4), Vector2(c.x, c.y + 4), Color.WHITE, 1.5)
+	# Debug paths (gelb) - Grüner Kreis = Start, Roter Kreis = Ziel, Label am Start
+	for entry in _debug_paths:
+		var path = entry["path"]
+		var lbl  = entry["label"]
 		if path.size() > 1:
-			var points = PackedVector2Array()
+			var points := PackedVector2Array()
 			for tile in path:
-				points.append(tile_to_world(tile))
-			draw_polyline(points, Color.RED, 2.0)
+				points.append(to_local(tile_to_world(tile)))
+			draw_polyline(points, Color.YELLOW, 2.0)
+			draw_circle(points[0], 6.0, Color.GREEN)
+			draw_circle(points[points.size() - 1], 6.0, Color.RED)
+			draw_string(ThemeDB.fallback_font, points[0] + Vector2(6, -6), lbl, HORIZONTAL_ALIGNMENT_LEFT, -1, 12, Color.WHITE)
+	# Failed paths (magenta)
+	for fp in _failed_paths:
+		var st_pos := to_local(tile_to_world(fp["start"]))
+		var et_pos := to_local(tile_to_world(fp["end"]))
+		draw_line(st_pos, et_pos, Color(1.0, 0.0, 1.0, 0.8), 6.0)
+		draw_circle(st_pos, 10.0, Color(1.0, 0.0, 1.0, 0.8))
+		draw_circle(et_pos, 10.0, Color(1.0, 0.0, 1.0, 0.8))
 
 # =============================================================================
 func _exit_outside_parcel(_px: int, _py: int, exit: Vector2i, _door_rot: int) -> bool:

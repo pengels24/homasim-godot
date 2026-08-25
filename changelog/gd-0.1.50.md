@@ -1,4 +1,4 @@
-﻿# Changelog â€“ gd-0.1.50
+# Changelog â€“ gd-0.1.50
 > Datum: 2026-07-29 | Branch: `dev`
 
 ---
@@ -191,3 +191,20 @@ epair_room) werden zuverlässig angenommen und ausgeführt.
 - **Logs:** GuestActor loggt nun reguläre Status-Wechsel (`_change_state`) analog zum StaffActor.
 - **Debug:** MapGrid gibt nun bei AStar-Fehlschlägen auf derselben X-Achse die Tile-Solidity für jedes Tile auf der Achse aus.
 - **Translation:** Fehlender Key `roomdef.name.long.lobby` in `language.csv` ergänzt.
+
+### 25.08.2026 - Pathfinding Root-Cause Fix & Debug-System
+
+#### Bugfixes
+- **Notfall-Teleport Root-Cause behoben:** Gäste, die nach dem Essen am Snackautomaten zurück in ihr Zimmer wollten, wurden mit `_current_poi_id = "lobby"` gespeichert. Die Bedingung `_current_poi_id != "lobby"` in `_get_logical_start_tile()` übersprang den POI-Door-Lookup, sodass die physische Position (tief im soliden Lobby-Körper) als Start genutzt wurde → Pfadfehler → Notfall-Teleport.
+  - **Fix:** Bedingung auf `not _current_poi_id.is_empty()` reduziert (kein Lobby-Ausschluss mehr). Damit liefert `lobby.get_target_tile()` korrekt die Lobby-Innentür `(4, 39)` als Start.
+- **Safety-Fallback eingebaut:** `_get_logical_start_tile()` prüft nach der Tile-Berechnung, ob das Ergebnis solid ist. Falls ja, wird als letzter Ausweg die Lobby-Innentür genutzt (loggt `[GuestActor] Safety fallback: ...`).
+- **`_get_closest_walkable_tile` Limitation:** Funktion sucht nur Radius 1–2; falls Gast tief im Lobby-Körper sitzt, wird das solid Original-Tile zurückgegeben → kein Pfad. Safety-Fallback fängt diesen Zustand nun ab.
+
+#### Debug-System (MapGrid & GuestActor)
+- **MapGrid `_debug_paths` Format:** Von `Array[Array]` auf `Array[Dictionary]` umgestellt (`{path, label}`), um den auslösenden Akteur pro Pfad zu speichern.
+- **`get_path_between_tiles()` Debug-Label:** Neuer optionaler Parameter `debug_label: String = ""`. Alle `GuestActor`-Aufrufe übergeben `_guest_member.get("name")` als Label.
+- **Visuelle Pfad-Beschriftung:** `MapGrid._draw()` zeichnet jeden Pfad mit grünem Startkreis, rotem Zielkreis und weißem Label-Text (Gastnamen) direkt auf der Map.
+- **Konsolen-Log pro Pfad:** Jeder erfolgreiche Pfad loggt `[MapGrid] Path OK: <Name> | <start> -> <end> len=<N>`.
+- **`DebugOverlay.gd` deaktiviert:** Das veraltete `DebugOverlay._draw()` (nutzte alten `WALK_W * TILE_PX` Offset = ursprünglicher Overlay-Bug) ist nun leer. `MapGrid._draw()` übernimmt das gesamte Debug-Rendering mit korrekter `to_local(tile_to_world())` Transformation.
+- **IN_POI State-Log erweitert:** Zustandswechsel zu `IN_POI` loggt nun den POI-Namen: `changed state: WALKING -> IN_POI [bar]`.
+- **`_debug_paths.erase` angepasst:** GuestActor entfernt nach Bewegung den eigenen Eintrag per `filter()` statt `erase()` (kompatibel mit neuem Dictionary-Format).

@@ -512,7 +512,8 @@ func _change_state(new_state: State) -> void:
 	previous_state = old_state
 	
 	var g_name = _guest_member.get("name") if _guest_member else "Unknown"
-	print("[GuestActor] %s changed state: %s -> %s" % [g_name, get_state_name(old_state), get_state_name(new_state)])
+	var poi_info = (" [" + _current_poi_id + "]") if new_state == State.IN_POI and not _current_poi_id.is_empty() else ""
+	print("[GuestActor] %s changed state: %s -> %s%s" % [g_name, get_state_name(old_state), get_state_name(new_state), poi_info])
 	
 	if old_state == State.SITTING or old_state == State.SLEEPING:
 		if is_instance_valid(_target_room):
@@ -828,7 +829,7 @@ func start_checkout() -> void:
 	
 	_change_state(State.WALKING)
 		
-	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
+	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile, (str(_guest_member.get("name")) if _guest_member else "?"))
 	if path_tiles.is_empty():
 		print("[GuestActor] Checkout failed for ", _guest_member.id, ". Path empty from ", start_tile, " to ", exit_tile, ". current_state=", current_state)
 		queue_free()
@@ -921,7 +922,7 @@ func _walk_to_world_pos(target_pos: Vector2, finish_state: State) -> void:
 	_change_state(State.WALKING)
 	var start_tile = _get_logical_start_tile()
 	var exit_tile = _map_grid.world_to_tile(target_pos)
-	var path_tiles: Array[Vector2i] = _map_grid.get_path_between_tiles(start_tile, exit_tile)
+	var path_tiles: Array[Vector2i] = _map_grid.get_path_between_tiles(start_tile, exit_tile, (str(_guest_member.get("name")) if _guest_member else "?"))
 	if path_tiles.is_empty():
 		path_tiles.append(start_tile)
 		path_tiles.append(exit_tile)
@@ -964,7 +965,7 @@ func _walk_to_room(room: Node2D, finish_state: State) -> void:
 			start_tile = lobby_room.get_target_tile(_map_grid)
 	var exit_tile = room.get_target_tile(_map_grid)
 	
-	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
+	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile, (str(_guest_member.get("name")) if _guest_member else "?"))
 	if path_tiles.is_empty() and start_tile != exit_tile:
 		var g_name = _guest_member.get("name") if _guest_member else "Unbekannt"
 		print("[%s] Pfad nicht gefunden! Start: %s Exit: %s. Führe Notfall-Teleport aus." % [g_name, str(start_tile), str(exit_tile)])
@@ -1029,7 +1030,7 @@ func _walk_to_poi(poi_id: String) -> void:
 	
 	var start_tile: Vector2i = _get_logical_start_tile()
 	
-	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile)
+	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile, (str(_guest_member.get("name")) if _guest_member else "?"))
 	if path_tiles.is_empty() and start_tile != exit_tile:
 # 		push_warning("[GuestActor] Pfad nicht gefunden! Start: %s Exit: %s" % [str(start_tile), str(exit_tile)])
 		# Notfall-Teleport zur Tür, damit der nächste Pfad-Versuch funktioniert
@@ -1096,7 +1097,7 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 			world_path.append_array(local_path_out)
 			
 	if _map_grid and "is_miniature" in _map_grid and not _map_grid.is_miniature:
-		_map_grid._debug_paths.append(path_tiles)
+		_map_grid._debug_paths.append({"path": path_tiles, "label": (str(_guest_member.get("name")) if _guest_member else "?")})
 
 	var door_index_out := -1
 	if world_path.size() > 0:
@@ -1168,7 +1169,7 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 		
 	_active_tween.tween_callback(func(): 
 		if _map_grid and "is_miniature" in _map_grid and not _map_grid.is_miniature:
-			_map_grid._debug_paths.erase(path_tiles)
+			_map_grid._debug_paths = _map_grid._debug_paths.filter(func(e): return e["path"] != path_tiles)
 	)
 
 # =============================================================================
@@ -1187,7 +1188,7 @@ func _on_time_speed_changed(is_paused: bool, speed: float) -> void:
 func _get_logical_start_tile() -> Vector2i:
 	var start_tile: Vector2i = _get_current_tile()
 	
-	if not _current_poi_id.is_empty() and _current_poi_id != "lobby":
+	if not _current_poi_id.is_empty():
 		var poi_room = _get_poi_room_node(_current_poi_id)
 		if is_instance_valid(poi_room) and poi_room.has_method("get_target_tile"):
 			start_tile = poi_room.get_target_tile(_map_grid)
@@ -1200,7 +1201,21 @@ func _get_logical_start_tile() -> Vector2i:
 			_room_door_world = _map_grid.tile_to_world(t_exit_tile)
 			start_tile = t_exit_tile
 	
-	return _get_closest_walkable_tile(start_tile)
+	var result := _get_closest_walkable_tile(start_tile)
+	
+	# Safety-Fallback: falls result immer noch solid ist (Gast steckt in Wand/Lobby-Körper),
+	# nimm die Lobby-Innentür als Startpunkt. Das passiert wenn _current_poi_id leer ist
+	# und der Gast sich physisch innerhalb eines Raum-Körpers befindet.
+	if is_instance_valid(_map_grid) and _map_grid.astar.is_in_boundsv(result) and _map_grid.astar.is_point_solid(result):
+		var lobby: Node2D = _get_lobby_room()
+		if is_instance_valid(lobby) and lobby.has_method("get_target_tile"):
+			var lobby_door: Vector2i = lobby.get_target_tile(_map_grid)
+			print("[GuestActor] Safety fallback: ", _guest_member.get("name") if _guest_member else "?",
+				" stuck at ", result, " (solid) -> using lobby door ", lobby_door,
+				" | poi=", _current_poi_id)
+			result = lobby_door
+	
+	return result
 
 func _get_closest_walkable_tile(tile: Vector2i) -> Vector2i:
 	if not is_instance_valid(_map_grid) or not _map_grid.astar.is_in_boundsv(tile): return tile

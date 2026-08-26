@@ -162,7 +162,14 @@ func get_live_details() -> Array[Dictionary]:
 			if gm:
 				var guest_node = gm.get_guest(seat["occupied_by"])
 				if guest_node:
-					guest_name = guest_node.name
+					var actor_state = -1
+					for a in get_tree().get_nodes_in_group("guest_actors"):
+						if a.get("actor_id") == seat["occupied_by"]:
+							actor_state = a.get("current_state")
+							break
+					if actor_state == 1: # State.WALKING
+						continue
+					guest_name = guest_node.get("_guest_member").name if guest_node.get("_guest_member") else "Gast"
 			details.append({"left": guest_name, "right": "Entspannt sich", "color": Color("#3b82f6")})
 	
 	for bed in _room_beds:
@@ -171,7 +178,14 @@ func get_live_details() -> Array[Dictionary]:
 			if gm:
 				var guest_node = gm.get_guest(bed["occupied_by"])
 				if guest_node:
-					guest_name = guest_node.name
+					var actor_state = -1
+					for a in get_tree().get_nodes_in_group("guest_actors"):
+						if a.get("actor_id") == bed["occupied_by"]:
+							actor_state = a.get("current_state")
+							break
+					if actor_state == 1: # State.WALKING
+						continue
+					guest_name = guest_node.get("_guest_member").name if guest_node.get("_guest_member") else "Gast"
 			details.append({"left": guest_name, "right": "Liegt", "color": Color("#818cf8")})
 	
 	return details

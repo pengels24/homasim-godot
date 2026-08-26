@@ -134,8 +134,16 @@ func get_live_details() -> Array[Dictionary]:
 			var guest_name = GameState.T("room.kitchen.guest")
 			var gm = get_tree().get_first_node_in_group("guest_manager")
 			var guest_node = gm.get_guest(seat["occupied_by"]) if gm else null
+			
 			if is_instance_valid(guest_node) or guest_node != null:
-				guest_name = guest_node.name
+				var actor_state = -1
+				for a in get_tree().get_nodes_in_group("guest_actors"):
+					if a.get("actor_id") == seat["occupied_by"]:
+						actor_state = a.get("current_state")
+						break
+				if actor_state == 1: # State.WALKING
+					continue
+				guest_name = guest_node.get("_guest_member").name if guest_node.get("_guest_member") else "Gast"
 				
 			var status_text = GameState.T("poi.restaurant.studying_menu")
 			var order_id = seat.get("order_id", "")

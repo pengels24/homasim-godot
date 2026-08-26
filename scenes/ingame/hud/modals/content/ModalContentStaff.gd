@@ -587,7 +587,13 @@ func _update_details() -> void:
 		if s.get("morale", 100) >= 100 or t_state != "none":
 			bonus_btn.disabled = true
 			bonus_btn.modulate = Color(1, 1, 1, 0.5)
-		detail_costs.add_child(bonus_btn)
+			
+		var actions_hbox = HBoxContainer.new()
+		actions_hbox.add_theme_constant_override("separation", 8)
+		detail_costs.add_child(actions_hbox)
+		
+		bonus_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		actions_hbox.add_child(bonus_btn)
 		
 		# Training Button
 		var train_btn = Button.new()
@@ -632,7 +638,8 @@ func _update_details() -> void:
 			elif t_state == "scheduled":
 				train_btn.text = GameState.T("ui.staff.status.scheduled", "Schulung geplant")
 		
-		detail_costs.add_child(train_btn)
+		train_btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		actions_hbox.add_child(train_btn)
 	else:
 		image_rect.visible = true
 		pip_camera.visible = false

@@ -28,6 +28,10 @@ func set_status(needs_cleaning: bool, needs_repair: bool, pending_demolish: bool
 	if not is_node_ready():
 		await ready
 
+	if _forced_clean_workers.size() > 0:
+		needs_cleaning = true
+		cleaning_requested = true
+
 	icon_clean.visible = needs_cleaning
 	icon_repair.visible = needs_repair
 	icon_demolish.visible = pending_demolish
@@ -67,12 +71,16 @@ func set_status(needs_cleaning: bool, needs_repair: bool, pending_demolish: bool
 	size = Vector2.ZERO
 
 var _active_progress: Dictionary = {}
+var _forced_clean_workers: Array[String] = []
 
-func set_progress(worker_id: String, value: float) -> void:
+func set_progress(worker_id: String, value: float, force_clean: bool = false) -> void:
 	## value: 0.0 (start) bis 1.0 (fertig)
 	if not is_node_ready(): await ready
 	show()
 	
+	if force_clean and not worker_id in _forced_clean_workers:
+		_forced_clean_workers.append(worker_id)
+		
 	_active_progress[worker_id] = value
 	var max_val = 0.0
 	for v in _active_progress.values():
@@ -86,6 +94,7 @@ func hide_progress(worker_id: String) -> void:
 	if not is_node_ready(): await ready
 	
 	_active_progress.erase(worker_id)
+	_forced_clean_workers.erase(worker_id)
 	if _active_progress.is_empty():
 		progress_bar.visible = false
 		progress_bar.value = 0.0

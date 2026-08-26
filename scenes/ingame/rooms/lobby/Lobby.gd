@@ -238,17 +238,22 @@ func get_live_details() -> Array[Dictionary]:
 	
 	# Zeige Gäste an, die sich gerade in der Lobby befinden (z.B. am Automaten oder beim Checkout)
 	for guest_actor in get_tree().get_nodes_in_group("guest_actors"):
-		if guest_actor._current_poi_id == "lobby" or guest_actor.current_state == 8: # 8 = AWAITING_CHECKOUT
-			var guest_name = guest_actor.get_node("NameLabel").text if guest_actor.has_node("NameLabel") else "Gast"
+		if guest_actor._current_poi_id in ["lobby", "vending_machine"] or guest_actor.current_state == guest_actor.State.AWAITING_CHECKOUT:
+			if guest_actor.current_state == guest_actor.State.WALKING:
+				continue
+				
+			var guest_name = guest_actor.get("_guest_member").name if guest_actor.get("_guest_member") else "Gast"
 			var status = "Wartet..."
-			if guest_actor.current_state == 8: # AWAITING_CHECKOUT
-				status = GameState.T("poi.lobby.checking_out")
-			elif guest_actor.current_state == 4: # IN_POI
-				status = GameState.T("poi.lobby.vending")
+			if guest_actor.current_state == guest_actor.State.AWAITING_CHECKOUT:
+				status = GameState.T("poi.lobby.checking_out", "Checkt aus")
+			elif guest_actor._current_poi_id == "vending_machine":
+				status = GameState.T("poi.lobby.vending", "Holt einen Snack")
+			elif guest_actor.current_state == guest_actor.State.SITTING:
+				status = GameState.T("poi.lobby.sitting", "Entspannt sich")
 				
 			details.append({
-				"name": guest_name,
-				"status": status,
+				"left": guest_name,
+				"right": status,
 				"icon": "res://assets/UI/icons/icon_guest.png"
 			})
 			

@@ -307,11 +307,9 @@ func _on_event_guest_arrival() -> void:
 func _on_event_reception_close() -> void:
 	_ui_mgr.close_reception()
 	hud_canvas.set_reception_locked(true)
+	# Die Gäste sollen nicht zwangsweise um 22:00 ins Bett geschickt werden.
+	# Das passiert organisch durch die GuestActor Logik ab 23:00 Uhr.
 	Toast.show(GameState.T("toast.event.day_soft_end"))
-
-	# Alle Gäste in Lobby/Bar zurück ins Zimmer schicken
-	if _guest_controller:
-		_guest_controller.send_lobby_guests_to_rooms()
 
 	# HIER feuert jetzt zentral die Strafe für alle, die noch draußen standen
 	_guest_mgr.clear_waiting_guests_with_penalty()

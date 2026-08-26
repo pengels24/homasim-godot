@@ -247,17 +247,7 @@ func place_order_for_seat(guest_id: String, budget: int = 9999, missing_sat: int
 			
 			# Bedienung vorhanden -> Speise bestellen
 			# ZUERST PRÜFEN: Ist überhaupt eine Küche noch offen für Bestellungen?
-			var kitchen_is_open = false
-			var map_grid = get_tree().get_first_node_in_group("map_grid")
-			if map_grid and map_grid.has_method("get_placed_rooms"):
-				for room in map_grid.get_placed_rooms():
-					if is_instance_valid(room) and room.has_method("get_definition"):
-						var def = room.get_definition()
-						if def.get("id") == "kitchen_small" and GameState.is_facility_open(def, 30):
-							var k_id = GuestManager._room_key(room)
-							if StaffManager.is_poi_staffed(def, k_id):
-								kitchen_is_open = true
-								break
+			var kitchen_is_open = _has_active_kitchen()
 			
 			if not kitchen_is_open:
 				# Küche geschlossen -> Gast trinkt nur
@@ -275,8 +265,22 @@ func place_order_for_seat(guest_id: String, budget: int = 9999, missing_sat: int
 				return true
 	return false
 
-## Prüft ob ein Waiter (Bedienung) für diese Bar zugewiesen ist
+func _has_active_kitchen() -> bool:
+	var map_grid = get_tree().get_first_node_in_group("map_grid")
+	if map_grid and map_grid.has_method("get_placed_rooms"):
+		for room in map_grid.get_placed_rooms():
+			if is_instance_valid(room) and room.has_method("get_definition"):
+				var def = room.get_definition()
+				if def.get("id") == "kitchen_small" and GameState.is_facility_open(def, 30):
+					if room.has_method("is_operational") and room.is_operational():
+						return true
+	return false
+
+## Prüft ob ein Waiter (Bedienung) für diese Bar zugewiesen ist UND die Küche aktiv ist
 func _has_waiter_assigned() -> bool:
+	if not _has_active_kitchen():
+		return false
+		
 	if _room_id == "":
 		_room_id = GuestManager._room_key(self)
 	var assigned = StaffManager.get_staff_for_room(_room_id)
@@ -339,8 +343,16 @@ func get_live_details() -> Array[Dictionary]:
 			var guest_name = GameState.T("room.kitchen.guest")
 			var gm = get_tree().get_first_node_in_group("guest_manager")
 			var guest_node = gm.get_guest(seat["occupied_by"]) if gm else null
+			
 			if is_instance_valid(guest_node) or guest_node != null:
-				guest_name = guest_node.name
+				var actor_state = -1
+				for a in get_tree().get_nodes_in_group("guest_actors"):
+					if a.get("actor_id") == seat["occupied_by"]:
+						actor_state = a.get("current_state")
+						break
+				if actor_state == 1: # State.WALKING
+					continue
+				guest_name = guest_node.get("_guest_member").name if guest_node.get("_guest_member") else "Gast"
 			
 			var status_text = GameState.T("poi.bar.drinking")
 			var order_id = seat.get("order_id", "")

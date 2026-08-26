@@ -471,6 +471,26 @@ func _process_idle() -> void:
 								_path = [_target_world_pos]
 						else:
 							# Steht am Platz
+							if get_job_type() == "waiter" and randf() < 0.2:
+								if _current_room.has_method("get_available_interactions"):
+									var avail = _current_room.get_available_interactions(null)
+									if avail.size() > 0:
+										var seat = avail[randi() % avail.size()]
+										var target = seat["target_pos"]
+										if _current_room.has_method("get_local_path"):
+											var lp = _current_room.get_local_path(global_position, target)
+											if lp.size() > 0:
+												_world_path = lp
+												_target_world_pos = _world_path[0]
+												_set_state("walking")
+												_path = []
+												_current_task = {
+													"id": "dummy_clean",
+													"type": "clean_table",
+													"status": "assigned"
+												}
+												return
+												
 							if _current_room.has_method("get_work_look_dir"):
 								var dir = _current_room.get_work_look_dir(get_staff_id())
 								_sprite.rotation = dir.angle() + PI / 2.0
@@ -1007,7 +1027,8 @@ func _process_working(delta: float, speed_mult: float) -> void:
 	if is_instance_valid(_current_room) and _current_room.has_node("RoomStatusIndicator"):
 		var indicator = _current_room.get_node("RoomStatusIndicator")
 		var progress = 1.0 - (_work_timer / _work_timer_max)
-		indicator.set_progress(get_staff_id(), progress)
+		var is_dummy = _current_task.get("id") == "dummy_clean" if not _current_task.is_empty() else false
+		indicator.set_progress(get_staff_id(), progress, is_dummy)
 	
 	# Simples visuelles Feedback fürs Arbeiten (Wackeln)
 	_sprite.scale.y = 1.0 + sin(_work_timer * 10.0) * 0.1

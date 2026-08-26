@@ -316,10 +316,10 @@ func _get_open_pois() -> Array[String]:
 		if not GameState.is_facility_open(def, 30):
 			continue
 		
-		# min_staff Check: Nur geöffnet wenn genügend Personal zugewiesen ist
-		var room_node_id = GuestManager._room_key(room)
-		if not StaffManager.is_poi_staffed(def, room_node_id):
-			continue
+		# Physischer Check: Ist das benötigte Personal auch wirklich im Raum?
+		if room.has_method("is_operational"):
+			if not room.is_operational():
+				continue
 			
 		# Max Guests Check
 		var max_guests = def.get("max_guests", 0)
@@ -355,8 +355,7 @@ func _is_current_poi_open() -> bool:
 		
 	var room_node = _get_poi_room_node(_current_poi_id)
 	if is_instance_valid(room_node):
-		var room_node_id = GuestManager._room_key(room_node)
-		if not StaffManager.is_poi_staffed(def, room_node_id):
+		if room_node.has_method("is_operational") and not room_node.is_operational():
 			return false
 			
 	return true

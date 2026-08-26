@@ -1045,3 +1045,25 @@ func _on_debug_draw(canvas: Node2D) -> void:
 				for cid in _local_astar.get_point_connections(id):
 					var p2 = _local_astar.get_point_position(cid)
 					canvas.draw_line(p1, p2, Color(0, 1, 0, 0.4), 0.5)
+
+# =============================================================================
+func is_operational() -> bool:
+	var def: Dictionary = call("get_definition")
+	var min_staff = def.get("min_staff", 0)
+	
+	# Räume ohne Personalbedarf (Lobby, Automat, einfache Pools) sind immer betriebsbereit
+	if min_staff <= 0:
+		return true
+		
+	var required_role = def.get("required_role", "")
+	var staff_present = 0
+	
+	# Prüfen, ob das Personal wirklich physisch in diesem Raum arbeitet
+	for actor in get_tree().get_nodes_in_group("staff_actors"):
+		if actor.get("_current_room") == self and actor.get("_state") in ["idle", "working", "returning"]:
+			var staff_data = actor.get("_staff_data")
+			if typeof(staff_data) == TYPE_DICTIONARY:
+				if required_role == "" or staff_data.get("role", "") == required_role:
+					staff_present += 1
+				
+	return staff_present >= min_staff

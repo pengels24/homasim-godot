@@ -1074,9 +1074,11 @@ func _walk_to_exit() -> void:
 	var exit_tile = lobby.get_street_tile(_map_grid)
 	var door_world = _map_grid.tile_to_world(exit_tile)
 	
-	# _execute_walk wird automatisch den local_path_out der Lobby nutzen,
-	# da der Gast sich im Status AWAITING_CHECKOUT befindet!
-	_execute_walk([] as Array[Vector2i], State.LEAVING, door_world, Vector2.INF, lobby)
+	# target_room = null (statt lobby) damit _execute_walk Phase 1 greift:
+	# current_room (lobby, aus _current_poi_id) != target_room (null)
+	# → lokaler Pfad von den Schreibtischen / reception-Waypoint zur OUT-Tür wird generiert.
+	# Ohne das würde current_room == target_room → kein lokaler Pfad → Gast verschwindet in place.
+	_execute_walk([] as Array[Vector2i], State.LEAVING, door_world, Vector2.INF, null)
 
 
 # =============================================================================

@@ -79,27 +79,36 @@ func _ready() -> void:
 					})
 
 # =============================================================================
-# GUEST INTERACTION
+# SMART ROOM INTERFACE (Replaces legacy SEAT MANAGEMENT)
 # =============================================================================
 
-## Prüft ob ein freier, sauberer Platz existiert
-func has_free_seat() -> bool:
-	for seat in _seats:
+func get_available_interactions(_guest: Node2D) -> Array[Dictionary]:
+	var interactions: Array[Dictionary] = []
+	for i in range(_seats.size()):
+		var seat = _seats[i]
 		if seat["occupied_by"] == "" and seat["status"] == "clean":
-			return true
-	return false
+			interactions.append({
+				"id": "seat_" + str(i),
+				"type": "eat",
+				"target_pos": seat["node"].global_position,
+				"duration": randf_range(30.0, 90.0)
+			})
+	return interactions
 
-## Belegt einen Platz für einen Gast und gibt die globale Position des Stuhls zurück
-func claim_seat(guest_id: String) -> Vector2:
-	for seat in _seats:
-		if seat["occupied_by"] == "" and seat["status"] == "clean":
-			seat["occupied_by"] = guest_id
-			# Die Stühle sind in verschiedenen Parent-Nodes, get_global_position() ist am sichersten
-			return seat["node"].global_position
-	return Vector2.ZERO
+func claim_interaction(guest_id: String, interaction_id: String) -> Dictionary:
+	if interaction_id.begins_with("seat_"):
+		var idx = interaction_id.replace("seat_", "").to_int()
+		if idx >= 0 and idx < _seats.size():
+			var seat = _seats[idx]
+			if seat["occupied_by"] == "" and seat["status"] == "clean":
+				seat["occupied_by"] = guest_id
+				return {
+					"target_pos": seat["node"].global_position,
+					"duration": randf_range(30.0, 90.0)
+				}
+	return {}
 
-## Gast verlässt den Platz - Tisch wird dreckig
-func leave_seat(guest_id: String) -> void:
+func release_interaction(guest_id: String) -> void:
 	for seat in _seats:
 		if seat["occupied_by"] == guest_id:
 			seat["occupied_by"] = ""
@@ -108,6 +117,7 @@ func leave_seat(guest_id: String) -> void:
 			if TaskManager:
 				TaskManager.add_task("clean_table", {"room": self, "pos": seat["node"].global_position})
 			break
+
 
 # =============================================================================
 # Live-Details für Gastro-Monitor

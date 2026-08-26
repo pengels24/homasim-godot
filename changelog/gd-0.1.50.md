@@ -208,3 +208,13 @@ epair_room) werden zuverlässig angenommen und ausgeführt.
 - **`DebugOverlay.gd` deaktiviert:** Das veraltete `DebugOverlay._draw()` (nutzte alten `WALK_W * TILE_PX` Offset = ursprünglicher Overlay-Bug) ist nun leer. `MapGrid._draw()` übernimmt das gesamte Debug-Rendering mit korrekter `to_local(tile_to_world())` Transformation.
 - **IN_POI State-Log erweitert:** Zustandswechsel zu `IN_POI` loggt nun den POI-Namen: `changed state: WALKING -> IN_POI [bar]`.
 - **`_debug_paths.erase` angepasst:** GuestActor entfernt nach Bewegung den eigenen Eintrag per `filter()` statt `erase()` (kompatibel mit neuem Dictionary-Format).
+### 26.08.2026 - Bar Solo-Loop & Hunger Priority
+
+#### Bugfixes & Improvements
+- **Bar Solo-Loop (Missing Clean-Tasks):** Im Solo-Loop (kein Waiter eingestellt) setze Bar.gd beim Verlassen eines Gastes den Stuhl bisher immer auf status = "dirty" und erzeugte einen clean_table-Task. Da diesen Task nur Waiter ausfOhren dOrfen, blieben alle 8 StOhle irgendwann dauerhaft dreckig, weshalb get_available_interactions 0 zurOckgab und Gste die Bar sofort wieder verlieYen.
+  - **Fix:** In elease_interaction() wird der Stuhl im Solo-Loop (_has_waiter_assigned() == false) nun direkt wieder auf clean gesetzt, da ohne KOche/Bedienung keine Essensreste anfallen und der Barkeeper den Tresen magisch subert.
+- **GuestActor Hunger-Priorisierung:** Gste haben bei der POI-Auswahl in _decide_next_action() bisher vllig zufllig zwischen allen mglichen Zielen gewhlt. Gste mit groYem Hunger ignorierten dadurch oft den Snack-Automaten und verhungerten.
+  - **Fix:** Fllt der Hunger (saturation) unter 30, bevorzugt der Gast nun mit 80% Wahrscheinlichkeit gezielt Essens-POIs (ending_machine, estaurant_small, ar), sofern verfOgbar.
+- **Bar als Food-POI:** Die Bar wurde in die Liste der ood_pois aufgenommen, da sie im Gastro-Loop (mit KOche und Waiter) ebenfalls Snacks anbietet.
+- **GuestActor Debug-Logs:** Neuer Log-Print, der den exakten Grund ausgibt, falls ein Gast einen POI-Besuch direkt beim Eintreten abbricht (  available interactions etc.).
+- **Bar NavWeight (User-Side):** Der Tresenbereich wurde vom User in Bar.tscn per NavWeight in der Szene mit einem erhhten Pfadkosten-Gewicht versehen, damit Gste sich brav vor den Tresen setzen.

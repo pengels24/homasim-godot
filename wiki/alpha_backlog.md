@@ -266,3 +266,5 @@ Phase 5: Events & Prestige     â† Braucht 4.1 (G1.4 GourmetkÃ¼che)
 ### Session Bugfixes
 - [x] Lobby: Guest clipping / standing in walls
 - [x] MapGrid: Pathfinding debug output for straight-line corridor failures
+- [x] SmartRoom: Guests instantly aborting Bar visit due to dirty tables in Solo-Loop
+- [x] GuestActor: Starving guests ignoring food POIs in favor of random POIs

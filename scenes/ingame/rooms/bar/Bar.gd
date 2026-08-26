@@ -103,8 +103,10 @@ func get_waiter_stand_pos() -> Vector2:
 
 func get_available_interactions(_guest: Node2D) -> Array[Dictionary]:
 	var interactions: Array[Dictionary] = []
+	var debug_str = ""
 	for i in range(_seats.size()):
 		var seat = _seats[i]
+		debug_str += "[%d:%s/%s] " % [i, seat["occupied_by"], seat["status"]]
 		if seat["occupied_by"] == "" and seat["status"] == "clean":
 			interactions.append({
 				"id": "seat_" + str(i),
@@ -112,6 +114,7 @@ func get_available_interactions(_guest: Node2D) -> Array[Dictionary]:
 				"target_pos": seat["node"].global_position,
 				"duration": randf_range(30.0, 90.0)
 			})
+	print("[Bar] get_available_interactions: %s => returned %d interactions" % [debug_str, interactions.size()])
 	return interactions
 
 func claim_interaction(guest_id: String, interaction_id: String) -> Dictionary:
@@ -131,10 +134,16 @@ func release_interaction(guest_id: String) -> void:
 	for seat in _seats:
 		if seat["occupied_by"] == guest_id:
 			seat["occupied_by"] = ""
-			seat["status"] = "dirty"
+			
+			if _has_waiter_assigned():
+				seat["status"] = "dirty"
+				if TaskManager:
+					TaskManager.add_task("clean_table", {"room": self, "pos": seat["node"].global_position})
+			else:
+				# Solo-Loop: Keine Küche, keine Teller, Barkeeper macht magisch sauber
+				seat["status"] = "clean"
+				
 			seat["order_id"] = ""
-			if TaskManager:
-				TaskManager.add_task("clean_table", {"room": self, "pos": seat["node"].global_position})
 			break
 
 # =============================================================================

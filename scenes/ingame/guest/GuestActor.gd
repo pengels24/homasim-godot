@@ -430,6 +430,18 @@ func _decide_next_action() -> void:
 	possible_targets.append_array(open_pois)
 		
 	var chosen: String = possible_targets.pick_random()
+	
+	# ANG-310: Hunger-Priorisierung! Wenn der Gast hungrig ist, soll er Essen fokussieren.
+	if _guest_member.saturation < 30:
+		var food_pois = []
+		if open_pois.has("vending_machine"): food_pois.append("vending_machine")
+		if open_pois.has("restaurant_small"): food_pois.append("restaurant_small")
+		if open_pois.has("bar"): food_pois.append("bar")
+		
+		# Zu 80% Wahrscheinlichkeit einen Essens-POI erzwingen, falls verfügbar
+		if food_pois.size() > 0 and randf() > 0.2:
+			chosen = food_pois.pick_random()
+			
 	# print("[DEBUG] Gast ", _guest_member.id if _guest_member else "?", " _decide_next_action -> chosen: ", chosen, " | current_poi: ", _current_poi_id, " | state: ", current_state)
 	
 	# Vermeide, dass der Gast ans selbe Ziel geht wie er schon ist
@@ -665,10 +677,16 @@ func _on_poi_arrived() -> void:
 	var poi_def = _get_poi_def(_current_poi_id)
 	var income: int = poi_def.get("visit_income", 0)
 	
+	var room_node = _get_poi_room_node(_current_poi_id)
+	
+	# Bar Gastro-Loop Dynamik: Wenn die Bar eine Bedienung hat, entfällt der Eintritt
+	if _current_poi_id == "bar" and is_instance_valid(room_node) and room_node.has_method("_has_waiter_assigned"):
+		if room_node.call("_has_waiter_assigned"):
+			income = 0
+	
 	# ACHTUNG: Wir prüfen ZUERST auf Sitzplätze, damit Gäste nicht zahlen, wenn voll ist!
 	var seat_pos = Vector2.ZERO
 	var is_smart_room = false
-	var room_node = _get_poi_room_node(_current_poi_id)
 	if is_instance_valid(room_node):
 		if room_node.has_method("get_available_interactions"):
 			is_smart_room = true
@@ -685,6 +703,14 @@ func _on_poi_arrived() -> void:
 			
 		if seat_pos == Vector2.ZERO or seat_pos == Vector2.INF:
 			# Kein Platz frei! Gast bricht Besuch ab
+			var reason = "Unknown"
+			if is_smart_room:
+				var avail = room_node.get_available_interactions(self)
+				reason = "SmartRoom: 0 available interactions. Total seats checked: " + str(avail.size())
+			else:
+				reason = "Legacy Room: claim_seat returned " + str(seat_pos)
+				
+			print("[GuestActor] %s bricht Besuch in %s ab. Grund: %s" % [_guest_member.name, _current_poi_id, reason])
 			send_back_to_room()
 			return
 	

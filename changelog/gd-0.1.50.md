@@ -232,3 +232,11 @@ epair_room) werden zuverlässig angenommen und ausgeführt.
 #### Features & Improvements
 - **Waiter Idle Patrol (Tisch abwischen):** Bedienungen (Waiters), die untaetig an ihrer Arbeitsstation (z. B. Tresen) stehen, starten jetzt zufaellig Dummy-Aufgaben (`clean_table`). Sie laufen zu einem freien Tisch, bleiben dort kurz stehen und erzeugen im Raum den typischen Putz-Fortschrittsbalken samt Besen-Icon (`RoomStatusIndicator`), bevor sie zurueckkehren. Das laesst das Personal deutlich lebendiger wirken.
 - **RoomStatusIndicator Force Clean:** Die Progress-Bar wurde erweitert (`force_clean`), um das Besen-Icon manuell einzublenden, auch wenn der Raum systemisch gar keinen Schmutz hat (genutzt fuer den neuen Dummy-Putz-Loop des Waiters).
+
+### 27.08.2026 - Gastro-Loop, Staff Fixes & DayTransition 🌙
+- **Gastro-Loop**: Gäste werden um 22:00 Uhr nicht mehr hart aus der Lobby geworfen (entfernt aus Ingame.gd).
+- **Bar Solo-Modus**: Wenn die Küche schließt (_has_active_kitchen() == false), geht die Bar automatisch in den Solo-Modus (Gäste zahlen beim Betreten).
+- **Kellner-Patrouille**: Kellner im Idle-Status patrouillieren nun zufällig zu Tischen und reinigen diese pro forma (inkl. Besen-Icon im RoomStatusIndicator), um dynamischer zu wirken.
+- **RoomStatusIndicator**: Unterstützt nun orce_clean, um unabhängig vom echten Schmutz-Status des Raumes das Besen-Icon anzuzeigen.
+- **DayTransitionModal**: Neues Hintergrundbild (Stadt bei Nacht) mit Clipping-Maske (Horizont). Der Mond bewegt sich nun auf einer perfekten Symmetrie-Parabel, die genau am Horizont verschwindet. Farb-Fade auf sattes Schwarz (#000000) gesetzt.
+- **Staff Pathing Bug (Betten)**: Die Möbel-Erkennung in Room.gd wurde korrigiert. Nachttische (BedTable) und Schränke (BedCase) werden nicht mehr fälschlicherweise als Betten registriert, sodass Mitarbeiter sich nun korrekt in die echten Betten legen, anstatt daneben zu sitzen.

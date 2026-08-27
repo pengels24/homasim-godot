@@ -19,3 +19,6 @@ Getränke-Ausgabe. Braucht Barkeeper. Kann kleine Speisen (A la carte) anbieten,
 *   **Wegfindung (Barkeeper):** Der Barkeeper (Personal) nutzt nun ebenfalls das *lokale* AStar-Raumnetz (`get_local_path()`), um seinen Arbeitsplatz (`WorkArea`) hinter dem Tresen zu erreichen. 
     *   *Wichtig für Map-Design:* Die `NavBlocker` der Tresen und Wände müssen einen Spalt von **mindestens 4 Pixeln** aufweisen, damit der Barkeeper-Knoten den Bereich betreten kann.
 *   **Rotation:** Die Mittelpunkt-Fallbacks in `Bar.gd` nutzen rotierendes `to_global()`, damit der Barkeeper bei Drehung (R-Taste) der Bar nicht in die Wand läuft oder den Raum verlässt.
+
+## Solo-Modus
+Wenn die Küche schließt (_has_active_kitchen() == false), geht die Bar in den Solo-Modus über, d.h. Gäste bezahlen ihre Getränke direkt beim Betreten und warten nicht auf Essen.

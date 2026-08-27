@@ -55,6 +55,13 @@
 - ✅ **Unbestätigter Fix (jetzt bestätigt):** Der Notfall-Teleport-Bug (Wolfgang/Anton-Bug) beim Verlassen von Lobby-POIs (Snackautomat) ist durch den Root-Cause-Fix in `_get_logical_start_tile()` behoben. `_current_poi_id = "lobby"` wird nun korrekt über `lobby.get_target_tile()` aufgelöst.
 - ✅ **Safety-Fallback:** `_get_logical_start_tile()` fängt verbleibende Edge-Cases ab (solid Start-Tile trotz Berechnung) → Lobby-Innentür als Notfall-Start.
 - ✅ **Debug-System MapGrid:** Pfade haben nun Gastnamen-Labels (visuell + Konsole). `DebugOverlay.gd` deaktiviert (veralteter Overlay-Code). `IN_POI` State-Log zeigt nun den POI-Namen.
+- **Gastro-Loop**: Gäste werden um 22:00 Uhr nicht mehr hart aus der Lobby geworfen.
+- **Bar Solo-Modus**: Wenn die Küche schließt, geht die Bar automatisch in den Solo-Modus.
+- **Kellner-Patrouille**: Kellner im Idle-Status patrouillieren nun zufällig zu Tischen und reinigen diese (inkl. Besen-Icon), um dynamischer zu wirken.
+- **RoomStatusIndicator**: orce_clean Eigenschaft hinzugefügt.
+- **DayTransitionModal**: Neues Hintergrundbild mit Clipping-Maske. Parabel-Mond-Animation repariert. Fade-to-Black statt Grau.
+- **Staff Pathing Bug**: Room.gd string-matching gefixt, sodass Nachttische (BedTable) und Schränke (BedCase) nicht mehr als Betten zählen. Mitarbeiter schlafen nun in den echten Betten (Bed1-4).
+
 ---
 
 ## ðŸ§± Phase 1 â€“ Fundament (v0.1.40â€“41)

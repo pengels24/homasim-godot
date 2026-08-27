@@ -98,7 +98,7 @@ func _find_furniture_recursive(node: Node) -> void:
 			_room_seats_staff_only.append({"node": child, "occupied_by": ""})
 		elif "chair" in n and n != "chairs":
 			_room_seats.append({"node": child, "occupied_by": ""})
-		elif "bed" in n and n != "beds":
+		elif "bed" in n and n != "beds" and not "table" in n and not "case" in n:
 			_room_beds.append({"node": child, "occupied_by": ""})
 			
 		_find_furniture_recursive(child)

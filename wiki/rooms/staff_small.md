@@ -14,3 +14,6 @@ Erhöht Mitarbeiter-Cap um 4. Hier ruhen sich Angestellte aus, um Moral wiederhe
 
 ### 3.1 Besonderheiten (WIP)
 *(Hier werden in Zukunft spezifische Navigations-Punkte, Slots für Personal oder State-Machines für diesen Raum dokumentiert)*
+
+## Wegfindung & Möbel
+Die Möbel-Erkennung in Room.gd schließt für Betten explizit 	able und case aus. Staff schläft in den echten Bed-Nodes und nicht auf Beistellmöbeln.

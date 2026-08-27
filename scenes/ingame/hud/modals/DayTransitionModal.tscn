@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dek3myewmq485" path="res://scenes/ingame/hud/modals/DayTransitionModal.gd" id="1_tpa5u"]
 [ext_resource type="Texture2D" uid="uid://vivhps83e3t4" path="res://assets/images/moon.png" id="2_r5buq"]
-[ext_resource type="FontFile" uid="uid://bs3xl562plyi2" path="res://assets/fonts/Jersey25-Regular.ttf" id="3_jcmji"]
+[ext_resource type="Texture2D" uid="uid://c3m7v9a" path="res://assets/images/daynightbackground.png" id="3_bgimg"]
 
 [sub_resource type="Animation" id="Animation_r5buq"]
 length = 0.001
@@ -21,14 +21,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Moon:position")
+tracks/1/path = NodePath("SkyClip/Moon:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 1080)]
+"values": [Vector2(0, 650)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -61,14 +61,14 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Moon:position")
+tracks/1/path = NodePath("SkyClip/Moon:position")
 tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(1, 2.5, 4, 5.5, 7, 8),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(0, 1080), Vector2(330, 500), Vector2(700, 250), Vector2(1070, 500), Vector2(1650, 1080), Vector2(1650, 1080)]
+"values": [Vector2(0, 650), Vector2(412, 238), Vector2(825, 100), Vector2(1238, 238), Vector2(1650, 650), Vector2(1650, 650)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -115,13 +115,33 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.043137256, 0.05882353, 0.09019608, 1)
+color = Color(0, 0, 0, 1)
 
-[node name="Moon" type="TextureRect" parent="." unique_id=1184989852]
+[node name="Background" type="TextureRect" parent="Dimmer" unique_id=999999999]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_bgimg")
+expand_mode = 1
+
+[node name="SkyClip" type="Control" parent="." unique_id=777777777]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 650.0
+grow_horizontal = 2
+
+[node name="Moon" type="TextureRect" parent="SkyClip" unique_id=1184989852]
 unique_name_in_owner = true
-offset_top = 1080.0
-offset_right = 255.99963
-offset_bottom = 1336.0002
+layout_mode = 0
+offset_top = 650.0
+offset_right = 256.0
+offset_bottom = 906.0
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_r5buq")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=216961801]
@@ -139,12 +159,14 @@ modulate = Color(1, 1, 1, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.8901961, 0.6392157, 0.03137255, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5882353)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/shadow_offset_x = 5
 theme_override_constants/shadow_offset_y = 5
 theme_override_constants/outline_size = 10
 theme_override_constants/shadow_outline_size = 10
+theme_override_font_sizes/font_size = 48
 text = "Ein neuer Tag beginnt..."
 horizontal_alignment = 1
 vertical_alignment = 1

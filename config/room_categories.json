@@ -2,11 +2,11 @@
   "room_categories": {
     "zimmer": {
       "label": "Zimmer",
-      "icon": "res://assets/icons/HUDTop/house.svg"
+      "icon": "res://assets/icons/angelus2010/BuildMenuCat/ang-bmc-bedrooms.aseprite"
     },
     "gastro": {
       "label": "Gastronomie",
-      "icon": "res://assets/icons/HUDBottom/utensils.svg"
+      "icon": "res://assets/icons/angelus2010/BuildMenuCat/ang-bmc-gastro.aseprite"
     },
     "service": {
       "label": "Service",
@@ -14,15 +14,15 @@
     },
     "management": {
       "label": "Management",
-      "icon": "res://assets/icons/HUDBottom/laptop-minimal.svg"
+      "icon": "res://assets/icons/angelus2010/BuildMenuCat/ang-bmc-management.aseprite"
     },
     "wellness": {
       "label": "Wellness",
-      "icon": "res://assets/icons/HUDBottom/parasol.svg"
+      "icon": "res://assets/icons/angelus2010/BuildMenuCat/ang-bmc-wellness.aseprite"
     },
     "business": {
       "label": "Business",
-      "icon": "res://assets/icons/HUDTop/briefcase.svg"
+      "icon": "res://assets/icons/angelus2010/BuildMenuCat/ang-bmc-business.aseprite"
     },
     "sonstiges": {
       "label": "Sonstiges",

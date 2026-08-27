@@ -15,3 +15,6 @@ Speisesaal. Gäste setzen sich, Kellner nimmt Bestellung auf, läuft in Küche, 
 ### 3.1 Besonderheiten
 *   **Gäste-Navigation:** Gäste teleportieren nicht mehr an ihre Plätze, sondern nutzen `Room.get_local_path()` und das `AStar2D`-Netzwerk, um (animiert über Tweens) um Hindernisse (NavBlockers) herum zum zugewiesenen Platz zu laufen. Ein `call_deferred` beim State-Wechsel (`GuestActor`) verhindert Tween-Konflikte (unsichtbar/teleport).
 *   **Kellner-Patrouille:** Das Personal (Bedienung) sucht in `get_waiter_stand_pos()` nach einem `ServicePoint`-Marker (bzw. greift auf die rotierte Raummitte zurück) und wählt von dort Ziele in einem Radius von 12 Pixeln. Über `get_random_walkable_local_pos()` wird garantiert, dass diese Ziele innerhalb des befahrbaren `AStar2D`-Netzes liegen, wodurch das Laufen durch Wände und Möbel (`NavBlockers`) verhindert wird.
+
+### Besondere Logik: Stuhl-Initialisierung
+Da die Möbelknoten im Restaurant Chair1, Chair2 (PascalCase) heißen, greift die reguläre _find_furniture_recursive aus Room.gd (die nach chair in lowercase sucht) hier nicht. Daher hat RestaurantSmall.gd eine überschriebene _ready()-Funktion, die die Stühle im Knoten Interior/Furniture manuell in _room_seats registriert. Ohne diese Registrierung können Gäste nicht Platz nehmen und Bestellungen werden abgebrochen.

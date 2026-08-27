@@ -240,3 +240,10 @@ epair_room) werden zuverlässig angenommen und ausgeführt.
 - **RoomStatusIndicator**: Unterstützt nun orce_clean, um unabhängig vom echten Schmutz-Status des Raumes das Besen-Icon anzuzeigen.
 - **DayTransitionModal**: Neues Hintergrundbild (Stadt bei Nacht) mit Clipping-Maske (Horizont). Der Mond bewegt sich nun auf einer perfekten Symmetrie-Parabel, die genau am Horizont verschwindet. Farb-Fade auf sattes Schwarz (#000000) gesetzt.
 - **Staff Pathing Bug (Betten)**: Die Möbel-Erkennung in Room.gd wurde korrigiert. Nachttische (BedTable) und Schränke (BedCase) werden nicht mehr fälschlicherweise als Betten registriert, sodass Mitarbeiter sich nun korrekt in die echten Betten legen, anstatt daneben zu sitzen.
+
+
+### 27.08.2026 - Restaurant Flow, Staff Footprints & Vending Machine Balancing
+- **Restaurant Guest Flow:** Bug behoben, durch den Gäste nach dem Karte-Studieren ohne Bestellung wieder gingen. Ursache war, dass Room.gd nach 'chair' suchte, die Nodes im Restaurant aber 'Chair' (PascalCase) hießen, weshalb _room_seats leer war. Eine eigene _ready()-Funktion in RestaurantSmall.gd fügt die Stühle nun manuell hinzu.
+- **Restaurant Debugging:** Ausführliche Konsolen-Logs ([DEBUG RESTAURANT]) in place_order_for_seat ergänzt, um exakt auszugeben, warum eine Bestellung abgelehnt wird (Kein Waiter, Küche zu, Budget/Hunger passt zu keinem Rezept, Stuhl unsauber).
+- **Staff Footprint Bug:** Fehler behoben, bei dem Personal grüne Pfad-Linien (DebugLine) auf dem Boden zurückließ, wenn sie z.B. schlafen gingen. Die Linie wird nun in StaffActor._set_state() automatisch geleert, sobald sie den State 'walking' verlassen.
+- **Vending Machine Balancing:** Den hardcodierten Schwellenwert von 40 für den Snackomat-Hunger aus GuestActor.gd entfernt. Dieser ist nun als VENDING_MACHINE_HUNGER_THRESHOLD direkt im Lobby.gd-Skript konfigurierbar, unabhängig von der generellen Hunger-Priorisierung.

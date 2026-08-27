@@ -1,6 +1,8 @@
 extends Node2D
 class_name GuestActor
 
+const HUNGER_THRESHOLD: int = 40
+
 # --- Zustände ---
 
 func get_state_name(s: int) -> String:
@@ -156,9 +158,11 @@ func _process_waiting(delta: float) -> void:
 		
 	# Normaler Gast: POI schließt -> zurück ins Zimmer, ABER wer schon bestellt hat oder isst, darf bleiben!
 	if current_state in [State.IN_POI, State.STUDYING_MENU] and not _current_poi_id.is_empty() and not _is_current_poi_open():
-		if current_state == State.STUDYING_MENU:
-			var poi_room_node = _get_poi_room_node(_current_poi_id)
-			if is_instance_valid(poi_room_node) and poi_room_node.has_method("leave_seat"):
+		var poi_room_node = _get_poi_room_node(_current_poi_id)
+		if is_instance_valid(poi_room_node):
+			if poi_room_node.has_method("release_interaction"):
+				poi_room_node.release_interaction(_guest_member.id)
+			if poi_room_node.has_method("leave_seat"):
 				poi_room_node.leave_seat(_guest_member.id)
 		send_back_to_room()
 		return
@@ -209,6 +213,13 @@ func _process_waiting(delta: float) -> void:
 				# Gast hat nur Getränk bekommen oder nichts bestellt -> wechselt direkt in EATING (Trink-Timer)
 				_change_state(State.EATING)
 		elif current_state == State.IN_POI:
+			var current_hour = 12
+			if TimeManager:
+				current_hour = TimeManager.get_hour()
+			if current_hour >= 23 or current_hour < 6:
+				_decide_next_action()
+				return
+
 			var room_node = _get_poi_room_node(_current_poi_id)
 			if is_instance_valid(room_node):
 				# SMART ROOM: Gibt es verfügbare Interaktionen?
@@ -337,7 +348,13 @@ func _get_open_pois() -> Array[String]:
 	# Vending Machine in Lobby (Level 2+)
 	if GameState.get_level() >= 2:
 		var can_afford = _guest_member.spending_budget >= 5
-		var is_hungry = _guest_member.saturation < 30
+		var is_hungry = false
+		var lobby = _get_lobby_room()
+		if is_instance_valid(lobby) and "VENDING_MACHINE_HUNGER_THRESHOLD" in lobby:
+			is_hungry = _guest_member.saturation < lobby.VENDING_MACHINE_HUNGER_THRESHOLD
+		else:
+			is_hungry = _guest_member.saturation < HUNGER_THRESHOLD
+			
 		if (is_hungry and can_afford) or _current_poi_id == "vending_machine":
 			open_pois.append("vending_machine")
 	
@@ -431,7 +448,7 @@ func _decide_next_action() -> void:
 	var chosen: String = possible_targets.pick_random()
 	
 	# ANG-310: Hunger-Priorisierung! Wenn der Gast hungrig ist, soll er Essen fokussieren.
-	if _guest_member.saturation < 30:
+	if _guest_member.saturation < HUNGER_THRESHOLD:
 		var food_pois = []
 		if open_pois.has("vending_machine"): food_pois.append("vending_machine")
 		if open_pois.has("restaurant_small"): food_pois.append("restaurant_small")

@@ -102,73 +102,137 @@ texture = ExtResource("2_fihr5")
 region_enabled = true
 region_rect = Rect2(96, 0, 16, 16)
 
-[node name="Chairs1" type="Node2D" parent="Interior/Furniture" unique_id=945595005]
+[node name="Chairs" type="Node2D" parent="Interior/Furniture" unique_id=945595005]
 
-[node name="Chair1" type="Sprite2D" parent="Interior/Furniture/Chairs1" unique_id=1801971945]
+[node name="Chair1" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1801971945]
 position = Vector2(42, 5)
 rotation = 3.1415927
 texture = ExtResource("2_fihr5")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
-[node name="Chair2" type="Sprite2D" parent="Interior/Furniture/Chairs1" unique_id=299577255]
+[node name="Chair2" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=299577255]
 position = Vector2(31, 5)
 rotation = 3.1415927
 texture = ExtResource("2_fihr5")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
-[node name="Chair3" type="Sprite2D" parent="Interior/Furniture/Chairs1" unique_id=702903473]
+[node name="Chair3" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=702903473]
 position = Vector2(20, 5)
 rotation = 3.1415927
 texture = ExtResource("2_fihr5")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
-[node name="Chair4" type="Sprite2D" parent="Interior/Furniture/Chairs1" unique_id=703474895]
+[node name="Chair4" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=703474895]
 position = Vector2(21, 14)
 texture = ExtResource("2_fihr5")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
-[node name="Chair5" type="Sprite2D" parent="Interior/Furniture/Chairs1" unique_id=2009713073]
+[node name="Chair5" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=2009713073]
 position = Vector2(32, 14)
 texture = ExtResource("2_fihr5")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
-[node name="Chair6" type="Sprite2D" parent="Interior/Furniture/Chairs1" unique_id=418617757]
+[node name="Chair6" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=418617757]
 position = Vector2(43, 14)
 texture = ExtResource("2_fihr5")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
-[node name="Chairs2" type="Node2D" parent="Interior/Furniture" unique_id=1997254336]
-
-[node name="Chair21" type="Sprite2D" parent="Interior/Furniture/Chairs2" unique_id=78801887]
+[node name="Chair7" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=78801887]
 position = Vector2(5, 25)
 rotation = 1.5707964
 texture = ExtResource("2_fihr5")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
-[node name="Chair22" type="Sprite2D" parent="Interior/Furniture/Chairs2" unique_id=1738884779]
+[node name="Chair8" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1738884779]
 position = Vector2(16, 24)
-rotation = 4.712389
+rotation = -1.5707964
 texture = ExtResource("2_fihr5")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
-[node name="Chair23" type="Sprite2D" parent="Interior/Furniture/Chairs2" unique_id=1674304748]
+[node name="Chair9" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1674304748]
 position = Vector2(24, 25)
 rotation = 1.5707964
 texture = ExtResource("2_fihr5")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
-[node name="Chair24" type="Sprite2D" parent="Interior/Furniture/Chairs2" unique_id=1046195748]
+[node name="Chair10" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1046195748]
 position = Vector2(35, 24)
-rotation = 4.712389
+rotation = -1.5707964
+texture = ExtResource("2_fihr5")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Chair11" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1020531970]
+position = Vector2(5, 34)
+rotation = -3.1415925
+texture = ExtResource("2_fihr5")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Chair12" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=880079922]
+position = Vector2(11, 34)
+rotation = -3.1415925
+texture = ExtResource("2_fihr5")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Chair13" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1963873968]
+position = Vector2(17, 38)
+rotation = -1.5707964
+texture = ExtResource("2_fihr5")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Chair14" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1292069324]
+position = Vector2(6, 43)
+texture = ExtResource("2_fihr5")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Chair15" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1414492808]
+position = Vector2(12, 43)
+texture = ExtResource("2_fihr5")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Chair21" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=18104992]
+position = Vector2(36, 34)
+rotation = -3.1415925
+texture = ExtResource("2_fihr5")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Chair22" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=2119917108]
+position = Vector2(42, 34)
+rotation = -3.1415925
+texture = ExtResource("2_fihr5")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Chair23" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=635740182]
+position = Vector2(31, 39)
+rotation = 1.5707964
+texture = ExtResource("2_fihr5")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Chair24" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1879121741]
+position = Vector2(37, 43)
+texture = ExtResource("2_fihr5")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="Chair25" type="Sprite2D" parent="Interior/Furniture/Chairs" unique_id=1693505991]
+position = Vector2(43, 43)
 texture = ExtResource("2_fihr5")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
@@ -237,39 +301,6 @@ region_rect = Rect2(80, 0, 16, 16)
 
 [node name="Fam1" type="Node2D" parent="Interior/Furniture" unique_id=2133977174]
 
-[node name="ChairF11" type="Sprite2D" parent="Interior/Furniture/Fam1" unique_id=1020531970]
-position = Vector2(5, 34)
-rotation = 3.1415927
-texture = ExtResource("2_fihr5")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
-
-[node name="ChairF12" type="Sprite2D" parent="Interior/Furniture/Fam1" unique_id=880079922]
-position = Vector2(11, 34)
-rotation = 3.1415927
-texture = ExtResource("2_fihr5")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
-
-[node name="ChairF13" type="Sprite2D" parent="Interior/Furniture/Fam1" unique_id=1963873968]
-position = Vector2(17, 38)
-rotation = 4.712389
-texture = ExtResource("2_fihr5")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
-
-[node name="ChairF14" type="Sprite2D" parent="Interior/Furniture/Fam1" unique_id=1292069324]
-position = Vector2(6, 43)
-texture = ExtResource("2_fihr5")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
-
-[node name="ChairF15" type="Sprite2D" parent="Interior/Furniture/Fam1" unique_id=1414492808]
-position = Vector2(12, 43)
-texture = ExtResource("2_fihr5")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
-
 [node name="TableF11" type="Sprite2D" parent="Interior/Furniture/Fam1" unique_id=1982783026]
 position = Vector2(8, 39)
 rotation = 3.1415927
@@ -278,39 +309,6 @@ region_enabled = true
 region_rect = Rect2(48, 0, 16, 16)
 
 [node name="Fam2" type="Node2D" parent="Interior/Furniture" unique_id=1405881992]
-
-[node name="ChairF21" type="Sprite2D" parent="Interior/Furniture/Fam2" unique_id=18104992]
-position = Vector2(36, 34)
-rotation = 3.1415927
-texture = ExtResource("2_fihr5")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
-
-[node name="ChairF22" type="Sprite2D" parent="Interior/Furniture/Fam2" unique_id=2119917108]
-position = Vector2(42, 34)
-rotation = 3.1415927
-texture = ExtResource("2_fihr5")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
-
-[node name="ChairF23" type="Sprite2D" parent="Interior/Furniture/Fam2" unique_id=635740182]
-position = Vector2(31, 39)
-rotation = 1.5707964
-texture = ExtResource("2_fihr5")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
-
-[node name="ChairF24" type="Sprite2D" parent="Interior/Furniture/Fam2" unique_id=1879121741]
-position = Vector2(37, 43)
-texture = ExtResource("2_fihr5")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
-
-[node name="ChairF25" type="Sprite2D" parent="Interior/Furniture/Fam2" unique_id=1693505991]
-position = Vector2(43, 43)
-texture = ExtResource("2_fihr5")
-region_enabled = true
-region_rect = Rect2(0, 0, 16, 16)
 
 [node name="TableF21" type="Sprite2D" parent="Interior/Furniture/Fam2" unique_id=1095054714]
 position = Vector2(40, 38)

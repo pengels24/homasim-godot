@@ -250,9 +250,12 @@ func get_live_details() -> Array[Dictionary]:
 		details.append({
 			"left": guest_name + " (" + r_name + ")",
 			"right": right_text,
-			"color": custom_col
+			"color": custom_col,
+			"poi_id": rest_id
 		})
 		
+	details.sort_custom(func(a, b): return a.get("poi_id", "") < b.get("poi_id", ""))
+	
 	if details.is_empty():
 		details.append({
 			"left": GameState.T("room.kitchen.status"),

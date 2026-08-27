@@ -270,6 +270,9 @@ Phase 5: Events & Prestige     â† Braucht 4.1 (G1.4 GourmetkÃ¼che)
 - **StaffSmall & Raumsitze-Kapazität:** Kapazitäts-Check `has_free_seat()` bei Personal-Räumen gefixt, um zu verhindern, dass Staff-Actors in einen überfüllten Pausenraum spawnen. Smart-Room Interaktionen in `Room.gd` und `StaffSmall.gd` überprüft.
 - **Staff-Aufgaben Annahme:** Validierung und Logging des Service-Rufen Buttons. Die Wegfindung zu Zielräumen wurde stabilisiert, und Tasks (`clean_room`, `repair_room`) werden zuverlässig angenommen und ausgeführt.
 
+- **Restaurant Guest Flow:** Bug behoben (Groß-/Kleinschreibung bei Stuhl-Erkennung in RestaurantSmall.gd), durch den Gäste ohne Bestellung gingen.
+- **Staff Footprint Bug:** Grüne Pfad-Linien (DebugLine) von Personal werden in StaffActor._set_state() nun bereinigt, wenn sie aufhören zu laufen.
+- **Vending Machine Balancing:** Snackomat-Sättigungsschwellenwert in Lobby.gd konfigurierbar gemacht (VENDING_MACHINE_HUNGER_THRESHOLD).
 ### Session Bugfixes
 - [x] Lobby: Guest clipping / standing in walls
 - [x] MapGrid: Pathfinding debug output for straight-line corridor failures

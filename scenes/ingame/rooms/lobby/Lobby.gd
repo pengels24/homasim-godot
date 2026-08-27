@@ -14,10 +14,11 @@ extends "res://scenes/ingame/rooms/Room.gd"
 # ── Zustand ───────────────────────────────────────────────────────────────────
 var entrance_dir: String = "top"
 
-# ── Konstanten (Snack-Automat) ────────────────────────────────────────────────
+# 🌟 Konstanten (Snack-Automat) 🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟🌟
 const VENDING_MACHINE_PRICE: int = 5
 const VENDING_MACHINE_EXP: int = 3
 const VENDING_MACHINE_SATURATION: int = 20
+const VENDING_MACHINE_HUNGER_THRESHOLD: int = 40
 
 @onready var _vending_machine: Node2D = get_node_or_null("%VendingMachine") if get_node_or_null("%VendingMachine") else get_node_or_null("%VendingMashine")
 @onready var _vending_target: Node2D = get_node_or_null("%VendingTargetPoint")

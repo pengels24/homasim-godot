@@ -50,3 +50,6 @@ Der Getränke-/Snackautomat in der Lobby fungiert als Pseudo-POI (`id: "vending_
 2. Am Automat angekommen (`_on_poi_arrived`) triggert die Bezahl-Animation und das Abziehen des Budgets.
 3. Danach sucht sich der Gast dynamisch über `get_snack_eating_target_world()` einen der `SnackPointX`-Marker oder nutzt als Fallback einen freien Sitzplatz (`SeatX`, `ChairX`) in der Lobby, um den Snack zu essen.
 4. Nach Ablauf des Timers (`_action_timer`) verlässt der Gast die Lobby wieder.
+
+### Snackomat (Vending Machine) Konfiguration
+Die Sättigungsgrenze, ab der Gäste den Automaten aufsuchen, kann über die Konstante VENDING_MACHINE_HUNGER_THRESHOLD (Standard: 40) gesteuert werden, was ein Balancing unabhängig von generellen Restaurant-Besuchen ermöglicht.

@@ -23,8 +23,8 @@ var _target_room: Node2D = null
 var _room_door_world: Vector2 = Vector2.INF
 
 # TODO: In spätere Settings auslagern
-const POI_WAIT_TIME_MINUTES: float = 3.0
-const FOOD_WAIT_TIME_MINUTES: float = 45.0
+const POI_WAIT_TIME_MINUTES: int = 3
+const FOOD_WAIT_TIME_MINUTES: int = 45
 var _has_waited_for_functional: bool = false
 var _waiting_for_food_timer: float = 0.0
 

@@ -98,6 +98,33 @@ func get_waiter_stand_pos() -> Vector2:
 	return to_global(Vector2(16, 16))
 
 # =============================================================================
+# =============================================================================
+func is_functional() -> bool:
+	var has_bartender = false
+	var has_waiter = false
+	
+	for actor in get_tree().get_nodes_in_group("staff_actors"):
+		if actor.get("_current_room") == self:
+			var staff_data = actor.get("_staff_data")
+			if typeof(staff_data) == TYPE_DICTIONARY:
+				var role = staff_data.get("role", "")
+				if role == "bartender":
+					has_bartender = true
+				elif role == "waiter":
+					has_waiter = true
+					
+	# Die Bar ist nur voll funktional (für Tisch-Bestellungen), wenn BEIDE Rollen anwesend sind
+	return has_bartender and has_waiter
+
+func is_bartender_present() -> bool:
+	for actor in get_tree().get_nodes_in_group("staff_actors"):
+		if actor.get("_current_room") == self:
+			var staff_data = actor.get("_staff_data")
+			if typeof(staff_data) == TYPE_DICTIONARY:
+				if staff_data.get("role", "") == "bartender":
+					return true
+	return false
+
 # SMART ROOM INTERFACE (Replaces legacy SEAT MANAGEMENT)
 # =============================================================================
 
@@ -143,6 +170,9 @@ func release_interaction(guest_id: String) -> void:
 				# Solo-Loop: Keine Küche, keine Teller, Barkeeper macht magisch sauber
 				seat["status"] = "clean"
 				
+			if seat.get("order_id", "") != "":
+				if GastroManager:
+					GastroManager.cancel_order(seat["order_id"])
 			seat["order_id"] = ""
 			break
 

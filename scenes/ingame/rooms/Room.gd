@@ -1060,7 +1060,7 @@ func is_operational() -> bool:
 	
 	# Prüfen, ob das Personal wirklich physisch in diesem Raum arbeitet
 	for actor in get_tree().get_nodes_in_group("staff_actors"):
-		if actor.get("_current_room") == self and actor.get("_state") in ["idle", "working", "returning"]:
+		if actor.get("_current_room") == self and actor.get("_state") in ["idle", "working", "returning", "walking"]:
 			var staff_data = actor.get("_staff_data")
 			if typeof(staff_data) == TYPE_DICTIONARY:
 				if required_role == "" or staff_data.get("role", "") == required_role:

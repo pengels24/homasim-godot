@@ -278,3 +278,6 @@ Phase 5: Events & Prestige     â† Braucht 4.1 (G1.4 GourmetkÃ¼che)
 - [x] MapGrid: Pathfinding debug output for straight-line corridor failures
 - [x] SmartRoom: Guests instantly aborting Bar visit due to dirty tables in Solo-Loop
 - [x] GuestActor: Starving guests ignoring food POIs in favor of random POIs
+- [x] GuestActor: POI-Warteschleifen (Endlosschleife bei geschlossenen/nicht funktionalen Räumen behoben)
+- [x] Gastro-Loop: Food-Timeout (Gäste brechen Restaurant/Bar nach 45 Ingame-Minuten ab, falls kein Kellner bedient)
+- [x] GuestActor: Eintrittslogik in der Bar (Differenzierung zwischen A La Carte und Solo-Modus)

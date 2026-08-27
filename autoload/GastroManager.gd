@@ -37,6 +37,11 @@ func serve_order(order_id: String) -> void:
 		sig_order_served.emit(order_id, guest_id, recipe_id)
 		active_orders.erase(order_id)
 
+func cancel_order(order_id: String) -> void:
+	if active_orders.has(order_id):
+		active_orders.erase(order_id)
+		print('[GastroManager] Order ', order_id, ' wurde storniert!')
+
 func get_pending_orders() -> Array:
 	var pending = []
 	for order_id in active_orders.keys():
@@ -47,9 +52,8 @@ func get_pending_orders() -> Array:
 func has_active_orders_for_room(room_id: String) -> bool:
 	for order_id in active_orders.keys():
 		var order = active_orders[order_id]
-		# Entweder das Restaurant oder die Küche ist dieser Raum
-		if order.get("restaurant_id", "") == room_id or order.get("kitchen_id", "") == room_id:
-			if order.get("status", "") != "served":
+		if order.get('restaurant_id', '') == room_id or order.get('kitchen_id', '') == room_id:
+			if order.get('status', '') != 'served':
 				return true
 	return false
 

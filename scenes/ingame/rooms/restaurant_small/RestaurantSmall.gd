@@ -127,6 +127,9 @@ func release_interaction(guest_id: String) -> void:
 		if seat["occupied_by"] == guest_id:
 			seat["occupied_by"] = ""
 			seat["status"] = "dirty"
+			if seat.get("order_id", "") != "":
+				if GastroManager:
+					GastroManager.cancel_order(seat["order_id"])
 			seat["order_id"] = ""
 			if TaskManager:
 				TaskManager.add_task("clean_table", {"room": self, "pos": seat["node"].global_position})

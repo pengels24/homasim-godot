@@ -247,3 +247,13 @@ epair_room) werden zuverlässig angenommen und ausgeführt.
 - **Restaurant Debugging:** Ausführliche Konsolen-Logs ([DEBUG RESTAURANT]) in place_order_for_seat ergänzt, um exakt auszugeben, warum eine Bestellung abgelehnt wird (Kein Waiter, Küche zu, Budget/Hunger passt zu keinem Rezept, Stuhl unsauber).
 - **Staff Footprint Bug:** Fehler behoben, bei dem Personal grüne Pfad-Linien (DebugLine) auf dem Boden zurückließ, wenn sie z.B. schlafen gingen. Die Linie wird nun in StaffActor._set_state() automatisch geleert, sobald sie den State 'walking' verlassen.
 - **Vending Machine Balancing:** Den hardcodierten Schwellenwert von 40 für den Snackomat-Hunger aus GuestActor.gd entfernt. Dieser ist nun als VENDING_MACHINE_HUNGER_THRESHOLD direkt im Lobby.gd-Skript konfigurierbar, unabhängig von der generellen Hunger-Priorisierung.
+
+### 27.08.2026 - POI Zustandstrennung & Timeout Logik
+
+#### Bugfixes & Improvements
+- **Trennung von is_open und is_functional:** Die Basisklasse Room.gd trennt nun sauber zwischen reinen Öffnungszeiten (is_open()) und der physischen Verfügbarkeit des nötigen Personals (is_functional()). Ein Raum wird nicht mehr geschlossen, nur weil der Kellner Tische abräumt (Zustand: Laufen).
+- **Gast Warte-Logik für POIs:** Betritt ein Gast einen Raum (z.B. Restaurant), der zwar geöffnet, aber kurzzeitig nicht funktional ist (z.B. Kellner macht Pause), wartet der Gast nun einmalig eine definierbare Zeit (Standard: 3 Ingame-Minuten), bevor er abbricht. Das verhindert ständiges Rein- und Rauslaufen.
+- **Bar Solo-Modus Prüfung:** Die Bar.gd überschreibt nun is_functional(). Sie gilt nur als funktional für Bestellungen am Tisch, wenn *sowohl* Barkeeper *als auch* Bedienung anwesend sind.
+- **Bar Solo-Modus Fallback:** Sitzt der Gast an der Bar und wartet vergebens auf die Bedienung (nach den 3 Ingame-Minuten), prüft er, ob zumindest der Barkeeper da ist (is_bartender_present()). Wenn ja, bestellt er sein Getränk am Tresen und wechselt in den EATING-Status.
+- **Bar Eintritt-Fix:** Der Eintritt für die Bar wird nun nicht mehr blind abgebucht. Ist der Gastro-Loop aktiv (Bedienung und Barkeeper anwesend), entfällt der Eintritt, da über Menü gezahlt wird. Fehlt die Bedienung (Solo-Modus), wird der Eintritt von 15 Geld als Pauschalpreis für Getränke beim Betreten abgerechnet.
+- **Food-Timeout für Gäste:** Wenn ein Gast im Restaurant erfolgreich bestellt hat, die Bedienung aber ausfällt (z.B. in Pause geht) und das Essen nicht kommt, wartet der Gast nicht mehr unendlich lange. Nach 45 Ingame-Minuten bricht der Gast wütend ab (-15 Zufriedenheits-Malus) und das ungelieferte Essen wird in der Küche gelöscht (GastroManager.cancel_order()).

@@ -62,25 +62,8 @@ func _ready() -> void:
 	if not is_inside_tree(): return
 	super._ready()
 	
-	# Da Room.gd nach "chair" (kleingeschrieben) sucht, die Nodes im Restaurant aber "Chair" heißen,
-	# müssen wir sie manuell hinzufügen!
-	var furniture = get_node_or_null("Interior/Furniture")
-	if not furniture: return
-	
-	var groups = ["Chairs1", "Chairs2", "Fam1", "Fam2"]
-	for g in groups:
-		var parent_node = furniture.get_node_or_null(g)
-		if parent_node:
-			for child in parent_node.get_children():
-				if "Chair" in child.name:
-					_room_seats.append({
-						"node": child,
-						"occupied_by": "",
-						"status": "clean",
-						"order_id": ""
-					})
-					
-	# Für etwaige Stühle, die von Room.gd gefunden wurden, ergänzen wir die Properties
+	# Room.gd kümmert sich bereits um das Sammeln der Stühle (find_furniture_recursive nutzt to_lower()).
+	# Wir müssen hier nur sicherstellen, dass die Gastro-spezifischen Properties existieren.
 	for s in _room_seats:
 		if not s.has("status"):
 			s["status"] = "clean"
@@ -133,7 +116,6 @@ func release_interaction(guest_id: String) -> void:
 			seat["order_id"] = ""
 			if TaskManager:
 				TaskManager.add_task("clean_table", {"room": self, "pos": seat["node"].global_position})
-			break
 
 
 # =============================================================================
@@ -152,8 +134,8 @@ func get_live_details() -> Array[Dictionary]:
 			var gm = get_tree().get_first_node_in_group("guest_manager")
 			var guest_member = gm.get_guest(seat["occupied_by"]) if gm else null
 			
+			var actor_state = -1
 			if guest_member != null:
-				var actor_state = -1
 				for a in get_tree().get_nodes_in_group("guest_actors"):
 					var gm_prop = a.get("_guest_member")
 					if gm_prop and gm_prop.id == seat["occupied_by"]:
@@ -181,9 +163,19 @@ func get_live_details() -> Array[Dictionary]:
 						status_text = GameState.T("poi.restaurant.cooking") + ": " + r_name
 					elif s == "ready":
 						status_text = GameState.T("poi.restaurant.waiting_service")
+					elif s == "serving":
+						var t_str = GameState.T("poi.restaurant.serving")
+						if t_str == "poi.restaurant.serving": t_str = "Wird abgeholt & serviert"
+						status_text = t_str + ": " + r_name
 				else:
 					# Wenn order_id gesetzt ist, aber nicht in active_orders -> Serviert
 					status_text = GameState.T("poi.restaurant.eating")
+			else:
+				# Wenn keine Order-ID, aber Gast isst bereits (Trink-Fallback) oder wartet auf Service
+				if actor_state == 8: # State.EATING
+					status_text = GameState.T("poi.restaurant.eating")
+				elif actor_state == 7: # State.WAITING_FOR_FOOD
+					status_text = GameState.T("poi.restaurant.ordered")
 					
 			var c = Color.WHITE
 			if "custom_color" in self and typeof(custom_color) == TYPE_COLOR and custom_color != Color.WHITE:
@@ -274,6 +266,16 @@ func _has_waiter_assigned() -> bool:
 			continue
 		if s.get("role", "") == "waiter":
 			return true
+	return false
+
+## Prüft ob physisch eine Bedienung im Raum ist (für den Gast)
+func is_functional() -> bool:
+	for actor in get_tree().get_nodes_in_group("staff_actors"):
+		if actor.get("_current_room") == self:
+			var staff_data = actor.get("_staff_data")
+			if typeof(staff_data) == TYPE_DICTIONARY:
+				if staff_data.get("role", "") == "waiter":
+					return true
 	return false
 
 func _process(_delta: float) -> void:

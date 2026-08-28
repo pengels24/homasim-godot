@@ -2,7 +2,8 @@ extends PanelContainer
 class_name CustomTooltip
 
 @onready var title_label: Label = %TitleLabel
-@onready var status_label: Label = %StatusLabel
+@onready var status_label: RichTextLabel = %StatusLabel
+@onready var staff_label: Label = %StaffLabel
 @onready var guests_label: Label = %GuestsLabel
 @onready var stay_progress: ProgressBar = %StayProgress
 @onready var stay_progress_label: Label = %StayProgressLabel
@@ -90,6 +91,9 @@ func _update_content() -> void:
 	var status = GameState.T("room.tooltip.free")
 	guests_label.text = ""
 	guests_label.hide()
+	if is_instance_valid(staff_label):
+		staff_label.text = ""
+		staff_label.hide()
 	if is_instance_valid(stay_progress):
 		stay_progress.hide()
 		if stay_spacer: stay_spacer.hide()
@@ -104,25 +108,52 @@ func _update_content() -> void:
 
 	if def.get("is_poi", false):
 		var room_id = GuestManager._room_key(_target_room)
-		var is_staffed = StaffManager.is_poi_staffed(def, room_id)
 		var is_open_now = GameState.is_facility_open(def)
-		if is_staffed and is_open_now:
-			var open_from: int = def.get("open_from", 0)
-			var open_to: int = def.get("open_to", 0)
-			var opens_str = GameState.format_game_time(open_from) if open_from > 0 else "00:00"
-			var closes_str = GameState.format_game_time(open_to) if open_to > 0 else "24:00"
-			status = GameState.T("room.tooltip.open") % [opens_str, closes_str]
-		elif is_staffed and not is_open_now:
-			var open_from: int = def.get("open_from", 0)
-			var opens_at := GameState.format_game_time(open_from) if open_from > 0 else "?"
-			status = GameState.T("room.tooltip.closed_until") % opens_at
+		
+		var staff_present = 0
+		var staff_names = []
+		var ingame = get_tree().get_root().get_node_or_null("Ingame")
+		if is_instance_valid(ingame):
+			var staff_ctrl = ingame.get("_staff_controller")
+			if staff_ctrl:
+				for actor in staff_ctrl._actors:
+					if is_instance_valid(actor) and actor.get("_current_room") == _target_room:
+						staff_present += 1
+						var s_data = actor.get("_staff_data")
+						if s_data:
+							var job = actor.get_job_type()
+							var job_name = GameState.T("staff.role." + job)
+							var staff_name = s_data.get("first_name", "") + " " + s_data.get("last_name", "")
+							staff_names.append("👤 " + staff_name + " (" + job_name + ")")
+
+		var is_staffed = false
+		if _target_room.has_method("is_functional"):
+			is_staffed = _target_room.is_functional()
+		elif _target_room.has_method("is_operational"):
+			is_staffed = _target_room.is_operational()
 		else:
-			status = GameState.T("room.tooltip.understaffed")
+			is_staffed = (staff_present >= def.get("min_staff", 1))
+		
+		var open_from: int = def.get("open_from", 0)
+		var open_to: int = def.get("open_to", 0)
+		var opens_str = GameState.format_game_time(open_from) if open_from > 0 else "00:00"
+		var closes_str = GameState.format_game_time(open_to) if open_to > 0 else "24:00"
+		var opens_at := GameState.format_game_time(open_from) if open_from > 0 else "?"
+		
+		var is_assigned = StaffManager.is_poi_staffed(def, room_id)
+		
+		if not is_assigned:
+			status = "[color=#e74c3c]" + GameState.T("room.tooltip.understaffed") + "[/color]"
+		elif is_open_now and is_staffed:
+			status = "[color=#2ecc71]" + (GameState.T("room.tooltip.open") % [opens_str, closes_str]) + "[/color]"
+		elif is_open_now and not is_staffed:
+			status = "[color=#f39c12]" + (GameState.T("room.tooltip.open") % [opens_str, closes_str]) + "[/color]"
+		else:
+			status = "[color=#e74c3c]" + (GameState.T("room.tooltip.closed_until") % opens_at) + "[/color]"
 			
 		if def.get("is_poi", false):
 			var current_visitors = 0
 			var visitor_names = []
-			var ingame = get_tree().get_root().get_node_or_null("Ingame")
 			if is_instance_valid(ingame):
 				var ctrl = ingame.get("_guest_controller")
 				if ctrl:
@@ -132,6 +163,16 @@ func _update_content() -> void:
 							current_visitors += 1
 							if is_instance_valid(actor._guest_member):
 								visitor_names.append("👤 " + actor._guest_member.name)
+				
+			var stxt = "Anwesende Mitarbeiter: %d" % staff_present
+			if staff_present > 0:
+				var display_names = staff_names.slice(0, 5)
+				stxt += "\n" + "\n".join(display_names)
+				if staff_names.size() > 5:
+					stxt += "\n" + (GameState.T("room.tooltip.and_more") % (staff_names.size() - 5))
+			if is_instance_valid(staff_label):
+				staff_label.text = stxt
+				staff_label.show()
 				
 			var txt = GameState.T("room.tooltip.current_visitors") % current_visitors
 			if current_visitors > 0:
@@ -161,10 +202,12 @@ func _update_content() -> void:
 			if staff_names.size() > 5:
 				txt += "\n" + (GameState.T("room.tooltip.and_more") % (staff_names.size() - 5))
 			
-			guests_label.text = txt
-			guests_label.show()
+			if is_instance_valid(staff_label):
+				staff_label.text = txt
+				staff_label.show()
 		else:
-			guests_label.hide()
+			if is_instance_valid(staff_label):
+				staff_label.hide()
 	else:
 		# GuestManager direkt befragen (nicht mehr über room._guest_mgr)
 		var ingame = get_tree().get_root().get_node_or_null("Ingame")

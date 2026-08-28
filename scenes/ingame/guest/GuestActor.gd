@@ -43,6 +43,7 @@ var _base_speed: float = 40.0
 
 var _active_tween: Tween
 var _last_interaction_id: String = ""
+var _has_claimed_seat: bool = false
 
 signal sig_poi_income(amount: int, world_pos: Vector2)
 
@@ -257,6 +258,11 @@ func _process_waiting(delta: float) -> void:
 						else:
 							print("[GuestActor] %s: Raum %s ist immer noch nicht funktional nach Wartezeit! Breche ab." % [(_guest_member.name if _guest_member else "?"), _current_poi_id])
 							_has_waited_for_functional = false
+							if is_instance_valid(room_node):
+								if room_node.has_method("release_interaction"):
+									room_node.release_interaction(_guest_member.id)
+								if room_node.has_method("leave_seat"):
+									room_node.leave_seat(_guest_member.id)
 							_decide_next_action()
 							return
 						
@@ -276,10 +282,22 @@ func _process_waiting(delta: float) -> void:
 			if ordered:
 				_change_state(State.WAITING_FOR_FOOD)
 			else:
-				# Gast hat nur Getränk bekommen oder nichts bestellt -> wechselt direkt in EATING (Trink-Timer)
-				print("[GuestActor] %s bestellt NICHTS (oder nur Getränk). Geht in EATING Fallback." % (_guest_member.name if _guest_member else "?"))
-				_change_state(State.EATING)
+				if _current_poi_id == "bar":
+					print("[GuestActor] %s bestellt NICHTS (oder nur Getränk). Geht in EATING Fallback in der Bar." % (_guest_member.name if _guest_member else "?"))
+					_change_state(State.EATING)
+				else:
+					print("[GuestActor] %s bestellt NICHTS im Restaurant. Breche ab." % (_guest_member.name if _guest_member else "?"))
+					if is_instance_valid(room_node):
+						if room_node.has_method("release_interaction"):
+							room_node.release_interaction(_guest_member.id)
+						if room_node.has_method("leave_seat"):
+							room_node.leave_seat(_guest_member.id)
+					_decide_next_action()
 		elif current_state == State.IN_POI:
+			_action_timer -= delta
+			if _action_timer > 0.0:
+				return
+			
 			var current_hour = 12
 			if TimeManager:
 				current_hour = TimeManager.get_hour()
@@ -307,10 +325,10 @@ func _process_waiting(delta: float) -> void:
 							return
 				
 				# Fallback für alte Räume (Legacy)
-				if room_node.has_method("release_interaction"):
-					room_node.release_interaction(_guest_member.id)
-				if room_node.has_method("leave_seat"):
-					room_node.leave_seat(_guest_member.id)
+				# if room_node.has_method("release_interaction"):
+				# 	room_node.release_interaction(_guest_member.id)
+				# if room_node.has_method("leave_seat"):
+				# 	room_node.leave_seat(_guest_member.id)
 			
 			_decide_next_action()
 		else:
@@ -534,9 +552,14 @@ func _decide_next_action() -> void:
 		else:
 			_wander_in_room(_target_room)
 			return
-	elif (current_state == State.IN_POI or current_state == State.EATING) and chosen == _current_poi_id:
+	elif (current_state == State.IN_POI or current_state == State.EATING or current_state == State.STUDYING_MENU or current_state == State.WAITING_FOR_FOOD) and chosen == _current_poi_id:
 		var party = _get_my_party()
 		if is_instance_valid(party) and party.event_poi_id != "":
+			if party.event_poi_id == _current_poi_id:
+				pass # Wir bleiben beim Event!
+			else:
+				chosen = party.event_poi_id
+		else:
 			if not open_pois.is_empty() and randf() > 0.3:
 				var other_pois = open_pois.duplicate()
 				other_pois.erase(_current_poi_id)
@@ -550,14 +573,7 @@ func _decide_next_action() -> void:
 						_walk_to_poi("lobby")
 					return
 			else:
-				var lobby = _get_lobby_room()
-				if is_instance_valid(lobby) and chosen == "lobby":
-					_wander_in_room(lobby)
-				else:
-					_walk_to_poi("lobby")
-				return
-		else:
-			chosen = "room"
+				chosen = "room"
 	
 	if chosen == "room":
 		if is_instance_valid(_target_room):
@@ -599,6 +615,11 @@ func wake_up() -> void:
 	_action_timer = randf_range(5.0, 30.0)
 
 
+# =============================================================================
+func _on_walk_finished(new_state: int) -> void:
+	if is_instance_valid(_map_grid) and _map_grid.has_method("clear_debug_path"):
+		_map_grid.clear_debug_path(str(_guest_member.get("name")) if _guest_member else "?")
+	_change_state(new_state)
 
 
 # =============================================================================
@@ -626,6 +647,11 @@ func _change_state(new_state: State) -> void:
 					_target_room.room_leave_bed(_guest_member.id)
 		# Reset avatar visualization if needed
 		avatar.rotation = 0
+		
+	if new_state == State.IDLE or new_state == State.WALKING:
+		pass
+	elif new_state != State.IN_POI:
+		_has_claimed_seat = false
 		
 	current_state = new_state
 	
@@ -776,20 +802,32 @@ func _on_poi_arrived() -> void:
 	var seat_pos = Vector2.ZERO
 	var is_smart_room = false
 	if is_instance_valid(room_node):
-		if room_node.has_method("get_available_interactions"):
+		if room_node.has_method("get_available_interactions") and room_node.has_method("claim_interaction"):
 			is_smart_room = true
-			var avail = room_node.get_available_interactions(self)
-			if avail.size() > 0:
-				seat_pos = Vector2(1, 1) # Dummy to pass validation
+			if not _has_claimed_seat:
+				var avail = room_node.get_available_interactions(self)
+				if avail.size() > 0:
+					var choice = avail.pick_random()
+					var claim_result = room_node.claim_interaction(_guest_member.id, choice.get("id", ""))
+					if claim_result.has("target_pos"):
+						seat_pos = claim_result.target_pos
+			else:
+				# They already claimed it, pretend it succeeded
+				seat_pos = global_position # just dummy to prevent abort
 		elif _current_poi_id == "conference_small" and room_node.has_method("claim_podium"):
-			seat_pos = room_node.claim_podium(_guest_member.id)
-			if seat_pos == Vector2.INF or seat_pos == Vector2.ZERO:
-				if room_node.has_method("claim_seat"):
-					seat_pos = room_node.claim_seat(_guest_member.id)
+			pass # Legacy system commented out
+			# seat_pos = room_node.claim_podium(_guest_member.id)
+			# if seat_pos == Vector2.INF or seat_pos == Vector2.ZERO:
+			# 	if room_node.has_method("claim_seat"):
+			# 		seat_pos = room_node.claim_seat(_guest_member.id)
 		elif room_node.has_method("claim_seat"):
-			seat_pos = room_node.claim_seat(_guest_member.id)
+			pass # Legacy system commented out
+			# if not _has_claimed_seat:
+			# 	seat_pos = room_node.claim_seat(_guest_member.id)
+			# else:
+			# 	seat_pos = global_position
 			
-		if seat_pos == Vector2.ZERO or seat_pos == Vector2.INF:
+		if not _has_claimed_seat and (seat_pos == Vector2.ZERO or seat_pos == Vector2.INF):
 			# Kein Platz frei! Gast bricht Besuch ab
 			var reason = "Unknown"
 			if is_smart_room:
@@ -849,7 +887,10 @@ func _on_poi_arrived() -> void:
 		_guest_manager.on_poi_visited(room_id)
 
 	if is_smart_room:
-		_action_timer = 0.0 # Force immediate process_waiting
+		if _current_poi_id in ["restaurant_small", "bar", "kiosk"]:
+			_change_state(State.STUDYING_MENU)
+		else:
+			_action_timer = 0.0 # Force immediate process_waiting
 		return
 
 	if seat_pos != Vector2.ZERO and seat_pos != Vector2.INF:
@@ -880,7 +921,8 @@ func _on_poi_arrived() -> void:
 			curr_pos = p
 			
 		if _current_poi_id != "pool_small" and _current_poi_id != "gym_small" and _current_poi_id != "spa_small" and _current_poi_id != "conference_small":
-			_active_tween.tween_callback(func(): _change_state(State.STUDYING_MENU))
+			pass # Wird nun von is_smart_room Block abgefangen (Gastro Räume)
+			# _active_tween.tween_callback(func(): _change_state(State.STUDYING_MENU))
 		return
 	else:
 		# Kein Platz frei! Gast bricht Besuch ab (sollte eigentlich oben schon gefangen werden, aber sicher ist sicher)
@@ -1172,11 +1214,16 @@ func _walk_to_poi(poi_id: String) -> void:
 					var claim_data = target_room.claim_interaction(_guest_member.id, choice.id)
 					if claim_data.has("target_pos"):
 						seat_pos = claim_data.target_pos
+						_has_claimed_seat = true
 			# --- LEGACY FALLBACK FÜR ALTE RÄUME ---
 			elif target_room.has_method("claim_seat"):
-				seat_pos = target_room.claim_seat(_guest_member.id)
+				pass # Legacy system commented out
+				# seat_pos = target_room.claim_seat(_guest_member.id)
+				# _has_claimed_seat = true
 			elif target_room.has_method("has_free_room_seat") and target_room.has_free_room_seat():
-				seat_pos = target_room.room_claim_seat(_guest_member.id)
+				pass # Legacy system commented out
+				# seat_pos = target_room.room_claim_seat(_guest_member.id)
+				# _has_claimed_seat = true
 				
 			if seat_pos != Vector2.INF and seat_pos != Vector2.ZERO:
 				extra_pos = seat_pos
@@ -1225,7 +1272,8 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 			world_path.append_array(local_path_out)
 			
 	if _map_grid and "is_miniature" in _map_grid and not _map_grid.is_miniature:
-		_map_grid._debug_paths.append({"path": path_tiles, "label": (str(_guest_member.get("name")) if _guest_member else "?")})
+		var lbl = (str(_guest_member.get("name")) if _guest_member else "?")
+		_map_grid._debug_paths[lbl] = {"path": path_tiles, "label": lbl}
 
 	var door_index_out := -1
 	if world_path.size() > 0:
@@ -1293,12 +1341,7 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 		_active_tween.tween_property(self, "modulate:a", 0.0, 0.4)
 		_active_tween.tween_callback(queue_free)
 	else:
-		_active_tween.tween_callback(func(): _change_state(finish_state))
-		
-	_active_tween.tween_callback(func(): 
-		if _map_grid and "is_miniature" in _map_grid and not _map_grid.is_miniature:
-			_map_grid._debug_paths = _map_grid._debug_paths.filter(func(e): return e["path"] != path_tiles)
-	)
+		_active_tween.tween_callback(func(): _on_walk_finished(finish_state))
 
 # =============================================================================
 func _on_time_speed_changed(is_paused: bool, speed: float) -> void:

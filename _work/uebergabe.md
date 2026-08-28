@@ -16,6 +16,6 @@ In dieser Session haben wir tiefgreifende Bugfixes am Guest-Flow und Gastro-Loop
 - autoload/GastroManager.gd (Cancellation Endpoint)
 
 ## Nächste Schritte
-- Die int-Konstanten POI_WAIT_TIME_MINUTES (3) und FOOD_WAIT_TIME_MINUTES (45) in GuestActor.gd sollten ins globale Settings-Menü ausgelagert werden, damit der Spieler die Toleranzgrenze seiner Gäste manipulieren kann (entsprechende TODO-Kommentare existieren).
 - Den Gastro-Loop ausgiebig im laufenden Spiel mit Personal-Pausen testen.
 - Offene Punkte aus dem wiki/alpha_backlog.md bearbeiten.
+- issue in linear anlegen. Die int-Konstanten POI_WAIT_TIME_MINUTES (3) und FOOD_WAIT_TIME_MINUTES (45) in GuestActor.gd sollten ins globale Settings-Menü ausgelagert werden, damit der Spieler die Toleranzgrenze seiner Gäste manipulieren kann (entsprechende TODO-Kommentare existieren).

@@ -100,12 +100,7 @@ func _update_visuals() -> void:
 
 func _set_state(new_state: String) -> void:
 	_state = new_state
-	var staff_name = "Unknown"
-	if _staff_data:
-		var first = _staff_data.get("first_name", "")
-		var last = _staff_data.get("last_name", "")
-		if first != "" or last != "":
-			staff_name = (first + " " + last).strip_edges()
+	var staff_name = _get_staff_name()
 	var role = get_job_type()
 	print("[StaffActor] " + staff_name + " (" + role + ") changing to next_state=" + new_state)
 	
@@ -114,6 +109,15 @@ func _set_state(new_state: String) -> void:
 
 func get_staff_id() -> String:
 	return str(_staff_data.get("id", ""))
+
+func _get_staff_name() -> String:
+	var staff_name = "Unknown"
+	if typeof(_staff_data) == TYPE_DICTIONARY:
+		var first = _staff_data.get("first_name", "")
+		var last = _staff_data.get("last_name", "")
+		if first != "" or last != "":
+			staff_name = (first + " " + last).strip_edges()
+	return staff_name
 
 func get_job_type() -> String:
 	return _staff_data.get("role", "housekeeping")
@@ -724,7 +728,7 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 	# Speichere extra_pos für den allerletzten Schritt (z.B. Tisch im Restaurant)
 	_extra_target_pos = extra_pos
 	
-	_path.assign(_map_grid.call("get_path_between_tiles", start_tile, end_tile))
+	_path.assign(_map_grid.call("get_path_between_tiles", start_tile, end_tile, _get_staff_name()))
 	_world_path.clear()
 	
 	if local_path_out.size() > 0:
@@ -778,7 +782,7 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 		start_tile = _map_grid.call("world_to_tile", unstuck_pos) if is_instance_valid(_map_grid) else start_tile
 		
 		if is_instance_valid(_map_grid):
-			_path.assign(_map_grid.call("get_path_between_tiles", start_tile, end_tile))
+			_path.assign(_map_grid.call("get_path_between_tiles", start_tile, end_tile, _get_staff_name()))
 			
 		if _path.size() > 0:
 			_world_path.clear()
@@ -840,7 +844,7 @@ func _start_path_to_lobby() -> void:
 	_room_entry_pos = spawn_pos
 	_extra_target_pos = Vector2.INF
 	
-	_path.assign(_map_grid.call("get_path_between_tiles", start_tile, end_tile))
+	_path.assign(_map_grid.call("get_path_between_tiles", start_tile, end_tile, _get_staff_name()))
 	_world_path.clear()
 	
 	if local_path_out.size() > 0:
@@ -876,7 +880,7 @@ func _start_path_to_lobby() -> void:
 		start_tile = _map_grid.call("world_to_tile", unstuck_pos) if is_instance_valid(_map_grid) else start_tile
 		
 		if is_instance_valid(_map_grid):
-			_path.assign(_map_grid.call("get_path_between_tiles", start_tile, end_tile))
+			_path.assign(_map_grid.call("get_path_between_tiles", start_tile, end_tile, _get_staff_name()))
 			
 		if _path.size() > 0:
 			_world_path.clear()
@@ -934,11 +938,17 @@ func _process_walking(delta: float, speed: float) -> void:
 		
 		if _world_path.is_empty() and dist_to_target < 5.0:
 			global_position = _target_world_pos # Snap exactly to target (e.g. seat or table)
+			if is_instance_valid(_map_grid) and _map_grid.has_method("clear_debug_path"):
+				_map_grid.clear_debug_path(get_staff_id())
 			if _state == "walking":
 				if not _current_task.is_empty() and _current_task.type == "serve_meal" and not _current_task.has("fetched"):
 					_set_state("working")
 					_work_timer = 1.0 # 1 Sekunde in der Küche abholen
 					_current_task["fetched"] = true
+					var target_data = _current_task.get("target", {})
+					if typeof(target_data) == TYPE_DICTIONARY and target_data.has("order_id"):
+						if is_instance_valid(GastroManager) and GastroManager.has_method("mark_order_serving"):
+							GastroManager.mark_order_serving(target_data.order_id)
 				elif not _current_task.is_empty():
 					_set_state("working")
 					var morale = _staff_data.get("morale", 100)

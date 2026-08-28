@@ -29,6 +29,10 @@ func finish_order(order_id: String) -> void:
 		active_orders[order_id]['status'] = 'ready'
 		sig_order_ready.emit(order_id)
 
+func mark_order_serving(order_id: String) -> void:
+	if active_orders.has(order_id):
+		active_orders[order_id]['status'] = 'serving'
+
 func serve_order(order_id: String) -> void:
 	if active_orders.has(order_id):
 		active_orders[order_id]['status'] = 'served'

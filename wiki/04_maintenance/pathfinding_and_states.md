@@ -28,8 +28,8 @@ func _get_logical_start_tile() -> Vector2i:
 
 ## Statuswechsel am POI
 - **Betreten:** Der Tween (`_active_tween`) steuert den Gast von der Tür zum POI-Objekt.
-- **Gym/Pool/Spa:** Der Gast behält sein Sprite (sichtbar).
-- **Gastro/Bar:** Der Gast tween't sichtbar zum Platz, setzt sich und wechselt dann auf `STUDYING_MENU` oder `WAITING_FOR_FOOD`.
+- **Smart-Rooms (Gym/Pool/Spa/Conference):** Der Gast wechselt in `IN_POI`. Der Action-Timer läuft dort ab. Sobald der Timer auf 0 ist, sucht sich der Gast eine neue Interaktion im Raum (`release_interaction` -> `claim_interaction`), bis die Gesamt-Aufenthaltsdauer abgelaufen ist. 
+- **Gastro-Rooms (Restaurant/Bar):** Diese Räume umgehen den `IN_POI` Loop! Sobald der Gast an seinem Tisch ankommt, wechselt er sofort in den Status `STUDYING_MENU`. Dies verhindert ständige Sitzplatzwechsel, während er auf den Kellner wartet.
 
 ## Check-in & Lobby
 - Beim Spawn werden Gäste (aufgrund der überlappenden UI) sofort auf die Rezeptions-Slots gesetzt (ohne Animation).

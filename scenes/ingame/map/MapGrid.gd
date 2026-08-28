@@ -1,4 +1,4 @@
-﻿extends Node2D
+extends Node2D
 ## Verantwortlichkeit: Spielfeld aufbauen, Parzellen-Sichtbarkeit steuern, Kamera-Input.
 ## ANG-186 – Occupancy Grid: globales Bool-Grid ersetzt per-Parzelle Rect2i-Array.
 
@@ -54,7 +54,7 @@ var _occ_h: int
 # ── Debugging ─────────────────────────────────────────────────────────────────
 @warning_ignore("unused_private_class_variable")
 var _show_debug_grid: bool = true
-var _debug_paths: Array[Dictionary] = []  # {path, label}
+var _debug_paths: Dictionary = {}  # {id: {path, label}}
 var _failed_paths: Array[Dictionary] = []
 
 var is_miniature: bool = false
@@ -157,11 +157,15 @@ func get_path_between_tiles(start_tile: Vector2i, end_tile: Vector2i, debug_labe
 	else:
 		var lbl = debug_label if not debug_label.is_empty() else "?"
 		print("[MapGrid] Path OK: ", lbl, " | ", start_tile, " -> ", end_tile, " len=", path.size())
-		_debug_paths.append({"path": path, "label": lbl})
-		if _debug_paths.size() > 10:
-			_debug_paths.pop_front()
+		if debug_label != "":
+			_debug_paths[debug_label] = {"path": path, "label": lbl}
 		queue_redraw()
 	return path
+
+func clear_debug_path(debug_label: String) -> void:
+	if _debug_paths.has(debug_label):
+		_debug_paths.erase(debug_label)
+		queue_redraw()
 
 
 # =============================================================================
@@ -560,7 +564,8 @@ func _draw() -> void:
 					draw_line(Vector2(c.x - 4, c.y), Vector2(c.x + 4, c.y), Color.WHITE, 1.5)
 					draw_line(Vector2(c.x, c.y - 4), Vector2(c.x, c.y + 4), Color.WHITE, 1.5)
 	# Debug paths (gelb) - Grüner Kreis = Start, Roter Kreis = Ziel, Label am Start
-	for entry in _debug_paths:
+	for key in _debug_paths:
+		var entry = _debug_paths[key]
 		var path = entry["path"]
 		var lbl  = entry["label"]
 		if path.size() > 1:

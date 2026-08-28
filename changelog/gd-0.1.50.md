@@ -257,3 +257,16 @@ epair_room) werden zuverlässig angenommen und ausgeführt.
 - **Bar Solo-Modus Fallback:** Sitzt der Gast an der Bar und wartet vergebens auf die Bedienung (nach den 3 Ingame-Minuten), prüft er, ob zumindest der Barkeeper da ist (is_bartender_present()). Wenn ja, bestellt er sein Getränk am Tresen und wechselt in den EATING-Status.
 - **Bar Eintritt-Fix:** Der Eintritt für die Bar wird nun nicht mehr blind abgebucht. Ist der Gastro-Loop aktiv (Bedienung und Barkeeper anwesend), entfällt der Eintritt, da über Menü gezahlt wird. Fehlt die Bedienung (Solo-Modus), wird der Eintritt von 15 Geld als Pauschalpreis für Getränke beim Betreten abgerechnet.
 - **Food-Timeout für Gäste:** Wenn ein Gast im Restaurant erfolgreich bestellt hat, die Bedienung aber ausfällt (z.B. in Pause geht) und das Essen nicht kommt, wartet der Gast nicht mehr unendlich lange. Nach 45 Ingame-Minuten bricht der Gast wütend ab (-15 Zufriedenheits-Malus) und das ungelieferte Essen wird in der Küche gelöscht (GastroManager.cancel_order()).
+
+### 28.08.2026 - Gastro-Loop Finalisierung & Live-Monitor Fixes (Session End)
+
+#### Bugfixes
+- **Smart-Room Loop Bug (Table Hopping):** Gäste wechselten in Smart-Räumen (und im Restaurant) kontinuierlich ihre Sitzplätze. Ursache war, dass der `IN_POI` State im `GuestActor.gd` den `_action_timer` nicht dekrementierte, wodurch in jedem Frame ein neuer Sitzplatz beansprucht (`claim_interaction`) und der alte freigegeben wurde (`release_interaction`). Der Timer-Check wurde hinzugefügt.
+- **Gastro-Room Bypass:** Gastro-Räume (Restaurant, Bar, Kiosk) überspringen nun die generische Smart-Room-Schleife (`IN_POI`) nach der Ankunft und wechseln stattdessen direkt in den Status `STUDYING_MENU`. Dies löst das Problem des redundanten Platzwechselns in Restaurants vollständig.
+- **Live-Monitor Bar:** Die Status-Anzeige der Bar wurde an das Restaurant angeglichen. Sie liest nun den internen `actor_state` aus und zeigt "Studiert Speisekarte" (statt pauschal "Sitzt / Trinkt") sowie den neuen Lieferstatus "Wird abgeholt & serviert" an.
+- **Live-Monitor Parse Error:** Einen Scope-Fehler in `Bar.gd` behoben, der verhinderte, dass die Bar-Skripte nach dem letzten Update kompiliert wurden (`actor_state` deklariert im if-Block).
+- **StaffActor Order-ID Fix:** Kellner konnten den Status einer Bestellung beim Abholen in der Küche nicht auf "serving" setzen, da sie in der Aufgaben-Struktur (Task) an der falschen Stelle nach der `order_id` suchten. Dies wurde behoben (Zugriff auf `target.order_id`), sodass die Live-Ansicht den Servier-Vorgang nun korrekt anzeigt.
+- **Staff Debug-Pfade:** Die MapGrid Debug-Linien für das Personal zeigten die interne UUID anstatt des Namens. `StaffActor.gd` übergibt nun wieder korrekt den generierten Vor- und Nachnamen an den Pfad-Renderer.
+
+#### Refactoring
+- **Legacy Seat-Logic entfernt:** Die alten, harten `claim_seat` und `claim_podium` Fallbacks wurden aus `GuestActor.gd` (`_walk_to_poi` & `_on_poi_arrived`) komplett entfernt. Das Spiel nutzt nun ausschließlich die Smart-Room API (`claim_interaction` / `get_available_interactions`).

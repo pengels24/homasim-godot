@@ -374,8 +374,8 @@ func get_live_details() -> Array[Dictionary]:
 			var gm = get_tree().get_first_node_in_group("guest_manager")
 			var guest_member = gm.get_guest(seat["occupied_by"]) if gm else null
 			
+			var actor_state = -1
 			if guest_member != null:
-				var actor_state = -1
 				for a in get_tree().get_nodes_in_group("guest_actors"):
 					var gm_prop = a.get("_guest_member")
 					if gm_prop and gm_prop.id == seat["occupied_by"]:
@@ -385,7 +385,7 @@ func get_live_details() -> Array[Dictionary]:
 					continue
 				guest_name = guest_member.name
 			
-			var status_text = GameState.T("poi.bar.drinking")
+			var status_text = GameState.T("poi.restaurant.studying_menu")
 			var order_id = seat.get("order_id", "")
 			
 			if order_id != "":
@@ -403,8 +403,20 @@ func get_live_details() -> Array[Dictionary]:
 						status_text = GameState.T("poi.restaurant.cooking") + ": " + r_name
 					elif s == "ready":
 						status_text = GameState.T("poi.restaurant.waiting_service")
+					elif s == "serving":
+						var t_str = GameState.T("poi.restaurant.serving")
+						if t_str == "poi.restaurant.serving": t_str = "Wird abgeholt & serviert"
+						status_text = t_str + ": " + r_name
 				else:
-					status_text = GameState.T("poi.restaurant.eating")
+					if actor_state == 8: # State.EATING
+						status_text = GameState.T("poi.bar.drinking")
+					elif actor_state == 7: # State.WAITING_FOR_FOOD
+						status_text = GameState.T("poi.restaurant.waiting_for_food")
+			else:
+				if actor_state == 8: # State.EATING
+					status_text = GameState.T("poi.bar.drinking")
+				elif actor_state == 7: # State.WAITING_FOR_FOOD
+					status_text = GameState.T("poi.restaurant.waiting_for_food")
 			
 			var c = Color.WHITE
 			if "custom_color" in self and typeof(custom_color) == TYPE_COLOR and custom_color != Color.WHITE:

@@ -68,7 +68,13 @@ func _get_staff_room(staff_data: Dictionary) -> Node2D:
 			if def.get("id") == "staff_small":
 				all_staff_rooms.append(r)
 				if r.has_method("has_free_seat") and r.has_free_seat():
-					staff_rooms.append(r)
+					var spawn_occupants = 0
+					for a in _actors:
+						if a.get("_current_room") == r:
+							spawn_occupants += 1
+					var cap = def.get("capacity", 4)
+					if spawn_occupants < cap:
+						staff_rooms.append(r)
 				
 		if assigned_room_id != "":
 			if GuestManager._room_key(r) == assigned_room_id:

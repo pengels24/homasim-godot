@@ -526,32 +526,45 @@ func _process_idle() -> void:
 							var dir = _current_room.get_bartender_look_dir()
 							_sprite.rotation = dir.angle() + PI / 2.0
 					_think_timer = 2.0
-				elif get_job_type() == "lifeguard" and is_instance_valid(_current_room) and _current_room.has_method("get_lifeguard_stand_pos"):
+				elif get_job_type() == "lifeguard" and is_instance_valid(_current_room):
+					var staff_interactions = []
+					if _current_room.has_method("get_available_staff_interactions"):
+						staff_interactions = _current_room.get_available_staff_interactions(self)
+					
+					var chair_interaction = null
+					for i in staff_interactions:
+						if i.type == "lifeguard":
+							chair_interaction = i
+							break
+							
 					# 70% Zeit auf Hochsitz sitzen, 30% Patrouille
-					if randf() < 0.7 and _current_room.has_method("is_lifeguard_chair_free") and _current_room.call("is_lifeguard_chair_free", get_staff_id()):
-						var chair_pos = _current_room.get_lifeguard_stand_pos()
+					if randf() < 0.7 and chair_interaction != null:
+						var chair_pos = chair_interaction.target_pos
 						if global_position.distance_to(chair_pos) > 6.0:
 							# Zum Hochsitz gehen
 							if _current_room.has_method("get_local_path"):
 								var lp = _current_room.get_local_path(global_position, chair_pos)
 								if lp.size() > 0:
-									_current_room.call("claim_lifeguard_chair", get_staff_id())
+									_current_room.call("claim_interaction", get_staff_id(), chair_interaction.id)
 									_world_path = lp
 									_target_world_pos = _world_path[0]
 									_set_state("walking")
 									_path = []
 						else:
-							# Sitzt schon dort — claim sicherstellen, leicht drehen
-							_current_room.call("claim_lifeguard_chair", get_staff_id())
-							if _current_room.has_method("get_lifeguard_look_dir"):
-								_sprite.rotation = _current_room.get_lifeguard_look_dir()
+							# Sitzt schon dort – claim sicherstellen, leicht drehen
+							var claim = _current_room.call("claim_interaction", get_staff_id(), chair_interaction.id)
+							if typeof(claim) == TYPE_DICTIONARY and claim.has("look_at_dir"):
+								_sprite.rotation = claim.look_at_dir
 							else:
 								_sprite.rotation = PI
 							_think_timer = 3.0 + randf() * 4.0
 					else:
 						# Patrouille um den Pool
-						if _current_room.has_method("leave_lifeguard_chair"):
-							_current_room.call("leave_lifeguard_chair", get_staff_id())
+						if _current_room.has_method("release_interaction"):
+							_current_room.call("release_interaction", get_staff_id())
+						elif _current_room.has_method("leave_lifeguard_chair"):
+							_current_room.call("leave_lifeguard_chair", get_staff_id()) # Legacy fallback
+							
 						if _current_room.has_method("get_local_path"):
 							var patrol_target = Vector2.ZERO
 							if _current_room.has_method("get_patrol_target"):

@@ -196,6 +196,19 @@ func get_available_interactions(_actor: Node2D) -> Array[Dictionary]:
 	})
 	return interactions
 
+func get_available_staff_interactions(_actor: Node2D) -> Array[Dictionary]:
+	var interactions: Array[Dictionary] = []
+	for i in range(_room_seats_staff_only.size()):
+		var s = _room_seats_staff_only[i]
+		if s["occupied_by"] == "":
+			interactions.append({
+				"id": "staff_seat_" + str(i),
+				"type": "lifeguard",
+				"target_pos": s["node"].global_position,
+				"duration": 0.0
+			})
+	return interactions
+
 func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 	if interaction_id.begins_with("bed_"):
 		var idx = interaction_id.replace("bed_", "").to_int()
@@ -221,6 +234,18 @@ func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 					"look_at_pos": look_pos,
 					"duration": randf_range(10.0, 20.0)
 				}
+	elif interaction_id.begins_with("staff_seat_"):
+		var idx = interaction_id.replace("staff_seat_", "").to_int()
+		if idx >= 0 and idx < _room_seats_staff_only.size():
+			var s = _room_seats_staff_only[idx]
+			if s["occupied_by"] == "":
+				s["occupied_by"] = actor_id
+				var look_dir = s["node"].global_rotation if "global_rotation" in s["node"] else (PI / 2.0)
+				return {
+					"target_pos": s["node"].global_position,
+					"look_at_dir": look_dir,
+					"duration": 0.0
+				}
 	elif interaction_id == "wander_center":
 		return {
 			"target_pos": get_service_position(),
@@ -238,6 +263,9 @@ func release_interaction(actor_id: String) -> void:
 		if b["occupied_by"] == actor_id:
 			b["occupied_by"] = ""
 	for s in _room_seats:
+		if s["occupied_by"] == actor_id:
+			s["occupied_by"] = ""
+	for s in _room_seats_staff_only:
 		if s["occupied_by"] == actor_id:
 			s["occupied_by"] = ""
 

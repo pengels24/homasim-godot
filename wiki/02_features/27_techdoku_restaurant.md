@@ -11,8 +11,8 @@ Das `RestaurantSmall` fungiert als der zentrale Gastro-POI für Gäste, in dem S
 ## 2. Sitzplatz-Management (`_seats`)
 Das Skript scannt beim Start alle Kinder unter `Interior/Furniture/Chairs`. Jeder Stuhl ist ein Sitzplatz.
 - **Zustände eines Platzes:** `clean` (Frei & Sauber), `dirty` (Schmutzig), `occupied` (Belegt).
-- Ein Gast beansprucht über `claim_seat()` einen sauberen Platz.
-- Steht der Gast auf (`leave_seat()`), wird der Platz `dirty` und das Restaurant generiert über den `TaskManager` einen `clean_table` Task für die Bedienung.
+- Ein Gast beansprucht über `claim_interaction()` (Smart-Room API) einen sauberen Platz.
+- Steht der Gast auf (`release_interaction()`), wird der Platz `dirty` und das Restaurant generiert über den `TaskManager` einen `clean_table` Task für die Bedienung.
 
 ## 3. Bestellablauf (Order Logic)
 1. **Bestellung aufgeben:** Wenn der Gast sitzt, ruft er `place_order_for_seat()` auf.

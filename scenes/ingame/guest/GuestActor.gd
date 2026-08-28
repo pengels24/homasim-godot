@@ -890,7 +890,7 @@ func _on_poi_arrived() -> void:
 		if _current_poi_id in ["restaurant_small", "bar", "kiosk"]:
 			_change_state(State.STUDYING_MENU)
 		else:
-			_action_timer = 0.0 # Force immediate process_waiting
+			_action_timer = 0.01 # Force immediate process_waiting next frame without aborting
 		return
 
 	if seat_pos != Vector2.ZERO and seat_pos != Vector2.INF:

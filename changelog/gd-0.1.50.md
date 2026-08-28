@@ -270,3 +270,17 @@ epair_room) werden zuverlässig angenommen und ausgeführt.
 
 #### Refactoring
 - **Legacy Seat-Logic entfernt:** Die alten, harten `claim_seat` und `claim_podium` Fallbacks wurden aus `GuestActor.gd` (`_walk_to_poi` & `_on_poi_arrived`) komplett entfernt. Das Spiel nutzt nun ausschließlich die Smart-Room API (`claim_interaction` / `get_available_interactions`).
+
+
+### Session Update (Pool Fixes & Live Monitor)
+- **Fix (GuestActor):** Beim Betreten eines Smart Rooms (wie dem Pool) wurde `_action_timer` auf 0.0 gesetzt, was sofort den `_process_waiting`-Loop lahmlegte. Gäste blieben dauerhaft im Eingang stehen (Timer auf 0.01 korrigiert).
+- **Feature (Pool):** `PoolSmall` nutzt im Live-Monitor nun die Iteration über die Gruppe `guest_actors` anstatt der starren Auswertung von `_room_seats`, um wandernde/schwimmende Gäste korrekt zu erfassen.
+- **Feature (Pool):** `get_available_interactions()` in `PoolSmall` überschrieben. `"wander"`-Aktionen werden gefiltert, damit Gäste am Pool entweder liegen oder schwimmen und nicht sinnlos in der Ecke stehen.
+- **Feature (Pool):** Der Live-Monitor zeigt bei Gästen im Pool nun die verbleibende Aufenthaltszeit in Ingame-Minuten an (z.B. "Baden (74m)").
+
+
+### Session Update (Pool Fixes & Live Monitor)
+- **Fix (GuestActor):** Beim Betreten eines Smart Rooms (wie dem Pool) wurde `_action_timer` auf 0.0 gesetzt, was sofort den `_process_waiting`-Loop lahmlegte. Gäste blieben dauerhaft im Eingang stehen (Timer auf 0.01 korrigiert).
+- **Feature (Pool):** `PoolSmall` nutzt im Live-Monitor nun die Iteration über die Gruppe `guest_actors` anstatt der starren Auswertung von `_room_seats`, um wandernde/schwimmende Gäste korrekt zu erfassen.
+- **Feature (Pool):** `get_available_interactions()` in `PoolSmall` überschrieben. `"wander"`-Aktionen werden gefiltert, damit Gäste am Pool entweder liegen oder schwimmen und nicht sinnlos in der Ecke stehen.
+- **Feature (Pool):** Der Live-Monitor zeigt bei Gästen im Pool nun die verbleibende Aufenthaltszeit in Ingame-Minuten an (z.B. "Baden (74m)").

@@ -32,7 +32,8 @@ Wenn der User diesen Skill aufruft, arbeite folgende Schritte **streng sequenzie
 5. **Wiki Tech-Doku pflegen (Lebenswichtig!):**
    - Gehe gedanklich die Dateien durch, die du in der Session verändert hast.
    - Prüfe den Ordner `wiki/` (z.B. `wiki/rooms/` oder `wiki/04_maintenance/`), ob es dort Dokumentationen gibt, die zu diesen Änderungen passen.
-   - Aktualisiere die entsprechenden `.md`-Dateien (z.B. `bar.md`, wenn du Logik an der Bar geändert hast).
+   - **WICHTIG:** Suche aktiv (mit grep_search) nach veralteten Begriffen oder Methoden (z.B. `claim_seat`, `IN_POI` Loops etc.), die durch deine Architektur-Änderungen obsolet geworden sind, und tilge sie aus **allen** zugehörigen Tech-Dokus.
+   - Aktualisiere die entsprechenden `.md`-Dateien (z.B. `bar.md` oder `27_techdoku_restaurant.md`), damit sie immer den *aktuellsten* Code-Stand widerspiegeln.
    - Lege neue `.md`-Dateien an, falls völlig neue Mechaniken oder Räume erschaffen wurden, die noch keine Doku haben.
 
 6. **Git Commit (Sauberer Cut):**

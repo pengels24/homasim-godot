@@ -176,27 +176,6 @@ func release_interaction(guest_id: String) -> void:
 			seat["order_id"] = ""
 			break
 
-# =============================================================================
-# LEGACY COMPATIBILITY SHIMS (für GuestActor der noch die alte API nutzt)
-# =============================================================================
-
-func has_free_seat() -> bool:
-	for seat in _seats:
-		if seat["occupied_by"] == "" and seat["status"] == "clean":
-			return true
-	return false
-
-## Legacy: claim_seat → delegiert an claim_interaction
-func claim_seat(guest_id: String) -> Vector2:
-	var avail = get_available_interactions(null)
-	if avail.size() > 0:
-		var result = claim_interaction(guest_id, avail[0]["id"])
-		return result.get("target_pos", Vector2.ZERO)
-	return Vector2.ZERO
-
-## Legacy: leave_seat → delegiert an release_interaction
-func leave_seat(guest_id: String) -> void:
-	release_interaction(guest_id)
 
 func get_staff_node(role: String, _purpose: String) -> Vector2:
 	var target_global = global_position + Vector2(16, 16)

@@ -90,59 +90,71 @@ func _apply_visuals() -> void:
 	
 	super._apply_visuals()
 
-func get_lifeguard_stand_pos() -> Vector2:
-	# ChairSpecial-Node verwenden wenn vorhanden
-	var chair = get_node_or_null("Interior/Furniture/Chairs/ChairSpecial")
-	if is_instance_valid(chair):
-		return chair.global_position
-	return global_position + Vector2(24.0, 16.0)
-
-func get_lifeguard_look_dir() -> float:
-	var chair = get_node_or_null("Interior/Furniture/Chairs/ChairSpecial")
-	if is_instance_valid(chair):
-		return chair.global_rotation
-	return PI / 2.0
-
-func claim_lifeguard_chair(staff_id: String) -> bool:
-	for s in _room_seats_staff_only:
-		if s["occupied_by"] == "":
-			s["occupied_by"] = staff_id
-			return true
-	return false
-
-func leave_lifeguard_chair(staff_id: String) -> void:
-	for s in _room_seats_staff_only:
-		if s["occupied_by"] == staff_id:
-			s["occupied_by"] = ""
-
-func is_lifeguard_chair_free(staff_id: String = "") -> bool:
-	for s in _room_seats_staff_only:
-		if s["occupied_by"] == "" or (staff_id != "" and s["occupied_by"] == staff_id):
-			return true
-	return false
+# --- LEGACY STAFF METHODS (SMART ROOM API USED INSTEAD) ---
+#func get_lifeguard_stand_pos() -> Vector2:
+#	# ChairSpecial-Node verwenden wenn vorhanden
+#	var chair = get_node_or_null("Interior/Furniture/Chairs/ChairSpecial")
+#	if is_instance_valid(chair):
+#		return chair.global_position
+#	return global_position + Vector2(24.0, 16.0)
+#
+#func get_lifeguard_look_dir() -> float:
+#	var chair = get_node_or_null("Interior/Furniture/Chairs/ChairSpecial")
+#	if is_instance_valid(chair):
+#		return chair.global_rotation
+#	return PI / 2.0
+#
+#func claim_lifeguard_chair(staff_id: String) -> bool:
+#	for s in _room_seats_staff_only:
+#		if s["occupied_by"] == "":
+#			s["occupied_by"] = staff_id
+#			return true
+#	return false
+#
+#func leave_lifeguard_chair(staff_id: String) -> void:
+#	for s in _room_seats_staff_only:
+#		if s["occupied_by"] == staff_id:
+#			s["occupied_by"] = ""
+#
+#func is_lifeguard_chair_free(staff_id: String = "") -> bool:
+#	for s in _room_seats_staff_only:
+#		if s["occupied_by"] == "" or (staff_id != "" and s["occupied_by"] == staff_id):
+#			return true
+#	return false
+#
+# =============================================================================
+# --- LEGACY GUEST METHODS ---
+#func claim_seat(guest_id: String) -> Vector2:
+#	for s in _room_seats:
+#		if s["occupied_by"] == guest_id:
+#			return s["node"].global_position
+#			
+#	var free_seats = []
+#	for s in _room_seats:
+#		if s["occupied_by"] == "":
+#			free_seats.append(s)
+#			
+#	if free_seats.size() > 0:
+#		var s = free_seats[randi() % free_seats.size()]
+#		s["occupied_by"] = guest_id
+#		return s["node"].global_position
+#		
+#	return Vector2.INF
+#func leave_seat(guest_id: String) -> void:
+#	for s in _room_seats:
+#		if s["occupied_by"] == guest_id:
+#			s["occupied_by"] = ""
 
 # =============================================================================
-
-func claim_seat(guest_id: String) -> Vector2:
-	for s in _room_seats:
-		if s["occupied_by"] == guest_id:
-			return s["node"].global_position
-			
-	var free_seats = []
-	for s in _room_seats:
-		if s["occupied_by"] == "":
-			free_seats.append(s)
-			
-	if free_seats.size() > 0:
-		var s = free_seats[randi() % free_seats.size()]
-		s["occupied_by"] = guest_id
-		return s["node"].global_position
-		
-	return Vector2.INF
-func leave_seat(guest_id: String) -> void:
-	for s in _room_seats:
-		if s["occupied_by"] == guest_id:
-			s["occupied_by"] = ""
+func is_functional() -> bool:
+	for actor in get_tree().get_nodes_in_group("staff_actors"):
+		if actor.get("_current_room") == self:
+			var staff_data = actor.get("_staff_data")
+			if typeof(staff_data) == TYPE_DICTIONARY:
+				var role = staff_data.get("role", "")
+				if role == "lifeguard":
+					return true
+	return false
 
 # =============================================================================
 # LIVE-MONITOR
@@ -150,30 +162,33 @@ func leave_seat(guest_id: String) -> void:
 func get_live_details() -> Array[Dictionary]:
 	var details: Array[Dictionary] = []
 	
-	for seat in _room_seats:
-		if seat["occupied_by"] != "":
-			var guest_name = "Gast"
-			var gm = get_tree().get_first_node_in_group("guest_manager")
+	for actor in get_tree().get_nodes_in_group("guest_actors"):
+		var valid_states = [3, 6, 7, 8, 9] # IN_POI, STUDYING_MENU, WAITING_FOR_FOOD, EATING, SITTING
+		if actor.get("current_state") in valid_states and actor.get("_current_poi_id") == "pool_small":
+			var gm = actor.get("_guest_member")
 			if gm:
-				var guest_node = gm.get_guest(seat["occupied_by"])
-				if guest_node:
-					var actor_state = -1
-					for a in get_tree().get_nodes_in_group("guest_actors"):
-						if a.get("actor_id") == seat["occupied_by"]:
-							actor_state = a.get("current_state")
-							break
-					if actor_state == 1: # State.WALKING
-						continue
-					guest_name = guest_node.get("_guest_member").name if guest_node.get("_guest_member") else "Gast"
-			
-			var status_text = "Schwimmt / Sonnt sich"
-			details.append({
-				"left": guest_name,
-				"right": status_text,
-				"color": Color("#06b6d4")
-			})
+				var time_left_sec = actor.get("_poi_stay_timer")
+				var time_left_mins = 0
+				# Use string check or TimeManager directly depending on Godot 4 setup
+				if time_left_sec != null:
+					time_left_mins = int(time_left_sec / 4.0) # 4.0 is SECONDS_PER_GAME_MINUTE
+				
+				var status_text = "Baden"
+				if time_left_mins > 0:
+					status_text += " (%dm)" % time_left_mins
+					
+				details.append({
+					"left": gm.name,
+					"right": status_text,
+					"color": Color("#06b6d4")
+				})
 			
 	return details
+
+func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
+	var interactions = super.get_available_interactions(actor)
+	# Im Pool sollen die Gäste nur sitzen oder schwimmen, nicht dumm in der Ecke stehen!
+	return interactions.filter(func(i): return i.type != "wander")
 
 
 

@@ -1,55 +1,52 @@
 import os
-import datetime
+import re
 
 # 1. Update Changelog
-changelog_path = "d:/game-dev/homasim-godot/changelog/gd-0.1.50.md"
-with open(changelog_path, "a", encoding="utf-8") as f:
-    f.write("\n\n### 23.08.2026 - Pathfinding Fixes (End of Session)\n")
-    f.write("- **Bugfix:** GuestActor teleportiert bei fehlendem Pfad zur Zimmertür.\n")
-    f.write("- **Bugfix:** Room.gd ersetzt bei INF-Zielen das Ziel durch einen gültigen AStar Punkt im Raum, um Gäste-Wand-Clipping in der Lobby zu verhindern.\n")
-    f.write("- **Logs:** `push_warning` für Pfad-Fehlschläge zu regulärem `print` geändert.\n")
-    f.write("- **Logs:** GuestActor loggt nun reguläre Status-Wechsel (`_change_state`) analog zum StaffActor.\n")
-    f.write("- **Debug:** MapGrid gibt nun bei AStar-Fehlschlägen auf derselben X-Achse die Tile-Solidity für jedes Tile auf der Achse aus.\n")
-    f.write("- **Translation:** Fehlender Key `roomdef.name.long.lobby` in `language.csv` ergänzt.\n")
+changelog_path = 'changelog/gd-0.1.50.md'
+changelog_text = """
+
+### Session Update (Pool Fixes & Live Monitor)
+- **Fix (GuestActor):** Beim Betreten eines Smart Rooms (wie dem Pool) wurde `_action_timer` auf 0.0 gesetzt, was sofort den `_process_waiting`-Loop lahmlegte. Gäste blieben dauerhaft im Eingang stehen (Timer auf 0.01 korrigiert).
+- **Feature (Pool):** `PoolSmall` nutzt im Live-Monitor nun die Iteration über die Gruppe `guest_actors` anstatt der starren Auswertung von `_room_seats`, um wandernde/schwimmende Gäste korrekt zu erfassen.
+- **Feature (Pool):** `get_available_interactions()` in `PoolSmall` überschrieben. `"wander"`-Aktionen werden gefiltert, damit Gäste am Pool entweder liegen oder schwimmen und nicht sinnlos in der Ecke stehen.
+- **Feature (Pool):** Der Live-Monitor zeigt bei Gästen im Pool nun die verbleibende Aufenthaltszeit in Ingame-Minuten an (z.B. "Baden (74m)").
+"""
+
+if os.path.exists(changelog_path):
+    with open(changelog_path, 'a', encoding='utf-8') as f:
+        f.write(changelog_text)
 
 # 2. Update Alpha Backlog
-backlog_path = "d:/game-dev/homasim-godot/wiki/alpha_backlog.md"
-try:
-    with open(backlog_path, "r", encoding="utf-8") as f:
-        backlog_content = f.read()
+backlog_path = 'wiki/alpha_backlog.md'
+if os.path.exists(backlog_path):
+    with open(backlog_path, 'r', encoding='utf-8') as f:
+        content = f.read()
     
-    # Simple replace for completed items if they exist, otherwise append.
-    if "- [ ] Lobby: Guest clipping / standing in walls" in backlog_content:
-        backlog_content = backlog_content.replace("- [ ] Lobby: Guest clipping / standing in walls", "- [x] Lobby: Guest clipping / standing in walls (Fixed via INF valid point replacement)")
-    elif "### Bugfixes & Polish" in backlog_content:
-        backlog_content = backlog_content.replace("### Bugfixes & Polish\n", "### Bugfixes & Polish\n- [x] Lobby: Guest clipping / standing in walls (Fixed via INF valid point replacement)\n- [x] MapGrid: Pathfinding debug output for straight-line corridor failures\n- [x] GuestActor: Standardized State-Change Logging\n")
-    else:
-        backlog_content += "\n### Session Bugfixes\n- [x] Lobby: Guest clipping / standing in walls\n- [x] MapGrid: Pathfinding debug output for straight-line corridor failures\n"
+    new_items = """- ✅ **GuestActor Smart Room Fix:** `_action_timer` Bug beim Betreten gefixed (verhinderte Interaktions-Claim).
+- ✅ **Pool Live Monitor:** Erfasst nun alle Gäste der Gruppe `guest_actors` (nicht nur sitzende) inkl. verbleibender Ingame-Minuten-Anzeige ("Baden (Xm)").
+- ✅ **Pool Interaktionen:** `get_available_interactions()` überschrieben, um `"wander"` im Pool zu unterbinden."""
+    
+    content = content.replace("## 🛠 Ungeplante Fixes & Features (Aktuelle Session)\n- (leer)", f"## 🛠 Ungeplante Fixes & Features (Aktuelle Session)\n{new_items}")
+    with open(backlog_path, 'w', encoding='utf-8') as f:
+        f.write(content)
+
+# 3. Update pool_small.md
+pool_doku_path = 'wiki/rooms/pool_small.md'
+if os.path.exists(pool_doku_path):
+    try:
+        with open(pool_doku_path, 'r', encoding='utf-8') as f:
+            pool_content = f.read()
+    except UnicodeDecodeError:
+        with open(pool_doku_path, 'r', encoding='latin-1') as f:
+            pool_content = f.read()
         
-    with open(backlog_path, "w", encoding="utf-8") as f:
-        f.write(backlog_content)
-except Exception as e:
-    print("Backlog error:", e)
-
-# 3. Write Uebergabe
-uebergabe_path = "d:/game-dev/homasim-godot/_work/uebergabe.md"
-uebergabe_content = """# Übergabeprotokoll (23.08.2026)
-
-## Status
-Der User hat die Session beendet. Wir haben das Problem behoben, dass Gäste (insbesondere in der Lobby) in der Wand stehen, indem wir `Vector2.INF` als Ziel in `Room.gd` (`get_local_path`) durch einen validen AStar-Punkt im Raum (`_local_astar`) ersetzen.
-Außerdem gab es einen Fehler, bei dem `MapGrid` keinen Pfad zwischen zwei Corridor-Tiles (z.B. `(0, 38)` und `(0, 35)`) fand, was zu einem Notfall-Teleport in `GuestActor.gd` führte.
-
-## Änderungen
-- **GuestActor.gd**: `push_warning` bei Pfad-Fehlern in normales `print` geändert. Standard State-Change Log (`[GuestActor] %s changed state: %s -> %s`) in `_change_state` eingebaut. Die alten Debug-Logs (`[DEBUG]`) bleiben weiterhin sauber auskommentiert.
-- **Room.gd**: Bei `Vector2.INF`-Target wird nun ein valider Random-Punkt aus dem `_local_astar` gesucht, anstatt die rohe Tür-Koordinate zu nutzen, was das "Steht in der Wand"-Clipping bei der Lobby behoben hat.
-- **MapGrid.gd**: Deep-Debug Log in `get_path_between_tiles` eingebaut. Wenn ein Pfad fehlschlägt und Start/Ende auf der gleichen X-Achse liegen (Corridor), werden nun alle Tiles dazwischen samt `is_point_solid` und `_occ`-Wert ins Log geschrieben.
-- **language.csv**: Fehlender Key `roomdef.name.long.lobby` hinzugefügt.
-
-## Nächste Schritte (für den nächsten Agenten)
-- Sobald das Spiel das nächste Mal läuft, falls der Teleport-Fehler (z.B. von Bar zum Zimmer) auftritt, das Log studieren. Der neue Debug-Output in `MapGrid.gd` wird präzise ausgeben, *welches* Tile zwischen `(0, 38)` und `(0, 35)` im Corridor auf `solid = true` steht oder welchen falschen `_occ` Wert es hat.
-- Tokens wurden gespart, die nächste Session startet morgen nach dem regulären Job des Users.
-"""
-with open(uebergabe_path, "w", encoding="utf-8") as f:
-    f.write(uebergabe_content)
+    pool_update = """  - Überschreibt `get_available_interactions()`, um `"wander"`-Aktionen zu entfernen. Gäste nutzen ausschließlich Liegen oder das Wasser.
+  - Der Live-Monitor (`get_live_details()`) iteriert über die Gruppe `guest_actors` (statt `_room_seats`), um auch nicht-sitzende Gäste (im Wasser) korrekt anzuzeigen.
+  - Berechnet und zeigt die verbleibende Aufenthaltszeit in Minuten im Live-Monitor an."""
     
-print("Doku updated successfully.")
+    if "get_available_interactions" not in pool_content:
+        pool_content = pool_content.replace("- G", pool_update + "\n  - G")
+        with open(pool_doku_path, 'w', encoding='utf-8') as f:
+            f.write(pool_content)
+
+print("Doku aktualisiert!")

@@ -1,14 +1,17 @@
 # Pool (Klein)
 
 ## Beschreibung
-Der kleine Pool bietet Gästen eine Erholungs- und Freizeitmöglichkeit im Hotel. Er erhöht die Zufriedenheit der Gäste und dient als POI (Point of Interest).
+Der kleine Pool bietet GÃ¤sten eine Erholungs- und FreizeitmÃ¶glichkeit im Hotel. Er erhÃ¶ht die Zufriedenheit der GÃ¤ste und dient als POI (Point of Interest).
 
 ## Funktion & Logik
-- **Gäste:** Gäste besuchen den Pool und verbringen Zeit im Wasser. Die Animation für das Schwimmen wird direkt abgespielt, während sie sich im Raum aufhalten.
-- **Personal:** Ein Bademeister wird benötigt, um die Sicherheit zu gewährleisten. Der Bademeister patrouilliert am Rand des Pools (auf den trockenen Fliesen) und durchquert nicht das Wasser. Hierfür wird eine spezielle Navigationslogik (`get_patrol_target()`) verwendet.
+- **GÃ¤ste:** GÃ¤ste besuchen den Pool und verbringen Zeit im Wasser. Die Animation fÃ¼r das Schwimmen wird direkt abgespielt, wÃ¤hrend sie sich im Raum aufhalten.
+- **Personal:** Ein Bademeister wird benÃ¶tigt, um die Sicherheit zu gewÃ¤hrleisten. Der Bademeister patrouilliert am Rand des Pools (auf den trockenen Fliesen) und durchquert nicht das Wasser. HierfÃ¼r wird eine spezielle Navigationslogik (`get_patrol_target()`) verwendet.
 
 ## Technische Details
 - **Raum-ID:** `pool_small`
 - **Besonderheiten:**
   - Nutzt `has_method("get_patrol_target")`, um dem Bademeister sichere Wegpunkte am Beckenrand zuzuweisen (oben, unten, links, rechts vom Wasser).
-  - Gäste, die den Pool betreten, überspringen das "Menü studieren" und gehen direkt in den Status `IN_POI` über.
+    - Ãœberschreibt `get_available_interactions()`, um `"wander"`-Aktionen zu entfernen. GÃ¤ste nutzen ausschlieÃŸlich Liegen oder das Wasser.
+  - Der Live-Monitor (`get_live_details()`) iteriert Ã¼ber die Gruppe `guest_actors` (statt `_room_seats`), um auch nicht-sitzende GÃ¤ste (im Wasser) korrekt anzuzeigen.
+  - Berechnet und zeigt die verbleibende Aufenthaltszeit in Minuten im Live-Monitor an.
+  - GÃ¤ste, die den Pool betreten, Ã¼berspringen das "MenÃ¼ studieren" und gehen direkt in den Status `IN_POI` Ã¼ber.

@@ -1,5 +1,5 @@
 # Smart-Room Architektur (TechDoku)
-> **Zuletzt aktualisiert:** 28.08.2026 (Phase 1)
+> **Zuletzt aktualisiert:** 31.08.2026 (Phase 1)
 > **Relevante Scripte:** `Room.gd`, `GuestActor.gd`, `StaffActor.gd`
 
 Das "Smart Room" System ersetzt das alte, harte `claim_seat()` und `room_claim_bed()` System. Räume sind nun intelligent, parsen ihre eigenen Möbel beim Laden (über den Namen der Nodes) und bieten Gästen dynamisch Interaktionen an, aus denen die KIs dann per Gewichtung und Zustand wählen.
@@ -24,6 +24,12 @@ Die Gäste rufen nicht mehr `claim_seat` auf, sondern diese drei Methoden:
    Versucht, die gewünschte Interaktion zu reservieren. Blockiert das Möbelstück für andere. Gibt `target_pos` (wo der Actor hinlaufen soll) und oft `duration` zurück.
 3. **`release_interaction(actor_id)`**
    Gibt alle vom Actor belegten Möbel in diesem Raum wieder frei. Wird aufgerufen, wenn der State wechselt (z.B. der Gast aufsteht).
+
+### `is_functional()`
+Das Smart-Room System bietet in `Room.gd` eine universelle `is_functional()` Methode für alle abgeleiteten Räume.
+Sie prüft automatisch:
+- Hat der Raum `min_staff: 0`? Dann ist er immer funktional (Beispiel: Gym).
+- Benötigt er Personal (`required_role`)? Dann wird geprüft, ob ein passender Mitarbeiter (`staff_actors`) entweder **physisch im Raum steht**, ODER gerade einen Arbeitsauftrag (`_current_task.target.room == self`) für diesen Raum ausführt (z.B. Kellner holt Essen in der Küche).
 
 ---
 
@@ -53,7 +59,7 @@ Die folgende Tabelle zeigt, welche Aktionen ein Raumtyp über die Smart-Room-Sch
 | **Family, Superior** | `sleep`, `sit`, `wander` | Node `*Bed*`, Node `*Chair*` | Erben alles automatisch von `Room.gd`. Gäste wechseln im Intervall durch. |
 | **Lobby** | `sit`, `wander` | Node `*Chair*` | Gäste können hier sitzen, während sie auf Events oder Checkout warten. |
 | **Bar / Restaurant** | `sit` | Node `*Chair*` | **Sonderregel (Gastro-Bypass):** Gast geht NICHT in `IN_POI`, sondern in `STUDYING_MENU`. Er wechselt den Platz *nicht*, bis das Essen vorbei ist. |
-| **Spa, Gym, Pool** | *Geplant:* `sit`, `relax`, `swim`, `workout` | *Geplant:* Stühle, Liegen, Pools, Geräte | Muss noch auf Smart-Room migriert werden (hat noch Legacy `claim_seat`). |
+| **Spa, Gym, Pool** | `wander`, `sit` (Gym), `sit` (Liegen) | Node `*Chair*`, Node `*Machine*` | **Erfolgreich migriert.** Gäste nutzen `_wander_in_room` und blockieren Liegen/Geräte (gemappt als Chairs). Die Timer für die Aufenthaltsdauer (z.B. Gym 60-90m) greifen automatisch. |
 | **StaffSmall** (Personalraum)| `sit`, `sleep` | Node `*Chair*`, Node `*Bed*` | StaffActor checkt tagsüber nach `sit`, nachts präferiert er `sleep`. |
 
 ---

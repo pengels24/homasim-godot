@@ -146,15 +146,7 @@ func _apply_visuals() -> void:
 #			s["occupied_by"] = ""
 
 # =============================================================================
-func is_functional() -> bool:
-	for actor in get_tree().get_nodes_in_group("staff_actors"):
-		if actor.get("_current_room") == self:
-			var staff_data = actor.get("_staff_data")
-			if typeof(staff_data) == TYPE_DICTIONARY:
-				var role = staff_data.get("role", "")
-				if role == "lifeguard":
-					return true
-	return false
+
 
 # =============================================================================
 # LIVE-MONITOR
@@ -173,7 +165,7 @@ func get_live_details() -> Array[Dictionary]:
 				if time_left_sec != null:
 					time_left_mins = int(time_left_sec / 4.0) # 4.0 is SECONDS_PER_GAME_MINUTE
 				
-				var status_text = "Baden"
+				var status_text = GameState.T("poi.pool.bathing")
 				if time_left_mins > 0:
 					status_text += " (%dm)" % time_left_mins
 					

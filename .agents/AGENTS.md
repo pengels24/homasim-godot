@@ -1,4 +1,4 @@
-# HO·MA·SIM Godot – Claude Direktiven
+﻿# HO·MA·SIM Godot – Claude Direktiven
 
 ## 🚨 Anti-Halluzinations-Protokoll (NEU & ZWINGEND)
 1. **Code-Verifizierung (Kein Spekulieren):** Bevor du behauptest, ein Feature, Raum oder eine Logik fehle, **MUSST** du per `grep_search` oder `list_dir` prüfen (z.B. in `scenes/ingame/rooms/`), ob es wirklich fehlt.
@@ -12,7 +12,7 @@
 - **Panel Nesting**: Niemals ein "Glow-Panel" (`ModalPanel`) innerhalb eines anderen Glow-Panels verwenden. (Stattdessen `InnerPanel` oder transparent).
 - **Design:** Farben: Gold `#EAB308`, Dark BG `#0f172a`/`#141416`, Weiß `#fafafa`. Fonts: Outfit-Bold (Titel/Buttons), Inter Regular (Text).
 - **UI immer in .tscn**: Keine `Node.new()` UI-Bauten in Scripts. Geteilte UI-Komponenten (Modals etc.) immer als eigene `.tscn` in `scenes/shared/` ablegen.
-- **Alle Texte via `GameState.T("key")`**: Nie Strings hardcoden. Feste Auflösung 1920×1080 (`layout_mode=0`).
+- **Alle Texte via `GameState.T("key")`**: Nie Strings hardcoden. NEUE TEXTE, die erstellt werden, sind SOFORT in die language.csv (DE und EN) einzutragen. Feste Auflösung 1920×1080 (`layout_mode=0`).
 
 ---
 
@@ -50,10 +50,10 @@
 - Vor dem Coden prüfen, ob es schon Lösungen via Autoload gibt.
 
 ## Status Quo Direktive
-- **STRIKTE REGEL f�r status_quo.md**: In das Status Quo Dokument kommen NIEMALS ToDos, unfertige Punkte oder '[ ]' Boxen. Es ist eine reine Inventar-Liste von Dingen, die bereits effektiv fertiggestellt und voll funktionsf�hig sind.
+- **STRIKTE REGEL f�r status_quo.md**: In das Status Quo Dokument kommen NIEMALS ToDos, unfertige Punkte oder '[ ]' Boxen. Es ist eine reine Inventar-Liste von Dingen, die bereits effektiv fertiggestellt und voll funktionsf�hig sind.
 
 ## 🎨 Szenen-Änderungen (.tscn)
 - **STRIKTE DIREKTIVE:** Keine direkten scriptseitigen Änderungen am visuellen Aufbau von .tscn-Dateien (z.B. Nodes hinzufügen, verschieben, Eigenschaften ändern) ohne ausdrückliche Freigabe. Wenn visuelle Änderungen nötig sind, definiere klar, was getan werden muss, und der User übernimmt die Anpassung im Godot-Editor. Dies verhindert "Kraut und Rüben" im Design.
 
 ## Dokumentationspflicht nach Tests
-Sobald eine �nderung (z.B. in GuestActor.gd oder anderen Kernsystemen) erfolgreich getestet und abgeschlossen ist, MUSS die zugeh�rige Techdoku im wiki/-Ordner aktualisiert werden. Existiert noch keine Doku f�r diesen Bereich, muss aktiv beim User nachgefragt werden, ob eine angelegt werden soll.
+Sobald eine �nderung (z.B. in GuestActor.gd oder anderen Kernsystemen) erfolgreich getestet und abgeschlossen ist, MUSS die zugeh�rige Techdoku im wiki/-Ordner aktualisiert werden. Existiert noch keine Doku f�r diesen Bereich, muss aktiv beim User nachgefragt werden, ob eine angelegt werden soll.

@@ -284,3 +284,20 @@ epair_room) werden zuverlässig angenommen und ausgeführt.
 - **Feature (Pool):** `PoolSmall` nutzt im Live-Monitor nun die Iteration über die Gruppe `guest_actors` anstatt der starren Auswertung von `_room_seats`, um wandernde/schwimmende Gäste korrekt zu erfassen.
 - **Feature (Pool):** `get_available_interactions()` in `PoolSmall` überschrieben. `"wander"`-Aktionen werden gefiltert, damit Gäste am Pool entweder liegen oder schwimmen und nicht sinnlos in der Ecke stehen.
 - **Feature (Pool):** Der Live-Monitor zeigt bei Gästen im Pool nun die verbleibende Aufenthaltszeit in Ingame-Minuten an (z.B. "Baden (74m)").
+
+---
+# Changelog – gd-0.1.50
+> Datum: 2026-08-31 | Branch: `dev`
+
+---
+
+## Refactoring & Architektur
+- **Smart Room Logik:** `is_functional()` aus individuellen Räumen (Spa, Pool, Gym, Restaurant) in die Basisklasse `Room.gd` migriert.
+- **is_functional() Edge-Case:** Die Logik prüft nun, ob ein Mitarbeiter den Raum physisch besetzt ODER aktuell einen Arbeitsauftrag für den Raum ausführt (z.B. Kellner holt Essen in der Küche). Verhindert, dass Räume fälschlicherweise als "Unterbesetzt" markiert werden, während Mitarbeiter arbeiten.
+- **Übersetzungen Live-Monitor:** Harte Strings in den `get_live_details()` von Pool, Spa, Gym und Conference in saubere `GameState.T("poi...")` Keys umgewandelt und in `language.csv` eingetragen.
+
+## Bugfixes & Tweaks
+- **Staff Debug-Paths:** Footprints auf dem Grid blieben hängen, da `_get_staff_name()` beim Löschen fehlte. (Vorherige Session, aber hier festgehalten).
+- **Gym Aufenthaltsdauer:** Gym hat nun einen eigenen Timer-Override in `GuestActor.gd` und dauert max 60-90 Ingame-Minuten (vorher 60-180 Min wie Pool/Spa).
+- **String-Crash Fix:** Absturz in `ModalContentStaff.gd` beim Zuweisen von Personal (fehlender Translation-Key führte zu Formatierungsfehler) behoben.
+

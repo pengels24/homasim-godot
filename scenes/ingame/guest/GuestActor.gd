@@ -669,6 +669,8 @@ func _change_state(new_state: State) -> void:
 		State.IN_POI:
 			if _current_poi_id == "pool_small" or _current_poi_id == "gym_small" or _current_poi_id == "spa_small" or _current_poi_id == "conference_small":
 				var stay_dur = randf_range(60.0, 180.0)
+				if _current_poi_id == "gym_small":
+					stay_dur = randf_range(60.0, 90.0)
 				var poi_def = _get_poi_def(_current_poi_id)
 				if poi_def.has("open_to"):
 					var open_to = poi_def.get("open_to")

@@ -1621,3 +1621,9 @@ quest.guest.vip.25.desc,Beherberge insgesamt 25 VIP-GÃ¤ste.,Beherberge insgesamt
 roomdef.name.long.vending_machine,Getränkeautomat,Vending Machine
 roomdef.name.short.vending_machine,Automat,Vending
 roomdef.name.long.lobby,Lobby,Lobby
+poi.restaurant.serving,Wird serviert,Being served
+poi.spa.relaxing,Entspannt,Relaxing
+poi.spa.lying_down,Liegt,Lying down
+poi.pool.bathing,Baden,Bathing
+poi.gym.training,Trainiert,Training
+poi.conference.attending,Nimmt teil,Attending

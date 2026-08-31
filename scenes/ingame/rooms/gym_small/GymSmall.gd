@@ -92,41 +92,37 @@ func _apply_visuals() -> void:
 
 	super._apply_visuals()
 
-func claim_seat(guest_id: String) -> Vector2:
-	return room_claim_seat(guest_id)
-	
-func leave_seat(guest_id: String) -> void:
-	for s in _room_seats:
-		if s["occupied_by"] == guest_id:
-			s["occupied_by"] = ""
+
 
 # =============================================================================
 # LIVE-MONITOR
 # =============================================================================
+func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
+	var interactions = super.get_available_interactions(actor)
+	# Im Gym sollen die Gäste an den Geräten trainieren, nicht herumstehen
+	return interactions.filter(func(i): return i.type != "wander")
+
 func get_live_details() -> Array[Dictionary]:
 	var details: Array[Dictionary] = []
 	
-	for seat in _room_seats:
-		if seat["occupied_by"] != "":
-			var guest_name = "Gast"
-			var gm = get_tree().get_first_node_in_group("guest_manager")
+	for actor in get_tree().get_nodes_in_group("guest_actors"):
+		var valid_states = [3, 6, 7, 8, 9] # IN_POI, STUDYING_MENU, WAITING_FOR_FOOD, EATING, SITTING
+		if actor.get("current_state") in valid_states and actor.get("_current_poi_id") == "gym_small":
+			var gm = actor.get("_guest_member")
 			if gm:
-				var guest_node = gm.get_guest(seat["occupied_by"])
-				if guest_node:
-					var actor_state = -1
-					for a in get_tree().get_nodes_in_group("guest_actors"):
-						if a.get("actor_id") == seat["occupied_by"]:
-							actor_state = a.get("current_state")
-							break
-					if actor_state == 1: # State.WALKING
-						continue
-					guest_name = guest_node.get("_guest_member").name if guest_node.get("_guest_member") else "Gast"
-			
-			var status_text = "Trainiert"
-			details.append({
-				"left": guest_name,
-				"right": status_text,
-				"color": Color("#f43f5e")
-			})
+				var time_left_sec = actor.get("_poi_stay_timer")
+				var time_left_mins = 0
+				if time_left_sec != null:
+					time_left_mins = int(time_left_sec / 4.0)
+					
+				var status_text = GameState.T("poi.gym.training")
+				if time_left_mins > 0:
+					status_text += " (%dm)" % time_left_mins
+					
+				details.append({
+					"left": gm.name,
+					"right": status_text,
+					"color": Color("#f43f5e")
+				})
 			
 	return details

@@ -114,7 +114,7 @@ func get_live_details() -> Array[Dictionary]:
 						continue
 					guest_name = guest_node.get("_guest_member").name if guest_node.get("_guest_member") else "Gast"
 			
-			var status_text = "Nimmt teil"
+			var status_text = GameState.T("poi.conference.attending")
 			details.append({
 				"left": guest_name,
 				"right": status_text,

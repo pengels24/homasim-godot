@@ -658,7 +658,11 @@ func _update_details() -> void:
 				action_btn.modulate = Color(1, 1, 1, 1.0)
 				_style_action_btn(action_btn, "disabled")
 			elif cur_cap >= max_cap:
-				action_btn.text = GameState.T("toast.staff.limit_reached") % max_cap
+				var t_txt = GameState.T("toast.staff.limit_reached")
+				if "%" in t_txt:
+					action_btn.text = t_txt % max_cap
+				else:
+					action_btn.text = t_txt + " (" + str(max_cap) + ")"
 				action_btn.disabled = true
 				action_btn.modulate = Color(1, 1, 1, 1.0)
 				_style_action_btn(action_btn, "disabled")
@@ -1001,4 +1005,3 @@ func _get_available_poi_roles() -> Array:
 				if role != "" and not roles.has(role):
 					roles.append(role)
 	return roles
-

@@ -104,7 +104,17 @@ func is_functional() -> bool:
 	var has_waiter = false
 	
 	for actor in get_tree().get_nodes_in_group("staff_actors"):
+		var is_working_here = false
 		if actor.get("_current_room") == self:
+			is_working_here = true
+		else:
+			var task = actor.get("_current_task")
+			if typeof(task) == TYPE_DICTIONARY and not task.is_empty():
+				var target = task.get("target")
+				if typeof(target) == TYPE_DICTIONARY and target.get("room") == self:
+					is_working_here = true
+					
+		if is_working_here:
 			var staff_data = actor.get("_staff_data")
 			if typeof(staff_data) == TYPE_DICTIONARY:
 				var role = staff_data.get("role", "")
@@ -384,7 +394,6 @@ func get_live_details() -> Array[Dictionary]:
 						status_text = GameState.T("poi.restaurant.waiting_service")
 					elif s == "serving":
 						var t_str = GameState.T("poi.restaurant.serving")
-						if t_str == "poi.restaurant.serving": t_str = "Wird abgeholt & serviert"
 						status_text = t_str + ": " + r_name
 				else:
 					if actor_state == 8: # State.EATING

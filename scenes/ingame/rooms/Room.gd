@@ -160,6 +160,8 @@ func room_leave_bed(guest_id: String) -> void:
 # =============================================================================
 # --- SMART ROOM INTERFACE ---
 # =============================================================================
+var _last_interaction_for_guest: Dictionary = {}
+
 func get_available_interactions(_actor: Node2D) -> Array[Dictionary]:
 	var interactions: Array[Dictionary] = []
 	for i in range(_room_beds.size()):
@@ -180,6 +182,28 @@ func get_available_interactions(_actor: Node2D) -> Array[Dictionary]:
 				"target_pos": s["node"].global_position,
 				"duration": randf_range(10.0, 20.0)
 			})
+	
+	if _actor and _actor.has_method("get"):
+		var actor_id = _actor.get("actor_id")
+		if _last_interaction_for_guest.has(actor_id):
+			var last_info = _last_interaction_for_guest[actor_id]
+			var last_type = last_info.get("type", "")
+			var last_id = last_info.get("id", "")
+			
+			var has_beds = _room_beds.size() > 0
+			var has_seats = _room_seats.size() > 0
+			
+			if has_beds and has_seats:
+				# Erzwungener Wechsel des Typs (Bed <-> Chair)
+				var target_type = "sit" if last_type == "sleep" else "sleep"
+				var filtered = interactions.filter(func(i): return i.type == target_type)
+				if not filtered.is_empty():
+					interactions = filtered
+			else:
+				# Erzwungener Wechsel des Platzes (ID)
+				var filtered = interactions.filter(func(i): return i.id != last_id)
+				if not filtered.is_empty():
+					interactions = filtered
 	
 	interactions.append({
 		"id": "wander_center",
@@ -216,6 +240,7 @@ func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 			var b = _room_beds[idx]
 			if b["occupied_by"] == "":
 				b["occupied_by"] = actor_id
+				_last_interaction_for_guest[actor_id] = {"id": interaction_id, "type": "sleep"}
 				return {
 					"target_pos": b["node"].global_position,
 					"look_at_pos": get_service_position(),
@@ -227,6 +252,7 @@ func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 			var s = _room_seats[idx]
 			if s["occupied_by"] == "":
 				s["occupied_by"] = actor_id
+				_last_interaction_for_guest[actor_id] = {"id": interaction_id, "type": "sit"}
 				var table = get_node_or_null("%Table")
 				var look_pos = table.global_position if is_instance_valid(table) else get_service_position()
 				return {
@@ -296,6 +322,42 @@ static func get_definition() -> Dictionary:
 		"valid_door_slots": [],
 	}
 
+
+# =============================================================================
+## Prüft, ob der Raum funktional ist (z.B. ob das nötige Personal anwesend ist).
+## Wird von speziellen Räumen (z.B. Bar) überschrieben, wenn sie komplexere Regeln haben.
+func is_functional() -> bool:
+	var def = call("get_definition") as Dictionary
+	var min_staff = def.get("min_staff", 0)
+	
+	# Räume ohne Personalbedarf sind immer funktional
+	if min_staff == 0:
+		return true
+		
+	var req_role = def.get("required_role", "")
+	if req_role == "":
+		return true
+		
+	# Prüfen ob ein Mitarbeiter mit der required_role im Raum steht
+	# ODER gerade einen Task (wie Essen holen) für diesen Raum ausführt
+	for actor in get_tree().get_nodes_in_group("staff_actors"):
+		var is_working_here = false
+		if actor.get("_current_room") == self:
+			is_working_here = true
+		else:
+			var task = actor.get("_current_task")
+			if typeof(task) == TYPE_DICTIONARY and not task.is_empty():
+				var target = task.get("target")
+				if typeof(target) == TYPE_DICTIONARY and target.get("room") == self:
+					is_working_here = true
+					
+		if is_working_here:
+			var staff_data = actor.get("_staff_data")
+			if typeof(staff_data) == TYPE_DICTIONARY:
+				if staff_data.get("role", "") == req_role:
+					return true
+					
+	return false
 
 # =============================================================================
 func _ready() -> void:

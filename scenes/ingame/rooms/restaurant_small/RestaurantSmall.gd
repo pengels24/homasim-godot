@@ -165,7 +165,6 @@ func get_live_details() -> Array[Dictionary]:
 						status_text = GameState.T("poi.restaurant.waiting_service")
 					elif s == "serving":
 						var t_str = GameState.T("poi.restaurant.serving")
-						if t_str == "poi.restaurant.serving": t_str = "Wird abgeholt & serviert"
 						status_text = t_str + ": " + r_name
 				else:
 					# Wenn order_id gesetzt ist, aber nicht in active_orders -> Serviert
@@ -269,14 +268,7 @@ func _has_waiter_assigned() -> bool:
 	return false
 
 ## Prüft ob physisch eine Bedienung im Raum ist (für den Gast)
-func is_functional() -> bool:
-	for actor in get_tree().get_nodes_in_group("staff_actors"):
-		if actor.get("_current_room") == self:
-			var staff_data = actor.get("_staff_data")
-			if typeof(staff_data) == TYPE_DICTIONARY:
-				if staff_data.get("role", "") == "waiter":
-					return true
-	return false
+
 
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint(): return

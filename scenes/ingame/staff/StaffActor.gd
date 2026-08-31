@@ -952,7 +952,7 @@ func _process_walking(delta: float, speed: float) -> void:
 		if _world_path.is_empty() and dist_to_target < 5.0:
 			global_position = _target_world_pos # Snap exactly to target (e.g. seat or table)
 			if is_instance_valid(_map_grid) and _map_grid.has_method("clear_debug_path"):
-				_map_grid.clear_debug_path(get_staff_id())
+				_map_grid.clear_debug_path(_get_staff_name())
 			if _state == "walking":
 				if not _current_task.is_empty() and _current_task.type == "serve_meal" and not _current_task.has("fetched"):
 					_set_state("working")
@@ -1024,15 +1024,18 @@ func _process_walking(delta: float, speed: float) -> void:
 	_update_debug_line()
 
 func _update_debug_line() -> void:
-	if is_instance_valid(_debug_line) and _path.size() > 0:
-		_debug_line.default_color = Color.GREEN
-		var pts: PackedVector2Array = []
-		pts.append(Vector2.ZERO) # Actor-Position = lokal (0,0)
-		if _target_world_pos != Vector2.ZERO and _target_world_pos != global_position:
-			pts.append(to_local(_target_world_pos))
-		for p in _path:
-			pts.append(to_local(_map_grid.call("tile_to_world", p)))
-		_debug_line.points = pts
+	if is_instance_valid(_debug_line):
+		if _path.size() > 0:
+			_debug_line.default_color = Color.GREEN
+			var pts: PackedVector2Array = []
+			pts.append(Vector2.ZERO) # Actor-Position = lokal (0,0)
+			if _target_world_pos != Vector2.ZERO and _target_world_pos != global_position:
+				pts.append(to_local(_target_world_pos))
+			for p in _path:
+				pts.append(to_local(_map_grid.call("tile_to_world", p)))
+			_debug_line.points = pts
+		else:
+			_debug_line.points = []
 
 func _process_working(delta: float, speed_mult: float) -> void:
 	if is_instance_valid(_debug_line): _debug_line.points = []

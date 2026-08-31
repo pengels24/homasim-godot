@@ -113,7 +113,11 @@ func _refresh_list() -> void:
 	# Ampel-Farbe für Titel (falls Raum eine Definition hat)
 	if _target_room.has_method("get_definition"):
 		var def = _target_room.get_definition()
-		if def.get("open_from", 0) != 0 or def.get("open_to", 0) != 0:
+		var is_functional = _target_room.is_functional() if _target_room.has_method("is_functional") else true
+		
+		if not is_functional:
+			label_title.add_theme_color_override("font_color", Color("#ef4444")) # Rot (Geschlossen wg. Unterbesetzung)
+		elif def.get("open_from", 0) != 0 or def.get("open_to", 0) != 0:
 			var taking_orders = GameState.is_facility_open(def, 30)
 			var is_open = GameState.is_facility_open(def, 0)
 			

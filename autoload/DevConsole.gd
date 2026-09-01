@@ -132,17 +132,23 @@ func _execute(cmd: String) -> void:
 		"set-conference":
 			if val_s == "on":
 				if EventManager:
-					EventManager.active_event = EventManager.EventType.CONFERENCE
-					EventManager.event_days_remaining = 1
-					EventManager._notify_event("Tageskonferenz!", "Ein Bus mit Tagungsgästen ist angekommen. (DevConsole)")
-				var gm = get_tree().current_scene.find_child("GuestManager", true, false)
-				if is_instance_valid(gm) and gm.has_method("spawn_conference_guests"):
-					gm.spawn_conference_guests()
-				_log("Konferenz-Event manuell gestartet.", CLR_OK)
+					if EventManager.has_method("force_conference"):
+						var success = EventManager.force_conference()
+						if success:
+							var gm = get_tree().current_scene.find_child("GuestManager", true, false)
+							if is_instance_valid(gm) and gm.has_method("spawn_conference_guests"):
+								# Call with a time that forces instant spawn (e.g. 430)
+								var t = 430
+								if TimeManager: t = TimeManager.get_game_time()
+								gm.spawn_conference_guests(t)
+							_log("Konferenz-Event manuell gestartet.", CLR_OK)
+						else:
+							_log("Keine Konferenzräume gefunden!", CLR_ERR)
+					else:
+						_log("Fehler: EventManager hat keine force_conference Methode.", CLR_ERR)
 			elif val_s == "off":
 				if EventManager:
-					EventManager.active_event = EventManager.EventType.NONE
-					EventManager.event_days_remaining = 0
+					EventManager.end_event()
 				_log("Konferenz-Event manuell beendet (Gäste bleiben ggf. bis 17 Uhr).", CLR_OK)
 			else:
 				_log("Verwendung: set-conference:on oder set-conference:off", CLR_ERR)

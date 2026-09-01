@@ -208,7 +208,7 @@ texture = ExtResource("2_onwgc")
 region_enabled = true
 region_rect = Rect2(64, 0, 16, 16)
 
-[node name="Chair12" type="Sprite2D" parent="Landscape/Interior/Furniture/Chairs" unique_id=1475142129]
+[node name="ChairSpeaker" type="Sprite2D" parent="Landscape/Interior/Furniture/Chairs" unique_id=1475142129]
 position = Vector2(41, 16)
 texture = ExtResource("2_onwgc")
 region_enabled = true
@@ -452,7 +452,7 @@ texture = ExtResource("2_onwgc")
 region_enabled = true
 region_rect = Rect2(64, 0, 16, 16)
 
-[node name="Chair12" type="Sprite2D" parent="Portrait/Interior/Furniture/Chairs" unique_id=1351520414]
+[node name="ChairSpeaker" type="Sprite2D" parent="Portrait/Interior/Furniture/Chairs" unique_id=1351520414]
 position = Vector2(16, 41)
 texture = ExtResource("2_onwgc")
 region_enabled = true

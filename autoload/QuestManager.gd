@@ -197,7 +197,7 @@ func _increment_quest_progress(quest_type: String, target_id: String, amount: in
 			if req_tech != "" and not TechtreeManager.is_tech_unlocked(req_tech):
 				continue
 			
-			if t_def["type"] == quest_type and (t_def.get("target_id", "") == target_id or target_id == ""):
+			if t_def["type"] == quest_type and (t_def.get("target_id", "") == target_id or t_def.get("target_id", "") == ""):
 				var max_val = t_def.get("target_count", 1)
 				if t_state["progress"] < max_val:
 					t_state["progress"] = min(current_val, max_val)
@@ -233,7 +233,7 @@ func _check_quest_threshold(quest_type: String, target_id: String, current_value
 			if req_tech != "" and not TechtreeManager.is_tech_unlocked(req_tech):
 				continue
 			
-			if t_def["type"] == quest_type and (t_def.get("target_id", "") == target_id or target_id == ""):
+			if t_def["type"] == quest_type and (t_def.get("target_id", "") == target_id or t_def.get("target_id", "") == ""):
 				var target_val = float(t_def.get("target_count", 1))
 				
 				# Only update progress UI if it increased

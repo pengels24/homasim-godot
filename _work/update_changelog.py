@@ -1,23 +1,16 @@
 import os
 
-changelog_path = r"d:\game-dev\homasim-godot\changelog\gd-0.1.50.md"
+file_path = "changelog/gd-0.1.50.md"
 content = """
-### 26.08.2026 - Gastro-Loop Fixes, Waiter Patrol & UI (Session End)
-
-#### Bugfixes
-- **Room.gd Parse Error:** Absturz beim Aufruf von `is_operational()` behoben. `actor.get()` unterstuetzt in Godot 4 kein Fallback-Argument, weshalb `actor.get("_staff_data", {})` entfernt und `def` korrekt typisiert wurde.
-- **Lobby Live-Monitor (Falsche Gaeste-Namen):** Die Anzeige in allen POI-Monitoren basierte auf dem internen Godot-Node-Namen (`GuestActor_XXXX`) oder auf einem nicht vorhandenen Label. Der Live-Monitor holt sich jetzt den korrekten Klarnamen aus dem internen `_guest_member`-Objekt.
-- **Lobby Live-Monitor (Falsche Status-Texte):** Falsche Status-Ids korrigiert. Die Logik nutzte harte Integer (4, 8), die durch das Enum in `GuestActor.gd` abwichen (`EATING` ist 8, `AWAITING_CHECKOUT` ist 4). Der Gast wird nun beim Automaten oder Auschecken korrekt angezeigt.
-- **Lobby Live-Monitor (Fehlende Translations):** Fehlende Fallback-Texte beim Aufruf von `GameState.T()` hinzugefuegt (z.B. `"Checkt aus"`, `"Holt einen Snack"`).
-- **Ingame.gd 22:00 Uhr Rauswurf:** Der harte Schnitt um 22:00 Uhr, der alle Gaeste zwangsweise aus Lobby und Bar ins Bett schickte, wurde entfernt. Gaeste bleiben nun organisch bis zur regulaeren Nachtruhe ab 23:00 Uhr im Raum.
-- **Bar Solo-Modus Fallback:** Die Bar schaltet jetzt korrekt auf den Solo-Modus zurueck, sobald die Kueche keine Bestellungen mehr annimmt (`_has_active_kitchen()`). Gaeste zahlen dann sofort beim Eintreten Eintritt (`visit_income`), da der Barkeeper keine Essensbestellungen mehr aufnehmen kann.
-
-#### Features & Improvements
-- **Waiter Idle Patrol (Tisch abwischen):** Bedienungen (Waiters), die untaetig an ihrer Arbeitsstation (z. B. Tresen) stehen, starten jetzt zufaellig Dummy-Aufgaben (`clean_table`). Sie laufen zu einem freien Tisch, bleiben dort kurz stehen und erzeugen im Raum den typischen Putz-Fortschrittsbalken samt Besen-Icon (`RoomStatusIndicator`), bevor sie zurueckkehren. Das laesst das Personal deutlich lebendiger wirken.
-- **RoomStatusIndicator Force Clean:** Die Progress-Bar wurde erweitert (`force_clean`), um das Besen-Icon manuell einzublenden, auch wenn der Raum systemisch gar keinen Schmutz hat (genutzt fuer den neuen Dummy-Putz-Loop des Waiters).
+### 01.09.2026 - Pathfinding Fixes, Quests & UI Tooltips
+- **Pathfinding Fix (Ghost Walking):** Behoben, dass Gäste bei der Abreise (`start_checkout`) geradlinig durch Wände vom Bett zur Tür liefen. Das Problem lag daran, dass `_current_poi_id` auf `"lobby"` gesetzt wurde, bevor der Pfad berechnet wurde. Dadurch dachte das Spiel, der Gast sei bereits in der Lobby und übersprang die Berechnung des lokalen Weges aus dem Hotelzimmer heraus.
+- **Quest-Tracking (POI-Nutzung):** Die Methode `QuestManager.on_poi_used` wurde zwar definiert, aber von `GuestActor` nie aufgerufen. Gäste informieren nun den QuestManager, wenn sie an einem POI eintreffen, sodass Quests wie "Kühles Nass" oder "Aufwärmen" korrekt hochzählen.
+- **Quest-Tracking (Wildcards):** Fix im `QuestManager._increment_quest_progress`, damit generische Quests (ohne festes Ziel, d.h. `target_id == ""`), korrekt hochzählen. Die Prüfung vergleicht nun sauber, ob die Quest-Definition überhaupt ein `target_id` vorgibt.
+- **Konferenzraum-Quest (Benötigt Forschung):** Die Quest zum Bau des Konferenzraums in `quests.json` setzte fälschlicherweise noch die veraltete Forschung `"B1.1"` voraus. Da dieser Knoten nicht mehr existiert, stockte der Quest-Fortschritt (und zeigte "Benötigt Forschung: ???"). Dies wurde auf den korrekten Knoten `"P1.2"` aktualisiert.
+- **Staff-Raum Kapazität:** Fix in `StaffSmall.gd`. Die `has_free_seat` Methode liest die Kapazität nun korrekt aus der Definition aus, was Clipping-Probleme in vollen Pausenräumen verhindert.
+- **Raum-Tooltips (UI):** Tooltips (`CustomTooltip.gd`) bereinigt: Bei Räumen ohne Personalbedarf (`min_staff == 0`) verschwindet der Eintrag "Anwesende Mitarbeiter: 0" nun komplett (sofern kein Putzpersonal o.ä. anwesend ist). Räume, die nicht für Gäste gedacht sind (z.B. Küche, `is_guest_poi == false`), zeigen keinen Platzhalter mehr für anwesende Gäste an.
 """
 
-with open(changelog_path, "a", encoding="utf-8") as f:
+with open(file_path, "a", encoding="utf-8") as f:
     f.write(content)
-
 print("Changelog updated.")

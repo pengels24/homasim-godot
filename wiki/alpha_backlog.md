@@ -16,6 +16,11 @@
 - ✅ **GuestActor Smart Room Fix:** `_action_timer` Bug beim Betreten gefixed (verhinderte Interaktions-Claim).
 - ✅ **Pool Live Monitor:** Erfasst nun alle Gäste der Gruppe `guest_actors` (nicht nur sitzende) inkl. verbleibender Ingame-Minuten-Anzeige ("Baden (Xm)").
 - ✅ **Pool Interaktionen:** `get_available_interactions()` überschrieben, um `"wander"` im Pool zu unterbinden.
+- ✅ **GuestActor Pathfinding (Checkout):** `_current_poi_id` Aktualisierung in `start_checkout` korrigiert, um Ghost-Walking (Luftlinie durch Wände) bei der Abreise zu verhindern.
+- ✅ **QuestManager POI-Zähler:** Fehlenden Trigger `QuestManager.on_poi_used` in `GuestActor` eingebaut, damit POI-bezogene Quests richtig zählen.
+- ✅ **QuestManager Wildcard-Fix:** Logikfehler beim Abgleich von generischen Quests (leere `target_id`) korrigiert.
+- ✅ **Konferenzraum Quest:** Veralteten Forschungs-Node `B1.1` in `quests.json` durch `P1.2` ersetzt.
+- ✅ **UI Raum-Tooltips:** `CustomTooltip.gd` blendet nun "Anwesende Mitarbeiter: 0" in gästefokussierten Räumen (`min_staff == 0`) und "Anwesende Gäste" in Personalräumen (wie Küche) korrekt aus.
 
 ## 🧱 Phase 1 – Fundament (v0.1.40–41)
 *Zuerst, weil alles andere darauf aufbaut.*

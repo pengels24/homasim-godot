@@ -1,4 +1,4 @@
-﻿# HO·MA·SIM Godot – Claude Direktiven
+# HO·MA·SIM Godot – Claude Direktiven
 
 ## 🚨 Anti-Halluzinations-Protokoll (NEU & ZWINGEND)
 1. **Code-Verifizierung (Kein Spekulieren):** Bevor du behauptest, ein Feature, Raum oder eine Logik fehle, **MUSST** du per `grep_search` oder `list_dir` prüfen (z.B. in `scenes/ingame/rooms/`), ob es wirklich fehlt.
@@ -35,6 +35,7 @@
 
 ## 💻 Code- & Godot-Direktiven
 - **Immer Godot 4 API** (Kein Godot 3 Syntax). Statische Typisierung überall.
+- **VORSICHT BEI `get()`:** In Godot 4 nimmt `Object.get("property")` exakt **EIN** Argument. Die Form `get("key", default_value)` mit zwei Argumenten ist **NUR** bei Dictionaries (`Dictionary.get()`) erlaubt! Nutze bei Objekten direkte Property-Zugriffe (z.B. `party.event_poi_id`).
 - **KISS & DRY:** Kein Over-Engineering. Keine God-Files. Wiederverwendbare Logik in eigene Autoloads/Klassen.
 - **Sauberer Weg:** Code schreiben wie ein Senior Game Developer. Magic Numbers in Konstanten.
 - **Signale:** Eigene Signale beginnen mit dem Präfix `sig_`.

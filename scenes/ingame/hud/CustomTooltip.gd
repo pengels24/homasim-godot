@@ -164,25 +164,31 @@ func _update_content() -> void:
 							if is_instance_valid(actor._guest_member):
 								visitor_names.append("👤 " + actor._guest_member.name)
 				
-			var stxt = "Anwesende Mitarbeiter: %d" % staff_present
-			if staff_present > 0:
-				var display_names = staff_names.slice(0, 5)
-				stxt += "\n" + "\n".join(display_names)
-				if staff_names.size() > 5:
-					stxt += "\n" + (GameState.T("room.tooltip.and_more") % (staff_names.size() - 5))
 			if is_instance_valid(staff_label):
-				staff_label.text = stxt
-				staff_label.show()
+				if def.get("min_staff", 0) == 0 and staff_present == 0:
+					staff_label.hide()
+				else:
+					var stxt = "Anwesende Mitarbeiter: %d" % staff_present
+					if staff_present > 0:
+						var display_names = staff_names.slice(0, 5)
+						stxt += "\n" + "\n".join(display_names)
+						if staff_names.size() > 5:
+							stxt += "\n" + (GameState.T("room.tooltip.and_more") % (staff_names.size() - 5))
+					staff_label.text = stxt
+					staff_label.show()
 				
-			var txt = GameState.T("room.tooltip.current_visitors") % current_visitors
-			if current_visitors > 0:
-				var display_names = visitor_names.slice(0, 5)
-				txt += "\n" + "\n".join(display_names)
-				if visitor_names.size() > 5:
-					var more_count = visitor_names.size() - 5
-					txt += "\n" + (GameState.T("room.tooltip.and_more") % more_count)
-			guests_label.text = txt
-			guests_label.show()
+			if def.get("is_guest_poi", true):
+				var txt = GameState.T("room.tooltip.current_visitors") % current_visitors
+				if current_visitors > 0:
+					var display_names = visitor_names.slice(0, 5)
+					txt += "\n" + "\n".join(display_names)
+					if visitor_names.size() > 5:
+						var more_count = visitor_names.size() - 5
+						txt += "\n" + (GameState.T("room.tooltip.and_more") % more_count)
+				guests_label.text = txt
+				guests_label.show()
+			else:
+				guests_label.hide()
 		else:
 			guests_label.hide()
 	elif def.get("is_staff_poi", false) and _target_room.has_method("get_live_details"):

@@ -1,0 +1,30 @@
+[
+  {
+    "id": "botany",
+    "name": "Botaniker-Tagung",
+    "max_participants": 24,
+    "color": "#22c55e",
+    "income_per_participant": 150
+  },
+  {
+    "id": "surgery",
+    "name": "Chirurgen-Kongress",
+    "max_participants": 16,
+    "color": "#3b82f6",
+    "income_per_participant": 150
+  },
+  {
+    "id": "marketing",
+    "name": "Marketing-Symposium",
+    "max_participants": 32,
+    "color": "#f59e0b",
+    "income_per_participant": 150
+  },
+  {
+    "id": "indie_dev",
+    "name": "Indie-Dev Meetup",
+    "max_participants": 12,
+    "color": "#a855f7",
+    "income_per_participant": 150
+  }
+]

@@ -115,44 +115,110 @@ func get_live_details() -> Array[Dictionary]:
 					guest_name = guest_node.get("_guest_member").name if guest_node.get("_guest_member") else "Gast"
 			
 			var status_text = GameState.T("poi.conference.attending")
+			if seat["occupied_by"] == _speaker_id:
+				status_text = GameState.T("poi.conference.speaking")
+				
 			details.append({
 				"left": guest_name,
 				"right": status_text,
-				"color": Color("#8b5cf6")
+				"color": Color("#8b5cf6") if seat["occupied_by"] != _speaker_id else Color("#f59e0b")
 			})
 			
 	return details
 
 # =============================================================================
-# Speaker Logic
+# Smart Room & Speaker Logic
 # =============================================================================
-var current_speaker_id: String = ""
+var _speaker_id: String = ""
+var _speaker_time: int = 0
 
-func claim_podium(guest_id: String) -> Vector2:
-	if current_speaker_id == "":
-		for s in _room_seats:
-			if s["node"].name == "Chair12" and s["occupied_by"] == "":
-				current_speaker_id = guest_id
-				s["occupied_by"] = guest_id
-				return s["node"].global_position
-	return Vector2.INF
+func _ready() -> void:
+	super._ready()
+	TimeManager.sig_minute_passed.connect(_on_minute_passed)
 
-func leave_podium(guest_id: String) -> void:
-	if current_speaker_id == guest_id:
-		current_speaker_id = ""
-		for s in _room_seats:
-			if s["node"].name == "Chair12" and s["occupied_by"] == guest_id:
-				s["occupied_by"] = ""
+func _on_minute_passed(_total_game_minutes: int) -> void:
+	if _speaker_id != "":
+		_speaker_time += 1
+		if _speaker_time >= 15:
+			_swap_speaker()
 
-func claim_seat(guest_id: String) -> Vector2:
-	# Only allow normal chairs 1-11
+func _swap_speaker() -> void:
+	# Finde einen Zuhörer zum Tauschen
+	var listener_id = ""
 	for s in _room_seats:
-		if s["occupied_by"] == "" and s["node"].name != "Chair12":
-			s["occupied_by"] = guest_id
-			return s["node"].global_position
-	return Vector2.INF
+		if s["node"].name != "ChairSpeaker" and s["occupied_by"] != "":
+			listener_id = s["occupied_by"]
+			break
+			
+	var old_speaker = _speaker_id
+	_speaker_id = ""
+	_speaker_time = 0
+	
+	release_interaction(old_speaker)
+	if listener_id != "":
+		release_interaction(listener_id)
+	
+	# Beide fordern sofort im nächsten _process vom GuestActor eine neue Interaction an.
 
-func leave_seat(guest_id: String) -> void:
-	for s in _room_seats:
-		if s["occupied_by"] == guest_id and s["node"].name != "Chair12":
-			s["occupied_by"] = ""
+func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
+	var interactions: Array[Dictionary] = []
+	
+	# Event-Modus prüfen
+	var is_event_active = EventManager.active_conferences.has(get_instance_id())
+	
+	var party = null
+	if actor.has_method("_get_my_party"):
+		party = actor.call("_get_my_party")
+			
+	var is_my_event_guest = (party != null and party.get("event_poi_id", "") == str(get_instance_id()))
+	var is_any_event_guest = (party != null and party.get("event_poi_id", "") != "")
+	
+	# MODUS A: Event läuft. NUR _meine_ Event-Gäste dürfen rein.
+	if is_event_active and not is_my_event_guest:
+		return interactions
+		
+	# MODUS B: Kein Event läuft. Event-Gäste dürfen NIE in reguläre Räume (außer Lobby/Bar/Rest)
+	if not is_event_active and is_any_event_guest:
+		return interactions
+		
+	# Normales Claiming (wie Room.gd)
+	for i in range(_room_seats.size()):
+		var s = _room_seats[i]
+		if s["occupied_by"] == "":
+			interactions.append({
+				"id": "seat_" + str(i),
+				"type": "sit",
+				"target_pos": s["node"].global_position,
+				"duration": randf_range(10.0, 20.0)
+			})
+			
+	return interactions
+
+func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
+	var res = super.claim_interaction(actor_id, interaction_id)
+	if res.is_empty():
+		return res
+		
+	if interaction_id.begins_with("seat_"):
+		var idx = interaction_id.replace("seat_", "").to_int()
+		var s = _room_seats[idx]
+		if s["node"].name == "ChairSpeaker":
+			_speaker_id = actor_id
+			_speaker_time = 0
+			
+			# Blickrichtung auf Speakertable erzwingen
+			var is_portrait := room_rotation % 2 == 1
+			var root = get_node("Portrait/Interior") if is_portrait else get_node("Landscape/Interior")
+			if root:
+				var table = root.get_node_or_null("Speakertable")
+				if table:
+					res["look_at_pos"] = table.global_position
+					
+	return res
+
+func release_interaction(actor_id: String) -> void:
+	if _speaker_id == actor_id:
+		_speaker_id = ""
+		_speaker_time = 0
+	super.release_interaction(actor_id)
+

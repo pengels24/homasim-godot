@@ -903,7 +903,7 @@
               "target_count": 1,
               "reward_fp": 200,
               "reward_money": 2000,
-              "requires_tech": "B1.1"
+              "requires_tech": "P1.2"
             }
           ]
         },

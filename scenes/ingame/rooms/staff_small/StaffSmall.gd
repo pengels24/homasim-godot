@@ -56,6 +56,20 @@ func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 # =============================================================================
 
 func has_free_seat() -> bool:
+	var def = get_definition()
+	var cap = def.get("capacity", 4)
+	var current_occupants = 0
+	
+	for s in _room_seats:
+		if s["occupied_by"] != "":
+			current_occupants += 1
+	for b in _room_beds:
+		if b["occupied_by"] != "":
+			current_occupants += 1
+			
+	if current_occupants >= cap:
+		return false
+		
 	for s in _room_seats:
 		if s["occupied_by"] == "":
 			return true

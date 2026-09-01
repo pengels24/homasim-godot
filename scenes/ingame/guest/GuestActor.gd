@@ -75,6 +75,22 @@ func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null, guest
 		vip_node.position = Vector2(0, -32)
 		vip_node.z_index = 50
 		add_child(vip_node)
+		
+	if party and party.event_poi_id != "":
+		var ev_node = Sprite2D.new()
+		ev_node.name = "EventOverlay"
+		ev_node.texture = preload("res://assets/icons/guests/user-star.svg")
+		
+		var color = "#aaaaaa"
+		if EventManager and EventManager.get("active_conferences") != null:
+			if EventManager.active_conferences.has(party.event_poi_id):
+				color = EventManager.active_conferences[party.event_poi_id].get("color", "#aaaaaa")
+				
+		ev_node.modulate = Color(color)
+		ev_node.scale = Vector2(0.6, 0.6)
+		ev_node.position = Vector2(0, -32)
+		ev_node.z_index = 50
+		add_child(ev_node)
 	
 	if start_room != null:
 		_target_room = start_room
@@ -128,6 +144,12 @@ func _process(delta: float) -> void:
 		var t = Time.get_ticks_msec() / 1000.0
 		var s = 0.6 + sin(t * 4.0) * 0.1
 		vip_node.scale = Vector2(s, s)
+		
+	if has_node("EventOverlay"):
+		var ev_node = get_node("EventOverlay")
+		var t = Time.get_ticks_msec() / 1000.0
+		var s = 0.6 + sin(t * 4.0) * 0.1
+		ev_node.scale = Vector2(s, s)
 
 	if has_node("HungryIcon"):
 		if avatar.visible and _guest_member.saturation <= 40:
@@ -197,10 +219,40 @@ func _process_waiting(delta: float) -> void:
 		return
 		
 	var speed = 1.0
+	var current_time = 0
 	if TimeManager:
 		if TimeManager.is_paused():
 			return # NEU: Nicht ticken, wenn pausiert!
 		speed = TimeManager.user_speed
+		current_time = TimeManager.get_game_time()
+		
+	var party = _get_my_party()
+	if party and party.event_poi_id != "":
+		# 07:45 (465) bis 12:00 (720) UND 13:50 (830) bis 17:00 (1020)
+		var is_event_time = (current_time >= 465 and current_time < 720) or (current_time >= 830 and current_time < 1020)
+		
+		if is_event_time and _current_poi_id != party.event_poi_id and current_state != State.WALKING:
+			# Force go to event
+			if current_state == State.EATING or current_state == State.IN_POI:
+				var room_n = _get_poi_room_node(_current_poi_id)
+				if is_instance_valid(room_n) and room_n.has_method("release_interaction"): room_n.release_interaction(_guest_member.id)
+			_action_timer = 0
+			_decide_next_action()
+			return
+		elif not is_event_time and _current_poi_id == party.event_poi_id and current_state != State.WALKING and current_time < 1020:
+			# Pause! Verlasse Konferenz.
+			var room_n = _get_poi_room_node(_current_poi_id)
+			if is_instance_valid(room_n) and room_n.has_method("release_interaction"): room_n.release_interaction(_guest_member.id)
+			_action_timer = 0
+			_decide_next_action()
+			return
+		elif current_time >= 1020 and current_state != State.LEAVING and current_state != State.WALKING:
+			# Feierabend -> Gehen
+			var room_n = _get_poi_room_node(_current_poi_id)
+			if is_instance_valid(room_n) and room_n.has_method("release_interaction"): room_n.release_interaction(_guest_member.id)
+			_change_state(State.LEAVING)
+			_walk_to_exit()
+			return
 		
 	if current_state == State.IN_POI and (_current_poi_id == "pool_small" or _current_poi_id == "gym_small" or _current_poi_id == "spa_small"):
 		_poi_stay_timer -= delta * speed
@@ -357,7 +409,7 @@ func _execute_poi_move(target_pos: Vector2, room_node: Node) -> void:
 			_active_tween.tween_property(self, "global_position", p, dur)
 		curr_pos = p
 		
-	if _current_poi_id != "pool_small" and _current_poi_id != "gym_small" and _current_poi_id != "spa_small" and _current_poi_id != "conference_small":
+	if _current_poi_id != "pool_small" and _current_poi_id != "gym_small" and _current_poi_id != "spa_small" and _current_poi_id != "conference_small" and _current_poi_id != "lobby" and _current_poi_id != "vending_machine":
 		_active_tween.tween_callback(func(): _change_state(State.STUDYING_MENU))
 
 # =============================================================================
@@ -395,6 +447,12 @@ func _get_open_pois() -> Array[String]:
 		
 		var room_id: String = def.get("id", "")
 		
+		# Event-Gast POI Einschränkungen
+		var party = _get_my_party()
+		if party and party.event_poi_id != "":
+			if room_id != party.event_poi_id and room_id != "restaurant_small" and room_id != "bar" and room_id != "lobby":
+				continue
+				
 		# SMART ROOM: Der Raum entscheidet selbst, ob der Gast rein darf!
 		if room.has_method("is_guest_allowed") and not room.is_guest_allowed(self):
 			continue
@@ -581,7 +639,12 @@ func _decide_next_action() -> void:
 		else:
 			var party = _get_my_party()
 			if is_instance_valid(party) and party.event_poi_id != "":
-				_walk_to_poi("lobby")
+				var t = TimeManager.get_game_time() if TimeManager else 0
+				if t >= 1020:
+					_change_state(State.LEAVING)
+					_walk_to_exit()
+				else:
+					_walk_to_poi("lobby")
 			else:
 				_change_state(State.LEAVING)
 				_walk_to_exit()
@@ -887,6 +950,9 @@ func _on_poi_arrived() -> void:
 	if is_instance_valid(_guest_manager):
 		var room_id = _get_poi_room_id(_current_poi_id)
 		_guest_manager.on_poi_visited(room_id)
+		
+	if QuestManager and QuestManager.has_method("on_poi_used"):
+		QuestManager.on_poi_used(_current_poi_id)
 
 	if is_smart_room:
 		if _current_poi_id in ["restaurant_small", "bar", "kiosk"]:
@@ -995,7 +1061,6 @@ func start_checkout() -> void:
 		queue_free()
 		return
 		
-	_current_poi_id = "lobby"
 	var door_world = _map_grid.tile_to_world(exit_tile)
 	
 	# Hole Warteposition für den Checkout (lokal in der Lobby)
@@ -1009,6 +1074,8 @@ func start_checkout() -> void:
 		wait_pos += jitter
 		
 	_execute_walk(path_tiles, State.AWAITING_CHECKOUT, door_world, wait_pos, lobby)
+	_current_poi_id = "lobby"
+
 
 
 # =============================================================================
@@ -1163,11 +1230,12 @@ func _walk_to_poi(poi_id: String) -> void:
 	# Budget-Check: Hat der Gast genügend Taschengeld für diesen Besuch?
 	if poi_id != "lobby":
 		var poi_def = _get_poi_def(poi_id)
-		var income: int = poi_def.get("visit_income", 0)
-		if income > 0 and _guest_member.spending_budget < income:
-			# Kein Geld mehr für diesen POI – kurz warten und dann neu entscheiden
-			_action_timer = randf_range(5.0, 15.0)
-			return
+		if poi_def != null:
+			var income: int = poi_def.get("visit_income", 0)
+			if income > 0 and _guest_member.spending_budget < income:
+				# Kein Geld mehr für diesen POI -> kurz warten und dann neu entscheiden
+				_action_timer = randf_range(5.0, 15.0)
+				return
 	
 	var target_room: Node2D = null
 	var exit_tile: Vector2i
@@ -1177,6 +1245,10 @@ func _walk_to_poi(poi_id: String) -> void:
 	else:
 		for room in _map_grid.active_rooms:
 			if not is_instance_valid(room): continue
+			# Check if poi_id is an instance id (for events)
+			if str(room.get_instance_id()) == poi_id:
+				target_room = room
+				break
 			var def = room.call("get_definition")
 			if def.get("id", "") == poi_id:
 				target_room = room

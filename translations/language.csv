@@ -1628,3 +1628,7 @@ poi.pool.bathing,Baden,Bathing
 poi.gym.training,Trainiert,Training
 poi.conference.attending,Nimmt teil,Attending
 poi.conference.speaking,Spricht,Speaking
+poi.lobby.checking_out,Checkt aus,Checking out
+poi.lobby.vending,Holt einen Snack,Getting a snack
+poi.lobby.sitting,Entspannt sich,Relaxing
+poi.lobby.eating_snack,Isst einen Snack,Eating a snack

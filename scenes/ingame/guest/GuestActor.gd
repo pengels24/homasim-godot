@@ -77,20 +77,24 @@ func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null, guest
 		add_child(vip_node)
 		
 	if party and party.event_poi_id != "":
-		var ev_node = Sprite2D.new()
-		ev_node.name = "EventOverlay"
-		ev_node.texture = preload("res://assets/icons/guests/user-star.svg")
+		var ev_badge = Sprite2D.new()
+		ev_badge.name = "EventOverlay"
+		ev_badge.texture = preload("res://assets/icons/angelus2010/ang-guest-conference.aseprite")
 		
 		var color = "#aaaaaa"
 		if EventManager and EventManager.get("active_conferences") != null:
-			if EventManager.active_conferences.has(party.event_poi_id):
-				color = EventManager.active_conferences[party.event_poi_id].get("color", "#aaaaaa")
+			# event_poi_id ist ein String, aber active_conferences nutzt int (instance_id)
+			var conf_id = party.event_poi_id.to_int()
+			if EventManager.active_conferences.has(conf_id):
+				color = EventManager.active_conferences[conf_id].get("color", "#aaaaaa")
 				
-		ev_node.modulate = Color(color)
-		ev_node.scale = Vector2(0.6, 0.6)
-		ev_node.position = Vector2(0, -32)
-		ev_node.z_index = 50
-		add_child(ev_node)
+		ev_badge.modulate = Color(color)
+		
+		# Positionierung und Skalierung 100% identisch zum HungryIcon
+		ev_badge.scale = Vector2(0.25, 0.25)
+		ev_badge.position = Vector2(0, -4)
+		ev_badge.z_index = 10  # Höherer z-index als HungryIcon (welches auf 0 ist)
+		add_child(ev_badge)
 	
 	if start_room != null:
 		_target_room = start_room
@@ -148,7 +152,8 @@ func _process(delta: float) -> void:
 	if has_node("EventOverlay"):
 		var ev_node = get_node("EventOverlay")
 		var t = Time.get_ticks_msec() / 1000.0
-		var s = 0.6 + sin(t * 4.0) * 0.1
+		# Nutze den Base-Scale von 0.25 und pulsiere sanft darum (z.B. +/- 0.02)
+		var s = 0.25 + sin(t * 4.0) * 0.02
 		ev_node.scale = Vector2(s, s)
 
 	if has_node("HungryIcon"):
@@ -1134,9 +1139,9 @@ func start_waiting_for_event(spawn_pos: Vector2, delay: float) -> void:
 		await get_tree().create_timer(wait_time).timeout
 		
 	var lobby = _get_lobby_room()
-	if is_instance_valid(lobby) and lobby.has_method("get_checkout_wait_pos"):
-		var reception_pos = lobby.get_checkout_wait_pos(_guest_member.party_id)
-		global_position = reception_pos + Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
+	if is_instance_valid(lobby) and lobby.has_method("get_free_walkable_pos"):
+		var wait_pos = lobby.get_free_walkable_pos(_map_grid)
+		global_position = wait_pos
 	modulate.a = 1.0
 	
 	# Status IDLE = Gast wartet auf das Event und fängt an POIs zu suchen

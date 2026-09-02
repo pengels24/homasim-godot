@@ -244,13 +244,20 @@ func get_live_details() -> Array[Dictionary]:
 				continue
 				
 			var guest_name = guest_actor.get("_guest_member").name if guest_actor.get("_guest_member") else "Gast"
+			var party = guest_actor.call("_get_my_party") if guest_actor.has_method("_get_my_party") else null
+			if is_instance_valid(party) and party.event_poi_id != "":
+				guest_name += " (TG)"
+				
 			var status = "Wartet..."
 			if guest_actor.current_state == guest_actor.State.AWAITING_CHECKOUT:
-				status = GameState.T("poi.lobby.checking_out", "Checkt aus")
+				status = GameState.T("poi.lobby.checking_out")
 			elif guest_actor._current_poi_id == "vending_machine":
-				status = GameState.T("poi.lobby.vending", "Holt einen Snack")
+				if guest_actor.current_state == guest_actor.State.EATING:
+					status = GameState.T("poi.lobby.eating_snack")
+				else:
+					status = GameState.T("poi.lobby.vending")
 			elif guest_actor.current_state == guest_actor.State.SITTING:
-				status = GameState.T("poi.lobby.sitting", "Entspannt sich")
+				status = GameState.T("poi.lobby.sitting")
 				
 			details.append({
 				"left": guest_name,

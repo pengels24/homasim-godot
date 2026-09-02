@@ -56,11 +56,15 @@ func _on_morning_struck() -> void:
 func start_random_event() -> void:
 	var conference_rooms = []
 	if TechtreeManager and TechtreeManager.is_tech_unlocked("P1.2"):
-		var hm = get_tree().get_first_node_in_group("MapGrid")
-		if hm and "active_rooms" in hm:
-			for room in hm.active_rooms:
-				if is_instance_valid(room) and room.has_method("get_definition"):
-					if room.get_definition().get("id").begins_with("conference_"):
+		var hm = get_tree().current_scene.find_child("MapGrid", true, false) if get_tree().current_scene else null
+		if hm == null:
+			hm = get_tree().get_first_node_in_group("MapGrid")
+		if hm:
+			var all_rooms = hm.get_placed_rooms() if hm.has_method("get_placed_rooms") else (hm.active_rooms if "active_rooms" in hm else [])
+			for room in all_rooms:
+				if is_instance_valid(room):
+					var r_id = room.get("room_type_id")
+					if r_id != null and r_id.begins_with("conference_"):
 						conference_rooms.append(room)
 
 	var roll = randf()
@@ -118,13 +122,27 @@ func end_event() -> void:
 # =============================================================================
 func force_conference() -> bool:
 	var conference_rooms = []
-	if TechtreeManager and TechtreeManager.is_tech_unlocked("P1.2"):
-		var hm = get_tree().get_first_node_in_group("MapGrid")
-		if hm and "active_rooms" in hm:
-			for room in hm.active_rooms:
-				if is_instance_valid(room) and room.has_method("get_definition"):
-					if room.get_definition().get("id").begins_with("conference_"):
+	# Finde das MapGrid, es ist ein Kind der Ingame-Szene (nicht zwingend in einer Gruppe)
+	var hm = get_tree().current_scene.find_child("MapGrid", true, false) if get_tree().current_scene else null
+	if hm == null:
+		hm = get_tree().get_first_node_in_group("MapGrid")
+	
+	if hm:
+		print("[EventManager] MapGrid gefunden!")
+		var all_rooms = hm.get_placed_rooms() if hm.has_method("get_placed_rooms") else (hm.active_rooms if "active_rooms" in hm else [])
+		print("[EventManager] Untersuche ", all_rooms.size(), " Räume...")
+		var found_room_types = []
+		for room in all_rooms:
+			if is_instance_valid(room):
+				var r_id = room.get("room_type_id")
+				if r_id != null:
+					found_room_types.append(r_id)
+					if r_id.begins_with("conference_"):
+						print("[EventManager] Konferenzraum identifiziert: ", room.name)
 						conference_rooms.append(room)
+		print("[EventManager] Gefundene Raum-Typen in der Liste: ", found_room_types)
+	else:
+		print("[EventManager] FEHLER: MapGrid wurde in der Gruppe 'MapGrid' nicht gefunden!")
 
 	if conference_rooms.size() == 0:
 		return false

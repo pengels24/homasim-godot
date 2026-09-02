@@ -158,11 +158,15 @@ func _update_content() -> void:
 				var ctrl = ingame.get("_guest_controller")
 				if ctrl:
 					for actor in ctrl._actors.values():
-						var valid_states = [actor.State.IN_POI, actor.State.STUDYING_MENU, actor.State.WAITING_FOR_FOOD, actor.State.EATING, actor.State.AWAITING_CHECKOUT]
-						if actor.current_state in valid_states and actor._current_poi_id == def.get("id", ""):
+						var valid_states = [actor.State.IN_POI, actor.State.STUDYING_MENU, actor.State.WAITING_FOR_FOOD, actor.State.EATING, actor.State.AWAITING_CHECKOUT, actor.State.IDLE, actor.State.WAITING_IN_LINE]
+						if actor.current_state in valid_states and (actor._current_poi_id == def.get("id", "") or actor._current_poi_id == str(_target_room.get_instance_id()) or (def.get("id", "") == "lobby" and actor._current_poi_id == "vending_machine")):
 							current_visitors += 1
 							if is_instance_valid(actor._guest_member):
-								visitor_names.append("👤 " + actor._guest_member.name)
+								var gname = actor._guest_member.name
+								var party = actor.call("_get_my_party") if actor.has_method("_get_my_party") else null
+								if is_instance_valid(party) and party.event_poi_id != "":
+									gname += " (TG)"
+								visitor_names.append("👤 " + gname)
 				
 			if is_instance_valid(staff_label):
 				if def.get("min_staff", 0) == 0 and staff_present == 0:

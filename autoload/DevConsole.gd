@@ -152,6 +152,8 @@ func _execute(cmd: String) -> void:
 				_log("Konferenz-Event manuell beendet (Gäste bleiben ggf. bis 17 Uhr).", CLR_OK)
 			else:
 				_log("Verwendung: set-conference:on oder set-conference:off", CLR_ERR)
+				
+		"reset-tutorial":
 			if TutorialManager:
 				TutorialManager.reset_all()
 				_log("Alle Tutorials wurden zurückgesetzt.", CLR_OK)

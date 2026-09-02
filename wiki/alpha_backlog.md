@@ -21,6 +21,7 @@
 - ✅ **QuestManager Wildcard-Fix:** Logikfehler beim Abgleich von generischen Quests (leere `target_id`) korrigiert.
 - ✅ **Konferenzraum Quest:** Veralteten Forschungs-Node `B1.1` in `quests.json` durch `P1.2` ersetzt.
 - ✅ **UI Raum-Tooltips:** `CustomTooltip.gd` blendet nun "Anwesende Mitarbeiter: 0" in gästefokussierten Räumen (`min_staff == 0`) und "Anwesende Gäste" in Personalräumen (wie Küche) korrekt aus.
+- ✅ **Konferenz-Gäste Pathing & UI:** Pathfinding-Fixes für Event-Gäste (Lobby-Verteilung per `get_free_walkable_pos()`), Fix des globalen AStar-Debugs, LiveMonitor Updates (Anzeige von `(TG)` und Live-Snack-State), korrekte Zählung im Raum-Tooltip und Behebung eines `Object.get()` Crashes.
 
 ## 🧱 Phase 1 – Fundament (v0.1.40–41)
 *Zuerst, weil alles andere darauf aufbaut.*

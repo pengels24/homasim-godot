@@ -82,7 +82,7 @@ func configure(hotel: Dictionary, map_grid: Node2D) -> void:
 # =============================================================================
 func _on_minute_passed(_total_game_minutes: int) -> void:
 	var current_time = TimeManager.get_game_time()
-	if current_time == 420 or current_time == 425 or current_time == 430: # 07:00, 07:05, 07:10 Uhr
+	if current_time >= 420 and current_time % 5 == 0: # Erst ab 07:00 Uhr und alle 5 Ingame-Minuten prüfen
 		if EventManager and EventManager.get("active_conferences") != null and EventManager.active_conferences.size() > 0:
 			spawn_conference_guests(current_time)
 
@@ -170,13 +170,17 @@ func spawn_conference_guests(current_time: int) -> void:
 	if not is_instance_valid(_map_grid) or EventManager == null:
 		return
 		
+	# Niemals vor 07:00 Uhr spawnen
+	if current_time < 420:
+		return
+		
 	var active_conferences = EventManager.active_conferences
 	
 	for room_id in active_conferences.keys():
 		var event_cfg = active_conferences[room_id]
 		var conf_rkey = str(room_id)
 		
-		var room = instance_from_id(room_id)
+		var room = _get_room_node(conf_rkey)
 		if not is_instance_valid(room):
 			continue
 			
@@ -192,16 +196,10 @@ func spawn_conference_guests(current_time: int) -> void:
 		if needed <= 0:
 			continue
 			
-		# Teile den Rest auf die verbleibenden Wellen auf
-		var remaining_waves = 1
-		if current_time == 420: remaining_waves = 3
-		elif current_time == 425: remaining_waves = 2
+		var spawn_now = min(4, needed) # Maximal 4 Gäste pro Welle (alle 5 Ingame-Minuten)
+		var spawned_this_wave = 0
 		
-		var spawn_now = ceili(float(needed) / remaining_waves)
-		
-		var parties_to_spawn = ceili(float(spawn_now) / 2.0) # Annahme: 1-3 Leute pro Party, wir spawnen einfach Einzelne oder Paare
-		
-		for i in range(parties_to_spawn):
+		while spawned_this_wave < spawn_now:
 			var party = _generate_party("business")
 			party.stay_days = 2
 			party.total_stay_days = 0 
@@ -221,6 +219,9 @@ func spawn_conference_guests(current_time: int) -> void:
 				var b: int = randi_range(budget_min, budget_max) + int(dynamic_poi_budget * poi_mult)
 				member.daily_budget   = b
 				member.spending_budget = b
+				# Tagungsgäste haben zu Beginn keinen Hunger, damit sie nicht sofort die POIs fluten
+				member.saturation = randi_range(80, 100)
+				
 			party.daily_budget    = party.members.reduce(func(acc, m): return acc + m.daily_budget, 0)
 			party.spending_budget = party.daily_budget
 			
@@ -229,8 +230,7 @@ func spawn_conference_guests(current_time: int) -> void:
 			
 			daily_checkin_parties += 1
 			daily_checkin_heads += party.members.size()
-			
-			# Event-Income wurde bereits im EventManager bei Buchung abgerechnet!
+			spawned_this_wave += party.members.size()
 
 
 # =============================================================================

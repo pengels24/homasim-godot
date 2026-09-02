@@ -159,7 +159,9 @@ func _update_content() -> void:
 				if ctrl:
 					for actor in ctrl._actors.values():
 						var valid_states = [actor.State.IN_POI, actor.State.STUDYING_MENU, actor.State.WAITING_FOR_FOOD, actor.State.EATING, actor.State.AWAITING_CHECKOUT, actor.State.IDLE, actor.State.WAITING_IN_LINE]
-						if actor.current_state in valid_states and (actor._current_poi_id == def.get("id", "") or actor._current_poi_id == str(_target_room.get_instance_id()) or (def.get("id", "") == "lobby" and actor._current_poi_id == "vending_machine")):
+						var gm = get_tree().current_scene.find_child("GuestManager", true, false)
+						var rkey = gm._room_key(_target_room) if is_instance_valid(gm) else ""
+						if actor.current_state in valid_states and (actor._current_poi_id == def.get("id", "") or actor._current_poi_id == rkey or (def.get("id", "") == "lobby" and actor._current_poi_id == "vending_machine")):
 							current_visitors += 1
 							if is_instance_valid(actor._guest_member):
 								var gname = actor._guest_member.name

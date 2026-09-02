@@ -128,6 +128,29 @@ func _execute(cmd: String) -> void:
 			_log("  reset-tutorial    – Setzt alle gesehenen Tutorials zurück", CLR_INFO)
 			_log("  set-conference:on – Startet das Tagungs-Event manuell", CLR_INFO)
 			_log("  set-conference:off– Beendet das Tagungs-Event manuell", CLR_INFO)
+			_log("  fix-savegame      – Bereinigt verbuggte Events und Tagungsgäste", CLR_INFO)
+
+		"fix-savegame":
+			if EventManager:
+				EventManager.end_event()
+			var gm = get_tree().current_scene.find_child("GuestManager", true, false)
+			if is_instance_valid(gm):
+				var removed = 0
+				var lists = [gm.get_active(), gm.get_waiting(), gm.get_checkout()]
+				for lst in lists:
+					for i in range(lst.size() - 1, -1, -1):
+						if lst[i].get("total_stay_days") == 0 or lst[i].get("event_poi_id") != "":
+							var party = lst[i]
+							# Cleanup GuestActor instances
+							for node in get_tree().get_nodes_in_group("guests"):
+								if node.has_method("_get_my_party") and node._get_my_party() == party:
+									node.queue_free()
+							lst.remove_at(i)
+							removed += 1
+				gm.parties_changed.emit()
+				_log("Savegame bereinigt! " + str(removed) + " kaputte Event-Gruppen entfernt.", CLR_OK)
+			else:
+				_log("GuestManager nicht gefunden.", CLR_ERR)
 
 		"set-conference":
 			if val_s == "on":

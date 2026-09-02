@@ -4,7 +4,6 @@
 [ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="2_n7g7k"]
 [ext_resource type="Texture2D" uid="uid://p63omxtgdu35" path="res://assets/icons/HUDTop/play.svg" id="3_2d45u"]
 [ext_resource type="PackedScene" path="res://scenes/ingame/hud/LabelPanel.tscn" id="3_unqwd"]
-[ext_resource type="Texture2D" uid="uid://d35lpn3ej3op7" path="res://assets/icons/HUDTop/house.svg" id="4_1a3cs"]
 [ext_resource type="Texture2D" uid="uid://digmreddi030f" path="res://assets/icons/HUDTop/fast-forward.svg" id="4_feby4"]
 [ext_resource type="Texture2D" uid="uid://d3qtauemfxupf" path="res://assets/icons/HUDTop/trending-up.svg" id="5_s3kxq"]
 [ext_resource type="Texture2D" uid="uid://dvuvt72n64q4v" path="res://assets/icons/HUDTop/star-progress.png" id="6_eas3h"]
@@ -21,23 +20,9 @@
 [ext_resource type="PackedScene" uid="uid://bcweu4cs7d73x" path="res://scenes/ingame/hud/modals/StandardModal.tscn" id="25_fiam6"]
 [ext_resource type="PackedScene" uid="uid://df2m4b8v7e1q" path="res://scenes/ingame/hud/TechOverlay.tscn" id="50_tech"]
 [ext_resource type="PackedScene" uid="uid://dxemoh2bim084" path="res://scenes/ingame/hud/BuildHintPanel.tscn" id="51_bh"]
-[ext_resource type="PackedScene" uid="uid://dxbxxxactivitylogpanel" path="res://scenes/ingame/hud/ActivityLogPanel.tscn" id="52_log"]
+[ext_resource type="PackedScene" uid="uid://dly5vgbhpbm6r" path="res://scenes/ingame/hud/ActivityLogPanel.tscn" id="52_log"]
 [ext_resource type="Texture2D" uid="uid://cvaoe3hytdbse" path="res://assets/icons/HUDBottom/book-open-check.svg" id="53_icon"]
 [ext_resource type="PackedScene" uid="uid://d4kasrrt3p41g" path="res://scenes/ingame/hud/OverlayToolbar.tscn" id="ext_overlay_toolbar"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nextevent"]
-content_margin_left = 20.0
-content_margin_top = 4.0
-content_margin_right = 20.0
-content_margin_bottom = 6.0
-bg_color = Color(0.13333334, 0.1254902, 0.18039216, 1)
-border_width_left = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.19215687, 0.20784314, 0.27450982, 1)
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
-corner_detail = 6
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_gfles"]
 content_margin_left = 0.0
@@ -145,8 +130,22 @@ _data = {
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_fiam6"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_7mtkd"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_0bsoo"]
 allow_unpress = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nextevent"]
+content_margin_left = 20.0
+content_margin_top = 4.0
+content_margin_right = 20.0
+content_margin_bottom = 6.0
+bg_color = Color(0.13333334, 0.1254902, 0.18039216, 1)
+border_width_left = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.19215687, 0.20784314, 0.27450982, 1)
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+corner_detail = 6
 
 [node name="HUDTop" type="CanvasLayer" unique_id=102009972]
 process_mode = 3
@@ -188,17 +187,17 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="Level" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1708982499 instance=ExtResource("3_unqwd")]
-tooltip_text = "hud.top.tooltip.level"
 custom_minimum_size = Vector2(85, 0)
 layout_mode = 2
+tooltip_text = "hud.top.tooltip.level"
 
 [node name="TextureRect" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/Level/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1708982499, 994132176) index="0" unique_id=545323053]
 modulate = Color(0.96862745, 0.5372549, 0.32156864, 1)
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 texture = ExtResource("5_s3kxq")
-stretch_mode = 5
 expand_mode = 1
+stretch_mode = 5
 
 [node name="Level" type="Label" parent="TopBar/MarginContainer/HBoxContainer/Level/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1708982499, 994132176) index="1" unique_id=2076223888]
 unique_name_in_owner = true
@@ -228,17 +227,17 @@ size_flags_horizontal = 3
 theme_override_constants/margin_left = 40
 
 [node name="Money" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1249543363 instance=ExtResource("3_unqwd")]
-tooltip_text = "hud.top.tooltip.capital"
 custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
+tooltip_text = "hud.top.tooltip.capital"
 
 [node name="TextureRect" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/Money/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1249543363, 994132176) index="0" unique_id=1717310057]
 modulate = Color(0.24705882, 0.56078434, 0.30980393, 1)
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 texture = ExtResource("8_grv02")
-stretch_mode = 5
 expand_mode = 1
+stretch_mode = 5
 
 [node name="Capital" type="Label" parent="TopBar/MarginContainer/HBoxContainer/Money/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1249543363, 994132176) index="1" unique_id=1081669663]
 unique_name_in_owner = true
@@ -249,10 +248,10 @@ text = "999.999.999"
 horizontal_alignment = 2
 
 [node name="Guests" type="Panel" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1747277186]
-tooltip_text = "hud.top.tooltip.guests"
 clip_children = 2
 custom_minimum_size = Vector2(182, 0)
 layout_mode = 2
+tooltip_text = "hud.top.tooltip.guests"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="TopBar/MarginContainer/HBoxContainer/Guests" unique_id=1335395210]
 layout_mode = 1
@@ -273,8 +272,8 @@ modulate = Color(0.31764707, 0.6509804, 0.9411765, 1)
 custom_minimum_size = Vector2(24, 24)
 layout_mode = 2
 texture = ExtResource("9_dhj4j")
-stretch_mode = 5
 expand_mode = 1
+stretch_mode = 5
 
 [node name="VSeparator" type="VSeparator" parent="TopBar/MarginContainer/HBoxContainer/Guests/HBoxContainer" unique_id=2020579649]
 layout_mode = 2
@@ -345,9 +344,9 @@ size_flags_horizontal = 3
 theme_override_constants/margin_left = 20
 
 [node name="Exp" type="VBoxContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=2054724630]
-tooltip_text = "hud.top.tooltip.exp"
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+tooltip_text = "hud.top.tooltip.exp"
 alignment = 1
 
 [node name="EXP" type="ProgressBar" parent="TopBar/MarginContainer/HBoxContainer/Exp" unique_id=1172729700]
@@ -378,9 +377,9 @@ layout_mode = 2
 theme_override_constants/margin_left = 10
 
 [node name="Reputation" type="VBoxContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1618042155]
-tooltip_text = "hud.top.tooltip.rep"
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
+tooltip_text = "hud.top.tooltip.rep"
 alignment = 1
 
 [node name="REP" type="ProgressBar" parent="TopBar/MarginContainer/HBoxContainer/Reputation" unique_id=1901553854]
@@ -424,8 +423,8 @@ modulate = Color(0.92941177, 0.9411765, 0.40392157, 1)
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 texture = ExtResource("10_f542l")
-stretch_mode = 5
 expand_mode = 1
+stretch_mode = 5
 
 [node name="FP" type="Label" parent="TopBar/MarginContainer/HBoxContainer/FP/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1608358203, 994132176) index="1" unique_id=1502268624]
 unique_name_in_owner = true
@@ -440,17 +439,17 @@ layout_mode = 2
 theme_override_constants/margin_left = 80
 
 [node name="Day" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1055048167 instance=ExtResource("3_unqwd")]
-tooltip_text = "hud.top.tooltip.day"
 custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
+tooltip_text = "hud.top.tooltip.day"
 
 [node name="TextureRect" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/Day/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1055048167, 994132176) index="0" unique_id=819640250]
 modulate = Color(0.9411765, 0.7294118, 0.6392157, 1)
 custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 texture = ExtResource("11_l8bek")
-stretch_mode = 5
 expand_mode = 1
+stretch_mode = 5
 
 [node name="Day" type="Label" parent="TopBar/MarginContainer/HBoxContainer/Day/MarginContainer/HBoxContainer" parent_id_path=PackedInt32Array(1055048167, 994132176) index="1" unique_id=44184594]
 unique_name_in_owner = true
@@ -462,10 +461,10 @@ text = "9.999"
 horizontal_alignment = 2
 
 [node name="Time" type="Label" parent="TopBar/MarginContainer/HBoxContainer" unique_id=576294517]
-tooltip_text = "hud.top.tooltip.time"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(95, 0)
 layout_mode = 2
+tooltip_text = "hud.top.tooltip.time"
 theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
 theme_override_font_sizes/font_size = 36
 text = "23:59"
@@ -491,12 +490,12 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 10
 
 [node name="Pause" type="Button" parent="TopBar/MarginContainer/HBoxContainer/Button/MarginContainer" unique_id=1024382007]
-mouse_default_cursor_shape = 2
-focus_mode = 0
 unique_name_in_owner = true
 modulate = Color(0.9411765, 0.7294118, 0.6392157, 1)
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
 theme_override_styles/pressed = ExtResource("12_yugll")
 toggle_mode = true
 button_pressed = true
@@ -522,12 +521,12 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 10
 
 [node name="Play" type="Button" parent="TopBar/MarginContainer/HBoxContainer/Button2/MarginContainer" unique_id=1527988184]
-mouse_default_cursor_shape = 2
-focus_mode = 0
 unique_name_in_owner = true
 modulate = Color(0.9411765, 0.7294118, 0.6392157, 1)
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
 theme_override_styles/pressed = ExtResource("12_yugll")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_fiam6")
@@ -552,20 +551,18 @@ theme_override_constants/margin_top = 1
 theme_override_constants/margin_right = 10
 
 [node name="Forward" type="Button" parent="TopBar/MarginContainer/HBoxContainer/Button3/MarginContainer" unique_id=164350172]
-mouse_default_cursor_shape = 2
-focus_mode = 0
 unique_name_in_owner = true
 modulate = Color(0.9411765, 0.7294118, 0.6392157, 1)
 custom_minimum_size = Vector2(24, 0)
 layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
 theme_override_styles/pressed = ExtResource("12_yugll")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_fiam6")
 icon = ExtResource("4_feby4")
 
-
 [node name="ManagementContainer" type="MarginContainer" parent="." unique_id=999999991]
-layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -578,10 +575,35 @@ grow_horizontal = 0
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="ActivityLogContainer" type="Panel" parent="."]
-theme = ExtResource("2_n7g7k")
+[node name="Reception" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel2/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1938624481) index="0" unique_id=2132307684]
+button_group = SubResource("ButtonGroup_0bsoo")
+
+[node name="TechTree" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel4/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1152472691) index="0" unique_id=1848820052]
+button_group = SubResource("ButtonGroup_0bsoo")
+
+[node name="GuestList" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel7/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1564498093) index="0" unique_id=1602170882]
+button_group = SubResource("ButtonGroup_0bsoo")
+
+[node name="RoomList" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel8/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1190011345) index="0" unique_id=790306827]
+button_group = SubResource("ButtonGroup_0bsoo")
+
+[node name="Staff" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel3/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1093129650) index="0" unique_id=1652034052]
+button_group = SubResource("ButtonGroup_0bsoo")
+
+[node name="Finances" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel9/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1759843935) index="0" unique_id=390759144]
+button_group = SubResource("ButtonGroup_0bsoo")
+
+[node name="SimBrowser" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel5/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1000552068) index="0" unique_id=103433776]
+button_group = SubResource("ButtonGroup_0bsoo")
+
+[node name="QuestBook" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel6/MarginContainer" parent_id_path=PackedInt32Array(491735265, 244124741) index="0" unique_id=969239424]
+button_group = SubResource("ButtonGroup_0bsoo")
+
+[node name="Tutorial" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel10/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1410065400) index="0" unique_id=1410065401]
+button_group = SubResource("ButtonGroup_0bsoo")
+
+[node name="ActivityLogContainer" type="Panel" parent="." unique_id=1434128839]
 custom_minimum_size = Vector2(60, 60)
-layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -590,8 +612,9 @@ offset_right = -20.0
 offset_bottom = 220.0
 grow_horizontal = 0
 mouse_filter = 1
+theme = ExtResource("2_n7g7k")
 
-[node name="MarginContainer" type="MarginContainer" parent="ActivityLogContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ActivityLogContainer" unique_id=1994471765]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -603,15 +626,15 @@ theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="ActivityBtn" type="Button" parent="ActivityLogContainer/MarginContainer"]
-mouse_default_cursor_shape = 2
+[node name="ActivityBtn" type="Button" parent="ActivityLogContainer/MarginContainer" unique_id=1181610754]
 layout_mode = 2
 focus_mode = 0
+mouse_default_cursor_shape = 2
 theme_override_styles/pressed = ExtResource("12_yugll")
 icon = ExtResource("53_icon")
 icon_alignment = 1
 
-[node name="Badge" type="Panel" parent="ActivityLogContainer"]
+[node name="Badge" type="Panel" parent="ActivityLogContainer" unique_id=1983551649]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -623,7 +646,7 @@ offset_bottom = 20.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_cxhb7")
 
-[node name="Label" type="Label" parent="ActivityLogContainer/Badge"]
+[node name="Label" type="Label" parent="ActivityLogContainer/Badge" unique_id=1994446348]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -636,15 +659,12 @@ text = "0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ActivityLogPanel" parent="." instance=ExtResource("52_log")]
-layout_mode = 1
+[node name="ActivityLogPanel" parent="." unique_id=2074145536 instance=ExtResource("52_log")]
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = 30.0
-offset_top = 160.0
 offset_right = 350.0
-offset_bottom = 660.0
 grow_horizontal = 0
 
 [node name="BottomBarContainer" type="HBoxContainer" parent="." unique_id=378990724]
@@ -690,7 +710,7 @@ offset_bottom = 100.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_nextevent")
 
-[node name="NextEvent" type="Label" parent="NextEventContainer"]
+[node name="NextEvent" type="Label" parent="NextEventContainer" unique_id=1863248109]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
@@ -698,6 +718,33 @@ theme_override_font_sizes/font_size = 22
 text = "Keine Events"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="EventIndicator" type="PanelContainer" parent="." unique_id=1882594287]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -950.0
+offset_top = 70.0
+offset_right = -550.0
+offset_bottom = 103.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nextevent")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="EventIndicator" unique_id=1415910294]
+layout_mode = 2
+
+[node name="EventColor" type="ColorRect" parent="EventIndicator/HBoxContainer" unique_id=1738995554]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(15, 0)
+layout_mode = 2
+
+[node name="EventNameLabel" type="Label" parent="EventIndicator/HBoxContainer" unique_id=1957292934]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 22
+text = "Keine Events"
 
 [node name="PauseLabel" type="Label" parent="." unique_id=1948573928]
 visible = false
@@ -709,13 +756,13 @@ offset_top = 120.0
 offset_right = 200.0
 offset_bottom = 160.0
 grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.6)
 theme_override_colors/font_outline_color = Color(0.1, 0.1, 0.1, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 3
 theme_override_font_sizes/font_size = 48
-theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "*** Spiel pausiert ***"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -730,29 +777,27 @@ unique_name_in_owner = true
 z_index = 10
 scale_amount_max = 3.0
 
-[node name="TechOverlay" parent="." instance=ExtResource("50_tech")]
-layout_mode = 1
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
-offset_left = 30.0
-offset_top = 80.0
-offset_right = 180.0
-offset_bottom = 160.0
+[node name="TechOverlay" parent="." unique_id=1322565124 instance=ExtResource("50_tech")]
+offset_left = 95.0
+offset_top = 150.0
+offset_right = 245.0
+offset_bottom = 349.0
 
-[node name="BuildHintPanel" parent="." instance=ExtResource("51_bh")]
-[node name="OverlayToolbar" parent="." instance=ExtResource("ext_overlay_toolbar")]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 20.0
-offset_top = 80.0
+[node name="BuildHintPanel" parent="." unique_id=2136705122 instance=ExtResource("51_bh")]
+offset_right = 299.0
+offset_bottom = 801.0
+
+[node name="OverlayToolbar" parent="." unique_id=784760319 instance=ExtResource("ext_overlay_toolbar")]
+offset_left = 10.0
+offset_top = 140.0
 offset_right = 80.0
-offset_bottom = 480.0
+offset_bottom = 630.0
+
 [editable path="TopBar/MarginContainer/HBoxContainer/Level"]
 [editable path="TopBar/MarginContainer/HBoxContainer/Money"]
 [editable path="TopBar/MarginContainer/HBoxContainer/FP"]
 [editable path="TopBar/MarginContainer/HBoxContainer/Day"]
 [editable path="ManagementContainer/HUDBottom"]
 [editable path="BottomBarContainer/BuildMenu"]
-[editable path="LevelUpModal"]
 [editable path="StandardModal"]
+[editable path="LevelUpModal"]

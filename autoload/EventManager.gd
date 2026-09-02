@@ -74,17 +74,20 @@ func start_random_event() -> void:
 		event_days_remaining = 1
 		
 		# 1 bis N Räume auswählen
+		active_conferences.clear()
 		var num_events = randi_range(1, conference_rooms.size())
 		conference_rooms.shuffle()
 		
 		for i in range(num_events):
 			var room = conference_rooms[i]
 			var cfg = _conference_configs.pick_random() if _conference_configs.size() > 0 else {"id": "default", "name": "Standard-Tagung", "max_participants": 12, "color": "#aaaaaa", "income_per_participant": 150}
-			active_conferences[room.get_instance_id()] = cfg
+			active_conferences[GuestManager._room_key(room)] = cfg
 			
 			var income = cfg.get("income_per_participant", 150) * min(cfg.get("max_participants", 12), room.call("get_definition").get("max_guests", 12))
 			if FinanceManager:
 				FinanceManager.add_transaction(income, "event", "Tagung gebucht: %s" % cfg.get("name", "Event"))
+				if EffectManager and is_instance_valid(room):
+					EffectManager.spawn_money_text(income, room.global_position + Vector2(0, -32))
 					
 		_notify_event("Tageskonferenz!", "%d Tagung(en) heute im Haus!" % num_events)
 	elif roll < 0.40:
@@ -150,17 +153,20 @@ func force_conference() -> bool:
 	active_event = EventType.CONFERENCE
 	event_days_remaining = 1
 	
+	active_conferences.clear()
 	var num_events = randi_range(1, conference_rooms.size())
 	conference_rooms.shuffle()
 	
 	for i in range(num_events):
 		var room = conference_rooms[i]
 		var cfg = _conference_configs.pick_random() if _conference_configs.size() > 0 else {"id": "default", "name": "Standard-Tagung", "max_participants": 12, "color": "#aaaaaa", "income_per_participant": 150}
-		active_conferences[room.get_instance_id()] = cfg
+		active_conferences[GuestManager._room_key(room)] = cfg
 		
 		var income = cfg.get("income_per_participant", 150) * min(cfg.get("max_participants", 12), room.call("get_definition").get("max_guests", 12))
 		if FinanceManager:
 			FinanceManager.add_transaction(income, "event", "Tagung gebucht: %s" % cfg.get("name", "Event"))
+			if EffectManager and is_instance_valid(room):
+				EffectManager.spawn_money_text(income, room.global_position + Vector2(0, -32))
 			
 	_notify_event("Tageskonferenz!", "%d Tagung(en) manuell gestartet!" % num_events)
 	sig_event_started.emit(str(active_event), "Event")

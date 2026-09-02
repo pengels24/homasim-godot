@@ -22,6 +22,9 @@
 - ✅ **Konferenzraum Quest:** Veralteten Forschungs-Node `B1.1` in `quests.json` durch `P1.2` ersetzt.
 - ✅ **UI Raum-Tooltips:** `CustomTooltip.gd` blendet nun "Anwesende Mitarbeiter: 0" in gästefokussierten Räumen (`min_staff == 0`) und "Anwesende Gäste" in Personalräumen (wie Küche) korrekt aus.
 - ✅ **Konferenz-Gäste Pathing & UI:** Pathfinding-Fixes für Event-Gäste (Lobby-Verteilung per `get_free_walkable_pos()`), Fix des globalen AStar-Debugs, LiveMonitor Updates (Anzeige von `(TG)` und Live-Snack-State), korrekte Zählung im Raum-Tooltip und Behebung eines `Object.get()` Crashes.
+- ✅ **Konferenz-Spawn Wellen:** Fehler in der while-Bedingung `GuestManager.spawn_conference_guests` korrigiert, sodass auch die 3. Welle (Gäste 9-12) das Hotel erreicht.
+- ✅ **Konferenz-Priorität:** `GuestActor._decide_next_action()` priorisiert zur Event-Zeit den Konferenzraum zwingend vor regulären POIs.
+- ✅ **Room Key Fixes:** Restliche `instance_id`-Überbleibsel in `GuestActor._walk_to_poi()`, `CustomTooltip.gd` und der Türsteher-Logik von `ConferenceSmall.gd` durch den sicheren `GuestManager._room_key` abgelöst.
 
 ## 🧱 Phase 1 – Fundament (v0.1.40–41)
 *Zuerst, weil alles andere darauf aufbaut.*

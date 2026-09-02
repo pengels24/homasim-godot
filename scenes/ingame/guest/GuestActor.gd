@@ -530,8 +530,8 @@ func _is_current_poi_open() -> bool:
 func _decide_next_action() -> void:
 	if current_state == State.LEAVING:
 		return
-	
-	# (Müdigkeits-Check entfernt, da GuestMember keine energy Property hat)
+		
+	var party = _get_my_party()
 		
 	var open_pois := _get_open_pois()
 	
@@ -569,7 +569,7 @@ func _decide_next_action() -> void:
 			if is_instance_valid(_target_room):
 				_walk_to_room(_target_room, State.IN_ROOM)
 			else:
-				var party = _get_my_party()
+				party = _get_my_party()
 				if is_instance_valid(party) and party.event_poi_id != "":
 					_walk_to_poi("lobby")
 				else:
@@ -577,7 +577,7 @@ func _decide_next_action() -> void:
 					_walk_to_exit()
 			return
 		else:
-			var party = _get_my_party()
+			party = _get_my_party()
 			if is_instance_valid(party) and party.event_poi_id != "":
 				_action_timer = randf_range(5.0, 10.0)
 			else:
@@ -595,8 +595,17 @@ func _decide_next_action() -> void:
 		
 	var chosen: String = possible_targets.pick_random()
 	
-	# ANG-310: Hunger-Priorisierung! Wenn der Gast hungrig ist, soll er Essen fokussieren.
-	if _guest_member.saturation < HUNGER_THRESHOLD:
+	# Event-Gast Priorität: Wenn es Event-Zeit ist, GEH ZUM EVENT!
+	party = _get_my_party()
+	if is_instance_valid(party) and party.event_poi_id != "":
+		var t = TimeManager.get_game_time() if TimeManager else 0
+		var is_event_time = (t >= 465 and t < 720) or (t >= 830 and t < 1020)
+		if is_event_time:
+			chosen = party.event_poi_id
+	
+	# ANG-310: Hunger-Priorisierung! (nur wenn wir nicht gerade zwingend zum Event müssen)
+	var ev_id = party.event_poi_id if is_instance_valid(party) else ""
+	if chosen != ev_id and _guest_member.saturation < HUNGER_THRESHOLD:
 		var food_pois = []
 		if open_pois.has("vending_machine"): food_pois.append("vending_machine")
 		if open_pois.has("restaurant_small"): food_pois.append("restaurant_small")
@@ -616,7 +625,7 @@ func _decide_next_action() -> void:
 			_wander_in_room(_target_room)
 			return
 	elif (current_state == State.IN_POI or current_state == State.EATING or current_state == State.STUDYING_MENU or current_state == State.WAITING_FOR_FOOD) and chosen == _current_poi_id:
-		var party = _get_my_party()
+		party = _get_my_party()
 		if is_instance_valid(party) and party.event_poi_id != "":
 			if party.event_poi_id == _current_poi_id:
 				pass # Wir bleiben beim Event!
@@ -642,7 +651,7 @@ func _decide_next_action() -> void:
 		if is_instance_valid(_target_room):
 			_walk_to_room(_target_room, State.IN_ROOM)
 		else:
-			var party = _get_my_party()
+			party = _get_my_party()
 			if is_instance_valid(party) and party.event_poi_id != "":
 				var t = TimeManager.get_game_time() if TimeManager else 0
 				if t >= 1020:
@@ -1125,12 +1134,12 @@ func start_waiting_in_lobby(spawn_pos: Vector2, delay: float) -> void:
 func start_waiting_for_event(spawn_pos: Vector2, delay: float) -> void:
 	_current_poi_id = "lobby"
 	global_position = spawn_pos
-	modulate.a = 0.0
+	modulate.a = 0.0  # Unsichtbar bis er an der Reception steht
 	
 	# Tagesgäste haben kein Zimmer
 	_target_room = null
 	
-	_change_state(State.WALKING)
+	_change_state(State.WAITING_IN_LINE)
 	
 	if delay > 0.0:
 		var wait_time = delay
@@ -1138,13 +1147,15 @@ func start_waiting_for_event(spawn_pos: Vector2, delay: float) -> void:
 			wait_time = delay / max(1.0, TimeManager.user_speed)
 		await get_tree().create_timer(wait_time).timeout
 		
+	# Gast an einem Reception-Waypoint platzieren und sichtbar machen (wie normale Gäste)
 	var lobby = _get_lobby_room()
-	if is_instance_valid(lobby) and lobby.has_method("get_free_walkable_pos"):
-		var wait_pos = lobby.get_free_walkable_pos(_map_grid)
-		global_position = wait_pos
-	modulate.a = 1.0
+	if is_instance_valid(lobby) and lobby.has_method("get_checkout_wait_pos"):
+		var reception_pos = lobby.get_checkout_wait_pos(_guest_member.party_id)
+		global_position = reception_pos + Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
+	modulate.a = 1.0  # Jetzt sichtbar an der Reception
 	
 	# Status IDLE = Gast wartet auf das Event und fängt an POIs zu suchen
+	previous_state = State.WAITING_IN_LINE
 	_change_state(State.IDLE)
 	_action_timer = randf_range(2.0, 5.0)
 
@@ -1250,8 +1261,9 @@ func _walk_to_poi(poi_id: String) -> void:
 	else:
 		for room in _map_grid.active_rooms:
 			if not is_instance_valid(room): continue
-			# Check if poi_id is an instance id (for events)
-			if str(room.get_instance_id()) == poi_id:
+			# Check if poi_id is an event room key
+			var gm = get_tree().current_scene.find_child("GuestManager", true, false)
+			if is_instance_valid(gm) and gm._room_key(room) == poi_id:
 				target_room = room
 				break
 			var def = room.call("get_definition")
@@ -1267,7 +1279,17 @@ func _walk_to_poi(poi_id: String) -> void:
 	
 	var start_tile: Vector2i = _get_logical_start_tile()
 	
-	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile, (str(_guest_member.get("name")) if _guest_member else "?"))
+	var path_tiles: Array[Vector2i] = []
+	var target_room_is_lobby = false
+	if is_instance_valid(target_room):
+		target_room_is_lobby = (target_room == _get_lobby_room())
+		
+	# Wenn wir schon in der Lobby sind und in der Lobby bleiben wollen (z.B. Snack-Automat)
+	# dann brauchen wir keinen globalen Pfad über die Flur-Tür!
+	if _current_poi_id == "lobby" and target_room_is_lobby:
+		path_tiles = []
+	else:
+		path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile, (str(_guest_member.get("name")) if _guest_member else "?"))
 	if path_tiles.is_empty() and start_tile != exit_tile:
 # 		push_warning("[GuestActor] Pfad nicht gefunden! Start: %s Exit: %s" % [str(start_tile), str(exit_tile)])
 		# Notfall-Teleport zur Tür, damit der nächste Pfad-Versuch funktioniert

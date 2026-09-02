@@ -15,6 +15,10 @@ extends CanvasLayer
 @onready var label_time: Label = %Time
 @onready var label_next_event: Label = %NextEvent
 
+@onready var event_indicator: Node = %EventIndicator
+@onready var event_color: Node = %EventColor
+@onready var event_name_label: Label = %EventNameLabel
+
 # =============================================================================
 func set_next_event(text: String) -> void:
 	if label_next_event:
@@ -413,6 +417,31 @@ func update_state_visuals() -> void:
 		state_border.visible = true
 	else:
 		state_border.visible = false
+		
+	if EventManager and EventManager.is_event_active() and not _is_building:
+		if is_instance_valid(event_indicator):
+			event_indicator.visible = true
+			var names = []
+			var col = Color(0.6, 0.2, 0.8)
+			for cfg in EventManager.active_conferences.values():
+				if not names.has(cfg.get("name", "Event")):
+					names.append(cfg.get("name", "Event"))
+				if cfg.has("color"):
+					col = Color(cfg["color"])
+			
+			if is_instance_valid(event_name_label):
+				if names.size() > 1:
+					event_name_label.text = "%d Tagungen" % names.size()
+				else:
+					event_name_label.text = names[0] if names.size() > 0 else "Event"
+			if is_instance_valid(event_color):
+				if event_color is ColorRect:
+					event_color.color = col
+				elif "modulate" in event_color:
+					event_color.modulate = col
+	else:
+		if is_instance_valid(event_indicator):
+			event_indicator.visible = false
 
 	pause_label.visible = _is_paused
 

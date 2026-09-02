@@ -164,14 +164,17 @@ func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 	var interactions: Array[Dictionary] = []
 	
 	# Event-Modus prüfen
-	var is_event_active = EventManager.active_conferences.has(get_instance_id())
+	var gm = get_tree().current_scene.find_child("GuestManager", true, false)
+	var rkey = gm._room_key(self) if is_instance_valid(gm) else ""
+	var is_event_active = EventManager.active_conferences.has(rkey)
 	
 	var party = null
 	if actor.has_method("_get_my_party"):
 		party = actor.call("_get_my_party")
 			
-	var is_my_event_guest = (party != null and party.get("event_poi_id", "") == str(get_instance_id()))
-	var is_any_event_guest = (party != null and party.get("event_poi_id", "") != "")
+
+	var is_my_event_guest = (party != null and party.get("event_poi_id") == rkey)
+	var is_any_event_guest = (party != null and party.get("event_poi_id") != "")
 	
 	# MODUS A: Event läuft. NUR _meine_ Event-Gäste dürfen rein.
 	if is_event_active and not is_my_event_guest:
@@ -221,4 +224,3 @@ func release_interaction(actor_id: String) -> void:
 		_speaker_id = ""
 		_speaker_time = 0
 	super.release_interaction(actor_id)
-

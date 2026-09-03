@@ -418,20 +418,33 @@ func update_state_visuals() -> void:
 	else:
 		state_border.visible = false
 		
-	if EventManager and EventManager.is_event_active() and not _is_building:
+	if EventManager and EventManager.is_any_event_active() and not _is_building:
 		if is_instance_valid(event_indicator):
 			event_indicator.visible = true
 			var names = []
-			var col = Color(0.6, 0.2, 0.8)
+			var col = Color(0.6, 0.2, 0.8) # Standard-Lila für Events
+			
+			# Konferenzen auslesen
 			for cfg in EventManager.active_conferences.values():
-				if not names.has(cfg.get("name", "Event")):
-					names.append(cfg.get("name", "Event"))
+				if not names.has(cfg.get("name", "Tagung")):
+					names.append(cfg.get("name", "Tagung"))
 				if cfg.has("color"):
 					col = Color(cfg["color"])
+					
+			# Falls nur ein City-Event aktiv ist und keine Tagung
+			if names.size() == 0 and EventManager.is_event_active():
+				match EventManager.get_active_event():
+					EventManager.EventType.TRADE_FAIR:
+						names.append("Fachmesse")
+					EventManager.EventType.CONCERT:
+						names.append("Konzert")
+					EventManager.EventType.HOLIDAY:
+						names.append("Feiertag")
+				col = Color(0.8, 0.5, 0.1) # Orange für City-Events
 			
 			if is_instance_valid(event_name_label):
 				if names.size() > 1:
-					event_name_label.text = "%d Tagungen" % names.size()
+					event_name_label.text = "%d Events" % names.size()
 				else:
 					event_name_label.text = names[0] if names.size() > 0 else "Event"
 			if is_instance_valid(event_color):
@@ -439,6 +452,27 @@ func update_state_visuals() -> void:
 					event_color.color = col
 				elif "modulate" in event_color:
 					event_color.modulate = col
+					
+			# CityEventIcon pulsieren lassen
+			var city_icon = event_indicator.find_child("CityEventIcon", true, false)
+			if is_instance_valid(city_icon):
+				if EventManager.is_event_active():
+					city_icon.visible = true
+					if not city_icon.has_meta("is_pulsing"):
+						city_icon.set_meta("is_pulsing", true)
+						var t = create_tween().set_loops()
+						t.tween_property(city_icon, "modulate:a", 0.3, 1.0).set_trans(Tween.TRANS_SINE)
+						t.tween_property(city_icon, "modulate:a", 1.0, 1.0).set_trans(Tween.TRANS_SINE)
+						city_icon.set_meta("tween", t)
+				else:
+					city_icon.visible = false
+					if city_icon.has_meta("is_pulsing"):
+						city_icon.set_meta("is_pulsing", false)
+						var t = city_icon.get_meta("tween")
+						if t and is_instance_valid(t):
+							t.kill()
+						city_icon.modulate.a = 1.0
+						
 	else:
 		if is_instance_valid(event_indicator):
 			event_indicator.visible = false

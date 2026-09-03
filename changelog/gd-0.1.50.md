@@ -323,3 +323,20 @@ epair_room) werden zuverlÃ¤ssig angenommen und ausgefÃ¼hrt.
 - **Konferenz-Spawn Wellen:** Fehler in der while-Bedingung `GuestManager.spawn_conference_guests` korrigiert, sodass auch die 3. Welle (Gäste 9-12) das Hotel rechtzeitig erreicht.
 - **Konferenz-Priorität:** `GuestActor._decide_next_action()` priorisiert zur Event-Zeit den Konferenzraum zwingend vor regulären POIs. Behebt den Bug, dass Eventgäste ziellos in der Lobby blieben.
 - **Room Key Fixes:** Restliche `instance_id`-Überbleibsel in `GuestActor._walk_to_poi()`, `CustomTooltip.gd` und der Türsteher-Logik von `ConferenceSmall.gd` durch den sicheren persistenten `GuestManager._room_key` abgelöst. Verhindert Pathfinding- und Tooltip-Fehler.
+
+### 03.09.2026 - ConferenceSmall Flow-Overhaul (Wander-Vorpuffer & Sitz-Logik)
+
+#### Bugfixes
+- **Speaker-Swap Stabilität:** `_swap_speaker()` in `ConferenceSmall.gd` führt den Rednertausch nun atomar durch (direktes Vertauschen der `occupied_by` Felder), ohne `release_interaction` + `_decide_next_action` aufzurufen. Behebt instabilen Zustand, der TG aus dem Raum geworfen hat.
+- **Event-Raum Check (ID-Mismatch):** `is_in_event_room` in `GuestActor._process_waiting` verglich `party.event_poi_id` ("P0001") direkt mit `_current_poi_id` ("conference_small") → immer false → Kick-out-Loop. Fix: Auflösung des Raum-Nodes über `_get_poi_room_node` und Vergleich via `_guest_manager._room_key()`.
+- **`_current_poi_id` Typ-Fix:** `_walk_to_poi("P0001")` setzte `_current_poi_id = "P0001"` (Raumkey), wodurch `_get_poi_room_node` den Raum nicht finden konnte. Fix: `_current_poi_id` wird nun immer auf den POI-Typ aus der Definition gesetzt (`def.get("id")` = "conference_small").
+- **Doppelter `var`-Deklaration:** Merge-Artifact erzeugte `var seat_pos` doppelt in `_walk_to_poi` → Parsing Error. Bereinigt.
+- **Double-Offset Bug (Wander-Pos):** `get_random_walkable_local_pos()` gibt bereits World-Koordinaten zurück (wie Room.gd Zeile 218 zeigt). Zusätzliches `to_global()` in ConferenceSmall führte zu Koordinaten weit außerhalb der Map. Entfernt.
+- **State.IN_POI Zahl:** Live-Monitor nutzte `== 5` für IN_POI, korrekt ist `== 3` (IDLE=0, WALKING=1, IN_ROOM=2, IN_POI=3).
+- **35€ visit_income für TG:** Event-Gäste zahlten fälschlicherweise den `visit_income` (35€) beim Betreten des Tagungsraums. Diese Einnahme ist bereits über das Event-Budget abgedeckt. Fix: `income = 0` wenn `party.event_poi_id != ""`.
+
+#### Features
+- **Wander-Vorpuffer (07:45–08:00):** Tagungsraum öffnet nun um 07:45 (`open_from: 465`). TG betreten den Raum ab 07:45 und wuseln darin bis 08:00 (`wander_pre`-Interaktion mit 0.5–2.5 min Zyklus), anstatt draußen zu warten.
+- **Blickrichtung zum Speakertable:** Alle Konferenzstühle setzen beim `claim_interaction` `look_at_pos` auf den Speakertable, sodass alle sitzenden TG in Richtung Redner schauen.
+- **Live-Monitor Wander-Phase:** Live-Monitor zeigt nun auch wuselnde TG (ohne Sitzplatz) mit Status "..." in Grau an, damit der Monitor vor 08:00 nicht leer wirkt.
+

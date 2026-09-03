@@ -126,9 +126,11 @@ func _execute(cmd: String) -> void:
 			_log("  set-fp:1000       – Setzt die Forschungspunkte", CLR_INFO)
 			_log("  unlock-all-tutorials - Schaltet alle Tutorials im Codex frei", CLR_INFO)
 			_log("  reset-tutorial    – Setzt alle gesehenen Tutorials zurück", CLR_INFO)
-			_log("  set-conference:on – Startet das Tagungs-Event manuell", CLR_INFO)
-			_log("  set-conference:off– Beendet das Tagungs-Event manuell", CLR_INFO)
-			_log("  fix-savegame      – Bereinigt verbuggte Events und Tagungsgäste", CLR_INFO)
+			_log("  set-conference:on - Startet das Tagungs-Event manuell", CLR_INFO)
+			_log("  set-conference:off- Beendet das Tagungs-Event manuell", CLR_INFO)
+			_log("  set-boost-event:on- Startet ein Stadt-Event (Messe) manuell", CLR_INFO)
+			_log("  set-boost-event:off- Beendet ein Stadt-Event manuell", CLR_INFO)
+			_log("  fix-savegame      - Bereinigt verbuggte Events und Tagungsgäste", CLR_INFO)
 
 		"fix-savegame":
 			if EventManager:
@@ -175,6 +177,21 @@ func _execute(cmd: String) -> void:
 				_log("Konferenz-Event manuell beendet (Gäste bleiben ggf. bis 17 Uhr).", CLR_OK)
 			else:
 				_log("Verwendung: set-conference:on oder set-conference:off", CLR_ERR)
+
+		"set-boost-event":
+			if val_s == "on":
+				if EventManager:
+					if EventManager.has_method("force_city_event"):
+						EventManager.force_city_event()
+						_log("Stadt-Event manuell gestartet (Boost).", CLR_OK)
+					else:
+						_log("Fehler: EventManager hat keine force_city_event Methode.", CLR_ERR)
+			elif val_s == "off":
+				if EventManager:
+					EventManager.end_event()
+				_log("Stadt-Event manuell beendet.", CLR_OK)
+			else:
+				_log("Verwendung: set-boost-event:on oder set-boost-event:off", CLR_ERR)
 				
 		"reset-tutorial":
 			if TutorialManager:

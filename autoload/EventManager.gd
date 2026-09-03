@@ -13,7 +13,7 @@ enum EventType {
 	TRADE_FAIR, # Fachmesse
 	CONCERT,    # Konzert
 	HOLIDAY,    # Feiertag
-	CONFERENCE  # Tages-Konferenz (P1.2)
+	CONFERENCE  # DEPRECATED - Tages-Konferenz (P1.2) - nun getrennt in active_conferences
 }
 
 var active_event: EventType = EventType.NONE
@@ -38,63 +38,77 @@ func _load_conference_configs() -> void:
 
 # =============================================================================
 func _on_morning_struck() -> void:
+	# 1. Konferenzen (P1.2) aufräumen und ggf. neu starten
+	active_conferences.clear()
+	if TechtreeManager and TechtreeManager.is_tech_unlocked("P1.2"):
+		if randf() < 0.25: # 25% Chance für Konferenz
+			_start_conference()
+
+	# 2. Stadt-Events (P1.1) prüfen
 	if not TechtreeManager or not TechtreeManager.is_tech_unlocked("P1.1"):
+		_update_hud()
 		return
 		
-	# Wenn ein Event läuft, Tage reduzieren
+	# Wenn ein Stadt-Event läuft, Tage reduzieren
 	if active_event != EventType.NONE:
-		event_days_remaining -= 1
-		if event_days_remaining <= 0:
-			end_event()
+		if active_event == EventType.CONFERENCE:
+			active_event = EventType.NONE # Fix für alte Spielstände
+			event_days_remaining = 0
+		else:
+			event_days_remaining -= 1
+			if event_days_remaining <= 0:
+				end_event()
+			else:
+				_update_hud()
+				return
+		
+	# Wenn kein Stadt-Event läuft, würfeln (z.B. 10% Chance pro Tag)
+	if active_event == EventType.NONE and randf() < 0.10:
+		start_random_event()
+	else:
+		_update_hud()
+
+# =============================================================================
+func _start_conference() -> void:
+	var conference_rooms = []
+	var hm = get_tree().current_scene.find_child("MapGrid", true, false) if get_tree().current_scene else null
+	if hm == null:
+		hm = get_tree().get_first_node_in_group("MapGrid")
+	if hm:
+		var all_rooms = hm.get_placed_rooms() if hm.has_method("get_placed_rooms") else (hm.active_rooms if "active_rooms" in hm else [])
+		for room in all_rooms:
+			if is_instance_valid(room):
+				var r_id = room.get("room_type_id")
+				if r_id != null and r_id.begins_with("conference_"):
+					conference_rooms.append(room)
+
+	if conference_rooms.size() == 0:
 		return
 		
-	# Wenn kein Event läuft, würfeln (z.B. 10% Chance pro Tag)
-	if randf() < 0.10:
-		start_random_event()
+	var num_events = randi_range(1, conference_rooms.size())
+	conference_rooms.shuffle()
+	
+	for i in range(num_events):
+		var room = conference_rooms[i]
+		var cfg = _conference_configs.pick_random() if _conference_configs.size() > 0 else {"id": "default", "name": "Standard-Tagung", "max_participants": 12, "color": "#aaaaaa", "income_per_participant": 150}
+		active_conferences[GuestManager._room_key(room)] = cfg
+		
+		var income = cfg.get("income_per_participant", 150) * min(cfg.get("max_participants", 12), room.call("get_definition").get("max_guests", 12))
+		if FinanceManager:
+			FinanceManager.add_transaction(income, "event", "Tagung gebucht: %s" % cfg.get("name", "Event"))
+			if EffectManager and is_instance_valid(room):
+				EffectManager.spawn_money_text(income, room.global_position + Vector2(0, -32))
+				
+	_notify_event("Tageskonferenz!", "%d Tagung(en) heute im Haus!" % num_events)
 
 # =============================================================================
 func start_random_event() -> void:
-	var conference_rooms = []
-	if TechtreeManager and TechtreeManager.is_tech_unlocked("P1.2"):
-		var hm = get_tree().current_scene.find_child("MapGrid", true, false) if get_tree().current_scene else null
-		if hm == null:
-			hm = get_tree().get_first_node_in_group("MapGrid")
-		if hm:
-			var all_rooms = hm.get_placed_rooms() if hm.has_method("get_placed_rooms") else (hm.active_rooms if "active_rooms" in hm else [])
-			for room in all_rooms:
-				if is_instance_valid(room):
-					var r_id = room.get("room_type_id")
-					if r_id != null and r_id.begins_with("conference_"):
-						conference_rooms.append(room)
-
 	var roll = randf()
-	
-	if conference_rooms.size() > 0 and roll < 0.25: # 25% Chance für Konferenz, falls möglich
-		active_event = EventType.CONFERENCE
-		event_days_remaining = 1
-		
-		# 1 bis N Räume auswählen
-		active_conferences.clear()
-		var num_events = randi_range(1, conference_rooms.size())
-		conference_rooms.shuffle()
-		
-		for i in range(num_events):
-			var room = conference_rooms[i]
-			var cfg = _conference_configs.pick_random() if _conference_configs.size() > 0 else {"id": "default", "name": "Standard-Tagung", "max_participants": 12, "color": "#aaaaaa", "income_per_participant": 150}
-			active_conferences[GuestManager._room_key(room)] = cfg
-			
-			var income = cfg.get("income_per_participant", 150) * min(cfg.get("max_participants", 12), room.call("get_definition").get("max_guests", 12))
-			if FinanceManager:
-				FinanceManager.add_transaction(income, "event", "Tagung gebucht: %s" % cfg.get("name", "Event"))
-				if EffectManager and is_instance_valid(room):
-					EffectManager.spawn_money_text(income, room.global_position + Vector2(0, -32))
-					
-		_notify_event("Tageskonferenz!", "%d Tagung(en) heute im Haus!" % num_events)
-	elif roll < 0.40:
+	if roll < 0.33:
 		active_event = EventType.TRADE_FAIR
 		event_days_remaining = 2
 		_notify_event("Fachmesse in der Stadt!", "Viele Geschäftsreisende suchen heute Zimmer.")
-	elif roll < 0.70:
+	elif roll < 0.66:
 		active_event = EventType.CONCERT
 		event_days_remaining = 1
 		_notify_event("Großes Konzert!", "Event-Gäste sind in der Stadt unterwegs.")
@@ -114,10 +128,11 @@ func start_random_event() -> void:
 func end_event() -> void:
 	active_event = EventType.NONE
 	event_days_remaining = 0
-	active_conferences.clear()
 	
 	sig_event_ended.emit("none")
-	
+	_update_hud()
+
+func _update_hud() -> void:
 	var hud = get_tree().get_first_node_in_group("HUD")
 	if hud and hud.has_method("update_state_visuals"):
 		hud.update_state_visuals()
@@ -150,8 +165,7 @@ func force_conference() -> bool:
 	if conference_rooms.size() == 0:
 		return false
 		
-	active_event = EventType.CONFERENCE
-	event_days_remaining = 1
+	# Konferenzen berühren NICHT mehr active_event (welches für City-Events reserviert ist)
 	
 	active_conferences.clear()
 	var num_events = randi_range(1, conference_rooms.size())
@@ -171,11 +185,18 @@ func force_conference() -> bool:
 	_notify_event("Tageskonferenz!", "%d Tagung(en) manuell gestartet!" % num_events)
 	sig_event_started.emit(str(active_event), "Event")
 	
-	var hud = get_tree().get_first_node_in_group("HUD")
-	if hud and hud.has_method("update_state_visuals"):
-		hud.update_state_visuals()
+	_update_hud()
 		
 	return true
+
+# =============================================================================
+func force_city_event() -> void:
+	# Startet manuell eine Messe als Boost-Event
+	active_event = EventType.TRADE_FAIR
+	event_days_remaining = 1
+	_notify_event("Fachmesse (Dev-Boost)!", "Viele Geschäftsreisende suchen heute Zimmer.")
+	sig_event_started.emit(str(active_event), "Event")
+	_update_hud()
 
 # =============================================================================
 func _notify_event(title: String, _desc: String) -> void:
@@ -190,7 +211,13 @@ func _notify_event(title: String, _desc: String) -> void:
 
 # =============================================================================
 func is_event_active() -> bool:
-	return active_event != EventType.NONE
+	return active_event != EventType.NONE and active_event != EventType.CONFERENCE
+
+func is_conference_active() -> bool:
+	return active_conferences.size() > 0
+
+func is_any_event_active() -> bool:
+	return is_event_active() or is_conference_active()
 
 func get_active_event() -> EventType:
 	return active_event

@@ -358,7 +358,8 @@ func generate_daily_schedule(start_time: int) -> Array:
 						available_today += 1
 						
 	var x: int = available_today
-		
+	if EventManager != null and EventManager.is_event_active():
+		x = int(ceil(x * 1.5))
 	var remaining_spawns = max(0, x - _daily_spawned_parties)
 	
 	# Wenn das Spiel mitten am Tag geladen wird, ist _daily_spawned_parties = 0.

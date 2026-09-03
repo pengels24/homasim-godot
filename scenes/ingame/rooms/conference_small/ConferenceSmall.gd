@@ -28,7 +28,7 @@ static func get_definition() -> Dictionary:
 		"allowed_roles": [],
 		"min_staff": 0,
 		"max_staff": 0,
-		"open_from": 480,  # 08:00
+		"open_from": 465,  # 07:45 – 15 Min. Vorpuffer damit TG den Raum betreten können
 		"open_to": 1020,   # 17:00
 		"valid_door_slots": ["L2"],
 		"cleanliness_level": 100,
@@ -97,23 +97,26 @@ func _apply_visuals() -> void:
 # =============================================================================
 func get_live_details() -> Array[Dictionary]:
 	var details: Array[Dictionary] = []
+	var shown_ids: Array[String] = []
 	
+	# 1. Belegte Sitzplätze anzeigen
 	for seat in _room_seats:
 		if seat["occupied_by"] != "":
 			var guest_name = "Gast"
-			var gm = get_tree().get_first_node_in_group("guest_manager")
-			if gm:
-				var guest_node = gm.get_guest(seat["occupied_by"])
-				if guest_node:
-					var actor_state = -1
-					for a in get_tree().get_nodes_in_group("guest_actors"):
-						if a.get("actor_id") == seat["occupied_by"]:
-							actor_state = a.get("current_state")
-							break
-					if actor_state == 1: # State.WALKING
-						continue
-					guest_name = guest_node.get("_guest_member").name if guest_node.get("_guest_member") else "Gast"
+			var is_walking = false
 			
+			for a in get_tree().get_nodes_in_group("guest_actors"):
+				var mem = a.get("_guest_member")
+				if mem and mem.id == seat["occupied_by"]:
+					guest_name = mem.name + " (TG)"
+					if a.get("current_state") == 1: # State.WALKING
+						is_walking = true
+					break
+			
+			if is_walking:
+				continue
+			
+			shown_ids.append(seat["occupied_by"])
 			var status_text = GameState.T("poi.conference.attending")
 			if seat["occupied_by"] == _speaker_id:
 				status_text = GameState.T("poi.conference.speaking")
@@ -123,13 +126,34 @@ func get_live_details() -> Array[Dictionary]:
 				"right": status_text,
 				"color": Color("#8b5cf6") if seat["occupied_by"] != _speaker_id else Color("#f59e0b")
 			})
-			
+	
+	# 2. Wuselnde Gäste anzeigen (vor Event-Start, noch kein Sitz)
+	var gm = get_tree().current_scene.find_child("GuestManager", true, false)
+	var rkey = gm._room_key(self) if is_instance_valid(gm) else ""
+	for a in get_tree().get_nodes_in_group("guest_actors"):
+		var mem = a.get("_guest_member")
+		if not mem:
+			continue
+		if mem.id in shown_ids:
+			continue
+		var party = a.call("_get_my_party") if a.has_method("_get_my_party") else null
+		if not is_instance_valid(party) or party.get("event_poi_id") != rkey:
+			continue
+		# Ist der Gast im IN_POI State in diesem Raum?
+		if a.get("current_state") == 3 and a.get("_current_poi_id") == "conference_small": # State.IN_POI = 3
+			details.append({
+				"left": mem.name + " (TG)",
+				"right": "...",
+				"color": Color("#6b7280")
+			})
+	
 	return details
 
 # =============================================================================
 # Smart Room & Speaker Logic
 # =============================================================================
 var _speaker_id: String = ""
+var _designated_speaker_id: String = ""
 var _speaker_time: int = 0
 
 func _ready() -> void:
@@ -143,22 +167,72 @@ func _on_minute_passed(_total_game_minutes: int) -> void:
 			_swap_speaker()
 
 func _swap_speaker() -> void:
-	# Finde einen Zuhörer zum Tauschen
-	var listener_id = ""
+	# Wähle einen ZUFÄLLIGEN Zuhörer als neuen Speaker
+	var possible_listeners = []
 	for s in _room_seats:
 		if s["node"].name != "ChairSpeaker" and s["occupied_by"] != "":
-			listener_id = s["occupied_by"]
-			break
+			possible_listeners.append(s["occupied_by"])
 			
-	var old_speaker = _speaker_id
-	_speaker_id = ""
+	if possible_listeners.is_empty():
+		_speaker_time = 0
+		return
+		
+	var new_speaker_id: String = possible_listeners.pick_random()
+	var old_speaker_id: String = _speaker_id
+	
+	if new_speaker_id == old_speaker_id:
+		_speaker_time = 0
+		return
+
+	# Finde die Platz-Daten
+	var speaker_seat_idx := -1
+	var listener_seat_idx := -1
+	for i in range(_room_seats.size()):
+		if _room_seats[i]["node"].name == "ChairSpeaker":
+			speaker_seat_idx = i
+		if _room_seats[i]["occupied_by"] == new_speaker_id:
+			listener_seat_idx = i
+			
+	if speaker_seat_idx == -1 or listener_seat_idx == -1:
+		_speaker_time = 0
+		return
+		
+	# Finde die GuestActor-Nodes
+	var old_speaker_actor: Node = null
+	var new_speaker_actor: Node = null
+	for node in get_tree().get_nodes_in_group("guest_actors"):
+		var mem = node.get("_guest_member")
+		if mem:
+			if mem.id == old_speaker_id:
+				old_speaker_actor = node
+			elif mem.id == new_speaker_id:
+				new_speaker_actor = node
+				
+	if not is_instance_valid(old_speaker_actor) or not is_instance_valid(new_speaker_actor):
+		_speaker_time = 0
+		return
+
+	# -- ATOMARER TAUSCH --
+	# 1. Plätze im Seatmap direkt tauschen (kein release/claim Umweg)
+	_room_seats[speaker_seat_idx]["occupied_by"] = new_speaker_id
+	_room_seats[listener_seat_idx]["occupied_by"] = old_speaker_id
+	
+	# 2. Speaker-Status aktualisieren
+	_speaker_id = new_speaker_id
+	_designated_speaker_id = new_speaker_id
 	_speaker_time = 0
 	
-	release_interaction(old_speaker)
-	if listener_id != "":
-		release_interaction(listener_id)
+	# 3. Beide Gäste direkt zu ihren neuen Plätzen schicken (über _execute_poi_move)
+	var speaker_target_pos: Vector2 = _room_seats[speaker_seat_idx]["node"].global_position
+	var listener_target_pos: Vector2 = _room_seats[listener_seat_idx]["node"].global_position
 	
-	# Beide fordern sofort im nächsten _process vom GuestActor eine neue Interaction an.
+	if new_speaker_actor.has_method("_execute_poi_move"):
+		new_speaker_actor.call("_execute_poi_move", speaker_target_pos, self)
+		new_speaker_actor.set("_action_timer", 999.0 * 60.0) # Bleibt sitzen
+	
+	if old_speaker_actor.has_method("_execute_poi_move"):
+		old_speaker_actor.call("_execute_poi_move", listener_target_pos, self)
+		old_speaker_actor.set("_action_timer", 999.0 * 60.0) # Bleibt sitzen
 
 func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 	var interactions: Array[Dictionary] = []
@@ -171,10 +245,11 @@ func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 	var party = null
 	if actor.has_method("_get_my_party"):
 		party = actor.call("_get_my_party")
-			
 
 	var is_my_event_guest = (party != null and party.get("event_poi_id") == rkey)
 	var is_any_event_guest = (party != null and party.get("event_poi_id") != "")
+	
+	print("[CONF-DEBUG] get_available_interactions: rkey=%s, is_event_active=%s, is_my_event_guest=%s, is_any=%s, party_event_poi=%s" % [rkey, is_event_active, is_my_event_guest, is_any_event_guest, (party.get("event_poi_id") if party else "null")])
 	
 	# MODUS A: Event läuft. NUR _meine_ Event-Gäste dürfen rein.
 	if is_event_active and not is_my_event_guest:
@@ -183,21 +258,53 @@ func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 	# MODUS B: Kein Event läuft. Event-Gäste dürfen NIE in reguläre Räume (außer Lobby/Bar/Rest)
 	if not is_event_active and is_any_event_guest:
 		return interactions
-		
+
+	# VORPUFFER-MODUS (7:45 – 8:00): Gäste wuseln im Raum bis zum Event-Start
+	var current_game_time = TimeManager.get_game_time() if TimeManager else 480
+	print("[CONF-DEBUG] current_game_time=%d, is_my_event_guest=%s" % [current_game_time, is_my_event_guest])
+	if is_my_event_guest and current_game_time < 480:
+		var wander_pos = get_random_walkable_local_pos() # gibt bereits World-Koordinaten zurück!
+		print("[CONF-DEBUG] wander_pre: wander_pos=%s" % str(wander_pos))
+		if wander_pos != Vector2.INF:
+			interactions.append({
+				"id": "wander_pre",
+				"type": "wander",
+				"target_pos": wander_pos,
+				"duration": randf_range(1.0, 2.5)
+			})
+		return interactions
+	
 	# Normales Claiming (wie Room.gd)
+	var actor_id = actor.get("_guest_member").id if actor.has_method("_get_my_party") else ""
 	for i in range(_room_seats.size()):
 		var s = _room_seats[i]
 		if s["occupied_by"] == "":
+			if s["node"].name == "ChairSpeaker":
+				# Wenn es einen ausgewählten nächsten Speaker gibt, darf nur er hier sitzen
+				if _designated_speaker_id != "" and actor_id != _designated_speaker_id:
+					continue
+			else:
+				# Der designierte Speaker DARF NICHT auf einen Zuhörerplatz
+				if _designated_speaker_id != "" and actor_id == _designated_speaker_id:
+					continue
+					
 			interactions.append({
 				"id": "seat_" + str(i),
 				"type": "sit",
 				"target_pos": s["node"].global_position,
-				"duration": randf_range(10.0, 20.0)
+				"duration": 999.0
 			})
 			
 	return interactions
 
 func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
+	# Wander-Interaktion vor Event-Start: kein Sitz belegen, nur Position
+	if interaction_id == "wander_pre":
+		var wander_pos = get_random_walkable_local_pos() # gibt bereits World-Koordinaten zurück!
+		if wander_pos != Vector2.INF:
+			return {"target_pos": wander_pos, "duration": randf_range(1.0, 2.5)}
+		return {}
+	
 	var res = super.claim_interaction(actor_id, interaction_id)
 	if res.is_empty():
 		return res
@@ -207,16 +314,17 @@ func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 		var s = _room_seats[idx]
 		if s["node"].name == "ChairSpeaker":
 			_speaker_id = actor_id
+			_designated_speaker_id = actor_id
 			_speaker_time = 0
 			
-			# Blickrichtung auf Speakertable erzwingen
-			var is_portrait := room_rotation % 2 == 1
-			var root = get_node("Portrait/Interior") if is_portrait else get_node("Landscape/Interior")
-			if root:
-				var table = root.get_node_or_null("Speakertable")
-				if table:
-					res["look_at_pos"] = table.global_position
-					
+		# Blickrichtung für ALLE Sitze: immer zum Speakertable
+		var is_portrait := room_rotation % 2 == 1
+		var root = get_node_or_null("Portrait/Interior") if is_portrait else get_node_or_null("Landscape/Interior")
+		if root:
+			var table = root.get_node_or_null("Speakertable")
+			if table:
+				res["look_at_pos"] = table.global_position
+				
 	return res
 
 func release_interaction(actor_id: String) -> void:
@@ -224,3 +332,11 @@ func release_interaction(actor_id: String) -> void:
 		_speaker_id = ""
 		_speaker_time = 0
 	super.release_interaction(actor_id)
+
+# =============================================================================
+func get_room_entry_pos(map_grid: Node) -> Vector2:
+	var door = get_node_or_null("Door")
+	if is_instance_valid(door):
+		return door.global_position
+		
+	return global_position + Vector2(16, 16)

@@ -236,7 +236,16 @@ func _process_waiting(delta: float) -> void:
 		# 07:45 (465) bis 12:00 (720) UND 13:50 (830) bis 17:00 (1020)
 		var is_event_time = (current_time >= 465 and current_time < 720) or (current_time >= 830 and current_time < 1020)
 		
-		if is_event_time and _current_poi_id != party.event_poi_id and current_state != State.WALKING:
+		# WICHTIG: party.event_poi_id ist ein Raumkey (z.B. "P1"), aber _current_poi_id ist
+		# ein POI-Typ (z.B. "conference_small"). Daher müssen wir den Raum-Node vergleichen!
+		var is_in_event_room := false
+		if not _current_poi_id.is_empty():
+			var current_room_node = _get_poi_room_node(_current_poi_id)
+			if is_instance_valid(current_room_node) and is_instance_valid(_guest_manager):
+				var current_room_key = _guest_manager._room_key(current_room_node)
+				is_in_event_room = (current_room_key == party.event_poi_id)
+		
+		if is_event_time and not is_in_event_room and current_state != State.WALKING:
 			# Force go to event
 			if current_state == State.EATING or current_state == State.IN_POI:
 				var room_n = _get_poi_room_node(_current_poi_id)
@@ -244,7 +253,7 @@ func _process_waiting(delta: float) -> void:
 			_action_timer = 0
 			_decide_next_action()
 			return
-		elif not is_event_time and _current_poi_id == party.event_poi_id and current_state != State.WALKING and current_time < 1020:
+		elif not is_event_time and is_in_event_room and current_state != State.WALKING and current_time < 1020:
 			# Pause! Verlasse Konferenz.
 			var room_n = _get_poi_room_node(_current_poi_id)
 			if is_instance_valid(room_n) and room_n.has_method("release_interaction"): room_n.release_interaction(_guest_member.id)
@@ -601,7 +610,36 @@ func _decide_next_action() -> void:
 		var t = TimeManager.get_game_time() if TimeManager else 0
 		var is_event_time = (t >= 465 and t < 720) or (t >= 830 and t < 1020)
 		if is_event_time:
-			chosen = party.event_poi_id
+			# Prüfen ob der Event-Raum bereits geöffnet hat
+			var event_room_node = null
+			for room in _map_grid.active_rooms:
+				if not is_instance_valid(room): continue
+				if is_instance_valid(_guest_manager) and _guest_manager._room_key(room) == party.event_poi_id:
+					event_room_node = room
+					break
+			
+			var event_room_open = true
+			if is_instance_valid(event_room_node) and event_room_node.has_method("is_open"):
+				event_room_open = event_room_node.is_open()
+			
+			if event_room_open:
+				chosen = party.event_poi_id
+			else:
+				# Raum noch geschlossen: Zum Eingang laufen und kurz warten
+				if current_state != State.WALKING and current_state != State.IDLE:
+					if is_instance_valid(event_room_node):
+						# Gehe zur Außentür und warte dort
+						var outside_tile = event_room_node.get_target_tile(_map_grid)
+						var outside_world = _map_grid.tile_to_world(outside_tile)
+						var start_tile = _get_logical_start_tile()
+						var path_tiles: Array[Vector2i] = _map_grid.get_path_between_tiles(start_tile, outside_tile, (_guest_member.name if _guest_member else "?"))
+						if not path_tiles.is_empty() or start_tile == outside_tile:
+							_change_state(State.WALKING)
+							_execute_walk(path_tiles, State.IDLE, outside_world)
+							_action_timer = 30.0 # Kurz warten dann nochmal prüfen
+							return
+				_action_timer = 20.0 # Warte und prüfe erneut
+				return
 	
 	# ANG-310: Hunger-Priorisierung! (nur wenn wir nicht gerade zwingend zum Event müssen)
 	var ev_id = party.event_poi_id if is_instance_valid(party) else ""
@@ -762,14 +800,16 @@ func _change_state(new_state: State) -> void:
 				_poi_stay_timer = stay_dur * TimeManager.SECONDS_PER_GAME_MINUTE
 				
 				if _current_poi_id == "conference_small":
-					if poi_def.has("current_speaker_id") and poi_def.get("current_speaker_id") == _guest_member.id:
-						pass # Wir können das hier nicht direkt abfragen, weil current_speaker_id auf dem Node liegt.
-					# Stattdessen einfach einen schnellen Check machen:
-					var room_node = _get_poi_room_node(_current_poi_id)
-					if is_instance_valid(room_node) and room_node.get("current_speaker_id") == _guest_member.id:
-						_action_timer = randf_range(10.0, 15.0) * TimeManager.SECONDS_PER_GAME_MINUTE
+					# Vor Event-Start (7:45-8:00): sofort wuseln
+					var now_time = TimeManager.get_game_time() if TimeManager else 480
+					if now_time < 480:
+						_action_timer = randf_range(0.5, 1.5) * TimeManager.SECONDS_PER_GAME_MINUTE
 					else:
-						_action_timer = randf_range(1.0, 3.0) * TimeManager.SECONDS_PER_GAME_MINUTE # Zuhörer pollen regelmäßig
+						var room_node = _get_poi_room_node(_current_poi_id)
+						if is_instance_valid(room_node) and room_node.get("current_speaker_id") == _guest_member.id:
+							_action_timer = randf_range(10.0, 15.0) * TimeManager.SECONDS_PER_GAME_MINUTE
+						else:
+							_action_timer = randf_range(1.0, 3.0) * TimeManager.SECONDS_PER_GAME_MINUTE # Zuhörer pollen regelmäßig
 				else:
 					_action_timer = randf_range(15.0, 30.0) * TimeManager.SECONDS_PER_GAME_MINUTE # Erster Wechsel nach 15-30 Ingame-Minuten
 				
@@ -869,6 +909,11 @@ func _on_poi_arrived() -> void:
 	
 	var poi_def = _get_poi_def(_current_poi_id)
 	var income: int = poi_def.get("visit_income", 0)
+	
+	# Tagungsgäste zahlen KEINEN visit_income – sie haben bereits über das Event-Budget bezahlt
+	var my_party := _get_my_party()
+	if is_instance_valid(my_party) and my_party.get("event_poi_id") != "":
+		income = 0
 	
 	var room_node = _get_poi_room_node(_current_poi_id)
 	
@@ -1284,13 +1329,16 @@ func _walk_to_poi(poi_id: String) -> void:
 	if is_instance_valid(target_room):
 		target_room_is_lobby = (target_room == _get_lobby_room())
 		
-	# Wenn wir schon in der Lobby sind und in der Lobby bleiben wollen (z.B. Snack-Automat)
+	# Wenn wir schon im Zielraum sind (z.B. Wechsel des Sitzplatzes in Konferenz oder Snack-Automat in Lobby)
 	# dann brauchen wir keinen globalen Pfad über die Flur-Tür!
-	if _current_poi_id == "lobby" and target_room_is_lobby:
+	var current_room = _get_current_room_node(current_state)
+	var is_same_room = (is_instance_valid(current_room) and is_instance_valid(target_room) and current_room == target_room)
+	if is_same_room:
 		path_tiles = []
 	else:
 		path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile, (str(_guest_member.get("name")) if _guest_member else "?"))
-	if path_tiles.is_empty() and start_tile != exit_tile:
+		
+	if path_tiles.is_empty() and start_tile != exit_tile and not is_same_room:
 # 		push_warning("[GuestActor] Pfad nicht gefunden! Start: %s Exit: %s" % [str(start_tile), str(exit_tile)])
 		# Notfall-Teleport zur Tür, damit der nächste Pfad-Versuch funktioniert
 		global_position = _map_grid.tile_to_world(exit_tile)
@@ -1319,12 +1367,8 @@ func _walk_to_poi(poi_id: String) -> void:
 			# --- LEGACY FALLBACK FÜR ALTE RÄUME ---
 			elif target_room.has_method("claim_seat"):
 				pass # Legacy system commented out
-				# seat_pos = target_room.claim_seat(_guest_member.id)
-				# _has_claimed_seat = true
 			elif target_room.has_method("has_free_room_seat") and target_room.has_free_room_seat():
 				pass # Legacy system commented out
-				# seat_pos = target_room.room_claim_seat(_guest_member.id)
-				# _has_claimed_seat = true
 				
 			if seat_pos != Vector2.INF and seat_pos != Vector2.ZERO:
 				extra_pos = seat_pos
@@ -1334,7 +1378,13 @@ func _walk_to_poi(poi_id: String) -> void:
 					extra_pos = wander_pos
 			
 	_execute_walk(path_tiles, State.IN_POI, door_world, extra_pos, target_room)
-	_current_poi_id = poi_id
+	# WICHTIG: _current_poi_id muss der POI-Typ sein (z.B. "conference_small"), NICHT der Raumkey (z.B. "P1")
+	# damit _get_poi_room_node() den Raum später korrekt findet!
+	if is_instance_valid(target_room) and target_room.has_method("get_definition"):
+		var def = target_room.call("get_definition")
+		_current_poi_id = def.get("id", poi_id)
+	else:
+		_current_poi_id = poi_id
 
 
 

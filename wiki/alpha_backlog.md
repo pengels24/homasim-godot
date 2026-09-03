@@ -20,11 +20,20 @@
 - ✅ **QuestManager POI-Zähler:** Fehlenden Trigger `QuestManager.on_poi_used` in `GuestActor` eingebaut, damit POI-bezogene Quests richtig zählen.
 - ✅ **QuestManager Wildcard-Fix:** Logikfehler beim Abgleich von generischen Quests (leere `target_id`) korrigiert.
 - ✅ **Konferenzraum Quest:** Veralteten Forschungs-Node `B1.1` in `quests.json` durch `P1.2` ersetzt.
-- ✅ **UI Raum-Tooltips:** `CustomTooltip.gd` blendet nun "Anwesende Mitarbeiter: 0" in gästefokussierten Räumen (`min_staff == 0`) und "Anwesende Gäste" in Personalräumen (wie Küche) korrekt aus.
 - ✅ **Konferenz-Gäste Pathing & UI:** Pathfinding-Fixes für Event-Gäste (Lobby-Verteilung per `get_free_walkable_pos()`), Fix des globalen AStar-Debugs, LiveMonitor Updates (Anzeige von `(TG)` und Live-Snack-State), korrekte Zählung im Raum-Tooltip und Behebung eines `Object.get()` Crashes.
 - ✅ **Konferenz-Spawn Wellen:** Fehler in der while-Bedingung `GuestManager.spawn_conference_guests` korrigiert, sodass auch die 3. Welle (Gäste 9-12) das Hotel erreicht.
 - ✅ **Konferenz-Priorität:** `GuestActor._decide_next_action()` priorisiert zur Event-Zeit den Konferenzraum zwingend vor regulären POIs.
 - ✅ **Room Key Fixes:** Restliche `instance_id`-Überbleibsel in `GuestActor._walk_to_poi()`, `CustomTooltip.gd` und der Türsteher-Logik von `ConferenceSmall.gd` durch den sicheren `GuestManager._room_key` abgelöst.
+- ✅ **ConferenceSmall Flow-Overhaul (03.09.2026):**
+  - Speaker-Swap atomar (kein release/claim-Umweg mehr)
+  - `_current_poi_id` immer auf POI-Typ ("conference_small"), nicht Raumkey ("P0001")
+  - `is_in_event_room` nutzt jetzt korrekt `_room_key()` Vergleich
+  - Wander-Vorpuffer 07:45–08:00 implementiert (`wander_pre` Interaktion)
+  - Tagungsraum öffnet um 07:45 (`open_from: 465`)
+  - Double-Offset Bug bei `get_random_walkable_local_pos()` behoben (kein `to_global()` mehr)
+  - Blickrichtung zum Speakertable für alle Stühle beim `claim_interaction`
+  - Live-Monitor zeigt Wander-TG (vor 08:00) korrekt an
+  - 35€ visit_income für TG blockiert (Event-Budget deckt das ab)
 
 ## 🧱 Phase 1 – Fundament (v0.1.40–41)
 *Zuerst, weil alles andere darauf aufbaut.*

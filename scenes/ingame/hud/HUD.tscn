@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" uid="uid://2l7rq0krey8f" path="res://scenes/ingame/hud/BuildMenu.tscn" id="17_8e3pd"]
 [ext_resource type="PackedScene" uid="uid://dnlttoshpxisb" path="res://scenes/ingame/hud/modals/LevelUpModal.tscn" id="24_6iy1x"]
 [ext_resource type="PackedScene" uid="uid://bcweu4cs7d73x" path="res://scenes/ingame/hud/modals/StandardModal.tscn" id="25_fiam6"]
+[ext_resource type="Texture2D" path="res://assets/icons/angelus2010/ang-active-boost-event.aseprite" id="26_boost"]
 [ext_resource type="PackedScene" uid="uid://df2m4b8v7e1q" path="res://scenes/ingame/hud/TechOverlay.tscn" id="50_tech"]
 [ext_resource type="PackedScene" uid="uid://dxemoh2bim084" path="res://scenes/ingame/hud/BuildHintPanel.tscn" id="51_bh"]
 [ext_resource type="PackedScene" uid="uid://dly5vgbhpbm6r" path="res://scenes/ingame/hud/ActivityLogPanel.tscn" id="52_log"]
@@ -745,6 +746,14 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
 theme_override_font_sizes/font_size = 22
 text = "Keine Events"
+
+[node name="CityEventIcon" type="TextureRect" parent="EventIndicator/HBoxContainer" unique_id=1498175923]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("26_boost")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="PauseLabel" type="Label" parent="." unique_id=1948573928]
 visible = false

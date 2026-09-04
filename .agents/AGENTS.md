@@ -7,7 +7,16 @@
 
 ---
 
-## 🎨 UI & Design Rules
+## 📄 Encoding-Direktive (ZWINGEND – IMMER UTF-8!)
+- **ALLE Dateien** in diesem Projekt sind **UTF-8**. Ohne Ausnahme.
+- Python-Skripte die Dateien lesen/schreiben: **IMMER** `encoding='utf-8'` angeben. Niemals `cp1252`, `latin-1` oder kein Argument.
+- Korrekt: `open('datei.md', 'w', encoding='utf-8')` | Falsch: `open('datei.md', 'w')` oder `encoding='cp1252'`
+- Das PowerShell-Terminal gibt Zeichen als cp1252 aus – das ist **nur das Terminal**, nicht die Datei!
+- Bei Problemen: `_work/fix_encoding.py` verwenden.
+
+---
+
+
 - **STRIKTE DIREKTIVE: Style Guide beachten!** Bevor du UI-Änderungen durchführst, zwingend `wiki/06_ui_style_guide.md` lesen.
 - **Panel Nesting**: Niemals ein "Glow-Panel" (`ModalPanel`) innerhalb eines anderen Glow-Panels verwenden. (Stattdessen `InnerPanel` oder transparent).
 - **Design:** Farben: Gold `#EAB308`, Dark BG `#0f172a`/`#141416`, Weiß `#fafafa`. Fonts: Outfit-Bold (Titel/Buttons), Inter Regular (Text).

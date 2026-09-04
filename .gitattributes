@@ -1,2 +1,30 @@
-# Normalize EOL for all files that Git considers text files.
+# HO·MA·SIM – Git Attribute Konfiguration
+# Erzwingt konsistentes Encoding und Zeilenenden für alle Dateien
+
+# Standard: Alle Textdateien mit LF
 * text=auto eol=lf
+
+# Markdown immer UTF-8, LF
+*.md text eol=lf working-tree-encoding=UTF-8
+
+# GDScript immer UTF-8, LF
+*.gd text eol=lf working-tree-encoding=UTF-8
+
+# JSON immer UTF-8, LF
+*.json text eol=lf working-tree-encoding=UTF-8
+
+# CSV immer UTF-8, LF
+*.csv text eol=lf working-tree-encoding=UTF-8
+
+# Python immer UTF-8, LF
+*.py text eol=lf working-tree-encoding=UTF-8
+
+# Binäre Dateien – kein Line-Ending Processing
+*.png binary
+*.webp binary
+*.aseprite binary
+*.ogg binary
+*.wav binary
+*.mp3 binary
+*.ttf binary
+*.otf binary

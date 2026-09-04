@@ -236,33 +236,35 @@ func _process_waiting(delta: float) -> void:
 		# 07:45 (465) bis 12:00 (720) UND 13:50 (830) bis 17:00 (1020)
 		var is_event_time = (current_time >= 465 and current_time < 720) or (current_time >= 830 and current_time < 1020)
 		
-		# WICHTIG: party.event_poi_id ist ein Raumkey (z.B. "P1"), aber _current_poi_id ist
-		# ein POI-Typ (z.B. "conference_small"). Daher müssen wir den Raum-Node vergleichen!
+		# Den konkreten Event-Raum explizit über die Party-ID ermitteln!
+		var event_room_node = null
+		if is_instance_valid(_guest_manager):
+			event_room_node = _guest_manager._get_room_node(party.event_poi_id)
+			
 		var is_in_event_room := false
-		if not _current_poi_id.is_empty():
-			var current_room_node = _get_poi_room_node(_current_poi_id)
-			if is_instance_valid(current_room_node) and is_instance_valid(_guest_manager):
-				var current_room_key = _guest_manager._room_key(current_room_node)
-				is_in_event_room = (current_room_key == party.event_poi_id)
+		if is_instance_valid(event_room_node):
+			var def = event_room_node.call("get_definition")
+			if def.get("id", "") == _current_poi_id:
+				is_in_event_room = true
 		
 		if is_event_time and not is_in_event_room and current_state != State.WALKING:
 			# Force go to event
 			if current_state == State.EATING or current_state == State.IN_POI:
-				var room_n = _get_poi_room_node(_current_poi_id)
+				var room_n = event_room_node if is_instance_valid(event_room_node) else _get_poi_room_node(_current_poi_id)
 				if is_instance_valid(room_n) and room_n.has_method("release_interaction"): room_n.release_interaction(_guest_member.id)
 			_action_timer = 0
 			_decide_next_action()
 			return
 		elif not is_event_time and is_in_event_room and current_state != State.WALKING and current_time < 1020:
 			# Pause! Verlasse Konferenz.
-			var room_n = _get_poi_room_node(_current_poi_id)
+			var room_n = event_room_node if is_instance_valid(event_room_node) else _get_poi_room_node(_current_poi_id)
 			if is_instance_valid(room_n) and room_n.has_method("release_interaction"): room_n.release_interaction(_guest_member.id)
 			_action_timer = 0
 			_decide_next_action()
 			return
 		elif current_time >= 1020 and current_state != State.LEAVING and current_state != State.WALKING:
 			# Feierabend -> Gehen
-			var room_n = _get_poi_room_node(_current_poi_id)
+			var room_n = event_room_node if is_instance_valid(event_room_node) else _get_poi_room_node(_current_poi_id)
 			if is_instance_valid(room_n) and room_n.has_method("release_interaction"): room_n.release_interaction(_guest_member.id)
 			_change_state(State.LEAVING)
 			_walk_to_exit()
@@ -371,7 +373,17 @@ func _process_waiting(delta: float) -> void:
 				_decide_next_action()
 				return
 
-			var room_node = _get_poi_room_node(_current_poi_id)
+			var room_node = null
+			if is_instance_valid(party) and party.event_poi_id != "" and is_instance_valid(_guest_manager):
+				var ev_node = _guest_manager._get_room_node(party.event_poi_id)
+				if is_instance_valid(ev_node):
+					var def = ev_node.call("get_definition")
+					if def.get("id", "") == _current_poi_id:
+						room_node = ev_node
+			
+			if not is_instance_valid(room_node):
+				room_node = _get_poi_room_node(_current_poi_id)
+				
 			if is_instance_valid(room_node):
 				# SMART ROOM: Gibt es verfügbare Interaktionen?
 				var interactions = []
@@ -380,6 +392,9 @@ func _process_waiting(delta: float) -> void:
 					
 				if interactions.size() > 0:
 					var choice = interactions.pick_random()
+					if _current_poi_id == "conference_small":
+						var t = TimeManager.get_game_time() if TimeManager else -1
+						print("[TGCHANGE] PROCESS_WAITING loop | %02d:%02d | %s | releasing+reclaiming: %s | timer was: %.1f" % [t/60, t%60, (_guest_member.name if _guest_member else "?"), choice.get("id","?"), _action_timer])
 					if room_node.has_method("release_interaction"):
 						room_node.release_interaction(_guest_member.id) # Alten Platz freigeben
 					if room_node.has_method("claim_interaction"):
@@ -388,18 +403,21 @@ func _process_waiting(delta: float) -> void:
 							_execute_poi_move(claim_result.target_pos, room_node)
 							var dur = claim_result.get("duration", randf_range(15.0, 30.0))
 							_action_timer = dur * TimeManager.SECONDS_PER_GAME_MINUTE
+							if _current_poi_id == "conference_small":
+								var t2 = TimeManager.get_game_time() if TimeManager else -1
+								print("[TGCHANGE] NEW TIMER | %02d:%02d | %s | next_action_in=%.1f s" % [t2/60, t2%60, (_guest_member.name if _guest_member else "?"), _action_timer])
 							return
 				
-				# Fallback für alte Räume (Legacy)
-				# if room_node.has_method("release_interaction"):
-				# 	room_node.release_interaction(_guest_member.id)
-				# if room_node.has_method("leave_seat"):
-				# 	room_node.leave_seat(_guest_member.id)
-			
-			_decide_next_action()
-		else:
-			# Für alle anderen States (z.B. IN_ROOM, IDLE, SITTING), entscheide was als nächstes passiert
-			_decide_next_action()
+				# Keine Interaktionen verfügbar: Platz freigeben und Flag zurücksetzen,
+				# damit _on_poi_arrived keinen EXP-Bypass durch _has_claimed_seat == true auslöst
+				if _has_claimed_seat and room_node.has_method("release_interaction"):
+					if _current_poi_id == "conference_small":
+						var t = TimeManager.get_game_time() if TimeManager else -1
+						print("[TGCHANGE] FALLTHROUGH RELEASE | %02d:%02d | %s | releasing seat before _decide_next_action" % [t/60, t%60, (_guest_member.name if _guest_member else "?")])
+					room_node.release_interaction(_guest_member.id)
+					_has_claimed_seat = false
+		
+		_decide_next_action()
 
 func _execute_poi_move(target_pos: Vector2, room_node: Node) -> void:
 	if _active_tween and _active_tween.is_valid():
@@ -746,6 +764,13 @@ func _change_state(new_state: State) -> void:
 	var poi_info = (" [" + _current_poi_id + "]") if new_state == State.IN_POI and not _current_poi_id.is_empty() else ""
 	print("[GuestActor] %s changed state: %s -> %s%s" % [g_name, get_state_name(old_state), get_state_name(new_state), poi_info])
 	
+	# [TGCHANGE] Detailliertes Konferenz-Tracking
+	if _current_poi_id == "conference_small" or new_state == State.IN_POI and _current_poi_id == "conference_small":
+		var t = TimeManager.get_game_time() if TimeManager else -1
+		var h = t / 60
+		var m = t % 60
+		print("[TGCHANGE] %s | %02d:%02d | %s -> %s | timer=%.1f | claimed=%s" % [g_name, h, m, get_state_name(old_state), get_state_name(new_state), _action_timer, str(_has_claimed_seat)])
+	
 	_has_waited_for_functional = false
 	if new_state == State.WAITING_FOR_FOOD:
 		_waiting_for_food_timer = 0.0
@@ -1004,6 +1029,9 @@ func _on_poi_arrived() -> void:
 		GameState.add_exp(visit_exp)
 		var spawn_pos = global_position
 		if EffectManager: EffectManager.spawn_exp_text(visit_exp, spawn_pos)
+		if _current_poi_id == "conference_small":
+			var t = TimeManager.get_game_time() if TimeManager else -1
+			print("[TGCHANGE] EXP SPAWN | %02d:%02d | %s | +%d EXP | claimed=%s | stack=%s" % [t/60, t%60, (_guest_member.name if _guest_member else "?"), visit_exp, str(_has_claimed_seat), get_stack()])
 
 	# GuestManager über Besuch informieren (für Warenverbrauch-Tracking)
 	if is_instance_valid(_guest_manager):

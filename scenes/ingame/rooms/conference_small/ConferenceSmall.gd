@@ -6,7 +6,7 @@ static func get_definition() -> Dictionary:
 		"id": "conference_small",
 		"build_cost": 5000,
 		"exp_reward": 500,
-		"prefix": "P",
+		"prefix": "C",
 		"label": "KONF",
 		"name": "roomdef.name.long.conference_small",
 		"category": "business",
@@ -143,7 +143,7 @@ func get_live_details() -> Array[Dictionary]:
 		if a.get("current_state") == 3 and a.get("_current_poi_id") == "conference_small": # State.IN_POI = 3
 			details.append({
 				"left": mem.name + " (TG)",
-				"right": "...",
+				"right": GameState.T("poi.conference.waiting"),
 				"color": Color("#6b7280")
 			})
 	
@@ -167,6 +167,8 @@ func _on_minute_passed(_total_game_minutes: int) -> void:
 			_swap_speaker()
 
 func _swap_speaker() -> void:
+	var t = TimeManager.get_game_time() if TimeManager else -1
+	print("[TGCHANGE] SWAP_SPEAKER called | %02d:%02d | current_speaker=%s | speaker_time=%d" % [t/60, t%60, _speaker_id, _speaker_time])
 	# Wähle einen ZUFÄLLIGEN Zuhörer als neuen Speaker
 	var possible_listeners = []
 	for s in _room_seats:
@@ -226,13 +228,21 @@ func _swap_speaker() -> void:
 	var speaker_target_pos: Vector2 = _room_seats[speaker_seat_idx]["node"].global_position
 	var listener_target_pos: Vector2 = _room_seats[listener_seat_idx]["node"].global_position
 	
+	# Timer VOR _execute_poi_move setzen! Verhindert Race-Condition:
+	# Wenn der alte _action_timer genau in diesem Frame auf <= 0 lief,
+	# würde _process_waiting() zwischen swap und Timer-Reset feuern und
+	# release/claim_interaction auslösen (was EXP generiert).
+	new_speaker_actor.set("_action_timer", 999.0 * 60.0)
+	old_speaker_actor.set("_action_timer", 999.0 * 60.0)
+	
+	var t2 = TimeManager.get_game_time() if TimeManager else -1
+	print("[TGCHANGE] SWAP_DONE | %02d:%02d | new_speaker=%s | old_speaker=%s | timers set to 999*60" % [t2/60, t2%60, new_speaker_id, old_speaker_id])
+	
 	if new_speaker_actor.has_method("_execute_poi_move"):
 		new_speaker_actor.call("_execute_poi_move", speaker_target_pos, self)
-		new_speaker_actor.set("_action_timer", 999.0 * 60.0) # Bleibt sitzen
 	
 	if old_speaker_actor.has_method("_execute_poi_move"):
 		old_speaker_actor.call("_execute_poi_move", listener_target_pos, self)
-		old_speaker_actor.set("_action_timer", 999.0 * 60.0) # Bleibt sitzen
 
 func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 	var interactions: Array[Dictionary] = []
@@ -278,7 +288,8 @@ func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 	var actor_id = actor.get("_guest_member").id if actor.has_method("_get_my_party") else ""
 	for i in range(_room_seats.size()):
 		var s = _room_seats[i]
-		if s["occupied_by"] == "":
+		# Frei ODER aktuell vom selben Gast besetzt (damit er seinen Platz "behalten" kann)
+		if s["occupied_by"] == "" or s["occupied_by"] == actor_id:
 			if s["node"].name == "ChairSpeaker":
 				# Wenn es einen ausgewählten nächsten Speaker gibt, darf nur er hier sitzen
 				if _designated_speaker_id != "" and actor_id != _designated_speaker_id:

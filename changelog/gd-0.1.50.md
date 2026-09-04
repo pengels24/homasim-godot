@@ -340,3 +340,9 @@ epair_room) werden zuverlÃƒÂ¤ssig angenommen und ausgefÃƒÂ¼hrt.
 - **Blickrichtung zum Speakertable:** Alle KonferenzstÃ¼hle setzen beim `claim_interaction` `look_at_pos` auf den Speakertable, sodass alle sitzenden TG in Richtung Redner schauen.
 - **Live-Monitor Wander-Phase:** Live-Monitor zeigt nun auch wuselnde TG (ohne Sitzplatz) mit Status "..." in Grau an, damit der Monitor vor 08:00 nicht leer wirkt.
 
+
+### 04.09.2026 - Konferenz Event Fixes & UI Verbesserungen
+- **Konferenz-Gast EXP-Loop:** Bug behoben, bei dem wuselnde Tagungsgäste in einer Endlosschleife WALKING -> IN_POI hingen und jede Sekunde +30 EXP generierten. Der GuestActor prüft den korrekten Konferenzraum nun direkt beim GuestManager (party.event_poi_id) ab, anstelle des Schlafzimmers (_target_room).
+- **Konferenzraum-Namensgebung:** Der Präfix in der ConferenceSmall.gd wurde von P (Personal) auf C geändert, um kuriose Zufallskollisionen (wie P0001) mit der intern generierten party_id (P%04d) zu vermeiden.
+- **Live-Monitor UI:** Die Platzhalter-Anzeige (...) für Tagungsgäste, die vor Veranstaltungsbeginn im Raum wandern, durch den übersetzbaren String GameState.T('poi.conference.waiting') (Wartet / Waiting) aus language.csv ersetzt.
+

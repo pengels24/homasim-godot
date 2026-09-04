@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.50 | Stand: 2026-07-29
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.50 | Stand: 2026-09-04
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -33,7 +33,15 @@
   - Double-Offset Bug bei `get_random_walkable_local_pos()` behoben (kein `to_global()` mehr)
   - Blickrichtung zum Speakertable für alle Stühle beim `claim_interaction`
   - Live-Monitor zeigt Wander-TG (vor 08:00) korrekt an
-  - 35€ visit_income für TG blockiert (Event-Budget deckt das ab)
+- ✅ **Conference Flow Fixes (04.09.2026):**
+  - Infinite EXP-Loop behoben: `GuestActor` fragt den Event-Raum nun direkt über `_guest_manager._get_room_node(party.event_poi_id)` ab, anstatt fälschlicherweise das Schlafzimmer (`_target_room`) zu prüfen, was zu Dauerschleifen (`WALKING -> IN_POI`) führte.
+  - Präfix des Konferenzraums in der Definition von `P` (Personal) auf `C` geändert (Vermeidung von ID-Kollisionen mit `party_id`).
+  - Live-Monitor: Harte `...` Anzeige für wandernde Tagungsgäste durch übersetzbaren Text `GameState.T("poi.conference.waiting")` ("Wartet") ersetzt.
+- ✅ **Conference EXP-Loop Root Cause Fix (04.09.2026, Session 2):**
+  - Root Cause gefunden: `get_available_interactions` listete den eigenen besetzten Sitz nicht als verfügbar (`occupied_by == actor_id` fehlte). Gäste sahen 0 Optionen → `_decide_next_action()` → globaler Walk → EXP-Bypass via `_has_claimed_seat == true`.
+  - Fix 1: `ConferenceSmall.get_available_interactions` gibt jetzt auch den eigenen Sitz zurück (`occupied_by == "" or occupied_by == actor_id`).
+  - Fix 2: Fallthrough-Guard in `GuestActor._process_waiting`: Vor `_decide_next_action()` wird `release_interaction` aufgerufen und `_has_claimed_seat = false` gesetzt.
+  - Speaker Swap 1 und 2 laufen jetzt sauber durch, Live-Monitor stabil, kein EXP-Spam mehr.
 
 ## 🧱 Phase 1 – Fundament (v0.1.40–41)
 *Zuerst, weil alles andere darauf aufbaut.*

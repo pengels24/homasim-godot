@@ -152,19 +152,46 @@ func get_live_details() -> Array[Dictionary]:
 # =============================================================================
 # Smart Room & Speaker Logic
 # =============================================================================
+const TIME_SESSION_START    := 480   # 08:00
+const TIME_BREAK_START      := 720   # 12:00
+const TIME_BREAK_END        := 825   # 13:45  Gäste kommen zurück -> wander_pm
+const TIME_SESSION_PM_START := 840   # 14:00  Session PM beginnt
+const TIME_END              := 1020  # 17:00
+
 var _speaker_id: String = ""
 var _designated_speaker_id: String = ""
 var _speaker_time: int = 0
+var _phase: String = "idle"  # idle / wander / session / break / wander_pm / session_pm / end
 
 func _ready() -> void:
 	super._ready()
 	TimeManager.sig_minute_passed.connect(_on_minute_passed)
 
-func _on_minute_passed(_total_game_minutes: int) -> void:
-	if _speaker_id != "":
+func _on_minute_passed(total_game_minutes: int) -> void:
+	# Speaker-Swap nur während aktiver Sessions
+	if _speaker_id != "" and (_phase == "session" or _phase == "session_pm"):
 		_speaker_time += 1
 		if _speaker_time >= 15:
 			_swap_speaker()
+
+	# Phasen-Übergänge
+	match total_game_minutes:
+		TIME_SESSION_START:
+			if _phase == "wander" or _phase == "idle":
+				_phase = "session"
+		TIME_BREAK_START:
+			if _phase == "session":
+				_start_break()
+		TIME_BREAK_END:
+			if _phase == "break":
+				_end_break()
+		TIME_SESSION_PM_START:
+			if _phase == "wander_pm":
+				_phase = "session_pm"
+				_speaker_time = 0  # Frischer Start nach Pause
+		TIME_END:
+			if _phase not in ["end", "idle"]:
+				_end_conference()
 
 func _swap_speaker() -> void:
 	var t = TimeManager.get_game_time() if TimeManager else -1
@@ -269,10 +296,13 @@ func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 	if not is_event_active and is_any_event_guest:
 		return interactions
 
-	# VORPUFFER-MODUS (7:45 – 8:00): Gäste wuseln im Raum bis zum Event-Start
+	# VORPUFFER-MODUS:
+	# Morgens 07:45-08:00 UND nachmittags 13:50-14:00: Gäste wuseln im Raum
 	var current_game_time = TimeManager.get_game_time() if TimeManager else 480
 	print("[CONF-DEBUG] current_game_time=%d, is_my_event_guest=%s" % [current_game_time, is_my_event_guest])
-	if is_my_event_guest and current_game_time < 480:
+	var is_wander_window := (current_game_time < TIME_SESSION_START) or \
+						   (current_game_time >= TIME_BREAK_END and current_game_time < TIME_SESSION_PM_START)
+	if is_my_event_guest and is_wander_window:
 		var wander_pos = get_random_walkable_local_pos() # gibt bereits World-Koordinaten zurück!
 		print("[CONF-DEBUG] wander_pre: wander_pos=%s" % str(wander_pos))
 		if wander_pos != Vector2.INF:
@@ -280,7 +310,7 @@ func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 				"id": "wander_pre",
 				"type": "wander",
 				"target_pos": wander_pos,
-				"duration": randf_range(1.0, 2.5)
+				"duration": randf_range(4.0, 8.0)  # 4-8 Ingame-Min: kurz zusammenstehen, dann weiterschlurfen
 			})
 		return interactions
 	
@@ -313,7 +343,7 @@ func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 	if interaction_id == "wander_pre":
 		var wander_pos = get_random_walkable_local_pos() # gibt bereits World-Koordinaten zurück!
 		if wander_pos != Vector2.INF:
-			return {"target_pos": wander_pos, "duration": randf_range(1.0, 2.5)}
+			return {"target_pos": wander_pos, "duration": randf_range(4.0, 8.0)}  # 4-8 Ingame-Min
 		return {}
 	
 	var res = super.claim_interaction(actor_id, interaction_id)
@@ -351,3 +381,53 @@ func get_room_entry_pos(map_grid: Node) -> Vector2:
 		return door.global_position
 		
 	return global_position + Vector2(16, 16)
+
+# =============================================================================
+# Konferenz-Phasen: Pause & Ende
+# =============================================================================
+
+func _start_break() -> void:
+	_phase = "break"
+	# Speaker-State zurücksetzen – nach Pause frischer Start
+	_speaker_id = ""
+	_speaker_time = 0
+	_designated_speaker_id = ""
+	# Alle Sitze freigeben (die GuestActor-Methode macht den Rest)
+	for s in _room_seats:
+		s["occupied_by"] = ""
+	print("[CONF] _start_break | 12:00 | alle Sitze frei, TG werden rausgeschickt")
+	_broadcast_to_event_guests("go_conference_break")
+
+func _end_break() -> void:
+	_phase = "wander_pm"
+	print("[CONF] _end_break | 13:50 | TG kehren zurück (wander_pm bis 14:00)")
+	_broadcast_to_event_guests("return_from_conference_break")
+
+func _end_conference() -> void:
+	_phase = "end"
+	# Alle restlichen Sitze freigeben
+	for s in _room_seats:
+		s["occupied_by"] = ""
+	_speaker_id = ""
+	_designated_speaker_id = ""
+	print("[CONF] _end_conference | 17:00 | Konferenz beendet")
+	# active_conferences Eintrag entfernen
+	var gm = get_tree().current_scene.find_child("GuestManager", true, false)
+	if is_instance_valid(gm):
+		var rkey = gm._room_key(self)
+		EventManager.active_conferences.erase(rkey)
+	_broadcast_to_event_guests("end_conference_day")
+
+## Ruft eine Methode auf allen TG-Akteuren auf, die zu diesem Raum gehören.
+func _broadcast_to_event_guests(method: String) -> void:
+	var gm = get_tree().current_scene.find_child("GuestManager", true, false)
+	if not is_instance_valid(gm):
+		return
+	var rkey = gm._room_key(self)
+	for actor in get_tree().get_nodes_in_group("guest_actors"):
+		if not is_instance_valid(actor):
+			continue
+		var party = actor.call("_get_my_party") if actor.has_method("_get_my_party") else null
+		if is_instance_valid(party) and party.event_poi_id == rkey:
+			if actor.has_method(method):
+				actor.call(method)

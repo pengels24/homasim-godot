@@ -42,6 +42,22 @@
   - Fix 1: `ConferenceSmall.get_available_interactions` gibt jetzt auch den eigenen Sitz zurück (`occupied_by == "" or occupied_by == actor_id`).
   - Fix 2: Fallthrough-Guard in `GuestActor._process_waiting`: Vor `_decide_next_action()` wird `release_interaction` aufgerufen und `_has_claimed_seat = false` gesetzt.
   - Speaker Swap 1 und 2 laufen jetzt sauber durch, Live-Monitor stabil, kein EXP-Spam mehr.
+- ✅ **Log-Cleanup (04.09.2026, Session 3):**
+  - `[GuestActor] changed state:` Print auskommentiert (war bei 12 Gästen der dominante Fluter).
+  - `[StaffActor] changing to next_state=` Print auskommentiert. Nützliche Fehler-Prints bleiben erhalten.
+- ✅ **Konferenz-Mittagspause implementiert (04.09.2026, Session 3):**
+  - `go_conference_break()` / `return_from_conference_break()` / `end_conference_day()` in `GuestActor.gd`.
+  - `_start_break()` / `_end_break()` / `_broadcast_to_event_guests()` in `ConferenceSmall.gd`.
+  - `party.event_poi_id` wird während der Pause temporär geleert (TG-Gäste akzeptiert als normale Gäste in Bar/Restaurant).
+  - `TIME_BREAK_END` auf 825 (13:45), Hardcode in `GuestActor._decide_next_action()` synchronisiert.
+  - End of Day (17:00): 50% direkt nach Hause, 50% noch Bar/Restaurant.
+- ✅ **Tooltip-Mismatch behoben (04.09.2026, Session 3):**
+  - Tooltip nutzt nun `get_nodes_in_group("guest_actors")` statt `ctrl._actors.values()` (dieselbe Quelle wie Live-Monitor).
+  - WALKING-State wird gezählt wenn `_current_poi_id` noch auf den Raum zeigt.
+- 🔴 **Restaurant/Bar Verschwinde-Bug (04.09.2026, noch offen):**
+  - Gäste verlassen Restaurant/Bar sofort nach Ankunft → Tooltip 0, Live-Monitor sieht Gast kurz.
+  - Verdacht: `place_order_for_seat` gibt `false` zurück → `_decide_next_action()` → sofortiger POI-Wechsel.
+  - Debug-Prints in `RestaurantSmall.place_order_for_seat()` eingebaut. Nächster Schritt: Testlauf → Abbruchgrund identifizieren.
 
 ## 🧱 Phase 1 – Fundament (v0.1.40–41)
 *Zuerst, weil alles andere darauf aufbaut.*

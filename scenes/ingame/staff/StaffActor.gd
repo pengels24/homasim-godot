@@ -102,7 +102,7 @@ func _set_state(new_state: String) -> void:
 	_state = new_state
 	var staff_name = _get_staff_name()
 	var role = get_job_type()
-	print("[StaffActor] " + staff_name + " (" + role + ") changing to next_state=" + new_state)
+	# print("[StaffActor] " + staff_name + " (" + role + ") changing to next_state=" + new_state)
 	
 	if new_state != "walking" and is_instance_valid(_debug_line):
 		_debug_line.points = []

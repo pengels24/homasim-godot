@@ -206,11 +206,16 @@ func get_dirty_seat_position() -> Vector2:
 		if seat["status"] == "dirty" and seat["occupied_by"] == "":
 			return seat["node"].global_position
 	return Vector2.ZERO
-
-## Gast bestellt etwas, sobald er sitzt
 func place_order_for_seat(guest_id: String, budget: int = 9999, missing_sat: int = 100) -> bool:
+	# [DEBUG] Seat-Status ausgeben
+	var seat_found = false
 	for seat in _room_seats:
-		if seat["occupied_by"] == guest_id and seat["status"] == "clean":
+		if seat["occupied_by"] == guest_id:
+			seat_found = true
+			if seat["status"] != "clean":
+				print("[DEBUG RESTAURANT] Bestell-Abbruch: Gast ", guest_id, " hat Seat, aber status='%s' (nicht clean)!" % seat["status"])
+				return false
+				
 			if _room_id == "":
 				_room_id = GuestManager._room_key(self)
 				
@@ -230,7 +235,7 @@ func place_order_for_seat(guest_id: String, budget: int = 9999, missing_sat: int
 							if StaffManager.is_poi_staffed(def, k_id):
 								kitchen_is_open = true
 								break
-			
+				
 			if not kitchen_is_open:
 				print("[DEBUG RESTAURANT] Bestell-Abbruch für Gast ", guest_id, " -> Küche ist ZU oder unbesetzt!")
 				return false
@@ -250,9 +255,13 @@ func place_order_for_seat(guest_id: String, budget: int = 9999, missing_sat: int
 					print("[DEBUG RESTAURANT] Bestellung ERFOLGREICH für Gast ", guest_id, " -> Order ID: ", order_id)
 					return true
 			else:
-				print("[DEBUG RESTAURANT] Bestell-Abbruch für Gast ", guest_id, " -> Keine Rezepte gefunden! Budget: ", budget, ", Missing Sat: ", missing_sat, ", Total Recipes: ", GameState.recipes.size())
+				print("[DEBUG RESTAURANT] Bestell-Abbruch für Gast ", guest_id, " -> Keine Rezepte! Budget=%d, MissingSat=%d, TotalRecipes=%d" % [budget, missing_sat, GameState.recipes.size()])
+			return false  # Sollte nicht erreicht werden, aber Sicherheitsnetz
 	
-	print("[DEBUG RESTAURANT] Bestell-Abbruch für Gast ", guest_id, " -> Sitzplatz nicht gefunden oder nicht clean!")
+	if not seat_found:
+		print("[DEBUG RESTAURANT] Bestell-Abbruch: Kein Seat mit occupied_by='%s' gefunden! Seat-Status:" % guest_id)
+		for s in _room_seats:
+			print("  Seat occupied_by='%s' status='%s'" % [s["occupied_by"], s["status"]])
 	return false
 
 ## Prüft ob ein Waiter (Bedienung) für dieses Restaurant zugewiesen ist

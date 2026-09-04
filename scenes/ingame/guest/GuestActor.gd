@@ -44,6 +44,8 @@ var _base_speed: float = 40.0
 var _active_tween: Tween
 var _last_interaction_id: String = ""
 var _has_claimed_seat: bool = false
+## Speichert den Konferenzraum-Key während der Mittagspause (event_poi_id wird temporär geleert)
+var _conference_break_poi_key: String = ""
 
 signal sig_poi_income(amount: int, world_pos: Vector2)
 
@@ -626,7 +628,7 @@ func _decide_next_action() -> void:
 	party = _get_my_party()
 	if is_instance_valid(party) and party.event_poi_id != "":
 		var t = TimeManager.get_game_time() if TimeManager else 0
-		var is_event_time = (t >= 465 and t < 720) or (t >= 830 and t < 1020)
+		var is_event_time = (t >= 465 and t < 720) or (t >= 825 and t < 1020)
 		if is_event_time:
 			# Prüfen ob der Event-Raum bereits geöffnet hat
 			var event_room_node = null
@@ -762,7 +764,7 @@ func _change_state(new_state: State) -> void:
 	
 	var g_name = _guest_member.get("name") if _guest_member else "Unknown"
 	var poi_info = (" [" + _current_poi_id + "]") if new_state == State.IN_POI and not _current_poi_id.is_empty() else ""
-	print("[GuestActor] %s changed state: %s -> %s%s" % [g_name, get_state_name(old_state), get_state_name(new_state), poi_info])
+	# print("[GuestActor] %s changed state: %s -> %s%s" % [g_name, get_state_name(old_state), get_state_name(new_state), poi_info])
 	
 	# [TGCHANGE] Detailliertes Konferenz-Tracking
 	if _current_poi_id == "conference_small" or new_state == State.IN_POI and _current_poi_id == "conference_small":
@@ -1127,6 +1129,78 @@ func _get_my_party() -> GuestParty:
 		return null
 	return _guest_manager.get_party(_guest_member.party_id)
 
+
+# =============================================================================
+# Konferenz-Lebenszyklus-Methoden (werden von ConferenceSmall.broadcast aufgerufen)
+# =============================================================================
+
+## 12:00: Mittagspause – TG verlassen den Tagungsraum
+func go_conference_break() -> void:
+	# event_poi_id temporär leeren, damit Restaurant/Bar den Gast als normalen Gast akzeptieren.
+	# Ohne diesen Fix: get_available_interactions blockiert Event-Gäste aus regulären POIs.
+	var party = _get_my_party()
+	if is_instance_valid(party) and party.event_poi_id != "":
+		_conference_break_poi_key = party.event_poi_id
+		party.event_poi_id = ""
+
+	_has_claimed_seat = false
+	_action_timer = 0.0
+
+	# Mögliche Ziele: Lobby (Snackomat), Bar, Restaurant
+	var candidates: Array[String] = ["lobby"]
+	for room in _map_grid.active_rooms:
+		if not is_instance_valid(room):
+			continue
+		var def = room.call("get_definition") if room.has_method("get_definition") else {}
+		var rid = def.get("id", "")
+		if rid in ["bar", "restaurant_small"]:
+			candidates.append(rid)
+
+	var target = candidates.pick_random()
+	print("[CONF] go_conference_break | %s | -> %s" % [(_guest_member.name if _guest_member else "?"), target])
+	_walk_to_poi(target)
+
+## 13:45: Rückkehr aus Pause → zurück zum Tagungsraum (wander_pm bis 14:00)
+func return_from_conference_break() -> void:
+	# event_poi_id wiederherstellen, damit der Gast als TG erkannt und der Raum geöffnet wird
+	var party = _get_my_party()
+	if is_instance_valid(party) and _conference_break_poi_key != "":
+		party.event_poi_id = _conference_break_poi_key
+		_conference_break_poi_key = ""
+
+	_has_claimed_seat = false
+	_action_timer = 0.0
+	print("[CONF] return_from_conference_break | %s" % (_guest_member.name if _guest_member else "?"))
+	_walk_to_poi("conference_small")
+
+## 17:00: Konferenz-Ende – 50% direkt heim, 50% noch Bar/Restaurant
+func end_conference_day() -> void:
+	var party = _get_my_party()
+	if is_instance_valid(party):
+		party.event_poi_id = ""  # Event-Status entfernen → normaler Gast ab jetzt
+	_has_claimed_seat = false
+
+	print("[CONF] end_conference_day | %s" % (_guest_member.name if _guest_member else "?"))
+
+	# 50% direkt auschecken
+	if randf() < 0.5:
+		start_checkout()
+		return
+
+	# 50% noch 1-2 Stunden Bar oder Restaurant
+	var social_candidates: Array[String] = []
+	for room in _map_grid.active_rooms:
+		if not is_instance_valid(room):
+			continue
+		var def = room.call("get_definition") if room.has_method("get_definition") else {}
+		var rid = def.get("id", "")
+		if rid in ["bar", "restaurant_small"]:
+			social_candidates.append(rid)
+
+	if social_candidates.size() > 0:
+		_walk_to_poi(social_candidates.pick_random())
+	else:
+		start_checkout()
 
 # =============================================================================
 func start_checkout() -> void:

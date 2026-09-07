@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.50 | Stand: 2026-09-04
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.50 | Stand: 2026-09-07
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -54,10 +54,15 @@
 - ✅ **Tooltip-Mismatch behoben (04.09.2026, Session 3):**
   - Tooltip nutzt nun `get_nodes_in_group("guest_actors")` statt `ctrl._actors.values()` (dieselbe Quelle wie Live-Monitor).
   - WALKING-State wird gezählt wenn `_current_poi_id` noch auf den Raum zeigt.
-- 🔴 **Restaurant/Bar Verschwinde-Bug (04.09.2026, noch offen):**
-  - Gäste verlassen Restaurant/Bar sofort nach Ankunft → Tooltip 0, Live-Monitor sieht Gast kurz.
-  - Verdacht: `place_order_for_seat` gibt `false` zurück → `_decide_next_action()` → sofortiger POI-Wechsel.
-  - Debug-Prints in `RestaurantSmall.place_order_for_seat()` eingebaut. Nächster Schritt: Testlauf → Abbruchgrund identifizieren.
+- ✅ **Gastro-Flow-Totalausfall behoben (07.09.2026):**
+  - **Root Cause:** In `_process_waiting()` fehlten `return`-Statements am Ende der `EATING`- und `STUDYING_MENU`-Branches. Ausführung fiel auf `_decide_next_action()` (Zeile 422) durch – Conference-Code hatte diese Zeile aus dem IN_POI-Block herausrutschen lassen.
+  - **Fix 1:** `return` am Ende des EATING-Branches (verhindert Fallthrough nach `_walk_to_room()`)
+  - **Fix 2:** `return` am Ende des STUDYING_MENU-Branches (verhindert Fallthrough nach `_change_state(WAITING_FOR_FOOD)`)
+  - Resultat: Restaurant, Bar und Post-Essen-Zimmer-Walk funktionieren wieder korrekt.
+- ✅ **Snackautomat vollständig repariert (07.09.2026):**
+  - Bug 1: `_current_poi_id` wurde durch `target_room.get_definition().id` auf `"lobby"` überschrieben → `_on_poi_arrived()` brach sofort ab. Fix: Expliziter Spezialfall `if poi_id == "vending_machine"`.
+  - Bug 2: `_execute_walk()` `is_nearby`-Check (< 200px) verhinderte Ess-Walk. Fix: Direkter Tween mit `lobby.get_local_path()` für NavBlocker-respektierenden Weg zum Essplatz.
+- ✅ **HUD Gästezähler für TG-Gäste (07.09.2026):** `parties_changed.emit()` fehlte in `spawn_conference_guests()` nach `_active.append()`. TG-Gäste wurden erst bei nächster normaler Gästeaktion gezählt.
 
 ## 🧱 Phase 1 – Fundament (v0.1.40–41)
 *Zuerst, weil alles andere darauf aufbaut.*

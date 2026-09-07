@@ -195,7 +195,7 @@ func _on_minute_passed(total_game_minutes: int) -> void:
 
 func _swap_speaker() -> void:
 	var t = TimeManager.get_game_time() if TimeManager else -1
-	print("[TGCHANGE] SWAP_SPEAKER called | %02d:%02d | current_speaker=%s | speaker_time=%d" % [t/60, t%60, _speaker_id, _speaker_time])
+	# print("[TGCHANGE] SWAP_SPEAKER called | %02d:%02d | current_speaker=%s | speaker_time=%d" % [t/60, t%60, _speaker_id, _speaker_time])
 	# Wähle einen ZUFÄLLIGEN Zuhörer als neuen Speaker
 	var possible_listeners = []
 	for s in _room_seats:
@@ -263,7 +263,7 @@ func _swap_speaker() -> void:
 	old_speaker_actor.set("_action_timer", 999.0 * 60.0)
 	
 	var t2 = TimeManager.get_game_time() if TimeManager else -1
-	print("[TGCHANGE] SWAP_DONE | %02d:%02d | new_speaker=%s | old_speaker=%s | timers set to 999*60" % [t2/60, t2%60, new_speaker_id, old_speaker_id])
+	# print("[TGCHANGE] SWAP_DONE | %02d:%02d | new_speaker=%s | old_speaker=%s | timers set to 999*60" % [t2/60, t2%60, new_speaker_id, old_speaker_id])
 	
 	if new_speaker_actor.has_method("_execute_poi_move"):
 		new_speaker_actor.call("_execute_poi_move", speaker_target_pos, self)

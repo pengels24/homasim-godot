@@ -227,6 +227,7 @@ func spawn_conference_guests(current_time: int) -> void:
 			
 			_active.append(party)
 			sig_party_event_arrived.emit(party)
+			parties_changed.emit() # HUD-Gästezähler sofort aktualisieren
 			
 			daily_checkin_parties += 1
 			daily_checkin_heads += party.members.size()

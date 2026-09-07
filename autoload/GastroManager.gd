@@ -92,7 +92,7 @@ func try_gastro_order(guest_id: String, spending_budget: int, saturation: int, r
 
 	# Raum ist funktional → Bestellung aufgeben
 	if room_node.has_method("place_order_for_seat"):
-		var missing_sat := max(0, 100 - saturation)
+		var missing_sat: int = int(max(0, 100 - saturation))
 		var ordered: bool = room_node.place_order_for_seat(guest_id, spending_budget, missing_sat)
 		result["ordered"] = ordered
 	return result

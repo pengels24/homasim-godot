@@ -1,93 +1,102 @@
 # TechDoku: GuestActor (Gäste-Verhalten)
-*Stand: v0.1.50 – 2026-09-07*
+*Stand: v0.1.50 – 2026-09-07 (Smart-Room-Unification)*
 
 Der `GuestActor` steuert die visuelle und logische Repräsentation eines einzelnen Hotelgastes auf der Karte. Jeder `GuestActor` ist an ein `GuestMember`-Datenobjekt gekoppelt, welches die eigentlichen Werte (Sättigung, Geduld, Geldbeutel, Budget) hält.
 
 ## 1. Lebenszyklus & Setup
-- **Spawn**: Wird vom `GuestManager` instantiiert, sobald eine neue `GuestParty` (Gästegruppe) anreist oder aus einem Savegame geladen wird.
-- **Setup**: `setup(member, map_grid, start_room, guest_manager)` verknüpft den Actor mit dem Datenmodell und setzt den initialen Zustand.
-- **Despawn**: Wenn der Checkout abgeschlossen ist und der Gast das Grundstück verlässt (`LEAVING`), wird der Actor aus dem Tree entfernt.
+- **Spawn**: Wird vom `GuestManager` instantiiert, sobald eine neue `GuestParty` anreist oder geladen wird.
+- **Setup**: `setup(member, map_grid, start_room, guest_manager)` verknüpft Actor mit Datenmodell.
+- **Despawn**: Nach Checkout und Verlassen des Grundstücks (`LEAVING`) wird der Actor entfernt.
 
 ## 2. State-Machine (Zustände)
-Der Ablauf eines Gastes wird über die Enum `State` gesteuert:
-- `IDLE`: Der Gast überlegt, was er als Nächstes tut. Sucht nach offenen POIs, geht aufs Zimmer oder wartet.
-- `WALKING`: Bewegt sich entlang eines AStar-Pfads zu einem Ziel.
-- `IN_ROOM`: Befindet sich im eigenen gebuchten Zimmer (meist zum Schlafen oder Erholen).
-- `IN_POI`: Befindet sich in einem besuchbaren Raum (Lobby, Restaurant, Bar, Pool, etc.).
-- `STUDYING_MENU`: Liest die Speisekarte (Restaurant/Bar) – Gastro-spezifisch.
-- `WAITING_FOR_FOOD`: Hat bestellt, wartet auf Lieferung – Geduld sinkt über `_process_impatient`.
+- `IDLE`: Gast überlegt. Sucht offene POIs, geht aufs Zimmer oder wartet.
+- `WALKING`: Bewegt sich entlang eines AStar-Pfads.
+- `IN_ROOM`: Im eigenen gebuchten Zimmer (Schlafen, Erholen).
+- `IN_POI`: In einem besuchbaren Raum (Lobby, Pool, Gym, Spa, Konferenz, etc.).
+- `SITTING`: Unterzustand für feste Platzbindung (z.B. Tagungsgast sitzt während Vortrag).
+- `STUDYING_MENU`: Liest Speisekarte – wird von `is_gastro() == true` ausgelöst.
+- `WAITING_FOR_FOOD`: Hat bestellt, wartet auf Lieferung – Geduld sinkt.
 - `EATING`: Isst gerade – Sättigungsbalken steigt, Timer läuft.
-- `AWAITING_CHECKOUT`: Steht in der Lobby und wartet auf Checkout.
-- `LEAVING`: Hat ausgecheckt und läuft zum Ausgang.
+- `AWAITING_CHECKOUT`: Steht in der Lobby, wartet auf Checkout.
+- `LEAVING`: Hat ausgecheckt, läuft zum Ausgang.
 
-## 3. _process_waiting – KRITISCHE ARCHITEKTUR-NOTIZ
-> ⚠️ **ACHTUNG – Fallthrough-Gefahr!**
+## 3. _process_waiting – Architektur (v0.1.50)
 
-`_process_waiting()` hat einen `if _action_timer <= 0.0:` Block mit folgenden Branches:
+`_process_waiting()` hat drei saubere, voneinander unabhängige Branches:
 
 ```
+_action_timer -= delta * speed
 if _action_timer <= 0.0:
     if current_state == EATING:
         ...
-        return  ← PFLICHT, sonst Fallthrough!
+        return  # PFLICHT
     elif current_state == STUDYING_MENU:
+        GastroManager.try_gastro_order(...)
+        return  # PFLICHT
+    elif current_state in [IN_POI, SITTING]:
         ...
-        return  ← PFLICHT, sonst Fallthrough!
-    elif current_state == IN_POI:
-        ...
-        # kein return am Ende (fällt durch zu _decide_next_action)
-    
-    _decide_next_action()  ← Zeile 422 – läuft für IN_POI + alle anderen States
+        # kein return – fällt durch zu _decide_next_action()
+    _decide_next_action()
 ```
 
-**Regel:** Jeder Branch der einen State-Wechsel oder Walk auslöst, MUSS mit `return` enden. Andernfalls fällt die Ausführung auf `_decide_next_action()` durch – was Gäste sofort aus Restaurant/Bar herauslaufen lässt.
+> ⚠️ **Regel:** Jeder Branch der einen State-Wechsel auslöst MUSS mit `return` enden.
+> `SITTING` wird seit v0.1.50 im gemeinsamen `[IN_POI, SITTING]` Block behandelt.
 
-**History:** Dieser Bug trat auf als der Conference-Code den `elif IN_POI` Block hinzufügte und dabei `_decide_next_action()` aus dem IN_POI-Block herausrutschen ließ (v0.1.50 Fix).
+## 4. Gastronomie – Smart Room Protocol (v0.1.50)
 
-## 4. Gastronomie-Integration (Restaurant / Bar)
-Ist ein Gast im Restaurant oder an der Bar, durchläuft er eine Mini-State-Machine:
-1. **IN_POI** → Eintreffen, Platz nehmen via Smart Room API (`claim_interaction`)
-2. **STUDYING_MENU** → `_execute_poi_move()` Callback setzt diesen State; Timer für Menü-Lesen läuft
-3. **WAITING_FOR_FOOD** → `place_order_for_seat()` war erfolgreich; `_process_impatient()` tickt
-4. **EATING** → Essen wurde geliefert (Signal von RestaurantSmall/KitchenSmall); Sättigung steigt
-5. **WALKING** → Nach dem Essen: `_walk_to_room()` → zurück ins Zimmer
+Der `GuestActor` kennt **keine Raum-IDs** mehr. Der Raum teilt über Methoden mit was er ist.
 
-**Bar-Sonderfall:** Bei der Bar gibt es keine Küche – bei `ordered == false` geht der Gast direkt in `EATING` (Getränk am Tresen).
-
-## 5. Vending Machine (Lobby Snack-Automat)
-Der Snackautomat ist ein Pseudo-POI in der Lobby.
-
-**Wichtige Besonderheit:** `target_room` ist die **Lobby**, nicht ein eigener Raum. Daher:
-- `_current_poi_id` muss in `_walk_to_poi()` **explizit** auf `"vending_machine"` gesetzt werden, BEVOR `target_room.get_definition().id` gelesen wird – sonst würde `"lobby"` überschreiben und `_on_poi_arrived()` sofort per Early-Return abbrechen.
-- Der Ess-Walk nach dem Kauf nutzt **keinen** `_execute_walk()` (wegen des `is_nearby < 200px` Checks), sondern einen direkten Tween mit `lobby.get_local_path()` für korrekte NavBlocker-Respektierung.
+**Trigger:** `_execute_poi_move()` prüft `room_node.is_gastro()` – nur dann wird `STUDYING_MENU` nach Ankunft am Platz ausgelöst.
 
 **Flow:**
-1. `_walk_to_poi("vending_machine")` → Gast läuft zu `get_vending_target_world()`
-2. `_on_poi_arrived()` → `lobby.buy_snack()` → EXP + Geld
-3. Direkter Tween zu `lobby.get_snack_eating_target_world()` via `get_local_path()`
-4. `_change_state(EATING)` → 15s essen → dann `_walk_to_room()`
+1. `IN_POI` → `claim_interaction()` → `_execute_poi_move()` → `[STUDYING_MENU falls is_gastro()]`
+2. `STUDYING_MENU` → `GastroManager.try_gastro_order(id, budget, saturation, room_node)` → eines von:
+   - `ordered == true` → `WAITING_FOR_FOOD`
+   - `solo_mode == true` → `EATING` direkt (Bar mit Barkeeper aber ohne Waiter)
+   - beide false → Platz freigeben, `_decide_next_action()`
+3. `WAITING_FOR_FOOD` → Signal `GastroManager.sig_order_served` → `EATING`
+4. `EATING` → nach 15s → `release_interaction()` → `_walk_to_room()`
 
-## 6. Smart Room System
-Das Gast-Interaktionssystem läuft über die generische Smart Room API:
-- `get_available_interactions(actor)` → listet verfügbare Interaktionen (Sitze, etc.)
-- `claim_interaction(actor_id, interaction_id)` → reserviert Platz, gibt `target_pos` zurück
-- `release_interaction(actor_id)` → gibt Platz frei
+## 5. Wellness-Räume (Pool / Gym / Spa)
+Pool, Gym und Spa nutzen die generische `IN_POI` Schleife wie alle anderen Räume.
+Die Aufenthaltsdauer kommt direkt aus `claim_interaction()` des jeweiligen Raums zurück:
+- Pool: 60–180 Ingame-Minuten (begrenzt auf Schließzeit)
+- Gym: 60–90 Ingame-Minuten (begrenzt auf Schließzeit)
+- Spa: 90–180 Ingame-Minuten (begrenzt auf Schließzeit)
 
-Der GuestActor trackt seine aktive Interaktion über `_has_claimed_seat` und gibt diese beim Verlassen oder State-Wechsel automatisch frei.
+> **Kein `_poi_stay_timer` mehr** – diese Variable existiert nicht mehr. Der `_action_timer` wird direkt genutzt. Nach Ablauf: `release_interaction()` + `_decide_next_action()`.
 
-## 7. Tagungsgäste (TG-Gäste)
+## 6. Vending Machine (Lobby Snack-Automat)
+Pseudo-POI in der Lobby. `target_room` ist die Lobby selbst.
+- `_current_poi_id` muss **explizit** auf `"vending_machine"` gesetzt werden (vor `target_room.get_definition()`)
+- Ess-Walk nutzt direkten Tween mit `lobby.get_local_path()` (nicht `_execute_walk()`)
+
+## 7. Smart Room API (vollständige Referenz)
+Alle Räume sind Smart Rooms. `GuestActor` nutzt ausschließlich diese Methoden:
+
+| Methode | Bedeutung |
+|---|---|
+| `get_available_interactions(actor)` | Liste verfügbarer Interaktionen (Sitz, Bett, ...) |
+| `claim_interaction(actor_id, id)` | Reserviert Platz, gibt `target_pos` + `duration` zurück |
+| `release_interaction(actor_id)` | Gibt alle belegten Plätze frei |
+| `is_gastro()` | *(NEU v0.1.50)* True → STUDYING_MENU nach Ankunft |
+| `can_serve_solo()` | *(NEU v0.1.50)* True → Solo-Drink ohne Kellner möglich |
+
+`_has_claimed_seat` trackt ob ein Sitz geclaimed ist. Wird beim Verlassen automatisch freigegeben.
+
+## 8. Tagungsgäste (TG-Gäste)
 Conference-Gäste (`party.event_poi_id != ""`) verhalten sich anders:
 - Priorisieren zur Tagungszeit zwingend den Konferenzraum (`_decide_next_action`)
-- Während `party.event_poi_id` gesetzt: konferenzraum-spezifische Wander-Logik
-- Mittagspause: `event_poi_id` wird temporär geleert → TG-Gäste dürfen Bar/Restaurant nutzen
-- End of Day (17:00): 50% direkt nach Hause, 50% noch Bar/Restaurant
-- Mitternacht: aus `_active` entfernt via `GuestManager.process_midnight_penalties()`
+- `SITTING` State im gemeinsamen `[IN_POI, SITTING]` Block – kein Sonderfall mehr
+- Mittagspause: `event_poi_id` temporär geleert → TG-Gäste dürfen Gastro-Räume nutzen (via `is_gastro()`)
+- End of Day: 50% direkt nach Hause, 50% noch Gastro-Räume (via `is_gastro()`)
+- Event-Gäste-Filter in `_get_open_pois()`: `is_gastro()` statt hardcoded ID-Liste
 
-## 8. Zufriedenheit (Satisfaction) & Bedürfnisse
-Die `satisfaction` ist ein zentraler Wert der gesamten `GuestParty`:
-- **Sinkt durch**: Lange Wartezeiten, Hunger, dreckige/kaputte Zimmer, fehlende Requirements
+## 9. Zufriedenheit (Satisfaction) & Bedürfnisse
+`satisfaction` ist ein zentraler Wert der gesamten `GuestParty`:
+- **Sinkt durch**: Lange Wartezeiten, Hunger, dreckige/kaputte Zimmer
 - **Steigt durch**: Erfolgreiche POI-Besuche (+2%), WLAN (+1%), Klima (+1%)
 - Max. +4% pro Besuch (Balancing-Bremse)
 
-## 9. Pathfinding & Bewegung
-Gäste nutzen `MapGrid.get_path_astar()` für globale Pfade und `room.get_local_path()` für Bewegungen innerhalb von Räumen. Geschwindigkeit (`_base_speed`) ist pro Gästetyp konfigurierbar und skaliert synchron mit `TimeManager.user_speed`.
+## 10. Pathfinding & Bewegung
+Gäste nutzen `MapGrid.get_path_astar()` für globale Pfade und `room.get_local_path()` für Bewegungen innerhalb von Räumen. Geschwindigkeit (`_base_speed`) skaliert mit `TimeManager.user_speed`.

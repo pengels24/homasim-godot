@@ -102,7 +102,7 @@ func _set_state(new_state: String) -> void:
 	_state = new_state
 	var staff_name = _get_staff_name()
 	var role = get_job_type()
-	# print("[StaffActor] " + staff_name + " (" + role + ") changing to next_state=" + new_state)
+	print("[StaffActor] " + staff_name + " (" + role + ") changing to next_state=" + new_state)
 	
 	if new_state != "walking" and is_instance_valid(_debug_line):
 		_debug_line.points = []
@@ -774,7 +774,7 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 		else:
 			_target_world_pos = global_position
 	else:
-		var astar = _map_grid.get("astar") if _map_grid else null
+		# var astar = _map_grid.get("astar") if _map_grid else null
 		# var s_solid = astar.is_point_solid(start_tile) if astar else false
 		# var e_solid = astar.is_point_solid(end_tile) if astar else false
 		# print("[StaffActor] _start_path_to_room FAILED: start=", start_tile, " (solid:", s_solid, ") end=", end_tile, " (solid:", e_solid, ") room=", room.name if room else "null")
@@ -822,7 +822,7 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 				_target_world_pos = global_position
 		else:
 			# Absoluter Mega-Notfall: Geht wirklich nicht (z.B. Ziel ist eingemauert) -> Teleport, um FPS zu retten
-			global_position = _map_grid.call("tile_to_world", end_tile) if is_instance_valid(_map_grid) else end_tile * 16
+			global_position = _map_grid.call("tile_to_world", end_tile) if is_instance_valid(_map_grid) else Vector2(end_tile) * 16.0
 			_target_world_pos = global_position
 			if extra_pos != Vector2.INF:
 				_extra_target_pos = extra_pos

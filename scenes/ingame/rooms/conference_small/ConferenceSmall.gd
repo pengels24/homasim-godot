@@ -194,7 +194,7 @@ func _on_minute_passed(total_game_minutes: int) -> void:
 				_end_conference()
 
 func _swap_speaker() -> void:
-	var t = TimeManager.get_game_time() if TimeManager else -1
+	# var t = TimeManager.get_game_time() if TimeManager else -1
 	# print("[TGCHANGE] SWAP_SPEAKER called | %02d:%02d | current_speaker=%s | speaker_time=%d" % [t/60, t%60, _speaker_id, _speaker_time])
 	# Wähle einen ZUFÄLLIGEN Zuhörer als neuen Speaker
 	var possible_listeners = []
@@ -262,7 +262,7 @@ func _swap_speaker() -> void:
 	new_speaker_actor.set("_action_timer", 999.0 * 60.0)
 	old_speaker_actor.set("_action_timer", 999.0 * 60.0)
 	
-	var t2 = TimeManager.get_game_time() if TimeManager else -1
+	# var t2 = TimeManager.get_game_time() if TimeManager else -1
 	# print("[TGCHANGE] SWAP_DONE | %02d:%02d | new_speaker=%s | old_speaker=%s | timers set to 999*60" % [t2/60, t2%60, new_speaker_id, old_speaker_id])
 	
 	if new_speaker_actor.has_method("_execute_poi_move"):
@@ -286,8 +286,6 @@ func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 	var is_my_event_guest = (party != null and party.get("event_poi_id") == rkey)
 	var is_any_event_guest = (party != null and party.get("event_poi_id") != "")
 	
-	print("[CONF-DEBUG] get_available_interactions: rkey=%s, is_event_active=%s, is_my_event_guest=%s, is_any=%s, party_event_poi=%s" % [rkey, is_event_active, is_my_event_guest, is_any_event_guest, (party.get("event_poi_id") if party else "null")])
-	
 	# MODUS A: Event läuft. NUR _meine_ Event-Gäste dürfen rein.
 	if is_event_active and not is_my_event_guest:
 		return interactions
@@ -299,12 +297,10 @@ func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 	# VORPUFFER-MODUS:
 	# Morgens 07:45-08:00 UND nachmittags 13:50-14:00: Gäste wuseln im Raum
 	var current_game_time = TimeManager.get_game_time() if TimeManager else 480
-	print("[CONF-DEBUG] current_game_time=%d, is_my_event_guest=%s" % [current_game_time, is_my_event_guest])
 	var is_wander_window := (current_game_time < TIME_SESSION_START) or \
 						   (current_game_time >= TIME_BREAK_END and current_game_time < TIME_SESSION_PM_START)
 	if is_my_event_guest and is_wander_window:
 		var wander_pos = get_random_walkable_local_pos() # gibt bereits World-Koordinaten zurück!
-		print("[CONF-DEBUG] wander_pre: wander_pos=%s" % str(wander_pos))
 		if wander_pos != Vector2.INF:
 			interactions.append({
 				"id": "wander_pre",
@@ -375,7 +371,7 @@ func release_interaction(actor_id: String) -> void:
 	super.release_interaction(actor_id)
 
 # =============================================================================
-func get_room_entry_pos(map_grid: Node) -> Vector2:
+func get_room_entry_pos(_map_grid: Node) -> Vector2:
 	var door = get_node_or_null("Door")
 	if is_instance_valid(door):
 		return door.global_position

@@ -162,6 +162,16 @@ func room_leave_bed(guest_id: String) -> void:
 # =============================================================================
 var _last_interaction_for_guest: Dictionary = {}
 
+## Gibt an ob dieser Raum eine Gastro-Bestellstrecke hat (Menü → Bestellung → Essen).
+## Standard: false. Gastro-Räume (Restaurant, Bar, Kiosk, ...) überschreiben mit: return true
+func is_gastro() -> bool:
+	return false
+
+## Gibt an ob der Raum Gäste solo bedienen kann (ohne Kellner/Waiter).
+## Standard: false. Bar überschreibt mit: return is_bartender_present()
+func can_serve_solo() -> bool:
+	return false
+
 func get_available_interactions(_actor: Node2D) -> Array[Dictionary]:
 	var interactions: Array[Dictionary] = []
 	for i in range(_room_beds.size()):

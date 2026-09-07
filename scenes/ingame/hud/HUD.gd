@@ -394,7 +394,7 @@ func _on_time_speed_changed(is_paused: bool, speed: float) -> void:
 
 
 # =============================================================================
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if state_border and state_border.visible and EventManager and EventManager.is_event_active() and not _is_building and not _is_paused:
 		var time = Time.get_ticks_msec() / 1000.0
 		state_border.modulate.a = 0.5 + 0.5 * sin(time * 3.0)

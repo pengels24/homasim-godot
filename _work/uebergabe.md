@@ -1,80 +1,52 @@
-# Übergabeprotokoll – Session 07.09.2026
-*Version: v0.1.50 | Erstellt: 10:34 Uhr*
+# Uebergabe-Protokoll - Session 07.09.2026 Abend
 
----
+## Exakter letzter Stand
+Smart-Room-Unification Refactoring ist code-complete aber NICHT getestet.
+Peter startet den Test morgen.
 
-## ✅ Was wurde in dieser Session gemacht?
+## Was wurde gemacht
 
-### ROOT CAUSE: Gastro-Flow-Totalausfall
-Der schwerwiegendste Bug dieser Session wurde vollständig behoben:
+### Neue Raum-Abstraktionen
+- Room.gd: is_gastro() und can_serve_solo() als Basis-Methoden
+- RestaurantSmall.gd: is_gastro() = true
+- Bar.gd: is_gastro() = true, can_serve_solo() = is_bartender_present()
+- Pool/Gym/Spa: claim_interaction() ueberschrieben mit korrekter Dauer:
+  - Pool 60-180 Min, Gym 60-90 Min, Spa 90-180 Min (alle Schliesszeit-begrenzt)
+  - get_live_details() liest _action_timer statt _poi_stay_timer
 
-**In `_process_waiting()` (GuestActor.gd) fehlten zwei `return`-Statements:**
-- `STUDYING_MENU`-Branch: Nach `_change_state(WAITING_FOR_FOOD)` kein `return` → Fallthrough auf `_decide_next_action()` → Gast stand sofort auf
-- `EATING`-Branch: Nach `_walk_to_room()` kein `return` → Fallthrough → Gast ging nicht ins Zimmer
+### GastroManager.gd
+- try_gastro_order(guest_id, budget, saturation, room_node) -> {ordered, solo_mode}
+- Kapselt is_functional + can_serve_solo + place_order_for_seat
 
-**Ursache:** Conference-Code hatte `elif current_state == State.IN_POI:` Block hinzugefügt, wodurch `_decide_next_action()` aus dem IN_POI-Block herausgerutscht war (auf `\t\t` statt `\t\t\t`).
+### GuestActor.gd - Massiver Cleanup
+- _poi_stay_timer vollstaendig entfernt
+- is_smart_room, is_bar_gastro_loop Flags weg
+- _process_waiting(): 3 saubere Branches ohne room-ID Checks
+- _on_poi_arrived(): einheitlicher Claim-Pfad
+- _execute_poi_move(): is_gastro() statt langer Ausschlussliste
+- _change_state(IN_POI): nur noch _action_timer = 0.01
+- SITTING im [IN_POI, SITTING] Block (conference fix)
+- Alle hardcodierten room-ID Entscheidungen entfernt
 
-**Fix:** `return` am Ende beider Branches (GuestActor.gd ~Zeile 302 und ~Zeile 370).
+## Sofortige naechste Schritte
 
-### Snackautomat: Zwei separate Bugs behoben
-**Bug 1** (`_current_poi_id` wurde auf `"lobby"` überschrieben):
-- `_walk_to_poi()` las nach `_execute_walk()` die `_current_poi_id` aus `target_room.get_definition().id`
-- Da Snackautomat in Lobby liegt → `"lobby"` statt `"vending_machine"`
-- `_on_poi_arrived()` brach per Early-Return sofort ab
-- **Fix:** `if poi_id == "vending_machine": _current_poi_id = "vending_machine"` vor dem Definition-Read
+1. TESTEN (Agent wartet auf Bestaetigung):
+   - Pool/Gym/Spa Aufenthaltsdauer korrekt
+   - Restaurant Bestell-Flow
+   - Bar Solo (nur Barkeeper): EATING direkt
+   - Bar Full: normale Bestellung
+   - Tagungsgast: kein Zucken, Speaker-Wechsel nach ~15 Min
+   - Tagungsgast Mittagspause: Gastro und Rueckkehr
 
-**Bug 2** (Gäste liefen durch Möbel zum Essplatz):
-- `_execute_walk()` mit leerem `path_tiles`-Array und `is_nearby < 200px` Check verhinderte Pfadberechnung
-- **Fix:** Direkter Tween mit `lobby.get_local_path()` für NavBlocker-respektierenden Weg
+2. Falls OK: Tech-Doku aktualisieren (GuestActor, GastroManager)
+3. Falls NICHT OK: gezielt fixen ohne Architektur aufzurollen
 
-### HUD Gästezähler für TG-Gäste
-- `spawn_conference_guests()` emittierte kein `parties_changed` nach `_active.append()`
-- **Fix:** `parties_changed.emit()` in `GuestManager.spawn_conference_guests()` hinzugefügt
-
----
-
-## 📂 Geänderte Dateien
-
-| Datei | Änderung |
-|---|---|
-| `scenes/ingame/guest/GuestActor.gd` | `return` in EATING+STUDYING_MENU, vending_machine poi_id Fix, Ess-Walk Tween, Debug-Prints |
-| `scenes/ingame/GuestManager.gd` | `parties_changed.emit()` in `spawn_conference_guests()` |
-| `wiki/02_features/25_techdoku_guestactor.md` | Komplett neu geschrieben (Encoding + neue Infos) |
-| `wiki/alpha_backlog.md` | Bugs als erledigt markiert, Stand aktualisiert |
-| `changelog/gd-0.1.50.md` | Session-Changelog erstellt |
-
----
-
-## 🔧 Noch zu erledigen (Debug-Prints entfernen!)
-
-Folgende temporäre Prints sind noch aktiv und sollten vor dem nächsten Release entfernt werden:
-
-- `GuestActor.gd`: `[DEBUG GASTRO]` Stack-Trace Print in `_decide_next_action()` (~Zeile 562)
-- `GuestActor.gd`: `[VENDING]` Prints in `_on_poi_arrived()` und `_walk_to_poi()`
-- `GuestActor.gd`: `[DEBUG RESTAURANT]` Print in `RestaurantSmall.place_order_for_seat()` (ACHTUNG: dieser ist in RestaurantSmall.gd!)
-- `ConferenceSmall.gd`: `[CONF-DEBUG]` Prints (auskommentiert, aber vorhanden)
-
----
-
-## 🔴 Offene Punkte / Noch nicht getestet
-
-1. **HUD TG-Gästezähler** – Fix wurde implementiert aber noch **nicht getestet** (Session endete davor). Beim nächsten Start prüfen: Zeigt HUD beim Spawn von TG-Gästen sofort die korrekte Anzahl?
-
-2. **Snackautomat NavPath** – Funktioniert laut User-Feedback. `[VENDING] punkte=X` im Log beobachten ob `get_local_path` ordentliche Wegpunkte liefert (sollte > 1 sein).
-
-3. **EATING → Zimmer-Walk** – Gäste sollten nach dem Essen nun korrekt ins Zimmer zurücklaufen. Noch nicht explizit bestätigt, implizit durch `return`-Fix gelöst.
-
----
-
-## 🔮 Nächste Schritte (Prio-Reihenfolge)
-
-1. **Debug-Prints entfernen** (alle `[VENDING]`, `[DEBUG GASTRO]`, `[DEBUG RESTAURANT]`)
-2. **Vollständiger Gastro-Flow Test** mit Restaurant + Bar + Snackautomat + Tagungsgäste gleichzeitig
-3. **Weiter in der Alpha-Roadmap** (Phase 4/5 – Techtree Content, Zufallsereignisse)
-
----
-
-## 💡 Architektur-Warnung für nächsten Agenten
-
-> **KRITISCH:** `_process_waiting()` in `GuestActor.gd` hat einen Fallthrough-Mechanismus. Jeder neue Branch der einen State-Wechsel oder Walk auslöst, MUSS mit `return` enden! Sonst läuft `_decide_next_action()` auf Zeile 422 immer mit durch → Gäste verlassen sofort POIs.
-> Siehe `wiki/02_features/25_techdoku_guestactor.md` Abschnitt 3 für Details.
+## Geaenderte Dateien
+- scenes/ingame/guest/GuestActor.gd
+- scenes/ingame/rooms/Room.gd
+- scenes/ingame/rooms/restaurant_small/RestaurantSmall.gd
+- scenes/ingame/rooms/bar/Bar.gd
+- scenes/ingame/rooms/pool_small/PoolSmall.gd
+- scenes/ingame/rooms/gym_small/GymSmall.gd
+- scenes/ingame/rooms/spa_small/SpaSmall.gd
+- autoload/GastroManager.gd

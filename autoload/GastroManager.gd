@@ -68,3 +68,31 @@ func get_ready_orders_for_restaurant(restaurant_id: String) -> Array:
 		if order['status'] == 'ready' and order['restaurant_id'] == restaurant_id:
 			ready_orders_list.append(order_id)
 	return ready_orders_list
+
+## Versucht eine Bestellung für einen Gast in einem Gastro-Raum aufzugeben.
+## Gibt { "ordered": bool, "solo_mode": bool } zurück.
+## "ordered" = true  → Bestellung erfolgreich, Gast wartet auf Essen (WAITING_FOR_FOOD)
+## "solo_mode" = true → Kein Kellner, aber Barkeeper ist da → Gast geht in EATING (Solo-Drink)
+## Beide false → Raum nicht funktional, Gast soll abbrechen
+func try_gastro_order(guest_id: String, spending_budget: int, saturation: int, room_node: Node) -> Dictionary:
+	var result := {"ordered": false, "solo_mode": false}
+	if not is_instance_valid(room_node):
+		return result
+
+	# Ist der Raum voll funktional (Küche + Kellner)?
+	var is_func := true
+	if room_node.has_method("is_functional"):
+		is_func = room_node.is_functional()
+
+	if not is_func:
+		# Solo-Modus prüfen (z.B. Bar ohne Waiter, aber Barkeeper ist da)
+		if room_node.has_method("can_serve_solo") and room_node.can_serve_solo():
+			result["solo_mode"] = true
+		return result
+
+	# Raum ist funktional → Bestellung aufgeben
+	if room_node.has_method("place_order_for_seat"):
+		var missing_sat := max(0, 100 - saturation)
+		var ordered: bool = room_node.place_order_for_seat(guest_id, spending_budget, missing_sat)
+		result["ordered"] = ordered
+	return result

@@ -63,6 +63,16 @@
   - Bug 1: `_current_poi_id` wurde durch `target_room.get_definition().id` auf `"lobby"` überschrieben → `_on_poi_arrived()` brach sofort ab. Fix: Expliziter Spezialfall `if poi_id == "vending_machine"`.
   - Bug 2: `_execute_walk()` `is_nearby`-Check (< 200px) verhinderte Ess-Walk. Fix: Direkter Tween mit `lobby.get_local_path()` für NavBlocker-respektierenden Weg zum Essplatz.
 - ✅ **HUD Gästezähler für TG-Gäste (07.09.2026):** `parties_changed.emit()` fehlte in `spawn_conference_guests()` nach `_active.append()`. TG-Gäste wurden erst bei nächster normaler Gästeaktion gezählt.
+- ✅ **Konferenz: Zucken der Zuhörer + Speaker-Wechsel-Ausfall behoben (07.09.2026, Abend):** Root Cause: `State.SITTING` wurde in `_process_waiting()` nicht abgefangen → endloser Timer-Reset → Speaker-Swap-Timer erreichte nie 15 Min. Fix: `SITTING` im einheitlichen `[State.IN_POI, State.SITTING]` Block behandelt.
+- ✅ **ARCHITEKTUR: Smart-Room-Unification (07.09.2026, Abend):** 21+ hardcodierte Raum-ID Checks aus `GuestActor.gd` vollständig entfernt. Neue Architektur:
+  - `Room.gd`: Neue Basis-Methoden `is_gastro()` und `can_serve_solo()`
+  - `RestaurantSmall.gd` + `Bar.gd`: Überschreiben `is_gastro()` → `true`
+  - `Bar.gd`: Überschreibt `can_serve_solo()` → `is_bartender_present()`
+  - `PoolSmall/GymSmall/SpaSmall.gd`: Überschreiben `claim_interaction()` mit korrekter Aufenthaltsdauer (Pool 60-180, Gym 60-90, Spa 90-180 Min). `get_live_details()` liest `_action_timer` statt `_poi_stay_timer` (entfernt)
+  - `GastroManager.gd`: Neue zentrale Methode `try_gastro_order()` für alle Gastro-Räume
+  - `GuestActor.gd`: `_poi_stay_timer`, `is_smart_room`, `is_bar_gastro_loop` und alle Room-ID-Checks entfernt. STUDYING_MENU Block (80→20 Zeilen), vereinheitlichter IN_POI/SITTING Block, `_change_state(State.IN_POI)` ohne room-ID Logik.
+  - **Ergebnis:** Neue Gastro-Räume benötigen nur `is_gastro() -> true` + `place_order_for_seat()` – keine Änderungen am Actor mehr nötig.
+  - **Offene Tests (morgen):** Pool/Gym/Spa Aufenthalt, Restaurant, Bar (solo+full), Tagungsgast (kein Zucken, Speaker-Swap, Mittagspause)
 
 ## 🧱 Phase 1 – Fundament (v0.1.40–41)
 *Zuerst, weil alles andere darauf aufbaut.*

@@ -99,6 +99,12 @@ func get_waiter_stand_pos() -> Vector2:
 
 # =============================================================================
 # =============================================================================
+func is_gastro() -> bool:
+	return true
+
+func can_serve_solo() -> bool:
+	return is_bartender_present()
+
 func is_functional() -> bool:
 	var has_bartender = false
 	var has_waiter = false

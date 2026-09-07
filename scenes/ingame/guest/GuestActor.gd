@@ -37,7 +37,6 @@ var _current_order_id: String = ""
 
 # Interner Timer für Aufenthaltsdauer
 var _action_timer: float = 0.0
-var _poi_stay_timer: float = 0.0
 var _impatient_timer: float = 0.0
 var _base_speed: float = 40.0
 
@@ -272,15 +271,6 @@ func _process_waiting(delta: float) -> void:
 			_walk_to_exit()
 			return
 		
-	if current_state == State.IN_POI and (_current_poi_id == "pool_small" or _current_poi_id == "gym_small" or _current_poi_id == "spa_small"):
-		_poi_stay_timer -= delta * speed
-		if _poi_stay_timer <= 0.0:
-			var room_node = _get_poi_room_node(_current_poi_id)
-			if is_instance_valid(room_node) and room_node.has_method("leave_seat"):
-				room_node.leave_seat(_guest_member.id)
-			_decide_next_action()
-			return
-			
 	_action_timer -= delta * speed
 	if _action_timer <= 0.0:
 		if current_state == State.EATING:
@@ -292,84 +282,51 @@ func _process_waiting(delta: float) -> void:
 				if poi_room_node.has_method("leave_seat"):
 					poi_room_node.leave_seat(_guest_member.id)
 			
-			# Der Weg aus dem POI wird nun sauber über local_path_out in _execute_walk animiert!
-			# print("[DEBUG] Gast ", _guest_member.id if _guest_member else "?", " beendet EATING. Ziel: Zimmer ist valid! Rufe _walk_to_room auf.")
 			if is_instance_valid(_target_room):
 				_walk_to_room(_target_room, State.IN_ROOM)
 			else:
-				# print("[DEBUG] Gast ", _guest_member.id if _guest_member else "?", " beendet EATING. Ziel: Zimmer ist INVALID! Rufe _decide_next_action auf.")
 				_decide_next_action()
 			return # WICHTIG: Verhindert Fallthrough zu _decide_next_action() am Ende des Blocks
+		
 		elif current_state == State.STUDYING_MENU:
+			# GastroManager übernimmt die gesamte Bestell-Logik – kein room-ID Check mehr nötig
 			var room_node = _get_poi_room_node(_current_poi_id)
-			var ordered = false
 			
-			if is_instance_valid(room_node):
-				# 1. Ist der Raum überhaupt funktional (Personal anwesend)?
-				var is_func = true
-				if room_node.has_method("is_functional"):
-					is_func = room_node.is_functional()
-					
-				if not is_func:
-					if not _has_waited_for_functional:
-						print("[GuestActor] %s: Raum %s ist NICHT funktional. Warte einmalig %s Minuten." % [(_guest_member.name if _guest_member else "?"), _current_poi_id, POI_WAIT_TIME_MINUTES])
-						_has_waited_for_functional = true
-						if TimeManager:
-							_action_timer = POI_WAIT_TIME_MINUTES * TimeManager.SECONDS_PER_GAME_MINUTE
-						else:
-							_action_timer = 5.0
-						return
-					else:
-						# Nach Wartezeit immer noch nicht funktional
-						if _current_poi_id == "bar" and room_node.has_method("is_bartender_present") and room_node.is_bartender_present():
-							print("[GuestActor] %s: Bar Waiter fehlt, aber Barkeeper ist da -> Solo-Modus (nur Getränk)." % [(_guest_member.name if _guest_member else "?")])
-							_has_waited_for_functional = false
-							_change_state(State.EATING) # Solo-Drink
-							return
-						else:
-							print("[GuestActor] %s: Raum %s ist immer noch nicht funktional nach Wartezeit! Breche ab." % [(_guest_member.name if _guest_member else "?"), _current_poi_id])
-							_has_waited_for_functional = false
-							if is_instance_valid(room_node):
-								if room_node.has_method("release_interaction"):
-									room_node.release_interaction(_guest_member.id)
-								if room_node.has_method("leave_seat"):
-									room_node.leave_seat(_guest_member.id)
-							_decide_next_action()
-							return
-						
-				_has_waited_for_functional = false
-				
-				# 2. Raum ist funktional -> Bestellung aufgeben
-				print("[GuestActor] %s STUDYING_MENU beendet. Versuche place_order_for_seat in Raum %s" % [(_guest_member.name if _guest_member else "?"), _current_poi_id])
-				if room_node.has_method("place_order_for_seat"):
-					var missing_sat = max(0, 100 - _guest_member.saturation)
-					ordered = room_node.place_order_for_seat(_guest_member.id, _guest_member.spending_budget, missing_sat)
-					print("[GuestActor] place_order_for_seat Resultat für %s: %s" % [(_guest_member.name if _guest_member else "?"), ordered])
-				else:
-					print("[GuestActor ERROR] %s hat keine Methode place_order_for_seat!" % _current_poi_id)
-			else:
-				print("[GuestActor ERROR] room_node ist ungültig (invalid) in STUDYING_MENU!")
-				
-			if ordered:
-				_change_state(State.WAITING_FOR_FOOD)
-			else:
-				if _current_poi_id == "bar":
-					print("[GuestActor] %s bestellt NICHTS (oder nur Getränk). Geht in EATING Fallback in der Bar." % (_guest_member.name if _guest_member else "?"))
-					_change_state(State.EATING)
-				else:
-					print("[GuestActor] %s bestellt NICHTS im Restaurant. Breche ab." % (_guest_member.name if _guest_member else "?"))
-					if is_instance_valid(room_node):
-						if room_node.has_method("release_interaction"):
-							room_node.release_interaction(_guest_member.id)
-						if room_node.has_method("leave_seat"):
-							room_node.leave_seat(_guest_member.id)
-					_decide_next_action()
-			return # WICHTIG: Verhindert Fallthrough zu _decide_next_action() am Ende des Blocks
-		elif current_state == State.IN_POI:
-			_action_timer -= delta
-			if _action_timer > 0.0:
+			if not is_instance_valid(room_node):
+				print("[GuestActor ERROR] room_node ist ungültig in STUDYING_MENU!")
+				_decide_next_action()
 				return
 			
+			# Einmalige Wartezeit falls Raum noch nicht funktional ist
+			if room_node.has_method("is_functional") and not room_node.is_functional():
+				if not _has_waited_for_functional:
+					print("[GuestActor] %s: Raum nicht funktional. Warte %s Minuten." % [(_guest_member.name if _guest_member else "?"), POI_WAIT_TIME_MINUTES])
+					_has_waited_for_functional = true
+					_action_timer = POI_WAIT_TIME_MINUTES * (TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 5.0)
+					return
+			
+			_has_waited_for_functional = false
+			
+			# GastroManager versucht die Bestellung – er kennt is_functional und can_serve_solo
+			var gastro_result = GastroManager.try_gastro_order(
+				_guest_member.id, _guest_member.spending_budget, _guest_member.saturation, room_node
+			)
+			
+			if gastro_result.get("ordered", false):
+				_change_state(State.WAITING_FOR_FOOD)
+			elif gastro_result.get("solo_mode", false):
+				# Kein Kellner, aber Barkeeper ist da → Solo-Drink direkt
+				_change_state(State.EATING)
+			else:
+				# Kein Personal → Platz freigeben und abbrechen
+				if room_node.has_method("release_interaction"):
+					room_node.release_interaction(_guest_member.id)
+				if room_node.has_method("leave_seat"):
+					room_node.leave_seat(_guest_member.id)
+				_decide_next_action()
+			return # WICHTIG: Verhindert Fallthrough zu _decide_next_action() am Ende des Blocks
+		
+		elif current_state in [State.IN_POI, State.SITTING]:
 			var current_hour = 12
 			if TimeManager:
 				current_hour = TimeManager.get_hour()
@@ -377,6 +334,7 @@ func _process_waiting(delta: float) -> void:
 				_decide_next_action()
 				return
 
+			# Event-Raum Lookup (Tagungsgäste haben eine eigene room-node via party.event_poi_id)
 			var room_node = null
 			if is_instance_valid(party) and party.event_poi_id != "" and is_instance_valid(_guest_manager):
 				var ev_node = _guest_manager._get_room_node(party.event_poi_id)
@@ -396,28 +354,18 @@ func _process_waiting(delta: float) -> void:
 					
 				if interactions.size() > 0:
 					var choice = interactions.pick_random()
-					if _current_poi_id == "conference_small":
-						var t = TimeManager.get_game_time() if TimeManager else -1
-						# print("[TGCHANGE] PROCESS_WAITING loop | %02d:%02d | %s | releasing+reclaiming: %s | timer was: %.1f" % [t/60, t%60, (_guest_member.name if _guest_member else "?"), choice.get("id","?"), _action_timer])
 					if room_node.has_method("release_interaction"):
-						room_node.release_interaction(_guest_member.id) # Alten Platz freigeben
+						room_node.release_interaction(_guest_member.id)
 					if room_node.has_method("claim_interaction"):
 						var claim_result = room_node.claim_interaction(_guest_member.id, choice.get("id", ""))
 						if claim_result.has("target_pos"):
 							_execute_poi_move(claim_result.target_pos, room_node)
 							var dur = claim_result.get("duration", randf_range(15.0, 30.0))
 							_action_timer = dur * TimeManager.SECONDS_PER_GAME_MINUTE
-							if _current_poi_id == "conference_small":
-								var t2 = TimeManager.get_game_time() if TimeManager else -1
-								# print("[TGCHANGE] NEW TIMER | %02d:%02d | %s | next_action_in=%.1f s" % [t2/60, t2%60, (_guest_member.name if _guest_member else "?"), _action_timer])
 							return
 				
-				# Keine Interaktionen verfügbar: Platz freigeben und Flag zurücksetzen,
-				# damit _on_poi_arrived keinen EXP-Bypass durch _has_claimed_seat == true auslöst
+				# Keine Interaktionen verfügbar: Platz freigeben
 				if _has_claimed_seat and room_node.has_method("release_interaction"):
-					if _current_poi_id == "conference_small":
-						var t = TimeManager.get_game_time() if TimeManager else -1
-						# print("[TGCHANGE] FALLTHROUGH RELEASE | %02d:%02d | %s | releasing seat before _decide_next_action" % [t/60, t%60, (_guest_member.name if _guest_member else "?")])
 					room_node.release_interaction(_guest_member.id)
 					_has_claimed_seat = false
 		
@@ -445,7 +393,8 @@ func _execute_poi_move(target_pos: Vector2, room_node: Node) -> void:
 			_active_tween.tween_property(self, "global_position", p, dur)
 		curr_pos = p
 		
-	if _current_poi_id != "pool_small" and _current_poi_id != "gym_small" and _current_poi_id != "spa_small" and _current_poi_id != "conference_small" and _current_poi_id != "lobby" and _current_poi_id != "vending_machine":
+	# Gastro-Räume wechseln nach Ankunft in STUDYING_MENU (Raum sagt das selbst via is_gastro())
+	if is_instance_valid(room_node) and room_node.has_method("is_gastro") and room_node.is_gastro():
 		_active_tween.tween_callback(func(): _change_state(State.STUDYING_MENU))
 
 # =============================================================================
@@ -485,8 +434,19 @@ func _get_open_pois() -> Array[String]:
 		
 		# Event-Gast POI Einschränkungen
 		var party = _get_my_party()
+		var is_event_guest = false
 		if party and party.event_poi_id != "":
-			if room_id != party.event_poi_id and room_id != "restaurant_small" and room_id != "bar" and room_id != "lobby":
+			is_event_guest = true
+		elif _conference_break_poi_key != "":
+			is_event_guest = true
+		elif party and party.total_stay_days == 0:
+			is_event_guest = true
+			
+		if is_event_guest:
+			# Event-Gäste dürfen nur Gastro-Räume und Lobby besuchen
+			var is_gastro_room = room.has_method("is_gastro") and room.is_gastro()
+			var is_lobby_room = room_id == "lobby"
+			if not is_gastro_room and not is_lobby_room:
 				continue
 				
 		# SMART ROOM: Der Raum entscheidet selbst, ob der Gast rein darf!
@@ -494,8 +454,9 @@ func _get_open_pois() -> Array[String]:
 			continue
 		
 		var cost = def.get("visit_income", 0)
-		if room_id in ["restaurant_small", "bar", "kiosk"]:
-			cost = max(cost, 5) # Gastro braucht mindestens 5€ Budget für Essen/Getränke
+		# Gastro-Räume: Mindestbudget 5€ und Hunger-Prüfung
+		if room.has_method("is_gastro") and room.is_gastro():
+			cost = max(cost, 5)
 			if _guest_member.saturation > 50:
 				continue
 			
@@ -559,14 +520,6 @@ func _is_current_poi_open() -> bool:
 
 # =============================================================================
 func _decide_next_action() -> void:
-	# [DEBUG GASTRO] Wer ruft _decide_next_action auf wenn der Gast gerade bestellt hat?
-	if current_state == State.WAITING_FOR_FOOD or current_state == State.STUDYING_MENU:
-		print("[DEBUG GASTRO] _decide_next_action() aufgerufen für %s | State=%s | poi=%s | Stack=%s" % [
-			(_guest_member.name if _guest_member else "?"),
-			get_state_name(current_state),
-			_current_poi_id,
-			get_stack()
-		])
 	if current_state == State.LEAVING:
 		return
 		
@@ -644,7 +597,7 @@ func _decide_next_action() -> void:
 			var event_room_node = null
 			for room in _map_grid.active_rooms:
 				if not is_instance_valid(room): continue
-				if is_instance_valid(_guest_manager) and _guest_manager._room_key(room) == party.event_poi_id:
+				if is_instance_valid(_guest_manager) and GuestManager._room_key(room) == party.event_poi_id:
 					event_room_node = room
 					break
 			
@@ -774,14 +727,8 @@ func _change_state(new_state: State) -> void:
 	
 	var g_name = _guest_member.get("name") if _guest_member else "Unknown"
 	var poi_info = (" [" + _current_poi_id + "]") if new_state == State.IN_POI and not _current_poi_id.is_empty() else ""
-	# print("[GuestActor] %s changed state: %s -> %s%s" % [g_name, get_state_name(old_state), get_state_name(new_state), poi_info])
+	print("[GuestActor] %s changed state: %s -> %s%s" % [g_name, get_state_name(old_state), get_state_name(new_state), poi_info])
 	
-	# [TGCHANGE] Detailliertes Konferenz-Tracking
-	if _current_poi_id == "conference_small" or new_state == State.IN_POI and _current_poi_id == "conference_small":
-		var t = TimeManager.get_game_time() if TimeManager else -1
-		var h = t / 60
-		var m = t % 60
-		# print("[TGCHANGE] %s | %02d:%02d | %s -> %s | timer=%.1f | claimed=%s" % [g_name, h, m, get_state_name(old_state), get_state_name(new_state), _action_timer, str(_has_claimed_seat)])
 	
 	_has_waited_for_functional = false
 	if new_state == State.WAITING_FOR_FOOD:
@@ -827,42 +774,11 @@ func _change_state(new_state: State) -> void:
 			avatar.visible = true
 			if has_node("ClickArea"): get_node("ClickArea").input_pickable = true
 		State.IN_POI:
-			if _current_poi_id == "pool_small" or _current_poi_id == "gym_small" or _current_poi_id == "spa_small" or _current_poi_id == "conference_small":
-				var stay_dur = randf_range(60.0, 180.0)
-				if _current_poi_id == "gym_small":
-					stay_dur = randf_range(60.0, 90.0)
-				var poi_def = _get_poi_def(_current_poi_id)
-				if poi_def.has("open_to"):
-					var open_to = poi_def.get("open_to")
-					if open_to < 1440:
-						var now = 0
-						if TimeManager: now = TimeManager.get_game_time()
-						var time_left = open_to - now
-						if time_left > 0:
-							stay_dur = min(stay_dur, float(time_left))
-						else:
-							stay_dur = 1.0
-				_poi_stay_timer = stay_dur * TimeManager.SECONDS_PER_GAME_MINUTE
-				
-				if _current_poi_id == "conference_small":
-					# Vor Event-Start (7:45-8:00): sofort wuseln
-					var now_time = TimeManager.get_game_time() if TimeManager else 480
-					if now_time < 480:
-						_action_timer = randf_range(0.5, 1.5) * TimeManager.SECONDS_PER_GAME_MINUTE
-					else:
-						var room_node = _get_poi_room_node(_current_poi_id)
-						if is_instance_valid(room_node) and room_node.get("current_speaker_id") == _guest_member.id:
-							_action_timer = randf_range(10.0, 15.0) * TimeManager.SECONDS_PER_GAME_MINUTE
-						else:
-							_action_timer = randf_range(1.0, 3.0) * TimeManager.SECONDS_PER_GAME_MINUTE # Zuhörer pollen regelmäßig
-				else:
-					_action_timer = randf_range(15.0, 30.0) * TimeManager.SECONDS_PER_GAME_MINUTE # Erster Wechsel nach 15-30 Ingame-Minuten
-				
-				avatar.visible = true
-			else:
-				_action_timer = randf_range(45.0, 120.0)
-				avatar.visible = true
-			if has_node("ClickArea"): get_node("ClickArea").input_pickable = avatar.visible
+			# Aufenthaltsdauer kommt jetzt via duration aus claim_interaction – kein _poi_stay_timer mehr.
+			# action_timer = 0.01 triggert sofort den ersten get_available_interactions/claim Zyklus.
+			_action_timer = 0.01
+			avatar.visible = true
+			if has_node("ClickArea"): get_node("ClickArea").input_pickable = true
 		State.AWAITING_CHECKOUT:
 			# Sichtbar in der Lobby am Checkout warten
 			_action_timer = 0.0
@@ -931,11 +847,9 @@ func _on_poi_arrived() -> void:
 		
 	# Snack-Automat Logik
 	if _current_poi_id == "vending_machine":
-		print("[VENDING] %s angekommen | _current_poi_id=%s | budget=%d" % [(_guest_member.name if _guest_member else "?"), _current_poi_id, (_guest_member.spending_budget if _guest_member else -1)])
 		var lobby = _get_lobby_room()
 		if is_instance_valid(lobby) and lobby.has_method("buy_snack"):
 			var snack_result = lobby.buy_snack(_guest_member.spending_budget)
-			print("[VENDING] buy_snack Ergebnis: %s | lobby_valid=%s" % [snack_result, is_instance_valid(lobby)])
 			if snack_result:
 				_guest_member.spending_budget = max(0, _guest_member.spending_budget - lobby.VENDING_MACHINE_PRICE)
 				var actual_sat = lobby.VENDING_MACHINE_SATURATION + randi_range(-5, 10) # Bricht die Sättigungs-Zyklen auf
@@ -970,7 +884,6 @@ func _on_poi_arrived() -> void:
 						_active_tween.tween_property(self, "global_position", pt, max(d / _base_speed, 0.05))
 					curr = pt
 				_active_tween.tween_callback(func(): _change_state(State.EATING))
-				print("[VENDING] Tween zum Essplatz gestartet | dist=%.0f | punkte=%d | target=%s" % [global_position.distance_to(target_pos), nav_path.size(), target_pos])
 				return
 		
 		# Falls Automat nicht klappt
@@ -987,59 +900,36 @@ func _on_poi_arrived() -> void:
 	
 	var room_node = _get_poi_room_node(_current_poi_id)
 	
-	# Bar Gastro-Loop Dynamik: Wenn die Bar eine Bedienung hat, entfällt der Eintritt
-	if _current_poi_id == "bar" and is_instance_valid(room_node) and room_node.has_method("_has_waiter_assigned"):
-		if room_node.call("_has_waiter_assigned"):
+	# Gastro-Räume: visit_income entfällt wenn Waiter vorhanden (Einnahmen laufen via Bestellung)
+	if is_instance_valid(room_node) and room_node.has_method("is_gastro") and room_node.is_gastro():
+		if room_node.has_method("_has_waiter_assigned") and room_node.call("_has_waiter_assigned"):
 			income = 0
 	
-	# ACHTUNG: Wir prüfen ZUERST auf Sitzplätze, damit Gäste nicht zahlen, wenn voll ist!
+	# Sitzplatz clamen (alle Räume sind Smart Rooms)
 	var seat_pos = Vector2.ZERO
-	var is_smart_room = false
-	if is_instance_valid(room_node):
-		if room_node.has_method("get_available_interactions") and room_node.has_method("claim_interaction"):
-			is_smart_room = true
-			if not _has_claimed_seat:
-				var avail = room_node.get_available_interactions(self)
-				if avail.size() > 0:
-					var choice = avail.pick_random()
-					var claim_result = room_node.claim_interaction(_guest_member.id, choice.get("id", ""))
-					if claim_result.has("target_pos"):
-						seat_pos = claim_result.target_pos
-			else:
-				# They already claimed it, pretend it succeeded
-				seat_pos = global_position # just dummy to prevent abort
-		elif _current_poi_id == "conference_small" and room_node.has_method("claim_podium"):
-			pass # Legacy system commented out
-			# seat_pos = room_node.claim_podium(_guest_member.id)
-			# if seat_pos == Vector2.INF or seat_pos == Vector2.ZERO:
-			# 	if room_node.has_method("claim_seat"):
-			# 		seat_pos = room_node.claim_seat(_guest_member.id)
-		elif room_node.has_method("claim_seat"):
-			pass # Legacy system commented out
-			# if not _has_claimed_seat:
-			# 	seat_pos = room_node.claim_seat(_guest_member.id)
-			# else:
-			# 	seat_pos = global_position
-			
-		if not _has_claimed_seat and (seat_pos == Vector2.ZERO or seat_pos == Vector2.INF):
-			# Kein Platz frei! Gast bricht Besuch ab
-			var reason = "Unknown"
-			if is_smart_room:
-				var avail = room_node.get_available_interactions(self)
-				reason = "SmartRoom: 0 available interactions. Total seats checked: " + str(avail.size())
-			else:
-				reason = "Legacy Room: claim_seat returned " + str(seat_pos)
-				
-			print("[GuestActor] %s bricht Besuch in %s ab. Grund: %s" % [_guest_member.name, _current_poi_id, reason])
-			send_back_to_room()
-			return
+	if is_instance_valid(room_node) and room_node.has_method("get_available_interactions") and room_node.has_method("claim_interaction"):
+		if not _has_claimed_seat:
+			var avail = room_node.get_available_interactions(self)
+			if avail.size() > 0:
+				var choice = avail.pick_random()
+				var claim_result = room_node.claim_interaction(_guest_member.id, choice.get("id", ""))
+				if claim_result.has("target_pos"):
+					seat_pos = claim_result.target_pos
+					_has_claimed_seat = true
+		else:
+			seat_pos = global_position # bereits geclaimed, dummy um Abbruch zu verhindern
+	
+	if not _has_claimed_seat and (seat_pos == Vector2.ZERO or seat_pos == Vector2.INF):
+		print("[GuestActor] %s bricht Besuch in %s ab: kein Platz verfügbar." % [_guest_member.name, _current_poi_id])
+		send_back_to_room()
+		return
 	
 	var party := _get_my_party()
 	
 	if is_instance_valid(party):
 		var bonus = 0
 		if income > 0:
-			bonus += 2 # Base bonus (war vorher 5, reduziert für Balancing)
+			bonus += 2
 			
 		if is_instance_valid(room_node) and room_node.has_method("has_trait"):
 			if room_node.has_trait("wlan"): bonus += 1
@@ -1048,20 +938,13 @@ func _on_poi_arrived() -> void:
 		if bonus > 0:
 			party.modify_satisfaction(bonus)
 
-	var is_bar_gastro_loop = (_current_poi_id == "bar" and is_instance_valid(room_node) and room_node.has_method("is_functional") and room_node.is_functional())
-
 	# Einnahmen buchen (falls Eintritt/Basis-Kosten existieren)
-	if income > 0 and not is_bar_gastro_loop:
-		# Budget abziehen (per Member – jeder hat seinen eigenen Geldbeutel)
+	if income > 0:
 		_guest_member.spending_budget = max(0, _guest_member.spending_budget - income)
-		
-		# Einnahme buchen
 		FinanceManager.add_transaction(
 			income, "gastro",
 			"tx.poi_income|" + _guest_member.name + "|" + GameState.T(poi_def.get("name", _current_poi_id))
 		)
-		
-		# FloatingValue Signal senden
 		var spawn_pos = global_position
 		if is_instance_valid(room_node):
 			var sz = room_node.call("get_tile_size") if room_node.has_method("get_tile_size") else Vector2i(1, 1)
@@ -1074,9 +957,6 @@ func _on_poi_arrived() -> void:
 		GameState.add_exp(visit_exp)
 		var spawn_pos = global_position
 		if EffectManager: EffectManager.spawn_exp_text(visit_exp, spawn_pos)
-		if _current_poi_id == "conference_small":
-			var t = TimeManager.get_game_time() if TimeManager else -1
-			# print("[TGCHANGE] EXP SPAWN | %02d:%02d | %s | +%d EXP | claimed=%s | stack=%s" % [t/60, t%60, (_guest_member.name if _guest_member else "?"), visit_exp, str(_has_claimed_seat), get_stack()])
 
 	# GuestManager über Besuch informieren (für Warenverbrauch-Tracking)
 	if is_instance_valid(_guest_manager):
@@ -1086,48 +966,12 @@ func _on_poi_arrived() -> void:
 	if QuestManager and QuestManager.has_method("on_poi_used"):
 		QuestManager.on_poi_used(_current_poi_id)
 
-	if is_smart_room:
-		if _current_poi_id in ["restaurant_small", "bar", "kiosk"]:
-			_change_state(State.STUDYING_MENU)
-		else:
-			_action_timer = 0.01 # Force immediate process_waiting next frame without aborting
-		return
-
+	# Gast zum Sitzplatz schicken (is_gastro() bestimmt ob danach STUDYING_MENU kommt)
 	if seat_pos != Vector2.ZERO and seat_pos != Vector2.INF:
-		# Animierter Gang zum Sitzplatz statt Teleport!
-		if _active_tween and _active_tween.is_valid():
-			_active_tween.kill()
-		_active_tween = create_tween()
-		var speed_scale = TimeManager.user_speed if TimeManager and not TimeManager.is_paused() else 1.0
-		_active_tween.set_speed_scale(speed_scale)
-		_active_tween.tween_interval(0.01) # Verhindert "started with no Tweeners" Error
-		
-		# Avatar während des Weges zum Platz sichtbar halten!
-		avatar.visible = true
-		
-		var local_path = []
-		if is_instance_valid(room_node) and room_node.has_method("get_local_path"):
-			local_path = room_node.get_local_path(global_position, seat_pos)
-		
-		if local_path.is_empty():
-			local_path.append(seat_pos)
-			
-		var curr_pos = global_position
-		for p in local_path:
-			var dur = curr_pos.distance_to(p) / _base_speed
-			if dur > 0.0:
-				_active_tween.tween_callback(func(): avatar.rotation = global_position.angle_to_point(p))
-				_active_tween.tween_property(self, "global_position", p, dur)
-			curr_pos = p
-			
-		if _current_poi_id != "pool_small" and _current_poi_id != "gym_small" and _current_poi_id != "spa_small" and _current_poi_id != "conference_small":
-			pass # Wird nun von is_smart_room Block abgefangen (Gastro Räume)
-			# _active_tween.tween_callback(func(): _change_state(State.STUDYING_MENU))
-		return
+		_execute_poi_move(seat_pos, room_node)
 	else:
-		# Kein Platz frei! Gast bricht Besuch ab (sollte eigentlich oben schon gefangen werden, aber sicher ist sicher)
-		send_back_to_room()
-		return
+		# Kein dedizierter Sitzplatz – sofort in process_waiting gehen
+		_action_timer = 0.01
 
 
 # =============================================================================
@@ -1179,13 +1023,11 @@ func _get_my_party() -> GuestParty:
 
 ## 12:00: Mittagspause – TG verlassen den Tagungsraum
 func go_conference_break() -> void:
-	# event_poi_id temporär leeren, damit Restaurant/Bar den Gast als normalen Gast akzeptieren.
-	# Ohne diesen Fix: get_available_interactions blockiert Event-Gäste aus regulären POIs.
+	# event_poi_id wird NICHT mehr geleert, sonst spawnt der GuestManager neue Gäste!
 	var party = _get_my_party()
 	if is_instance_valid(party) and party.event_poi_id != "":
 		_conference_break_poi_key = party.event_poi_id
-		party.event_poi_id = ""
-
+		# party.event_poi_id = "" # HIER WAR DER BUG FÜR DOPPELTEN SPAWN!
 	_has_claimed_seat = false
 	_action_timer = 0.0
 
@@ -1195,9 +1037,8 @@ func go_conference_break() -> void:
 		if not is_instance_valid(room):
 			continue
 		var def = room.call("get_definition") if room.has_method("get_definition") else {}
-		var rid = def.get("id", "")
-		if rid in ["bar", "restaurant_small"]:
-			candidates.append(rid)
+		if room.has_method("is_gastro") and room.is_gastro():
+			candidates.append(def.get("id", ""))
 
 	var target = candidates.pick_random()
 	print("[CONF] go_conference_break | %s | -> %s" % [(_guest_member.name if _guest_member else "?"), target])
@@ -1205,7 +1046,7 @@ func go_conference_break() -> void:
 
 ## 13:45: Rückkehr aus Pause → zurück zum Tagungsraum (wander_pm bis 14:00)
 func return_from_conference_break() -> void:
-	# event_poi_id wiederherstellen, damit der Gast als TG erkannt und der Raum geöffnet wird
+	# event_poi_id ist nun ohnehin noch intakt, aber wir weisen _conference_break_poi_key zur Sicherheit zu
 	var party = _get_my_party()
 	if is_instance_valid(party) and _conference_break_poi_key != "":
 		party.event_poi_id = _conference_break_poi_key
@@ -1236,9 +1077,8 @@ func end_conference_day() -> void:
 		if not is_instance_valid(room):
 			continue
 		var def = room.call("get_definition") if room.has_method("get_definition") else {}
-		var rid = def.get("id", "")
-		if rid in ["bar", "restaurant_small"]:
-			social_candidates.append(rid)
+		if room.has_method("is_gastro") and room.is_gastro():
+			social_candidates.append(def.get("id", ""))
 
 	if social_candidates.size() > 0:
 		_walk_to_poi(social_candidates.pick_random())
@@ -1453,7 +1293,7 @@ func _walk_to_poi(poi_id: String) -> void:
 			if not is_instance_valid(room): continue
 			# Check if poi_id is an event room key
 			var gm = get_tree().current_scene.find_child("GuestManager", true, false)
-			if is_instance_valid(gm) and gm._room_key(room) == poi_id:
+			if is_instance_valid(gm) and GuestManager._room_key(room) == poi_id:
 				target_room = room
 				break
 			var def = room.call("get_definition")
@@ -1470,9 +1310,8 @@ func _walk_to_poi(poi_id: String) -> void:
 	var start_tile: Vector2i = _get_logical_start_tile()
 	
 	var path_tiles: Array[Vector2i] = []
-	var target_room_is_lobby = false
 	if is_instance_valid(target_room):
-		target_room_is_lobby = (target_room == _get_lobby_room())
+		pass
 		
 	# Wenn wir schon im Zielraum sind (z.B. Wechsel des Sitzplatzes in Konferenz oder Snack-Automat in Lobby)
 	# dann brauchen wir keinen globalen Pfad über die Flur-Tür!
@@ -1529,7 +1368,6 @@ func _walk_to_poi(poi_id: String) -> void:
 	# also poi_id direkt setzen statt aus der Definition zu lesen!
 	if poi_id == "vending_machine":
 		_current_poi_id = "vending_machine"
-		print("[VENDING] _walk_to_poi: _current_poi_id explizit auf 'vending_machine' gesetzt")
 	elif is_instance_valid(target_room) and target_room.has_method("get_definition"):
 		var def = target_room.call("get_definition")
 		_current_poi_id = def.get("id", poi_id)
@@ -1805,7 +1643,7 @@ func _wander_in_room(room: Node2D, force_sleep: bool = false, initial_wait: bool
 		current_pos = point
 		
 	_active_tween.tween_callback(func(): 
-		# print("[GuestActor] %s tween finished. changing to next_state=%s (%d)" % [_guest_member.get("name") if _guest_member else "Unknown", get_state_name(next_state), next_state])
+		print("[GuestActor] %s tween finished. changing to next_state=%s (%d)" % [_guest_member.get("name") if _guest_member else "Unknown", get_state_name(next_state), next_state])
 		if next_state == State.SLEEPING or next_state == State.SITTING:
 			avatar.rotation = 0
 			if next_state == State.SITTING and is_instance_valid(_target_room):

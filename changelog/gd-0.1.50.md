@@ -1,39 +1,67 @@
-# Changelog – gd-0.1.50
-> Session: 2026-09-07 | Branch: `dev`
+﻿# Changelog gd-0.1.50 – Session 07.09.2026 (Abend)
 
----
+## Architektur-Refactoring: Smart-Room-Unification
 
-## 🐛 Bugfixes
+### Problem
+GuestActor.gd enthielt 21+ hardcodierte Raum-ID Checks (pool_small, gym_small, spa_small,
+conference_small, restaurant_small, bar). Jeder neue Raumtyp erforderte Änderungen an mehreren
+Stellen im Actor – führte zu ständigen Regressionen.
 
-### ROOT CAUSE: Gastro-Flow-Totalausfall (GuestActor.gd)
-- **Root Cause gefunden & behoben:** In `_process_waiting()` fehlten zwei `return`-Statements am Ende der `EATING`- und `STUDYING_MENU`-Branches. Dadurch fiel die Ausführung nach jeder Branch auf Zeile 422 durch (`_decide_next_action()`), was für **alle** gastronomiebezogenen Flows einen sofortigen Abbruch auslöste.
-  - `STUDYING_MENU`: Gast bestellte → `_change_state(WAITING_FOR_FOOD)` → kein return → `_decide_next_action()` → Gast stand sofort auf und ging
-  - `EATING`: Gast fertig → `_walk_to_room()` → kein return → `_decide_next_action()` → Gast ging nicht ins Zimmer, sondern in nächstes POI
-  - **Fix:** `return` am Ende beider Branches eingefügt
-  - **Ursache des Regressions:** Conference-Code hatte `elif current_state == State.IN_POI:` Block hinzugefügt, wodurch `_decide_next_action()` an Zeile 422 aus dem IN_POI-Block herausgerutscht war
+### Lösung: POI-Behaviour-Protokoll
+Der GuestActor ist jetzt vollständig blind gegenüber Raumtypen.
 
-### Snackautomat: _current_poi_id Bug (GuestActor.gd)
-- **Root Cause:** In `_walk_to_poi()` wurde nach `_execute_walk()` die `_current_poi_id` aus `target_room.get_definition().id` gelesen. Da der Snackautomat in der **Lobby** liegt, lieferte `get_definition()` `"lobby"` statt `"vending_machine"`. In `_on_poi_arrived()` wurde dann sofort `return` ausgelöst (`_current_poi_id == "lobby"`).
-  - **Fix:** Spezialfall-Check vor der Definition-Abfrage: `if poi_id == "vending_machine": _current_poi_id = "vending_machine"`
+**Room.gd (Basis):**
+- Neue Methode is_gastro() -> bool (Standard: false)
+- Neue Methode can_serve_solo() -> bool (Standard: false)
 
-### Snackautomat: Direkter Tween statt _execute_walk (GuestActor.gd)
-- **Root Cause:** `_execute_walk()` hat einen `is_nearby`-Check (< 200px) eingebaut, der bei leerem `path_tiles`-Array das Berechnen des lokalen Pfads zum Essplatz verhinderte → Gast blieb am Automaten stehen.
-  - **Fix:** Für den Ess-Walk nach Automatenkauf wird jetzt ein direkter Tween mit `lobby.get_local_path()` erstellt, der NavBlocker respektiert und keine Distanzbeschränkung hat.
+**RestaurantSmall.gd:**
+- Überschreibt is_gastro() → return true
 
-### HUD Gästezähler: TG-Gäste fehlten (GuestManager.gd)
-- **Root Cause:** `spawn_conference_guests()` emittierte nach `_active.append(party)` nur `sig_party_event_arrived`, aber nicht `parties_changed`. Der HUD-Zähler hing ausschließlich an `parties_changed` → TG-Gäste wurden erst sichtbar wenn ein normaler Gast eine Aktion auslöste.
-  - **Fix:** `parties_changed.emit()` direkt nach `_active.append(party)` in `spawn_conference_guests()` hinzugefügt.
+**Bar.gd:**
+- Überschreibt is_gastro() → return true
+- Überschreibt can_serve_solo() → return is_bartender_present()
 
----
+**PoolSmall.gd / GymSmall.gd / SpaSmall.gd:**
+- Überschreiben claim_interaction() mit raumspezifischer Aufenthaltsdauer:
+  - Pool: 60–180 Min (begrenzt auf Schließzeit)
+  - Gym: 60–90 Min (begrenzt auf Schließzeit)
+  - Spa: 90–180 Min (begrenzt auf Schließzeit)
+- get_live_details() liest jetzt _action_timer statt _poi_stay_timer
 
-## 🔧 Debug-Infrastruktur (temporär, zum Entfernen nach Test)
-- `[DEBUG GASTRO]` Stack-Trace Print in `_decide_next_action()` für WAITING_FOR_FOOD State
-- `[VENDING]` Prints für kompletten Snackautomat-Flow (Ankunft, buy_snack Ergebnis, Tween-Start)
-- `[DEBUG RESTAURANT]` Print in `RestaurantSmall.place_order_for_seat()`
-- `[CONF-DEBUG]` Prints in `ConferenceSmall.get_available_interactions()` (temporär)
+**GastroManager.gd:**
+- Neue Methode try_gastro_order(guest_id, spending_budget, saturation, room_node) -> Dictionary
+  - Gibt {ordered, solo_mode} zurück
+  - Kapselt is_functional(), can_serve_solo(), place_order_for_seat() zentral
+  - Kein Actor-Objekt als Parameter – nur primitive Werte (clean dependency)
 
----
+**GuestActor.gd – Entfernt:**
+- Variable _poi_stay_timer (vollständig entfernt)
+- is_smart_room Flag, is_bar_gastro_loop Flag
+- is_bartender_present() direkte Abfrage im Actor
+- Kompletter _poi_stay_timer Block für Pool/Gym/Spa
+- Hardcodierter STUDYING_MENU Block (80 Zeilen → 20 Zeilen via GastroManager)
+- SITTING + conference_small Sonderfall → vereinheitlicht zu [State.IN_POI, State.SITTING]
+- Legacy auskommentierter Code (claim_podium, claim_seat) endgültig entfernt
+- Alle _current_poi_id Einzelvergleiche in Entscheidungspfaden
 
-## 📝 Hinweise
-- Alle obigen Fixes betreffen `GuestActor.gd` und `GuestManager.gd`
-- Debug-Prints vor nächstem Release entfernen
+**GuestActor.gd – Vereinfacht:**
+- _process_waiting(): 3 saubere Branches (EATING, STUDYING_MENU, IN_POI/SITTING)
+- _on_poi_arrived(): Einheitlicher Claim-Pfad für alle Räume
+- _execute_poi_move(): is_gastro() statt langer Ausschlussliste
+- _change_state(State.IN_POI): Nur noch _action_timer = 0.01
+- Event-Gäste-Filter, Conference-Break und End-of-Day: is_gastro() statt hardcoded Listen
+
+## Bugfixes
+
+### Konferenz: Zucken der Zuhörer behoben
+- Root Cause: State SITTING nicht in _process_waiting() abgefangen → dauernder Timer-Reset
+- Fix: SITTING im einheitlichen [State.IN_POI, State.SITTING] Block
+
+### Konferenz: Speaker-Wechsel funktioniert wieder
+- Folge des Zucken-Fixes: Timer läuft durch → _swap_speaker() regulär ausgelöst
+
+## Offene Tests (für morgen)
+- Pool/Gym/Spa: Aufenthaltsdauer korrekt?
+- Restaurant / Bar (solo + full): Bestell-Flow
+- Tagungsgast: kein Zucken, Speaker-Wechsel nach ~15 Min
+- Tagungsgast Mittagspause: Restaurant und Rückkehr

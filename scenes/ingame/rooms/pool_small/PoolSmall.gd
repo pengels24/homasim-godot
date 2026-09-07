@@ -159,9 +159,8 @@ func get_live_details() -> Array[Dictionary]:
 		if actor.get("current_state") in valid_states and actor.get("_current_poi_id") == "pool_small":
 			var gm = actor.get("_guest_member")
 			if gm:
-				var time_left_sec = actor.get("_poi_stay_timer")
+				var time_left_sec = actor.get("_action_timer")
 				var time_left_mins = 0
-				# Use string check or TimeManager directly depending on Godot 4 setup
 				if time_left_sec != null:
 					time_left_mins = int(time_left_sec / 4.0) # 4.0 is SECONDS_PER_GAME_MINUTE
 				
@@ -181,6 +180,24 @@ func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 	var interactions = super.get_available_interactions(actor)
 	# Im Pool sollen die Gäste nur sitzen oder schwimmen, nicht dumm in der Ecke stehen!
 	return interactions.filter(func(i): return i.type != "wander")
+
+func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
+	# Ermittle korrekte Aufenthaltsdauer (60-180 Min, begrenzt auf Schließzeit)
+	var stay_dur := randf_range(60.0, 180.0)
+	var def = get_definition()
+	if def.has("open_to"):
+		var open_to: int = def.get("open_to")
+		if open_to < 1440:
+			var now := TimeManager.get_game_time() if TimeManager else 0
+			var time_left := open_to - now
+			if time_left > 0:
+				stay_dur = min(stay_dur, float(time_left))
+			else:
+				stay_dur = 1.0
+	var result := super.claim_interaction(actor_id, interaction_id)
+	if result.has("target_pos"):
+		result["duration"] = stay_dur
+	return result
 
 
 

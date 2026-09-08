@@ -43,7 +43,9 @@ var _base_speed: float = 40.0
 var _active_tween: Tween
 var _last_interaction_id: String = ""
 var _has_claimed_seat: bool = false
-## Speichert den Konferenzraum-Key während der Mittagspause (event_poi_id wird temporär geleert)
+## Nach Check-in: POI-Sperre fuer 60 Ingame-Minuten (Gast kommt erst an)
+var _checkin_poi_block_until: int = 0
+## Speichert den Konferenzraum-Key waehrend der Mittagspause (event_poi_id wird temporaer geleert)
 var _conference_break_poi_key: String = ""
 
 signal sig_poi_income(amount: int, world_pos: Vector2)
@@ -116,8 +118,9 @@ func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null, guest
 		# im Zimmer auch anfangen zu wandern/schlafen, statt in IDLE zu hngen.
 		_change_state(State.IN_ROOM)
 
-			
-		_change_state(State.IN_ROOM)
+		# Check-in POI-Sperre: 60 Ingame-Minuten im Zimmer bleiben
+		if TimeManager:
+			_checkin_poi_block_until = TimeManager.get_game_time() + 60
 		
 		# Wenn es Nacht ist, Timer auf fast Null setzen, damit sie direkt ins Bett laufen
 		if is_night:
@@ -526,6 +529,14 @@ func _decide_next_action() -> void:
 	var party = _get_my_party()
 		
 	var open_pois := _get_open_pois()
+	
+	# Check-in Sperre: 60 Min nach Ankunft keine POIs
+	if _checkin_poi_block_until > 0:
+		var now := TimeManager.get_game_time() if TimeManager else 0
+		if now < _checkin_poi_block_until:
+			open_pois.clear() # Erzwingt Zimmer-Aufenthalt
+		else:
+			_checkin_poi_block_until = 0 # Einmalig zuruecksetzen
 	
 	# 2. Nachtruhe-Logik (22:00 - 06:00): 
 	# Die Lobby ist nachts als reiner "Zeitvertreib" tabu, um Endlos-Pendeln zu verhindern.

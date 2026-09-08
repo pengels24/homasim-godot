@@ -183,10 +183,7 @@ func get_live_details() -> Array[Dictionary]:
 var _guest_session_end: Dictionary = {}
 
 func is_guest_allowed(actor: Node2D) -> bool:
-	# Basis-Check (Staff, max_guests etc.)
-	if not super.is_guest_allowed(actor):
-		return false
-	# Session abgelaufen? Gast muss erst den Pool verlassen bevor er wieder rein darf
+	# Session abgelaufen? Kein Wiedereintritt bis release_interaction aufgerufen wird
 	var gm = actor.get("_guest_member")
 	var guest_id: String = gm.id if gm else ""
 	if _guest_session_end.has(guest_id):

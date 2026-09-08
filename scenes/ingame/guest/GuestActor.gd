@@ -118,9 +118,7 @@ func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null, guest
 		# im Zimmer auch anfangen zu wandern/schlafen, statt in IDLE zu hngen.
 		_change_state(State.IN_ROOM)
 
-		# Check-in POI-Sperre: 60 Ingame-Minuten im Zimmer bleiben
-		if TimeManager:
-			_checkin_poi_block_until = TimeManager.get_game_time() + 60
+		# Check-in POI-Sperre wird in start_checkin() gesetzt (nicht hier - setup laeuft auch beim Save-Load)
 		
 		# Wenn es Nacht ist, Timer auf fast Null setzen, damit sie direkt ins Bett laufen
 		if is_night:
@@ -1230,6 +1228,10 @@ func _walk_to_world_pos(target_pos: Vector2, finish_state: State) -> void:
 
 func start_checkin(room: Node2D, spawn_pos: Vector2, delay: float) -> void:
 	_target_room = room
+	
+	# POI-Sperre: 60 Ingame-Min nach Ankunft kein POI-Besuch (Gast kommt erst an)
+	if TimeManager:
+		_checkin_poi_block_until = TimeManager.get_game_time() + 60
 	
 	# Fallback, falls Actor noch nicht in der Lobby ist
 	if current_state != State.WAITING_IN_LINE and current_state != State.WALKING:

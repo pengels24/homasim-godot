@@ -127,7 +127,8 @@ func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 					stay_dur = 1.0
 		var now := TimeManager.get_game_time() if TimeManager else 0
 		_guest_session_end[actor_id] = now + int(stay_dur)
-	var spot_dur := randf_range(10.0, 20.0)
+	# Spot-Wechsel-Timer: 5-12 Min fuer mehr Lebendigkeit
+	var spot_dur := randf_range(5.0, 12.0)
 	var result := super.claim_interaction(actor_id, interaction_id)
 	if result.has("target_pos"):
 		result["duration"] = spot_dur

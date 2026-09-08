@@ -125,8 +125,18 @@ func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 			_guest_session_end.erase(guest_id)
 			return []
 	var interactions = super.get_available_interactions(actor)
-	# Im Spa sollen die Gäste nur sitzen oder liegen, nicht dumm herumstehen!
-	return interactions.filter(func(i): return i.type != "wander")
+	# Kein Wandern im Spa
+	interactions = interactions.filter(func(i): return i.type != "wander")
+	
+	# Erzwungene Chair <-> Bed Alternation (Liege <-> Wellness-Stuhl)
+	if _last_interaction_for_guest.has(guest_id):
+		var last_type: String = _last_interaction_for_guest[guest_id].get("type", "")
+		var want_type: String = "sleep" if last_type == "sit" else "sit"
+		var alternated = interactions.filter(func(i): return i.type == want_type)
+		if not alternated.is_empty():
+			return alternated
+	
+	return interactions
 
 func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 	if not _guest_session_end.has(actor_id):
@@ -143,7 +153,8 @@ func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 					stay_dur = 1.0
 		var now := TimeManager.get_game_time() if TimeManager else 0
 		_guest_session_end[actor_id] = now + int(stay_dur)
-	var spot_dur := randf_range(10.0, 20.0)
+	# Spot-Wechsel-Timer: 5-12 Min fuer mehr Lebendigkeit
+	var spot_dur := randf_range(5.0, 12.0)
 	var result := super.claim_interaction(actor_id, interaction_id)
 	if result.has("target_pos"):
 		result["duration"] = spot_dur

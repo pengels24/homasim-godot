@@ -113,28 +113,44 @@ func get_patrol_target() -> Vector2:
 # =============================================================================
 # LIVE-MONITOR
 # =============================================================================
+# Session-Tracking: Wann soll der Gast das Spa verlassen?
+var _guest_session_end: Dictionary = {}
+
 func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
+	var actor_id = actor.get("actor_id") if actor.has_method("get") else ""
+	if _guest_session_end.has(actor_id):
+		var now := TimeManager.get_game_time() if TimeManager else 0
+		if now >= _guest_session_end[actor_id]:
+			_guest_session_end.erase(actor_id)
+			return []
 	var interactions = super.get_available_interactions(actor)
 	# Im Spa sollen die Gäste nur sitzen oder liegen, nicht dumm herumstehen!
 	return interactions.filter(func(i): return i.type != "wander")
 
 func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
-	# Spa: längere Aufenthaltsdauer (90-180 Min)
-	var stay_dur := randf_range(90.0, 180.0)
-	var def = get_definition()
-	if def.has("open_to"):
-		var open_to: int = def.get("open_to")
-		if open_to < 1440:
-			var now := TimeManager.get_game_time() if TimeManager else 0
-			var time_left := open_to - now
-			if time_left > 0:
-				stay_dur = min(stay_dur, float(time_left))
-			else:
-				stay_dur = 1.0
+	if not _guest_session_end.has(actor_id):
+		var stay_dur := randf_range(90.0, 180.0)
+		var def = get_definition()
+		if def.has("open_to"):
+			var open_to: int = def.get("open_to")
+			if open_to < 1440:
+				var now_t := TimeManager.get_game_time() if TimeManager else 0
+				var time_left := open_to - now_t
+				if time_left > 0:
+					stay_dur = min(stay_dur, float(time_left))
+				else:
+					stay_dur = 1.0
+		var now := TimeManager.get_game_time() if TimeManager else 0
+		_guest_session_end[actor_id] = now + int(stay_dur)
+	var spot_dur := randf_range(10.0, 20.0)
 	var result := super.claim_interaction(actor_id, interaction_id)
 	if result.has("target_pos"):
-		result["duration"] = stay_dur
+		result["duration"] = spot_dur
 	return result
+
+func release_interaction(actor_id: String) -> void:
+	_guest_session_end.erase(actor_id)
+	super.release_interaction(actor_id)
 
 func get_live_details() -> Array[Dictionary]:
 	var details: Array[Dictionary] = []

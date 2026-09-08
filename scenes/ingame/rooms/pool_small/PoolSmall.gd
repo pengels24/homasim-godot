@@ -176,30 +176,53 @@ func get_live_details() -> Array[Dictionary]:
 			
 	return details
 
+# Session-Tracking: Wann soll der Gast den Pool verlassen?
+# guest_id -> Ingame-Zeit (Minuten) bei der die Session endet
+var _guest_session_end: Dictionary = {}
+
 func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
+	# Session-Check: Ist die Gesamtaufenthalt-Zeit abgelaufen?
+	var actor_id = actor.get("actor_id") if actor.has_method("get") else ""
+	if _guest_session_end.has(actor_id):
+		var now := TimeManager.get_game_time() if TimeManager else 0
+		if now >= _guest_session_end[actor_id]:
+			# Session abgelaufen → leeres Array → Gast verlaesst Pool
+			_guest_session_end.erase(actor_id)
+			return []
 	var interactions = super.get_available_interactions(actor)
 	# Im Pool sollen die Gäste nur sitzen oder schwimmen, nicht dumm in der Ecke stehen!
 	return interactions.filter(func(i): return i.type != "wander")
 
 func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
-	# Ermittle korrekte Aufenthaltsdauer (60-180 Min, begrenzt auf Schließzeit)
-	var stay_dur := randf_range(60.0, 180.0)
-	var def = get_definition()
-	if def.has("open_to"):
-		var open_to: int = def.get("open_to")
-		if open_to < 1440:
-			var now := TimeManager.get_game_time() if TimeManager else 0
-			var time_left := open_to - now
-			if time_left > 0:
-				stay_dur = min(stay_dur, float(time_left))
-			else:
-				stay_dur = 1.0
+	# Beim ersten Claim: Gesamtaufenthalt festlegen (60-180 Min, begrenzt auf Schliessung)
+	if not _guest_session_end.has(actor_id):
+		var stay_dur := randf_range(60.0, 180.0)
+		var def = get_definition()
+		if def.has("open_to"):
+			var open_to: int = def.get("open_to")
+			if open_to < 1440:
+				var now_t := TimeManager.get_game_time() if TimeManager else 0
+				var time_left := open_to - now_t
+				if time_left > 0:
+					stay_dur = min(stay_dur, float(time_left))
+				else:
+					stay_dur = 1.0
+		var now := TimeManager.get_game_time() if TimeManager else 0
+		_guest_session_end[actor_id] = now + int(stay_dur)
+	
+	# Spot-Wechsel-Timer: kurz (10-20 Min) damit Gast zwischen Pool und Liege wechselt
+	var spot_dur := randf_range(10.0, 20.0)
 	var result := super.claim_interaction(actor_id, interaction_id)
 	if result.has("target_pos"):
-		result["duration"] = stay_dur
+		result["duration"] = spot_dur
 	return result
 
 
+
+func release_interaction(actor_id: String) -> void:
+	# Session-Eintrag aufräumen wenn Gast Pool verlässt
+	_guest_session_end.erase(actor_id)
+	super.release_interaction(actor_id)
 
 func get_patrol_target() -> Vector2:
 	var side = randi() % 4

@@ -154,35 +154,32 @@ func _apply_visuals() -> void:
 func get_live_details() -> Array[Dictionary]:
 	var details: Array[Dictionary] = []
 	var now := TimeManager.get_game_time() if TimeManager else 0
-	var secs_per_min := TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 4.0
 	
 	for actor in get_tree().get_nodes_in_group("guest_actors"):
-		var valid_states = [3, 6, 7, 8, 9] # IN_POI, STUDYING_MENU, WAITING_FOR_FOOD, EATING, SITTING
+		var valid_states = [3, 6, 7, 8, 9]
 		if actor.get("current_state") in valid_states and actor.get("_current_poi_id") == "pool_small":
 			var gm = actor.get("_guest_member")
 			if gm:
-				# Key muss mit claim_interaction() übereinstimmen: _guest_member.id
 				var guest_id: String = gm.id
-				var time_left_mins = 0
+				var time_left_mins: int = 0
 				if _guest_session_end.has(guest_id):
 					time_left_mins = max(0, _guest_session_end[guest_id] - now)
 				
-				var status_text = GameState.T("poi.pool.bathing")
-				if time_left_mins > 0:
-					status_text += " (%dm)" % time_left_mins
+				var status_text: String
+				if time_left_mins <= 0:
+					status_text = GameState.T("poi.status.leaving_soon")
+				else:
+					status_text = GameState.T("poi.pool.bathing") + " (%dm)" % time_left_mins
 				
-				# [DEBUG] Spot-Wechsel-Timer anzeigen
-				var action_timer: float = actor.get("_action_timer")
-				if action_timer > 0:
-					var spot_left := int(action_timer / secs_per_min)
-					status_text += " · ↺%dm" % spot_left
-					
 				details.append({
 					"left": gm.name,
 					"right": status_text,
-					"color": Color("#06b6d4")
+					"color": Color("#06b6d4"),
+					"_sort": time_left_mins
 				})
-			
+	
+	# Aufsteigend: kleinste Zeit zuerst
+	details.sort_custom(func(a, b): return a["_sort"] < b["_sort"])
 	return details
 
 # Session-Tracking: Wann soll der Gast den Pool verlassen?

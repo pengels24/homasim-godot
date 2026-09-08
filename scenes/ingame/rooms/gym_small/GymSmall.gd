@@ -152,7 +152,6 @@ func release_interaction(actor_id: String) -> void:
 func get_live_details() -> Array[Dictionary]:
 	var details: Array[Dictionary] = []
 	var now := TimeManager.get_game_time() if TimeManager else 0
-	var secs_per_min := TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 4.0
 	
 	for actor in get_tree().get_nodes_in_group("guest_actors"):
 		var valid_states = [3, 6, 7, 8, 9]
@@ -164,20 +163,19 @@ func get_live_details() -> Array[Dictionary]:
 				if _guest_session_end.has(guest_id):
 					time_left_mins = max(0, _guest_session_end[guest_id] - now)
 				
-				var status_text = GameState.T("poi.gym.training")
-				if time_left_mins > 0:
-					status_text += " (%dm)" % time_left_mins
-				
-				# [DEBUG] Spot-Wechsel-Timer anzeigen
-				var action_timer: float = actor.get("_action_timer")
-				if action_timer > 0:
-					var spot_left := int(action_timer / secs_per_min)
-					status_text += " · ↺%dm" % spot_left
+				var status_text: String
+				if time_left_mins <= 0:
+					status_text = GameState.T("poi.status.leaving_soon")
+				else:
+					status_text = GameState.T("poi.gym.training") + " (%dm)" % time_left_mins
 				
 				details.append({
 					"left": gm.name,
 					"right": status_text,
-					"color": Color("#f43f5e")
+					"color": Color("#f43f5e"),
+					"_sort": time_left_mins
 				})
 	
+	# Aufsteigend sortieren: kleinste Zeit zuerst (geht als naechstes)
+	details.sort_custom(func(a, b): return a["_sort"] < b["_sort"])
 	return details

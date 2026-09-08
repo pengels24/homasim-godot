@@ -189,33 +189,33 @@ func get_live_details() -> Array[Dictionary]:
 			var gm = actor.get("_guest_member")
 			if gm:
 				var guest_id: String = gm.id
-				var time_left_mins = 0
+				var time_left_mins: int = 0
 				if _guest_session_end.has(guest_id):
 					time_left_mins = max(0, _guest_session_end[guest_id] - now)
 				
-				var status_text = GameState.T("poi.spa.relaxing")
-				var color = Color("#3b82f6")
-				
-				# Check if actor is in a bed
-				for b in _room_beds:
-					if b["occupied_by"] == actor.get("actor_id"):
-						status_text = GameState.T("poi.spa.lying_down")
-						color = Color("#818cf8")
-						break
-					
-				if time_left_mins > 0:
+				var status_text: String
+				var color: Color
+				if time_left_mins <= 0:
+					status_text = GameState.T("poi.status.leaving_soon")
+					color = Color("#818cf8")
+				else:
+					status_text = GameState.T("poi.spa.relaxing")
+					color = Color("#3b82f6")
+					# Liege oder Stuhl?
+					for b in _room_beds:
+						if b["occupied_by"] == guest_id:
+							status_text = GameState.T("poi.spa.lying_down")
+							color = Color("#818cf8")
+							break
 					status_text += " (%dm)" % time_left_mins
-					
-				# [DEBUG] Spot-Wechsel-Timer
-				var action_timer: float = actor.get("_action_timer")
-				if action_timer > 0:
-					var spot_left := int(action_timer / secs_per_min)
-					status_text += " · ↺%dm" % spot_left
 				
 				details.append({
 					"left": gm.name,
 					"right": status_text,
-					"color": color
+					"color": color,
+					"_sort": time_left_mins
 				})
-		
+	
+	# Aufsteigend: kleinste Zeit zuerst
+	details.sort_custom(func(a, b): return a["_sort"] < b["_sort"])
 	return details

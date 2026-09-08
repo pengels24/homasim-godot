@@ -138,16 +138,17 @@ func release_interaction(actor_id: String) -> void:
 
 func get_live_details() -> Array[Dictionary]:
 	var details: Array[Dictionary] = []
+	var now := TimeManager.get_game_time() if TimeManager else 0
 	
 	for actor in get_tree().get_nodes_in_group("guest_actors"):
-		var valid_states = [3, 6, 7, 8, 9] # IN_POI, STUDYING_MENU, WAITING_FOR_FOOD, EATING, SITTING
+		var valid_states = [3, 6, 7, 8, 9]
 		if actor.get("current_state") in valid_states and actor.get("_current_poi_id") == "gym_small":
 			var gm = actor.get("_guest_member")
 			if gm:
-				var time_left_sec = actor.get("_action_timer")
+				var actor_id = actor.get("actor_id")
 				var time_left_mins = 0
-				if time_left_sec != null:
-					time_left_mins = int(time_left_sec / 4.0)
+				if _guest_session_end.has(actor_id):
+					time_left_mins = max(0, _guest_session_end[actor_id] - now)
 					
 				var status_text = GameState.T("poi.gym.training")
 				if time_left_mins > 0:

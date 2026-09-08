@@ -14,6 +14,9 @@ signal sig_ff_speed_changed(new_speed: float)
 @warning_ignore("unused_signal")
 signal sig_camera_pan_speed_changed(new_speed: float)
 
+## Wird emittiert wenn Autosave-Einstellung geaendert wird (z.B. Timer neu aufsetzen)
+signal sig_settings_changed
+
 const SETTINGS_PATH := "user://settings.cfg"
 
 # ── Gameplay ──────────────────────────────────────────────────────────────────

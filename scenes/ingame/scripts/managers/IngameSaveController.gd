@@ -4,6 +4,7 @@ class_name IngameSaveController
 var _hotel: Dictionary
 var _guest_mgr: GuestManager
 var _map_grid: Node2D
+var _autosave_timer: Timer = null
 
 # =============================================================================
 func setup(hotel: Dictionary, guest_mgr: GuestManager, map_grid: Node2D = null) -> void:
@@ -19,6 +20,11 @@ func setup(hotel: Dictionary, guest_mgr: GuestManager, map_grid: Node2D = null) 
 
 	if not TimeManager.sig_day_ended.is_connected(_on_day_ended):
 		TimeManager.sig_day_ended.connect(_on_day_ended)
+
+	# Bei Einstellungsaenderung Autosave-Timer neu aufsetzen
+	if SettingsManager.has_signal("sig_settings_changed"):
+		if not SettingsManager.sig_settings_changed.is_connected(_on_settings_changed):
+			SettingsManager.sig_settings_changed.connect(_on_settings_changed)
 func save_progress(game_time_min: int) -> void:
 	var hotel_id: int = _hotel.get("id", -1)
 	if hotel_id < 0 and hotel_id != GameState.TUTORIAL_HOTEL_ID:
@@ -48,19 +54,34 @@ func save_progress(game_time_min: int) -> void:
 
 # =============================================================================
 func _setup_autosave_timer() -> void:
+	# Alten Timer entfernen falls vorhanden
+	if is_instance_valid(_autosave_timer):
+		_autosave_timer.stop()
+		_autosave_timer.queue_free()
+		_autosave_timer = null
+
 	if not SettingsManager.autosave_enabled:
 		return
 
-	var autosave_timer := Timer.new()
-	autosave_timer.wait_time = SettingsManager.autosave_interval_minutes * 60.0
-	autosave_timer.one_shot  = false
-	autosave_timer.timeout.connect(_on_timed_autosave)
-	add_child(autosave_timer)
-	autosave_timer.start()
+	_autosave_timer = Timer.new()
+	_autosave_timer.wait_time = SettingsManager.autosave_interval_minutes * 60.0
+	_autosave_timer.one_shot  = false
+	_autosave_timer.timeout.connect(_on_timed_autosave)
+	add_child(_autosave_timer)
+	_autosave_timer.start()
+
+
+# =============================================================================
+func _on_settings_changed() -> void:
+	# Autosave-Timer neu aufsetzen wenn Einstellung geaendert wurde
+	_setup_autosave_timer()
 
 
 # =============================================================================
 func _on_timed_autosave() -> void:
+	# Doppelter Guard: Auch wenn der Timer noch laeuft, Autosave-Setting pruefen
+	if not SettingsManager.autosave_enabled:
+		return
 	var hotel_id: int = _hotel.get("id", -1)
 	if hotel_id < 0 and hotel_id != GameState.TUTORIAL_HOTEL_ID:
 		return
@@ -72,7 +93,9 @@ func _on_timed_autosave() -> void:
 
 # =============================================================================
 func _on_day_ended(_new_day: int) -> void:
-	# Wenn der Tag endet, machen wir automatisch einen Save
+	# Tag-Ende-Save nur wenn Autosave aktiv
+	if not SettingsManager.autosave_enabled:
+		return
 	var hotel_id: int = _hotel.get("id", -1)
 	if hotel_id >= 0:
 		SaveManager.save_auto(hotel_id)

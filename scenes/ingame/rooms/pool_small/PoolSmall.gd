@@ -166,21 +166,38 @@ func get_live_details() -> Array[Dictionary]:
 					time_left_mins = max(0, _guest_session_end[guest_id] - now)
 				
 				var status_text: String
+				var color := Color("#06b6d4")
+				
 				if time_left_mins <= 0:
 					status_text = GameState.T("poi.status.leaving_soon")
 				else:
-					status_text = GameState.T("poi.pool.bathing") + " (%dm)" % time_left_mins
+					# Liege (bed) = "Entspannt", Wasser/Pool (seat) = "Badet"
+					var on_lounger := false
+					for b in _room_beds:
+						if b["occupied_by"] == guest_id:
+							on_lounger = true
+							break
+					
+					if on_lounger:
+						status_text = GameState.T("poi.pool.lounging")
+						color = Color("#0891b2") # Liege etwas dunkler
+					else:
+						status_text = GameState.T("poi.pool.swimming")
+						color = Color("#06b6d4") # Wasser-Blau
+					status_text += " (%dm)" % time_left_mins
+
 				
 				details.append({
 					"left": gm.name,
 					"right": status_text,
-					"color": Color("#06b6d4"),
+					"color": color,
 					"_sort": time_left_mins
 				})
 	
 	# Aufsteigend: kleinste Zeit zuerst
 	details.sort_custom(func(a, b): return a["_sort"] < b["_sort"])
 	return details
+
 
 # Session-Tracking: Wann soll der Gast den Pool verlassen?
 var _guest_session_end: Dictionary = {}   # guest_id -> Ingame-Zeit Sessionende

@@ -1625,6 +1625,8 @@ poi.restaurant.serving,Wird serviert,Being served
 poi.spa.relaxing,Entspannt,Relaxing
 poi.spa.lying_down,Liegt,Lying down
 poi.pool.bathing,Baden,Bathing
+poi.pool.swimming,Badet,Swimming
+poi.pool.lounging,Entspannt,Relaxing
 poi.gym.training,Trainiert,Training
 poi.status.leaving_soon,Geht gleich,Leaving soon
 poi.conference.attending,Nimmt teil,Attending

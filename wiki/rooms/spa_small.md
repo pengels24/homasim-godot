@@ -1,51 +1,68 @@
 # Raum: Spa (Klein)
+> **Zuletzt aktualisiert:** 08.09.2026 (v0.1.50 – Wellness-Session-System)
+> **Scene:** `scenes/ingame/rooms/spa_small/SpaSmall.tscn`
+> **Script:** `scenes/ingame/rooms/spa_small/SpaSmall.gd`
 
 ## 1. Identifikation
-*   **ID:** `spa_small`
-*   **Kategorie:** Wellness
-*   **Techtree-Gate:** `W1.1`
-*   **Grid-Size:** variabel (typisch 2×2 Parzellen)
+
+| Feld | Wert |
+|---|---|
+| **ID** | `spa_small` |
+| **Kategorie** | Wellness |
+| **Techtree-Gate** | `W1.2` |
+| **Max Gäste** | 6 |
+| **Preis** | Eintritt via `visit_income` |
 
 ## 2. Spielmechanik
-Gäste entspannen im Spa und regenerieren Energie und Spaß. Der Raum wird als POI besucht (kein Übernachten). Gäste bleiben 1–3 Ingame-Stunden und wechseln alle 20–30 Minuten den Platz (Liege/Massagebereich).
 
-## 3. Technische Umsetzung & Scripting
-*   **Scene:** `scenes/ingame/rooms/spa_small/SpaSmall.tscn`
-*   **Script:** `scenes/ingame/rooms/spa_small/SpaSmall.gd`
+Gäste entspannen im Spa für 1,5–3 Ingame-Stunden und wechseln alle **5–12 Minuten** zwischen Massageliege und Entspannungsstuhl. Nach Ablauf der Session verlassen sie den Raum mit 60 Min Cooldown.
 
-### 3.1 Kapazität & Limits
-- **`max_guests`:** 6 (erhöht von ursprünglich 4)
-- **Platzwechsel-Intervall:** ~20–30 Ingame-Minuten
-- **Aufenthaltsdauer:** 1–3 Ingame-Stunden
+**Gasttyp-Präferenz:** Business, Luxury, VIP (via `preferred_pois` im Gasttyp-System, 70% Gewichtung).
 
-### 3.2 Need-Restoration (Gästebedürfnisse)
-Beim Verlassen des Spas werden folgende Stat-Veränderungen auf den Gast angewandt (definiert im `need_restoration`-Dictionary in `SpaSmall.gd`):
+## 3. Session-System
 
-| Bedürfnis | Änderung | Erklärung |
-|-----------|----------|-----------|
-| `energy`  | `+20`    | Entspannung regeneriert Energie |
-| `fun`     | `+15`    | Angenehme Erfahrung |
+### Furniture-Mapping
+| Node-Typ | Interaktion | Live-Monitor |
+|---|---|---|
+| `bed`-Node | `sleep` → Massageliege | "Liegt" (lila/indigo) |
+| `chair`/`seat`-Node | `sit` → Entspannungsstuhl | "Entspannt" (blau) |
 
-> **Hinweis:** Werte können im `get_data()` Dictionary von `SpaSmall.gd` unter dem Key `need_restoration` angepasst werden.
+> **Key für Lookup:** `_room_beds[i]["occupied_by"] == gm.id` (NICHT `actor.get("actor_id")` – falscher Key!)
 
-### 3.3 Navigation & Wegpunkte
-Dieser Raum nutzt das Standard-`RoomNavigator`-System:
+### Timing
+- **Session-Dauer:** 90–180 Ingame-Minuten (begrenzt auf Schließzeit)
+- **Spot-Timer:** 5–12 Ingame-Minuten pro Platz
+- **Alternation:** `sit` ↔ `sleep` erzwungen (Stuhl → Liege → Stuhl...)
+- **Cooldown:** 60 Min nach Session-Ende
 
-**Sitzplätze / Liegeplätze:**
-- `Seat1` bis `SeatN` – Marker2D/Node2D für Gäste-Platzierung auf Liegen oder in Pools.
-- `claim_seat()` wird beim Betreten aufgerufen, um einen freien Platz zu reservieren.
+### Wichtige Methoden (`SpaSmall.gd`)
 
-**NavBlocker:**
-- Massageliegen, Whirlpools und Dekoelemente blockieren das lokale AStar-Netz.
-- `LOCAL_NAV_CELL_SIZE = 4` Pixel für feineres Routing zwischen Möbeln.
+| Methode | Funktion |
+|---|---|
+| `is_guest_allowed(actor)` | Prüft `_guest_cooldown_end` |
+| `get_available_interactions(actor)` | Kein `wander`. Erzwingt sit↔sleep Alternation. `[]` wenn Session abgelaufen |
+| `claim_interaction(actor_id, id)` | Setzt Session-Timer beim Erstbesuch, gibt Spot-Timer (5–12 Min) zurück |
+| `release_interaction(actor_id)` | Spot-Wechsel: Session behalten. Session-Ende: Cooldown setzen |
+| `get_live_details()` | Zeigt Liegt/Entspannt/Geht gleich, sortiert aufsteigend nach Restzeit |
+| `get_work_position(staff_id)` | Personal patrouilliert alle 10 Aufrufe statt ServicePoint |
 
-**ServicePoint:**
-- `%ServicePoint` definiert den Marker, zu dem Reinigungskräfte navigieren.
+## 4. Personal
 
-### 3.4 Personal
-- **Kein dediziertes Spa-Personal** in der aktuellen Alpha.
-- Reinigung: Hausmeister/Reinigungskraft nach Gästeabreise über Standard-`ServicePoint`.
+- **Wellness-Fachkraft** (optional): Patrouilliert via `get_patrol_target()` / `get_work_position()`.
+- Ohne Personal: Spa gilt als nicht `is_functional()` sofern `min_staff > 0`.
 
-### 3.5 Bekannte Eigenheiten
-- `claim_seat()` muss beim `_ready` eines Gastes aufgerufen werden, da sonst die Sitzplatzsuche fehlschlägt (Initialisierungs-Bug, bereits behoben in v0.1.50).
-- Der Rekursions-Bug, bei dem Gäste den Spa sofort wieder verließen, wurde in v0.1.50 behoben (Wellness-Logik mit Timer implementiert).
+## 5. Live-Monitor
+
+```
+Ophelia Mayr     Liegt (52m)        ← auf Massageliege (bed)
+Manfred Schäfer  Entspannt (114m)   ← auf Stuhl (seat)
+Sandro Tiedemann Geht gleich        ← Session abgelaufen
+```
+
+Sortierung: aufsteigend nach Restzeit.
+
+## 6. Veraltete Konzepte (nicht mehr gültig)
+
+- ~~`claim_seat()` beim `_ready`~~ → ersetzt durch `claim_interaction()` via Smart-Room-API
+- ~~Platzwechsel alle 20–30 Min~~ → jetzt 5–12 Min
+- ~~Aufenthaltsdauer direkt in Actor~~ → jetzt via `_guest_session_end` im Raum

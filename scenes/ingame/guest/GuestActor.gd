@@ -585,7 +585,20 @@ func _decide_next_action() -> void:
 		
 	possible_targets.append_array(open_pois)
 		
+	# POI-Gewichtung: 70% preferred (laut Gasttyp), 30% freie Wahl
 	var chosen: String = possible_targets.pick_random()
+	var party_for_type = _get_my_party()
+	if is_instance_valid(party_for_type) and randf() < 0.7:
+		var type_def = party_for_type.get_type_def()
+		var preferred: Array = type_def.get("preferred_pois", [])
+		# Nur preferred POIs die aktuell offen sind
+		var preferred_open: Array[String] = []
+		for pref_id in preferred:
+			if open_pois.has(pref_id):
+				preferred_open.append(pref_id)
+		if not preferred_open.is_empty():
+			chosen = preferred_open.pick_random()
+
 	
 	# Event-Gast Priorität: Wenn es Event-Zeit ist, GEH ZUM EVENT!
 	party = _get_my_party()

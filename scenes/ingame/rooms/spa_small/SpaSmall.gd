@@ -115,14 +115,14 @@ func get_patrol_target() -> Vector2:
 # =============================================================================
 # Session-Tracking: Wann soll der Gast das Spa verlassen?
 var _guest_session_end: Dictionary = {}
+var _guest_cooldown_end: Dictionary = {}
 
 func is_guest_allowed(actor: Node2D) -> bool:
 	var gm = actor.get("_guest_member")
 	var guest_id: String = gm.id if gm else ""
-	if _guest_session_end.has(guest_id):
-		var now := TimeManager.get_game_time() if TimeManager else 0
-		if now >= _guest_session_end[guest_id]:
-			return false
+	var now := TimeManager.get_game_time() if TimeManager else 0
+	if _guest_cooldown_end.has(guest_id) and now < _guest_cooldown_end[guest_id]:
+		return false
 	return true
 
 func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
@@ -170,7 +170,12 @@ func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 	return result
 
 func release_interaction(actor_id: String) -> void:
-	_guest_session_end.erase(actor_id)
+	if _guest_session_end.has(actor_id):
+		var now := TimeManager.get_game_time() if TimeManager else 0
+		if now >= _guest_session_end[actor_id]:
+			_guest_cooldown_end[actor_id] = now + 60
+			_guest_session_end.erase(actor_id)
+		# else: Spot-Wechsel - Session behalten
 	super.release_interaction(actor_id)
 
 func get_live_details() -> Array[Dictionary]:

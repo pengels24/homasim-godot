@@ -180,41 +180,36 @@ func get_live_details() -> Array[Dictionary]:
 
 # Session-Tracking: Wann soll der Gast den Pool verlassen?
 # guest_id -> Ingame-Zeit (Minuten) bei der die Session endet
-var _guest_session_end: Dictionary = {}
+var _guest_session_end: Dictionary = {}   # guest_id -> Ingame-Zeit Sessionende
+var _guest_cooldown_end: Dictionary = {}  # guest_id -> Ingame-Zeit Cooldown-Ende (nach Ablauf)
 
 func is_guest_allowed(actor: Node2D) -> bool:
-	# Session abgelaufen? Kein Wiedereintritt bis release_interaction aufgerufen wird
+	# Cooldown-Check: nach Session-Ende darf Gast 60 Min nicht mehr rein
 	var gm = actor.get("_guest_member")
 	var guest_id: String = gm.id if gm else ""
-	if _guest_session_end.has(guest_id):
-		var now := TimeManager.get_game_time() if TimeManager else 0
-		if now >= _guest_session_end[guest_id]:
-			return false
+	var now := TimeManager.get_game_time() if TimeManager else 0
+	if _guest_cooldown_end.has(guest_id) and now < _guest_cooldown_end[guest_id]:
+		return false
 	return true
 
 func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
-	# Session abgelaufen? Leeres Array damit GuestActor _decide_next_action aufruft
 	var gm = actor.get("_guest_member")
 	var guest_id: String = gm.id if gm else ""
-	if _guest_session_end.has(guest_id):
-		var now := TimeManager.get_game_time() if TimeManager else 0
-		if now >= _guest_session_end[guest_id]:
-			# Session NICHT loeschen - is_guest_allowed verhindert Wiedereintritt
-			# Session wird erst in release_interaction geloescht
-			return []
+	var now := TimeManager.get_game_time() if TimeManager else 0
+	# Session abgelaufen? Leeres Array, Session bleibt bis release_interaction kommt
+	if _guest_session_end.has(guest_id) and now >= _guest_session_end[guest_id]:
+		return []
 	
 	var interactions = super.get_available_interactions(actor)
 	# Kein Wandern im Pool
 	interactions = interactions.filter(func(i): return i.type != "wander")
-	
-	# Erzwungene Chair <-> Bed Alternation fuer mehr Lebendigkeit
+	# Erzwungene Chair <-> Bed Alternation
 	if _last_interaction_for_guest.has(guest_id):
 		var last_type: String = _last_interaction_for_guest[guest_id].get("type", "")
 		var want_type: String = "sleep" if last_type == "sit" else "sit"
 		var alternated = interactions.filter(func(i): return i.type == want_type)
 		if not alternated.is_empty():
 			return alternated
-	
 	return interactions
 
 func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
@@ -244,8 +239,13 @@ func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 
 
 func release_interaction(actor_id: String) -> void:
-	# Session-Eintrag aufräumen wenn Gast Pool verlässt
-	_guest_session_end.erase(actor_id)
+	if _guest_session_end.has(actor_id):
+		var now := TimeManager.get_game_time() if TimeManager else 0
+		if now >= _guest_session_end[actor_id]:
+			# Session abgelaufen: Cooldown setzen und Session loeschen
+			_guest_cooldown_end[actor_id] = now + 60
+			_guest_session_end.erase(actor_id)
+		# else: Spot-Wechsel - Session BEHALTEN damit claim_interaction keine neue erstellt
 	super.release_interaction(actor_id)
 
 func get_patrol_target() -> Vector2:

@@ -116,13 +116,24 @@ func get_patrol_target() -> Vector2:
 # Session-Tracking: Wann soll der Gast das Spa verlassen?
 var _guest_session_end: Dictionary = {}
 
+func is_guest_allowed(actor: Node2D) -> bool:
+	if not super.is_guest_allowed(actor):
+		return false
+	var gm = actor.get("_guest_member")
+	var guest_id: String = gm.id if gm else ""
+	if _guest_session_end.has(guest_id):
+		var now := TimeManager.get_game_time() if TimeManager else 0
+		if now >= _guest_session_end[guest_id]:
+			return false
+	return true
+
 func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 	var gm = actor.get("_guest_member")
 	var guest_id: String = gm.id if gm else ""
 	if _guest_session_end.has(guest_id):
 		var now := TimeManager.get_game_time() if TimeManager else 0
 		if now >= _guest_session_end[guest_id]:
-			_guest_session_end.erase(guest_id)
+			# Session nicht loeschen - is_guest_allowed verhindert Wiedereintritt
 			return []
 	var interactions = super.get_available_interactions(actor)
 	# Kein Wandern im Spa

@@ -182,14 +182,28 @@ func get_live_details() -> Array[Dictionary]:
 # guest_id -> Ingame-Zeit (Minuten) bei der die Session endet
 var _guest_session_end: Dictionary = {}
 
-func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
-	# Session-Check: Ist die Gesamtaufenthalt-Zeit abgelaufen?
+func is_guest_allowed(actor: Node2D) -> bool:
+	# Basis-Check (Staff, max_guests etc.)
+	if not super.is_guest_allowed(actor):
+		return false
+	# Session abgelaufen? Gast muss erst den Pool verlassen bevor er wieder rein darf
 	var gm = actor.get("_guest_member")
 	var guest_id: String = gm.id if gm else ""
 	if _guest_session_end.has(guest_id):
 		var now := TimeManager.get_game_time() if TimeManager else 0
 		if now >= _guest_session_end[guest_id]:
-			_guest_session_end.erase(guest_id)
+			return false
+	return true
+
+func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
+	# Session abgelaufen? Leeres Array damit GuestActor _decide_next_action aufruft
+	var gm = actor.get("_guest_member")
+	var guest_id: String = gm.id if gm else ""
+	if _guest_session_end.has(guest_id):
+		var now := TimeManager.get_game_time() if TimeManager else 0
+		if now >= _guest_session_end[guest_id]:
+			# Session NICHT loeschen - is_guest_allowed verhindert Wiedereintritt
+			# Session wird erst in release_interaction geloescht
 			return []
 	
 	var interactions = super.get_available_interactions(actor)

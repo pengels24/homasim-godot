@@ -100,13 +100,23 @@ func _apply_visuals() -> void:
 # Session-Tracking: Wann soll der Gast das Gym verlassen?
 var _guest_session_end: Dictionary = {}
 
+func is_guest_allowed(actor: Node2D) -> bool:
+	if not super.is_guest_allowed(actor):
+		return false
+	var gm = actor.get("_guest_member")
+	var guest_id: String = gm.id if gm else ""
+	if _guest_session_end.has(guest_id):
+		var now := TimeManager.get_game_time() if TimeManager else 0
+		if now >= _guest_session_end[guest_id]:
+			return false
+	return true
+
 func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 	var gm = actor.get("_guest_member")
 	var guest_id: String = gm.id if gm else ""
 	if _guest_session_end.has(guest_id):
 		var now := TimeManager.get_game_time() if TimeManager else 0
 		if now >= _guest_session_end[guest_id]:
-			_guest_session_end.erase(guest_id)
 			return []
 	var interactions = super.get_available_interactions(actor)
 	# Im Gym sollen die Gäste an den Geräten trainieren, nicht herumstehen

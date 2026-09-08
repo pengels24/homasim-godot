@@ -83,6 +83,10 @@
   - Spot-Wechsel Alternation Pool/Spa (sit<->sleep), Spot-Timer auf 5-12 Min reduziert
   - Live-Monitor: Badet/Entspannt (Pool), Liegt/Entspannt (Spa), Geht gleich, Sortierung nach Restzeit
 - 🔧 **ANG-340 offen: [Space] kollabiert fokussierten Live-Monitor** (NICHT behoben, in Linear geloggt)
+- ✅ **Tests bestätigt (08.09.2026 Nachmittag):** Bar-Flow, Restaurant-Flow, Küche, Zimmer (DZ), Personalraum – alle grün
+- ✅ **Check-in POI-Sperre (60 Ingame-Min):** Nach echtem Check-in bleiben Gäste im Zimmer. Fix: in `start_checkin()` statt `setup()` gesetzt (Save-Load-Bug)
+- ✅ **Autosave ignoriert Setting:** Dreifacher Guard + `sig_settings_changed` → Timer stoppt/startet live bei Einstellungsänderung
+- 🔧 **ANG-343 angelegt: StaffActor Smart-Room-Unification** (Prio: Medium, vor neuem Staff-Raum umsetzen)
 
 ## 🧱 Phase 1 – Fundament (v0.1.40–41)
 *Zuerst, weil alles andere darauf aufbaut.*

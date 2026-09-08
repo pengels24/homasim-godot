@@ -1,0 +1,4 @@
+✅ Issue erstellt: ANG-343 – Architektur: StaffActor Smart-Room-Unification (analog GuestActor-Refactoring)
+   (Automatisch dem Projekt HO·MA·SIM Godot zugewiesen!)
+
+Return code: 0

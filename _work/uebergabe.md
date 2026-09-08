@@ -1,55 +1,69 @@
-# Übergabe-Protokoll – 08.09.2026 (Session Ende)
+# Übergabe-Protokoll – 08.09.2026 (Session Ende, Nachmittag)
 
-## Was wurde gemacht?
+## Was wurde heute gemacht?
 
-### Wellness-System komplett stabilisiert (Pool / Gym / Spa)
+### Morgen: Wellness-Overhaul (Pool/Gym/Spa) – siehe auch Changelog
+- Session-Timer-Reset, Doppelbelegung, Sofort-Wechsel, Gast-bleibt-im-Raum: alle behoben
+- Cooldown-System in Pool/Gym/Spa implementiert
+- Live-Monitor: Badet/Entspannt (Pool), Liegt/Entspannt (Spa), Geht gleich, Sortierung
 
-**Root Causes identifiziert und behoben:**
+### Nachmittag: Tests & Fixes
 
-1. **Session-Timer-Reset bei Spot-Wechsel** (ANG-339 o.ä.)
-   - Ursache: `release_interaction()` löschte `_guest_session_end` bei JEDEM Aufruf (auch Spot-Wechsel)
-   - Fix: Cooldown-System. `release_interaction()` prüft ob Session wirklich abgelaufen. Wenn ja: Cooldown 60 Min + Session löschen. Wenn nein (Spot-Wechsel): nichts löschen.
+**Erfolgreich getestet (alle grün):**
+- Bar Gastro-Flow (Studiert → Küche → Serviert → Trinkt) ✅
+- Restaurant Gastro-Flow (identisch, teilt Küche korrekt) ✅
+- Küche (beliefert Bar + Restaurant parallel) ✅
+- Zimmer DZ (Check-in, Wander/Schlafen, Checkout ohne Ghost-Walking) ✅
+- Personalraum (Smart Room API korrekt, Legacy Staff-API bewusst erhalten) ✅
 
-2. **Doppelbelegung von Sitzen** 
-   - Ursache: `_process()`-Hack setzte `_action_timer = 0.0` → L212 Guard `if _action_timer <= 0.0: return` in `_process_waiting` → Gast eingefroren mit behaltenem Seat
-   - Fix: `_process()` aus allen drei Räumen entfernt
+**Implementiert:**
+- **Check-in POI-Sperre (60 Ingame-Min):** Gäste bleiben nach Check-in 60 Min im Zimmer
+  - `start_checkin()` setzt `_checkin_poi_block_until = now + 60`
+  - `_decide_next_action()` cleared `open_pois` solange Sperre aktiv
+  - Bug behoben: War fälschlich in `setup()` → alle geladenen Gäste bekamen Sperre beim Spielstart
+- **Autosave ignoriert Setting:**
+  - `_on_timed_autosave()`: Guard `if not SettingsManager.autosave_enabled: return`
+  - `_on_day_ended()`: Guard hinzugefügt
+  - `sig_settings_changed` neu in SettingsManager + IngameSaveController stoppt/startet Timer live
 
-3. **Sofort-Wechsel nach erstem Ankommen (EXP-Bug)**
-   - Ursache: `_on_poi_arrived()` rief `claim_interaction()` auf aber ignorierte `duration` im Rückgabe-Dict. `_action_timer` blieb auf `0.01` → sofort weiter
-   - Fix: In `_on_poi_arrived()` wird jetzt `dur = claim_result.get("duration", ...)` gesetzt und `_action_timer = dur * SECONDS_PER_GAME_MINUTE`
+**Linear:**
+- ANG-343 angelegt: StaffActor Smart-Room-Unification (Prio: Medium)
+  StaffActor nutzt noch Legacy `claim_seat/leave_seat/has_free_seat` + hardcoded `"staff_small"` String.
+  Refactoring analog GuestActor v0.1.50 – vor dem nächsten neuen Staff-Raum-Typ.
 
-4. **Spa Bed-Lookup** nutzte falschen Key (`actor.get("actor_id")` statt `gm.id`) → "Liegt" wurde nie angezeigt. Fix in `SpaSmall.get_live_details()`.
+## Sofortige nächste Schritte (morgen)
 
-**Features:**
-- Wellness POI-Präferenzen nach Gasttyp (70% preferred_pois, 30% random)
-- Spot-Alternation Pool/Spa (sit↔sleep), Gym (Platz-ID Wechsel)
-- Spot-Timer auf 5–12 Min reduziert
-- Live-Monitor: Badet/Entspannt (Pool), Liegt/Entspannt (Spa), "Geht gleich" bei Session-Ende, Sortierung aufsteigend nach Restzeit
+### 1. Konferenz testen (PRIORITÄT)
+- Speaker-Swap nach ~15 Min (prüfen ob nach dem SITTING-Fix stabil)
+- Zuhörer-Zucken (soll weg sein seit SITTING-Fix)
+- Mittagspause: TG-Gäste gehen in Restaurant/Bar → Rückkehr
+- End of Day: 50% direkt nach Hause, 50% noch Gastro
 
-## Letzter getesteter Stand
-
-- Pool: ✅ Stabil (Gäste wechseln Spots, verlassen nach Session, Cooldown funktioniert)
-- Gym: ✅ Stabil (idem)
-- Spa: ✅ Stabil (idem)
-- Live-Monitor alle 3: ✅ Korrekte Statusanzeige, Sortierung
-
-## Offene Issues / Nächste Schritte
-
-1. **ANG-340 (Linear):** [Space]-Taste pausiert Spiel UND kollabiert fokussierten Live-Monitor. NICHT behoben, nur geloggt. Bitte vor nächster Session angehen.
-2. **Restaurant / Bar testen:** Noch nicht in dieser Session getestet. Smart-Room-Unification vom 07.09. müsste aber halten.
-3. **Tagungsgast testen:** Mittagspause + Speaker-Swap – wurden in dieser Session nicht getestet.
-
-## Relevante Dateien
-
-- `scenes/ingame/rooms/pool_small/PoolSmall.gd` – Session + Cooldown + Live-Monitor
-- `scenes/ingame/rooms/gym_small/GymSmall.gd` – Session + Cooldown + Live-Monitor  
-- `scenes/ingame/rooms/spa_small/SpaSmall.gd` – Session + Cooldown + Alternation + Live-Monitor
-- `scenes/ingame/guest/GuestActor.gd` – `_on_poi_arrived()` Timer-Fix (L928-933)
-- `translations/language.csv` – 3 neue Keys: `poi.status.leaving_soon`, `poi.pool.swimming`, `poi.pool.lounging`
+### 2. ANG-340: [Space] kollabiert fokussierten Live-Monitor
+- Niedrige Prio aber störend beim Testen
 
 ## Architektur-Wissen (wichtig!)
 
-- `_action_timer = 0.0` NIEMALS von außen setzen! L212 Guard friert Gast ein.
-- Spot-Wechsel und Session-Ende sind ZWEI verschiedene Ereignisse im `release_interaction()`
-- `get_available_interactions()` ist das Steuerungselement: gibt `[]` zurück wenn Session abgelaufen
-- `is_guest_allowed()` prüft Cooldown (nach Session-Ende)
+### GuestActor
+- `_action_timer = 0.0` NIEMALS von außen setzen (L212 Guard friert Gast ein)
+- `_checkin_poi_block_until` = 0 bedeutet kein Block aktiv
+- `start_checkin()` für Neuankömmlinge, `setup()` für Save-Load → unterschiedliche Initialisierung
+
+### IngameSaveController
+- `_autosave_timer` (Timer-Referenz gespeichert) → `_setup_autosave_timer()` kann ihn stoppen/ersetzen
+- `sig_settings_changed` von SettingsManager → live Reaktion auf Setting-Änderung
+
+### Wellness-Räume
+- Session-Ende ≠ Spot-Wechsel: `release_interaction()` unterscheidet intern
+- `is_guest_allowed()` = Cooldown-Check (60 Min nach Session-Ende)
+- Alle drei Räume: `_guest_session_end[id]` + `_guest_cooldown_end[id]`
+
+## Relevante Dateien
+
+- `scenes/ingame/guest/GuestActor.gd` – `start_checkin()` POI-Block, `_decide_next_action()` Block-Check
+- `scenes/ingame/scripts/managers/IngameSaveController.gd` – Autosave-Fix, Timer-Management
+- `autoload/SettingsManager.gd` – `sig_settings_changed` Signal (neu)
+- `scenes/ingame/hud/modals/content/ModalContentSettings.gd` – Signal-Emit in `_on_autosave_changed()`
+- `scenes/ingame/rooms/pool_small/PoolSmall.gd` – Cooldown-System, Live-Monitor
+- `scenes/ingame/rooms/gym_small/GymSmall.gd` – Cooldown-System, Live-Monitor
+- `scenes/ingame/rooms/spa_small/SpaSmall.gd` – Cooldown-System, Alternation, Live-Monitor

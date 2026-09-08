@@ -93,3 +93,42 @@ Der GuestActor ist jetzt vollständig blind gegenüber Raumtypen.
 - `_guest_cooldown_end`: 60 Min Sperre nach Session-Ende
 - `is_guest_allowed()`: prueft Cooldown (kein Wiedereintritt)
 - `release_interaction()`: Cooldown nur bei echtem Session-Ende, nicht bei Spot-Wechsel
+
+---
+
+## Session 08.09.2026 (Nachmittag) - Tests, Fixes & Aufraumen
+
+### Getestet & bestaetigt ✅
+
+- Bar Gastro-Flow (vollstaendig): Studiert Speisekarte → Kuechenauftrag → Abholbereit → Serviert → Sitzt/Trinkt
+- Restaurant Gastro-Flow (vollstaendig): identischer Flow, beide Raeume teilen Kueche korrekt
+- Kueche: beliefert Bar und Restaurant parallel, Status-Anzeige korrekt
+- Zimmer (DZ): Check-in, Navigation im Zimmer, Wander/Schlafen, Checkout-Walk ohne Ghost-Walking
+- Personalraum: Smart Room API fuer Gaeste korrekt, Staff Legacy-API bewusst erhalten
+
+### Bugfixes
+
+- **Check-in POI-Sperre (Save-Load Bug):** _checkin_poi_block_until wurde in setup() gesetzt.
+  setup() wird auch beim Spielladen aufgerufen → alle Gaeste bekamen 60 Min Sperre beim Spielstart.
+  Fix: Sperre in start_checkin() verschoben (wird nur bei echtem Neuankoemmling aufgerufen).
+- **Autosave ignoriert Setting:** Timer lief weiter obwohl Autosave in Settings auf "Aus".
+  Fix 1: Guard direkt in _on_timed_autosave() (prueft autosave_enabled zur Laufzeit).
+  Fix 2: Guard in _on_day_ended() (Tag-Ende-Save auch deaktiviert wenn Autosave aus).
+  Fix 3: sig_settings_changed Signal in SettingsManager + IngameSaveController reagiert
+         mit Timer-Neustart/Stop bei Live-Aenderung der Einstellung.
+
+### Features
+
+- **Check-in POI-Sperre (60 Ingame-Min):** Nach echtem Check-in bleiben Gaeste 60 Min im Zimmer,
+  bevor sie POIs besuchen (realistisch: Koffer ablegen, ankommen). Kein Einfluss auf Save-Load.
+
+### Linear Issues
+
+- ANG-343 angelegt: "Architektur: StaffActor Smart-Room-Unification" (Prio: Medium)
+  StaffActor hat Legacy claim_seat/leave_seat API + hardcoded "staff_small" String.
+  Refactoring analog GuestActor (v0.1.50) vor dem naechsten neuen Staff-Raum-Typ.
+
+### Noch offen
+
+- ANG-340: [Space] kollabiert fokussierten Live-Monitor (Backlog)
+- Conference: Test Speaker-Swap, Mittagspause, Zuhoehrer-Zucken → Fokus morgen

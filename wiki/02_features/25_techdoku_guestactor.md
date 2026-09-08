@@ -57,14 +57,37 @@ Der `GuestActor` kennt **keine Raum-IDs** mehr. Der Raum teilt über Methoden mi
 3. `WAITING_FOR_FOOD` → Signal `GastroManager.sig_order_served` → `EATING`
 4. `EATING` → nach 15s → `release_interaction()` → `_walk_to_room()`
 
-## 5. Wellness-Räume (Pool / Gym / Spa)
-Pool, Gym und Spa nutzen die generische `IN_POI` Schleife wie alle anderen Räume.
-Die Aufenthaltsdauer kommt direkt aus `claim_interaction()` des jeweiligen Raums zurück:
-- Pool: 60–180 Ingame-Minuten (begrenzt auf Schließzeit)
-- Gym: 60–90 Ingame-Minuten (begrenzt auf Schließzeit)
-- Spa: 90–180 Ingame-Minuten (begrenzt auf Schließzeit)
+## 5. Wellness-Räume (Pool / Gym / Spa) – v0.1.50+
 
-> **Kein `_poi_stay_timer` mehr** – diese Variable existiert nicht mehr. Der `_action_timer` wird direkt genutzt. Nach Ablauf: `release_interaction()` + `_decide_next_action()`.
+Wellness-Räume nutzen ein **zweistufiges Timing-System** – vollständig in den jeweiligen Room-Scripts implementiert. `GuestActor` selbst hat keine spezielle Wellness-Logik.
+
+### Timing-Hierarchie
+
+```
+Session-Timer (60-180 Min)
+  └── Spot-Timer (5-12 Min pro Platz)
+       └── Alternation: sit ↔ sleep (Pool/Spa)
+```
+
+### Ablauf beim ersten Betreten (`_on_poi_arrived`)
+1. `get_available_interactions(self)` → freie Spots
+2. `claim_interaction(id, spot_id)` → gibt `target_pos` + `duration` (Spot-Timer)
+3. **`_action_timer = duration * SECONDS_PER_GAME_MINUTE`** ← setzt ersten Timer korrekt
+4. EXP + Income vergeben (einmalig)
+5. `_execute_poi_move(seat_pos, room_node)` → Gast läuft zum Platz
+
+### Spot-Wechsel (alle 5-12 Min, via `_process_waiting`)
+1. `get_available_interactions()` → `[]` falls Session abgelaufen → Abgang
+2. `release_interaction(id)` → Room-Script entscheidet: Cooldown setzen oder Session behalten
+3. `claim_interaction(id, new_spot)` → neuer Platz
+4. Neuer `_action_timer` aus `claim_result["duration"]`
+
+### Session-Ende (automatisch)
+- `get_available_interactions()` gibt `[]` zurück wenn `now >= _guest_session_end[id]`
+- Beim nächsten Spot-Timer: `release_interaction()` → Cooldown 60 Min → `_decide_next_action()`
+- `is_guest_allowed()` prüft Cooldown → verhindert Wiedereintritt
+
+> **Wichtig:** `_action_timer = 0.0` DARF NICHT von außen gesetzt werden! Führt zu permanentem Ruhezustand (L212 Guard: `if _action_timer <= 0.0: return`).
 
 ## 6. Vending Machine (Lobby Snack-Automat)
 Pseudo-POI in der Lobby. `target_room` ist die Lobby selbst.

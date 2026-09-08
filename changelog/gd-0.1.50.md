@@ -65,3 +65,31 @@ Der GuestActor ist jetzt vollständig blind gegenüber Raumtypen.
 - Restaurant / Bar (solo + full): Bestell-Flow
 - Tagungsgast: kein Zucken, Speaker-Wechsel nach ~15 Min
 - Tagungsgast Mittagspause: Restaurant und Rückkehr
+---
+
+## Session 08.09.2026 - Wellness-Overhaul (Pool/Gym/Spa)
+
+### Bugfixes
+
+- **Session-Timer-Reset (Pool/Gym/Spa):** Spot-Wechsel setzte Session zurueck -> EXP-Spam. Fix: Cooldown-System trennt Spot-Wechsel von echtem Session-Ende.
+- **Doppelbelegung von Sitzen:** _process()-Hack setzte _action_timer=0.0 -> permanenter Ruhezustand -> Seats nie freigegeben. Fix: _process() entfernt.
+- **Sofort-Wechsel nach erstem Ankommen:** _on_poi_arrived() ignorierte duration aus claim_interaction(). _action_timer blieb auf 0.01. Fix: duration korrekt als erster Timer gesetzt.
+- **Gast bleibt nach Session-Ende:** get_available_interactions() gibt [] zurueck -> naechster Spot-Timer -> sauberer Abgang.
+- **Spa Bed-Lookup:** nutzte falschen Key actor.get("actor_id") statt gm.id. Behoben.
+
+### Features
+
+- **Wellness POI-Praeferenzen:** 70/30 Gewichtung (preferred_pois/random). Pool -> Family/Single/Couple, Spa -> Business/Luxury/VIP.
+- **Alternation (Pool/Spa):** sit<->sleep (Wasser<->Liege) erzwingt Platzwechsel fuer visuelle Lebendigkeit.
+- **Spot-Timer:** 5-12 Min (war 10-20), belebtere Atmosphaere.
+- **Live-Monitor Pool:** Badet (Wasser/seat) vs Entspannt (Liege/bed), verschiedene Farben.
+- **Live-Monitor Spa:** Liegt (Liege/bed) vs Entspannt (Stuhl/seat), verschiedene Farben.
+- **Live-Monitor alle Wellness:** "Geht gleich" bei abgelaufener Session, Sortierung aufsteigend nach Restzeit.
+- **Language Keys:** poi.status.leaving_soon, poi.pool.swimming, poi.pool.lounging
+
+### Architektur: Cooldown-System
+
+- `_guest_session_end`: wann Session endet
+- `_guest_cooldown_end`: 60 Min Sperre nach Session-Ende
+- `is_guest_allowed()`: prueft Cooldown (kein Wiedereintritt)
+- `release_interaction()`: Cooldown nur bei echtem Session-Ende, nicht bei Spot-Wechsel

@@ -1,52 +1,55 @@
-# Uebergabe-Protokoll - Session 07.09.2026 Abend
+# Übergabe-Protokoll – 08.09.2026 (Session Ende)
 
-## Exakter letzter Stand
-Smart-Room-Unification Refactoring ist code-complete aber NICHT getestet.
-Peter startet den Test morgen.
+## Was wurde gemacht?
 
-## Was wurde gemacht
+### Wellness-System komplett stabilisiert (Pool / Gym / Spa)
 
-### Neue Raum-Abstraktionen
-- Room.gd: is_gastro() und can_serve_solo() als Basis-Methoden
-- RestaurantSmall.gd: is_gastro() = true
-- Bar.gd: is_gastro() = true, can_serve_solo() = is_bartender_present()
-- Pool/Gym/Spa: claim_interaction() ueberschrieben mit korrekter Dauer:
-  - Pool 60-180 Min, Gym 60-90 Min, Spa 90-180 Min (alle Schliesszeit-begrenzt)
-  - get_live_details() liest _action_timer statt _poi_stay_timer
+**Root Causes identifiziert und behoben:**
 
-### GastroManager.gd
-- try_gastro_order(guest_id, budget, saturation, room_node) -> {ordered, solo_mode}
-- Kapselt is_functional + can_serve_solo + place_order_for_seat
+1. **Session-Timer-Reset bei Spot-Wechsel** (ANG-339 o.ä.)
+   - Ursache: `release_interaction()` löschte `_guest_session_end` bei JEDEM Aufruf (auch Spot-Wechsel)
+   - Fix: Cooldown-System. `release_interaction()` prüft ob Session wirklich abgelaufen. Wenn ja: Cooldown 60 Min + Session löschen. Wenn nein (Spot-Wechsel): nichts löschen.
 
-### GuestActor.gd - Massiver Cleanup
-- _poi_stay_timer vollstaendig entfernt
-- is_smart_room, is_bar_gastro_loop Flags weg
-- _process_waiting(): 3 saubere Branches ohne room-ID Checks
-- _on_poi_arrived(): einheitlicher Claim-Pfad
-- _execute_poi_move(): is_gastro() statt langer Ausschlussliste
-- _change_state(IN_POI): nur noch _action_timer = 0.01
-- SITTING im [IN_POI, SITTING] Block (conference fix)
-- Alle hardcodierten room-ID Entscheidungen entfernt
+2. **Doppelbelegung von Sitzen** 
+   - Ursache: `_process()`-Hack setzte `_action_timer = 0.0` → L212 Guard `if _action_timer <= 0.0: return` in `_process_waiting` → Gast eingefroren mit behaltenem Seat
+   - Fix: `_process()` aus allen drei Räumen entfernt
 
-## Sofortige naechste Schritte
+3. **Sofort-Wechsel nach erstem Ankommen (EXP-Bug)**
+   - Ursache: `_on_poi_arrived()` rief `claim_interaction()` auf aber ignorierte `duration` im Rückgabe-Dict. `_action_timer` blieb auf `0.01` → sofort weiter
+   - Fix: In `_on_poi_arrived()` wird jetzt `dur = claim_result.get("duration", ...)` gesetzt und `_action_timer = dur * SECONDS_PER_GAME_MINUTE`
 
-1. TESTEN (Agent wartet auf Bestaetigung):
-   - Pool/Gym/Spa Aufenthaltsdauer korrekt
-   - Restaurant Bestell-Flow
-   - Bar Solo (nur Barkeeper): EATING direkt
-   - Bar Full: normale Bestellung
-   - Tagungsgast: kein Zucken, Speaker-Wechsel nach ~15 Min
-   - Tagungsgast Mittagspause: Gastro und Rueckkehr
+4. **Spa Bed-Lookup** nutzte falschen Key (`actor.get("actor_id")` statt `gm.id`) → "Liegt" wurde nie angezeigt. Fix in `SpaSmall.get_live_details()`.
 
-2. Falls OK: Tech-Doku aktualisieren (GuestActor, GastroManager)
-3. Falls NICHT OK: gezielt fixen ohne Architektur aufzurollen
+**Features:**
+- Wellness POI-Präferenzen nach Gasttyp (70% preferred_pois, 30% random)
+- Spot-Alternation Pool/Spa (sit↔sleep), Gym (Platz-ID Wechsel)
+- Spot-Timer auf 5–12 Min reduziert
+- Live-Monitor: Badet/Entspannt (Pool), Liegt/Entspannt (Spa), "Geht gleich" bei Session-Ende, Sortierung aufsteigend nach Restzeit
 
-## Geaenderte Dateien
-- scenes/ingame/guest/GuestActor.gd
-- scenes/ingame/rooms/Room.gd
-- scenes/ingame/rooms/restaurant_small/RestaurantSmall.gd
-- scenes/ingame/rooms/bar/Bar.gd
-- scenes/ingame/rooms/pool_small/PoolSmall.gd
-- scenes/ingame/rooms/gym_small/GymSmall.gd
-- scenes/ingame/rooms/spa_small/SpaSmall.gd
-- autoload/GastroManager.gd
+## Letzter getesteter Stand
+
+- Pool: ✅ Stabil (Gäste wechseln Spots, verlassen nach Session, Cooldown funktioniert)
+- Gym: ✅ Stabil (idem)
+- Spa: ✅ Stabil (idem)
+- Live-Monitor alle 3: ✅ Korrekte Statusanzeige, Sortierung
+
+## Offene Issues / Nächste Schritte
+
+1. **ANG-340 (Linear):** [Space]-Taste pausiert Spiel UND kollabiert fokussierten Live-Monitor. NICHT behoben, nur geloggt. Bitte vor nächster Session angehen.
+2. **Restaurant / Bar testen:** Noch nicht in dieser Session getestet. Smart-Room-Unification vom 07.09. müsste aber halten.
+3. **Tagungsgast testen:** Mittagspause + Speaker-Swap – wurden in dieser Session nicht getestet.
+
+## Relevante Dateien
+
+- `scenes/ingame/rooms/pool_small/PoolSmall.gd` – Session + Cooldown + Live-Monitor
+- `scenes/ingame/rooms/gym_small/GymSmall.gd` – Session + Cooldown + Live-Monitor  
+- `scenes/ingame/rooms/spa_small/SpaSmall.gd` – Session + Cooldown + Alternation + Live-Monitor
+- `scenes/ingame/guest/GuestActor.gd` – `_on_poi_arrived()` Timer-Fix (L928-933)
+- `translations/language.csv` – 3 neue Keys: `poi.status.leaving_soon`, `poi.pool.swimming`, `poi.pool.lounging`
+
+## Architektur-Wissen (wichtig!)
+
+- `_action_timer = 0.0` NIEMALS von außen setzen! L212 Guard friert Gast ein.
+- Spot-Wechsel und Session-Ende sind ZWEI verschiedene Ereignisse im `release_interaction()`
+- `get_available_interactions()` ist das Steuerungselement: gibt `[]` zurück wenn Session abgelaufen
+- `is_guest_allowed()` prüft Cooldown (nach Session-Ende)

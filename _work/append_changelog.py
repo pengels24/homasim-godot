@@ -1,56 +1,24 @@
-#!/usr/bin/env python3
-"""
-Haengt einen Changelog-Eintrag an eine bestehende Datei an.
-Liest immer als UTF-8, schreibt immer als UTF-8.
-"""
 
-entry = """
+with open('changelog/gd-0.1.50.md', 'a', encoding='utf-8') as f:
+    f.write('\n---\n\n## Session 08.09.2026 - Wellness-Overhaul (Pool/Gym/Spa)\n\n')
+    f.write('### Bugfixes\n\n')
+    f.write('- **Session-Timer-Reset (Pool/Gym/Spa):** Spot-Wechsel setzte Session zurueck -> EXP-Spam. Fix: Cooldown-System trennt Spot-Wechsel von echtem Session-Ende.\n')
+    f.write('- **Doppelbelegung von Sitzen:** _process()-Hack setzte _action_timer=0.0 -> permanenter Ruhezustand -> Seats nie freigegeben. Fix: _process() entfernt.\n')
+    f.write('- **Sofort-Wechsel nach erstem Ankommen:** _on_poi_arrived() ignorierte duration aus claim_interaction(). _action_timer blieb auf 0.01. Fix: duration korrekt als erster Timer gesetzt.\n')
+    f.write('- **Gast bleibt nach Session-Ende:** get_available_interactions() gibt [] zurueck -> naechster Spot-Timer -> sauberer Abgang.\n')
+    f.write('- **Spa Bed-Lookup:** nutzte falschen Key actor.get("actor_id") statt gm.id. Behoben.\n\n')
+    f.write('### Features\n\n')
+    f.write('- **Wellness POI-Praeferenzen:** 70/30 Gewichtung (preferred_pois/random). Pool -> Family/Single/Couple, Spa -> Business/Luxury/VIP.\n')
+    f.write('- **Alternation (Pool/Spa):** sit<->sleep (Wasser<->Liege) erzwingt Platzwechsel fuer visuelle Lebendigkeit.\n')
+    f.write('- **Spot-Timer:** 5-12 Min (war 10-20), belebtere Atmosphaere.\n')
+    f.write('- **Live-Monitor Pool:** Badet (Wasser/seat) vs Entspannt (Liege/bed), verschiedene Farben.\n')
+    f.write('- **Live-Monitor Spa:** Liegt (Liege/bed) vs Entspannt (Stuhl/seat), verschiedene Farben.\n')
+    f.write('- **Live-Monitor alle Wellness:** "Geht gleich" bei abgelaufener Session, Sortierung aufsteigend nach Restzeit.\n')
+    f.write('- **Language Keys:** poi.status.leaving_soon, poi.pool.swimming, poi.pool.lounging\n\n')
+    f.write('### Architektur: Cooldown-System\n\n')
+    f.write('- `_guest_session_end`: wann Session endet\n')
+    f.write('- `_guest_cooldown_end`: 60 Min Sperre nach Session-Ende\n')
+    f.write('- `is_guest_allowed()`: prueft Cooldown (kein Wiedereintritt)\n')
+    f.write('- `release_interaction()`: Cooldown nur bei echtem Session-Ende, nicht bei Spot-Wechsel\n')
 
-### 04.09.2026 - Session 3: Conference Break, Log-Cleanup, Tooltip-Fix & Restaurant-Debug
-
-#### Log-Cleanup
-- **GuestActor changed state:** Print auf Zeile 767 auskommentiert (groesster Log-Fluter)
-- **StaffActor changing to next_state:** Print auf Zeile 105 auskommentiert
-- Im Log bleiben: [CONF-DEBUG], [TGCHANGE], [DEBUG RESTAURANT], Fehler-Prints, MapGrid-Paths
-
-#### Konferenz-Mittagspause (12:00 - 13:45)
-- **go_conference_break():** Alle TG-Gaeste verlassen um 12:00 den Konferenzraum -> Lobby/Bar/Restaurant.
-  `party.event_poi_id` temporaer geleert, gespeichert in `_conference_break_poi_key`.
-- **return_from_conference_break():** 13:45 (TIME_BREAK_END=825) TG-Gaeste kehren zurueck, `event_poi_id` wiederhergestellt.
-- **_broadcast_to_event_guests():** Hilfsmethode in ConferenceSmall.
-- **_start_break() / _end_break() / _end_conference():** Phasen-Wechsel in ConferenceSmall.
-- **end_conference_day():** 17:00 - 50% Heimweg, 50% Bar/Restaurant. `event_poi_id` geleert.
-
-#### Hardcode-Sync
-- `GuestActor._decide_next_action()` Zeile 631: Event-Zeit von `830` auf `825` korrigiert.
-
-#### Tooltip Mismatch Fix (CustomTooltip.gd)
-- Tooltip-Gaeste-Zaehler nutzt nun `get_nodes_in_group("guest_actors")` statt `ctrl._actors.values()`.
-- WALKING wird gezaehlt wenn `_current_poi_id` noch auf den Zielraum zeigt.
-
-#### Restaurant Debug-Prints
-- `RestaurantSmall.place_order_for_seat()` mit praezisen Debug-Prints fuer alle Abbruchgruende.
-
-#### Offener Bug (Cut mit offenem Ende)
-- Gaeste verschwinden sofort aus Restaurant/Bar.
-- Naechster Schritt: Testlauf mit Debug-Prints -> Abbruchgrund identifizieren.
-"""
-
-target = 'changelog/gd-0.1.50.md'
-
-# Lesen
-try:
-    with open(target, 'r', encoding='utf-8') as f:
-        existing = f.read()
-except UnicodeDecodeError:
-    # Fallback: latin-1 lesen und als UTF-8 behandeln
-    with open(target, 'rb') as f:
-        raw = f.read()
-    existing = raw.decode('latin-1')
-
-# Schreiben (immer UTF-8!)
-with open(target, 'w', encoding='utf-8', newline='\r\n') as f:
-    f.write(existing)
-    f.write(entry)
-
-print("Changelog erfolgreich angehaengt (UTF-8).")
+print('done')

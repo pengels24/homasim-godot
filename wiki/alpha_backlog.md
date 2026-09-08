@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.50 | Stand: 2026-09-07
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.50 | Stand: 08.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -73,6 +73,16 @@
   - `GuestActor.gd`: `_poi_stay_timer`, `is_smart_room`, `is_bar_gastro_loop` und alle Room-ID-Checks entfernt. STUDYING_MENU Block (80→20 Zeilen), vereinheitlichter IN_POI/SITTING Block, `_change_state(State.IN_POI)` ohne room-ID Logik.
   - **Ergebnis:** Neue Gastro-Räume benötigen nur `is_gastro() -> true` + `place_order_for_seat()` – keine Änderungen am Actor mehr nötig.
   - **Offene Tests (morgen):** Pool/Gym/Spa Aufenthalt, Restaurant, Bar (solo+full), Tagungsgast (kein Zucken, Speaker-Swap, Mittagspause)
+- ✅ **Wellness-System Overhaul (08.09.2026):**
+  - Session-Timer-Reset bei Spot-Wechsel behoben (Cooldown-System in Pool/Gym/Spa)
+  - Doppelbelegung von Sitzen behoben (_process()-Hack entfernt)
+  - Sofort-Wechsel nach erstem Ankommen behoben (_on_poi_arrived nutzt claim duration als ersten Timer)
+  - Gast bleibt nach Session-Ende behoben (get_available_interactions gibt [] -> naechster Spot-Timer -> Abgang)
+  - Spa Bed-Lookup-Fix (gm.id statt actor.get("actor_id"))
+  - Wellness POI-Praeferenzen nach Gasttyp (70/30 preferred_pois/random)
+  - Spot-Wechsel Alternation Pool/Spa (sit<->sleep), Spot-Timer auf 5-12 Min reduziert
+  - Live-Monitor: Badet/Entspannt (Pool), Liegt/Entspannt (Spa), Geht gleich, Sortierung nach Restzeit
+- 🔧 **ANG-340 offen: [Space] kollabiert fokussierten Live-Monitor** (NICHT behoben, in Linear geloggt)
 
 ## 🧱 Phase 1 – Fundament (v0.1.40–41)
 *Zuerst, weil alles andere darauf aufbaut.*

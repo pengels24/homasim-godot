@@ -182,19 +182,6 @@ func get_live_details() -> Array[Dictionary]:
 var _guest_session_end: Dictionary = {}   # guest_id -> Ingame-Zeit Sessionende
 var _guest_cooldown_end: Dictionary = {}  # guest_id -> Ingame-Zeit Cooldown-Ende
 
-func _process(_delta: float) -> void:
-	if _guest_session_end.is_empty():
-		return
-	var now := TimeManager.get_game_time() if TimeManager else 0
-	for actor in get_tree().get_nodes_in_group("guest_actors"):
-		var gm = actor.get("_guest_member")
-		if not gm:
-			continue
-		if actor.get("_current_poi_id") != "pool_small":
-			continue
-		if _guest_session_end.has(gm.id) and now >= _guest_session_end[gm.id]:
-			actor.set("_action_timer", 0.0)
-
 func is_guest_allowed(actor: Node2D) -> bool:
 	# Cooldown-Check: nach Session-Ende darf Gast 60 Min nicht mehr rein
 	var gm = actor.get("_guest_member")

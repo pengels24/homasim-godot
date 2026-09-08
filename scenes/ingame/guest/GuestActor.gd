@@ -918,7 +918,7 @@ func _on_poi_arrived() -> void:
 		if room_node.has_method("_has_waiter_assigned") and room_node.call("_has_waiter_assigned"):
 			income = 0
 	
-	# Sitzplatz clamen (alle Räume sind Smart Rooms)
+	# Sitzplatz claimen (alle Räume sind Smart Rooms)
 	var seat_pos = Vector2.ZERO
 	if is_instance_valid(room_node) and room_node.has_method("get_available_interactions") and room_node.has_method("claim_interaction"):
 		if not _has_claimed_seat:
@@ -929,6 +929,9 @@ func _on_poi_arrived() -> void:
 				if claim_result.has("target_pos"):
 					seat_pos = claim_result.target_pos
 					_has_claimed_seat = true
+					# Timer aus claim_result setzen damit Gast NICHT sofort weiterwechselt
+					var dur = claim_result.get("duration", randf_range(15.0, 30.0))
+					_action_timer = dur * (TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 4.0)
 		else:
 			seat_pos = global_position # bereits geclaimed, dummy um Abbruch zu verhindern
 	

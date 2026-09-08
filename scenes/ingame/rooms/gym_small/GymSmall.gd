@@ -101,21 +101,6 @@ func _apply_visuals() -> void:
 var _guest_session_end: Dictionary = {}
 var _guest_cooldown_end: Dictionary = {}
 
-# Pruefen ob Gaeste mit abgelaufener Session rausgeschmissen werden muessen
-func _process(_delta: float) -> void:
-	if _guest_session_end.is_empty():
-		return
-	var now := TimeManager.get_game_time() if TimeManager else 0
-	for actor in get_tree().get_nodes_in_group("guest_actors"):
-		var gm = actor.get("_guest_member")
-		if not gm:
-			continue
-		if actor.get("_current_poi_id") != "gym_small":
-			continue
-		if _guest_session_end.has(gm.id) and now >= _guest_session_end[gm.id]:
-			# Session abgelaufen: Action-Timer auf 0 damit GuestActor sofort reagiert
-			actor.set("_action_timer", 0.0)
-
 func is_guest_allowed(actor: Node2D) -> bool:
 	var gm = actor.get("_guest_member")
 	var guest_id: String = gm.id if gm else ""

@@ -117,11 +117,12 @@ func get_patrol_target() -> Vector2:
 var _guest_session_end: Dictionary = {}
 
 func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
-	var actor_id = actor.get("actor_id") if actor.has_method("get") else ""
-	if _guest_session_end.has(actor_id):
+	var gm = actor.get("_guest_member")
+	var guest_id: String = gm.id if gm else ""
+	if _guest_session_end.has(guest_id):
 		var now := TimeManager.get_game_time() if TimeManager else 0
-		if now >= _guest_session_end[actor_id]:
-			_guest_session_end.erase(actor_id)
+		if now >= _guest_session_end[guest_id]:
+			_guest_session_end.erase(guest_id)
 			return []
 	var interactions = super.get_available_interactions(actor)
 	# Im Spa sollen die Gäste nur sitzen oder liegen, nicht dumm herumstehen!
@@ -161,10 +162,10 @@ func get_live_details() -> Array[Dictionary]:
 		if actor.get("current_state") in valid_states and actor.get("_current_poi_id") == "spa_small":
 			var gm = actor.get("_guest_member")
 			if gm:
-				var actor_id = actor.get("actor_id")
+				var guest_id: String = gm.id
 				var time_left_mins = 0
-				if _guest_session_end.has(actor_id):
-					time_left_mins = max(0, _guest_session_end[actor_id] - now)
+				if _guest_session_end.has(guest_id):
+					time_left_mins = max(0, _guest_session_end[guest_id] - now)
 				
 				var status_text = GameState.T("poi.spa.relaxing")
 				var color = Color("#3b82f6")

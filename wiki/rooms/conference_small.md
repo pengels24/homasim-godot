@@ -33,3 +33,41 @@ Falls trotzdem `interactions.size() == 0` (z.B. designierter Speaker darf nicht 
 - **Kapazität:** max 12 Gäste (`max_guests = 12`)
 - **Raumgröße:** 3x2 (bzw. 2x3 im Portrait-Modus)
 - **Live-Monitor:** Zeigt den aktuellen Redner orange mit dem Status "Hält einen Vortrag" (`poi.conference.speaking`) an, während Zuhörer lila markiert bleiben (`poi.conference.attending`).
+
+## TG-Checkout nach Tagungsende (17:00)
+
+### Problem & Architektur
+Tagungsgäste haben **kein Hotelzimmer** (`party.room_id = ""`). Der normale Checkout-Flow (`GuestManager.do_checkout()`) setzt ein Zimmer voraus und ist daher nicht direkt verwendbar. Der Checkout-Flow für TG-Gäste wird stattdessen über `GuestManager.checkout_event_party()` gesteuert.
+
+### Identifikation von "abgereisten" TG-Gästen
+Ein TG-Gast gilt nach 17:00 als "fertig", wenn:
+- `party.room_id == ""` (kein Zimmer)
+- `party.event_poi_id == ""` (Tagung beendet – wird um 17:00 von `ConferenceSmall._end_conference_day()` geleert)
+
+### Two-Pass-Pattern in `GuestController.spawn_active_guests()`
+Um Array-Modification-während-Iteration zu vermeiden (Godot-Bug), wird ein Two-Pass verwendet:
+1. **Pass 1:** Alle aktiven Parties iterieren. TG-Parties die die obige Bedingung erfüllen → in `tg_checkout_parties` sammeln.
+2. **Pass 2:** Für jede gesammelte Party: `_guest_manager.checkout_event_party(party)` aufrufen.
+
+### `GuestManager.checkout_event_party(party)`
+Neue dedizierte Methode für den Event-Checkout ohne Zimmer:
+```gdscript
+_active.erase(party)
+party.state = "gone"
+sig_party_checked_out_physically.emit(party)
+```
+→ `GuestController._on_party_checked_out_physically()` greift → Actors werden gespawnt.
+
+### `GuestActor.complete_checkout(spawn_pos)`
+Beim Reload-Spawn (IDLE-State) muss `_current_poi_id = "lobby"` gesetzt werden, BEVOR `_walk_to_exit()` aufgerufen wird.  
+**Warum:** `_walk_to_exit()` → `_execute_walk()` → Phase 1 nutzt `_get_current_room_node(previous_state)`. Ist `_current_poi_id = ""`, gibt `_get_current_room_node` null zurück → kein lokaler Pfad → Gast teleportiert sofort zur Exit-Tile → `queue_free()` → **unsichtbarer Sofort-Exit**.
+
+### Spawn-Position
+TG-Actors spawnen beim Checkout-Flow an den **ReceptionX-Waypoints** der Lobby (`lobby.get_checkout_wait_pos(member.party_id)`), genau wie ankommende Hotelgäste. Nicht am generischen `_get_lobby_spawn_pos()` (= Flur-Position).
+
+### Post-Essen-Guard
+Falls ein TG-Gast während der 17:00–17:30-Mittagszeit noch im Restaurant/Bar ist, greift ein Guard in `GuestActor._process_waiting()`:
+- `state == EATING` (oder STUDYING_MENU, WAITING_FOR_FOOD)
+- `party.event_poi_id == ""` (Tagung vorbei)
+- `party.room_id == ""` (kein Zimmer)
+→ direkt `start_checkout()` aufrufen, ohne in Lobby-IDLE zu fallen.

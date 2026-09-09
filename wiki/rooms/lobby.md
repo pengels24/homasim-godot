@@ -53,3 +53,17 @@ Der Getränke-/Snackautomat in der Lobby fungiert als Pseudo-POI (`id: "vending_
 
 ### Snackomat (Vending Machine) Konfiguration
 Die Sättigungsgrenze, ab der Gäste den Automaten aufsuchen, kann über die Konstante VENDING_MACHINE_HUNGER_THRESHOLD (Standard: 40) gesteuert werden, was ein Balancing unabhängig von generellen Restaurant-Besuchen ermöglicht.
+
+### 3.4 TG-Gäste im Checkout-Flow (Spawn via ReceptionX)
+
+Wenn Tagungsgäste nach 17:00 Uhr das Hotel verlassen, spawnen sie über `GuestController._on_party_checked_out_physically()` direkt in der Lobby – an den **ReceptionX-Waypoints** (via `lobby.get_checkout_wait_pos(member.party_id)`). Diese Spawn-Position ist identisch mit der Ankunfts-Position normaler Hotelgäste.
+
+**Wichtig:** Der Actor muss mit `_current_poi_id = "lobby"` initialisiert werden, damit `_walk_to_exit()` → `_execute_walk()` → Phase 1 einen lokalen Pfad durch die Lobby zur Ausgangstür generiert. Ohne das wird kein lokaler Pfad erstellt → der Gast teleportiert sofort zur Exit-Tile → `queue_free()`.
+
+### 3.5 Live Monitor: Gefilterte States
+
+`Lobby.gd → get_live_details()` filtert folgende Actor-States aus der Anzeige aus:
+- **`State.WALKING`** – Gäste die gerade durch die Lobby laufen (keine "Verweilenden")
+- **`State.LEAVING`** – Abreisende Gäste (passieren die Lobby nur noch, verweilen nicht)
+
+**Warum LEAVING filtern?** Abreisende TG-Gäste spawnen im LEAVING-State an den ReceptionX-Positionen. Ohne Filter: Lobby-Tooltip = 0 (keine geclaimten Interactions), Live Monitor = 12 (alle LEAVING-Actors sichtbar) → verwirrend für den Spieler. Mit Filter: beide Anzeigen konsistent auf 0.

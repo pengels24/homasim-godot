@@ -1196,6 +1196,15 @@ func send_back_to_room() -> void:
 
 # =============================================================================
 func start_waiting_in_lobby(spawn_pos: Vector2, delay: float) -> void:
+	# TG-Gast ohne Zimmer + Tagung vorbei → direkt zum Checkout, nicht in WAITING_IN_LINE
+	if _target_room == null:
+		var _p_check = _get_my_party()
+		if is_instance_valid(_p_check) and _p_check.event_poi_id == "":
+			global_position = spawn_pos
+			modulate.a = 1.0
+			start_checkout()
+			return
+	
 	_current_poi_id = "lobby"
 	global_position = spawn_pos
 	modulate.a = 0.0  # Unsichtbar bis er an der Reception steht

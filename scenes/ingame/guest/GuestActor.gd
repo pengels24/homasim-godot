@@ -985,6 +985,9 @@ func _on_poi_arrived() -> void:
 	# EXP und Quest-Trigger NUR beim echten Erstbesuch (nicht bei Pause-Rueckkehr)
 	if was_fresh_claim:
 		var visit_exp: int = poi_def.get("visit_exp", 0)
+		# Event-Gaeste zahlen keinen visit_exp - analog zu income = 0 (Bezahlung via Event-Budget)
+		if is_instance_valid(my_party) and my_party.get("event_poi_id") != "":
+			visit_exp = 0
 		if visit_exp > 0:
 			GameState.add_exp(visit_exp)
 			var spawn_pos = global_position

@@ -39,6 +39,9 @@ func spawn_active_guests() -> void:
 				if party.room_id == "" and party.event_poi_id != "":
 					actor.start_waiting_for_event(spawn_pos, event_delay_counter * 0.3)
 					event_delay_counter += 1
+				elif party.room_id == "" and party.event_poi_id == "":
+					# TG-Gast nach Tagungsende: kein Zimmer, Tagung vorbei → direkt zum Checkout
+					actor.start_checkout()
 				elif room == null:
 					# Fallback: Zimmer nicht gefunden (z.B. abgerissen oder Datenfehler)
 					# → Gast sicher in der Lobby platzieren statt bei (0,0) im Nirgendwo

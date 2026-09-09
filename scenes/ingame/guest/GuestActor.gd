@@ -584,7 +584,9 @@ func _decide_next_action() -> void:
 	if is_instance_valid(_target_room):
 		possible_targets.append("room")
 	else:
-		possible_targets.append("lobby")
+		# TG-Gast ohne Zimmer: nach Gastro direkt zum Checkout, nicht in Lobby-Wander-Loop
+		start_checkout()
+		return
 		
 	possible_targets.append_array(open_pois)
 		

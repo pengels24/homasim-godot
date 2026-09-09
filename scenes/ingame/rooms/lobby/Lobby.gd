@@ -245,7 +245,9 @@ func get_live_details() -> Array[Dictionary]:
 				
 			var guest_name = guest_actor.get("_guest_member").name if guest_actor.get("_guest_member") else "Gast"
 			var party = guest_actor.call("_get_my_party") if guest_actor.has_method("_get_my_party") else null
-			if is_instance_valid(party) and party.event_poi_id != "":
+			var is_tg_guest = (is_instance_valid(party) and party.event_poi_id != "") or \
+					(guest_actor.get("_target_room") == null and guest_actor.get("_guest_member") != null)
+			if is_tg_guest:
 				guest_name += " (TG)"
 				
 			var status = "Wartet..."

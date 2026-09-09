@@ -41,6 +41,9 @@ func spawn_active_guests() -> void:
 					event_delay_counter += 1
 				elif party.room_id == "" and party.event_poi_id == "":
 					# TG-Gast nach Tagungsende: kein Zimmer, Tagung vorbei → direkt zum Checkout
+					# Position MUSS gesetzt sein bevor start_checkout() Pathfinding aufruft!
+					actor.global_position = spawn_pos
+					actor.modulate.a = 1.0
 					actor.start_checkout()
 				elif room == null:
 					# Fallback: Zimmer nicht gefunden (z.B. abgerissen oder Datenfehler)

@@ -242,6 +242,8 @@ func get_live_details() -> Array[Dictionary]:
 		if guest_actor._current_poi_id in ["lobby", "vending_machine"] or guest_actor.current_state == guest_actor.State.AWAITING_CHECKOUT:
 			if guest_actor.current_state == guest_actor.State.WALKING:
 				continue
+			if guest_actor.current_state == guest_actor.State.LEAVING:
+				continue  # Abreisende Gäste zählen nicht als "in der Lobby" (Tooltip wäre sonst inkonsistent)
 				
 			var guest_name = guest_actor.get("_guest_member").name if guest_actor.get("_guest_member") else "Gast"
 			var party = guest_actor.call("_get_my_party") if guest_actor.has_method("_get_my_party") else null

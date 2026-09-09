@@ -1166,7 +1166,7 @@ func start_checkout() -> void:
 func complete_checkout(spawn_pos: Vector2) -> void:
 	if current_state == State.IDLE or global_position == Vector2.ZERO:
 		global_position = spawn_pos  # Notfall-Spawn, z.B. bei Reload
-		
+		_current_poi_id = "lobby"    # Smart-Room-Navigation: lokaler Pfad zur Lobby-Ausgangstür
 	_change_state(State.LEAVING)  # sichtbar
 	_walk_to_exit()
 

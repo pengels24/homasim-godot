@@ -214,25 +214,11 @@ func _process_impatient(delta: float) -> void:
 func _process_waiting(delta: float) -> void:
 	if _action_timer <= 0.0:
 		return # Gast ruht – kein Timer-Countdown
-		
-	# Normaler Gast: POI schließt → zurück ins Zimmer, ABER wer schon bestellt hat oder isst, darf bleiben!
-	# AUSNAHME: Event-Gäste im eigenen Event-Raum werden von ConferenceSmall._end_conference() verwaltet
-	var _party_for_kick = _get_my_party()
-	var _is_event_guest_in_own_room = is_instance_valid(_party_for_kick) and \
-		_party_for_kick.get("event_poi_id") != "" and \
-		_current_poi_id == "conference_small"
-	if current_state in [State.IN_POI, State.STUDYING_MENU] and not _current_poi_id.is_empty() \
-			and not _is_current_poi_open() and not _is_event_guest_in_own_room:
-		print("[GuestActor] %s wird aus %s geworfen, weil POI geschlossen ist! Aktueller State: %s" % [(_guest_member.name if _guest_member else "?"), _current_poi_id, get_state_name(current_state)])
-		var poi_room_node = _get_poi_room_node(_current_poi_id)
-		if is_instance_valid(poi_room_node):
-			if poi_room_node.has_method("release_interaction"):
-				poi_room_node.release_interaction(_guest_member.id)
-			if poi_room_node.has_method("leave_seat"):
-				poi_room_node.leave_seat(_guest_member.id)
-		send_back_to_room()
-		return
-		
+
+	# Hinweis: Kein aktiver "Rauswurf" wenn POI schließt - close kommt erst zum open_to.
+	# Wer bereits sitzt/isst bleibt bis sein Timer ablaeuft (wie im echten Leben).
+	# Neue Eintritte werden bereits in _decide_next_action() via _is_current_poi_open() blockiert.
+
 	var speed = 1.0
 	var current_time = 0
 	if TimeManager:

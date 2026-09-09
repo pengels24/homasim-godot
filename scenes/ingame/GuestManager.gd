@@ -814,6 +814,14 @@ func clear_waiting_guests_with_penalty() -> void:
 # ── Checkout ──────────────────────────────────────────────────────────────────
 
 # =============================================================================
+## TG-Gäste (kein Zimmer, Tagung beendet) sauber aus _active entfernen und
+## den normalen physischen Checkout-Flow triggern.
+func checkout_event_party(party: GuestParty) -> void:
+	_active.erase(party)
+	party.state = "gone"
+	sig_party_checked_out_physically.emit(party)
+
+# =============================================================================
 func do_checkout(party: GuestParty) -> float:
 	var payout := _calculate_payout(party)
 	_finalize_checkout(party, int(payout), false)

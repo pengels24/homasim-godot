@@ -26,32 +26,43 @@ func spawn_active_guests() -> void:
 	var spawn_pos = _get_lobby_spawn_pos()
 	var event_delay_counter := 0
 	
+	# TG-Parties nach Tagungsende separat sammeln (nicht während _active-Loop löschen!)
+	var tg_checkout_parties: Array = []
+	
 	for party in _guest_manager._active:
 		var room = _find_room_by_id(party.room_id)
 		for member in party.members:
 			var guest_id = member.id  # Stabile ID aus dem Savegame
 			if not _actors.has(guest_id):
-				var actor = _create_actor(member, party.room_id, room)
 				# Event-Gäste (Tagesgäste für Konferenz etc.) haben keine room_id
 				# aber eine event_poi_id – sie müssen an der Rezeption gespawnt werden.
 				# start_waiting_for_event platziert sie visuell an der Rezeption, setzt sie
 				# aber auf IDLE, damit sie sofort POIs nutzen oder zum Event gehen können.
 				if party.room_id == "" and party.event_poi_id != "":
+					var actor = _create_actor(member, party.room_id, room)
 					actor.start_waiting_for_event(spawn_pos, event_delay_counter * 0.3)
 					event_delay_counter += 1
 				elif party.room_id == "" and party.event_poi_id == "":
-					# TG-Gast nach Tagungsende: kein Zimmer, Tagung vorbei → direkt zum Checkout
-					# Position MUSS gesetzt sein bevor start_checkout() Pathfinding aufruft!
-					actor.global_position = spawn_pos
-					actor.modulate.a = 1.0
-					actor.start_checkout()
-				elif room == null:
-					# Fallback: Zimmer nicht gefunden (z.B. abgerissen oder Datenfehler)
-					# → Gast sicher in der Lobby platzieren statt bei (0,0) im Nirgendwo
-					push_warning("[GuestController] Kein Raum für Gast %s (party %s, room_id='%s') – Lobby-Fallback" % [guest_id, party.id, party.room_id])
-					actor.start_waiting_in_lobby(spawn_pos, event_delay_counter * 0.3)
-					event_delay_counter += 1
-			
+					# TG-Gast nach Tagungsende: nach dem Loop sauber per GuestManager auschecken
+					if not tg_checkout_parties.has(party):
+						tg_checkout_parties.append(party)
+					break # Alle Member der Party werden via checkout_event_party verarbeitet
+				else:
+					var actor = _create_actor(member, party.room_id, room)
+					if room == null:
+						# Fallback: Zimmer nicht gefunden (z.B. abgerissen oder Datenfehler)
+						# → Gast sicher in der Lobby platzieren statt bei (0,0) im Nirgendwo
+						push_warning("[GuestController] Kein Raum für Gast %s (party %s, room_id='%s') – Lobby-Fallback" % [guest_id, party.id, party.room_id])
+						actor.start_waiting_in_lobby(spawn_pos, event_delay_counter * 0.3)
+						event_delay_counter += 1
+	
+	# TG-Parties nach Tagungsende: GuestManager übernimmt den Checkout-Flow.
+	# checkout_event_party() entfernt die Party aus _active und emittet sig_party_checked_out_physically.
+	# _on_party_checked_out_physically() erstellt die Actors und ruft complete_checkout() auf.
+	for tg_party in tg_checkout_parties:
+		_guest_manager.checkout_event_party(tg_party)
+	
+		
 	# Auch Gäste spawnen, die bereits im Checkout sind (nach Reload)
 	for party in _guest_manager._checkout:
 		var room = _find_room_by_id(party.room_id)

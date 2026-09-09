@@ -47,6 +47,8 @@ var _has_claimed_seat: bool = false
 var _checkin_poi_block_until: int = 0
 ## Speichert den Konferenzraum-Key waehrend der Mittagspause (event_poi_id wird temporaer geleert)
 var _conference_break_poi_key: String = ""
+## True wenn Gast gerade aus Konferenz-Pause zurueckkehrt (verhindert doppelte EXP)
+var _is_returning_from_break: bool = false
 
 signal sig_poi_income(amount: int, world_pos: Vector2)
 
@@ -927,9 +929,11 @@ func _on_poi_arrived() -> void:
 		if room_node.has_method("_has_waiter_assigned") and room_node.call("_has_waiter_assigned"):
 			income = 0
 	
-	# Sitzplatz claimen (alle Räume sind Smart Rooms)
+	# Sitzplatz claimen (alle Raeume sind Smart Rooms)
 	var seat_pos = Vector2.ZERO
-	var was_fresh_claim := false  # true = echter Erstbesuch (nicht Pause-Rueckkehr)
+	# was_fresh_claim = echter Erstbesuch ODER Pause-Rueckkehr ist KEIN Erstbesuch
+	var was_fresh_claim := not _is_returning_from_break
+	_is_returning_from_break = false  # Immer zuruecksetzen nach Verarbeitung
 	if is_instance_valid(room_node) and room_node.has_method("get_available_interactions") and room_node.has_method("claim_interaction"):
 		if not _has_claimed_seat:
 			var avail = room_node.get_available_interactions(self)
@@ -1072,7 +1076,7 @@ func go_conference_break() -> void:
 	print("[CONF] go_conference_break | %s | -> %s" % [(_guest_member.name if _guest_member else "?"), target])
 	_walk_to_poi(target)
 
-## 13:45: Rückkehr aus Pause → zurück zum Tagungsraum (wander_pm bis 14:00)
+## 13:45: Rueckkehr aus Pause → zurueck zum Tagungsraum (wander_pm bis 14:00)
 func return_from_conference_break() -> void:
 	# event_poi_id ist nun ohnehin noch intakt, aber wir weisen _conference_break_poi_key zur Sicherheit zu
 	var party = _get_my_party()
@@ -1080,6 +1084,7 @@ func return_from_conference_break() -> void:
 		party.event_poi_id = _conference_break_poi_key
 		_conference_break_poi_key = ""
 
+	_is_returning_from_break = true  # Verhindert doppelte EXP beim Wiedereintritt
 	_has_claimed_seat = false
 	_action_timer = 0.0
 	print("[CONF] return_from_conference_break | %s" % (_guest_member.name if _guest_member else "?"))

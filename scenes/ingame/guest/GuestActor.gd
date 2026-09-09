@@ -800,6 +800,9 @@ func _change_state(new_state: State) -> void:
 			_action_timer = 0.0
 			avatar.visible = true
 			if has_node("ClickArea"): get_node("ClickArea").input_pickable = false
+			# TG-Gäste haben kein Zimmer → auto-checkout ohne Spieler-Klick
+			if _target_room == null:
+				call_deferred("_auto_checkout_tg_guest")
 		State.STUDYING_MENU:
 			_action_timer = randf_range(5.0, 10.0)
 			print("[GuestActor] %s betritt STUDYING_MENU. Wartet %s Sekunden..." % [(_guest_member.name if _guest_member else "?"), _action_timer])
@@ -1159,6 +1162,15 @@ func complete_checkout(spawn_pos: Vector2) -> void:
 	_change_state(State.LEAVING)  # sichtbar
 	_walk_to_exit()
 
+
+# =============================================================================
+## TG-Gäste (kein Hotelzimmer) werden automatisch ausgecheckt.
+func _auto_checkout_tg_guest() -> void:
+	# Kurz in der Lobby sichtbar warten, dann auto-abreisen
+	var wait_time := 1.5 / max(1.0, TimeManager.user_speed if TimeManager else 1.0)
+	await get_tree().create_timer(wait_time).timeout
+	if is_instance_valid(self) and current_state == State.AWAITING_CHECKOUT:
+		complete_checkout(global_position)
 
 # =============================================================================
 ## Wird um 22:00 Uhr aufgerufen: Gast kehrt aus POI ins Zimmer zurück

@@ -29,14 +29,28 @@ Wenn der User diesen Skill aufruft, arbeite folgende Schritte **streng sequenzie
    - Prüfe, ob in der Session **neue Core-Systeme, Akteure oder Räume komplett fertiggestellt** wurden.
    - Trage **NUR DIESE** (fertigen Dinge) in `wiki/status_quo.md` ein. Keine halben Sachen, keine Bugfixes.
 
-5. **Wiki Tech-Doku pflegen (Lebenswichtig!):**
-   - Gehe gedanklich die Dateien durch, die du in der Session verändert hast.
-   - Prüfe den Ordner `wiki/` (z.B. `wiki/rooms/` oder `wiki/04_maintenance/`), ob es dort Dokumentationen gibt, die zu diesen Änderungen passen.
-   - **WICHTIG:** Suche aktiv (mit grep_search) nach veralteten Begriffen oder Methoden (z.B. `claim_seat`, `IN_POI` Loops etc.), die durch deine Architektur-Änderungen obsolet geworden sind, und tilge sie aus **allen** zugehörigen Tech-Dokus.
-   - Aktualisiere die entsprechenden `.md`-Dateien (z.B. `bar.md` oder `27_techdoku_restaurant.md`), damit sie immer den *aktuellsten* Code-Stand widerspiegeln.
-   - Lege neue `.md`-Dateien an, falls völlig neue Mechaniken oder Räume erschaffen wurden, die noch keine Doku haben.
+5. **🚨 PFLICHT-CHECKPOINT: Wiki Tech-Doku (BLOCKIERT Schritt 6!)**
+
+   > **Du darfst Schritt 6 (Git Commit) ERST ausführen, wenn du diese Checkliste vollständig abgearbeitet hast. Kein Überspringen. Kein "gedanklich".**
+
+   **5.1 – Strukturen sichten (Tool-Call erzwungen):**
+   Führe aus: `list_dir wiki/` und `list_dir wiki/rooms/` – notiere dir die vorhandenen `.md`-Dateien.
+
+   **5.2 – Pflicht-Mapping: Jede geänderte Datei → passende Wiki-Dok**
+   Erstelle intern eine Liste aller Dateien, die du in dieser Session geändert hast. Für **jede** dieser Dateien:
+   - Suche in `wiki/rooms/`, `wiki/03_autoloads/`, `wiki/04_maintenance/`, `wiki/02_features/` nach einer passenden `.md`
+   - Wenn eine passende Dok existiert: **Lesen + Aktualisieren** (veraltete Methoden/Begriffe prüfen, neue Architektur ergänzen)
+   - Wenn keine Dok existiert aber eine neue Mechanik entstanden ist: **Neue `.md` anlegen**
+   - Wenn bewusst keine Doku nötig (z.B. rein kosmetischer Fix): **Explizit begründen** (1 Satz)
+
+   **5.3 – Suche nach veralteten Begriffen (Tool-Call erzwungen):**
+   Wenn du Architektur geändert hast (Methodennamen, Signale, Klassen), führe `grep_search` in `wiki/` nach den alten Begriffen aus und tilge/korrigiere sie.
+
+   **5.4 – Selbst-Prüfung:**
+   Beantworte VOR dem Commit laut: *"Für welche geänderten Dateien habe ich die Wiki aktualisiert?"* – mindestens eine Antwort pro geändertem System.
 
 6. **Git Commit (Sauberer Cut):**
+   - *(Nur ausführen nachdem Schritt 5 vollständig abgearbeitet wurde!)*
    - Führe `git add .` aus.
    - Führe einen `git commit -m "core: gd-<version> changelog + session changes (<Kurze Zusammenfassung>)"` aus.
    - Dies sorgt für den sauberen Cut, wie vom User gewünscht.

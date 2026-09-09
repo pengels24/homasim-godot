@@ -106,6 +106,12 @@ func _ready() -> void:
 	var room_menu_scene = preload("res://scenes/ingame/hud/modals/RoomContextMenu.tscn")
 	var room_menu_instance = room_menu_scene.instantiate()
 	add_child(room_menu_instance)
+	
+	# Feature: Klick auf Event-Indikator → Kamera springt zum Tagungsraum
+	# event_indicator muss ein Control sein (mouse_filter != IGNORE), damit gui_input feuert.
+	if is_instance_valid(event_indicator) and event_indicator is Control:
+		event_indicator.mouse_filter = Control.MOUSE_FILTER_STOP
+		event_indicator.gui_input.connect(_on_event_indicator_clicked)
 
 # =============================================================================
 func _on_tech_unlocked(tech_id: String) -> void:
@@ -443,10 +449,24 @@ func update_state_visuals() -> void:
 				col = Color(0.8, 0.5, 0.1) # Orange für City-Events
 			
 			if is_instance_valid(event_name_label):
+				# Timer-Suffix: zeige Restzeit bis Ende der Tagungssession
+				var timer_suffix := ""
+				if TimeManager and EventManager.active_conferences.size() > 0:
+					var now := TimeManager.get_game_time()  # Minuten seit Mitternacht
+					var end_min := 1020  # 17:00 (Nachmittag-Ende)
+					if now < 720:        # Vor 12:00 → Morgensession endet um 12:00
+						end_min = 720
+					var remaining := max(0, end_min - now)
+					var h := remaining / 60
+					var m := remaining % 60
+					if h > 0:
+						timer_suffix = " (%dh%02dm)" % [h, m]
+					else:
+						timer_suffix = " (%dmin)" % m
 				if names.size() > 1:
-					event_name_label.text = "%d Events" % names.size()
+					event_name_label.text = "%d Events%s" % [names.size(), timer_suffix]
 				else:
-					event_name_label.text = names[0] if names.size() > 0 else "Event"
+					event_name_label.text = (names[0] if names.size() > 0 else "Event") + timer_suffix
 			if is_instance_valid(event_color):
 				if event_color is ColorRect:
 					event_color.color = col
@@ -538,4 +558,48 @@ func _get_action_key_string(action_name: String) -> String:
 				txt = translated
 			return "(" + txt + ")"
 	return ""
+
+
+# =============================================================================
+## Klick auf Event-Indikator → Kamera springt zum aktiven Tagungsraum.
+func _on_event_indicator_clicked(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		_jump_to_conference_room()
+		get_viewport().set_input_as_handled()
+
+
+# =============================================================================
+## Springt die Kamera zum ersten aktiven Tagungsraum (wie F4-Raumliste "Gehe zu Raum").
+func _jump_to_conference_room() -> void:
+	if not EventManager or EventManager.active_conferences.is_empty():
+		return
+	
+	# Aktiven Tagungsraum in der Szene suchen (via room_type_id + room_key Matching)
+	var target_room: Node2D = null
+	for room in get_tree().get_nodes_in_group("placed_rooms"):
+		var rtype: String = room.get("room_type_id") if room.get("room_type_id") != null else ""
+		if rtype.begins_with("conference_"):
+			var rkey: String = GuestManager._room_key(room)
+			if EventManager.active_conferences.has(rkey):
+				target_room = room
+				break
+	
+	if not is_instance_valid(target_room):
+		return
+	
+	# Kamera-Position: Raum-Mittelpunkt (identisch zu F4-Raumliste)
+	var target_pos: Vector2 = target_room.global_position
+	if target_room.has_method("get_tile_size"):
+		var tile_size = target_room.get_tile_size()
+		target_pos += Vector2(tile_size.x, tile_size.y) * 16.0 * 0.5 * target_room.global_scale
+	
+	var cam = get_viewport().get_camera_2d()
+	if not is_instance_valid(cam):
+		return
+	
+	var tween = get_tree().create_tween()
+	tween.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween.set_parallel(true)
+	tween.tween_property(cam, "global_position", target_pos, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(cam, "zoom", Vector2(4, 4), 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 

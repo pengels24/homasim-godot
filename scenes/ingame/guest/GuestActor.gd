@@ -1164,6 +1164,12 @@ func complete_checkout(spawn_pos: Vector2) -> void:
 ## Wird um 22:00 Uhr aufgerufen: Gast kehrt aus POI ins Zimmer zurück
 func send_back_to_room() -> void:
 	if current_state in [State.IN_POI, State.STUDYING_MENU, State.WAITING_FOR_FOOD, State.EATING]:
+		# Sitz im aktuellen POI freigeben bevor wir weglaufen (verhindert Ghost-Seats)
+		if not _current_poi_id.is_empty():
+			var poi_node = _get_poi_room_node(_current_poi_id)
+			if is_instance_valid(poi_node) and poi_node.has_method("release_interaction"):
+				poi_node.release_interaction(_guest_member.id)
+		_has_claimed_seat = false
 		_walk_to_room(_target_room, State.IN_ROOM)
 
 

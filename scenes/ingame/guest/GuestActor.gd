@@ -584,9 +584,15 @@ func _decide_next_action() -> void:
 	if is_instance_valid(_target_room):
 		possible_targets.append("room")
 	else:
-		# TG-Gast ohne Zimmer: nach Gastro direkt zum Checkout, nicht in Lobby-Wander-Loop
-		start_checkout()
-		return
+		# TG-Gast ohne Zimmer: nur zum Checkout wenn Tagung wirklich beendet (event_poi_id leer)
+		var _p_tg = _get_my_party()
+		if is_instance_valid(_p_tg) and _p_tg.event_poi_id == "":
+			# Tagung vorbei → direkt zum Checkout, nicht in Lobby-Wander-Loop
+			start_checkout()
+			return
+		else:
+			# Tagung läuft noch (oder kein Party-Objekt) → Lobby als Wartepunkt
+			possible_targets.append("lobby")
 		
 	possible_targets.append_array(open_pois)
 		

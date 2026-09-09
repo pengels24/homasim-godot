@@ -1167,7 +1167,7 @@ func complete_checkout(spawn_pos: Vector2) -> void:
 ## TG-Gäste (kein Hotelzimmer) werden automatisch ausgecheckt.
 func _auto_checkout_tg_guest() -> void:
 	# Kurz in der Lobby sichtbar warten, dann auto-abreisen
-	var wait_time := 1.5 / max(1.0, TimeManager.user_speed if TimeManager else 1.0)
+	var wait_time: float = 1.5 / max(1.0, TimeManager.user_speed if TimeManager else 1.0)
 	await get_tree().create_timer(wait_time).timeout
 	if is_instance_valid(self) and current_state == State.AWAITING_CHECKOUT:
 		complete_checkout(global_position)

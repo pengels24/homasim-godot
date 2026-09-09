@@ -156,11 +156,20 @@ func _on_party_moving_to_checkout(party: GuestParty, _room_id: String) -> void:
 ## Spieler hat Checkout bestätigt: Gast erscheint vor der Lobby und läuft raus.
 func _on_party_checked_out_physically(party: GuestParty) -> void:
 	var spawn_pos = _get_lobby_spawn_pos()
+	# Lobby-Rezeption-Waypoints nutzen (ReceptionX) – gleich wie start_waiting_in_lobby()
+	var lobby_room: Node2D = null
+	var entry_parcel: Node2D = _map_grid._grid[_map_grid._entry_plot.y][_map_grid._entry_plot.x]
+	if entry_parcel and entry_parcel.has_method("get_lobby"):
+		lobby_room = entry_parcel.get_lobby()
+	
 	for member in party.members:
 		var guest_id = member.id
 		var actor = _actors.get(guest_id, null)
 		if not is_instance_valid(actor):
-			# Gast hatte keinen Actor (z.B. nach Reload und er stand im Checkout)
+			# Spawn-Position: ReceptionX-Waypoint der Lobby (wie ankommende Gäste)
+			if is_instance_valid(lobby_room) and lobby_room.has_method("get_checkout_wait_pos"):
+				var reception_pos = lobby_room.get_checkout_wait_pos(member.party_id)
+				spawn_pos = reception_pos + Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
 			actor = _create_actor(member, party.room_id, null)
 		
 		if is_instance_valid(actor):

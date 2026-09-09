@@ -166,6 +166,25 @@ var _phase: String = "idle"  # idle / wander / session / break / wander_pm / ses
 func _ready() -> void:
 	super._ready()
 	TimeManager.sig_minute_passed.connect(_on_minute_passed)
+	# Phase nach Reload korrekt initialisieren (sig_minute_passed liefert keine vergangenen Events)
+	_init_phase_from_time.call_deferred()
+
+func _init_phase_from_time() -> void:
+	if _phase != "idle":
+		return
+	var t := TimeManager.get_game_time() if TimeManager else 0
+	if t < TIME_SESSION_START:
+		_phase = "wander"
+	elif t < TIME_BREAK_START:
+		_phase = "session"
+	elif t < TIME_BREAK_END:
+		_phase = "break"
+	elif t < TIME_SESSION_PM_START:
+		_phase = "wander_pm"
+	elif t < TIME_END:
+		_phase = "session_pm"
+	else:
+		_phase = "end"
 
 func _on_minute_passed(total_game_minutes: int) -> void:
 	# Speaker-Swap nur während aktiver Sessions
@@ -345,16 +364,21 @@ func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 	var res = super.claim_interaction(actor_id, interaction_id)
 	if res.is_empty():
 		return res
-		
+	
 	if interaction_id.begins_with("seat_"):
 		var idx = interaction_id.replace("seat_", "").to_int()
 		var s = _room_seats[idx]
+		# Konferenz-Sitze: Gaeste bleiben bis Swap oder Session-Ende (kein 10-20 Min Zucken)
+		res["duration"] = 999.0
 		if s["node"].name == "ChairSpeaker":
 			_speaker_id = actor_id
 			_designated_speaker_id = actor_id
 			_speaker_time = 0
-			
-		# Blickrichtung für ALLE Sitze: immer zum Speakertable
+			# Phase sicherstellen falls noch idle (Reload-Fallback)
+			if _phase == "idle":
+				_init_phase_from_time()
+		
+		# Blickrichtung fuer ALLE Sitze: immer zum Speakertable
 		var is_portrait := room_rotation % 2 == 1
 		var root = get_node_or_null("Portrait/Interior") if is_portrait else get_node_or_null("Landscape/Interior")
 		if root:

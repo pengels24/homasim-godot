@@ -929,6 +929,7 @@ func _on_poi_arrived() -> void:
 	
 	# Sitzplatz claimen (alle Räume sind Smart Rooms)
 	var seat_pos = Vector2.ZERO
+	var was_fresh_claim := false  # true = echter Erstbesuch (nicht Pause-Rueckkehr)
 	if is_instance_valid(room_node) and room_node.has_method("get_available_interactions") and room_node.has_method("claim_interaction"):
 		if not _has_claimed_seat:
 			var avail = room_node.get_available_interactions(self)
@@ -938,6 +939,7 @@ func _on_poi_arrived() -> void:
 				if claim_result.has("target_pos"):
 					seat_pos = claim_result.target_pos
 					_has_claimed_seat = true
+					was_fresh_claim = true
 					# Timer aus claim_result setzen damit Gast NICHT sofort weiterwechselt
 					var dur = claim_result.get("duration", randf_range(15.0, 30.0))
 					_action_timer = dur * (TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 4.0)
@@ -976,20 +978,21 @@ func _on_poi_arrived() -> void:
 			spawn_pos = room_node.global_position + Vector2(sz.x * 16.0, sz.y * 16.0)
 		sig_poi_income.emit(income, spawn_pos)
 
-	# EXP pro POI-Besuch vergeben (wenn definiert)
-	var visit_exp: int = poi_def.get("visit_exp", 0)
-	if visit_exp > 0:
-		GameState.add_exp(visit_exp)
-		var spawn_pos = global_position
-		if EffectManager: EffectManager.spawn_exp_text(visit_exp, spawn_pos)
+	# EXP und Quest-Trigger NUR beim echten Erstbesuch (nicht bei Pause-Rueckkehr)
+	if was_fresh_claim:
+		var visit_exp: int = poi_def.get("visit_exp", 0)
+		if visit_exp > 0:
+			GameState.add_exp(visit_exp)
+			var spawn_pos = global_position
+			if EffectManager: EffectManager.spawn_exp_text(visit_exp, spawn_pos)
 
-	# GuestManager über Besuch informieren (für Warenverbrauch-Tracking)
-	if is_instance_valid(_guest_manager):
-		var room_id = _get_poi_room_id(_current_poi_id)
-		_guest_manager.on_poi_visited(room_id)
-		
-	if QuestManager and QuestManager.has_method("on_poi_used"):
-		QuestManager.on_poi_used(_current_poi_id)
+		# GuestManager über Besuch informieren (für Warenverbrauch-Tracking)
+		if is_instance_valid(_guest_manager):
+			var room_id = _get_poi_room_id(_current_poi_id)
+			_guest_manager.on_poi_visited(room_id)
+			
+		if QuestManager and QuestManager.has_method("on_poi_used"):
+			QuestManager.on_poi_used(_current_poi_id)
 
 	# Gast zum Sitzplatz schicken (is_gastro() bestimmt ob danach STUDYING_MENU kommt)
 	if seat_pos != Vector2.ZERO and seat_pos != Vector2.INF:

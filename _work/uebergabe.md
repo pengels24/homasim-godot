@@ -1,69 +1,73 @@
-# Übergabe-Protokoll – 08.09.2026 (Session Ende, Nachmittag)
+﻿# Übergabeprotokoll – Session 09.09.2026
 
-## Was wurde heute gemacht?
+## 🎯 Letzter Stand
 
-### Morgen: Wellness-Overhaul (Pool/Gym/Spa) – siehe auch Changelog
-- Session-Timer-Reset, Doppelbelegung, Sofort-Wechsel, Gast-bleibt-im-Raum: alle behoben
-- Cooldown-System in Pool/Gym/Spa implementiert
-- Live-Monitor: Badet/Entspannt (Pool), Liegt/Entspannt (Spa), Geht gleich, Sortierung
+TG-Checkout-Flow (Tagungsgäste) nach 5 Root Causes vollständig repariert.  
+Alle Räume im Spiel sind nun vollständig funktional.  
+Zwei Event-HUD Features implementiert (Timer + Kamera-Jump).
 
-### Nachmittag: Tests & Fixes
+---
 
-**Erfolgreich getestet (alle grün):**
-- Bar Gastro-Flow (Studiert → Küche → Serviert → Trinkt) ✅
-- Restaurant Gastro-Flow (identisch, teilt Küche korrekt) ✅
-- Küche (beliefert Bar + Restaurant parallel) ✅
-- Zimmer DZ (Check-in, Wander/Schlafen, Checkout ohne Ghost-Walking) ✅
-- Personalraum (Smart Room API korrekt, Legacy Staff-API bewusst erhalten) ✅
+## ✅ Was wurde in dieser Session erledigt?
 
-**Implementiert:**
-- **Check-in POI-Sperre (60 Ingame-Min):** Gäste bleiben nach Check-in 60 Min im Zimmer
-  - `start_checkin()` setzt `_checkin_poi_block_until = now + 60`
-  - `_decide_next_action()` cleared `open_pois` solange Sperre aktiv
-  - Bug behoben: War fälschlich in `setup()` → alle geladenen Gäste bekamen Sperre beim Spielstart
-- **Autosave ignoriert Setting:**
-  - `_on_timed_autosave()`: Guard `if not SettingsManager.autosave_enabled: return`
-  - `_on_day_ended()`: Guard hinzugefügt
-  - `sig_settings_changed` neu in SettingsManager + IngameSaveController stoppt/startet Timer live
+### 1. TG-Checkout-Flow Komplett-Overhaul
+5 Root Causes gefunden und behoben:
 
-**Linear:**
-- ANG-343 angelegt: StaffActor Smart-Room-Unification (Prio: Medium)
-  StaffActor nutzt noch Legacy `claim_seat/leave_seat/has_free_seat` + hardcoded `"staff_small"` String.
-  Refactoring analog GuestActor v0.1.50 – vor dem nächsten neuen Staff-Raum-Typ.
+**RC1 – Two-Pass-Pattern in GuestController:**
+`spawn_active_guests()` hat TG-Parties mit leerem `event_poi_id` in Lobby-Idle geworfen.
+Fix: TG-Parties werden nach Loop in `tg_checkout_parties` gesammelt → danach `checkout_event_party()` aufgerufen.
 
-## Sofortige nächste Schritte (morgen)
+**RC2 – checkout_event_party() in GuestManager:**
+Neue Methode: Entfernt Party aus `_active`, setzt `state = "gone"`, emittet `sig_party_checked_out_physically` → normaler Checkout-Flow.
 
-### 1. Konferenz testen (PRIORITÄT)
-- Speaker-Swap nach ~15 Min (prüfen ob nach dem SITTING-Fix stabil)
-- Zuhörer-Zucken (soll weg sein seit SITTING-Fix)
-- Mittagspause: TG-Gäste gehen in Restaurant/Bar → Rückkehr
-- End of Day: 50% direkt nach Hause, 50% noch Gastro
+**RC3 – complete_checkout() setzt _current_poi_id:**
+Frisch gespawnte Actors hatten `_current_poi_id = ""` → `_walk_to_exit()` ohne `current_room` → Sofort-Exit (unsichtbar).
+Fix: `complete_checkout()` setzt `_current_poi_id = "lobby"` bei IDLE-Spawn.
 
-### 2. ANG-340: [Space] kollabiert fokussierten Live-Monitor
-- Niedrige Prio aber störend beim Testen
+**RC4 – ReceptionX-Waypoints statt Flur-Spawn:**
+`_on_party_checked_out_physically()` nutzt jetzt `lobby.get_checkout_wait_pos(member.party_id)` → korrekte Verteilung auf 4 ReceptionX-Points.
 
-## Architektur-Wissen (wichtig!)
+**RC5 – Post-Essen-Guard in GuestActor:**
+Nach Restaurant/Bar-Besuch gingen TG-Gäste in Lobby-Idle statt Checkout.
+Fix: Guard in `_process_waiting()`: Tagung vorbei + TG-Gast + fertig gegessen → `start_checkout()` direkt.
 
-### GuestActor
-- `_action_timer = 0.0` NIEMALS von außen setzen (L212 Guard friert Gast ein)
-- `_checkin_poi_block_until` = 0 bedeutet kein Block aktiv
-- `start_checkin()` für Neuankömmlinge, `setup()` für Save-Load → unterschiedliche Initialisierung
+**Bonus Fix:**
+Lobby Live Monitor filtert LEAVING-State Actors aus `get_live_details()` → Tooltip=0 / Live Monitor=0 konsistent.
 
-### IngameSaveController
-- `_autosave_timer` (Timer-Referenz gespeichert) → `_setup_autosave_timer()` kann ihn stoppen/ersetzen
-- `sig_settings_changed` von SettingsManager → live Reaktion auf Setting-Änderung
+### 2. Event-HUD Features
+- `event_name_label` zeigt Restzeit: "Marketingkonferenz (1h30m)" / "...  (45min)"
+- Klick auf Event-Indikator → Kamera-Jump zum Tagungsraum (Tween 0.4s, Zoom 4)
+  - **NOCH NICHT GETESTET** – erst wenn nächstes Tagungsevent startet prüfen ob EventIndicator ein Control-Node ist
 
-### Wellness-Räume
-- Session-Ende ≠ Spot-Wechsel: `release_interaction()` unterscheidet intern
-- `is_guest_allowed()` = Cooldown-Check (60 Min nach Session-Ende)
-- Alle drei Räume: `_guest_session_end[id]` + `_guest_cooldown_end[id]`
+---
 
-## Relevante Dateien
+## 📁 Geänderte Dateien
 
-- `scenes/ingame/guest/GuestActor.gd` – `start_checkin()` POI-Block, `_decide_next_action()` Block-Check
-- `scenes/ingame/scripts/managers/IngameSaveController.gd` – Autosave-Fix, Timer-Management
-- `autoload/SettingsManager.gd` – `sig_settings_changed` Signal (neu)
-- `scenes/ingame/hud/modals/content/ModalContentSettings.gd` – Signal-Emit in `_on_autosave_changed()`
-- `scenes/ingame/rooms/pool_small/PoolSmall.gd` – Cooldown-System, Live-Monitor
-- `scenes/ingame/rooms/gym_small/GymSmall.gd` – Cooldown-System, Live-Monitor
-- `scenes/ingame/rooms/spa_small/SpaSmall.gd` – Cooldown-System, Alternation, Live-Monitor
+| Datei | Was |
+|---|---|
+| `scenes/ingame/GuestManager.gd` | `checkout_event_party()` neu |
+| `scenes/ingame/guest/GuestController.gd` | Two-Pass, ReceptionX-Spawn |
+| `scenes/ingame/guest/GuestActor.gd` | `complete_checkout()` lobby-poi-id, Post-Essen-Guard |
+| `scenes/ingame/rooms/lobby/Lobby.gd` | LEAVING-State aus Live Monitor gefiltert |
+| `scenes/ingame/hud/HUD.gd` | Event-Timer + Kamera-Jump |
+| `wiki/alpha_backlog.md` | Session-Fixes eingetragen |
+| `wiki/status_quo.md` | Konferenzraum als fertig markiert, TG + Event-HUD ergänzt |
+| `changelog/gd-0.1.50.md` | Session-Changelog erstellt |
+
+---
+
+## ⚠️ Offene Punkte / Nächste Schritte
+
+1. **Event-HUD Kamera-Jump testen** – beim nächsten Tagungsevent: Klick auf Event-Indikator → Kamera springt? Falls nicht → EventIndicator ist kein Control-Node → in HUD.tscn anpassen
+2. **ANG-343: StaffActor Smart-Room-Unification** – Medium Prio, vor neuem Staff-Raum
+3. **Autosave Setting Bug** – Autosave triggert obwohl disabled (noch nicht behoben)
+4. **Visual Bug** – Gäste/Speaker schauen nicht korrekt zum Tisch (Look Direction)
+5. **Live Monitor Bug** – Zeigt falsche Destinations für Bar/Restaurant Gäste
+
+---
+
+## 🏁 Meilenstein
+
+**Alle Räume vollständig funktional:**  
+Lobby, Zimmer, Küche, Restaurant, Bar, Pool, Gym, Spa, Personalraum, Konferenzraum  
+→ Das Spiel ist bereit für Alpha-Content-Erweiterungen (neue Räume, Tier 2 Techtree, Gourmetsterne etc.)

@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.50 | Stand: 08.09.2026
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.50 | Stand: 09.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -87,6 +87,17 @@
 - ✅ **Check-in POI-Sperre (60 Ingame-Min):** Nach echtem Check-in bleiben Gäste im Zimmer. Fix: in `start_checkin()` statt `setup()` gesetzt (Save-Load-Bug)
 - ✅ **Autosave ignoriert Setting:** Dreifacher Guard + `sig_settings_changed` → Timer stoppt/startet live bei Einstellungsänderung
 - 🔧 **ANG-343 angelegt: StaffActor Smart-Room-Unification** (Prio: Medium, vor neuem Staff-Raum umsetzen)
+- ✅ **TG-Checkout-Flow Komplett-Overhaul (09.09.2026):**
+  - `GuestController.spawn_active_guests()`: Two-Pass-Pattern – TG-Gäste nach Tagungsende werden gesammelt und NACH dem Loop via `checkout_event_party()` sauber ausgecheckt (kein Array-Modification-Bug)
+  - `GuestManager.checkout_event_party()`: Neue Methode – entfernt Party aus `_active`, setzt `state = "gone"`, emittet `sig_party_checked_out_physically` → normaler Checkout-Flow greift
+  - `GuestActor.complete_checkout()`: Setzt `_current_poi_id = "lobby"` bei Reload-Spawn, damit `_walk_to_exit()` via Smart-Room-Navigation einen korrekten lokalen Pfad durch die Lobby generiert (verhindert unsichtbaren Sofort-Exit)
+  - Spawn an korrekten `ReceptionX`-Waypoints (`lobby.get_checkout_wait_pos()`) statt generischem Lobby-Spawn
+  - Guard in `GuestActor`: Nach dem Essen → direkt `start_checkout()` wenn Tagung vorbei (kein Idle in Lobby)
+  - Lobby Live Monitor filtert LEAVING-State aus → Tooltip (0) und Live Monitor (0) konsistent, kein "Tooltip=0 / LiveMon=12" Verwirrung
+- ✅ **Event-HUD Features (09.09.2026):**
+  - `HUD.gd`: `event_name_label` zeigt Restzeit der Tagungssession als Countdown (z.B. "Marketingkonferenz (1h30m)")
+  - `HUD.gd`: Klick auf Event-Indikator → Kamera springt smooth (Tween 0.4s, Zoom 4) zum aktiven Tagungsraum – identisch F4-Raumliste
+  - Erfordert: `EventIndicator` im HUD muss ein Control-Node sein (gui_input Hook)
 
 ## 🧱 Phase 1 – Fundament (v0.1.40–41)
 *Zuerst, weil alles andere darauf aufbaut.*

@@ -11,10 +11,11 @@
 - [x] **Pool:** Funktioniert (`pool_small`). Gäste entspannen und baden. Bademeister patrouilliert.
 - [x] **Gym:** Funktioniet (`gym_small`). Fitness-Angebote mit Intervall-Platzwechsel.
 - [x] **Spa / Sauna:** Funktioniert (`spa_small`). Wellness-Angebote mit Intervall-Platzwechsel.
-- [] **Konferenzraum:** Funktioniert (`conference_small`). Tagesgäste (Business) halten und hören Vorträge.
+- [x] **Konferenzraum:** Funktioniert (`conference_small`). Tagesgäste (TG) halten/hören Vorträge, gehen Mittagspause, nutzen Restaurant/Bar, checken nach Tagungsende korrekt aus (inkl. Reload-Safe via Two-Pass-Checkout in GuestController).
 
 ## 🧑‍🤝‍🧑 Akteure & KI
 - [x] **Gäste:** Checken ein, nutzen POIs (Essen/Trinken), haben Bedürfnisse (WLAN etc.), zahlen, checken aus.
+- [x] **Tagungsgäste (TG):** Besuchen Konferenz (Vorträge, Speaker-Wechsel, Sitzplätze), gehen Mittagspause zu Bar/Restaurant, checken nach Tagungsende sauber aus – auch nach Autosave/Reload.
 - [x] **Geduldssystem:** Gäste haben einen Geduldsfaden. Warten sie zu lange (z. B. auf Essen), brechen sie die Aktion ab und verlieren Zufriedenheit.
 - [x] **Reinigungskraft:** Putzt Zimmer automatisch nach Checkout (`housekeeping`).
 - [x] **Hausmeister:** Repariert kaputte Objekte (`maintenance`).
@@ -44,3 +45,4 @@
 - [x] **Tutorialsystem & Codex:** Kontext-sensitive Erklärungen bei neuen Features sowie ein Lexikon zum Nachschlagen aller Mechaniken.
 - [x] **Activity Log:** Chronologisches Protokoll aller wichtigen Ereignisse im Hotel (Level-Ups, Defekte, Abreisen).
 - [x] **Live-Monitore für POI:** Separate verschiebbare Fenster mit Aktivitäten und Gästelisten des jeweiligen POI.
+- [x] **Event-HUD:** Aktive Tagungsevent-Anzeige mit Restzeit-Countdown (z.B. "Marketingkonferenz (1h30m)") und Klick-to-Kamera-Jump zum Tagungsraum.

@@ -504,32 +504,9 @@ func _process_idle() -> void:
 						_think_timer = 2.0
 						return
 				
-				# Barkeeper: immer am Tresen stehen bleiben
-				if get_job_type() == "bartender" and is_instance_valid(_current_room) and _current_room.has_method("get_bartender_stand_pos"):
-					var stand_pos = _current_room.get_bartender_stand_pos()
-					if global_position.distance_to(stand_pos) > 6.0:
-						if _current_room.has_method("get_local_path"):
-							var lp = _current_room.get_local_path(global_position, stand_pos)
-							if lp.size() > 0:
-								_world_path = lp
-								_target_world_pos = _world_path[0]
-								_set_state("walking")
-								_path = []
-						else:
-							# Fallback
-							_target_world_pos = stand_pos
-							_set_state("walking")
-							_path = [_target_world_pos]
-					else:
-						# Steht am Platz -> Rotiere in die gewünschte Richtung
-						if _current_room.has_method("get_bartender_look_dir"):
-							var dir = _current_room.get_bartender_look_dir()
-							_sprite.rotation = dir.angle() + PI / 2.0
-					_think_timer = 2.0
-				elif get_job_type() == "lifeguard" and is_instance_valid(_current_room):
-					var staff_interactions = []
-					if _current_room.has_method("get_available_staff_interactions"):
-						staff_interactions = _current_room.get_available_staff_interactions(self)
+				# Raum bietet spezifische Staff-Interaktionen (z.B. Bademeister-Hochsitz)
+				if is_instance_valid(_current_room) and _current_room.has_method("get_available_staff_interactions"):
+					var staff_interactions = _current_room.get_available_staff_interactions(self)
 					
 					var chair_interaction = null
 					for i in staff_interactions:
@@ -586,9 +563,11 @@ func _process_idle() -> void:
 					var wander_center = global_position
 					var max_radius = 16.0
 					
-					if get_job_type() == "waiter" and is_instance_valid(_current_room) and _current_room.has_method("get_waiter_stand_pos"):
-						wander_center = _current_room.get_waiter_stand_pos()
-						max_radius = 12.0
+					if is_instance_valid(_current_room) and _current_room.has_method("get_work_position"):
+						var wp := _current_room.get_work_position(get_staff_id())
+						if wp != Vector2.INF:
+							wander_center = wp
+							max_radius = 12.0
 					
 					var offset = Vector2(randf_range(-max_radius, max_radius), randf_range(-max_radius, max_radius))
 					var target = wander_center + offset

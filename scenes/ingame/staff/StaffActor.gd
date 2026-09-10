@@ -516,20 +516,22 @@ func _process_idle() -> void:
 							
 					# 70% Zeit auf Hochsitz sitzen, 30% Patrouille
 					if randf() < 0.7 and chair_interaction != null:
-						var chair_pos = chair_interaction.target_pos
-						if global_position.distance_to(chair_pos) > 16.0:
-							# Zum Hochsitz gehen
-							if _current_room.has_method("get_local_path"):
-								var lp = _current_room.get_local_path(global_position, chair_pos)
-								if lp.size() > 0:
-									_current_room.call("claim_interaction", get_staff_id(), chair_interaction.id)
-									_world_path = lp
-									_target_world_pos = _world_path[0]
-									_set_state("walking")
-									_path = []
+						var chair_pos: Vector2 = chair_interaction.target_pos
+						# Prüfen ob Weg zum Hochsitz gefunden wird (leerer Pfad = bereits nah genug)
+						var lp: Array[Vector2] = []
+						if global_position.distance_to(chair_pos) > 4.0 and _current_room.has_method("get_local_path"):
+							lp = _current_room.get_local_path(global_position, chair_pos)
+						
+						if lp.size() > 0:
+							# Anmarsch: Hochsitz ist erreichbar → hingehen
+							_current_room.call("claim_interaction", get_staff_id(), chair_interaction.id)
+							_world_path = lp
+							_target_world_pos = _world_path[0]
+							_set_state("walking")
+							_path = []
 						else:
-							# Sitzt schon dort – claim sicherstellen, leicht drehen
-							var claim = _current_room.call("claim_interaction", get_staff_id(), chair_interaction.id)
+							# Sitzt bereits / Nav-Pfad leer (zu nah) → Drehen & Warten
+							var claim := _current_room.call("claim_interaction", get_staff_id(), chair_interaction.id)
 							if typeof(claim) == TYPE_DICTIONARY and claim.has("look_at_dir"):
 								_sprite.rotation = claim.look_at_dir
 							else:

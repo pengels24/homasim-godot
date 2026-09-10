@@ -1,73 +1,50 @@
-﻿# Übergabeprotokoll – Session 09.09.2026
+# Übergabeprotokoll – Session 10.09.2026 (v0.1.51)
 
-## 🎯 Letzter Stand
+## Was war der letzte Stand?
 
-TG-Checkout-Flow (Tagungsgäste) nach 5 Root Causes vollständig repariert.  
-Alle Räume im Spiel sind nun vollständig funktional.  
-Zwei Event-HUD Features implementiert (Timer + Kamera-Jump).
+Alle Punkte getestet und committed. Session sauber abgeschlossen.
 
----
+## Bearbeitete Systeme
 
-## ✅ Was wurde in dieser Session erledigt?
+### ANG-340 ✅ (erledigt)
+- `RoomDetailsMonitor.tscn`: `BtnCollapse`, `BtnClose`, `ColorPickerButton` → `focus_mode = FOCUS_NONE`
+- Problem: Space-Taste kollabierte den fokussierten Live-Monitor
 
-### 1. TG-Checkout-Flow Komplett-Overhaul
-5 Root Causes gefunden und behoben:
+### ANG-343 ✅ (erledigt)
+- `StaffActor.gd`: 3 hardcodierte `get_job_type()`-Checks entfernt
+  - Bartender-Block (Dead Code) gelöscht – `Bar.gd` hatte `get_work_position()` + `get_work_look_dir()` schon
+  - Lifeguard-Guard → `has_method("get_available_staff_interactions")`
+  - Waiter-Wander → `get_work_position()` statt `get_waiter_stand_pos()`
+- **Getestet:** Bartender ✅, Waiter ✅, Lifeguard ✅
 
-**RC1 – Two-Pass-Pattern in GuestController:**
-`spawn_active_guests()` hat TG-Parties mit leerem `event_poi_id` in Lobby-Idle geworfen.
-Fix: TG-Parties werden nach Loop in `tg_checkout_parties` gesammelt → danach `checkout_event_party()` aufgerufen.
+### Bademeister Blickrichtung & Rotation ✅ (erledigt)
+- `PoolSmall.gd`: `claim_interaction()` Override
+  - `staff_seat_*` → Blickrichtung Hochsitz → `Chair4` (Pool-Mitte)
+  - Explizit typisiert (Godot Variant-Inference Fehler behoben)
+- `Room.gd`: Re-Claim-Support
+  - `get_available_staff_interactions()`: gibt auch eigenen bereits belegten Platz zurück (`occupied_by == staff_id`)
+  - `claim_interaction()` für `staff_seat_`: Re-Claim durch selben Actor erlaubt → gibt `look_at_dir` immer zurück
+- `StaffActor.gd`: Pfad-basierte sit-vs-walk Entscheidung
+  - `get_local_path().size() > 0` → laufen, sonst → Rotation setzen
+  - Threshold 8.0px (2 Grid-Zellen à 4px) vor Pfadsuche
 
-**RC2 – checkout_event_party() in GuestManager:**
-Neue Methode: Entfernt Party aus `_active`, setzt `state = "gone"`, emittet `sig_party_checked_out_physically` → normaler Checkout-Flow.
+## Sofortige nächste Schritte (für nächste Session)
 
-**RC3 – complete_checkout() setzt _current_poi_id:**
-Frisch gespawnte Actors hatten `_current_poi_id = ""` → `_walk_to_exit()` ohne `current_room` → Sofort-Exit (unsichtbar).
-Fix: `complete_checkout()` setzt `_current_poi_id = "lobby"` bei IDLE-Spawn.
+1. **Nächstes Ticket aus alpha_backlog.md prüfen** – `list` via Linear CLI
+2. **Noch zu testen:** Bademeister-Rotation über mehrere Patrouillenwechsel (wurde einmal bestätigt)
+3. **Offene Baustellen:**
+   - Camera/Look-Direction Event-Start (wurde heute nicht getestet – wartete auf Event)
+   - Nächstes ANG-Ticket nach Priorität im Backlog
 
-**RC4 – ReceptionX-Waypoints statt Flur-Spawn:**
-`_on_party_checked_out_physically()` nutzt jetzt `lobby.get_checkout_wait_pos(member.party_id)` → korrekte Verteilung auf 4 ReceptionX-Points.
+## Geänderte Dateien (Commit-Referenzen)
 
-**RC5 – Post-Essen-Guard in GuestActor:**
-Nach Restaurant/Bar-Besuch gingen TG-Gäste in Lobby-Idle statt Checkout.
-Fix: Guard in `_process_waiting()`: Tagung vorbei + TG-Gast + fertig gegessen → `start_checkout()` direkt.
-
-**Bonus Fix:**
-Lobby Live Monitor filtert LEAVING-State Actors aus `get_live_details()` → Tooltip=0 / Live Monitor=0 konsistent.
-
-### 2. Event-HUD Features
-- `event_name_label` zeigt Restzeit: "Marketingkonferenz (1h30m)" / "...  (45min)"
-- Klick auf Event-Indikator → Kamera-Jump zum Tagungsraum (Tween 0.4s, Zoom 4)
-  - **NOCH NICHT GETESTET** – erst wenn nächstes Tagungsevent startet prüfen ob EventIndicator ein Control-Node ist
-
----
-
-## 📁 Geänderte Dateien
-
-| Datei | Was |
+| Datei | Commits |
 |---|---|
-| `scenes/ingame/GuestManager.gd` | `checkout_event_party()` neu |
-| `scenes/ingame/guest/GuestController.gd` | Two-Pass, ReceptionX-Spawn |
-| `scenes/ingame/guest/GuestActor.gd` | `complete_checkout()` lobby-poi-id, Post-Essen-Guard |
-| `scenes/ingame/rooms/lobby/Lobby.gd` | LEAVING-State aus Live Monitor gefiltert |
-| `scenes/ingame/hud/HUD.gd` | Event-Timer + Kamera-Jump |
-| `wiki/alpha_backlog.md` | Session-Fixes eingetragen |
-| `wiki/status_quo.md` | Konferenzraum als fertig markiert, TG + Event-HUD ergänzt |
-| `changelog/gd-0.1.50.md` | Session-Changelog erstellt |
-
----
-
-## ⚠️ Offene Punkte / Nächste Schritte
-
-1. **Event-HUD Kamera-Jump testen** – beim nächsten Tagungsevent: Klick auf Event-Indikator → Kamera springt? Falls nicht → EventIndicator ist kein Control-Node → in HUD.tscn anpassen
-2. **ANG-343: StaffActor Smart-Room-Unification** – Medium Prio, vor neuem Staff-Raum
-3. **Autosave Setting Bug** – Autosave triggert obwohl disabled (noch nicht behoben)
-4. **Visual Bug** – Gäste/Speaker schauen nicht korrekt zum Tisch (Look Direction)
-5. **Live Monitor Bug** – Zeigt falsche Destinations für Bar/Restaurant Gäste
-
----
-
-## 🏁 Meilenstein
-
-**Alle Räume vollständig funktional:**  
-Lobby, Zimmer, Küche, Restaurant, Bar, Pool, Gym, Spa, Personalraum, Konferenzraum  
-→ Das Spiel ist bereit für Alpha-Content-Erweiterungen (neue Räume, Tier 2 Techtree, Gourmetsterne etc.)
+| `scenes/ingame/staff/StaffActor.gd` | eb79e25, cd8eaa2, 76067ea, cb944a6, b1ca19d |
+| `scenes/ingame/rooms/Room.gd` | 76067ea |
+| `scenes/ingame/rooms/pool_small/PoolSmall.gd` | eb79e25, 15e84dd, 76067ea |
+| `scenes/ingame/hud/modals/RoomDetailsMonitor.tscn` | (ANG-340, früherer Commit) |
+| `wiki/rooms/pool_small.md` | b2f224e |
+| `wiki/02_features/26_techdoku_staffactor.md` | b2f224e |
+| `changelog/gd-0.1.51.md` | b2f224e |
+| `wiki/alpha_backlog.md` | b2f224e |

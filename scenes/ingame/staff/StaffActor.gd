@@ -517,7 +517,7 @@ func _process_idle() -> void:
 					# 70% Zeit auf Hochsitz sitzen, 30% Patrouille
 					if randf() < 0.7 and chair_interaction != null:
 						var chair_pos = chair_interaction.target_pos
-						if global_position.distance_to(chair_pos) > 6.0:
+						if global_position.distance_to(chair_pos) > 16.0:
 							# Zum Hochsitz gehen
 							if _current_room.has_method("get_local_path"):
 								var lp = _current_room.get_local_path(global_position, chair_pos)

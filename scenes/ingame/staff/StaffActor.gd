@@ -531,7 +531,7 @@ func _process_idle() -> void:
 							_path = []
 						else:
 							# Sitzt bereits / Nav-Pfad leer (zu nah) → Drehen & Warten
-							var claim := _current_room.call("claim_interaction", get_staff_id(), chair_interaction.id)
+							var claim: Dictionary = _current_room.call("claim_interaction", get_staff_id(), chair_interaction.id)
 							if typeof(claim) == TYPE_DICTIONARY and claim.has("look_at_dir"):
 								_sprite.rotation = claim.look_at_dir
 							else:

@@ -1,5 +1,5 @@
 # TechDoku: GuestActor (Gäste-Verhalten)
-*Stand: v0.1.50 – 2026-09-07 (Smart-Room-Unification)*
+*Stand: v0.1.50 – 2026-09-10 (get_status_text, UI-Refactoring)*
 
 Der `GuestActor` steuert die visuelle und logische Repräsentation eines einzelnen Hotelgastes auf der Karte. Jeder `GuestActor` ist an ein `GuestMember`-Datenobjekt gekoppelt, welches die eigentlichen Werte (Sättigung, Geduld, Geldbeutel, Budget) hält.
 
@@ -14,11 +14,35 @@ Der `GuestActor` steuert die visuelle und logische Repräsentation eines einzeln
 - `IN_ROOM`: Im eigenen gebuchten Zimmer (Schlafen, Erholen).
 - `IN_POI`: In einem besuchbaren Raum (Lobby, Pool, Gym, Spa, Konferenz, etc.).
 - `SITTING`: Unterzustand für feste Platzbindung (z.B. Tagungsgast sitzt während Vortrag).
+- `SLEEPING`: Gast schläft im Zimmer.
 - `STUDYING_MENU`: Liest Speisekarte – wird von `is_gastro() == true` ausgelöst.
 - `WAITING_FOR_FOOD`: Hat bestellt, wartet auf Lieferung – Geduld sinkt.
 - `EATING`: Isst gerade – Sättigungsbalken steigt, Timer läuft.
+- `WAITING_IN_LINE`: Steht in einer Warteschlange (z.B. Snackautomat besetzt).
 - `AWAITING_CHECKOUT`: Steht in der Lobby, wartet auf Checkout.
 - `LEAVING`: Hat ausgecheckt, läuft zum Ausgang.
+
+## 2a. `get_status_text()` – Single Source of Truth (v0.1.50)
+
+> ⚠️ **Regel:** Alle Status-Texte für UI (Gästeliste F3, Tooltips, Detail-Panel) kommen **ausschließlich** aus `GuestActor.get_status_text()`. Nie direkt im UI-Code State-IDs prüfen!
+
+Gibt einen lokalisierten, lesbaren Kurztext zurück. Reihenfolge:
+
+| State(s) | Format | Beispiel |
+|---|---|---|
+| `AWAITING_CHECKOUT` | Translation-Key | `"Wartet auf Checkout"` |
+| `LEAVING` | Translation-Key | `"Reist ab"` |
+| `WALKING` (Checkout) | Translation-Key | `"Zur Rezeption"` |
+| `WALKING` (Raum) | `"Unterwegs (Raumnummer)"` | `"Unterwegs (Z0005)"` |
+| `IN_POI`-Gruppe | `"Raumname Raumnummer"` | `"Fitness-Studio W0003"` |
+| `IN_POI` vending_machine | `GameState.T("poi.vending_machine")` | `"Snack-Automat"` |
+| `IN_ROOM/SITTING/SLEEPING` | `"Raumtyp Raumnummer"` | `"Doppelzimmer Z0005"` |
+| `IDLE` / unbekannt | `"-"` | `"-"` |
+
+**Koordinaten-Fallback** (`type_x_y`): Wird immer unterdrückt (enthält `_`). Nur echte Raumnummern (Präfix + 4 Ziffern) werden angezeigt.
+
+**Neue States/Räume eintragen:** Nur `get_status_text()` in `GuestActor.gd` editieren – kein UI-Code anfassen.
+
 
 ## 3. _process_waiting – Architektur (v0.1.50)
 

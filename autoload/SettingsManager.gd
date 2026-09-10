@@ -62,7 +62,7 @@ var keybindings_config: Dictionary = {}
 const KEYBINDINGS_CONFIG_PATH := "res://config/keybindings.json"
 
 # ── Werte-Listen (für Slider-Positionen) ──────────────────────────────────────
-const AUTOSAVE_INTERVALS: Array[int]   = [5, 10, 15, 30]
+const AUTOSAVE_INTERVALS: Array[int]   = [0, 5, 10, 15, 30]
 var autosave_intervals_labels: Array[String]:
 	get:
 		return [GameState.T("settings.gameplay.autosave_interval.off"), GameState.T("settings.gameplay.autosave_interval.on", 5), GameState.T("settings.gameplay.autosave_interval.on", 10), GameState.T("settings.gameplay.autosave_interval.on", 15), GameState.T("settings.gameplay.autosave_interval.on", 30)]

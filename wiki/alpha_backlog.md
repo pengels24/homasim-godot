@@ -95,9 +95,25 @@
   - Guard in `GuestActor`: Nach dem Essen → direkt `start_checkout()` wenn Tagung vorbei (kein Idle in Lobby)
   - Lobby Live Monitor filtert LEAVING-State aus → Tooltip (0) und Live Monitor (0) konsistent, kein "Tooltip=0 / LiveMon=12" Verwirrung
 - ✅ **Event-HUD Features (09.09.2026):**
-  - `HUD.gd`: `event_name_label` zeigt Restzeit der Tagungssession als Countdown (z.B. "Marketingkonferenz (1h30m)")
+  - `HUD.gd`: `event_name_label` zeigt Restzeit der Tagungssession als Countdown (z.B. „Marketingkonferenz (1h30m)")
   - `HUD.gd`: Klick auf Event-Indikator → Kamera springt smooth (Tween 0.4s, Zoom 4) zum aktiven Tagungsraum – identisch F4-Raumliste
   - Erfordert: `EventIndicator` im HUD muss ein Control-Node sein (gui_input Hook)
+- ✅ **Autosave-Fix (10.09.2026):** `SettingsManager.gd` – Index-Offset korrigiert; Option „Aus" (0 Min) fehlte als erster Eintrag.
+- ✅ **HUD Timer Type-Fix (10.09.2026):** `HUD.gd` – `max()` durch `maxi()` ersetzt (Godot 4 Type-Inference-Bug).
+- ✅ **GuestActor `get_status_text()` – Single Source of Truth (10.09.2026):**
+  - Neue Methode kapselt alle 12 States (`WALKING`, `IN_POI`, `IN_ROOM`, `SITTING`, `SLEEPING`, `STUDYING_MENU`, `WAITING_FOR_FOOD`, `EATING`, `WAITING_IN_LINE`, `AWAITING_CHECKOUT`, `LEAVING`, `IDLE`).
+  - WALKING: zeigt Ziel-Raumnummer `"Unterwegs (Z0005)"`.
+  - IN_POI: kein `"in "` Präfix mehr; Koordinaten-Fallback-Keys unterdrückt.
+  - vending_machine: Sonderfall → `"Snack-Automat"` (DE) / `"Vending Machine"` (EN).
+  - IN_ROOM/SITTING/SLEEPING: zeigt Raumnummer (z.B. `"Doppelzimmer Z0005"`).
+  - **Architektur:** Neue States/Räume nur noch in `GuestActor.get_status_text()` eintragen – kein UI-Code mehr.
+- ✅ **Gästeliste (F3) UI-Overhaul (10.09.2026):**
+  - ~120 Zeilen duplizierter State-Checking-Code → 3 Zeilen `actor.get_status_text()`.
+  - Konsistente Spaltenbreiten (Header + Zeilen gleiche `stretch_ratio`).
+  - Textspalten linksbündig, Wertspalten (Budget, Sättigung, Zufr.) rechtsbündig.
+  - `clip_text` + `OVERRUN_TRIM_ELLIPSIS` auf Status-Spalte + sekündlich synchroner Tooltip.
+  - Header: „Zimmer" → „Raum", „Status" → „Status / Raum".
+  - `float` → `int` für alle Needs-Werte.
 
 ## 🧱 Phase 1 – Fundament (v0.1.40–41)
 *Zuerst, weil alles andere darauf aufbaut.*

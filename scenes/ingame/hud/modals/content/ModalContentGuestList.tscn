@@ -99,13 +99,14 @@ layout_mode = 2
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.0
+horizontal_alignment = 2
 text = "Budget"
 
 [node name="LblGoal" type="Label" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
 layout_mode = 2
 mouse_filter = 1
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 1.5
+size_flags_stretch_ratio = 2.0
 text = "Status"
 
 [node name="LblEnergy" type="Label" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
@@ -113,6 +114,7 @@ layout_mode = 2
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.0
+horizontal_alignment = 2
 text = "Sättigung"
 
 [node name="LblSatisfaction" type="Label" parent="HBoxContainer/LeftCol/TableHeaderPanel/MarginContainer/HBoxContainer"]
@@ -120,6 +122,7 @@ layout_mode = 2
 mouse_filter = 1
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.0
+horizontal_alignment = 2
 text = "Zufr."
 tooltip_text = "Zufriedenheit"
 

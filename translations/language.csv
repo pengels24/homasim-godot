@@ -1,4 +1,4 @@
-keys,de,en
+﻿keys,de,en
 game.title,HO·MA·SIM - Hotel Manager Simulation,HO·MA·SIM - Hotel Manager Simulation
 game.textlogo,HO·MA·SIM,HO·MA·SIM
 currency.symbol,€,€
@@ -708,9 +708,9 @@ guest.state.waiting,Wartet,Waiting
 ui.guest_list.please_select,Bitte wählen...,Please select...
 ui.room_list.please_select,Bitte wählen...,Please select...
 ui.guest_list.col.name,Name,Name
-ui.guest_list.col.room,Zimmer,Room
+ui.guest_list.col.room,Raum,Room
 ui.guest_list.col.budget,Budget,Budget
-ui.guest_list.col.status,Status,Status
+ui.guest_list.col.status,Status / Raum,Status / Room
 ui.guest_list.col.energy,Sättigung,Saturation
 ui.guest_list.col.satisfaction,Zufr.,Sat.
 ui.guest_list.tooltip.satisfaction,Zufriedenheit,Satisfaction
@@ -1618,7 +1618,7 @@ quest.guest.vip.10.name,Roter Teppich,Roter Teppich
 quest.guest.vip.10.desc,Beherberge insgesamt 10 VIP-Gäste.,Beherberge insgesamt 10 VIP-Gäste.
 quest.guest.vip.25.name,Sterne-Status,Sterne-Status
 quest.guest.vip.25.desc,Beherberge insgesamt 25 VIP-Gäste.,Beherberge insgesamt 25 VIP-Gäste.
-roomdef.name.long.vending_machine,Getr�nkeautomat,Vending Machine
+roomdef.name.long.vending_machine,Getr�nkeautomat,Vending Machine
 roomdef.name.short.vending_machine,Automat,Vending
 roomdef.name.long.lobby,Lobby,Lobby
 poi.restaurant.serving,Wird serviert,Being served
@@ -1633,6 +1633,7 @@ poi.conference.attending,Nimmt teil,Attending
 poi.conference.speaking,Spricht,Speaking
 poi.lobby.checking_out,Checkt aus,Checking out
 poi.lobby.vending,Holt einen Snack,Getting a snack
+poi.vending_machine,Snack-Automat,Vending Machine
 poi.lobby.sitting,Entspannt sich,Relaxing
 poi.lobby.eating_snack,Isst einen Snack,Eating a snack
 poi.conference.waiting,Wartet,Waiting

@@ -11,6 +11,57 @@ func get_state_name(s: int) -> String:
 		return keys[s]
 	return "UNKNOWN"
 
+
+# =============================================================================
+## Gibt eine lesbare Statusbeschreibung zurück (Single Source of Truth für UI).
+## Neue States oder POI-Typen HIER eintragen – nie in UI-Klassen!
+func get_status_text() -> String:
+	match current_state:
+		State.AWAITING_CHECKOUT:
+			return GameState.T("guest.tooltip.reception")
+		State.LEAVING:
+			return GameState.T("guest.tooltip.leaving")
+		State.WALKING:
+			if _is_checkout_walk:
+				return GameState.T("guest.tooltip.walking_reception")
+			var base := GameState.T("guest.tooltip.walking_room").replace(" (Zimmer)", "")
+			if is_instance_valid(_target_room) and _target_room.has_method("get_definition"):
+				# Nur Raumnummer zeigen (kürzer) – kein Typ-Name nötig
+				var rnum: String = str(_target_room.get("room_number") if _target_room.get("room_number") != null else "")
+				if rnum != "" and rnum != "null" and not rnum.contains("_"):
+					return "%s (%s)" % [base, rnum]
+				# Fallback: Typ-Name ohne Koordinaten-Key
+				var rname := GameState.T(_target_room.get_definition().get("name", ""))
+				return "%s (%s)" % [base, rname] if rname != "" else base
+			return base
+		State.IN_POI, State.STUDYING_MENU, State.WAITING_FOR_FOOD, State.EATING, State.WAITING_IN_LINE:
+			if _current_poi_id != "" and _map_grid:
+				# Spezialfall: vending_machine ist kein eigener Raum (Teil der Lobby)
+				if _current_poi_id == "vending_machine":
+					return GameState.T("poi.vending_machine")
+				var poi_name := _current_poi_id.capitalize()
+				var def := _get_poi_def(_current_poi_id)
+				if def.has("name"):
+					poi_name = GameState.T(def.get("name"))
+				var room_key := _get_poi_room_id(_current_poi_id)
+				# Koordinaten-Fallback (enthält "_") nicht anzeigen
+				if room_key != "" and room_key != "null" and not room_key.contains("_"):
+					return "%s %s" % [poi_name, room_key]
+				return poi_name
+			return GameState.T("guest.tooltip.room")
+		State.IN_ROOM, State.SITTING, State.SLEEPING:
+			if is_instance_valid(_target_room) and _target_room.has_method("get_definition"):
+				var rname := GameState.T(_target_room.get_definition().get("name", ""))
+				var rnum: String = str(_target_room.get("room_number") if _target_room.get("room_number") != null else "")
+				if rnum != "" and rnum != "null" and not rnum.contains("_"):
+					return "%s %s" % [rname, rnum] if rname != "" else rnum
+				return rname if rname != "" else GameState.T("guest.tooltip.room")
+			return GameState.T("guest.tooltip.room")
+		State.IDLE:
+			return "-"
+		_:
+			return "-"
+
 enum State { IDLE, WALKING, IN_ROOM, IN_POI, AWAITING_CHECKOUT, LEAVING, STUDYING_MENU, WAITING_FOR_FOOD, EATING, SITTING, SLEEPING, WAITING_IN_LINE }
 
 var current_state: State = State.IDLE

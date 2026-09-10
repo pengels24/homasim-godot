@@ -134,93 +134,63 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 	# Name
 	var lbl_name = Label.new()
 	lbl_name.text = member.name
+	lbl_name.clip_text = true
+	lbl_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	lbl_name.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lbl_name.size_flags_stretch_ratio = 2.0
 	lbl_name.add_theme_color_override("font_color", font_color)
 	
-	# Room
+	# Raum
 	var lbl_room = Label.new()
 	if party.room_id == "" and party.event_poi_id != "":
-		# Tagesgast für ein Event: lesbaren Namen anzeigen statt internem Schlüssel
 		lbl_room.text = "Tagesgast"
 	elif party.room_id != "":
 		lbl_room.text = party.room_id
 	else:
 		lbl_room.text = GameState.T("guest.state.waiting")
+	lbl_room.clip_text = true
 	lbl_room.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	lbl_room.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lbl_room.size_flags_stretch_ratio = 1.0
 	lbl_room.add_theme_color_override("font_color", font_color)
 	
-	# Budget (individuell pro Member)
+	# Budget (individuell pro Member) – rechtsbündig (Wert)
 	var lbl_budget = Label.new()
 	if member.daily_budget > 0:
 		lbl_budget.text = "%d %s" % [member.spending_budget, GameState.T("currency.symbol")]
 	else:
 		lbl_budget.text = "---"
-	lbl_budget.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	lbl_budget.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	lbl_budget.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lbl_budget.size_flags_stretch_ratio = 1.0
 	lbl_budget.add_theme_color_override("font_color", font_color)
 	
 	# Gather live data from actor if spawned
-	var actor = null
+	var actor: GuestActor = null
 	if _guest_controller and _guest_controller._actors.has(member.id):
 		actor = _guest_controller._actors[member.id]
-		
-	var goal_text = "---"
-	var energy_val = 100.0
 	
+	var goal_text := "---"
 	if actor:
-		var state = actor.get("current_state")
-		var _raw_poi = actor.get("_current_poi_id")
-		var poi_id = _raw_poi if _raw_poi != null else ""
-		var target_room = actor.get("_target_room")
-		
-		if state == 4: # AWAITING_CHECKOUT
-			goal_text = GameState.T("guest.tooltip.reception")
-		elif state == 5: # LEAVING
-			goal_text = GameState.T("guest.tooltip.leaving")
-		elif state == 1: # WALKING
-			if actor.get("_is_checkout_walk"):
-				goal_text = GameState.T("guest.tooltip.walking_reception")
-			else:
-				goal_text = GameState.T("guest.tooltip.walking_room").replace(" (Zimmer)", "")
-		elif poi_id != "": # Any POI state
-			var poi_name = poi_id.capitalize()
-			if actor.has_method("_get_poi_def"):
-				var poi_def = actor.call("_get_poi_def", poi_id)
-				if typeof(poi_def) == TYPE_DICTIONARY and poi_def.has("name"):
-					poi_name = GameState.T(poi_def.get("name"))
-			
-			var room_key = ""
-			if actor.has_method("_get_poi_room_id"):
-				room_key = actor.call("_get_poi_room_id", poi_id)
-				
-			if room_key != "" and room_key != "null":
-				goal_text = "in %s %s" % [poi_name, room_key]
-			else:
-				goal_text = "in %s" % poi_name
-		elif is_instance_valid(target_room) and target_room.has_method("get_definition"): # Any Room state
-			goal_text = target_room.get_definition().get("name", GameState.T("guest.tooltip.room"))
-		elif state == 2 or state == 9 or state == 10:
-			goal_text = GameState.T("guest.tooltip.room")
-		else:
-			goal_text = "-"
-			
-	# Goal (Status)
+		goal_text = actor.get_status_text()
+
+	# Status – linksbündig (Text), mit Clip + Ellipsis + Tooltip
 	var lbl_goal = Label.new()
 	lbl_goal.text = goal_text
+	lbl_goal.tooltip_text = goal_text
+	lbl_goal.clip_text = true
+	lbl_goal.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	lbl_goal.mouse_filter = Control.MOUSE_FILTER_PASS
 	lbl_goal.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	lbl_goal.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	lbl_goal.size_flags_stretch_ratio = 1.5
+	lbl_goal.size_flags_stretch_ratio = 2.0
 	lbl_goal.add_theme_color_override("font_color", font_color)
 	
-	# Energy -> Saturation
+	# Sättigung – rechtsbündig (Wert)
+	var energy_val: int = member.saturation if "saturation" in member else 100
 	var row_lbl_energy = Label.new()
-	energy_val = member.saturation if "saturation" in member else 100.0
-	row_lbl_energy.text = "%d%%" % int(energy_val)
-	row_lbl_energy.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	row_lbl_energy.text = "%d%%" % energy_val
+	row_lbl_energy.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	row_lbl_energy.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row_lbl_energy.size_flags_stretch_ratio = 1.0
 	if energy_val < 30:
@@ -228,11 +198,11 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 	else:
 		row_lbl_energy.add_theme_color_override("font_color", font_color)
 		
-	# Satisfaction
+	# Zufriedenheit – rechtsbündig (Wert)
+	var sat: int = party.satisfaction
 	var lbl_sat = Label.new()
-	var sat = party.satisfaction
-	lbl_sat.text = "%d%%" % int(sat)
-	lbl_sat.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	lbl_sat.text = "%d%%" % sat
+	lbl_sat.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	lbl_sat.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lbl_sat.size_flags_stretch_ratio = 1.0
 	if sat < 50:
@@ -241,6 +211,7 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 		lbl_sat.add_theme_color_override("font_color", Color("#366e4d"))
 	else:
 		lbl_sat.add_theme_color_override("font_color", font_color)
+
 		
 	hbox.add_child(lbl_name)
 	hbox.add_child(lbl_room)
@@ -293,41 +264,8 @@ func _on_guest_selected(party: GuestParty, member: GuestMember, _btn: Button) ->
 			detail_budget_val.text = "---"
 			detail_budget_val.remove_theme_color_override("font_color")
 		
-		var goal_text = "---"
-		var state = _selected_guest.get("current_state")
-		var _raw_poi = _selected_guest.get("_current_poi_id")
-		var poi_id = _raw_poi if _raw_poi != null else ""
-		var target_room = _selected_guest.get("_target_room")
-		
-		if state == 4:
-			goal_text = GameState.T("guest.tooltip.reception")
-		elif state == 5:
-			goal_text = GameState.T("guest.tooltip.leaving")
-		elif state == 1:
-			if _selected_guest.get("_is_checkout_walk"):
-				goal_text = GameState.T("guest.tooltip.walking_reception")
-			else:
-				goal_text = GameState.T("guest.tooltip.walking_room").replace(" (Zimmer)", "")
-		elif poi_id != "":
-			var poi_name = poi_id.capitalize()
-			if _selected_guest.has_method("_get_poi_def"):
-				var def = _selected_guest.call("_get_poi_def", poi_id)
-				if typeof(def) == TYPE_DICTIONARY and def.has("name"):
-					poi_name = GameState.T(def.get("name"))
-			
-			var room_key = ""
-			if _selected_guest.has_method("_get_poi_room_id"):
-				room_key = _selected_guest.call("_get_poi_room_id", poi_id)
-				
-			if room_key != "" and room_key != "null":
-				goal_text = "in %s %s" % [poi_name, room_key]
-			else:
-				goal_text = "in %s" % poi_name
-		elif is_instance_valid(target_room) and target_room.has_method("get_definition"):
-			goal_text = target_room.get_definition().get("name", GameState.T("guest.tooltip.room"))
-		elif state == 2 or state == 9 or state == 10:
-			goal_text = GameState.T("guest.tooltip.room")
-		detail_status_val.text = goal_text
+		detail_status_val.text = _selected_guest.get_status_text()
+
 		
 		_update_need_bar(need_hunger, lbl_hunger, GameState.T("need.hunger"), member.saturation)
 		_update_need_bar(need_thirst, lbl_thirst, GameState.T("need.thirst"), member.thirst)
@@ -382,59 +320,15 @@ func _refresh_live_data() -> void:
 		if _guest_controller._actors.has(member.id):
 			actor = _guest_controller._actors[member.id]
 			
-		var goal_text_short = "---"
-		var goal_text_long = "---"
-		var energy_val = member.saturation if "saturation" in member else 100.0
-		var sat = party.satisfaction
-		
+		var goal_text_short := "---"
+		var energy_val: int = member.saturation if "saturation" in member else 100
+		var sat: int = party.satisfaction
 		if actor:
-			var state = actor.get("current_state")
-			var _raw_poi = actor.get("_current_poi_id")
-			var poi_id = _raw_poi if _raw_poi != null else ""
-			var target_room = actor.get("_target_room")
-			
-			if state == 4: # AWAITING_CHECKOUT
-				goal_text_short = GameState.T("guest.tooltip.reception")
-				goal_text_long = goal_text_short
-			elif state == 5: # LEAVING
-				goal_text_short = GameState.T("guest.tooltip.leaving")
-				goal_text_long = goal_text_short
-			elif state == 1: # WALKING
-				if actor.get("_is_checkout_walk"):
-					goal_text_short = GameState.T("guest.tooltip.walking_reception")
-				else:
-					goal_text_short = GameState.T("guest.tooltip.walking_room").replace(" (Zimmer)", "")
-				goal_text_long = goal_text_short
-			elif poi_id != "":
-				var poi_name = poi_id.capitalize()
-				if actor.has_method("_get_poi_def"):
-					var def = actor.call("_get_poi_def", poi_id)
-					if typeof(def) == TYPE_DICTIONARY and def.has("name"):
-						poi_name = GameState.T(def.get("name"))
-				
-				var room_key = ""
-				if actor.has_method("_get_poi_room_id"):
-					room_key = actor.call("_get_poi_room_id", poi_id)
-					
-				if room_key != "" and room_key != "null":
-					goal_text_long = "in %s %s" % [poi_name, room_key]
-				else:
-					goal_text_long = "in %s" % poi_name
-				
-				goal_text_short = poi_name.split(" (")[0]
-				goal_text_short = "in %s" % goal_text_short
-			elif is_instance_valid(target_room) and target_room.has_method("get_definition"):
-				goal_text_short = target_room.get_definition().get("name", GameState.T("guest.tooltip.room"))
-				goal_text_long = goal_text_short
-			elif state == 2 or state == 9 or state == 10:
-				goal_text_short = GameState.T("guest.tooltip.room")
-				goal_text_long = goal_text_short
-			else:
-				goal_text_short = "-"
-				goal_text_long = "-"
-				
+			goal_text_short = actor.get_status_text()
+
 		row.lbl_goal.text = goal_text_short
-		row.lbl_energy.text = "%d%%" % int(energy_val)
+		row.lbl_goal.tooltip_text = goal_text_short
+		row.lbl_energy.text = "%d%%" % energy_val
 		if energy_val < 30:
 			row.lbl_energy.add_theme_color_override("font_color", Color("#b02e3b"))
 		else:
@@ -445,7 +339,7 @@ func _refresh_live_data() -> void:
 		else:
 			row.lbl_budget.text = "---"
 			
-		row.lbl_sat.text = "%d%%" % int(sat)
+		row.lbl_sat.text = "%d%%" % sat
 		if sat < 50:
 			row.lbl_sat.add_theme_color_override("font_color", Color("#b02e3b"))
 		elif sat > 80:
@@ -455,7 +349,8 @@ func _refresh_live_data() -> void:
 			
 		if _selected_guest and actor and _selected_guest == actor:
 			detail_satisfaction_val.text = "%d%%" % sat
-			detail_status_val.text = goal_text_long
+			detail_status_val.text = goal_text_short
+
 			if member.daily_budget > 0:
 				detail_budget_val.text = "%d / %d %s" % [member.spending_budget, member.daily_budget, GameState.T("currency.symbol")]
 			_update_need_bar(need_hunger, lbl_hunger, GameState.T("need.hunger"), member.saturation)

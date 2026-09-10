@@ -452,13 +452,13 @@ func update_state_visuals() -> void:
 				# Timer-Suffix: zeige Restzeit bis Ende der Tagungssession
 				var timer_suffix := ""
 				if TimeManager and EventManager.active_conferences.size() > 0:
-					var now := TimeManager.get_game_time()  # Minuten seit Mitternacht
-					var end_min := 1020  # 17:00 (Nachmittag-Ende)
+					var now: int = TimeManager.get_game_time()  # Minuten seit Mitternacht
+					var end_min: int = 1020  # 17:00 (Nachmittag-Ende)
 					if now < 720:        # Vor 12:00 → Morgensession endet um 12:00
 						end_min = 720
-					var remaining := max(0, end_min - now)
-					var h := remaining / 60
-					var m := remaining % 60
+					var remaining: int = maxi(0, end_min - now)
+					var h: int = remaining / 60
+					var m: int = remaining % 60
 					if h > 0:
 						timer_suffix = " (%dh%02dm)" % [h, m]
 					else:
@@ -602,4 +602,3 @@ func _jump_to_conference_room() -> void:
 	tween.set_parallel(true)
 	tween.tween_property(cam, "global_position", target_pos, 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	tween.tween_property(cam, "zoom", Vector2(4, 4), 0.4).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-

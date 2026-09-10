@@ -24,10 +24,13 @@ Die Methode `_process_idle()` ist das Gehirn des Angestellten. Sie triggert, wen
    Ist der Mitarbeiter z.B. Koch oder Bedienung und seinem Restaurant/Küche zugewiesen, prüft er über den `GastroManager`, ob es Bestellungen gibt, die zubereitet oder serviert werden müssen.
 3. **Globale Tasks (Putzen / Reparieren)**:
    Für Zimmermädchen (`cleaner`) oder Hausmeister (`handyman`) fragt der Actor beim `StaffController` nach dem nächsten freien Job. Der Controller verwaltet eine Liste an offenen Tasks (Dreckige Zimmer, kaputte Betten).
-4. **Patrouillen-Jobs (Bademeister)**:
-   Für Wellness-Bereiche (wie `pool_small`) wird der zugewiesene Mitarbeiter (z.B. Bademeister) nicht stationär an einem Tresen stehen, sondern auf Basis von Wegpunkten patrouillieren. Hierfür ruft er am zugewiesenen Raum `get_patrol_target()` ab, um einen sicheren Wegpunkt (z.B. nicht im Wasser) zu finden.
+4. **Smart-Room-Verhalten (ANG-343, seit v0.1.51 – keine hardcodierten `job_type`-Checks mehr!):**
+   - **Arbeitsposition:** `room.get_work_position(staff_id)` → Raum liefert Standplatz (Bartresen, Kellner-Mitte). Keine `if job_type == "bartender"` Checks mehr im Actor.
+   - **Blickrichtung:** `room.get_work_look_dir(staff_id)` → Raum liefert Richtungsvektor.
+   - **Wander-Center:** Beim Chill-Verhalten nutzt der Actor `get_work_position()` als Zentrum des Wander-Radius.
+   - **Staff-Interaktionen (Bademeister):** `room.get_available_staff_interactions(actor)` → Raum liefert Hochsitz-Positionen. 70% Hochsitz / 30% Patrouille. Sit vs. Walk: `get_local_path().size() > 0` (Pfad-basiert, Threshold 8px = 2 Grid-Zellen à 4px).
 5. **Feierabend / Warten**:
-   Gibt es absolut nichts zu tun, läuft der Mitarbeiter an seinen zugewiesenen Platz (z.B. hinter den Tresen der Bar) oder in die Lobby und wartet (`returning` -> `idle`).
+   Gibt es absolut nichts zu tun, läuft der Mitarbeiter an seinen zugewiesenen Platz (z.B. hinter den Tresen der Bar) oder in die Lobby und wartet (`returning` → `idle`).
 
 ## 4. Moral-System (Morale)
 Jeder Mitarbeiter hat einen `morale`-Wert (0–100).

@@ -48,6 +48,17 @@ Gäste besuchen den Pool und verbringen 1–3 Ingame-Stunden. Sie wechseln alle 
 - **Bademeister** (`required_role: lifeguard_chair`): Patrouilliert am Beckenrand via `get_patrol_target()`. Durchquert NICHT das Wasser.
 - Kein Bademeister → Pool gilt als nicht `is_functional()` → Gäste besuchen ihn nicht.
 
+### Bademeister-Hochsitz-Logik
+
+Der Bademeister nutzt den `ChairSpecial`-Node als Hochsitz. `PoolSmall.gd` überschreibt `claim_interaction()`:
+- Bei `staff_seat_*`-Interaktionen: Blickrichtung wird als Winkel von Hochsitz → **`Chair4`** (Pool-Mitte) berechnet und als `look_at_dir` zurückgegeben.
+- `StaffActor.gd` bestimmt mit `get_local_path().size() > 0` ob gelaufen wird oder ob direkt Rotation gesetzt wird (Nav-Snap-Robustheit, Threshold 8.0px = 2 Grid-Zellen).
+
+**Re-Claim Mechanismus (seit 10.09.2026):**
+- `Room.gd.get_available_staff_interactions()` gibt auch Plätze zurück, die der anfragende Actor selbst belegt → `occupied_by == "" or == staff_id`.
+- `Room.gd.claim_interaction()` für `staff_seat_` erlaubt Re-Claim durch denselben Actor → gibt immer `look_at_dir` zurück (kein leeres Dict).
+- Resultat: Rotation wird sowohl beim Erstbesuch als auch nach Patrouille korrekt gesetzt.
+
 ## 5. Live-Monitor
 
 ```

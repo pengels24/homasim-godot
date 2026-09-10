@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.50 | Stand: 09.09.2026
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.51 | Stand: 10.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -82,11 +82,12 @@
   - Wellness POI-Praeferenzen nach Gasttyp (70/30 preferred_pois/random)
   - Spot-Wechsel Alternation Pool/Spa (sit<->sleep), Spot-Timer auf 5-12 Min reduziert
   - Live-Monitor: Badet/Entspannt (Pool), Liegt/Entspannt (Spa), Geht gleich, Sortierung nach Restzeit
-- 🔧 **ANG-340 offen: [Space] kollabiert fokussierten Live-Monitor** (NICHT behoben, in Linear geloggt)
+- ✅ **ANG-340: [Space] kollabierte fokussierten Live-Monitor (10.09.2026):** `focus_mode = FOCUS_NONE` auf `BtnCollapse`, `BtnClose` und `ColorPickerButton` in `RoomDetailsMonitor.tscn`.
 - ✅ **Tests bestätigt (08.09.2026 Nachmittag):** Bar-Flow, Restaurant-Flow, Küche, Zimmer (DZ), Personalraum – alle grün
 - ✅ **Check-in POI-Sperre (60 Ingame-Min):** Nach echtem Check-in bleiben Gäste im Zimmer. Fix: in `start_checkin()` statt `setup()` gesetzt (Save-Load-Bug)
 - ✅ **Autosave ignoriert Setting:** Dreifacher Guard + `sig_settings_changed` → Timer stoppt/startet live bei Einstellungsänderung
-- 🔧 **ANG-343 angelegt: StaffActor Smart-Room-Unification** (Prio: Medium, vor neuem Staff-Raum umsetzen)
+- ✅ **ANG-343: StaffActor Smart-Room-Unification (10.09.2026):** 3 hardcodierte `get_job_type()`-Checks entfernt. Bartender-Block (Dead Code) gelöscht. Lifeguard-Guard → `has_method("get_available_staff_interactions")`. Waiter-Wander → `get_work_position()`. Getestet: Bartender ✅, Waiter ✅, Lifeguard ✅.
+- ✅ **Bademeister Blickrichtung & Rotation (10.09.2026):** `PoolSmall.claim_interaction` überschrieben → `look_at_dir` auf Chair4. `Room.gd` Re-Claim erlaubt (`occupied_by == actor_id`). StaffActor Pfad-basierte sit-vs-walk Entscheidung (lp.size() statt Distanz-Threshold). Threshold 8.0px (2×4px Grid).
 - ✅ **TG-Checkout-Flow Komplett-Overhaul (09.09.2026):**
   - `GuestController.spawn_active_guests()`: Two-Pass-Pattern – TG-Gäste nach Tagungsende werden gesammelt und NACH dem Loop via `checkout_event_party()` sauber ausgecheckt (kein Array-Modification-Bug)
   - `GuestManager.checkout_event_party()`: Neue Methode – entfernt Party aus `_active`, setzt `state = "gone"`, emittet `sig_party_checked_out_physically` → normaler Checkout-Flow greift

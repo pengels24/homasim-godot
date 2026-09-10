@@ -564,7 +564,7 @@ func _process_idle() -> void:
 					var max_radius = 16.0
 					
 					if is_instance_valid(_current_room) and _current_room.has_method("get_work_position"):
-						var wp := _current_room.get_work_position(get_staff_id())
+						var wp: Vector2 = _current_room.get_work_position(get_staff_id())
 						if wp != Vector2.INF:
 							wander_center = wp
 							max_radius = 12.0
@@ -1074,4 +1074,3 @@ func _process_working(delta: float, speed_mult: float) -> void:
 		# Prüfen ob es direkt noch einen weiteren Job gibt
 		_set_state("idle")
 		_process_idle()
-

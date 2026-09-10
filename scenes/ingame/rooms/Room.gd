@@ -230,11 +230,13 @@ func get_available_interactions(_actor: Node2D) -> Array[Dictionary]:
 	})
 	return interactions
 
-func get_available_staff_interactions(_actor: Node2D) -> Array[Dictionary]:
+func get_available_staff_interactions(actor: Node2D) -> Array[Dictionary]:
+	var staff_id: String = actor.get_staff_id() if actor.has_method("get_staff_id") else ""
 	var interactions: Array[Dictionary] = []
 	for i in range(_room_seats_staff_only.size()):
 		var s = _room_seats_staff_only[i]
-		if s["occupied_by"] == "":
+		# Freie Plätze UND der eigene bereits belegte Platz (für Re-Claim / Rotation nach Ankunft)
+		if s["occupied_by"] == "" or s["occupied_by"] == staff_id:
 			interactions.append({
 				"id": "staff_seat_" + str(i),
 				"type": "lifeguard",
@@ -274,7 +276,8 @@ func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 		var idx = interaction_id.replace("staff_seat_", "").to_int()
 		if idx >= 0 and idx < _room_seats_staff_only.size():
 			var s = _room_seats_staff_only[idx]
-			if s["occupied_by"] == "":
+			# Re-Claim durch denselben Actor erlauben (für Rotations-Update nach Ankunft)
+			if s["occupied_by"] == "" or s["occupied_by"] == actor_id:
 				s["occupied_by"] = actor_id
 				var look_dir = s["node"].global_rotation if "global_rotation" in s["node"] else (PI / 2.0)
 				return {

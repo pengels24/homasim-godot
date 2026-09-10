@@ -238,8 +238,14 @@ func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 	if interaction_id.begins_with("staff_seat_"):
 		var result := super.claim_interaction(actor_id, interaction_id)
 		if result.has("target_pos"):
-			var pool_center := get_service_position()
-			var dir := (pool_center - result["target_pos"]).normalized()
+			var pool_center: Vector2
+			var chair4 := get_node_or_null("Interior/Furniture/Chairs/Chair4")
+			if is_instance_valid(chair4):
+				pool_center = chair4.global_position
+			else:
+				pool_center = get_service_position() # Fallback
+			var chair_pos: Vector2 = result["target_pos"]
+			var dir: Vector2 = (pool_center - chair_pos).normalized()
 			result["look_at_dir"] = dir.angle() + PI / 2.0
 		return result
 

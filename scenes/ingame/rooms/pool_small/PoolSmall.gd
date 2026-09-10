@@ -147,6 +147,7 @@ func _apply_visuals() -> void:
 
 # =============================================================================
 
+# =============================================================================
 
 # =============================================================================
 # LIVE-MONITOR
@@ -233,7 +234,16 @@ func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 	return interactions
 
 func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
-	# Beim ersten Claim: Gesamtaufenthalt festlegen (60-180 Min, begrenzt auf Schliessung)
+	# Bademeister-Hochsitz: Blickrichtung zum Pool (ServicePoint) statt Stuhl-Rotation
+	if interaction_id.begins_with("staff_seat_"):
+		var result := super.claim_interaction(actor_id, interaction_id)
+		if result.has("target_pos"):
+			var pool_center := get_service_position()
+			var dir := (pool_center - result["target_pos"]).normalized()
+			result["look_at_dir"] = dir.angle() + PI / 2.0
+		return result
+
+	# Gäste: Beim ersten Claim Gesamtaufenthalt festlegen (60-180 Min, begrenzt auf Schliessung)
 	if not _guest_session_end.has(actor_id):
 		var stay_dur := randf_range(60.0, 180.0)
 		var def = get_definition()
@@ -248,7 +258,7 @@ func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 					stay_dur = 1.0
 		var now := TimeManager.get_game_time() if TimeManager else 0
 		_guest_session_end[actor_id] = now + int(stay_dur)
-	
+
 	# Spot-Wechsel-Timer: 5-12 Min fuer mehr Lebendigkeit
 	var spot_dur := randf_range(5.0, 12.0)
 	var result := super.claim_interaction(actor_id, interaction_id)

@@ -519,7 +519,7 @@ func _process_idle() -> void:
 						var chair_pos: Vector2 = chair_interaction.target_pos
 						# Prüfen ob Weg zum Hochsitz gefunden wird (leerer Pfad = bereits nah genug)
 						var lp: Array[Vector2] = []
-						if global_position.distance_to(chair_pos) > 4.0 and _current_room.has_method("get_local_path"):
+						if global_position.distance_to(chair_pos) > 8.0 and _current_room.has_method("get_local_path"):
 							lp = _current_room.get_local_path(global_position, chair_pos)
 						
 						if lp.size() > 0:

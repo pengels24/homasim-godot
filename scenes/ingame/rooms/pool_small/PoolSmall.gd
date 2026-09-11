@@ -7,7 +7,7 @@ static func get_definition() -> Dictionary:
 	
 	# Check for extended hours tech
 	var tm = Engine.get_main_loop().root.get_node_or_null("TechtreeManager")
-	if tm and tm.is_tech_unlocked("W1.5"): # Placeholder Tech ID für erweiterte Öffnungszeiten
+	if tm and tm.is_tech_unlocked("W1.4"): # Erweiterte Öffnungszeiten (Wellness-Paket)
 		open_f = 360 # 06:00
 		open_t = 1320 # 22:00
 

@@ -1,50 +1,49 @@
-# Übergabeprotokoll – Session 10.09.2026 (v0.1.51)
+﻿# Uebergabeprotokoll - Session 11.09.2026 (v0.1.51)
 
 ## Was war der letzte Stand?
 
-Alle Punkte getestet und committed. Session sauber abgeschlossen.
+Session sauber abgeschlossen. Ein einziger Bugfix, aber mit komplexer Root-Cause-Analyse.
+Alle Commits auf dev. Kein offener Dirty-State.
 
-## Bearbeitete Systeme
+## Bearbeitetes System
 
-### ANG-340 ✅ (erledigt)
-- `RoomDetailsMonitor.tscn`: `BtnCollapse`, `BtnClose`, `ColorPickerButton` → `focus_mode = FOCUS_NONE`
-- Problem: Space-Taste kollabierte den fokussierten Live-Monitor
+### Reachability-Check (Insel-Erkennung) - MapGrid.gd
 
-### ANG-343 ✅ (erledigt)
-- `StaffActor.gd`: 3 hardcodierte `get_job_type()`-Checks entfernt
-  - Bartender-Block (Dead Code) gelöscht – `Bar.gd` hatte `get_work_position()` + `get_work_look_dir()` schon
-  - Lifeguard-Guard → `has_method("get_available_staff_interactions")`
-  - Waiter-Wander → `get_work_position()` statt `get_waiter_stand_pos()`
-- **Getestet:** Bartender ✅, Waiter ✅, Lifeguard ✅
+Der Bau-Validierungscheck fuer raeumlich abgekappte Zimmer (get_placement_error) war
+seit seiner Einfuehrung dead code - zwei unabhaengige Bugs ueberlagerten sich:
 
-### Bademeister Blickrichtung & Rotation ✅ (erledigt)
-- `PoolSmall.gd`: `claim_interaction()` Override
-  - `staff_seat_*` → Blickrichtung Hochsitz → `Chair4` (Pool-Mitte)
-  - Explizit typisiert (Godot Variant-Inference Fehler behoben)
-- `Room.gd`: Re-Claim-Support
-  - `get_available_staff_interactions()`: gibt auch eigenen bereits belegten Platz zurück (`occupied_by == staff_id`)
-  - `claim_interaction()` für `staff_seat_`: Re-Claim durch selben Actor erlaubt → gibt `look_at_dir` immer zurück
-- `StaffActor.gd`: Pfad-basierte sit-vs-walk Entscheidung
-  - `get_local_path().size() > 0` → laufen, sonst → Rotation setzen
-  - Threshold 8.0px (2 Grid-Zellen à 4px) vor Pfadsuche
+Root Cause 1: lobby_tile wurde als Mitte des Lobby-Koerpers berechnet (val=1 = solid).
+-> astar.is_point_solid(lobby_tile) war IMMER true -> Early-Return -> Check nie ausgefuehrt.
 
-## Sofortige nächste Schritte (für nächste Session)
+Root Cause 2: Die Lobby ist in active_rooms. Ihr externer Exit-Tile liegt
+ausserhalb der Parzelle (col -1, global col 15 bei Parzelle 1,0).
+-> von innen nie erreichbar -> get_path_between_tiles() gab immer [] zurueck
+-> alle Ghost-Positionen faelschlich rot (auch wenn Check lief).
 
-1. **Nächstes Ticket aus alpha_backlog.md prüfen** – `list` via Linear CLI
-2. **Noch zu testen:** Bademeister-Rotation über mehrere Patrouillenwechsel (wurde einmal bestätigt)
-3. **Offene Baustellen:**
-   - Camera/Look-Direction Event-Start (wurde heute nicht getestet – wartete auf Event)
-   - Nächstes ANG-Ticket nach Priorität im Backlog
+Fix:
+- Check 1 startet vom Ghost-Exit-Tile als Ankerpunkt (nicht Lobby-Tile)
+- Lobby wird in der Check-1-Schleife uebersprungen (id == 'lobby')
+- Check 2 (Ghost selbst erreichbar) nutzt entrance_dir-abhaengiges internes Corridor-Tile
+  z.B. bei 'left': Tile rechts neben der Lobby = Vector2i(lx + lw, ly + lh/2)
 
-## Geänderte Dateien (Commit-Referenzen)
+Verhalten nach Fix:
+- Ghost zeigt rot wenn er einen Raum isolieren wuerde
+- Ghost zeigt gruen bei valider Platzierung
+- Alle anderen Checks unveraendert (Tuer blockiert, Tuer ins Nichts, etc.)
+
+## Sofortige naechste Schritte
+
+1. Reachability-Check weiter beobachten - Edge-Cases koennen noch auftauchen
+   (z.B. Raeume mit Exit-Tiles an Parzellenraendern)
+2. Naechstes Ticket aus alpha_backlog.md pruefen - python _dev/linear_cli.py list
+3. Offene Baustellen aus letzter Session:
+   - Camera/Look-Direction Event-Start (noch nicht getestet)
+   - Bademeister-Rotation ueber mehrere Patrouillenwechsel (einmal bestaetigt, beobachten)
+
+## Geaenderte Dateien (Commit-Referenzen)
 
 | Datei | Commits |
 |---|---|
-| `scenes/ingame/staff/StaffActor.gd` | eb79e25, cd8eaa2, 76067ea, cb944a6, b1ca19d |
-| `scenes/ingame/rooms/Room.gd` | 76067ea |
-| `scenes/ingame/rooms/pool_small/PoolSmall.gd` | eb79e25, 15e84dd, 76067ea |
-| `scenes/ingame/hud/modals/RoomDetailsMonitor.tscn` | (ANG-340, früherer Commit) |
-| `wiki/rooms/pool_small.md` | b2f224e |
-| `wiki/02_features/26_techdoku_staffactor.md` | b2f224e |
-| `changelog/gd-0.1.51.md` | b2f224e |
-| `wiki/alpha_backlog.md` | b2f224e |
+| scenes/ingame/map/MapGrid.gd | f36fda2, 5893f99, 694be19, 014d66e |
+| changelog/gd-0.1.51.md | 014d66e |
+| wiki/alpha_backlog.md | 014d66e |

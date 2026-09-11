@@ -253,19 +253,31 @@ func get_placement_error(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 				astar.set_point_solid(Vector2i(sim_x, sim_y), true)
 				sim_coords.append(Vector2i(sim_x, sim_y))
 
-	# Startpunkt (Lobby) berechnen
+	# Startpunkt: Internes Corridor-Tile direkt neben der Lobby (gegenüber Eingangsseite).
+	# BUGFIX: Vorher wurde die Lobby-Körper-MITTE verwendet (val=1 = solid).
+	# → is_point_solid war IMMER true → der gesamte Check war dead code (return "")!
+	# Korrekt: Tile auf der INNENSEITE (entrance_dir-abhängig), z.B. bei "left"-Eingang
+	# das erste freie Tile rechts neben der Lobby = Hauptkorridor.
 	var entry_parcel: Node2D = _grid[_entry_plot.y][_entry_plot.x]
-	var clearance: Rect2i = entry_parcel.get_lobby_clearance_rect()
-	# Wenn Lobby noch nicht initialisiert, Reachability-Check überspringen
 	var error_msg := ""
-	if not clearance.has_area():
+	var lobby_rect: Rect2i = entry_parcel.get_lobby_clearance_rect()
+	if not lobby_rect.has_area():
+		# Lobby noch nicht initialisiert → Check überspringen
 		for sim_p in sim_coords:
 			astar.set_point_solid(sim_p, false)
 		return error_msg
-	var start_x := (_entry_plot.x * PARCEL_SZ) + clearance.position.x + int(clearance.size.x / 2.0)
-	var start_y := (_entry_plot.y * PARCEL_SZ) + clearance.position.y + int(clearance.size.y / 2.0)
-	var lobby_tile := Vector2i(start_x, start_y)
-	# Absicherung: Lobby-Tile muss begehbar sein
+	var lx := _entry_plot.x * PARCEL_SZ + lobby_rect.position.x
+	var ly := _entry_plot.y * PARCEL_SZ + lobby_rect.position.y
+	var lw := lobby_rect.size.x
+	var lh := lobby_rect.size.y
+	var lobby_tile: Vector2i
+	match entry_parcel.entrance_dir:
+		"left":   lobby_tile = Vector2i(lx + lw,      ly + lh / 2)  # Tile rechts neben Lobby
+		"right":  lobby_tile = Vector2i(lx - 1,       ly + lh / 2)  # Tile links neben Lobby
+		"top":    lobby_tile = Vector2i(lx + lw / 2,  ly + lh)      # Tile unter Lobby
+		"bottom": lobby_tile = Vector2i(lx + lw / 2,  ly - 1)       # Tile über Lobby
+		_:        lobby_tile = Vector2i(lx + lw,      ly + lh / 2)  # Fallback
+	# Absicherung: Interior-Tile muss begehbar sein
 	if astar.is_point_solid(lobby_tile):
 		for sim_p in sim_coords:
 			astar.set_point_solid(sim_p, false)
@@ -273,14 +285,8 @@ func get_placement_error(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 
 
 	# 2. PRÜFUNG: Teste alle aktiven Zimmer
-	# FIX ANG-BUG-REACH: Exit-Tile des Ghost-Raums für Check 1 mitblocken.
-	# Ohne diesen Fix findet der Pathfinder einen "Pfad" durch den Ghost-Exit-Tile
-	# zu dahinterliegenden Räumen – obwohl der Korridor visuell komplett abgeklemmt ist.
-	# Bestehende Räume müssen auch ohne den Ghost-Türausgang erreichbar sein.
-	var exit_was_passable := not astar.is_point_solid(exit)
-	if exit_was_passable:
-		astar.set_point_solid(exit, true)
-
+	# Exit-Tile des Ghost ist NICHT geblockt: Exit-Tiles sind in der Realität begehbar!
+	# Das Blocken des Exit-Tiles war falsch – es hat valide Placements gesperrt.
 	for room: Node2D in active_rooms:
 		# Ignoriere Zimmer, die gerade abgerissen werden oder ungültig sind
 		if not is_instance_valid(room):
@@ -300,11 +306,7 @@ func get_placement_error(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 		var path := get_path_between_tiles(lobby_tile, room_door_tile)
 		if path.is_empty():
 			error_msg = "build.error.path_blocked" # "Blockiert Wege anderer Zimmer"
-			break # Sobald ein Raum meckert, brechen wir ab
-
-	# Exit-Tile wieder freigeben für Check 2 (Ghost selbst muss erreichbar sein)
-	if exit_was_passable:
-		astar.set_point_solid(exit, false)
+			break
 
 	# Check 2: Findet der GHOST selbst einen Weg? (Damit man keine Inseln baut)
 	if error_msg == "":

@@ -273,6 +273,14 @@ func get_placement_error(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 
 
 	# 2. PRÜFUNG: Teste alle aktiven Zimmer
+	# FIX ANG-BUG-REACH: Exit-Tile des Ghost-Raums für Check 1 mitblocken.
+	# Ohne diesen Fix findet der Pathfinder einen "Pfad" durch den Ghost-Exit-Tile
+	# zu dahinterliegenden Räumen – obwohl der Korridor visuell komplett abgeklemmt ist.
+	# Bestehende Räume müssen auch ohne den Ghost-Türausgang erreichbar sein.
+	var exit_was_passable := not astar.is_point_solid(exit)
+	if exit_was_passable:
+		astar.set_point_solid(exit, true)
+
 	for room: Node2D in active_rooms:
 		# Ignoriere Zimmer, die gerade abgerissen werden oder ungültig sind
 		if not is_instance_valid(room):
@@ -293,6 +301,10 @@ func get_placement_error(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 		if path.is_empty():
 			error_msg = "build.error.path_blocked" # "Blockiert Wege anderer Zimmer"
 			break # Sobald ein Raum meckert, brechen wir ab
+
+	# Exit-Tile wieder freigeben für Check 2 (Ghost selbst muss erreichbar sein)
+	if exit_was_passable:
+		astar.set_point_solid(exit, false)
 
 	# Check 2: Findet der GHOST selbst einen Weg? (Damit man keine Inseln baut)
 	if error_msg == "":

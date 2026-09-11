@@ -499,6 +499,15 @@ func _get_open_pois() -> Array[String]:
 		if room.has_method("is_guest_allowed") and not room.is_guest_allowed(self):
 			continue
 		
+		# Gasttyp-Filter: allowed_guest_types aus Raumdefinition
+		var allowed_types: Array = def.get("allowed_guest_types", [])
+		if not allowed_types.is_empty():
+			var my_party = _get_my_party()
+			var party_type: String = my_party.type if is_instance_valid(my_party) else ""
+			if not allowed_types.has(party_type):
+				continue
+
+		
 		var cost = def.get("visit_income", 0)
 		# Gastro-Räume: Mindestbudget 5€ und Hunger-Prüfung
 		if room.has_method("is_gastro") and room.is_gastro():

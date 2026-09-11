@@ -34,7 +34,7 @@ static func get_definition() -> Dictionary:
 		"cleanliness_level": 100,
 		"maintenance_level": 100,
 		"is_service_requested": false,
-		"allowed_guest_types": ["business", "digital_nomade", "luxus", "vip"]
+		"allowed_guest_types": ["business", "nomad", "luxury", "vip"]
 	}
 
 # =============================================================================

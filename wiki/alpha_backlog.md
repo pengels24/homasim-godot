@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.51 | Stand: 10.09.2026
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.51 | Stand: 11.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -115,6 +115,11 @@
   - `clip_text` + `OVERRUN_TRIM_ELLIPSIS` auf Status-Spalte + sekündlich synchroner Tooltip.
   - Header: „Zimmer" → „Raum", „Status" → „Status / Raum".
   - `float` → `int` für alle Needs-Werte.
+- ✅ **Reachability-Check (Insel-Erkennung) reaktiviert (11.09.2026):** Der Bau-Validierungscheck für abgekappte Räume war dead code (zwei Root-Causes gleichzeitig).
+  - **Root Cause 1:** `lobby_tile` zeigte auf Lobby-Körper-Mitte (val=1 = solid) → `is_point_solid()` war immer true → Check übersprungen.
+  - **Root Cause 2:** Lobby ist in `active_rooms`, ihr externer Exit-Tile liegt außerhalb der Parzelle (col -1) → von innen nie erreichbar → alle Ghost-Positionen fälschlich rot.
+  - **Fix:** Check 1 startet vom **Ghost-Exit-Tile** (nicht Lobby). Lobby wird in der Check-1-Schleife übersprungen (`id == "lobby"`). Check 2 nutzt internen Corridor-Tile (entrance_dir-abhängig) für Ghost-Verbindungstest.
+  - **Ergebnis:** Ghost zeigt korrekt rot wenn er einen Raum isolieren würde, grün bei valider Platzierung.
 
 ## 🧱 Phase 1 – Fundament (v0.1.40–41)
 *Zuerst, weil alles andere darauf aufbaut.*

@@ -33,12 +33,12 @@ Verhalten nach Fix:
 
 ## Sofortige naechste Schritte
 
-1. Reachability-Check weiter beobachten - Edge-Cases koennen noch auftauchen
+1. Offene Baustellen aus wiki/alpha_backlog.md auflisten
+2. Reachability-Check weiter beobachten - Edge-Cases koennen noch auftauchen
    (z.B. Raeume mit Exit-Tiles an Parzellenraendern)
-2. Naechstes Ticket aus alpha_backlog.md pruefen - python _dev/linear_cli.py list
-3. Offene Baustellen aus letzter Session:
+3. Naechstes Ticket aus alpha_backlog.md pruefen - python _dev/linear_cli.py list
+4. Offene Baustellen aus letzter Session:
    - Camera/Look-Direction Event-Start (noch nicht getestet)
-   - Bademeister-Rotation ueber mehrere Patrouillenwechsel (einmal bestaetigt, beobachten)
 
 ## Geaenderte Dateien (Commit-Referenzen)
 

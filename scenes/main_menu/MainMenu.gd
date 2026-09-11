@@ -377,6 +377,6 @@ func _on_to_register_pressed() -> void:
 
 # =============================================================================
 func _check_disclaimer() -> void:
-	if not SettingsManager.dont_show_disclaimer:
+	if not SettingsManager.dont_show_prealpha_disclaimer:
 		_disclaimer_modal.set_content("res://scenes/main_menu/ModalContentDisclaimer.tscn")
-		_disclaimer_modal.open(GameState.T("ui.disclaimer.title"))
+		_disclaimer_modal.open(GameState.T("ui.disclaimer.prealpha.title"))

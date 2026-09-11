@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://fgfmm6hk88yi" path="res://assets/icons/angelus2010/HUDBottom/ang-simbrowser.aseprite" id="11_am7my"]
 [ext_resource type="Texture2D" uid="uid://ca33d0387h3lo" path="res://assets/icons/angelus2010/HUDBottom/ang-questbook.aseprite" id="12_am7my"]
 [ext_resource type="Texture2D" uid="uid://bd7kj4k11w5n7" path="res://assets/icons/angelus2010/HUDBottom/ang-tutorial-codex.aseprite" id="13_am7my"]
+[ext_resource type="Texture2D" path="res://assets/icons/HUDTop/house.svg" id="14_house"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l5yvd"]
 bg_color = Color(1, 1, 1, 1)
@@ -376,3 +377,33 @@ offset_left = -10.0
 offset_bottom = 10.0
 grow_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_jm8q0")
+
+[node name="Panel11" type="Panel" parent="HBoxContainer" unique_id=2024101111]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+mouse_filter = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/Panel11" unique_id=2024101112]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="HotelOverview" type="Button" parent="HBoxContainer/Panel11/MarginContainer" unique_id=2024101113]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/pressed = ExtResource("3_jm8q0")
+toggle_mode = true
+button_group = ExtResource("4_hq4tq")
+icon = ExtResource("14_house")
+icon_alignment = 1

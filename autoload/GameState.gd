@@ -49,7 +49,7 @@ signal sig_hotel_time_changed(time_string: String)
 const GAME_STAGE: String = "PRE-ALPHA"
 
 signal sig_hotel_level_up(new_level: int)
-signal sig_techdemo_completed()
+signal sig_demo_completed()
 @warning_ignore("unused_signal")
 signal sig_open_codex_tech(tech_id: String)
 
@@ -93,6 +93,7 @@ var is_tutorial_mode:  bool       = false # Flag für das interaktive Tutorial
 const TUTORIAL_HOTEL_ID: int      = -2    # Dummy-ID für das Tutorial-Hotel
 
 var _demo_end_countdown: int = -1 # <--- NEU: Countdown für das TechDemo-Ende
+var _has_completed_demo: bool = false
 
 # =============================================================================
 func _ready() -> void:
@@ -113,8 +114,9 @@ func _on_minute_passed(_total_minutes: int) -> void:
 	if _demo_end_countdown > 0:
 		_demo_end_countdown -= 1
 		if _demo_end_countdown <= 0:
-			_demo_end_countdown = -1
-			sig_techdemo_completed.emit()
+			_has_completed_demo = true
+			sig_demo_completed.emit()
+			return
 
 
 # =============================================================================
@@ -452,6 +454,8 @@ func get_xp_needed_for_level(level: int) -> int:
 
 # =============================================================================
 func add_exp(amount: int, _source: String = "Unbekannt") -> void:
+	if selected_hotel.get("exp_frozen", false):
+		return
 	var current_exp: int   = selected_hotel.get("exp", 0)
 	var current_level: int = selected_hotel.get("level", 1)
 	var exp_max: int       = selected_hotel.get("exp_max", 100)

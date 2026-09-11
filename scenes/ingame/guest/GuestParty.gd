@@ -21,6 +21,10 @@ var checkout_days: int = 0 # Tage die der Gast bereits in checkout-Spalte wartet
 var has_been_seen: bool = false
 var pays_surcharge: bool = false
 
+# Inspector specific
+var is_inspector: bool = false
+var cover_type: String = ""
+
 
 # =============================================================================
 func modify_satisfaction(amount: int) -> void:
@@ -49,11 +53,15 @@ func get_display_name() -> String:
 
 # =============================================================================
 func get_type_def() -> Dictionary:
+	if is_inspector and state != "checkout" and cover_type != "":
+		return GuestDefinitions.ALL.get(cover_type, {})
 	return GuestDefinitions.ALL.get(type, {})
 
 
 # =============================================================================
 func get_type_name() -> String:
+	if is_inspector and state != "checkout" and cover_type != "":
+		return GuestDefinitions.ALL.get(cover_type, {}).get("name", cover_type)
 	return GuestDefinitions.ALL.get(type, {}).get("name", type)
 
 
@@ -81,6 +89,8 @@ func to_dict() -> Dictionary:
 		"checkout_days": checkout_days,
 		"has_been_seen": has_been_seen,
 		"pays_surcharge": pays_surcharge,
+		"is_inspector": is_inspector,
+		"cover_type": cover_type,
 	}
 
 
@@ -109,6 +119,8 @@ static func from_dict(d: Dictionary) -> GuestParty:
 	p.checkout_days = d.get("checkout_days", 0)
 	p.has_been_seen = d.get("has_been_seen", false)
 	p.pays_surcharge = d.get("pays_surcharge", false)
+	p.is_inspector = d.get("is_inspector", false)
+	p.cover_type = d.get("cover_type", "")
 
 	for md: Dictionary in d.get("members", []):
 		p.members.append(GuestMember.from_dict(md))

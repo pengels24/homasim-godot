@@ -18,6 +18,7 @@ enum EventType {
 
 var active_event: EventType = EventType.NONE
 var event_days_remaining: int = 0
+var is_inspector_coming_today: bool = false
 
 # Speichert aktive Tagungen. Key: room_instance_id, Value: config_dict
 var active_conferences: Dictionary = {}
@@ -38,6 +39,17 @@ func _load_conference_configs() -> void:
 
 # =============================================================================
 func _on_morning_struck() -> void:
+	# 0. Check Inspector (G1.4)
+	if TechtreeManager and TechtreeManager.is_tech_unlocked("G1.4") and GameState.selected_hotel.get("level", 1) >= 9:
+		var last_visit = GameState.selected_hotel.get("last_inspector_day", -999)
+		var today = GameState.selected_hotel.get("day", 1)
+		# Wenn noch kein Besuch oder letzter Besuch > 30-35 Tage her ist
+		if today - last_visit >= 30:
+			# Damit es nicht immer genau nach 30 Tagen ist, würfeln wir (oder fix bei Tag 35)
+			if randf() < 0.20 or today - last_visit >= 35:
+				is_inspector_coming_today = true
+				if Toast:
+					Toast.show("Gerüchte besagen, dass ein Gourmet-Kritiker in der Stadt ist...", "event", false)
 	# 1. Konferenzen (P1.2) aufräumen und ggf. neu starten
 	active_conferences.clear()
 	if TechtreeManager and TechtreeManager.is_tech_unlocked("P1.2"):
@@ -227,7 +239,8 @@ func to_save_dict() -> Dictionary:
 	return {
 		"active_event": active_event,
 		"event_days_remaining": event_days_remaining,
-		"active_conferences": active_conferences
+		"active_conferences": active_conferences,
+		"is_inspector_coming_today": is_inspector_coming_today
 	}
 
 # =============================================================================
@@ -235,3 +248,4 @@ func load_from_dict(data: Dictionary) -> void:
 	active_event = data.get("active_event", EventType.NONE)
 	event_days_remaining = data.get("event_days_remaining", 0)
 	active_conferences = data.get("active_conferences", {})
+	is_inspector_coming_today = data.get("is_inspector_coming_today", false)

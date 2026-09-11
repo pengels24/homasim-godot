@@ -1,0 +1,37 @@
+{
+  "1": {
+    "min_inspector_satisfaction": 80,
+    "min_avg_satisfaction": 70,
+    "min_cleanliness": 75,
+    "min_rep": 600,
+    "min_rooms": 10
+  },
+  "2": {
+    "min_inspector_satisfaction": 85,
+    "min_avg_satisfaction": 75,
+    "min_cleanliness": 80,
+    "min_rep": 1500,
+    "min_rooms": 20
+  },
+  "3": {
+    "min_inspector_satisfaction": 90,
+    "min_avg_satisfaction": 80,
+    "min_cleanliness": 85,
+    "min_rep": 3000,
+    "min_rooms": 30
+  },
+  "4": {
+    "min_inspector_satisfaction": 95,
+    "min_avg_satisfaction": 85,
+    "min_cleanliness": 90,
+    "min_rep": 5000,
+    "min_rooms": 40
+  },
+  "5": {
+    "min_inspector_satisfaction": 98,
+    "min_avg_satisfaction": 90,
+    "min_cleanliness": 95,
+    "min_rep": 8000,
+    "min_rooms": 50
+  }
+}

@@ -120,6 +120,9 @@
   - **Root Cause 2:** Lobby ist in `active_rooms`, ihr externer Exit-Tile liegt außerhalb der Parzelle (col -1) → von innen nie erreichbar → alle Ghost-Positionen fälschlich rot.
   - **Fix:** Check 1 startet vom **Ghost-Exit-Tile** (nicht Lobby). Lobby wird in der Check-1-Schleife übersprungen (`id == "lobby"`). Check 2 nutzt internen Corridor-Tile (entrance_dir-abhängig) für Ghost-Verbindungstest.
   - **Ergebnis:** Ghost zeigt korrekt rot wenn er einen Raum isolieren würde, grün bei valider Platzierung.
+- ✅ **Pre-Alpha Demo Ende (11.09.2026):** Nach Erreichen des 1. Sterns friert die EXP ein. Modaltext auf Pre-Alpha angepasst. Startup Disclaimer angepasst.
+- ✅ **Hotelübersicht Modal F9 (11.09.2026):** Modal mit WiSim-Metriken (Auslastung, Ruf, Finanzen, etc.) inkl. Hotkey eingebaut.
+- ✅ **Gourmet-Sterne: Anonymer Inspektor & Bericht (11.09.2026):** Inspektor spawnt komplett getarnt als "single" (ohne Log-Eintrag). Nach dem Checkout triggert ein neues `ModalContentInspectorReport` mit der Sterne-Bewertung, gefolgt von der Star-Animation.
 
 ## 🧱 Phase 1 – Fundament (v0.1.40–41)
 *Zuerst, weil alles andere darauf aufbaut.*
@@ -257,8 +260,8 @@ Aktuell gesperrte Nodes ohne Inhalt:
 ### 5.2 Gourmetsterne
 - Voraussetzung: `G1.4` (Gourmetküche) erforscht
 - Bewertungs-Logik: Restaurant-Qualität (Küchen-Skills) + Ø Gästezufriedenheit über Zeit → 0–3 Sterne
-- **Inspektor-Event:** Seltenes Zufallsevent (1x pro ~30 Tage). Inspektor besucht → bewertet anonym → Toast mit Ergebnis
-- Sterne geben Boni: +Reputation, +Einnahmen-Multiplikator Restaurant, neue Gästetypen
+- **Inspektor-Event:** Seltenes Zufallsevent (1x pro ~30 Tage). Inspektor besucht → bewertet anonym → Toast mit Ergebnis (✅ Implementiert als Inspektor-Bericht + Anonyme Spawns)
+- Sterne geben Boni: +Reputation, +Einnahmen-Multiplikator Restaurant, neue Gästetypen (✅ Teilweise implementiert)
 
 ---
 

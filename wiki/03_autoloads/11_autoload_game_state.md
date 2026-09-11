@@ -33,7 +33,7 @@ Das globale Gedächtnis des Spiels. Der `GameState` speichert sitzungsübergreif
 ### ⚙️ Kern-Funktionen
 
 - **`select_hotel(hotel_data)`:** Lädt die Hotel-Daten und triggert sofort Signale (`sig_hotel_money_changed`, `sig_hotel_exp_changed`, etc.), um das HUD zu synchronisieren. Löst auch das Laden der anderen Manager (Techtree, Tutorial, Quests) aus.
-- **`add_exp(amount)`:** Fügt Erfahrungspunkte hinzu inkl. `while`-Schleife für Mehrfach-Level-Ups.
+- **`add_exp(amount)`:** Fügt Erfahrungspunkte hinzu inkl. `while`-Schleife für Mehrfach-Level-Ups. Bricht sofort ab, wenn `selected_hotel.exp_frozen` aktiv ist (z.B. am Ende der Pre-Alpha).
 - **`add_money()`, `add_rep()`, `add_fp()`:** Manipulieren die Ressourcen und alarmieren das UI.
 - **`load_room_config()`, `load_daily_schedule_config()`:** Lesen die JSON-Dateien aus `/config/` in die Registries.
 - **`format_money()`, `format_game_time()`, `format_timestamp()`:** Globale Helfer.

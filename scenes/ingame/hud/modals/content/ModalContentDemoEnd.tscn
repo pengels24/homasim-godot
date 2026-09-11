@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://cxtechdemoend"]
 
-[ext_resource type="Script" uid="uid://d0m8qo8jh7mq5" path="res://scenes/ingame/hud/modals/content/ModalContentTechDemoEnd.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://d0m8qo8jh7mq5" path="res://scenes/ingame/hud/modals/content/ModalContentDemoEnd.gd" id="1_script"]
 [ext_resource type="StyleBox" uid="uid://cxh0s5seikuc5" path="res://assets/UI/menu_button_green.tres" id="2_green"]
 [ext_resource type="Texture2D" uid="uid://dh8sppodu0d3j" path="res://assets/images/bsky-favicon-tbn.png" id="3_3f2yf"]
 [ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://assets/UI/menu_button_green_hover.tres" id="3_green_hover"]
 [ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://assets/UI/menu_button_green_pressed.tres" id="4_green_pressed"]
 [ext_resource type="Texture2D" uid="uid://dtoyanhcnwt05" path="res://assets/icons/ic_discord.png" id="5_discord"]
 
-[node name="ModalContentTechDemoEnd" type="VBoxContainer" unique_id=508613206]
+[node name="ModalContentDemoEnd" type="VBoxContainer" unique_id=508613206]
 custom_minimum_size = Vector2(800, 400)
 anchors_preset = 15
 anchor_right = 1.0

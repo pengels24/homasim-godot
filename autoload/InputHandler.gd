@@ -39,6 +39,7 @@ signal sig_hotkey_tutorial_requested
 signal sig_hotkey_guest_list_requested
 signal sig_hotkey_room_list_requested
 signal sig_hotkey_finances_requested
+signal sig_hotkey_hotel_overview_requested
 signal sig_hotkey_activity_log_requested
 signal sig_hotkey_escape_pressed
 #signal sig_hotkey_quicksave_requested
@@ -149,6 +150,16 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_staff"):
 		get_viewport().set_input_as_handled()
 		sig_hotkey_staff_requested.emit()
+		return
+
+	if event.is_action_pressed("ui_finances"):
+		get_viewport().set_input_as_handled()
+		sig_hotkey_finances_requested.emit()
+		return
+
+	if event.is_action_pressed("ui_hotel_overview"):
+		get_viewport().set_input_as_handled()
+		sig_hotkey_hotel_overview_requested.emit()
 		return
 
 	if event.is_action_pressed("ui_tech_tree"):

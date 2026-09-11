@@ -1,7 +1,8 @@
 extends Node
 class_name GuestManager
 
-signal parties_changed()
+signal parties_changed
+signal sig_inspector_report_ready(stats: Dictionary)
 signal checkout_forgotten(count: int)
 signal sig_party_checked_in(party: GuestParty, room: Node2D) # <--- NEU
 signal sig_party_event_arrived(party: GuestParty)
@@ -22,6 +23,7 @@ var _active:   Array = []   # Array[GuestParty]
 var _checkout: Array = []   # Array[GuestParty]
 var _pending_dirty_rooms: Array[String] = [] # NEU: Räume, die auf das Unpause warten
 var _daily_poi_visits: Dictionary = {}  # poi_room_id → visit_count (Reset jeden Morgen)
+var recent_satisfaction: Array = [] # Die Satisfaction der letzten 30 Checkouts
 
 
 # --- Tages-Statistiken ---
@@ -86,8 +88,9 @@ func _on_minute_passed(_total_game_minutes: int) -> void:
 		if EventManager and EventManager.get("active_conferences") != null and EventManager.active_conferences.size() > 0:
 			spawn_conference_guests(current_time)
 
-
-
+	if current_time >= 720 and EventManager and EventManager.get("is_inspector_coming_today"):
+		EventManager.is_inspector_coming_today = false
+		spawn_inspector()
 # =============================================================================
 func set_patience_rate(rate: float) -> void:
 	_patience_rate = rate
@@ -126,6 +129,37 @@ func get_party(party_id: String) -> GuestParty:
 			return p
 
 	return null
+
+
+# =============================================================================
+func get_average_satisfaction() -> float:
+	if recent_satisfaction.is_empty():
+		return 100.0
+	var sum := 0
+	for val in recent_satisfaction:
+		sum += val
+	return float(sum) / float(recent_satisfaction.size())
+
+# =============================================================================
+func get_average_cleanliness() -> float:
+	if not is_instance_valid(_map_grid):
+		return 100.0
+	var sum := 0
+	var count := 0
+	for room in _map_grid.get_placed_rooms():
+		var clean = room.get("cleanliness_level")
+		if clean != null:
+			sum += int(clean)
+			count += 1
+	if count == 0:
+		return 100.0
+	return float(sum) / float(count)
+
+# =============================================================================
+func _push_satisfaction(val: int) -> void:
+	recent_satisfaction.append(val)
+	if recent_satisfaction.size() > 30:
+		recent_satisfaction.pop_front()
 
 
 # =============================================================================
@@ -438,6 +472,19 @@ func spawn_guests(amount: int = -1) -> int:
 		SoundManager.play("reception_new_guests")
 
 	return total_heads
+
+# =============================================================================
+func spawn_inspector() -> void:
+	var party := _generate_party("inspector")
+	party.is_inspector = true
+	party.cover_type = "single" # Standard-Tarnung (ggf. _weighted_random_type, aber 'single' passt gut zum Inspektor)
+	
+	_waiting.append(party)
+	sig_party_arrived.emit(party)
+	
+	parties_changed.emit()
+	if SoundManager:
+		SoundManager.play("reception_new_guests")
 
 
 # =============================================================================
@@ -817,6 +864,7 @@ func clear_waiting_guests_with_penalty() -> void:
 ## TG-Gäste (kein Zimmer, Tagung beendet) sauber aus _active entfernen und
 ## den normalen physischen Checkout-Flow triggern.
 func checkout_event_party(party: GuestParty) -> void:
+	_push_satisfaction(party.satisfaction)
 	_active.erase(party)
 	party.state = "gone"
 	sig_party_checked_out_physically.emit(party)
@@ -826,21 +874,104 @@ func do_checkout(party: GuestParty) -> float:
 	var payout := _calculate_payout(party)
 	_finalize_checkout(party, int(payout), false)
 	
-	var exp_gain = GameState.calc_checkout_exp(party)
-	if exp_gain > 0:
-		var final_exp = int(exp_gain * (party.satisfaction / 100.0))
-		GameState.add_exp(final_exp, "Checkout (GuestManager)")
-		
-	if party.satisfaction < 30:
-		GameState.add_rep(-15)
-	elif party.satisfaction >= 80:
-		GameState.add_rep(5)
+	if party.type == "inspector":
+		evaluate_gourmet_stars(party)
+	else:
+		var exp_gain = GameState.calc_checkout_exp(party)
+		if exp_gain > 0:
+			var final_exp = int(exp_gain * (party.satisfaction / 100.0))
+			GameState.add_exp(final_exp, "Checkout (GuestManager)")
+			
+		if party.satisfaction < 30:
+			GameState.add_rep(-15)
+		elif party.satisfaction >= 80:
+			GameState.add_rep(5)
 
 	return payout
+
+# =============================================================================
+func evaluate_gourmet_stars(party: GuestParty) -> void:
+	GameState.selected_hotel["last_inspector_day"] = _hotel.get("day", 1)
+	
+	var current_stars = GameState.selected_hotel.get("stars", 0)
+	var next_level = str(current_stars + 1)
+	
+	var path := "res://config/gourmet_stars.json"
+	if not FileAccess.file_exists(path):
+		return
+		
+	var f := FileAccess.open(path, FileAccess.READ)
+	var config = JSON.parse_string(f.get_as_text())
+	if config == null or not config.has(next_level):
+		Toast.show(GameState.T("event.gourmet.max_stars"), "event")
+		return
+		
+	var req = config[next_level]
+	var inspector_sat = party.satisfaction
+	var avg_sat = get_average_satisfaction()
+	var avg_clean = get_average_cleanliness()
+	var rep = GameState.selected_hotel.get("rep", 0)
+	var rooms = 0
+	if is_instance_valid(_map_grid):
+		rooms = _map_grid.get_placed_rooms().size()
+		
+	var success = true
+	if inspector_sat < req.get("min_inspector_satisfaction", 0): success = false
+	if avg_sat < req.get("min_avg_satisfaction", 0): success = false
+	if avg_clean < req.get("min_cleanliness", 0): success = false
+	if rep < req.get("min_rep", 0): success = false
+	if rooms < req.get("min_rooms", 0): success = false
+	
+	var stats = {
+		"inspector_sat": inspector_sat,
+		"req_inspector_sat": req.get("min_inspector_satisfaction", 0),
+		"avg_sat": avg_sat,
+		"req_avg_sat": req.get("min_avg_satisfaction", 0),
+		"avg_clean": avg_clean,
+		"req_clean": req.get("min_cleanliness", 0),
+		"rep": rep,
+		"req_rep": req.get("min_rep", 0),
+		"rooms": rooms,
+		"req_rooms": req.get("min_rooms", 0),
+		"result": "none",
+		"stars_before": current_stars,
+		"stars_after": current_stars
+	}
+	
+	if success:
+		GameState.selected_hotel["stars"] = current_stars + 1
+		GameState.add_exp(200, GameState.T("event.gourmet.gained_toast"))
+		GameState.sig_hotel_stars_changed.emit(GameState.selected_hotel["stars"])
+		
+		stats["result"] = "up"
+		stats["stars_after"] = current_stars + 1
+		
+		if current_stars == 0:
+			GameState.selected_hotel["exp_frozen"] = true
+			# We emit sig_demo_completed after the inspector report is closed!
+			# But we'll let UIManager handle that or emit it later. 
+			# For now, just setting exp_frozen is fine.
+	else:
+		# Check auf Verlust
+		if current_stars > 0:
+			var curr_req = config.get(str(current_stars))
+			if curr_req != null:
+				var loss = false
+				if inspector_sat < curr_req.get("min_inspector_satisfaction", 0) - 20: loss = true
+				if avg_sat < curr_req.get("min_avg_satisfaction", 0) - 20: loss = true
+				if avg_clean < curr_req.get("min_cleanliness", 0) - 20: loss = true
+				if loss:
+					GameState.selected_hotel["stars"] -= 1
+					GameState.sig_hotel_stars_changed.emit(GameState.selected_hotel["stars"])
+					stats["result"] = "down"
+					stats["stars_after"] = current_stars - 1
+
+	sig_inspector_report_ready.emit(stats)
 
 
 # =============================================================================
 func _finalize_checkout(party: GuestParty, payout: int, auto: bool) -> void:
+	_push_satisfaction(party.satisfaction)
 	_checkout.erase(party)
 	
 	party.state = "gone"
@@ -963,6 +1094,7 @@ func to_save_dict() -> Dictionary:
 		"daily_reject_heads": daily_reject_heads,
 		"daily_declined_parties": daily_declined_parties,
 		"daily_declined_heads": daily_declined_heads,
+		"recent_satisfaction": recent_satisfaction.duplicate(),
 	}
 
 
@@ -991,6 +1123,7 @@ func load_from_dict(d: Dictionary) -> void:
 	daily_reject_heads = d.get("daily_reject_heads", 0)
 	daily_declined_parties = d.get("daily_declined_parties", 0)
 	daily_declined_heads = d.get("daily_declined_heads", 0)
+	recent_satisfaction = d.get("recent_satisfaction", [])
 	
 	parties_changed.emit()
 

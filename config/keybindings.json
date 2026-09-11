@@ -140,6 +140,12 @@
         "order": 11,
         "default": "L",
         "default_alt": ""
+      },
+      "ui_hotel_overview": {
+        "label": "settings.controls.ui.hotel_overview",
+        "order": 12,
+        "default": "F9",
+        "default_alt": ""
       }
     }
   },

@@ -41,3 +41,22 @@ Der Bau-Validierungscheck für isolierte Zimmer war dead code – zwei Root-Caus
 - **Fix:** Check 1 startet vom **Ghost-Exit-Tile** (natürlicher Ankerpunkt). Lobby in der Schleife übersprungen (`id == "lobby"`). Check 2 nutzt entrance_dir-abhängiges internes Corridor-Tile.
 - **Ergebnis:** Ghost korrekt rot bei Insel-Bildung, grün bei valider Platzierung.
 
+
+## ✨ Features & Verbesserungen (11.09.2026: Pre-Alpha & Inspector Update)
+
+- **Pre-Alpha Demo Ende:** Nach Erreichen des ersten Sterns wird das `exp_frozen`-Flag aktiviert. Es gibt keine neuen Erfahrungspunkte mehr, stattdessen wird das `ModalContentDemoEnd` (früher TechDemoEnd) mit dem Hinweis auf den Pre-Alpha Status angezeigt.
+- **Hotelübersicht (WiSim-Metriken):** Neues Modal `ModalContentHotelOverview` hinzugefügt, aufrufbar über F9 oder den HUD-Button. Zeigt aktuelle Sterne, Finanzen, Gästezufriedenheit und Zimmerauslastung an.
+- **Anonyme Inspektoren:** Der Gourmet-Inspektor spawnt nun komplett getarnt (`is_inspector = true`, `cover_type = "single"`) ohne Benachrichtigung im Activity Log. Er ist äußerlich nicht von einem normalen Gast zu unterscheiden.
+- **Inspektor-Bericht:** Beim Checkout des Inspektors öffnet sich ein neues Modal (`ModalContentInspectorReport`), das die erreichten Werte den geforderten Werten detailliert gegenüberstellt, bevor es zu einer Sterne-Verleihung (oder Aberkennung) kommt.
+- **Startup Disclaimer Update:** `dont_show_disclaimer` im `SettingsManager` in `dont_show_prealpha_disclaimer` umbenannt, um die Checkbox zurückzusetzen. Texte und Key (`ui.disclaimer.prealpha.*`) in `language.csv` aktualisiert.
+
+## 📁 Geänderte Dateien (11.09.2026)
+
+| `autoload/GameState.gd` | `exp_frozen` Logik für Pre-Alpha Ende. |
+| `scenes/ingame/GuestManager.gd` | `spawn_inspector` (getarnt), `evaluate_gourmet_stars` sendet `sig_inspector_report_ready` Signal. |
+| `scenes/ingame/guest/GuestParty.gd` | `is_inspector` und `cover_type` mit Tarnungslogik. |
+| `scenes/ingame/scripts/managers/IngameUIManager.gd` | Aufruf für Hotelübersicht und Inspektor-Bericht. |
+| `scenes/ingame/hud/modals/content/ModalContentHotelOverview.tscn / .gd` | NEU: Hotelübersicht. |
+| `scenes/ingame/hud/modals/content/ModalContentInspectorReport.tscn / .gd` | NEU: Inspektor-Bericht. |
+| `autoload/InputHandler.gd` / `keybindings.json` | F9 für Hotelübersicht hinzugefügt. |
+| `translations/language.csv` | Neue Keys für Modale und Pre-Alpha. |

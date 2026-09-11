@@ -9,6 +9,7 @@ signal sig_guest_list_toggled
 signal sig_room_list_toggled
 signal sig_finances_toggled
 signal sig_tutorial_toggled
+signal sig_hotel_overview_toggled
 
 @onready var reception: Button = %Reception
 @onready var staff: Button = %Staff
@@ -19,6 +20,7 @@ signal sig_tutorial_toggled
 @onready var guest_list: Button = %GuestList
 @onready var room_list: Button = %RoomList
 @onready var finances: Button = %Finances
+@onready var hotel_overview: Button = %HotelOverview
 @onready var ind_reception: Panel = %IndReception
 @onready var ind_sim_browser: Panel = %IndSimBrowser
 @onready var ind_quest_book: Panel = %IndQuestBook
@@ -62,6 +64,10 @@ func _ready() -> void:
 		sig_finances_toggled.emit()
 	)
 
+	hotel_overview.pressed.connect(func():
+		sig_hotel_overview_toggled.emit()
+	)
+
 	_update_quest_book_indicator()
 	
 	# Events
@@ -82,6 +88,7 @@ func _ready() -> void:
 	room_list.tooltip_text = GameState.T("hud.bottom.room_list_tt", _get_action_key_string("ui_room_list"))
 	finances.tooltip_text = GameState.T("hud.bottom.finances_tt", _get_action_key_string("ui_finances"))
 	tutorial.tooltip_text = GameState.T("hud.bottom.tutorials_tt", _get_action_key_string("ui_tutorial"))
+	hotel_overview.tooltip_text = GameState.T("hud.bottom.hotel_overview_tt", _get_action_key_string("ui_hotel_overview"))
 
 	ind_reception.hide()
 	ind_sim_browser.modulate = Color.GREEN
@@ -133,7 +140,7 @@ func set_quest_alert(has_claimable: bool) -> void:
 func sync_button_state(active_menu: String = "") -> void:
 	_update_quest_book_indicator()
 	# Alle Buttons sicherheitshalber ausschalten und Fokus entfernen
-	for btn in [reception, staff, tech_tree, sim_browser, quest_book, guest_list, room_list, finances, tutorial]:
+	for btn in [reception, staff, tech_tree, sim_browser, quest_book, guest_list, room_list, finances, tutorial, hotel_overview]:
 		btn.set_pressed_no_signal(false)
 		btn.release_focus()
 
@@ -157,6 +164,8 @@ func sync_button_state(active_menu: String = "") -> void:
 			room_list.set_pressed_no_signal(true)
 		"finances":
 			finances.set_pressed_no_signal(true)
+		"hotel_overview":
+			hotel_overview.set_pressed_no_signal(true)
 
 
 # =============================================================================

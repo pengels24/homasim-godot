@@ -75,8 +75,8 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	_bottom_bar.sig_guest_list_toggled.connect(open_guest_list)
 	_bottom_bar.sig_room_list_toggled.connect(open_room_list)
 	_bottom_bar.sig_tutorial_toggled.connect(open_tutorial_codex)
-
 	_bottom_bar.sig_finances_toggled.connect(open_finances)
+	_bottom_bar.sig_hotel_overview_toggled.connect(open_hotel_overview)
 
 	_standard_modal.visibility_changed.connect(update_map_grid_mode)
 	_standard_modal.hidden.connect(_on_standard_modal_hidden)
@@ -113,6 +113,9 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	# finances
 	if not InputHandler.sig_hotkey_finances_requested.is_connected(open_finances):
 		InputHandler.sig_hotkey_finances_requested.connect(open_finances)
+	# hotel overview
+	if not InputHandler.sig_hotkey_hotel_overview_requested.is_connected(open_hotel_overview):
+		InputHandler.sig_hotkey_hotel_overview_requested.connect(open_hotel_overview)
 
 	if OS.is_debug_build() and is_instance_valid(GlobalConsole):
 		if not GlobalConsole.visibility_changed.is_connected(update_map_grid_mode):
@@ -139,8 +142,11 @@ func setup(hud: CanvasLayer, bottom: Control, map: Node2D, modal: StandardModal,
 	# Initial einmal synchronisieren (wichtig für Spielstart & Savegame Load!)
 	_sync_guest_ui()
 
-	if not GameState.sig_techdemo_completed.is_connected(_on_techdemo_completed):
-		GameState.sig_techdemo_completed.connect(_on_techdemo_completed)
+	if not _guest_mgr.sig_inspector_report_ready.is_connected(_on_inspector_report_ready):
+		_guest_mgr.sig_inspector_report_ready.connect(_on_inspector_report_ready)
+
+	if not GameState.sig_demo_completed.is_connected(_on_demo_completed):
+		GameState.sig_demo_completed.connect(_on_demo_completed)
 
 	if not GameState.sig_open_codex_tech.is_connected(open_codex_at_tech):
 		GameState.sig_open_codex_tech.connect(open_codex_at_tech)
@@ -176,13 +182,52 @@ func cleanup_current_states(keep_modal: bool = false) -> void:
 
 
 # =============================================================================
-func _on_techdemo_completed() -> void:
+func _on_inspector_report_ready(stats: Dictionary) -> void:
+	cleanup_current_states(true)
+	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentInspectorReport.tscn")
+	if content:
+		content.setup(stats)
+		if content.has_signal("sig_close_requested"):
+			content.sig_close_requested.connect(_on_inspector_report_closed.bind(stats))
+	_standard_modal.open(GameState.T("ui.modal.inspector_report.title", "Inspektor-Bericht"))
+	_set_modal_pausing(true)
+
+func _on_inspector_report_closed(stats: Dictionary) -> void:
+	_standard_modal.close()
+	
+	if stats.result == "up":
+		var modal_scene = load("res://scenes/ingame/hud/modals/ModalStarAchieved.tscn")
+		if modal_scene:
+			var modal = modal_scene.instantiate()
+			_hud.get_node("ModalLayer").add_child(modal)
+			if modal.has_method("play_animation"):
+				modal.play_animation(stats.stars_after)
+				
+		if stats.stars_before == 0:
+			GameState.sig_demo_completed.emit()
+			
+	elif stats.result == "down":
+		var modal_scene = load("res://scenes/ingame/hud/modals/ModalStarAchieved.tscn")
+		if modal_scene:
+			var modal = modal_scene.instantiate()
+			_hud.get_node("ModalLayer").add_child(modal)
+			if modal.has_method("play_lost_animation"):
+				modal.play_lost_animation(stats.stars_after)
+		var Toast = get_node_or_null("/root/ToastManager")
+		if Toast: Toast.show(GameState.T("event.gourmet.lost_toast"), "event", true)
+		
+	else:
+		var Toast = get_node_or_null("/root/ToastManager")
+		if Toast: Toast.show(GameState.T("event.gourmet.failed_toast"), "event", true)
+
+# =============================================================================
+func _on_demo_completed() -> void:
 	cleanup_current_states()
 	_set_modal_pausing(true)
-	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentTechDemoEnd.tscn")
+	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentDemoEnd.tscn")
 	if content and content.has_signal("sig_close_requested"):
 		content.sig_close_requested.connect(_standard_modal.close)
-	_standard_modal.open(GameState.T("ui.modal.techdemo_end.title", "TechDemo Abgeschlossen"))
+	_standard_modal.open(GameState.T("ui.modal.demo_end.title", "Pre-Alpha Abgeschlossen"))
 
 
 # =============================================================================
@@ -812,6 +857,24 @@ func open_finances() -> void:
 		_standard_modal.set_title(GameState.T("modal.finances.title"))
 	else:
 		_standard_modal.open(GameState.T("modal.finances.title"))
+
+# =============================================================================
+func open_hotel_overview() -> void:
+	if _standard_modal.visible and _standard_modal.get_title() == GameState.T("modal.hotel_overview.title"):
+		_standard_modal.close()
+		return
+		
+	cleanup_current_states(true)
+	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentHotelOverview.tscn")
+	if not is_instance_valid(content): return
+	
+	_set_modal_pausing(true)
+	_bottom_bar.sync_button_state("hotel_overview")
+
+	if _standard_modal.visible:
+		_standard_modal.set_title(GameState.T("modal.hotel_overview.title"))
+	else:
+		_standard_modal.open(GameState.T("modal.hotel_overview.title"))
 
 
 # =============================================================================

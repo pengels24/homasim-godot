@@ -163,4 +163,22 @@ const ALL: Dictionary = {
 		"base_exp": 100,
 		"rep_penalty": 30
 	},
+	"inspector": {
+		"name":            "Gourmet-Inspektor",
+		"allowed_rooms":   ["bed_superior", "bed_standard", "bed_double"],
+		"preferred_rooms": ["bed_superior"],
+		"preferred_pois":  ["restaurant_small", "spa_small", "pool_small", "bar", "gym_small"],
+		"requirements":    ["wlan", "comfort"],
+		"spawn_chance":    0,
+		"min_stay":        1,
+		"max_stay":        2,
+		"min_base_price":  150,
+		"max_base_price":  300,
+		"min_daily_budget": 100,
+		"max_daily_budget": 300,
+		"poi_budget_multiplier": 3.0,
+		"icon":            "res://assets/icons/guests/user-star.svg",
+		"base_exp": 100,
+		"rep_penalty": 50
+	}
 }

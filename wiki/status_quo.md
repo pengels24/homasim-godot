@@ -36,6 +36,7 @@
 - [x] **Moral-System:** Personal verliert Moral bei Überarbeitung, kündigt bei 0, regeneriert im Personalraum.
 - [x] **Level & EXP:** EXP-Bedarf steigt exponentiell bis Level 10. Startschwierigkeit (Boost) ist wählbar.
 - [x] **Soundsystem:** Hintergrundmusik (Playlist via JSON) und situative Sounds (Türklappern, Besen, Schraubenschlüssel, etc.) sind implementiert.
+- [x] **Gourmetsterne & Inspektor:** Anonyme Hotelprüfer besuchen das Hotel unerkannt und verleihen (oder entziehen) Sterne basierend auf Sauberkeit, Gästezufriedenheit und Reputationswerten.
 
 ## 📊 UI & Management-Tools
 - [x] **Gästeliste:** Übersicht aller aktuellen Gäste inkl. Filter, Live-Vorschau (PiP) und Kamera-Sprung zum Gast.
@@ -46,3 +47,4 @@
 - [x] **Activity Log:** Chronologisches Protokoll aller wichtigen Ereignisse im Hotel (Level-Ups, Defekte, Abreisen).
 - [x] **Live-Monitore für POI:** Separate verschiebbare Fenster mit Aktivitäten und Gästelisten des jeweiligen POI.
 - [x] **Event-HUD:** Aktive Tagungsevent-Anzeige mit Restzeit-Countdown (z.B. "Marketingkonferenz (1h30m)") und Klick-to-Kamera-Jump zum Tagungsraum.
+- [x] **Hotelübersicht:** Zentrales Modal (F9) für WiSim-Metriken wie Finanzen, Durchschnitts-Sauberkeit, Belegung und Gesamtzufriedenheit.

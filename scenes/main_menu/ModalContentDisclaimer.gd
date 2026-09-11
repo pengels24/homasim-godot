@@ -5,7 +5,7 @@ extends VBoxContainer
 @onready var btn_ok: Button = %BtnOk
 
 func _ready() -> void:
-    label.text = GameState.T("ui.disclaimer.text")
+    label.text = GameState.T("ui.disclaimer.prealpha.text")
     check_dont_show.text = GameState.T("ui.disclaimer.dont_show")
     btn_ok.text = GameState.T("ui.disclaimer.ok")
     
@@ -13,7 +13,7 @@ func _ready() -> void:
 
 func _on_ok_pressed() -> void:
     if check_dont_show.button_pressed:
-        SettingsManager.dont_show_disclaimer = true
+        SettingsManager.dont_show_prealpha_disclaimer = true
         SettingsManager.save()
     
     # Finde das StandardModal-Parent und schließe es

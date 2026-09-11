@@ -43,7 +43,7 @@ var hud_side: String = "center"    # "left" / "center" / "right"
 var show_tech_info: bool = false   # Ingame Performance Overlay
 var tutorial_tips: bool = true     # Tutorial-Tipps im Spiel anzeigen
 var language: String = "en"        # "de" / "en" (erweiterbar)
-var dont_show_disclaimer: bool = false
+var dont_show_prealpha_disclaimer: bool = false
 var window_mode: String = "fullscreen"  # "fullscreen" / "borderless"
 
 # ── Session ───────────────────────────────────────────────────────────────────
@@ -230,7 +230,7 @@ func save() -> void:
 	cfg.set_value("ui", "show_tech_info", show_tech_info)
 	cfg.set_value("ui", "tutorial_tips", tutorial_tips)
 	cfg.set_value("ui", "language", language)
-	cfg.set_value("ui", "dont_show_disclaimer", dont_show_disclaimer)
+	cfg.set_value("ui", "dont_show_prealpha_disclaimer", dont_show_prealpha_disclaimer)
 	cfg.set_value("ui", "window_mode", window_mode)
 	cfg.set_value("session", "last_profile_id", last_profile_id)
 	cfg.set_value("ui", "preferred_screen", preferred_screen)
@@ -276,7 +276,7 @@ func _load() -> void:
 	var default_lang = "de" if os_lang == "de" else "en"
 	language = cfg.get_value("ui", "language", default_lang)
 	TranslationServer.set_locale(language)
-	dont_show_disclaimer = cfg.get_value("ui", "dont_show_disclaimer", false)
+	dont_show_prealpha_disclaimer = cfg.get_value("ui", "dont_show_prealpha_disclaimer", false)
 	window_mode = cfg.get_value("ui", "window_mode", "fullscreen")
 	preferred_screen = cfg.get_value("ui", "preferred_screen", 0)
 	# Nicht sofort apply_screen/apply_window_mode aufrufen –

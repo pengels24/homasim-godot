@@ -24,9 +24,20 @@
 
 ## 📁 Geänderte Dateien
 
-| Datei | Änderung |
-|---|---|
 | `scenes/ingame/staff/StaffActor.gd` | ANG-343 Refactoring, Bademeister-Logik (Pfad-basiert), Typ-Fixes |
 | `scenes/ingame/rooms/Room.gd` | `get_available_staff_interactions` + `claim_interaction` Re-Claim-Support |
 | `scenes/ingame/rooms/pool_small/PoolSmall.gd` | `claim_interaction` Override für Bademeister-Blickrichtung (Chair4) |
 | `scenes/ingame/hud/modals/RoomDetailsMonitor.tscn` | ANG-340: `focus_mode = FOCUS_NONE` auf Header-Buttons |
+| `scenes/ingame/map/MapGrid.gd` | Reachability-Check: Ghost-Exit als Anker, Lobby-Skip in Check 1 |
+
+---
+
+## 🐛 Bugfix (11.09.2026): Reachability-Check (Insel-Erkennung) reaktiviert
+
+Der Bau-Validierungscheck für isolierte Zimmer war dead code – zwei Root-Causes gleichzeitig aktiv.
+
+- **Root Cause 1:** `lobby_tile` zeigte auf Lobby-Körper-Mitte (val=1 = solid) → `is_point_solid()` immer `true` → Early-Return → Check nie ausgeführt.
+- **Root Cause 2:** Lobby ist in `active_rooms`. Ihr externer Exit-Tile liegt außerhalb der Parzelle (col -1) → von innen nie erreichbar → alle Ghost-Positionen fälschlich rot.
+- **Fix:** Check 1 startet vom **Ghost-Exit-Tile** (natürlicher Ankerpunkt). Lobby in der Schleife übersprungen (`id == "lobby"`). Check 2 nutzt entrance_dir-abhängiges internes Corridor-Tile.
+- **Ergebnis:** Ghost korrekt rot bei Insel-Bildung, grün bei valider Platzierung.
+

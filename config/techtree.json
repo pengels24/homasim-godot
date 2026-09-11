@@ -17,7 +17,6 @@
                     "cost_fp": 100,
                     "cost_money": 1000,
                     "dependencies": [],
-                    "unlocks_emojis": "🛏️ 🚿",
                     "demo_locked": false,
                     "unlocks_features": [
                         "ui.techtree.feature.z1_1_speed"
@@ -34,7 +33,6 @@
                     "dependencies": [
                         "Z1.1"
                     ],
-                    "unlocks_emojis": "📺 🛋️",
                     "demo_locked": false
                 },
                 {
@@ -48,7 +46,6 @@
                     "dependencies": [
                         "Z1.1"
                     ],
-                    "unlocks_emojis": "⭐ 🍾",
                     "demo_locked": false
                 },
                 {
@@ -62,7 +59,6 @@
                     "dependencies": [
                         "Z1.1"
                     ],
-                    "unlocks_emojis": "📶 💻",
                     "demo_locked": false
                 },
                 {
@@ -76,7 +72,6 @@
                     "dependencies": [
                         "Z1.1"
                     ],
-                    "unlocks_emojis": "❄️ 🌬️",
                     "demo_locked": false
                 },
                 {
@@ -88,7 +83,6 @@
                     "cost_fp": 100,
                     "cost_money": 1000,
                     "dependencies": [],
-                    "unlocks_emojis": "🍔 ☕",
                     "demo_locked": false
                 },
                 {
@@ -102,7 +96,6 @@
                     "dependencies": [
                         "G1.1"
                     ],
-                    "unlocks_emojis": "🍳 🥗",
                     "demo_locked": false
                 },
                 {
@@ -116,7 +109,6 @@
                     "dependencies": [
                         "G1.1"
                     ],
-                    "unlocks_emojis": "🍷 🥩",
                     "demo_locked": false
                 },
                 {
@@ -131,7 +123,6 @@
                         "G1.2",
                         "G1.3"
                     ],
-                    "unlocks_emojis": "⭐ 🍽️",
                     "demo_locked": false
                 },
                 {
@@ -143,7 +134,6 @@
                     "cost_fp": 100,
                     "cost_money": 1000,
                     "dependencies": [],
-                    "unlocks_emojis": "🧖 💆",
                     "demo_locked": false,
                     "unlocks_features": [
                         "ui.techtree.feature.w1_1_bonus"
@@ -159,8 +149,7 @@
                     "cost_money": 2500,
                     "dependencies": [
                         "W1.1"
-                    ],
-                    "unlocks_emojis": "🏊 🌳"
+                    ]
                 },
                 {
                     "id": "W1.3",
@@ -172,8 +161,7 @@
                     "cost_money": 5000,
                     "dependencies": [
                         "W1.1"
-                    ],
-                    "unlocks_emojis": "⭐ 🧘"
+                    ]
                 },
                 {
                     "id": "M1.1",
@@ -184,7 +172,6 @@
                     "cost_fp": 100,
                     "cost_money": 1000,
                     "dependencies": [],
-                    "unlocks_emojis": "💼 📊",
                     "demo_locked": false,
                     "unlocks_features": [
                         "tutorial.sim_browser.title"
@@ -201,7 +188,6 @@
                     "dependencies": [
                         "M1.1"
                     ],
-                    "unlocks_emojis": "🧑‍💼 📝",
                     "demo_locked": false,
                     "unlocks_features": [
                         "ui.techtree.feature.m1_2_train"
@@ -218,7 +204,6 @@
                     "dependencies": [
                         "M1.1"
                     ],
-                    "unlocks_emojis": "⚙️ ⏱️",
                     "demo_locked": false,
                     "unlocks_features": [
                         "ui.techtree.feature.m1_3_speed"
@@ -236,7 +221,6 @@
                         "M1.2",
                         "M1.3"
                     ],
-                    "unlocks_emojis": "🏢 📈",
                     "demo_locked": false,
                     "unlocks_features": [
                         "ui.techtree.feature.m1_4_patience"
@@ -251,7 +235,6 @@
                     "cost_fp": 100,
                     "cost_money": 1000,
                     "dependencies": [],
-                    "unlocks_emojis": "🎪 🎤",
                     "demo_locked": false,
                     "unlocks_features": [
                         "ui.techtree.feature.p1_1_events"
@@ -268,7 +251,6 @@
                     "dependencies": [
                         "P1.1"
                     ],
-                    "unlocks_emojis": "🏟️ 🎇",
                     "demo_locked": false
                 },
                 {
@@ -282,7 +264,6 @@
                     "dependencies": [
                         "P1.2"
                     ],
-                    "unlocks_emojis": "🎭 🎵",
                     "demo_locked": false,
                     "unlocks_features": [
                         "ui.techtree.feature.p1_3_vip"
@@ -300,7 +281,6 @@
                         "W1.2",
                         "W1.3"
                     ],
-                    "unlocks_emojis": "🏋️ 🕒",
                     "unlocks_features": [
                         "ui.techtree.feature.w1_4_hours",
                         "ui.techtree.feature.w1_4_package"

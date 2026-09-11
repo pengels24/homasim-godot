@@ -277,6 +277,12 @@ func get_placement_error(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 	for room: Node2D in active_rooms:
 		if not is_instance_valid(room):
 			continue
+		# Lobby überspringen: ihr externer Exit-Tile liegt außerhalb der Parzelle
+		# und ist von innen nie erreichbar → würde ALLE Positionen fälschlich rot machen.
+		if room.has_method("get_definition"):
+			var def = room.get_definition()
+			if def.has("id") and def["id"] == "lobby":
+				continue
 
 		var r_sz: Vector2i = room.get_tile_size()
 		var r_rot: int = room.get("door_rotation")

@@ -154,8 +154,8 @@ func get_live_details() -> Array[Dictionary]:
 # =============================================================================
 const TIME_SESSION_START    := 480   # 08:00
 const TIME_BREAK_START      := 720   # 12:00
-const TIME_BREAK_END        := 825   # 13:45  Gäste kommen zurück -> wander_pm
-const TIME_SESSION_PM_START := 840   # 14:00  Session PM beginnt
+const TIME_BREAK_END        := 795   # 13:15  Gäste kommen zurück → wander_pm
+const TIME_SESSION_PM_START := 810   # 13:30  Session PM beginnt
 const TIME_END              := 1020  # 17:00
 
 var _speaker_id: String = ""
@@ -187,13 +187,7 @@ func _init_phase_from_time() -> void:
 		_phase = "end"
 
 func _on_minute_passed(total_game_minutes: int) -> void:
-	# Speaker-Swap nur während aktiver Sessions
-	if _speaker_id != "" and (_phase == "session" or _phase == "session_pm"):
-		_speaker_time += 1
-		if _speaker_time >= 15:
-			_swap_speaker()
-
-	# Phasen-Übergänge
+	# Phasen-Übergänge ZUERST (damit Speaker-Check korrekte Phase sieht)
 	match total_game_minutes:
 		TIME_SESSION_START:
 			if _phase == "wander" or _phase == "idle":
@@ -209,8 +203,15 @@ func _on_minute_passed(total_game_minutes: int) -> void:
 				_phase = "session_pm"
 				_speaker_time = 0  # Frischer Start nach Pause
 		TIME_END:
-			if _phase not in ["end", "idle"]:
-				_end_conference()
+			if _phase == "session_pm" or _phase == "wander_pm":
+				_broadcast_to_event_guests("end_conference_day")
+				_phase = "end"
+
+	# Speaker-Swap DANACH (Phase ist jetzt aktuell)
+	if _speaker_id != "" and (_phase == "session" or _phase == "session_pm"):
+		_speaker_time += 1
+		if _speaker_time >= 15:
+			_swap_speaker()
 
 func _swap_speaker() -> void:
 	# var t = TimeManager.get_game_time() if TimeManager else -1

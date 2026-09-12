@@ -1,4 +1,4 @@
-﻿keys,de,en
+keys,de,en
 game.title,HO·MA·SIM - Hotel Manager Simulation,HO·MA·SIM - Hotel Manager Simulation
 game.textlogo,HO·MA·SIM,HO·MA·SIM
 currency.symbol,€,€
@@ -112,6 +112,7 @@ hud.bottom.quest_book_tt,Aufgaben ###,Quests ###
 hud.bottom.guest_list_tt,Gästeliste ###,Guest List ###
 hud.bottom.room_list_tt,Raumliste ###,Room List ###
 hud.bottom.tutorials_tt,Tutorials ###,Tutorials ###
+hud.bottom.hotel_overview_tt,Hotelübersicht ###,Hotel Overview ###
 hud.button.reset_view.restore_tt,Ansicht zurücksetzen,Reset View
 hud.button.reset_view.restore_toast,Ansicht wurde zurückgesetzt,View has been reset
 hud.button.reset_view.save_tt,Ansicht speichern,Save View
@@ -1049,6 +1050,7 @@ tx.level_up_bonus,Level-Up Bonus,Level-Up Bonus
 tx.hire,Einstellungsgebuehr: %s (%s),Hire fee: %s (%s)
 tx.daily_wages,Tagesgehaelter,Daily wages
 tx.research,Forschung: %s,Research: %s
+tx.construction,Ausstattung: %s,Equipment: %s
 finances.cat.label.betrieb,Betrieb/POI,Operations/POI
 
 reception.decline.title,Gast abweisen?,Decline Guest?

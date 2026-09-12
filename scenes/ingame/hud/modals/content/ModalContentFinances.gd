@@ -245,6 +245,9 @@ func _translate_tx_desc(raw: String) -> String:
 		return raw
 	var parts := raw.split("|")
 	var translated := GameState.T(parts[0])
+	# Guard: nur formatieren wenn Platzhalter vorhanden, sonst Parameter anhängen
+	if "%" not in translated:
+		return translated + " " + "|".join(parts.slice(1))
 	if parts.size() == 2:
 		return translated % parts[1]
 	if parts.size() >= 3:

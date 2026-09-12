@@ -119,6 +119,8 @@ func refresh() -> void:
 
 	else:
 		for party in active_guests:
+			if party.event_poi_id != "":
+				continue  # TG-Gäste nicht in der Rezeption anzeigen
 			var card = GUEST_CARD_SCENE.instantiate()
 
 			_list_active.add_child(card)

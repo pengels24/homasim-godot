@@ -89,8 +89,14 @@ func _on_minute_passed(_total_game_minutes: int) -> void:
 			spawn_conference_guests(current_time)
 
 	if current_time >= 720 and EventManager and EventManager.get("is_inspector_coming_today"):
-		EventManager.is_inspector_coming_today = false
-		spawn_inspector()
+		# Inspektor nur spawnen wenn kein anderes Event gleichzeitig läuft
+		var conf_active: bool = EventManager.active_conferences.size() > 0
+		var city_active: bool = EventManager.active_event != EventManager.EventType.NONE
+		if not conf_active and not city_active:
+			EventManager.is_inspector_coming_today = false
+			spawn_inspector()
+		# Wenn ein anderes Event läuft: Flag bleibt, Inspector kommt später nicht mehr.
+		# Das ist gewollt - der Inspector-Tag wird verpasst (kein Nachholen).
 # =============================================================================
 func set_patience_rate(rate: float) -> void:
 	_patience_rate = rate
@@ -477,7 +483,7 @@ func spawn_guests(amount: int = -1) -> int:
 func spawn_inspector() -> void:
 	var party := _generate_party("inspector")
 	party.is_inspector = true
-	party.cover_type = "single" # Standard-Tarnung (ggf. _weighted_random_type, aber 'single' passt gut zum Inspektor)
+	party.cover_type = "business" # Tarnung als Geschäftsreisender – nutzt Restaurant, passt zum Gourmet-Inspektor
 	
 	_waiting.append(party)
 	sig_party_arrived.emit(party)

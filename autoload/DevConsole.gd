@@ -131,6 +131,7 @@ func _execute(cmd: String) -> void:
 			_log("  set-boost-event:on- Startet ein Stadt-Event (Messe) manuell", CLR_INFO)
 			_log("  set-boost-event:off- Beendet ein Stadt-Event manuell", CLR_INFO)
 			_log("  fix-savegame      - Bereinigt verbuggte Events und Tagungsgäste", CLR_INFO)
+			_log("  start-inspector   - Spawnt den Gourmet-Inspektor manuell", CLR_INFO)
 
 		"fix-savegame":
 			if EventManager:
@@ -357,6 +358,36 @@ func _execute(cmd: String) -> void:
 			SaveManager.update_hotel(hotel_id, { "fp": fp })
 			GameState.sig_hotel_fp_changed.emit(fp)
 			_log("FP auf %d gesetzt." % fp, CLR_OK)
+
+		"start-inspector":
+			var gm = get_tree().current_scene.find_child("GuestManager", true, false)
+			if not is_instance_valid(gm):
+				_log("Fehler: GuestManager nicht gefunden.", CLR_ERR)
+				return
+			# Guard: laufende andere Events prüfen
+			if EventManager:
+				if EventManager.active_event != EventManager.EventType.NONE:
+					_log("Abbruch: Ein Stadt-Event (Messe/Konzert/Feiertag) läuft gerade. Inspektor nur solo möglich.", CLR_ERR)
+					return
+				if EventManager.active_conferences.size() > 0:
+					_log("Abbruch: Eine Tagung läuft gerade. Inspektor nur solo möglich.", CLR_ERR)
+					return
+			# Guard: Inspektor schon aktiv?
+			var already_running = false
+			for p in gm.get_active():
+				if p.is_inspector:
+					already_running = true
+					break
+			if not already_running:
+				for p in gm.get_waiting():
+					if p.is_inspector:
+						already_running = true
+						break
+			if already_running:
+				_log("Inspektor ist bereits im Hotel – Event läuft noch!", CLR_ERR)
+				return
+			gm.spawn_inspector()
+			_log("Gourmet-Inspektor manuell gespawnt. Er wartet an der Rezeption.", CLR_OK)
 
 		_:
 			_log("Unbekannter Befehl: \"%s\". Tippe \"help\"." % cmd_name, CLR_ERR)

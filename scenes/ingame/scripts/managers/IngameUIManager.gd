@@ -867,6 +867,8 @@ func open_hotel_overview() -> void:
 	cleanup_current_states(true)
 	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentHotelOverview.tscn")
 	if not is_instance_valid(content): return
+	if content.has_method("setup"):
+		content.setup(_guest_mgr)
 	
 	_set_modal_pausing(true)
 	_bottom_bar.sync_button_state("hotel_overview")

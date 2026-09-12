@@ -1129,14 +1129,19 @@ func go_conference_break() -> void:
 	_has_claimed_seat = false
 	_action_timer = 0.0
 
-	# Mögliche Ziele: Lobby (Snackomat), Bar, Restaurant
-	var candidates: Array[String] = ["lobby"]
+	# Mögliche Ziele: Bar/Restaurant bevorzugt, Lobby (Snackomat) als Fallback
+	var candidates: Array[String] = []
 	for room in _map_grid.active_rooms:
 		if not is_instance_valid(room):
 			continue
 		var def = room.call("get_definition") if room.has_method("get_definition") else {}
 		if room.has_method("is_gastro") and room.is_gastro():
+			# Gastro 3x gewichtet → deutlich bevorzugt gegenüber Lobby
 			candidates.append(def.get("id", ""))
+			candidates.append(def.get("id", ""))
+			candidates.append(def.get("id", ""))
+	# Lobby als seltener Fallback (1x)
+	candidates.append("lobby")
 
 	var target = candidates.pick_random()
 	print("[CONF] go_conference_break | %s | -> %s" % [(_guest_member.name if _guest_member else "?"), target])

@@ -8,7 +8,7 @@ Der Tagungsraum (Conference Small) bietet Platz für bis zu 12 Personen (11 Zuh�
 1. **Event-Modus (Modus A):**
    - Wenn der `EventManager` morgens ein Event auf diesen Raum bucht (z.B. Botaniker-Tagung), erhält das Hotel sofort die Einmalzahlung pro Teilnehmer.
    - Der Raum ist in dieser Zeit **exklusiv** für die gebuchten Tagungsgäste reserviert. Reguläre Hotelgäste (VIPs, Business-Gäste ohne Event) dürfen den Raum nicht betreten.
-   - Tagungsgäste haben einen strikten Tagesablauf: 07:45 bis 12:00 Uhr Konferenz, 12:00 bis 13:50 Uhr Mittagspause im Restaurant/Bar, 13:50 bis 17:00 Uhr Nachmittagssession.
+   - Tagungsgäste haben einen strikten Tagesablauf: 07:45–12:00 Konferenz, 12:00–13:15 Mittagspause (Bar/Restaurant), 13:30–17:00 Nachmittagssession.
 
 2. **Regulärer Modus (Modus B):**
    - Findet kein Event statt, verhält sich der Raum wie ein regulärer POI. 

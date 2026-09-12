@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.51 | Stand: 11.09.2026
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.52 | Stand: 12.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -13,7 +13,16 @@
 ---
 
 ## 🛠 Ungeplante Fixes & Features (Aktuelle Session)
-- ✅ **GuestActor Smart Room Fix:** `_action_timer` Bug beim Betreten gefixed (verhinderte Interaktions-Claim).
+- ✅ **ConferenceSmall Speaker-Swap ohne Reload (ANG-346, 12.09.2026):** Reihenfolge in `_on_minute_passed()` getauscht → Phase wird vor Speaker-Timer-Check gesetzt. Feuert jetzt nach 15 Min ohne Reload.
+- ✅ **TG-Gäste aus Rezeptionsliste gefiltert (12.09.2026):** `ModalContentReception.gd` überspringt Parties mit `event_poi_id != ""`.
+- ✅ **Mittagspause Lobby-Gewichtung (12.09.2026):** Gastro 3× vs. Lobby 1× in `go_conference_break()` – verhindert überfüllte Lobby während Pause.
+- ✅ **ModalContentFinances String-Format-Guard (12.09.2026):** `_translate_tx_desc()` crashte bei Keys ohne `%s`. Guard prüft jetzt ob Platzhalter vorhanden.
+- ✅ **tx.construction Translation-Key (12.09.2026):** `language.csv` ergänzt – `Ausstattung: %s` (DE) / `Equipment: %s` (EN). Betrifft WLAN/Klima Bau-Transaktionen.
+- ✅ **Konferenz-Pausenzeiten angepasst (12.09.2026):** Rückkehr 13:45 → 13:15, Nachmittagsstart 14:00 → 13:30.
+- ✅ **AGENTS.md Versions-Regl (12.09.2026):** Direktive – eine Session = eine Version, +v nur am Tagesende.
+- ✅ **wiki/_dev/test_review.md angelegt (12.09.2026):** Living-Checklist für Testpunkte.
+- ✅ **Skill /review erstellt (12.09.2026):** Eintragen in test_review.md via `/review [text]`.
+
 - ✅ **Pool Live Monitor:** Erfasst nun alle Gäste der Gruppe `guest_actors` (nicht nur sitzende) inkl. verbleibender Ingame-Minuten-Anzeige ("Baden (Xm)").
 - ✅ **Pool Interaktionen:** `get_available_interactions()` überschrieben, um `"wander"` im Pool zu unterbinden.
 - ✅ **GuestActor Pathfinding (Checkout):** `_current_poi_id` Aktualisierung in `start_checkout` korrigiert, um Ghost-Walking (Luftlinie durch Wände) bei der Abreise zu verhindern.

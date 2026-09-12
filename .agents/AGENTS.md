@@ -31,6 +31,7 @@
 - **Kein Push ohne Test:** Code muss vorher von Peter getestet werden.
 - **Alpha-Backlog (`wiki/_dev/alpha_backlog.md`):** Das ist die Bibel für den `dev`-Branch. Prio-Reihenfolge strikt einhalten. Keine Spekulationen ohne Absprache.
 - **Changelog:** Am Ende jeder Session Changelog erstellen (`changelog/gd-0.1.XX.md`). ZUERST `alpha_backlog.md` aktualisieren (erledigte Punkte abhaken/ergänzen), DANN Changelog committen.
+- **Versions-Regl (ZWINGEND):** Eine Dev-Session = eine Version. Tagesstart: bestehende Version weiterführen. Tagesende: `/update_doku +v` ausführen → Version bumpen, Changelog abschließen. Niemals mehrere Tage/Sessions in derselben Version sammeln. Niemals mittendrin bumpen.
 
 ---
 

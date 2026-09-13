@@ -30,7 +30,7 @@ static func get_definition() -> Dictionary:
 		"min_staff": 1,
 		"max_staff": 2,  # Slot 1: bartender (Pflicht), Slot 2: waiter (optional)
 		"max_role_limits": {"bartender": 1, "waiter": 1},  # Je max. 1 pro Rolle
-		"open_from": 480,   # DEBUG: 8:00 (Normal 12:00 / 720)
+		"open_from": 720,   # 12:00
 		"open_to": 1410,    # 23:30
 		"need_restoration": {"thirst": 70, "fun": 30},
 		"valid_door_slots": ["R1"],

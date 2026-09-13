@@ -3,55 +3,67 @@
     {
       "id": "softdrink",
       "name_key": "recipe.name.softdrink",
+      "type": "drink",
       "prep_time": 2,
       "cost": 1,
       "price": 3,
-      "saturation": 10,
+      "saturation": 5,
+      "thirst": 50,
       "served_in": ["bar", "restaurant_small"]
     },
     {
       "id": "toast_hawaii",
       "name_key": "recipe.name.toast_hawaii",
+      "type": "food",
       "prep_time": 10,
       "cost": 3,
       "price": 12,
       "saturation": 25,
+      "thirst": 0,
       "served_in": ["bar", "restaurant_small"]
     },
     {
       "id": "chips_bowl",
       "name_key": "recipe.name.chips_bowl",
+      "type": "food",
       "prep_time": 5,
       "cost": 1,
       "price": 5,
       "saturation": 15,
+      "thirst": 0,
       "served_in": ["bar"]
     },
     {
       "id": "burger_classic",
       "name_key": "recipe.name.burger_classic",
+      "type": "food",
       "prep_time": 15,
       "cost": 5,
       "price": 18,
       "saturation": 40,
+      "thirst": 0,
       "served_in": ["restaurant_small"]
     },
     {
       "id": "pasta_napoli",
       "name_key": "recipe.name.pasta_napoli",
+      "type": "food",
       "prep_time": 20,
       "cost": 4,
       "price": 16,
       "saturation": 35,
+      "thirst": 0,
       "served_in": ["restaurant_small"]
     },
     {
       "id": "steak_frites",
       "name_key": "recipe.name.steak_frites",
+      "type": "food",
       "prep_time": 30,
       "cost": 10,
       "price": 35,
       "saturation": 60,
+      "thirst": 0,
       "served_in": ["restaurant_small"]
     }
   ]

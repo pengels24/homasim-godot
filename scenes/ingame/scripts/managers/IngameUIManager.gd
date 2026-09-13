@@ -189,7 +189,9 @@ func _on_inspector_report_ready(stats: Dictionary) -> void:
 		content.setup(stats)
 		if content.has_signal("sig_close_requested"):
 			content.sig_close_requested.connect(_on_inspector_report_closed.bind(stats))
-	_standard_modal.open(GameState.T("ui.modal.inspector_report.title", "Inspektor-Bericht"))
+	# set_title() direkt aufrufen – open() bricht ab wenn Modal bereits sichtbar ist (z.B. Rezeption)
+	_standard_modal.set_title(GameState.T("ui.modal.inspector_report.title", "Gourmet-Sterne \u2013 Pr\u00fcfbericht"))
+	_standard_modal.open(GameState.T("ui.modal.inspector_report.title", "Gourmet-Sterne \u2013 Pr\u00fcfbericht"))
 	_set_modal_pausing(true)
 
 func _on_inspector_report_closed(stats: Dictionary) -> void:
@@ -199,7 +201,7 @@ func _on_inspector_report_closed(stats: Dictionary) -> void:
 		var modal_scene = load("res://scenes/ingame/hud/modals/ModalStarAchieved.tscn")
 		if modal_scene:
 			var modal = modal_scene.instantiate()
-			_hud.get_node("ModalLayer").add_child(modal)
+			_hud.add_child(modal)
 			if modal.has_method("play_animation"):
 				modal.play_animation(stats.stars_after)
 				
@@ -210,7 +212,7 @@ func _on_inspector_report_closed(stats: Dictionary) -> void:
 		var modal_scene = load("res://scenes/ingame/hud/modals/ModalStarAchieved.tscn")
 		if modal_scene:
 			var modal = modal_scene.instantiate()
-			_hud.get_node("ModalLayer").add_child(modal)
+			_hud.add_child(modal)
 			if modal.has_method("play_lost_animation"):
 				modal.play_lost_animation(stats.stars_after)
 		var Toast = get_node_or_null("/root/ToastManager")

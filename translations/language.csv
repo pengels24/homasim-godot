@@ -1226,6 +1226,7 @@ poi.restaurant.ordered,Bestellt,Ordered
 poi.restaurant.cooking,Zubereitung,Preparation
 poi.restaurant.waiting_service,Wartet auf Service,Waiting for Service
 poi.restaurant.eating,Isst gerade,Eating
+poi.vending_machine,Snackautomat,Snack Machine
 ui.staff.assign.free,Frei,Free
 techtree.zimmer.wlan,WLAN (Internet),WIFI (Internet)
 techtree.zimmer.klima,Klimaanlage,Air Conditioning
@@ -1620,7 +1621,7 @@ quest.guest.vip.10.name,Roter Teppich,Roter Teppich
 quest.guest.vip.10.desc,Beherberge insgesamt 10 VIP-Gäste.,Beherberge insgesamt 10 VIP-Gäste.
 quest.guest.vip.25.name,Sterne-Status,Sterne-Status
 quest.guest.vip.25.desc,Beherberge insgesamt 25 VIP-Gäste.,Beherberge insgesamt 25 VIP-Gäste.
-roomdef.name.long.vending_machine,Getr�nkeautomat,Vending Machine
+roomdef.name.long.vending_machine,Getränkeautomat,Vending Machine
 roomdef.name.short.vending_machine,Automat,Vending
 roomdef.name.long.lobby,Lobby,Lobby
 poi.restaurant.serving,Wird serviert,Being served
@@ -1643,9 +1644,21 @@ event.gourmet.stars_gained.desc,Glückwunsch! Der Inspektor war begeistert.,Cong
 event.gourmet.stars_lost.desc,Der Inspektor war enttäuscht. Ein Stern wurde abgezogen!,The inspector was disappointed. One star was revoked!
 event.gourmet.max_stars,"Der Inspektor war da, aber es gibt keine weiteren Sterne zu vergeben.","The inspector visited, but no further stars can be awarded."
 event.gourmet.gained_toast,Gourmet-Stern erhalten!,Gourmet Star achieved!
+poi.vending_machine,Snack-Automat,Vending Machine
+poi.lobby.sitting,Entspannt sich,Relaxing
+poi.lobby.eating_snack,Isst einen Snack,Eating a snack
+poi.conference.waiting,Wartet,Waiting
+event.gourmet.stars_gained.desc,Glückwunsch! Der Inspektor war begeistert.,Congratulations! The inspector was thrilled.
+event.gourmet.stars_lost.desc,Der Inspektor war enttäuscht. Ein Stern wurde abgezogen!,The inspector was disappointed. One star was revoked!
+event.gourmet.max_stars,"Der Inspektor war da, aber es gibt keine weiteren Sterne zu vergeben.","The inspector visited, but no further stars can be awarded."
+event.gourmet.gained_toast,Gourmet-Stern erhalten!,Gourmet Star achieved!
 event.gourmet.lost_toast,"Der Inspektor war zutiefst enttäuscht. Das Hotel verliert einen Stern!","The inspector was deeply disappointed. The hotel loses a star!"
 event.gourmet.failed_toast,"Der Inspektor war nicht vollends überzeugt. Verbessere den Service und die Sauberkeit!","The inspector wasn't fully convinced. Improve service and cleanliness!"
 ui.disclaimer.prealpha.title,Willkommen in der HO·MA·SIM Pre-Alpha!,Welcome to the HO·MA·SIM Pre-Alpha!
 ui.disclaimer.prealpha.text,"Schön, dass du dabei bist! Bevor du dein erstes Hotel baust, ein kleiner Hinweis vorab: Du spielst hier eine frühe Pre-Alpha. Das bedeutet, das Fundament steht, aber viele Features sind noch im Bau.\n\nBitte behalte während des Spielens folgende Dinge im Hinterkopf:\n\n[b]Ecken und Kanten:[/b] Du wirst mit Sicherheit auf Bugs, Glitches oder noch nicht ganz ausbalancierte Mechaniken stoßen.\n\n[b]Work in Progress:[/b] Viele Grafiken, Animationen und UI-Elemente sind noch Platzhalter und spiegeln nicht die finale Qualität wider.\n\n[b]Dein Feedback ist Gold wert:[/b] Auf der rechten Bildschirmseite findest du einen ""Bug melden""-Button. Bitte nutze ihn ausgiebig! Egal ob du einen Fehler gefunden hast, Kritik äußern möchtest oder eine coole Idee für ein Feature hast – lass es mich wissen.\n\nVielen Dank, dass du meine Solo-Entwicklung spielst und dieses Projekt mit deiner Zeit und deinem Feedback unterstützt. Viel Spaß beim Bauen!","Great to have you here! Before you build your first hotel, a quick heads-up: You are playing an early Pre-Alpha. This means the foundation is laid, but many features are still under construction.\n\nPlease keep the following things in mind while playing:\n\n[b]Rough Edges:[/b] You will definitely encounter bugs, glitches, or mechanics that are not fully balanced yet.\n\n[b]Work in Progress:[/b] Many graphics, animations, and UI elements are still placeholders and do not reflect the final quality.\n\n[b]Your Feedback is Gold:[/b] On the right side of the screen, you will find a ""Report Bug"" button. Please use it extensively! Whether you've found a bug, have some constructive criticism, or a cool idea for a feature – let me know.\n\nThank you so much for playing my solo-developed game and supporting this project with your time and feedback. Have fun building!"
 modal.hotel_overview.title,Hotelübersicht,Hotel Overview
-ui.modal.inspector_report.title,Inspektor-Bericht,Inspector Report
+ui.modal.inspector_report.title,Gourmet-Sterne – Prüfbericht,Gourmet Stars – Inspection Report
+event.inspector.result_up,Prüfung erfolgreich! Die Anforderungen für den nächsten Stern wurden erfüllt.,Inspection passed! The requirements for the next star have been met.
+event.inspector.result_down,Prüfung nicht bestanden! Aufgrund gravierender Mängel wurde ein Stern aberkannt.,Inspection failed! Due to serious deficiencies a star was revoked.
+event.inspector.result_held,Prüfung nicht bestanden. Aktueller Stern konnte gehalten werden.,Inspection not passed. The current star could be maintained.
+event.inspector.result_none,Anforderungen noch nicht erfüllt. Weiter so – der erste Stern wartet!,Requirements not yet met. Keep it up – the first star is waiting!

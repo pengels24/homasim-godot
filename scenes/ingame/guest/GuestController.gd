@@ -83,6 +83,18 @@ func spawn_active_guests() -> void:
 				# Delay 0 = sofort sichtbar an der Reception (kein Staffel-Warten nötig)
 				actor.start_waiting_in_lobby(_get_lobby_spawn_pos(), 0.0)
 
+	# [DEBUG] Tagesstart-Report
+	print("[DAYSTART] === Tagesstart Spawn-Report ===")
+	print("[DAYSTART] _active: " + str(_guest_manager._active.size()) + " | TG-CO: " + str(tg_checkout_parties.size()))
+	for p in _guest_manager._active:
+		var dbg_names = ", ".join(p.members.map(func(m): return m.name))
+		print("[DAYSTART]  ACTIVE -> " + dbg_names + " | room=" + p.room_id + " | event=" + p.event_poi_id + " | stay=" + str(p.stay_days) + " | total=" + str(p.total_stay_days) + " | type=" + p.type)
+	for p in tg_checkout_parties:
+		var dbg_names = ", ".join(p.members.map(func(m): return m.name))
+		print("[DAYSTART]  TG-CO -> " + dbg_names + " | event=" + p.event_poi_id)
+	var ac = str(EventManager.active_conferences) if EventManager else "N/A"
+	print("[DAYSTART] active_conferences: " + ac)
+	print("[DAYSTART] ===============================")
 
 # =============================================================================
 func _on_party_arrived(party: GuestParty) -> void:

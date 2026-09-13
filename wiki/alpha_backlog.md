@@ -1,5 +1,5 @@
-# HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.52 | Stand: 12.09.2026
+﻿# HO·MA·SIM – Alpha Backlog & Roadmap
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.53 | Stand: 13.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -22,6 +22,12 @@
 - ✅ **AGENTS.md Versions-Regl (12.09.2026):** Direktive – eine Session = eine Version, +v nur am Tagesende.
 - ✅ **wiki/_dev/test_review.md angelegt (12.09.2026):** Living-Checklist für Testpunkte.
 - ✅ **Skill /review erstellt (12.09.2026):** Eintragen in test_review.md via `/review [text]`.
+
+- [x] **ANG-361 Ruhepause verifiziert (13.09.2026):** Gaeste bleiben nachts im Zimmer, verlassen es erst ab 6:00.
+- [x] **Inspector-Bericht Polishing (13.09.2026):** Modal 80x75%, Titel fix, Float-Format, Signatur, Blue-Button, Ergebnis-Texte via GameState.T().
+- [x] **Crash-Fix ModalLayer + get_display_name (13.09.2026):** Beide Crashes in IngameUIManager/GuestManager behoben.
+- [x] **Erster Gourmet-Stern vergeben! (13.09.2026):** Dominik Hinz bestand die Pruefung erfolgreich.
+- [ ] **ANG-362 HUD-Sterne Overlay (offen):** star-progress_overlay.png auf gefuellte Sterne umstellen (140x24px, Gold #EAB308).
 
 - ✅ **Pool Live Monitor:** Erfasst nun alle Gäste der Gruppe `guest_actors` (nicht nur sitzende) inkl. verbleibender Ingame-Minuten-Anzeige ("Baden (Xm)").
 - ✅ **Pool Interaktionen:** `get_available_interactions()` überschrieben, um `"wander"` im Pool zu unterbinden.

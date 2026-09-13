@@ -1,4 +1,4 @@
-extends Node
+﻿extends Node
 class_name GuestManager
 
 signal parties_changed
@@ -941,7 +941,8 @@ func evaluate_gourmet_stars(party: GuestParty) -> void:
 		"req_rooms": req.get("min_rooms", 0),
 		"result": "none",
 		"stars_before": current_stars,
-		"stars_after": current_stars
+		"stars_after": current_stars,
+		"inspector_name": party.get_display_name()  # Pruefername fuer Signatur im Bericht
 	}
 	
 	if success:
@@ -1294,8 +1295,10 @@ func process_morning_routine() -> void:
 	
 	var dynamic_poi_budget = _get_dynamic_poi_budget()
 
-	# Aktive Gäste: stay_days verringern
+	# Aktive Gäste: stay_days verringern (TG-Gäste ausschließen – kein Zimmer, kein Countdown)
 	for party: GuestParty in _active:
+		if party.total_stay_days == 0:
+			continue  # TG-Gast: kein stay_days Countdown, Checkout läuft über checkout_event_party()
 		party.stay_days -= 1
 		
 		var def = GuestDefinitions.ALL.get(party.type, {})

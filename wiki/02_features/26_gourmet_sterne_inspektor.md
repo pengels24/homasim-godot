@@ -13,21 +13,39 @@ Sterne werden **nicht** automatisch im Hintergrund vergeben oder abgezogen. Sie 
 2. **Der Besuch (Anonym):** Der Inspektor taucht unangekündigt als "getarnter" Gast (z.B. als Single-Gast) auf. Sein Status (`is_inspector = true`, `cover_type = "single"`) sorgt dafür, dass er sich äußerlich nicht von normalen Gästen unterscheidet.
 3. **Auswertung beim Checkout:**
    - Beim Checkout (`GuestManager.evaluate_gourmet_stars()`) werden die Werte gesammelt.
-   - Der Inspektor sendet seine Bewertung über das Signal `sig_inspector_report_ready`, was im UI das **Inspektor-Bericht-Modal** öffnet.
+   - Das Stats-Dict enthält: `inspector_sat`, `avg_sat`, `avg_clean`, `rep`, `rooms`, `result` ("up"/"down"/"none"), `stars_before`, `stars_after`, **`inspector_name`** (via `party.get_display_name()`).
+   - Der Inspektor sendet seine Bewertung über das Signal `sig_inspector_report_ready`, was im UI das **Gourmet-Sterne Prüfbericht-Modal** öffnet.
    - Erst wenn der Spieler diesen Bericht schließt, startet die Sterne-Verleihung (oder Aberkennung) via `ModalStarAchieved`.
    - Besonderheit: Das Erreichen des 1. Sterns friert aktuell die EXP ein (`exp_frozen`) und beendet die Pre-Alpha-Phase.
 
+### Modal: Gourmet-Sterne – Prüfbericht (`ModalContentInspectorReport`)
+- **Szene:** `scenes/ingame/hud/modals/content/ModalContentInspectorReport.tscn`
+- **Script:** `scenes/ingame/hud/modals/content/ModalContentInspectorReport.gd`
+- **Größe:** 80% Breite × 75% Höhe via `custom_minimum_size` in `_ready()` (Viewport-relativ)
+- **Titel:** Wird via `_standard_modal.set_title()` direkt gesetzt (nicht nur über `open()`, da Modal bei Rezeptionswechsel bereits sichtbar sein kann)
+- **Ergebnis-Texte:** 4 Varianten via `GameState.T()`:
+  - `event.inspector.result_up` → Prüfung erfolgreich
+  - `event.inspector.result_down` → Stern aberkannt
+  - `event.inspector.result_held` → Stern gehalten (nur wenn `stars_before >= 1`)
+  - `event.inspector.result_none` → Anforderungen nicht erfüllt (0 Sterne)
+- **Signatur:** `SignatureLabel` (RichTextLabel, BBCode) zeigt `"Gez. [inspector_name]"` kursiv, font_size 26
+- **Button:** `menu_button_blue.tres` / hover / pressed StyleBoxes
+
+### Bekannte Offene Punkte (v0.1.53)
+- **ANG-362:** `star-progress_overlay.png` (140×24px) zeigt hohle Sternumrisse – muss auf gefüllte Sterne (★, Gold #EAB308) umgestellt werden.
+
 ## Schwellenwerte für den 1. Stern
 Der 1. Stern ist die Voraussetzung, um ins Tier 2 des Techtrees zu gelangen.
+Alle Werte kommen aus `config/gourmet_stars.json` (Rufpunkte-Skala: 1–1000).
 
 **Kriterien für die Vergabe (laut ANG-165):**
 - **Voraussetzung:** Technologie `G1.4` erforscht.
-- **Service-Qualität:** Ø Gäste-Satisfaction ≥ 70% (Rolling Average der letzten Gäste).
+- **Service-Qualität:** Ø Gäste-Satisfaction ≥ 70%.
 - **Sauberkeit:** Ø Cleanliness aller Zimmer ≥ 75%.
-- **Reputation:** Ruf-Score ≥ 600.
+- **Reputation:** Ruf-Score ≥ 400 (1-1000 Skala).
 - **Kapazität:** Mindestens 10 Zimmer vorhanden.
 
 ## Verknüpfung mit dem Techtree
 Die Gourmet-Sterne agieren als Gatekeeper im Techtree:
 - **Tier 1:** Standard, frei verfügbar nach Bau des Forschungsbüros.
-- **Tier 2:** Benötigt eine bestimme Anzahl an Forschungen in Tier 1 + **⭐ 1. Gourmet-Stern**.
+- **Tier 2:** Benötigt eine bestimmte Anzahl an Forschungen in Tier 1 + **⭐ 1. Gourmet-Stern**.

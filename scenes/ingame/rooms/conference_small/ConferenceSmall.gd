@@ -432,19 +432,21 @@ func _end_conference() -> void:
 	_speaker_id = ""
 	_designated_speaker_id = ""
 	print("[CONF] _end_conference | 17:00 | Konferenz beendet")
-	# active_conferences Eintrag entfernen
-	var gm = get_tree().current_scene.find_child("GuestManager", true, false)
-	if is_instance_valid(gm):
-		var rkey = gm._room_key(self)
+	# active_conferences Eintrag entfernen (GuestManager direkt via Gruppe, nicht find_child)
+	var gm_nodes = get_tree().get_nodes_in_group("guest_manager")
+	if gm_nodes.size() > 0:
+		var rkey = gm_nodes[0]._room_key(self)
 		EventManager.active_conferences.erase(rkey)
+		print("[CONF] active_conferences bereinigt: ", rkey)
 	_broadcast_to_event_guests("end_conference_day")
 
 ## Ruft eine Methode auf allen TG-Akteuren auf, die zu diesem Raum gehören.
 func _broadcast_to_event_guests(method: String) -> void:
-	var gm = get_tree().current_scene.find_child("GuestManager", true, false)
-	if not is_instance_valid(gm):
+	var gm_nodes = get_tree().get_nodes_in_group("guest_manager")
+	if gm_nodes.size() == 0:
+		push_warning("[CONF] _broadcast_to_event_guests: GuestManager nicht gefunden!")
 		return
-	var rkey = gm._room_key(self)
+	var rkey = gm_nodes[0]._room_key(self)
 	for actor in get_tree().get_nodes_in_group("guest_actors"):
 		if not is_instance_valid(actor):
 			continue

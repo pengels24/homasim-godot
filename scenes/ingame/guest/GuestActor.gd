@@ -1,7 +1,7 @@
 extends Node2D
 class_name GuestActor
 
-const HUNGER_THRESHOLD: int = 40
+const HUNGER_THRESHOLD: int = 55  # ANG-357: Erhöht von 40 → Gäste suchen früher Essen/Trinken
 
 # --- Zustände ---
 
@@ -96,6 +96,8 @@ var _last_interaction_id: String = ""
 var _has_claimed_seat: bool = false
 ## Nach Check-in: POI-Sperre fuer 60 Ingame-Minuten (Gast kommt erst an)
 var _checkin_poi_block_until: int = 0
+## ANG-361: Pflicht-Ruhepause nach POI-Besuch (in Spielminuten seit Mitternacht)
+var _poi_rest_until: int = 0
 ## Speichert den Konferenzraum-Key waehrend der Mittagspause (event_poi_id wird temporaer geleert)
 var _conference_break_poi_key: String = ""
 ## True wenn Gast gerade aus Konferenz-Pause zurueckkehrt (verhindert doppelte EXP)
@@ -590,6 +592,16 @@ func _decide_next_action() -> void:
 		else:
 			_checkin_poi_block_until = 0 # Einmalig zuruecksetzen
 	
+	# ANG-361: Pflicht-Ruhepause nach POI-Besuch (ueberspringen bei Hunger)
+	if _poi_rest_until > 0:
+		var now_r := TimeManager.get_game_time() if TimeManager else 0
+		if now_r < _poi_rest_until:
+			var is_hungry_now := _guest_member != null and _guest_member.saturation < HUNGER_THRESHOLD
+			if not is_hungry_now:
+				open_pois.clear()  # Erzwingt Zimmer-Aufenthalt
+		else:
+			_poi_rest_until = 0  # Pause abgelaufen
+	
 	# 2. Nachtruhe-Logik (22:00 - 06:00): 
 	# Die Lobby ist nachts als reiner "Zeitvertreib" tabu, um Endlos-Pendeln zu verhindern.
 	# Echte POIs wie die Bar (die bis 23:30 auf hat) bleiben aber erlaubt!
@@ -616,6 +628,7 @@ func _decide_next_action() -> void:
 			return
 	
 	# Kein offener POI? Gast wartet etwas und probiert es später wieder
+	# ANG-357: Wenn kein POI verfügbar (z.B. spending_budget leer), Gast ins Zimmer schicken
 	if open_pois.is_empty():
 		if current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING:
 			_wander_in_room(_target_room)
@@ -632,9 +645,12 @@ func _decide_next_action() -> void:
 					_walk_to_exit()
 			return
 		else:
+			# IDLE oder WALKING außerhalb des Zimmers → zurück ins Zimmer statt endlos warten
 			party = _get_my_party()
 			if is_instance_valid(party) and party.event_poi_id != "":
 				_action_timer = randf_range(5.0, 10.0)
+			elif is_instance_valid(_target_room):
+				_walk_to_room(_target_room, State.IN_ROOM)
 			else:
 				_action_timer = randf_range(15.0, 45.0)
 			return
@@ -753,6 +769,12 @@ func _decide_next_action() -> void:
 				chosen = "room"
 	
 	if chosen == "room":
+		# ANG-361: Ruhepause setzen wenn Gast einen bezahlten POI verlaesst
+		if _poi_rest_until == 0:
+			var _leaving_paid_poi := current_state in [State.IN_POI, State.EATING, State.STUDYING_MENU, State.WAITING_FOR_FOOD]
+			if _leaving_paid_poi and _current_poi_id not in ["", "lobby", "vending_machine"]:
+				var now_r := TimeManager.get_game_time() if TimeManager else 0
+				_poi_rest_until = now_r + randi_range(30, 60)  # 30-60 Ingame-Minuten Pause
 		if is_instance_valid(_target_room):
 			_walk_to_room(_target_room, State.IN_ROOM)
 		else:
@@ -794,6 +816,7 @@ func wake_up() -> void:
 	
 	if current_state == State.LEAVING or current_state == State.WAITING_IN_LINE:
 		return
+	_poi_rest_until = 0  # ANG-361: Ruhepause nach Nacht zurücksetzen
 	_action_timer = randf_range(5.0, 30.0)
 
 

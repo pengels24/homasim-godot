@@ -247,8 +247,11 @@ func get_live_details() -> Array[Dictionary]:
 				
 			var guest_name = guest_actor.get("_guest_member").name if guest_actor.get("_guest_member") else "Gast"
 			var party = guest_actor.call("_get_my_party") if guest_actor.has_method("_get_my_party") else null
-			var is_tg_guest = (is_instance_valid(party) and party.event_poi_id != "") or \
-					(guest_actor.get("_target_room") == null and guest_actor.get("_guest_member") != null)
+			var is_inspector = is_instance_valid(party) and party.get("is_inspector") == true
+			var is_tg_guest = not is_inspector and (
+				(is_instance_valid(party) and party.event_poi_id != "") or
+				(guest_actor.get("_target_room") == null and guest_actor.get("_guest_member") != null)
+			)
 			if is_tg_guest:
 				guest_name += " (TG)"
 				

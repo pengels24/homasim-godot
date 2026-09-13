@@ -407,15 +407,15 @@ func _on_checkin_pressed() -> void:
 		var roll_result = _guest_mgr.roll_ask(_sel_party, _sel_room)
 
 		if roll_result["accepted"]:
-			# Toast für erfolgreiche Verhandlung
-			Toast.show(GameState.T("toast.surcharge.accepted", roll_result["roll_val"], roll_result["target_val"]), "guest")
-
+			var guest_name = _sel_party.members[0].name if _sel_party.members.size() > 0 else "Gast"
+			Toast.show(guest_name + " akzeptiert und bleibt!", "guest")
 			# ---> NEU: Direkt einchecken! Kein zweiter Klick nötig.
 			_execute_checkin_logic(true)
 
 		else:
+			var guest_name = _sel_party.members[0].name if _sel_party.members.size() > 0 else "Gast"
 			_guest_mgr.guest_declined_offer(_sel_party)
-			Toast.show(GameState.T("toast.surcharge.rejected", roll_result["roll_val"], roll_result["target_val"]), "guest")
+			Toast.show(guest_name + " lehnt ab und verlässt das Hotel!", "guest")
 
 			_clear_selection()
 			refresh()

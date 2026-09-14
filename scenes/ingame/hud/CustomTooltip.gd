@@ -159,7 +159,7 @@ func _update_content() -> void:
 				if ctrl:
 					for actor in get_tree().get_nodes_in_group("guest_actors"):
 						if not is_instance_valid(actor): continue
-						var valid_states = [actor.State.IN_POI, actor.State.STUDYING_MENU, actor.State.WAITING_FOR_FOOD, actor.State.EATING, actor.State.AWAITING_CHECKOUT, actor.State.IDLE, actor.State.WAITING_IN_LINE, actor.State.WALKING]
+						var valid_states = [actor.State.IN_POI, actor.State.STUDYING_MENU, actor.State.WAITING_FOR_FOOD, actor.State.EATING, actor.State.AWAITING_CHECKOUT, actor.State.IDLE, actor.State.WAITING_IN_LINE, actor.State.WALKING, actor.State.SITTING]
 						var gm = get_tree().current_scene.find_child("GuestManager", true, false)
 						var rkey = gm._room_key(_target_room) if is_instance_valid(gm) else ""
 						# ANG-356: WALKING nur zählen wenn Gast sich physisch im Raum befindet (verhindert Zählen am anderen Ende des Hotels)

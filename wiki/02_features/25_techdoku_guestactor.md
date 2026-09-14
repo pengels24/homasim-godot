@@ -157,3 +157,7 @@ Gäste nutzen `MapGrid.get_path_astar()` für globale Pfade und `room.get_local_
 ## Gastro Consumption Type
 - **`consumption_type`**: Gibt an, ob der Gast gerade ein Getränk (`"drink"`) oder eine Mahlzeit (`"food"`) zu sich nimmt. Wird in `_on_order_served` anhand des Rezept-Typs gesetzt oder auf `"drink"` bei Solo-Bestellungen an der Bar.
 - **Live-Monitor:** Räume wie Bar und Restaurant lesen diesen Typ aus (während der Gast im `State.EATING` ist), um korrekt zwischen *Trinkt gerade* und *Isst gerade* zu unterscheiden.
+
+
+### Zwangspause nach POI-Besuch (ANG-361)
+Um zu verhindern, dass Gäste hektisch von POI zu POI rennen, wurde eine Zwangspause implementiert. Beim Verlassen eines beliebigen POIs (inklusive Lobby) wird `_poi_rest_until` gesetzt. Solange dieser Timer aktiv ist, werden alle `open_pois` blockiert, wodurch der Gast zwingend auf sein Zimmer geht und dort über `_wander_in_room()` die Zeit absitzt. Einzig enormer Hunger (`< HUNGER_THRESHOLD`) kann diese Zwangspause überschreiben, sofern sich der Gast noch eine Mahlzeit leisten kann.

@@ -1,17 +1,20 @@
-# Übergabeprotokoll (14.09.2026)
+# Übergabeprotokoll (Stand: v0.1.53)
 
 ## Letzter Stand
-- Wir haben erfolgreich Bugs im **Gastro-Flow und den Live-Monitoren** von Bar und Restaurant (`Bar.gd`, `RestaurantSmall.gd`, `CustomTooltip.gd`) behoben.
-- Neu ankommende Gäste (`WALKING`) blockieren nun nicht mehr den Hover-Tooltip der Räume und werden durch einen korrekten `Rect2.has_point` Scope-Fix auch im Live-Monitor sicher erkannt.
-- `GuestActor.gd` speichert nun dynamisch `consumption_type` ("food" oder "drink"), womit der Live-Monitor im `EATING`-Status zwischen "Isst gerade" und "Trinkt gerade" unterscheidet.
+- Die Session wurde erfolgreich mit einem Fix für einen schwerwiegenden Navigations-Bug in der Lobby beendet. 
+- Das Problem war **Ticket ANG-357**, bei dem sich Gäste endlos in der Lobby aufhielten und ununterbrochen Sitzplätze wechselten, ohne jemals auf ihr Zimmer oder in einen POI zu gehen.
+- **Ursache:** Die Lobby wird code-seitig als POI mit Sitzplätzen (Interaktionen) behandelt. Gäste im State `IN_POI [lobby]` haben sich einen freien Platz gesucht, gewartet, und wenn der Timer abgelaufen ist, hat `_process_waiting` in `GuestActor.gd` sofort die nächste Interaktion in der Lobby geclaimed. Dadurch wurde `_decide_next_action()` durch ein vorzeitiges `return` blockiert und die Gäste verließen die Lobby nie mehr.
+- **Lösung:** Ein temporärer Flag (`_has_waited_for_functional`) wird nun in `_process_waiting` genutzt, um zu erkennen, dass der Gast in der Lobby bereits gesessen hat. Beim Ablauf des Timers (nach 15-30 Ingame-Minuten) wird die Platzsuche für die Lobby einmalig blockiert, der Platz wird freigegeben und `_decide_next_action()` zwingend aufgerufen.
+- Der Fix wurde getestet und vom User bestätigt.
 
-## Bearbeitete Systeme
-- **Gastro-Flow Live-Monitore:** `Bar.gd`, `RestaurantSmall.gd` (Scope Bugfix & Consumption Type Switch).
-- **Tooltip System:** `CustomTooltip.gd` (Walking Gäste Fix).
-- **GuestActor:** `consumption_type` via `recipes.json` in `_on_order_served` angebunden.
-- **Lobby:** Das `(TG)` Tag für Tagungsgäste wird nur noch hinzugefügt, wenn tatsächlich ein `event_poi_id` gesetzt ist.
+## Bearbeitete Dateien & Dokumentation
+- `scenes/ingame/guest/GuestActor.gd`: Fix in `_process_waiting` hinzugefügt und alte temporäre Debug-Prints (`[LOBBY TRACE]`, `[LOBBY DEBUG]`) drin gelassen, um bei weiteren Bugs helfen zu können (sie sind nicht störend). Außerdem wurde in `scenes/ingame/staff/StaffActor.gd` auf Wunsch des Users das Log für State-Changes (`changing to next_state=`) auskommentiert.
+- `changelog/gd-0.1.53.md`: Fix dokumentiert.
+- `wiki/alpha_backlog.md`: ANG-357 ergänzt und als gelöst markiert.
+- `wiki/02_features/25_techdoku_guestactor.md`: Neue Sektion `3b. Lobby als Ausnahme-POI` hinzugefügt.
+- `wiki/rooms/lobby.md`: Neue Sektion `3.6 Verhinderung von Endlos-Interaktionen (Lobby-Loop)` hinzugefügt.
 
-## Sofortige nächste Schritte
-- **ANG-362 (Gourmet-Sterne HUD):** Dies ist im Backlog noch offen. Der User erwähnte, dass die neuen Sterne (★, 140x24px, Gold #EAB308) noch gepixelt werden müssen. Sobald die Assets da sind, muss das HUD-Overlay (`star-progress_overlay.png` o.ä.) umgebaut werden.
-- **Alpha-Backlog:** Die restlichen Punkte im Linear-Backlog sichten und priorisieren (User will bis Freitag die Pre-Alpha Version für einen Streamer fertig haben!). Fokus: Crash-Sicherheit und fehlende QoL-Features, nichts Neues mehr anfangen, das Systeme brechen könnte.
-- Die Startzeit der Bar in `config/rooms.json` (oder `Bar.gd` je nach finaler Implementation) wurde zu Testzwecken auf `open_from: 480` (08:00) gesetzt. Ggf. zurück auf 12:00 Uhr (720) stellen, falls das nicht so bleiben soll!
+## Nächste Schritte (Sofort)
+1. **ANG-362 HUD-Sterne Overlay (offen):** Laut Alpha-Backlog soll als nächstes das Sterne-Overlay (`star-progress_overlay.png`) im HUD auf gefüllte Sterne (★) umgestellt werden (140x24px, Gold #EAB308).
+2. Der User hat sich erst einmal wegen seines RL-Jobs verabschiedet ("später machen wir weiter"). Beim nächsten Start kannst du direkt nachfragen, ob mit ANG-362 weitergemacht werden soll.
+3. Bitte daran denken, die Debug-Prints in `StaffActor.gd` bei Bedarf irgendwann wieder zu aktivieren, falls der User danach verlangt.

@@ -66,4 +66,10 @@ Dominik Hinz (Inspektor) bestand die Pr√ºfung: 88% Sat / 81.2% G√§steZuf / 83.7%
 
 ## ?? Bugfixes & Gameplay (Lobby Loop Fix)
 
-- **ANG-357 (Lobby Endlos-Loop):** G‰ste blieben in der Lobby h‰ngen und wechselten unendlich oft die Sitzpl‰tze, ohne jemals in ihr Zimmer oder zu einem anderen POI zu gehen. Grund war eine Endlosschleife in _process_waiting, da die Lobby als POI mit Sitzpl‰tzen gewertet wurde und _decide_next_action() durch ein eturn nie erreicht wurde. Fix: G‰ste in der Lobby d¸rfen nach einer Interaktion nun regul‰r weiterziehen.
+- **ANG-357 (Lobby Endlos-Loop):** Gste blieben in der Lobby hngen und wechselten unendlich oft die Sitzpltze, ohne jemals in ihr Zimmer oder zu einem anderen POI zu gehen. Grund war eine Endlosschleife in _process_waiting, da die Lobby als POI mit Sitzpltzen gewertet wurde und _decide_next_action() durch ein eturn nie erreicht wurde. Fix: Gste in der Lobby drfen nach einer Interaktion nun regulr weiterziehen.
+
+## üêõ G√§steverhalten & Lobby Fixes (Session 2)
+
+- **ANG-361 (Zwangspause):** Komplette √úberarbeitung der Ruhepausen-Logik in `GuestActor.gd`. Die Zwangspause triggert nun direkt beim Verlassen eines POIs (inkl. Lobby). Wenn G√§ste sich einen POI nicht leisten k√∂nnen, gehen sie nun zwingend auf ihr Zimmer, statt in einem Endlos-Loop zu verharren.
+- **Feature (Guest Definitions):** `min_poi_rest_time` und `max_poi_rest_time` in `GuestDefinitions.ALL` als einstellbare Properties ausgelagert, statt sie im Code hart zu verdrahten.
+- **Bugfix (Tooltip):** `State.SITTING` zu den z√§hlbaren States in `CustomTooltip.gd` hinzugef√ºgt, sodass sitzende G√§ste (z.B. auf dem Sofa in der Lobby) endlich korrekt als anwesend gez√§hlt werden.

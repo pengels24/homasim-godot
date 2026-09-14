@@ -617,11 +617,31 @@ func _decide_next_action() -> void:
 		else:
 			_checkin_poi_block_until = 0 # Einmalig zuruecksetzen
 	
-	# ANG-361: Pflicht-Ruhepause nach POI-Besuch (ueberspringen bei Hunger)
+	# ANG-361: Pflicht-Ruhepause nach POI-Besuch setzen (bevor open_pois manipuliert wird)
+	if _poi_rest_until == 0:
+		var _leaving_poi := current_state in [State.IN_POI, State.EATING, State.STUDYING_MENU, State.WAITING_FOR_FOOD]
+		if _leaving_poi and _current_poi_id != "":
+			var now_r := TimeManager.get_game_time() if TimeManager else 0
+			_poi_rest_until = now_r + _get_poi_rest_duration()
+			print("[GuestActor] %s beendet POI-Besuch (%s). Zwangspause bis %s gesetzt." % [(_guest_member.name if _guest_member else "?"), _current_poi_id, _poi_rest_until])
+
+	# ANG-361: Pflicht-Ruhepause nach POI-Besuch (ueberspringen bei Hunger, ausser Gast hat kein Geld fuer Essen)
 	if _poi_rest_until > 0:
 		var now_r := TimeManager.get_game_time() if TimeManager else 0
 		if now_r < _poi_rest_until:
 			var is_hungry_now := _guest_member != null and _guest_member.saturation < HUNGER_THRESHOLD
+			if is_hungry_now:
+				var can_afford_food = false
+				if open_pois.has("vending_machine") and _guest_member.spending_budget >= 5: can_afford_food = true
+				if not can_afford_food and open_pois.has("restaurant_small"):
+					var r_def = _get_poi_def("restaurant_small")
+					if r_def and _guest_member.spending_budget >= r_def.get("visit_income", 0): can_afford_food = true
+				if not can_afford_food and open_pois.has("bar"):
+					var b_def = _get_poi_def("bar")
+					if b_def and _guest_member.spending_budget >= b_def.get("visit_income", 0): can_afford_food = true
+				if not can_afford_food:
+					is_hungry_now = false # Kann sich nichts leisten, also Pause beibehalten!
+			
 			if not is_hungry_now:
 				open_pois.clear()  # Erzwingt Zimmer-Aufenthalt
 		else:
@@ -772,9 +792,15 @@ func _decide_next_action() -> void:
 	var ev_id = party.event_poi_id if is_instance_valid(party) else ""
 	if chosen != ev_id and _guest_member.saturation < HUNGER_THRESHOLD:
 		var food_pois = []
-		if open_pois.has("vending_machine"): food_pois.append("vending_machine")
-		if open_pois.has("restaurant_small"): food_pois.append("restaurant_small")
-		if open_pois.has("bar"): food_pois.append("bar")
+		if open_pois.has("vending_machine") and _guest_member.spending_budget >= 5: food_pois.append("vending_machine")
+		
+		if open_pois.has("restaurant_small"):
+			var r_def = _get_poi_def("restaurant_small")
+			if r_def and _guest_member.spending_budget >= r_def.get("visit_income", 0): food_pois.append("restaurant_small")
+			
+		if open_pois.has("bar"):
+			var b_def = _get_poi_def("bar")
+			if b_def and _guest_member.spending_budget >= b_def.get("visit_income", 0): food_pois.append("bar")
 		
 		# Zu 80% Wahrscheinlichkeit einen Essens-POI erzwingen, falls verfügbar
 		if food_pois.size() > 0 and randf() > 0.2:
@@ -816,12 +842,6 @@ func _decide_next_action() -> void:
 				chosen = "room"
 	
 	if chosen == "room":
-		# ANG-361: Ruhepause setzen wenn Gast einen bezahlten POI verlaesst
-		if _poi_rest_until == 0:
-			var _leaving_paid_poi := current_state in [State.IN_POI, State.EATING, State.STUDYING_MENU, State.WAITING_FOR_FOOD]
-			if _leaving_paid_poi and _current_poi_id not in ["", "lobby", "vending_machine"]:
-				var now_r := TimeManager.get_game_time() if TimeManager else 0
-				_poi_rest_until = now_r + randi_range(30, 60)  # 30-60 Ingame-Minuten Pause
 		if is_instance_valid(_target_room):
 			_walk_to_room(_target_room, State.IN_ROOM)
 		else:
@@ -873,6 +893,18 @@ func _on_walk_finished(new_state: int) -> void:
 		_map_grid.clear_debug_path(str(_guest_member.get("name")) if _guest_member else "?")
 	_change_state(new_state)
 
+
+# =============================================================================
+func _get_poi_rest_duration() -> int:
+	var party = _get_my_party()
+	if not is_instance_valid(party):
+		return randi_range(45, 90) # Fallback
+		
+	var type_def = party.get_type_def()
+	var min_rest = type_def.get("min_poi_rest_time", 45)
+	var max_rest = type_def.get("max_poi_rest_time", 90)
+	
+	return randi_range(min_rest, max_rest)
 
 # =============================================================================
 func _change_state(new_state: State) -> void:
@@ -1476,9 +1508,27 @@ func _walk_to_poi(poi_id: String) -> void:
 		if poi_def != null:
 			var income: int = poi_def.get("visit_income", 0)
 			if income > 0 and _guest_member.spending_budget < income:
-				# Kein Geld mehr für diesen POI -> kurz warten und dann neu entscheiden
-				_action_timer = randf_range(5.0, 15.0)
+				# Kein Geld mehr für diesen POI -> Zwangspause im Zimmer
+				print("[GuestActor] %s kann sich %s nicht leisten. Geht aufs Zimmer." % [(_guest_member.name if _guest_member else "?"), poi_id])
+				if is_instance_valid(_target_room):
+					if current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING:
+						_wander_in_room(_target_room)
+					else:
+						_walk_to_room(_target_room, State.IN_ROOM)
+				else:
+					_action_timer = randf_range(5.0, 15.0)
 				return
+				
+	if poi_id == "vending_machine" and _guest_member.spending_budget < 5:
+		print("[GuestActor] %s kann sich Automaten-Snack nicht leisten. Geht aufs Zimmer." % [(_guest_member.name if _guest_member else "?")])
+		if is_instance_valid(_target_room):
+			if current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING:
+				_wander_in_room(_target_room)
+			else:
+				_walk_to_room(_target_room, State.IN_ROOM)
+		else:
+			_action_timer = randf_range(5.0, 15.0)
+		return
 	
 	var target_room: Node2D = null
 	var exit_tile: Vector2i

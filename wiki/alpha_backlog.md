@@ -13,6 +13,9 @@
 ---
 
 ## 🛠 Ungeplante Fixes & Features (Aktuelle Session)
+- [x] **ANG-361:** Zwangspause nach POI-Besuch komplettiert & Budget-Endlosschleife gefixt
+- [x] **Bugfix:** Tooltip Gästezählung (Sofa-Sitzer in Lobby)
+- [x] **Refactoring:** Pausenzeiten in GuestDefinitions ausgelagert
 - [x] **ANG-356:** Room-Tooltip Bug (Walking Gäste nicht zählen)
 - [x] **ANG-359 & ANG-360:** Bar Live-Monitor Gastro-Flow (Wird serviert)
 - [x] **Bugfix:** GuestActor consumption_type (Essen vs Trinken) im Live-Monitor

@@ -67,3 +67,10 @@ Wenn Tagungsgäste nach 17:00 Uhr das Hotel verlassen, spawnen sie über `GuestC
 - **`State.LEAVING`** – Abreisende Gäste (passieren die Lobby nur noch, verweilen nicht)
 
 **Warum LEAVING filtern?** Abreisende TG-Gäste spawnen im LEAVING-State an den ReceptionX-Positionen. Ohne Filter: Lobby-Tooltip = 0 (keine geclaimten Interactions), Live Monitor = 12 (alle LEAVING-Actors sichtbar) → verwirrend für den Spieler. Mit Filter: beide Anzeigen konsistent auf 0.
+
+### 3.6 Verhinderung von Endlos-Interaktionen (Lobby-Loop)
+
+Da die Lobby wie ein normaler Raum (mit Sitzplätzen/Interaktionen) behandelt wird, würden Gäste im State `IN_POI [lobby]` theoretisch ewig zwischen den Sitzplätzen wechseln, sobald ihr Timer abläuft (wie im Gym).
+Damit sie die Lobby nach einer kurzen Wartezeit wieder verlassen:
+- Nach einer Sitzplatz-Interaktion setzt der `GuestActor` temporär das Flag `_has_waited_for_functional`.
+- Beim nächsten Ablauf des Timers (15-30 Ingame-Minuten später) wird die erneute Platzsuche dadurch unterbunden. Der Gast gibt seinen Platz frei, setzt das Flag zurück und ruft zwingend `_decide_next_action()` auf, um das Hotel weiter zu erkunden oder aufs Zimmer zu gehen.

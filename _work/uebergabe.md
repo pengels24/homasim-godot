@@ -1,53 +1,17 @@
-# Übergabeprotokoll – Session 13.09.2026 (v0.1.53)
+# Übergabeprotokoll (14.09.2026)
 
 ## Letzter Stand
-Session erfolgreich abgeschlossen. **Erster Gourmet-Stern wurde live vergeben** (Dominik Hinz als Inspektor, Tag 7).
-Die Animation `ModalStarAchieved` (derzeit nur Kopie vom LevelUp) muss 
-a) noch angepasst werden 
-b) sollte nicht identisch aussehen wie LevelUp und 
-c) wird derzeit garnicht gezeigt.
+- Wir haben erfolgreich Bugs im **Gastro-Flow und den Live-Monitoren** von Bar und Restaurant (`Bar.gd`, `RestaurantSmall.gd`, `CustomTooltip.gd`) behoben.
+- Neu ankommende Gäste (`WALKING`) blockieren nun nicht mehr den Hover-Tooltip der Räume und werden durch einen korrekten `Rect2.has_point` Scope-Fix auch im Live-Monitor sicher erkannt.
+- `GuestActor.gd` speichert nun dynamisch `consumption_type` ("food" oder "drink"), womit der Live-Monitor im `EATING`-Status zwischen "Isst gerade" und "Trinkt gerade" unterscheidet.
 
 ## Bearbeitete Systeme
+- **Gastro-Flow Live-Monitore:** `Bar.gd`, `RestaurantSmall.gd` (Scope Bugfix & Consumption Type Switch).
+- **Tooltip System:** `CustomTooltip.gd` (Walking Gäste Fix).
+- **GuestActor:** `consumption_type` via `recipes.json` in `_on_order_served` angebunden.
+- **Lobby:** Das `(TG)` Tag für Tagungsgäste wird nur noch hinzugefügt, wenn tatsächlich ein `event_poi_id` gesetzt ist.
 
-### ModalContentInspectorReport (.tscn + .gd)
-- Modal: 80%×75% Bildschirmgröße
-- Titel: "Gourmet-Sterne – Prüfbericht" via `set_title()` direkt (da `open()` abbricht wenn Modal bereits sichtbar)
-- Ergebnis-Texte: 4 Varianten via `GameState.T("event.inspector.result_*")`
-- Signatur: "Gez. [inspector_name]" kursiv, font_size 26
-- Blue-Button: `menu_button_blue.tres` / hover / pressed
-- Float-Formatierung: `%.1f%%`
-- Grid-Font: Per Editor auf Labels gesetzt (nicht via Script)
-
-### GuestManager.gd (Zeile ~945)
-- `inspector_name` via `party.get_display_name()` ins Stats-Dict aufgenommen
-- Bugfix: `get_primary_name()` → `get_display_name()` (korrekter Methodenname)
-
-### IngameUIManager.gd (Zeile ~185 + ~204)
-- `set_title()` direkt aufrufen vor `open()`
-- Crash-Fix: `_hud.get_node("ModalLayer")` → `_hud.add_child(modal)` (ModalLayer existiert nicht in HUD.tscn)
-
-### config/gourmet_stars.json
-- Rufpunkte-Anforderungen auf 1-1000 Skala normalisiert
-
-### translations/language.csv
-- 5 neue Keys: `ui.modal.inspector_report.title`, `event.inspector.result_up/down/held/none`
-
-## Offene Nächste Schritte (Priorität)
-
-### 🔴 MORGEN ZUERST (ANG-362)
-- `star-progress_overlay.png` (140×24px) → gefüllte Sterne (★) zeichnen
-- Optionen: (A) Neues Pixel-Art-Asset zeichnen, (B) 5 separate TextureRect-Nodes statt TextureProgressBar
-
-### 🟡 Offene Issues aus Backlog
-- ANG-348/349: Conference Small – Tagungszahlung, Tutorial, Badge
-- ANG-353: PIP-Kamera
-- ANG-355: Inspector-Log
-- ANG-356: Room-Tooltip Bug
-- ANG-358: Breakfast synchronized 06:15
-- ANG-359: Bar-Küchen-Flow "Abholbereit"-State
-- ANG-360 Part 2: Bar-Status-Logik in UI/Monitor
-
-## Wichtige Architektur-Notizen
-- `StandardModal.open()` bricht ab wenn `visible == true` → immer zusätzlich `set_title()` aufrufen!
-- `GuestParty.get_display_name()` ist der korrekte Accessor (nicht `get_primary_name()`)
-- `ModalStarAchieved` muss als `_hud.add_child(modal)` hinzugefügt werden (kein ModalLayer-Node)
+## Sofortige nächste Schritte
+- **ANG-362 (Gourmet-Sterne HUD):** Dies ist im Backlog noch offen. Der User erwähnte, dass die neuen Sterne (★, 140x24px, Gold #EAB308) noch gepixelt werden müssen. Sobald die Assets da sind, muss das HUD-Overlay (`star-progress_overlay.png` o.ä.) umgebaut werden.
+- **Alpha-Backlog:** Die restlichen Punkte im Linear-Backlog sichten und priorisieren (User will bis Freitag die Pre-Alpha Version für einen Streamer fertig haben!). Fokus: Crash-Sicherheit und fehlende QoL-Features, nichts Neues mehr anfangen, das Systeme brechen könnte.
+- Die Startzeit der Bar in `config/rooms.json` (oder `Bar.gd` je nach finaler Implementation) wurde zu Testzwecken auf `open_from: 480` (08:00) gesetzt. Ggf. zurück auf 12:00 Uhr (720) stellen, falls das nicht so bleiben soll!

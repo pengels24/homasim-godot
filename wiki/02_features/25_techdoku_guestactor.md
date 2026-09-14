@@ -66,6 +66,12 @@ if _action_timer <= 0.0:
 > ⚠️ **Regel:** Jeder Branch der einen State-Wechsel auslöst MUSS mit `return` enden.
 > `SITTING` wird seit v0.1.50 im gemeinsamen `[IN_POI, SITTING]` Block behandelt.
 
+## 3b. Lobby als Ausnahme-POI (v0.1.53)
+Die Lobby ist ein spezieller POI (hat z.B. Sitzplätze, aber keine echten POI-Eigenschaften wie `is_poi`). Wenn Gäste in die Lobby geschickt werden, sollen sie nach einer kurzen Wartezeit (Sitzplatz-Timer 15-30 Minuten) wieder in den Entscheidungsbaum übergehen. 
+Damit sie nicht in einem endlosen Interaktions-Loop (von Platz zu Platz) gefangen bleiben, wird für die Lobby eine Ausnahmelogik verwendet:
+- Nach einer Interaktion wird ein Flag `_has_waited_for_functional` "missbraucht", um zu markieren, dass der Gast bereits in der Lobby saß.
+- Beim nächsten Durchlauf von `_process_waiting` wird dadurch die Interaktions-Suche übersprungen, der Gast gibt den Sitz frei und ruft `_decide_next_action()` auf.
+
 ## 4. Gastronomie – Smart Room Protocol (v0.1.50)
 
 Der `GuestActor` kennt **keine Raum-IDs** mehr. Der Raum teilt über Methoden mit was er ist.

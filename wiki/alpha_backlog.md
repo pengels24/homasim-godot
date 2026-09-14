@@ -1,4 +1,4 @@
-﻿# HO·MA·SIM – Alpha Backlog & Roadmap
+# HO·MA·SIM – Alpha Backlog & Roadmap
 > Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.53 | Stand: 13.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
@@ -16,6 +16,7 @@
 - [x] **ANG-356:** Room-Tooltip Bug (Walking Gäste nicht zählen)
 - [x] **ANG-359 & ANG-360:** Bar Live-Monitor Gastro-Flow (Wird serviert)
 - [x] **Bugfix:** GuestActor consumption_type (Essen vs Trinken) im Live-Monitor
+- [x] **ANG-357:** Lobby Endlos-Loop Fix (Gäste verlassen die Lobby wieder, statt endlos Plätze zu tauschen)
 - [ ] **ANG-362 HUD-Sterne Overlay (offen):** star-progress_overlay.png auf gefüllte Sterne umstellen (140x24px, Gold #EAB308).
 
 ---

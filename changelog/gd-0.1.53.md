@@ -63,3 +63,7 @@ Dominik Hinz (Inspektor) bestand die PrÃ¼fung: 88% Sat / 81.2% GÃ¤steZuf / 83.7%
 - **Scope Bugfix:** Godot 4 `for a in ...` Scope-Fehler in Bar.gd und RestaurantSmall.gd Live-Monitoren behoben.
 - **Consumption Type Logic:** GÃ¤ste (`GuestActor.gd`) speichern nun ihren `consumption_type` (food oder drink) basierend auf dem Rezept oder ob es ein Solo-Drink war.
 - **Trinken vs Essen Fix:** Live-Monitor in Bar und Restaurant unterscheidet nun via `consumption_type` korrekt zwischen `Isst gerade` und `Trinkt gerade`.
+
+## ?? Bugfixes & Gameplay (Lobby Loop Fix)
+
+- **ANG-357 (Lobby Endlos-Loop):** Gäste blieben in der Lobby hängen und wechselten unendlich oft die Sitzplätze, ohne jemals in ihr Zimmer oder zu einem anderen POI zu gehen. Grund war eine Endlosschleife in _process_waiting, da die Lobby als POI mit Sitzplätzen gewertet wurde und _decide_next_action() durch ein eturn nie erreicht wurde. Fix: Gäste in der Lobby dürfen nach einer Interaktion nun regulär weiterziehen.

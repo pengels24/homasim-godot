@@ -1,5 +1,13 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.53 | Stand: 13.09.2026
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.54 | Stand: 14.09.2026
+> Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
+
+---
+
+## ⚠️ Getroffene Design-Entscheidungen (nicht mehr diskutieren!)
+
+# HO·MA·SIM – Alpha Backlog & Roadmap
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.55 | Stand: 15.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -12,12 +20,12 @@
 
 ---
 
-## 🛠 Ungeplante Fixes & Features (Aktuelle Session)
+## 🚨 Ungeplante Fixes & Features (Aktuelle Session)
+- [x] **ANG-348:** Pre-Alpha Polishing (Tutorial-Button deaktiviert mit Verbotsschild, Tagungs-Badges korrigiert, Tagungszahlung auf 07:45 verlegt inkl. Kassenbuch)
+- [x] **ANG-358:** Frühstücks-Flow (Restaurant/Küche öffnen 06:15, Automaten-Rusch durch Öffnungszeit um 07:00 gelöst)
 - [x] **ANG-361:** Zwangspause nach POI-Besuch komplettiert & Budget-Endlosschleife gefixt
 - [x] **Bugfix:** Tooltip Gästezählung (Sofa-Sitzer in Lobby)
 - [x] **Refactoring:** Pausenzeiten in GuestDefinitions ausgelagert
-- [x] **ANG-356:** Room-Tooltip Bug (Walking Gäste nicht zählen)
-- [x] **ANG-359 & ANG-360:** Bar Live-Monitor Gastro-Flow (Wird serviert)
 - [x] **Bugfix:** GuestActor consumption_type (Essen vs Trinken) im Live-Monitor
 - [x] **ANG-357:** Lobby Endlos-Loop Fix (Gäste verlassen die Lobby wieder, statt endlos Plätze zu tauschen)
 - [ ] **ANG-362 HUD-Sterne Overlay (offen):** star-progress_overlay.png auf gefüllte Sterne umstellen (140x24px, Gold #EAB308).

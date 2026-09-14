@@ -6,8 +6,9 @@
 Der Tagungsraum (Conference Small) bietet Platz für bis zu 12 Personen (11 Zuhörer, 1 Redner). Seit dem Update auf das Smart Room System und die Einführung des EventManagers (Tier 2/3) arbeitet der Raum im **Dual-Modus**:
 
 1. **Event-Modus (Modus A):**
-   - Wenn der `EventManager` morgens ein Event auf diesen Raum bucht (z.B. Botaniker-Tagung), erhält das Hotel sofort die Einmalzahlung pro Teilnehmer.
-   - Der Raum ist in dieser Zeit **exklusiv** für die gebuchten Tagungsgäste reserviert. Reguläre Hotelgäste (VIPs, Business-Gäste ohne Event) dürfen den Raum nicht betreten.
+   - Wenn der `EventManager` morgens ein Event auf diesen Raum bucht (z.B. Botaniker-Tagung), ist der Raum für diesen Tag exklusiv reserviert.
+   - Die Zahlung pro Teilnehmer erfolgt erst um **07:45 Uhr** direkt über den `ConferenceSmall` Raum (Vorpuffer-Öffnung), nicht im `EventManager`.
+   - Reguläre Hotelgäste (VIPs, Business-Gäste ohne Event) dürfen den Raum nicht betreten.
    - Tagungsgäste haben einen strikten Tagesablauf: 07:45–12:00 Konferenz, 12:00–13:15 Mittagspause (Bar/Restaurant), 13:30–17:00 Nachmittagssession.
 
 2. **Regulärer Modus (Modus B):**

@@ -19,6 +19,8 @@ const VENDING_MACHINE_PRICE: int = 5
 const VENDING_MACHINE_EXP: int = 3
 const VENDING_MACHINE_SATURATION: int = 20
 const VENDING_MACHINE_HUNGER_THRESHOLD: int = 40
+const VENDING_MACHINE_OPEN_FROM: int = 420 # 07:00
+const VENDING_MACHINE_OPEN_TO: int = 1410  # 23:30
 
 @onready var _vending_machine: Node2D = get_node_or_null("%VendingMachine") if get_node_or_null("%VendingMachine") else get_node_or_null("%VendingMashine")
 @onready var _vending_target: Node2D = get_node_or_null("%VendingTargetPoint")
@@ -206,6 +208,9 @@ func buy_snack(budget: int) -> bool:
 		GameState.add_exp(VENDING_MACHINE_EXP, "Snack-Automat")
 		return true
 	return false
+
+func is_vending_machine_open(time_minutes: int) -> bool:
+	return time_minutes >= VENDING_MACHINE_OPEN_FROM and time_minutes < VENDING_MACHINE_OPEN_TO
 
 # ── Visuals ───────────────────────────────────────────────────────────────────
 

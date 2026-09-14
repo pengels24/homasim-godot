@@ -142,15 +142,14 @@ func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null, guest
 		
 		var color = "#aaaaaa"
 		if EventManager and EventManager.get("active_conferences") != null:
-			# event_poi_id ist ein String, aber active_conferences nutzt int (instance_id)
-			var conf_id = party.event_poi_id.to_int()
+			var conf_id = party.event_poi_id
 			if EventManager.active_conferences.has(conf_id):
 				color = EventManager.active_conferences[conf_id].get("color", "#aaaaaa")
 				
 		ev_badge.modulate = Color(color)
 		
-		# Positionierung und Skalierung 100% identisch zum HungryIcon
-		ev_badge.scale = Vector2(0.25, 0.25)
+		# ANG-348: Badge war zu gross, skaliert auf 0.15
+		ev_badge.scale = Vector2(0.15, 0.15)
 		ev_badge.position = Vector2(0, -4)
 		ev_badge.z_index = 10  # Höherer z-index als HungryIcon (welches auf 0 ist)
 		add_child(ev_badge)
@@ -556,14 +555,18 @@ func _get_open_pois() -> Array[String]:
 	# Vending Machine in Lobby (Level 2+)
 	if GameState.get_level() >= 2:
 		var can_afford = _guest_member.spending_budget >= 5
-		var is_hungry = false
 		var lobby = _get_lobby_room()
-		if is_instance_valid(lobby) and "VENDING_MACHINE_HUNGER_THRESHOLD" in lobby:
-			is_hungry = _guest_member.saturation < lobby.VENDING_MACHINE_HUNGER_THRESHOLD
+		var is_hungry = false
+		var vending_open = true
+		if is_instance_valid(lobby):
+			if "VENDING_MACHINE_HUNGER_THRESHOLD" in lobby:
+				is_hungry = _guest_member.saturation < lobby.VENDING_MACHINE_HUNGER_THRESHOLD
+			if lobby.has_method("is_vending_machine_open") and TimeManager:
+				vending_open = lobby.is_vending_machine_open(TimeManager.get_game_time())
 		else:
 			is_hungry = _guest_member.saturation < HUNGER_THRESHOLD
 			
-		if (is_hungry and can_afford) or _current_poi_id == "vending_machine":
+		if (is_hungry and can_afford and vending_open) or _current_poi_id == "vending_machine":
 			open_pois.append("vending_machine")
 	
 	return open_pois

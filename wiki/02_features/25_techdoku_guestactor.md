@@ -113,21 +113,6 @@ Session-Timer (60-180 Min)
 4. Neuer `_action_timer` aus `claim_result["duration"]`
 
 ### Session-Ende (automatisch)
-- `get_available_interactions()` gibt `[]` zurück wenn `now >= _guest_session_end[id]`
-- Beim nächsten Spot-Timer: `release_interaction()` → Cooldown 60 Min → `_decide_next_action()`
-- `is_guest_allowed()` prüft Cooldown → verhindert Wiedereintritt
-
-> **Wichtig:** `_action_timer = 0.0` DARF NICHT von außen gesetzt werden! Führt zu permanentem Ruhezustand (L212 Guard: `if _action_timer <= 0.0: return`).
-
-## 6. Vending Machine (Lobby Snack-Automat)
-Pseudo-POI in der Lobby. `target_room` ist die Lobby selbst.
-- `_current_poi_id` muss **explizit** auf `"vending_machine"` gesetzt werden (vor `target_room.get_definition()`)
-- Ess-Walk nutzt direkten Tween mit `lobby.get_local_path()` (nicht `_execute_walk()`)
-
-## 7. Smart Room API (vollständige Referenz)
-Alle Räume sind Smart Rooms. `GuestActor` nutzt ausschließlich diese Methoden:
-
-| Methode | Bedeutung |
 |---|---|
 | `get_available_interactions(actor)` | Liste verfügbarer Interaktionen (Sitz, Bett, ...) |
 | `claim_interaction(actor_id, id)` | Reserviert Platz, gibt `target_pos` + `duration` zurück |

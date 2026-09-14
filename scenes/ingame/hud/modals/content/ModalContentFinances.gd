@@ -23,8 +23,8 @@ var type_idx: int = 0
 const TIME_TEXTS = ["finances.time.today", "finances.time.yesterday", "finances.time.all"]
 const TIME_VALS = ["today", "yesterday", "all"]
 
-const CAT_TEXTS = ["finances.cat.all", "finances.cat.construction", "finances.cat.personal", "finances.cat.gastro", "finances.cat.quest", "finances.cat.research"]
-const CAT_VALS = ["all", "construction", "Personal", "gastro", "quest", "research"]
+const CAT_TEXTS = ["finances.cat.all", "finances.cat.construction", "finances.cat.personal", "finances.cat.gastro", "finances.cat.quest", "finances.cat.research", "finances.cat.event"]
+const CAT_VALS = ["all", "construction", "Personal", "gastro", "quest", "research", "event"]
 
 const TYPE_TEXTS = ["finances.type.all", "finances.type.income", "finances.type.expense"]
 const TYPE_VALS = ["all", "income", "expense"]
@@ -180,6 +180,7 @@ func _add_transaction_row(tx: Dictionary) -> void:
 		"system":       cat_name = GameState.T("finances.cat.label.system")
 		"room":         cat_name = GameState.T("finances.cat.label.room")
 		"betrieb":      cat_name = GameState.T("finances.cat.label.betrieb")
+		"event":        cat_name = GameState.T("finances.cat.label.event")
 		_:              cat_name = t_cat  # Fallback: raw value
 	lbl_c.text = cat_name
 	row.add_child(lbl_c)

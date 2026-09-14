@@ -6,9 +6,10 @@ Mit dem Update auf Smart Room 2.0 wurde das veraltete Legacy-System durch eine s
 
 ## Ablauf einer Tagung (Event-Modus)
 
-1. **Morning Struck (06:00)**
-   - `EventManager` würfelt auf Events. Bei Treffer (Konferenz) werden 1 bis N gebaute Konferenzräume per Zufall mit einem Event belegt (aus `config/events.json`).
-   - Die Event-Buchung bringt **sofort** Einnahmen: `150` pro Kopf.
+1. **Event-Modus (Modus A):**
+   - Wenn der `EventManager` morgens ein Event auf diesen Raum bucht (z.B. Botaniker-Tagung), ist der Raum für diesen Tag exklusiv reserviert.
+   - Die Zahlung pro Teilnehmer erfolgt erst um **07:45 Uhr** direkt über den `ConferenceSmall` Raum (Vorpuffer-Öffnung), nicht im `EventManager`.
+   - Reguläre Hotelgäste (VIPs, Business-Gäste ohne Event) dürfen den Raum nicht betreten.
    - Der `EventManager` speichert die aktiven Events pro Raum-Instanz-ID in `active_conferences`.
 
 2. **Gestaffelter Spawn (07:00 - 07:15)**

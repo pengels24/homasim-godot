@@ -285,7 +285,8 @@ func _on_event_reception_open() -> void:
 	if _guest_mgr.get_waiting().size() > 0 or _guest_mgr.get_checkout().size() > 0:
 		if not TimeManager.is_paused():
 			TimeManager.trigger_auto_pause()
-			Toast.show(GameState.T("toast.reception.auto_pause", "Auto-Pause: Gäste an der Rezeption!"), "guest", false)
+			# ANG-352: Nerviger Toast entfernt, da der Auto-Pause Effekt selbsterklärend ist
+			# Toast.show(GameState.T("toast.reception.auto_pause", "Auto-Pause: Gäste an der Rezeption!"), "guest", false)
 
 
 # =============================================================================

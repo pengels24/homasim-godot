@@ -1662,3 +1662,5 @@ event.inspector.result_up,Prüfung erfolgreich! Die Anforderungen für den näch
 event.inspector.result_down,Prüfung nicht bestanden! Aufgrund gravierender Mängel wurde ein Stern aberkannt.,Inspection failed! Due to serious deficiencies a star was revoked.
 event.inspector.result_held,Prüfung nicht bestanden. Aktueller Stern konnte gehalten werden.,Inspection not passed. The current star could be maintained.
 event.inspector.result_none,Anforderungen noch nicht erfüllt. Weiter so – der erste Stern wartet!,Requirements not yet met. Keep it up – the first star is waiting!
+finances.cat.event,Events,Events
+finances.cat.label.event,Event,Event

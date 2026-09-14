@@ -189,6 +189,9 @@ func _init_phase_from_time() -> void:
 func _on_minute_passed(total_game_minutes: int) -> void:
 	# Phasen-Übergänge ZUERST (damit Speaker-Check korrekte Phase sieht)
 	match total_game_minutes:
+		465:
+			# ANG-348: Zahlungseingang zur Türöffnung (Vorpuffer 07:45)
+			_process_conference_payment()
 		TIME_SESSION_START:
 			if _phase == "wander" or _phase == "idle":
 				_phase = "session"
@@ -439,6 +442,18 @@ func _end_conference() -> void:
 		EventManager.active_conferences.erase(rkey)
 		print("[CONF] active_conferences bereinigt: ", rkey)
 	_broadcast_to_event_guests("end_conference_day")
+
+func _process_conference_payment() -> void:
+	var gm_nodes = get_tree().get_nodes_in_group("guest_manager")
+	if gm_nodes.size() > 0:
+		var rkey = gm_nodes[0]._room_key(self)
+		if EventManager.active_conferences.has(rkey):
+			var cfg = EventManager.active_conferences[rkey]
+			var income = cfg.get("income_per_participant", 150) * min(cfg.get("max_participants", 12), get_definition().get("max_guests", 12))
+			if FinanceManager:
+				FinanceManager.add_transaction(income, "event", "Tagung gebucht: %s" % cfg.get("name", "Event"))
+				if EffectManager:
+					EffectManager.spawn_money_text(income, global_position + Vector2(0, -32))
 
 ## Ruft eine Methode auf allen TG-Akteuren auf, die zu diesem Raum gehören.
 func _broadcast_to_event_guests(method: String) -> void:

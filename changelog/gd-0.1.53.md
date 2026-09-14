@@ -54,3 +54,12 @@ Neue Keys hinzugefügt:
 
 **Erster Gourmet-Stern erfolgreich vergeben!**
 Dominik Hinz (Inspektor) bestand die Prüfung: 88% Sat / 81.2% GästeZuf / 83.7% Sauberkeit / 491 Rep / 27 Zimmer
+
+## 🐛 Bar / Restaurant Fixes (Gastro-Flow)
+
+- **ANG-356 (Room-Tooltip Bug):** Ankommende Gäste (Walking) werden nicht mehr als anwesend gezählt. `Rect2.has_point` Logik hinzugefügt.
+- **ANG-359 & ANG-360 (Bar Live-Monitor):** Status-Texte (Wartet auf Service, Wird serviert) gefixt.
+- **Lobby Bugfix:** Tagungsgäste `(TG)` Tag wird nur noch gesetzt wenn das Event-POI existiert.
+- **Scope Bugfix:** Godot 4 `for a in ...` Scope-Fehler in Bar.gd und RestaurantSmall.gd Live-Monitoren behoben.
+- **Consumption Type Logic:** Gäste (`GuestActor.gd`) speichern nun ihren `consumption_type` (food oder drink) basierend auf dem Rezept oder ob es ein Solo-Drink war.
+- **Trinken vs Essen Fix:** Live-Monitor in Bar und Restaurant unterscheidet nun via `consumption_type` korrekt zwischen `Isst gerade` und `Trinkt gerade`.

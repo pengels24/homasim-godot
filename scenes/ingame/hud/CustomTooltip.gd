@@ -162,9 +162,13 @@ func _update_content() -> void:
 						var valid_states = [actor.State.IN_POI, actor.State.STUDYING_MENU, actor.State.WAITING_FOR_FOOD, actor.State.EATING, actor.State.AWAITING_CHECKOUT, actor.State.IDLE, actor.State.WAITING_IN_LINE, actor.State.WALKING]
 						var gm = get_tree().current_scene.find_child("GuestManager", true, false)
 						var rkey = gm._room_key(_target_room) if is_instance_valid(gm) else ""
-						# WALKING nur zählen wenn _current_poi_id noch auf diesen Raum zeigt (Gast ist auf dem Weg zum Tisch)
-						if actor.current_state == actor.State.WALKING and actor._current_poi_id != def.get("id", "") and actor._current_poi_id != rkey:
-							continue
+						# ANG-356: WALKING nur zählen wenn Gast sich physisch im Raum befindet (verhindert Zählen am anderen Ende des Hotels)
+						if actor.current_state == actor.State.WALKING:
+							var local_pos = _target_room.to_local(actor.global_position)
+							var sz = _target_room.get_tile_size() if _target_room.has_method("get_tile_size") else Vector2(2, 2)
+							var rect = Rect2(Vector2.ZERO, Vector2(sz.x * 16.0, sz.y * 16.0))
+							if not rect.has_point(local_pos):
+								continue
 						if actor.current_state in valid_states and (actor._current_poi_id == def.get("id", "") or actor._current_poi_id == rkey or (def.get("id", "") == "lobby" and actor._current_poi_id == "vending_machine")):
 							current_visitors += 1
 							if is_instance_valid(actor._guest_member):

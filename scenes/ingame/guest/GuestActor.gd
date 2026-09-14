@@ -85,6 +85,7 @@ var _is_checkout_walk: bool = false
 ## Welcher POI aktuell besucht wird (z.B. "lobby", "bar", "spa")
 var _current_poi_id: String = ""
 var _current_order_id: String = ""
+var consumption_type: String = "food" # "food" or "drink"
 
 # Interner Timer für Aufenthaltsdauer
 var _action_timer: float = 0.0
@@ -363,7 +364,8 @@ func _process_waiting(delta: float) -> void:
 			if gastro_result.get("ordered", false):
 				_change_state(State.WAITING_FOR_FOOD)
 			elif gastro_result.get("solo_mode", false):
-				# Kein Kellner, aber Barkeeper ist da → Solo-Drink direkt
+				# Kein Kellner, aber Barkeeper ist da -> Solo-Drink direkt
+				consumption_type = "drink"
 				_change_state(State.EATING)
 			else:
 				# Kein Personal → Platz freigeben und abbrechen
@@ -927,6 +929,7 @@ func _on_order_served(_order_id: String, guest_id: String, recipe_id: String) ->
 				price = r.get("price", 0)
 				sat = r.get("saturation", 0)
 				r_name = GameState.T(r.get("name_key", ""))
+				consumption_type = r.get("type", "food")
 				break
 		
 		# Bezahlen via FinanceManager

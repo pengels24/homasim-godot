@@ -30,7 +30,7 @@ static func get_definition() -> Dictionary:
 		"min_staff": 1,
 		"max_staff": 2,  # Slot 1: bartender (Pflicht), Slot 2: waiter (optional)
 		"max_role_limits": {"bartender": 1, "waiter": 1},  # Je max. 1 pro Rolle
-		"open_from": 720,   # 12:00
+		"open_from": 480,   # 08:00
 		"open_to": 1410,    # 23:30
 		"need_restoration": {"thirst": 70, "fun": 30},
 		"valid_door_slots": ["R1"],
@@ -370,14 +370,20 @@ func get_live_details() -> Array[Dictionary]:
 			var guest_member = gm.get_guest(seat["occupied_by"]) if gm else null
 			
 			var actor_state = -1
+			var target_actor: Node = null
 			if guest_member != null:
 				for a in get_tree().get_nodes_in_group("guest_actors"):
 					var gm_prop = a.get("_guest_member")
 					if gm_prop and gm_prop.id == seat["occupied_by"]:
 						actor_state = a.get("current_state")
+						target_actor = a
 						break
-				if actor_state == 1: # State.WALKING
-					continue
+				if actor_state == 1 and target_actor != null: # State.WALKING
+					var local_pos = to_local(target_actor.global_position)
+					var sz = get_tile_size() if has_method("get_tile_size") else Vector2(2, 2)
+					var rect = Rect2(Vector2.ZERO, Vector2(sz.x * 16.0, sz.y * 16.0))
+					if not rect.has_point(local_pos):
+						continue
 				guest_name = guest_member.name
 			
 			var status_text = GameState.T("poi.restaurant.studying_menu")
@@ -403,12 +409,18 @@ func get_live_details() -> Array[Dictionary]:
 						status_text = t_str + ": " + r_name
 				else:
 					if actor_state == 8: # State.EATING
-						status_text = GameState.T("poi.bar.drinking")
+						if target_actor != null and target_actor.get("consumption_type") == "drink":
+							status_text = GameState.T("poi.bar.drinking")
+						else:
+							status_text = GameState.T("poi.restaurant.eating")
 					elif actor_state == 7: # State.WAITING_FOR_FOOD
 						status_text = GameState.T("poi.restaurant.waiting_for_food")
 			else:
 				if actor_state == 8: # State.EATING
-					status_text = GameState.T("poi.bar.drinking")
+					if target_actor != null and target_actor.get("consumption_type") == "drink":
+						status_text = GameState.T("poi.bar.drinking")
+					else:
+						status_text = GameState.T("poi.restaurant.eating")
 				elif actor_state == 7: # State.WAITING_FOR_FOOD
 					status_text = GameState.T("poi.restaurant.waiting_for_food")
 			

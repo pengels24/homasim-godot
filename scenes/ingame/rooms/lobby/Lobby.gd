@@ -241,17 +241,18 @@ func get_live_details() -> Array[Dictionary]:
 	for guest_actor in get_tree().get_nodes_in_group("guest_actors"):
 		if guest_actor._current_poi_id in ["lobby", "vending_machine"] or guest_actor.current_state == guest_actor.State.AWAITING_CHECKOUT:
 			if guest_actor.current_state == guest_actor.State.WALKING:
-				continue
+				var local_pos = to_local(guest_actor.global_position)
+				var sz = get_tile_size() if has_method("get_tile_size") else Vector2(2, 2)
+				var rect = Rect2(Vector2.ZERO, Vector2(sz.x * 16.0, sz.y * 16.0))
+				if not rect.has_point(local_pos):
+					continue
 			if guest_actor.current_state == guest_actor.State.LEAVING:
 				continue  # Abreisende Gäste zählen nicht als "in der Lobby" (Tooltip wäre sonst inkonsistent)
 				
 			var guest_name = guest_actor.get("_guest_member").name if guest_actor.get("_guest_member") else "Gast"
 			var party = guest_actor.call("_get_my_party") if guest_actor.has_method("_get_my_party") else null
 			var is_inspector = is_instance_valid(party) and party.get("is_inspector") == true
-			var is_tg_guest = not is_inspector and (
-				(is_instance_valid(party) and party.event_poi_id != "") or
-				(guest_actor.get("_target_room") == null and guest_actor.get("_guest_member") != null)
-			)
+			var is_tg_guest = not is_inspector and (is_instance_valid(party) and party.event_poi_id != "")
 			if is_tg_guest:
 				guest_name += " (TG)"
 				

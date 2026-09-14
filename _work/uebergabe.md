@@ -1,57 +1,53 @@
-# Übergabeprotokoll – Session 12.09.2026 (Nachmittag)
-> Version: v0.1.52 | Commit: 62360c1 | Nächste Session: Inspector-Test
-
----
+# Übergabeprotokoll – Session 13.09.2026 (v0.1.53)
 
 ## Letzter Stand
+Session erfolgreich abgeschlossen. **Erster Gourmet-Stern wurde live vergeben** (Dominik Hinz als Inspektor, Tag 7).
+Die Animation `ModalStarAchieved` (derzeit nur Kopie vom LevelUp) muss 
+a) noch angepasst werden 
+b) sollte nicht identisch aussehen wie LevelUp und 
+c) wird derzeit garnicht gezeigt.
 
-Vollständiger Konferenz-Flow getestet und als stabil bestätigt. Mehrere Bugs gefixt. Inspector-Test steht als nächstes an.
+## Bearbeitete Systeme
 
----
+### ModalContentInspectorReport (.tscn + .gd)
+- Modal: 80%×75% Bildschirmgröße
+- Titel: "Gourmet-Sterne – Prüfbericht" via `set_title()` direkt (da `open()` abbricht wenn Modal bereits sichtbar)
+- Ergebnis-Texte: 4 Varianten via `GameState.T("event.inspector.result_*")`
+- Signatur: "Gez. [inspector_name]" kursiv, font_size 26
+- Blue-Button: `menu_button_blue.tres` / hover / pressed
+- Float-Formatierung: `%.1f%%`
+- Grid-Font: Per Editor auf Labels gesetzt (nicht via Script)
 
-## Getestete und bestätigte Features
+### GuestManager.gd (Zeile ~945)
+- `inspector_name` via `party.get_display_name()` ins Stats-Dict aufgenommen
+- Bugfix: `get_primary_name()` → `get_display_name()` (korrekter Methodenname)
 
-- ✅ Wander-Vorpuffer, Session-Start, Blickrichtung
-- ✅ Speaker-Swap (nach Fix: auch ohne Reload)
-- ✅ Mittagspause (Entenmarsch, Bar/Restaurant-Verteilung)
-- ✅ Rückkehr aus Pause (13:15), Nachmittagssession
-- ✅ End of Day (17:00) – Tagungsraum leer, Gäste verteilen sich/gehen
+### IngameUIManager.gd (Zeile ~185 + ~204)
+- `set_title()` direkt aufrufen vor `open()`
+- Crash-Fix: `_hud.get_node("ModalLayer")` → `_hud.add_child(modal)` (ModalLayer existiert nicht in HUD.tscn)
 
----
+### config/gourmet_stars.json
+- Rufpunkte-Anforderungen auf 1-1000 Skala normalisiert
 
-## Was wurde in dieser Session gefixt
+### translations/language.csv
+- 5 neue Keys: `ui.modal.inspector_report.title`, `event.inspector.result_up/down/held/none`
 
-1. **ConferenceSmall.gd** – `_on_minute_passed()`: Phase-Setzen jetzt VOR Speaker-Timer-Check (ANG-346)
-2. **GuestActor.gd** – `go_conference_break()`: Gastro 3× gewichtet vs. Lobby 1× (weniger Lobby-Hänger)
-3. **ModalContentReception.gd** – TG-Gäste (event_poi_id != "") aus Aktive-Gäste-Liste gefiltert
-4. **ModalContentFinances.gd** – String-Format-Guard in `_translate_tx_desc()`
-5. **language.csv** – `tx.construction,Ausstattung: %s,Equipment: %s` hinzugefügt
-6. **ConferenceSmall.gd** – Pausenzeiten: 13:15 Rückkehr, 13:30 Nachmittagsstart
-7. **AGENTS.md** – Versions-Regl Direktive (eine Session = eine Version)
+## Offene Nächste Schritte (Priorität)
 
----
+### 🔴 MORGEN ZUERST (ANG-362)
+- `star-progress_overlay.png` (140×24px) → gefüllte Sterne (★) zeichnen
+- Optionen: (A) Neues Pixel-Art-Asset zeichnen, (B) 5 separate TextureRect-Nodes statt TextureProgressBar
 
-## Sofortige nächste Schritte (morgen)
+### 🟡 Offene Issues aus Backlog
+- ANG-348/349: Conference Small – Tagungszahlung, Tutorial, Badge
+- ANG-353: PIP-Kamera
+- ANG-355: Inspector-Log
+- ANG-356: Room-Tooltip Bug
+- ANG-358: Breakfast synchronized 06:15
+- ANG-359: Bar-Küchen-Flow "Abholbereit"-State
+- ANG-360 Part 2: Bar-Status-Logik in UI/Monitor
 
-### 1. Inspector testen (höchste Priorität)
-- Game neu starten (alle heutigen Code-Änderungen laden)
-- Neue Tagung starten → nach Tagungsende in DevConsole: `start-inspector`
-- Erwarteter Flow: Check-in → POI-Besuche (Restaurant!) → Checkout → Bericht-Modal → Sterne
-
-### 2. Offene Verifikationen nach Reload
-- Tagungsgäste in Rezeption: Sollten NICHT mehr auftauchen (event_poi_id-Filter)
-- Speaker-Swap: Ohne Reload nach 15 Min testen (frische Tagung, kein Save/Reload dazwischen)
-- Mittagspause: Lobby-Hänger sollten deutlich weniger sein (Gastro 3×)
-
-### 3. Offene Issues
-- ANG-348: Pre-Alpha Polishing (Badge-Größe, Tagungszahlung, Tutorial)
-- ANG-349: Tagungsraum-Limit (max. 1) + Techtree "Parallele Tagungen"
-- ANG-345: Hotel-Übersicht (F9) Redesign
-- ANG-344: Main Menu Disclaimer-Button
-
----
-
-## Neue Infrastruktur
-
-- **`wiki/_dev/test_review.md`**: Living-Checklist für offene Testpunkte – immer aktuell halten!
-- **`.agents/skills/review/SKILL.md`**: `/review [text]` → trägt Beobachtungen in test_review.md ein
+## Wichtige Architektur-Notizen
+- `StandardModal.open()` bricht ab wenn `visible == true` → immer zusätzlich `set_title()` aufrufen!
+- `GuestParty.get_display_name()` ist der korrekte Accessor (nicht `get_primary_name()`)
+- `ModalStarAchieved` muss als `_hud.add_child(modal)` hinzugefügt werden (kein ModalLayer-Node)

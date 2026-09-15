@@ -384,6 +384,8 @@ func _refresh_translated_labels() -> void:
 		%LabelFastForward.text = GameState.T("settings.gameplay.ff_speed")
 	if is_instance_valid(%LabelTutorialTips):
 		%LabelTutorialTips.text = GameState.T("settings.gameplay.tutorial_tips")
+	if is_instance_valid(%LabelMultiBuild):
+		%LabelMultiBuild.text = GameState.T("settings.gameplay.multi_build.title")
 	if is_instance_valid(%LabelZoomSens):
 		%LabelZoomSens.text = GameState.T("settings.gameplay.zoom_sens")
 	if is_instance_valid(%LabelPanSpeed):

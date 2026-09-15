@@ -180,9 +180,10 @@ func _update_manager_state() -> void:
 		var hotels := SaveManager.get_hotels(GameState.active_profile_id)
 		if hotels.size() > 0:
 			var last_hotel = hotels.back()
-			lbl_idcard_info.text = "%d Hotels\nZuletzt: %s" % [hotels.size(), last_hotel.get("name", "Unbekannt")]
+			var hotel_name = last_hotel.get("name", GameState.T("menu.idcard.unknown"))
+			lbl_idcard_info.text = "%d %s\n%s %s" % [hotels.size(), GameState.T("menu.idcard.hotels"), GameState.T("menu.idcard.last"), hotel_name]
 		else:
-			lbl_idcard_info.text = "0 Hotels\n" + GameState.T("menu.idcard.change_profile", "Profil wechseln")
+			lbl_idcard_info.text = "0 %s\n%s" % [GameState.T("menu.idcard.hotels"), GameState.T("menu.idcard.change_profile", "Profil wechseln")]
 		
 		# Avatar rendern
 		var ManagerSelectScript = preload("res://scenes/manager_select/ManagerSelect.gd")
@@ -395,9 +396,9 @@ func _check_disclaimer() -> void:
 # =============================================================================
 func _check_for_legacy_saves() -> void:
 	if DirAccess.dir_exists_absolute("user://hotels") and not FileAccess.file_exists("user://migration_v2.flag"):
-		var title = "Alte Spielstände gefunden"
-		var msg = "Die Pre-Alpha ist auf einem viel weiter fortgeschrittenen Stand als die TechDemo. Eine Fortführung alter Spielstände ist nicht zu empfehlen und kann zu massiven Balancing-Fehlern führen.\n\nSollen die Daten der TechDemo jetzt gelöscht werden, um Speicherplatz freizugeben?\n(Wenn du 'Nein' wählst, werden sie behalten, aber die Pre-Alpha nutzt in jedem Fall eigene, neue Ordner)."
-		_confirm_modal.ask(title, msg, "Ja, löschen", "Nein, behalten")
+		var title = GameState.T("ui.legacy_saves.title")
+		var msg = GameState.T("ui.legacy_saves.msg")
+		_confirm_modal.ask(title, msg, GameState.T("ui.legacy_saves.btn_yes"), GameState.T("ui.legacy_saves.btn_no"))
 		
 		if _confirm_modal.confirmed.is_connected(_on_legacy_delete_confirmed):
 			_confirm_modal.confirmed.disconnect(_on_legacy_delete_confirmed)

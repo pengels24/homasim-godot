@@ -77,73 +77,67 @@
     "actions": {
       "ui_tutorial": {
         "label": "settings.controls.ui.tutorial",
-        "order": 1,
+        "order": 10,
         "default": "F10",
-        "default_alt": ""
-      },
-      "ui_build_menu": {
-        "label": "settings.controls.ui.build",
-        "order": 2,
-        "default": "B",
         "default_alt": ""
       },
       "ui_reception": {
         "label": "settings.controls.ui.reception",
-        "order": 3,
+        "order": 1,
         "default": "F1",
         "default_alt": ""
       },
       "ui_staff": {
         "label": "settings.controls.ui.staff",
-        "order": 4,
+        "order": 5,
         "default": "F5",
         "default_alt": ""
       },
       "ui_tech_tree": {
         "label": "settings.controls.ui.tech",
-        "order": 5,
+        "order": 2,
         "default": "F2",
         "default_alt": ""
       },
       "ui_sim_browser": {
         "label": "settings.controls.ui.sim_browser",
-        "order": 6,
+        "order": 7,
         "default": "F7",
         "default_alt": ""
       },
       "ui_quest_book": {
         "label": "settings.controls.ui.quests",
-        "order": 7,
+        "order": 8,
         "default": "F8",
         "default_alt": ""
       },
       "ui_guest_list": {
         "label": "settings.controls.ui.guest_list",
-        "order": 8,
+        "order": 3,
         "default": "F3",
         "default_alt": ""
       },
       "ui_room_list": {
         "label": "settings.controls.ui.room_list",
-        "order": 9,
+        "order": 4,
         "default": "F4",
         "default_alt": ""
       },
       "ui_finances": {
         "label": "settings.controls.ui.finances",
-        "order": 10,
+        "order": 6,
         "default": "F6",
         "default_alt": ""
       },
       "ui_activity_log": {
         "label": "settings.controls.ui.activity_log",
-        "order": 11,
+        "order": 12,
         "default": "L",
         "default_alt": ""
       },
       "ui_hotel_overview": {
         "label": "settings.controls.ui.hotel_overview",
-        "order": 12,
+        "order": 9,
         "default": "F9",
         "default_alt": ""
       }
@@ -155,20 +149,26 @@
     "actions": {
       "rotate_room": {
         "label": "settings.controls.build.rotate",
-        "order": 1,
+        "order": 2,
         "default": "R",
         "default_alt": ""
       },
       "cycle_door": {
         "label": "settings.controls.build.door",
-        "order": 2,
+        "order": 3,
         "default": "Period",
         "default_alt": ""
       },
       "multi_build_modifier": {
         "label": "settings.controls.build.multi_build_modifier",
-        "order": 3,
+        "order": 4,
         "default": "Shift",
+        "default_alt": ""
+      },
+      "ui_build_menu": {
+        "label": "settings.controls.ui.build",
+        "order": 1,
+        "default": "B",
         "default_alt": ""
       }
     }

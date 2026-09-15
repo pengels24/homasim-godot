@@ -14,6 +14,7 @@ var lbl_techdemo: Label
 var music_player: AudioStreamPlayer
 
 func _ready() -> void:
+    lbl_skip.text = GameState.T("ui.intro.skip")
     Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
     if has_node("/root/BugReporter"):
         get_node("/root/BugReporter").visible = false

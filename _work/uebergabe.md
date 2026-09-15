@@ -1,11 +1,14 @@
-# Übergabeprotokoll (Stand: v0.1.55)
+# Übergabeprotokoll (Stand v0.1.56)
 
 ## Letzter Stand
-- Das HUD für die Gourmet-Sterne (ANG-362) wurde von einer einzelnen Progress-Bar auf 5 individuelle `TextureRect`-Sterne (`ang-star-filled.aseprite`, `ang-star-outline.aseprite`) umgebaut, die via Code (Gold #EAB308) eingefärbt werden.
-- Der PIP-Kamera Monitor (ANG-353) wurde visuell verfeinert (1px Goldrahmen, eckige Kanten, Snapping & Grouping-Funktion).
-- Alle ungenutzten alten Tooltip-Dateien (`GuestFollowTooltip`) wurden gelöscht.
-- Das komplette Projekt wurde von störenden Debugger-Warnungen befreit (Ternary-Casts, ungenutzte Variablen in StaffActor/SpaSmall, Shadowing in PoolSmall, Integer Division).
-- Der Start-Crash durch `GameState.hotel_stars` wurde gefixt.
+Der Agent hat umfangreiche UI- und Übersetzungsarbeiten durchgeführt. Wir befinden uns in einer laufenden Session zur Ausmerzung fehlender Übersetzungen (Translation Audit). Ein kritischer Fehler in der `language.csv` (falsches Encoding durch PowerShell) wurde behoben, was das Translation-System wieder einsatzbereit gemacht hat. Zudem wurden Settings-Menüs (Controls) neu sortiert und diverse hardcodierte Strings in HUD und Dashboard ausgetauscht.
 
-## Nächste Schritte
-- Der User meinte "es kommt noch mehr (später)", er wird also neue Aufgaben diktieren. Bereithalten für den nächsten Sprint.
+## Bearbeitete Systeme
+- **Translation System (`language.csv`):** Bereinigt und umfangreich erweitert.
+- **Keybindings (`keybindings.json`):** Umstrukturiert (F-Tasten Sortierung, Build-Menü verschoben).
+- **Dashboard / HUD / ModalContentDemoEnd:** Harte Text-Zuweisungen auf `GameState.T` umgeschrieben.
+
+## Sofortige nächste Schritte
+- Der User testet gerade, ob die reparierten Übersetzungen im Spiel (Dashboard, Demo End Screen etc.) richtig angezeigt werden.
+- Ausstehend auf der "To-Translate" Liste aus `_work/untranslated.txt`: `GuestPipMonitor` (Gast-Zufriedenheit) und der `GuestManager` (Wütend-Toast). Diese sollten nach Rückmeldung des Users bearbeitet werden.
+- Keine Git-Commits ohne Abstimmung, da wir noch in der Polishing/Translation Phase stecken.

@@ -11,3 +11,11 @@
 
 ## Refactoring / Internal
 - SaveManager verwendet nun konsequent die v2_-Präfixe für Ordner.
+
+## Translation & UI (Session Fortführung)
+- **Settings:** Fehlende Übersetzungen im Tab "Gameplay" (Mehrfachbau) ergänzt.
+- **Settings:** Audio "Door Sounds" in Übersetzung aufgenommen.
+- **Controls:** Die Tastenbelegung im "User Interface"-Tab wurde nach F-Tasten (F1-F10) sortiert; das Build Menu wurde thematisch korrekt in den Bereich "Build Mode" verschoben.
+- **Übersetzungs-Audit:** Weitere hartkodierte Strings in Dashboard, HUD und den Demo-End-Screens durch GameState.T-Aufrufe ersetzt.
+- **Disclaimer:** Eine persönliche Signatur ("Peter aka Angelus2010") wurde dem Pre-Alpha Disclaimer hinzugefügt.
+- **Bugfix (Translation):** Einen Encoding-Fehler (PowerShell-Artefakte) in der language.csv korrigiert, der das Laden neuer Strings in Godot blockiert hatte.

@@ -74,7 +74,7 @@ func close() -> void:
 func _setup_manager_panel() -> void:
 	var profile := GameState.active_profile
 	manager_name_lbl.text = profile.get("name", "Manager")
-	manager_role_lbl.text = "MANAGER · LEVEL 1"
+	manager_role_lbl.text = GameState.T("ui.dashboard.level", 1)
 	character_display.update_appearance(
 		profile.get("gender", "m"),
 		SKIN_COLORS.get(profile.get("appearance_skin",   "hell"),          SKIN_COLORS["hell"]),

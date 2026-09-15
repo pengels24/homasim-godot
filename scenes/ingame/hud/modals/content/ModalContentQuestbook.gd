@@ -148,7 +148,7 @@ func _select_category(cat_id: String) -> void:
 		btn.toggle_mode = true
 		_style_toggle_btn(btn)
 		
-		var txt = "Rang " + r_id
+		var txt = GameState.T("ui.quests.rank", r_id)
 		if r_int < current_rank:
 			txt += " (✔)"
 			btn.add_theme_color_override("font_color", Color.DIM_GRAY)
@@ -280,7 +280,7 @@ func _populate_quests() -> void:
 			var tech_def = TechtreeManager.tech_registry.get(req_tech, {})
 			if not tech_def.is_empty():
 				tech_name = GameState.T(tech_def.get("name", "Unknown"))
-			title.text = GameState.T(t_def.get("name", "Unknown")) + " (Benötigt Forschung: " + tech_name + ")"
+			title.text = GameState.T(t_def.get("name", "Unknown")) + GameState.T("ui.quests.req_tech", tech_name)
 			title.add_theme_color_override("font_color", Color.DIM_GRAY)
 			vbox.add_child(title)
 		else:

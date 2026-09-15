@@ -1723,3 +1723,42 @@ ui.confirm.demolish_title,Zimmer abreißen?,Demolish Room?
 ui.confirm.demolish_desc,"Möchtest du %s wirklich abreißen?
 Du erhältst %d € zurück.","Do you really want to demolish %s?
 You will receive %d € in return."
+modal.overview.title,Hotel Status,Hotel Status
+modal.overview.stars_rep,Sterne & Ruf,Stars & Rep
+modal.overview.finances,Finanzen,Finances
+modal.overview.rooms,Zimmer & Belegung,Rooms & Occupancy
+modal.overview.satisfaction,Gästezufriedenheit,Guest Satisfaction
+modal.overview.format_stars,%d / 5 Sterne,%d / 5 Stars
+modal.overview.format_rep,%d / %d Rufpunkte,%d / %d Reputation
+modal.overview.today,Heute: %s%s €,Today: %s%s €
+modal.overview.occupancy,Auslastung: %d%% (%d/%d Zimmer · %d Betten),Occupancy: %d%% (%d/%d Rooms · %d Beds)
+modal.overview.occupancy_zero,Auslastung: 0% (0 Zimmer),Occupancy: 0% (0 Rooms)
+modal.overview.cleanliness,Ø Sauberkeit: %d%%,Ø Cleanliness: %d%%
+modal.overview.satisfaction_fmt,Ø Zufriedenheit: %d%% (%d Gruppen),Ø Satisfaction: %d%% (%d Parties)
+modal.overview.satisfaction_none,Ø Zufriedenheit: Keine Gäste,Ø Satisfaction: No Guests
+modal.overview.satisfaction_empty,Ø Zufriedenheit: –,Ø Satisfaction: –
+ui.guest_list.pip,Beobachten (PIP),Watch (PIP)
+guest.state.day_guest,Tagesgast,Day Guest
+ui.staff.no_workplace,Kein Arbeitsplatz,No Workplace
+ui.staff.no_workplace_desc,"Dieser Beruf benötigt einen entsprechenden Arbeitsplatz (POI), der noch nicht gebaut wurde.",This profession requires a corresponding workplace (POI) which has not been built yet.
+ui.staff.assign_title,Personal Zuweisen,Assign Staff
+ui.staff.assign_empty,Kein passendes Personal verfügbar.,No suitable staff available.
+ui.staff.assign_desc,"Wähle einen Mitarbeiter aus, der diesem Raum zugewiesen werden soll:",Select a staff member to assign to this room:
+ui.staff.workplace_title,Arbeitsplatz Wählen,Select Workplace
+ui.staff.workplace_empty,Kein Raum mit freiem Slot für diesen Beruf vorhanden.,No room with a free slot for this profession is available.
+ui.staff.workplace_desc,"Wähle den Raum, in dem %s %s arbeiten soll:",Select the room where %s %s should work:
+toast.reception.accepts,%s akzeptiert und bleibt!,%s accepts and stays!
+toast.reception.declines,%s lehnt ab und verlässt das Hotel!,%s declines and leaves the hotel!
+toast.reception.checkout_money,Checkout: %s %s erhalten,Checkout: %s %s received
+ui.quests.req_tech, (Benötigt Forschung: ###), (Requires Research: ###)
+ui.tutorial.no_desc,Keine Beschreibung verfügbar.,No description available.
+ui.tutorial.no_desc_room,Für diesen Raum ist noch kein detaillierter Codex-Eintrag vorhanden.,No detailed codex entry is available for this room yet.
+ui.techtree.tooltip.reqs_title,Voraussetzungen:,Requirements:
+ui.techtree.tooltip.cost_title,Kosten:,Cost:
+ui.techtree.tooltip.cost_fp,%d / %d FP,%d / %d RP
+ui.techtree.tooltip.cost_money,%s / %s %s,%s / %s %s
+settings.ui.monitor_idx,Monitor %s,Monitor %s
+settings.controls.bind_title,Taste belegen,Bind Key
+settings.controls.bind_desc,Bitte drücke jetzt eine Taste für:\n%s\n\n(ESC zum Abbrechen),Please press a key for:\n%s\n\n(ESC to cancel)
+settings.controls.collision_title,Taste bereits belegt,Key already bound
+settings.controls.collision_desc,Die Taste ist bereits für '%s' belegt. Überschreiben?,The key is already bound to '%s'. Overwrite?

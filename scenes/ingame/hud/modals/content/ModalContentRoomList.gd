@@ -57,7 +57,9 @@ func _apply_translations() -> void:
 		var lbl_guest = header_hbox.get_node_or_null("LblColGuest")
 		if lbl_guest: lbl_guest.text = GameState.T("ui.room_list.col.guest")
 		var lbl_clean = header_hbox.get_node_or_null("LblColClean")
-		if lbl_clean: lbl_clean.text = GameState.T("ui.room_list.col.clean")
+		if lbl_clean: 
+			lbl_clean.text = GameState.T("ui.room_list.col.clean")
+			lbl_clean.tooltip_text = GameState.T("cleanliness")
 		var lbl_maint = header_hbox.get_node_or_null("LblColMaint")
 		if lbl_maint: lbl_maint.text = GameState.T("ui.room_list.col.condition")
 

@@ -11,7 +11,16 @@ extends MarginContainer
 var _guest_mgr: GuestManager = null
 
 func _ready() -> void:
-	pass
+	if has_node("VBox/Header/Title"):
+		$VBox/Header/Title.text = GameState.T("modal.overview.title", "Hotel Status")
+	if has_node("VBox/Grid/PanelStars/M/V/Label"):
+		$VBox/Grid/PanelStars/M/V/Label.text = GameState.T("modal.overview.stars_rep", "Sterne & Ruf")
+	if has_node("VBox/Grid/PanelFinances/M/V/Label"):
+		$VBox/Grid/PanelFinances/M/V/Label.text = GameState.T("modal.overview.finances", "Finanzen")
+	if has_node("VBox/Grid/PanelRooms/M/V/Label"):
+		$VBox/Grid/PanelRooms/M/V/Label.text = GameState.T("modal.overview.rooms", "Zimmer & Belegung")
+	if has_node("VBox/Grid/PanelGuests/M/V/Label"):
+		$VBox/Grid/PanelGuests/M/V/Label.text = GameState.T("modal.overview.satisfaction", "Gästezufriedenheit")
 
 func setup(guest_mgr: GuestManager) -> void:
 	_guest_mgr = guest_mgr
@@ -25,12 +34,12 @@ func _update_stats() -> void:
 	var stars = GameState.selected_hotel.get("stars", 0)
 	var rep = GameState.selected_hotel.get("rep", 0)
 	var rep_max = GameState.selected_hotel.get("rep_max", 100)
-	val_stars.text = "%d / 5 Sterne" % stars
-	val_rep.text = "%d / %d Rufpunkte" % [rep, rep_max]
+	val_stars.text = GameState.T("modal.overview.format_stars", "%d / 5 Sterne") % stars
+	val_rep.text = GameState.T("modal.overview.format_rep", "%d / %d Rufpunkte") % [rep, rep_max]
 
 	# Finanzen
 	var money = GameState.selected_hotel.get("money", 0)
-	val_money.text = "%d \u20ac" % money
+	val_money.text = "%s \u20ac" % GameState.format_money(money)
 
 	# Tagesbilanz aus Transaktionen berechnen
 	var today = GameState.selected_hotel.get("day", 1)
@@ -45,8 +54,8 @@ func _update_stats() -> void:
 			else:
 				expense += amt
 	var balance = income + expense
-	var prefix = "+" if balance >= 0 else ""
-	val_balance.text = "Heute: %s%d \u20ac" % [prefix, balance]
+	var prefix = "+" if balance > 0 else ""
+	val_balance.text = GameState.T("modal.overview.today", "Heute: %s%s \u20ac") % [prefix, GameState.format_money(balance)]
 
 	# Auslastung via GuestManager: aktive Parties = belegte Zimmer
 	if is_instance_valid(_guest_mgr):
@@ -72,16 +81,16 @@ func _update_stats() -> void:
 
 		if total_rooms > 0:
 			var pct = int(round((float(occupied_rooms) / float(total_rooms)) * 100.0))
-			val_occupancy.text = "Auslastung: %d%% (%d/%d Zimmer \u00b7 %d Betten)" % [pct, occupied_rooms, total_rooms, total_beds]
+			val_occupancy.text = GameState.T("modal.overview.occupancy", "Auslastung: %d%% (%d/%d Zimmer \u00b7 %d Betten)") % [pct, occupied_rooms, total_rooms, total_beds]
 		else:
-			val_occupancy.text = "Auslastung: 0% (0 Zimmer)"
+			val_occupancy.text = GameState.T("modal.overview.occupancy_zero", "Auslastung: 0% (0 Zimmer)")
 
 	# Sauberkeit via GuestManager API
 	if is_instance_valid(_guest_mgr):
 		var avg_clean = _guest_mgr.get_average_cleanliness()
-		val_cleanliness.text = "\u00d8 Sauberkeit: %d%%" % round(avg_clean)
+		val_cleanliness.text = GameState.T("modal.overview.cleanliness", "\u00d8 Sauberkeit: %d%%") % round(avg_clean)
 	else:
-		val_cleanliness.text = "\u00d8 Sauberkeit: 100%"
+		val_cleanliness.text = GameState.T("modal.overview.cleanliness", "\u00d8 Sauberkeit: %d%%") % 100
 
 	# Gaestezufriedenheit via GuestManager API
 	if is_instance_valid(_guest_mgr):
@@ -90,8 +99,8 @@ func _update_stats() -> void:
 		var total_parties = active.size() + waiting.size()
 		var avg_sat = _guest_mgr.get_average_satisfaction()
 		if total_parties > 0:
-			val_satisfaction.text = "\u00d8 Zufriedenheit: %d%% (%d Gruppen)" % [round(avg_sat), total_parties]
+			val_satisfaction.text = GameState.T("modal.overview.satisfaction_fmt", "\u00d8 Zufriedenheit: %d%% (%d Gruppen)") % [round(avg_sat), total_parties]
 		else:
-			val_satisfaction.text = "\u00d8 Zufriedenheit: Keine G\u00e4ste"
+			val_satisfaction.text = GameState.T("modal.overview.satisfaction_none", "\u00d8 Zufriedenheit: Keine G\u00e4ste")
 	else:
-		val_satisfaction.text = "\u00d8 Zufriedenheit: \u2013"
+		val_satisfaction.text = GameState.T("modal.overview.satisfaction_empty", "\u00d8 Zufriedenheit: \u2013")

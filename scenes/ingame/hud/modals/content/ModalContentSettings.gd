@@ -194,7 +194,7 @@ func _init_ui_tab() -> void:
 	var screen_labels: Array[String] = []
 	var screen_vals: Array[int] = []
 	for i in range(screen_count):
-		screen_labels.append("Monitor %d" % (i + 1))
+		screen_labels.append(GameState.T("settings.ui.monitor_idx", "Monitor %s") % (i + 1))
 		screen_vals.append(i)
 	# Bei nur einem Monitor: Selector ausblenden (macht keinen Sinn)
 	btn_screen_left.visible  = screen_count > 1
@@ -519,7 +519,7 @@ func _capture_key(action_id: String, slot_idx: int) -> void:
 	canvas.add_child(confirm)
 	get_tree().root.add_child(canvas)
 	
-	confirm.ask("Taste belegen", "Bitte drücke jetzt eine Taste für:\n" + GameState.T(lbl_text) + "\n\n(ESC zum Abbrechen)")
+	confirm.ask(GameState.T("settings.controls.bind_title", "Taste belegen"), GameState.T("settings.controls.bind_desc", "Bitte drücke jetzt eine Taste für:\n%s\n\n(ESC zum Abbrechen)") % GameState.T(lbl_text))
 	confirm.visible = true
 	# Verstecke die Buttons, da wir ja auf einen beliebigen Tastendruck warten
 	confirm.get_node("Center/Card/Margin/VBox/Buttons").hide()
@@ -585,7 +585,7 @@ func _on_key_captured(keycode: Key, action_id: String, slot_idx: int) -> void:
 		# Use ConfirmModal
 		var confirm = preload("res://scenes/shared/ConfirmModal.tscn").instantiate()
 		get_tree().root.add_child(confirm)
-		confirm.ask("Taste bereits belegt", "Die Taste ist bereits für '" + collision_action + "' belegt. Überschreiben?", "Ja", "Nein")
+		confirm.ask(GameState.T("settings.controls.collision_title", "Taste bereits belegt"), GameState.T("settings.controls.collision_desc", "Die Taste ist bereits für '%s' belegt. Überschreiben?") % GameState.T(collision_action), GameState.T("btn.yes", "Ja"), GameState.T("btn.no", "Nein"))
 		confirm.confirmed.connect(func():
 			_save_key(action_id, slot_idx, keycode)
 			# Unbind from old action

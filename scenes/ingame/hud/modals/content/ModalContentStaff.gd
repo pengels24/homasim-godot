@@ -673,11 +673,11 @@ func _update_details() -> void:
 				_style_action_btn(action_btn, "green")
 				action_btn.tooltip_text = ""
 		else:
-			action_btn.text = "Kein Arbeitsplatz"
+			action_btn.text = GameState.T("ui.staff.no_workplace", "Kein Arbeitsplatz")
 			action_btn.disabled = true
 			action_btn.modulate = Color(1, 1, 1, 1.0)
 			_style_action_btn(action_btn, "disabled")
-			action_btn.tooltip_text = "Dieser Beruf benötigt einen entsprechenden Arbeitsplatz (POI), der noch nicht gebaut wurde."
+			action_btn.tooltip_text = GameState.T("ui.staff.no_workplace_desc", "Dieser Beruf benötigt einen entsprechenden Arbeitsplatz (POI), der noch nicht gebaut wurde.")
 		
 	var age_str = str(s.get("age", 30)) + " " + GameState.T("ui.staff.years", "Jahre")
 	_create_2col_row(GameState.T("ui.staff.age", "Alter"), age_str, detail_stats, false)
@@ -927,14 +927,14 @@ func _on_empty_slot_clicked(room_id: String, allowed_roles: Array) -> void:
 					
 	var modal = _get_list_modal()
 	if unassigned_candidates.is_empty():
-		modal.ask_list("Personal Zuweisen", "Kein passendes Personal verfügbar.", [])
+		modal.ask_list(GameState.T("ui.staff.assign_title", "Personal Zuweisen"), GameState.T("ui.staff.assign_empty", "Kein passendes Personal verfügbar."), [])
 	else:
 		var items = []
 		for c in unassigned_candidates:
 			var txt = "%s %s (%s)" % [c.get("first_name", ""), c.get("last_name", ""), GameState.T("staff.role." + c.get("role", ""))]
 			items.append({"id": c.get("id", ""), "text": txt, "data": c})
 			
-		modal.ask_list("Personal Zuweisen", "Wähle einen Mitarbeiter aus, der diesem Raum zugewiesen werden soll:", items)
+		modal.ask_list(GameState.T("ui.staff.assign_title", "Personal Zuweisen"), GameState.T("ui.staff.assign_desc", "Wähle einen Mitarbeiter aus, der diesem Raum zugewiesen werden soll:"), items)
 		modal.item_selected.connect(func(s_id: String):
 			if StaffManager:
 				StaffManager.assign_to_room(s_id, room_id)
@@ -966,9 +966,9 @@ func _show_hire_and_assign_popup(staff: Dictionary) -> void:
 				
 	var modal = _get_list_modal()
 	if valid_rooms.is_empty():
-		modal.ask_list("Arbeitsplatz Wählen", "Kein Raum mit freiem Slot für diesen Beruf vorhanden.", [])
+		modal.ask_list(GameState.T("ui.staff.workplace_title", "Arbeitsplatz Wählen"), GameState.T("ui.staff.workplace_empty", "Kein Raum mit freiem Slot für diesen Beruf vorhanden."), [])
 	else:
-		modal.ask_list("Arbeitsplatz Wählen", "Wähle den Raum, in dem %s %s arbeiten soll:" % [staff.get("first_name", ""), staff.get("last_name", "")], valid_rooms)
+		modal.ask_list(GameState.T("ui.staff.workplace_title", "Arbeitsplatz Wählen"), GameState.T("ui.staff.workplace_desc", "Wähle den Raum, in dem %s %s arbeiten soll:") % [staff.get("first_name", ""), staff.get("last_name", "")], valid_rooms)
 		modal.item_selected.connect(func(r_id: String):
 			var staff_name = staff.get("first_name", "") + " " + staff.get("last_name", "")
 			var c_modal = _get_confirm_modal()

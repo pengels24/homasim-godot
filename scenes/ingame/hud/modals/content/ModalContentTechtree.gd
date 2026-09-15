@@ -245,7 +245,7 @@ func _build_tier_content(parent: Control, _tier_id: String, tier_data: Dictionar
 						add_child(confirm)
 						
 						var title = GameState.T("ui.techtree.confirm.title")
-						var msg = GameState.T("ui.techtree.confirm.desc", display_name, int(n.get("cost_fp", 0)), str(int(n.get("cost_money", 0))) + " €")
+						var msg = GameState.T("ui.techtree.confirm.desc", display_name, int(n.get("cost_fp", 0)), GameState.format_money(int(n.get("cost_money", 0))))
 						
 						confirm.ask(title, msg, GameState.T("ui.techtree.btn.unlock"), GameState.T("ui.techtree.btn.cancel"))
 						confirm.confirmed.connect(func():
@@ -348,11 +348,7 @@ func _generate_tooltip(tech_id: String) -> String:
 	var tt = ""
 	
 	if is_unlocked:
-		var trans = GameState.T("ui.techtree.tooltip.already_unlocked")
-		if trans == "ui.techtree.tooltip.already_unlocked":
-			tt += "✅ - Bereits erforscht -\n\n"
-		else:
-			tt += "✅ " + trans + "\n\n"
+		tt += "✅ " + GameState.T("ui.techtree.tooltip.already_unlocked", "- Bereits erforscht -") + "\n\n"
 		
 	var cost_fp = n.get("cost_fp", 0)
 	var cost_money = n.get("cost_money", 0)
@@ -391,15 +387,15 @@ func _generate_tooltip(tech_id: String) -> String:
 		var joined = "\n- ".join(unlocks)
 		tt += GameState.T("ui.techtree.tooltip.unlocks.desc", joined).strip_edges(false, true) + "\n\n"
 	
-	tt += "Voraussetzungen:\n"
+	tt += GameState.T("ui.techtree.tooltip.reqs_title", "Voraussetzungen:") + "\n"
 	var tier_id = n.get("tier", "1")
 	var req_level = int(TechtreeManager.tiers_config.get(tier_id, {}).get("gate", {}).get("req_level", 0))
 	if req_level > 0:
 		var has_level = GameState.selected_hotel.get("level", 1) >= req_level
 		tt += ("✅ " if has_level else "❌ ") + GameState.T("ui.techtree.req.level", req_level).strip_edges() + "\n"
 	
-	tt += ("✅ " if _has_fp else "❌ ") + "%d / %d FP\n" % [cur_fp, cost_fp]
-	tt += ("✅ " if _has_money else "❌ ") + "%s / %s €\n" % [GameState.format_money(cur_money), GameState.format_money(cost_money)]
+	tt += ("✅ " if _has_fp else "❌ ") + GameState.T("ui.techtree.tooltip.cost_fp", "%d / %d FP") % [cur_fp, cost_fp] + "\n"
+	tt += ("✅ " if _has_money else "❌ ") + GameState.T("ui.techtree.tooltip.cost_money", "%s / %s %s") % [GameState.format_money(cur_money), GameState.format_money(cost_money), GameState.T("currency.symbol")] + "\n"
 	for d in _deps:
 		var dep_name = d + " " + GameState.T(TechtreeManager.get_tech_node(d).get("name", d))
 		var is_dep_unlocked = TechtreeManager.is_tech_unlocked(d)

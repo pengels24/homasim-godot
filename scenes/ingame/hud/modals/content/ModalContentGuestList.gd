@@ -54,8 +54,8 @@ func _ready() -> void:
 	_clear_details()
 
 func _apply_translations() -> void:
-	btn_goto.text = GameState.T("ui.guest_list.goto")
-	btn_pip.text = "Beobachten (PIP)"
+	btn_goto.text = GameState.T("ui.guest_list.goto", "Gehe zu Gast")
+	btn_pip.text = GameState.T("ui.guest_list.pip", "Beobachten (PIP)")
 	
 	var header_hbox = find_child("TableHeaderPanel", true, false).get_child(0).get_child(0)
 	if header_hbox:
@@ -146,7 +146,7 @@ func _create_list_item(party: GuestParty, member: GuestMember) -> void:
 	# Raum
 	var lbl_room = Label.new()
 	if party.room_id == "" and party.event_poi_id != "":
-		lbl_room.text = "Tagesgast"
+		lbl_room.text = GameState.T("guest.state.day_guest", "Tagesgast")
 	elif party.room_id != "":
 		lbl_room.text = party.room_id
 	else:
@@ -256,7 +256,7 @@ func _on_guest_selected(party: GuestParty, member: GuestMember, _btn: Button) ->
 		
 		detail_name_lbl.text = member.name
 		if party.room_id == "" and party.event_poi_id != "":
-			detail_room_val.text = "Tagesgast"
+			detail_room_val.text = GameState.T("guest.state.day_guest", "Tagesgast")
 			detail_room_val.add_theme_color_override("font_color", Color("#8ab4f8"))
 		elif party.room_id != "":
 			detail_room_val.text = party.room_id

@@ -407,15 +407,15 @@ func _on_checkin_pressed() -> void:
 		var roll_result = _guest_mgr.roll_ask(_sel_party, _sel_room)
 
 		if roll_result["accepted"]:
-			var guest_name = _sel_party.members[0].name if _sel_party.members.size() > 0 else "Gast"
-			Toast.show(guest_name + " akzeptiert und bleibt!", "guest")
+			var guest_name = _sel_party.members[0].name if _sel_party.members.size() > 0 else GameState.T("guest")
+			Toast.show(GameState.T("toast.reception.accepts", "%s akzeptiert und bleibt!") % guest_name, "guest")
 			# ---> NEU: Direkt einchecken! Kein zweiter Klick nötig.
 			_execute_checkin_logic(true)
 
 		else:
-			var guest_name = _sel_party.members[0].name if _sel_party.members.size() > 0 else "Gast"
+			var guest_name = _sel_party.members[0].name if _sel_party.members.size() > 0 else GameState.T("guest")
 			_guest_mgr.guest_declined_offer(_sel_party)
-			Toast.show(guest_name + " lehnt ab und verlässt das Hotel!", "guest")
+			Toast.show(GameState.T("toast.reception.declines", "%s lehnt ab und verlässt das Hotel!") % guest_name, "guest")
 
 			_clear_selection()
 			refresh()
@@ -450,7 +450,7 @@ func _on_checkout_pressed() -> void:
 	SoundManager.play("reception_checkout")
 
 	if has_node("/root/Toast"):
-		Toast.show("Checkout: %.0f € erhalten" % payout, "guest", false)
+		Toast.show(GameState.T("toast.reception.checkout_money", "Checkout: %s %s erhalten") % [GameState.format_money(payout), GameState.T("currency.symbol")], "guest", false)
 
 	refresh()
 

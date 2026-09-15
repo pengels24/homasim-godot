@@ -146,14 +146,14 @@ func _update_list() -> void:
 		_add_transaction_row(tx)
 		items_added += 1
 
-	lbl_income.text = "+%d €" % income_today
-	lbl_expense.text = "%d €" % expense_today
+	lbl_income.text = "+%s %s" % [GameState.format_money(income_today), GameState.T("currency.symbol")]
+	lbl_expense.text = "%s %s" % [GameState.format_money(expense_today), GameState.T("currency.symbol")]
 	var total = income_today + expense_today
 	if total >= 0:
-		lbl_total.text = "+%d €" % total
+		lbl_total.text = "+%s %s" % [GameState.format_money(total), GameState.T("currency.symbol")]
 		lbl_total.add_theme_color_override("font_color", Color("366e4d"))
 	else:
-		lbl_total.text = "%d €" % total
+		lbl_total.text = "%s %s" % [GameState.format_money(total), GameState.T("currency.symbol")]
 		lbl_total.add_theme_color_override("font_color", Color("b02e3b"))
 
 # =============================================================================
@@ -197,10 +197,10 @@ func _add_transaction_row(tx: Dictionary) -> void:
 	lbl_amount.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	if tx["amount"] > 0:
 		lbl_amount.add_theme_color_override("font_color", Color("366e4d"))
-		lbl_amount.text = "+%d %s" % [tx["amount"], GameState.T("currency.symbol")]
+		lbl_amount.text = "+%s %s" % [GameState.format_money(tx["amount"]), GameState.T("currency.symbol")]
 	else:
 		lbl_amount.add_theme_color_override("font_color", Color("b02e3b"))
-		lbl_amount.text = "%d %s" % [tx["amount"], GameState.T("currency.symbol")]
+		lbl_amount.text = "%s %s" % [GameState.format_money(tx["amount"]), GameState.T("currency.symbol")]
 	row.add_child(lbl_amount)
 	
 	var spacer = Control.new()

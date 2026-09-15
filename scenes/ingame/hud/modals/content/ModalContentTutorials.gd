@@ -170,7 +170,7 @@ func _on_tech_selected(node: Dictionary) -> void:
 	
 	var desc_text = GameState.T(desc_key) if GameState else desc_key
 	if desc_text == desc_key:
-		desc_text = "Keine Beschreibung verfügbar."
+		desc_text = GameState.T("ui.tutorial.no_desc", "Keine Beschreibung verfügbar.")
 		
 	# 1. Unlocks ("Schaltet frei") sammeln
 	var unlocks = []
@@ -208,7 +208,7 @@ func _on_tech_selected(node: Dictionary) -> void:
 		req_parts.append(", ".join(deps_names))
 		
 	if req_parts.size() > 0:
-		desc_text += "\n\nVoraussetzungen: " + " | ".join(req_parts)
+		desc_text += "\n\n" + GameState.T("ui.techtree.tooltip.reqs_title", "Voraussetzungen:") + " " + " | ".join(req_parts)
 		
 	# 3. Kosten
 	var cost_fp = int(node.get("cost_fp", 0))
@@ -217,10 +217,10 @@ func _on_tech_selected(node: Dictionary) -> void:
 	if cost_fp > 0:
 		cost_parts.append(str(cost_fp) + " FP")
 	if cost_money > 0:
-		cost_parts.append(GameState.format_money(cost_money) + " €")
+		cost_parts.append("%s %s" % [GameState.format_money(cost_money), GameState.T("currency.symbol")])
 		
 	if cost_parts.size() > 0:
-		desc_text += "\nKosten: " + " | ".join(cost_parts)
+		desc_text += "\n" + GameState.T("ui.techtree.tooltip.cost_title", "Kosten:") + " " + " | ".join(cost_parts)
 		
 	desc_label.text = desc_text
 	texture_rect.texture = preload("res://assets/icons/angelus2010/HUDBottom/ang-flask.aseprite")
@@ -240,9 +240,9 @@ func _on_item_selected(index: int) -> void:
 	
 	if desc_text == desc_key:
 		if _current_tab == "rooms":
-			desc_text = "Für diesen Raum ist noch kein detaillierter Codex-Eintrag vorhanden."
+			desc_text = GameState.T("ui.tutorial.no_desc_room", "Für diesen Raum ist noch kein detaillierter Codex-Eintrag vorhanden.")
 		else:
-			desc_text = "Keine Beschreibung verfügbar."
+			desc_text = GameState.T("ui.tutorial.no_desc", "Keine Beschreibung verfügbar.")
 			
 	desc_label.text = desc_text
 	

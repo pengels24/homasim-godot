@@ -1,14 +1,20 @@
-# Übergabeprotokoll (Stand v0.1.56)
+# Übergabeprotokoll
 
-## Letzter Stand
-Der Agent hat umfangreiche UI- und Übersetzungsarbeiten durchgeführt. Wir befinden uns in einer laufenden Session zur Ausmerzung fehlender Übersetzungen (Translation Audit). Ein kritischer Fehler in der `language.csv` (falsches Encoding durch PowerShell) wurde behoben, was das Translation-System wieder einsatzbereit gemacht hat. Zudem wurden Settings-Menüs (Controls) neu sortiert und diverse hardcodierte Strings in HUD und Dashboard ausgetauscht.
+## Exakter letzter Stand
+Wir haben die "Phase 2" des Translation-Audits abgeschlossen (PiP-Monitore, Räume wie Lobby/Bar/Küche/Conference, Build-Menü Tooltips und Abriss/Kauf-Bestätigungen) und alle Änderungen (inkl. eines Kitchen-Bugfixes für die Anzeige des Gastnamens) sauber in `language.csv` und `GameState.T()` überführt. 
+Der Status wurde per `/update_doku` als Commit in `v0.1.56` gesichert.
 
-## Bearbeitete Systeme
-- **Translation System (`language.csv`):** Bereinigt und umfangreich erweitert.
-- **Keybindings (`keybindings.json`):** Umstrukturiert (F-Tasten Sortierung, Build-Menü verschoben).
-- **Dashboard / HUD / ModalContentDemoEnd:** Harte Text-Zuweisungen auf `GameState.T` umgeschrieben.
+## Vorbereitete Systeme (WICHTIG für den nächsten Agenten)
+Ein `implementation_plan.md` (Artefakt) wurde generiert, der die Strategie für die **Übersetzung der 10 großen F-Tasten-Modale (F1-F10)** festlegt. 
+Diese Modale (z.B. HotelOverview, Staff, Questbook, Settings) enthalten extrem viele harte `.text = "..."`-Zuweisungen in den `.tscn`- und `.gd`-Dateien.
+
+Die Strategie lautet: Anstatt die `.tscn`-Dateien direkt anzugreifen, fügen wir in jedem `ModalContentX.gd`-Skript eine Logik (z.B. in `_ready()` oder `_update_labels()`) ein, die alle sichtbaren Texte per `GameState.T()` überschreibt.
 
 ## Sofortige nächste Schritte
-- Der User testet gerade, ob die reparierten Übersetzungen im Spiel (Dashboard, Demo End Screen etc.) richtig angezeigt werden.
-- Ausstehend auf der "To-Translate" Liste aus `_work/untranslated.txt`: `GuestPipMonitor` (Gast-Zufriedenheit) und der `GuestManager` (Wütend-Toast). Diese sollten nach Rückmeldung des Users bearbeitet werden.
-- Keine Git-Commits ohne Abstimmung, da wir noch in der Polishing/Translation Phase stecken.
+1. Der User muss den `implementation_plan.md` freigeben (falls noch nicht geschehen).
+2. Beginne danach mit **Block 1** des Plans:
+   - `ModalContentHotelOverview.gd`
+   - `ModalContentGuestList.gd`
+   - `ModalContentRoomList.gd`
+3. Ersetze dort alle harten Strings (z.B. `"%d / 5 Sterne"` oder statische Tabellenköpfe aus den Nodes) durch formatierte `GameState.T`-Aufrufe.
+4. Dokumentiere die neuen Keys fortlaufend und füge sie am Ende in die `language.csv` ein.

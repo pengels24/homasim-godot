@@ -9,7 +9,7 @@ const ENTRY_SCENE = preload("res://scenes/ingame/hud/ActivityLogEntry.tscn")
 @onready var scroll = $MarginContainer/VBoxContainer/ScrollContainer
 
 var _is_open: bool = false
-var _filters: Array[String] = ["ALLE"]
+var _filters: Array[String] = ["ALL"]
 var _current_filter_idx: int = 0
 
 func _ready() -> void:
@@ -73,7 +73,7 @@ func _update_filters() -> void:
 		var type: String = e.get("type", "INFO").to_upper()
 		unique_types[type] = true
 	
-	_filters = ["ALLE"]
+	_filters = ["ALL"]
 	for t in unique_types.keys():
 		_filters.append(t)
 
@@ -91,7 +91,7 @@ func _refresh_list() -> void:
 	for i in range(entries.size() - 1, -1, -1):
 		var e = entries[i]
 		var t = e.get("type", "INFO").to_upper()
-		if active_filter == "ALLE" or t == active_filter:
+		if active_filter == "ALL" or t == active_filter:
 			var inst = ENTRY_SCENE.instantiate() as ActivityLogEntry
 			container.add_child(inst)
 			inst.setup(e)

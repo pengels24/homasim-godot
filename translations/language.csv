@@ -1688,3 +1688,38 @@ ui.room.live_details,Live-Details,Live Details
 toast.guest.angry_leave,### Gästegruppen wütend abgereist! (-*** Ruf),### guest groups left angry! (-*** Reputation)
 ui.demo_end.text,"[center][b]Herzlichen Glückwunsch![/b]\n\nDu hast den ersten Gourmet-Stern erhalten und damit den gesamten aktuellen Inhalt der Pre-Alpha freigeschaltet.\n\nWir würden uns riesig über dein kurzes Feedback freuen! Wenn dir das Spiel gefallen hat (oder auch nicht), besuch uns auf [color=#eab308]Discord[/color] oder folge uns auf [color=#eab308]Bluesky[/color]!\n\n[color=#aaaaaa][i](Bitte nutze für konkrete Bugs/Fehlerberichte weiterhin ausschließlich den roten Käfer-Button am rechten Bildschirmrand)[/i][/color]\n\nDu kannst dein Hotel nun beliebig lange weiter verwalten und ausbauen. (EXP sind ab jetzt eingefroren)\n\n[color=#eab308]Vielen Dank fürs Spielen und Testen![/color][/center]","[center][b]Congratulations![/b]\n\nYou've earned your first Gourmet Star, unlocking all current content in the Pre-Alpha.\n\nWe'd love to hear your brief feedback! Whether you liked the game (or didn't), visit us on [color=#eab308]Discord[/color] or follow us on [color=#eab308]Bluesky[/color]!\n\n[color=#aaaaaa][i](Please continue to use exclusively the red bug button on the right edge of the screen for specific bugs/reports)[/i][/color]\n\nYou can continue to manage and expand your hotel as long as you want. (EXP are frozen from now on)\n\n[color=#eab308]Thank you for playing and testing![/color][/center]"
 ui.demo_end.btn,Weiterspielen,Continue playing
+overlay.wlan,WLAN (Internet),Wi-Fi (Internet)
+overlay.ac,Klimaanlage,AC
+activitylog.filter.gastro,Gastro,Dining
+guest.req.klima,Klima,AC
+guest.req.telefon,Telefon,Phone
+guest.req.tv,TV,TV
+guest.type.single,Single,Single
+guest.type.couple,Paar,Couple
+guest.type.business,Geschäftsreisender,Business Traveler
+guest.type.family,Familie,Family
+guest.type.budget,Budgetreisender,Budget Traveler
+guest.type.nomad,Digitaler Nomade,Digital Nomad
+guest.type.event,Event-Teilnehmer,Event Attendee
+guest.type.luxury,Luxus-Gast,Luxury Guest
+guest.type.vip,VIP,VIP
+guest.type.inspector,Gourmet-Inspektor,Food Critic
+event.name.botany,Botaniker-Tagung,Botany Conference
+event.name.surgery,Chirurgen-Kongress,Surgeons Congress
+event.name.marketing,Marketing-Symposium,Marketing Symposium
+event.name.indie_dev,Indie-Dev Meetup,Indie-Dev Meetup
+event.name.default,Standard-Tagung,Standard Conference
+need.thirst.short,DU,TH
+need.energy.short,EN,EN
+need.fun.short,SP,FU
+poi.lobby.waiting,Wartet...,Waiting...
+toast.room.pending_demolish,%s für Abriss vorgemerkt.,%s marked for demolition.
+ui.confirm.demolish_pending_title,Abriss vormerken?,Mark for Demolition?
+ui.confirm.demolish_pending_desc,"%s ist aktuell belegt!
+Für automatischen Abriss nach Abreise der Gäste vormerken?","%s is currently occupied!
+Mark for automatic demolition after guests depart?"
+ui.confirm.demolish_pending_btn,Vormerken,Mark
+ui.confirm.demolish_title,Zimmer abreißen?,Demolish Room?
+ui.confirm.demolish_desc,"Möchtest du %s wirklich abreißen?
+Du erhältst %d € zurück.","Do you really want to demolish %s?
+You will receive %d € in return."

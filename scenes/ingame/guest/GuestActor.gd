@@ -1039,7 +1039,7 @@ func _check_room_conditions(room: Node2D) -> void:
 	if not is_instance_valid(room):
 		return
 	var room_id = room.get("room_id") if "room_id" in room else str(room.get_path())
-	var party = _guest_member.get_party()
+	var party = _get_my_party()
 	if party == null:
 		return
 	if party.visited_rooms.has(room_id):
@@ -1063,8 +1063,6 @@ func _check_room_conditions(room: Node2D) -> void:
 	
 	if penalty > 0:
 		party.modify_satisfaction(-penalty)
-		if EffectManager:
-			EffectManager.spawn_mood_icon("angry", global_position + Vector2(0, -64))
 
 # =============================================================================
 ## Verarbeitet die Ankunft in einem POI: Einnahmen buchen, Budget abziehen, Zufriedenheit boosten.

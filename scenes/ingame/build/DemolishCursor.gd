@@ -117,11 +117,11 @@ func _try_demolish() -> void:
 	if is_occupied:
 		confirm.confirmed.connect(func():
 			room.set("is_pending_demolish", true)
-			if is_instance_valid(Toast): Toast.show(room_name + " für Abriss vorgemerkt.", "build")
+			if is_instance_valid(Toast): Toast.show(GameState.T("toast.room.pending_demolish", "%s für Abriss vorgemerkt.") % room_name, "build")
 			confirm.queue_free()
 		)
 		confirm.cancelled.connect(func(): confirm.queue_free())
-		confirm.ask("Abriss vormerken?", "%s ist aktuell belegt!\nFür automatischen Abriss nach Abreise der Gäste vormerken?" % room_name, "Vormerken")
+		confirm.ask(GameState.T("ui.confirm.demolish_pending_title", "Abriss vormerken?"), GameState.T("ui.confirm.demolish_pending_desc", "%s ist aktuell belegt!\nFür automatischen Abriss nach Abreise der Gäste vormerken?") % room_name, GameState.T("ui.confirm.demolish_pending_btn", "Vormerken"))
 	else:
 		confirm.confirmed.connect(func():
 			var refund_pos = room.global_position + Vector2(16, 16)
@@ -136,4 +136,4 @@ func _try_demolish() -> void:
 			confirm.queue_free()
 		)
 		confirm.cancelled.connect(func(): confirm.queue_free())
-		confirm.ask("Zimmer abreißen?", "Möchtest du %s wirklich abreißen?\nDu erhältst %d € zurück." % [room_name, refund])
+		confirm.ask(GameState.T("ui.confirm.demolish_title", "Zimmer abreißen?"), GameState.T("ui.confirm.demolish_desc", "Möchtest du %s wirklich abreißen?\nDu erhältst %d € zurück.") % [room_name, refund], GameState.T("ui.buildmenu.demolish", "Abriss"))

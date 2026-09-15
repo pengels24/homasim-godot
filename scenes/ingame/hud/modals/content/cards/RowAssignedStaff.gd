@@ -15,7 +15,8 @@ func populate(staff: Dictionary) -> void:
 	_staff_id = staff.get("id", "")
 	var r = staff.get("role", "")
 	var r_name = StaffManager.staff_config.get("roles", {}).get(r, {}).get("name", r)
-	lbl_name.text = "%s %s (%s)" % [staff.get("first_name", ""), staff.get("last_name", ""), GameState.T(r_name)]
+	r_name = GameState.T("staff.role." + r, r_name)
+	lbl_name.text = "%s %s (%s)" % [staff.get("first_name", ""), staff.get("last_name", ""), r_name]
 	
 	if staff.get("training_state", "none") == "in_training":
 		lbl_name.text += " [📖]"

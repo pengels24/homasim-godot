@@ -189,7 +189,14 @@ func _on_inspector_report_ready(stats: Dictionary) -> void:
 	if content:
 		content.setup(stats)
 		if content.has_signal("sig_close_requested"):
-			content.sig_close_requested.connect(_on_inspector_report_closed.bind(stats))
+			var close_callable = Callable(_standard_modal, "close")
+			if not content.sig_close_requested.is_connected(close_callable):
+				content.sig_close_requested.connect(close_callable)
+				
+	_pending_inspector_stats = stats
+	if not _standard_modal.closed.is_connected(_on_inspector_modal_closed):
+		_standard_modal.closed.connect(_on_inspector_modal_closed)
+
 	# set_title() direkt aufrufen – open() bricht ab wenn Modal bereits sichtbar ist (z.B. Rezeption)
 	_standard_modal.set_title(GameState.T("ui.modal.inspector_report.title", "Gourmet-Sterne \u2013 Pr\u00fcfbericht"))
 	_standard_modal.open(GameState.T("ui.modal.inspector_report.title", "Gourmet-Sterne \u2013 Pr\u00fcfbericht"))

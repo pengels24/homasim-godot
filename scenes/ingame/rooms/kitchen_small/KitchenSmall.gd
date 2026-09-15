@@ -217,9 +217,9 @@ func get_live_details() -> Array[Dictionary]:
 		var guest_name = GameState.T("room.kitchen.guest")
 		
 		var gm = get_tree().get_first_node_in_group("guest_manager")
-		var guest_node = gm.get_guest(order_data.get("guest_id", "")) if gm else null
-		if is_instance_valid(guest_node) or guest_node != null:
-			guest_name = guest_node.get("_guest_member").name if guest_node.get("_guest_member") else "Gast"
+		var guest_member = gm.get_guest(order_data.get("guest_id", "")) if gm else null
+		if guest_member != null:
+			guest_name = guest_member.name
 			
 		for r in GameState.recipes:
 			if r.get("id") == order_data.get("recipe_id"):

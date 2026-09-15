@@ -61,9 +61,9 @@ func get_type_def() -> Dictionary:
 
 # =============================================================================
 func get_type_name() -> String:
-	if is_inspector and state != "checkout" and cover_type != "":
-		return GuestDefinitions.ALL.get(cover_type, {}).get("name", cover_type)
-	return GuestDefinitions.ALL.get(type, {}).get("name", type)
+	var t = cover_type if (is_inspector and state != "checkout" and cover_type != "") else type
+	var def_name = GuestDefinitions.ALL.get(t, {}).get("name", t)
+	return GameState.T("guest.type." + t, def_name)
 
 
 # =============================================================================

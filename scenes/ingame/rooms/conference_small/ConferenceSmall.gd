@@ -102,7 +102,7 @@ func get_live_details() -> Array[Dictionary]:
 	# 1. Belegte Sitzplätze anzeigen
 	for seat in _room_seats:
 		if seat["occupied_by"] != "":
-			var guest_name = "Gast"
+			var guest_name = GameState.T("room.kitchen.guest", "Gast")
 			var is_walking = false
 			
 			for a in get_tree().get_nodes_in_group("guest_actors"):

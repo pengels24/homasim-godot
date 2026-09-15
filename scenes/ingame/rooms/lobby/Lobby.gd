@@ -254,14 +254,14 @@ func get_live_details() -> Array[Dictionary]:
 			if guest_actor.current_state == guest_actor.State.LEAVING:
 				continue  # Abreisende Gäste zählen nicht als "in der Lobby" (Tooltip wäre sonst inkonsistent)
 				
-			var guest_name = guest_actor.get("_guest_member").name if guest_actor.get("_guest_member") else "Gast"
+			var guest_name = guest_actor.get("_guest_member").name if guest_actor.get("_guest_member") else GameState.T("room.kitchen.guest", "Gast")
 			var party = guest_actor.call("_get_my_party") if guest_actor.has_method("_get_my_party") else null
 			var is_inspector = is_instance_valid(party) and party.get("is_inspector") == true
 			var is_tg_guest = not is_inspector and (is_instance_valid(party) and party.event_poi_id != "")
 			if is_tg_guest:
 				guest_name += " (TG)"
 				
-			var status = "Wartet..."
+			var status = GameState.T("poi.lobby.waiting", "Wartet...")
 			if guest_actor.current_state == guest_actor.State.AWAITING_CHECKOUT:
 				status = GameState.T("poi.lobby.checking_out")
 			elif guest_actor._current_poi_id == "vending_machine":

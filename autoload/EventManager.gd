@@ -184,7 +184,8 @@ func force_conference() -> bool:
 		
 		var income = cfg.get("income_per_participant", 150) * min(cfg.get("max_participants", 12), room.call("get_definition").get("max_guests", 12))
 		if FinanceManager:
-			FinanceManager.add_transaction(income, "event", "Tagung gebucht: %s" % cfg.get("name", "Event"))
+			var translated_name = GameState.T("event.name." + cfg.get("id", "default"), cfg.get("name", "Event"))
+			FinanceManager.add_transaction(income, "event", "Tagung gebucht: %s" % translated_name)
 			if EffectManager and is_instance_valid(room):
 				EffectManager.spawn_money_text(income, room.global_position + Vector2(0, -32))
 			

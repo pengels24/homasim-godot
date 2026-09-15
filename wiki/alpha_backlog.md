@@ -32,6 +32,8 @@
 - [x] **Hauptmenü:** "Pre-Alpha Info" Button hinzugefügt.
 - [x] **Bugfix:** Demo-Ende-Screen verarbeitet Abbruch per ESC/Klick sauber und behebt den EXP-Freeze für den ersten Stern + Auto-Save nach Abschluss.
 - [x] **Translation-Audit:** Ca. 400 hardcoded Strings dokumentiert.
+- [x] **Translation-Audit Phase 2:** PiP-Monitore, Räume (Lobby, Bar, Küche, Conference), Build-Menü Tooltips und Abriss/Kauf-Bestätigungen in GameState.T überführt.
+- [x] **Bugfix:** Kitchen Live Monitor zeigt nun den korrekten Namen des Gastes für die Bestellung (statt "Gast").
 
 - [x] **ANG-362 HUD-Sterne Overlay (offen):** auf 5 Einzelsterne umgestellt.
 

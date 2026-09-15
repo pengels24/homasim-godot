@@ -76,6 +76,21 @@ func _refresh_details() -> void:
 		elif sat < 50: c = Color.ORANGE
 		elif sat < 80: c = Color.YELLOW
 		lbl_sat.add_theme_color_override("font_color", c)
+		
+		var sat_hunger = int(member.saturation) if "saturation" in member else 100
+		var sat_thirst = int(member.thirst) if "thirst" in member else 100
+		var sat_energy = int(member.energy) if "energy" in member else 100
+		var sat_fun = int(member.fun) if "fun" in member else 100
+		
+		if is_instance_valid(need_hunger): need_hunger.value = sat_hunger
+		if is_instance_valid(need_thirst): need_thirst.value = sat_thirst
+		if is_instance_valid(need_energy): need_energy.value = sat_energy
+		if is_instance_valid(need_fun): need_fun.value = sat_fun
+		
+		if is_instance_valid(lbl_hunger): lbl_hunger.text = GameState.T("need.hunger.short", "HU") + ": %d%%" % sat_hunger
+		if is_instance_valid(lbl_thirst): lbl_thirst.text = GameState.T("need.thirst.short", "DU") + ": %d%%" % sat_thirst
+		if is_instance_valid(lbl_energy): lbl_energy.text = GameState.T("need.energy.short", "EN") + ": %d%%" % sat_energy
+		if is_instance_valid(lbl_fun): lbl_fun.text = GameState.T("need.fun.short", "SP") + ": %d%%" % sat_fun
 	else:
 		lbl_sat.text = "Zufriedenheit: Unbekannt"
 		

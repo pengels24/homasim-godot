@@ -182,7 +182,7 @@ func _update_content() -> void:
 				if def.get("min_staff", 0) == 0 and staff_present == 0:
 					staff_label.hide()
 				else:
-					var stxt = "Anwesende Mitarbeiter: %d" % staff_present
+					var stxt = GameState.T("room.tooltip.staff_present") % staff_present
 					if staff_present > 0:
 						var display_names = staff_names.slice(0, 5)
 						stxt += "\n" + "\n".join(display_names)
@@ -282,11 +282,11 @@ func _update_content() -> void:
 	final_status += status
 	if _target_room.has_method("has_trait"):
 		var eq := []
-		if _target_room.has_trait("telefon"): eq.append("Telefon")
-		if _target_room.has_trait("tv"): eq.append("TV")
-		if _target_room.has_trait("desk"): eq.append("Schreibtisch")
-		if _target_room.has_trait("wlan"): eq.append("WLAN")
-		if _target_room.has_trait("klima"): eq.append("Klima")
+		if _target_room.has_trait("telefon"): eq.append(GameState.T("guest.req.telefon", "Telefon"))
+		if _target_room.has_trait("tv"): eq.append(GameState.T("guest.req.tv", "TV"))
+		if _target_room.has_trait("desk"): eq.append(GameState.T("guest.req.desk", "Schreibtisch"))
+		if _target_room.has_trait("wlan"): eq.append(GameState.T("guest.req.wlan", "WLAN"))
+		if _target_room.has_trait("klima"): eq.append(GameState.T("guest.req.klima", "Klima"))
 		
 		if not eq.is_empty():
 			eq.sort()

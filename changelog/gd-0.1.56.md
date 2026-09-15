@@ -19,3 +19,11 @@
 - **Übersetzungs-Audit:** Weitere hartkodierte Strings in Dashboard, HUD und den Demo-End-Screens durch GameState.T-Aufrufe ersetzt.
 - **Disclaimer:** Eine persönliche Signatur ("Peter aka Angelus2010") wurde dem Pre-Alpha Disclaimer hinzugefügt.
 - **Bugfix (Translation):** Einen Encoding-Fehler (PowerShell-Artefakte) in der language.csv korrigiert, der das Laden neuer Strings in Godot blockiert hatte.
+
+## Translation & Bugfixes (Current Session)
+- **UI & Tooltips:** Added translations for guest needs in PIP monitors, CustomTooltips ("Anwesende Mitarbeiter").
+- **POI/Rooms:** Fixed hardcoded "Gast" and "Wartet" strings in Lobby and Bar.
+- **Conference Room:** Fixed fallback "Gast" string to use proper translation key.
+- **Bugfix (Kitchen):** Fixed a bug in `KitchenSmall.gd` where guest names for cooking orders were always displayed as "Gast" because of an invalid property access. Kitchen Live Monitor now correctly shows the guest's name.
+- **Build Mode / Demolish:** Converted hardcoded German confirm dialogs and toasts for room demolition into proper translation keys in `DemolishCursor.gd` and added them to `language.csv`.
+- **Build Mode / Plots:** Validated that the Plot Purchase UI and dialogs are fully utilizing the translation system.

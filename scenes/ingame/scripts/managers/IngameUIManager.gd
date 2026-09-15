@@ -18,6 +18,7 @@ var _modal_is_pausing: bool = false
 
 var _overlay_toolbar = null
 var _current_overlay: String = "none"
+var _pending_inspector_stats: Dictionary = {}
 
 
 # =============================================================================
@@ -194,8 +195,14 @@ func _on_inspector_report_ready(stats: Dictionary) -> void:
 	_standard_modal.open(GameState.T("ui.modal.inspector_report.title", "Gourmet-Sterne \u2013 Pr\u00fcfbericht"))
 	_set_modal_pausing(true)
 
-func _on_inspector_report_closed(stats: Dictionary) -> void:
-	_standard_modal.close()
+func _on_inspector_modal_closed() -> void:
+	if _standard_modal.closed.is_connected(_on_inspector_modal_closed):
+		_standard_modal.closed.disconnect(_on_inspector_modal_closed)
+		
+	var stats = _pending_inspector_stats
+	_pending_inspector_stats = {}
+	if stats.is_empty():
+		return
 	
 	if stats.result == "up":
 		var modal_scene = load("res://scenes/ingame/hud/modals/ModalStarAchieved.tscn")
@@ -228,8 +235,23 @@ func _on_demo_completed() -> void:
 	_set_modal_pausing(true)
 	var content = _standard_modal.set_content("res://scenes/ingame/hud/modals/content/ModalContentDemoEnd.tscn")
 	if content and content.has_signal("sig_close_requested"):
-		content.sig_close_requested.connect(_standard_modal.close)
+		var close_callable = Callable(_standard_modal, "close")
+		if not content.sig_close_requested.is_connected(close_callable):
+			content.sig_close_requested.connect(close_callable)
+			
+	if not _standard_modal.closed.is_connected(_on_demo_modal_closed):
+		_standard_modal.closed.connect(_on_demo_modal_closed)
+		
 	_standard_modal.open(GameState.T("ui.modal.demo_end.title", "Pre-Alpha Abgeschlossen"))
+
+func _on_demo_modal_closed() -> void:
+	if _standard_modal.closed.is_connected(_on_demo_modal_closed):
+		_standard_modal.closed.disconnect(_on_demo_modal_closed)
+	if SaveManager and GameState.selected_hotel.has("id"):
+		SaveManager.save_auto(GameState.selected_hotel["id"])
+		var Toast = get_node_or_null("/root/ToastManager")
+		if Toast: Toast.show(GameState.T("ui.toast.autosave", "Spiel gespeichert"), "info")
+
 
 
 # =============================================================================

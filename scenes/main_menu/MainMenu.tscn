@@ -381,6 +381,27 @@ theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
 text = "Tutorial"
 
+[node name="BtnInfo" type="Button" parent="MarginContainer/Content/MenuRow/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=999999999]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(0.95, 0.95, 0.95, 1)
+theme_override_colors/font_pressed_color = Color(0.7, 0.53, 0.02, 1)
+theme_override_colors/font_hover_color = Color(0.918, 0.702, 0.031, 1)
+theme_override_colors/font_disabled_color = Color(0.28, 0.28, 0.28, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("3_wckin")
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1")
+text = "Pre-Alpha Info"
+
 [node name="BtnCredits" type="Button" parent="MarginContainer/Content/MenuRow/MenuBox/MenuVBox/MarginContainer/Buttons" unique_id=1852897334]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 52)

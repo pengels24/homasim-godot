@@ -1,9 +1,9 @@
 extends Node
 
 # ── Konstanten ────────────────────────────────────────────────────────────────
-const PROFILES_PATH := "user://profiles.cfg"
-const HOTELS_DIR    := "user://hotels/"
-const SAVES_DIR     := "user://saves/"
+const PROFILES_PATH := "user://v2_profiles.cfg"
+const HOTELS_DIR    := "user://v2_hotels/"
+const SAVES_DIR     := "user://v2_saves/"
 const MAX_AUTOSAVES := 5
 const MAX_HOTELS    := 10
 const MANUAL_SLOTS  := 5

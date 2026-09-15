@@ -950,6 +950,7 @@ func _change_state(new_state: State) -> void:
 	# Der match-Block danach darf dann NUR den neuen State setzen, NICHT den alten (IN_POI) nochmal verarbeiten.
 	var _state_after_poi_arrived := new_state
 	if new_state == State.IN_POI:
+		_check_room_conditions(_get_poi_room_node(_current_poi_id))
 		_on_poi_arrived()
 		_state_after_poi_arrived = current_state # Ggf. geändert von _on_poi_arrived()
 	
@@ -959,6 +960,7 @@ func _change_state(new_state: State) -> void:
 	
 	match current_state:
 		State.IN_ROOM:
+			_check_room_conditions(_target_room)
 			_action_timer = 0.5 # Immediately wander or sleep upon arriving
 			avatar.visible = true
 			if has_node("ClickArea"): get_node("ClickArea").input_pickable = true
@@ -1031,6 +1033,38 @@ func _on_order_served(_order_id: String, guest_id: String, recipe_id: String) ->
 		
 		# Essen-Status aktivieren
 		_change_state(State.EATING)
+
+# =============================================================================
+func _check_room_conditions(room: Node2D) -> void:
+	if not is_instance_valid(room):
+		return
+	var room_id = room.get("room_id") if "room_id" in room else str(room.get_path())
+	var party = _guest_member.get_party()
+	if party == null:
+		return
+	if party.visited_rooms.has(room_id):
+		return # Bereits bewertet
+	
+	var clean = room.get("cleanliness_level") if "cleanliness_level" in room else 100
+	var cond = room.get("maintenance_level") if "maintenance_level" in room else 100
+	
+	var penalty = 0
+	if clean < 50:
+		penalty += randi_range(2, 7)
+	if cond < 50:
+		penalty += randi_range(2, 7)
+		
+	party.visited_rooms[room_id] = {
+		"name": GameState.T(room.get_definition().get("name", "")) if room.has_method("get_definition") else "Room",
+		"cleanliness": clean,
+		"condition": cond,
+		"sat_delta": -penalty
+	}
+	
+	if penalty > 0:
+		party.modify_satisfaction(-penalty)
+		if EffectManager:
+			EffectManager.spawn_mood_icon("angry", global_position + Vector2(0, -64))
 
 # =============================================================================
 ## Verarbeitet die Ankunft in einem POI: Einnahmen buchen, Budget abziehen, Zufriedenheit boosten.

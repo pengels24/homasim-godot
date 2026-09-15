@@ -1,4 +1,4 @@
-﻿extends Node
+extends Node
 class_name GuestManager
 
 signal parties_changed
@@ -942,7 +942,8 @@ func evaluate_gourmet_stars(party: GuestParty) -> void:
 		"result": "none",
 		"stars_before": current_stars,
 		"stars_after": current_stars,
-		"inspector_name": party.get_display_name()  # Pruefername fuer Signatur im Bericht
+		"inspector_name": party.get_display_name(),  # Pruefername fuer Signatur im Bericht
+		"visited_rooms": party.visited_rooms
 	}
 	
 	if success:

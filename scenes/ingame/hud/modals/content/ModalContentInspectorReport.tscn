@@ -170,6 +170,13 @@ bbcode_enabled = true
 text = "[i]Gez. Unbekannt[/i]"
 fit_content = true
 
+[node name="FutureNotice" type="Label" parent="VBox" unique_id=1987654321]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_font_sizes/font_size = 18
+text = "Details zum Bericht bald verfuegbar -> SimBrowser -> Messages (internes Nachrichtensystem)"
+horizontal_alignment = 1
+
 [node name="BtnClose" type="Button" parent="VBox" unique_id=1547609946]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 50)

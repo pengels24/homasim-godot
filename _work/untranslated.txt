@@ -1,0 +1,439 @@
+=== GD Files ===
+scenes/credits/Credits.gd:139 -> follow_lbl.text = "FOLG UNS"
+scenes/credits/Credits.gd:244 -> btn.text = "■"
+scenes/credits/Credits.gd:366 -> copy_lbl.text = "© 2026 Peter Engels"
+scenes/credits/Credits.gd:386 -> lbl.text = "Danke fürs Spielen!  ♥"
+scenes/credits/Credits.gd:518 -> _audio_btn.text = "▶"
+scenes/credits/Credits.gd:522 -> _audio_btn.text = "■"
+scenes/dashboard/Dashboard.gd:77 -> manager_role_lbl.text = "MANAGER · LEVEL 1"
+scenes/ingame/GuestManager.gd:865 -> (Toast) %d Gästegruppen wütend abgereist! (-%d Ruf)
+scenes/ingame/InGameSaveModal.gd:131 -> num_lbl.text = "%d" % (idx + 1)
+scenes/ingame/InGameSaveModal.gd:156 -> date_lbl.text = "%02d.%02d.%d %02d:%02d" % [
+scenes/ingame/SimBrowser.gd:46 -> address_bar.text = "home.sim"
+scenes/ingame/SimBrowserTile.gd:23 -> lbl_cta.text = "▶ " + data.get("url", "app.sim")
+scenes/ingame/hud/ActivityLogEntry.gd:17 -> lbl_time.text = "%02d:%02d" % [h, m]
+scenes/ingame/hud/CustomTooltip.gd:88 -> title_label.text = "🏨 " + room_name
+scenes/ingame/hud/CustomTooltip.gd:265 -> guests_label.text = "\n".join(names)
+scenes/ingame/hud/HUD.gd:240 -> label_exp_range.text = "MAX LEVEL"
+scenes/ingame/hud/HUD.gd:242 -> label_exp_range.text = "%d / %d" % [exp_curr, exp_max]
+scenes/ingame/hud/HUD.gd:249 -> label_rep_range.text = "%d / %d" % [rep_curr, rep_max]
+scenes/ingame/hud/modals/GuestPipMonitor.gd:44 -> label_title.text = "  ::: " + member.name
+scenes/ingame/hud/modals/GuestPipMonitor.gd:46 -> label_title.text = "  ::: Gast"
+scenes/ingame/hud/modals/GuestPipMonitor.gd:80 -> lbl_sat.text = "Zufriedenheit: Unbekannt"
+scenes/ingame/hud/modals/RoomDetailsMonitor.gd:54 -> btn_collapse.text = "▼" # eingeklappt -> Pfeil nach unten = aufklappen
+scenes/ingame/hud/modals/RoomDetailsMonitor.gd:61 -> btn_collapse.text = "▲" # offen -> Pfeil nach oben = zuklappen
+scenes/ingame/hud/modals/RoomDetailsMonitor.gd:88 -> label_title.text = "  ::: Live: " + n
+scenes/ingame/hud/modals/RoomDetailsMonitor.gd:90 -> label_title.text = "  ::: Live-Details"
+scenes/ingame/hud/modals/content/ModalContentDemoEnd.gd:15 -> rich_text_label.text = "[center][b]Herzlichen Glückwunsch![/b]\n\nDu hast den ersten Gourmet-Stern erhalten und damit den gesamten aktuellen Inhalt der Pre-Alpha freigeschaltet.\n\nWir würden uns riesig über dein kurzes Feedback freuen! Wenn dir das Spiel gefallen hat (oder auch nicht), besuch uns auf [color=#eab308]Discord[/color] oder folge uns auf [color=#eab308]Bluesky[/color]!\n\n[color=#aaaaaa][i](Bitte nutze für konkrete Bugs/Fehlerberichte weiterhin ausschließlich den roten Käfer-Button am rechten Bildschirmrand)[/i][/color]\n\nDu kannst dein Hotel nun beliebig lange weiter verwalten und ausbauen. (EXP sind ab jetzt eingefroren)\n\n[color=#eab308]Vielen Dank fürs Spielen und Testen![/color][/center]"
+scenes/ingame/hud/modals/content/ModalContentDemoEnd.gd:16 -> btn_ok.text = "Weiterspielen"
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.gd:44 -> _btn_next_day.text = "WEITER ZU TAG %d" % (today + 1)
+scenes/ingame/hud/modals/content/ModalContentFinances.gd:149 -> lbl_income.text = "+%d €" % income_today
+scenes/ingame/hud/modals/content/ModalContentFinances.gd:150 -> lbl_expense.text = "%d €" % expense_today
+scenes/ingame/hud/modals/content/ModalContentFinances.gd:153 -> lbl_total.text = "+%d €" % total
+scenes/ingame/hud/modals/content/ModalContentFinances.gd:156 -> lbl_total.text = "%d €" % total
+scenes/ingame/hud/modals/content/ModalContentGuestList.gd:58 -> btn_pip.text = "Beobachten (PIP)"
+scenes/ingame/hud/modals/content/ModalContentGuestList.gd:149 -> lbl_room.text = "Tagesgast"
+scenes/ingame/hud/modals/content/ModalContentGuestList.gd:165 -> lbl_budget.text = "---"
+scenes/ingame/hud/modals/content/ModalContentGuestList.gd:195 -> row_lbl_energy.text = "%d%%" % energy_val
+scenes/ingame/hud/modals/content/ModalContentGuestList.gd:207 -> lbl_sat.text = "%d%%" % sat
+scenes/ingame/hud/modals/content/ModalContentGuestList.gd:259 -> detail_room_val.text = "Tagesgast"
+scenes/ingame/hud/modals/content/ModalContentGuestList.gd:267 -> detail_satisfaction_val.text = "%d%%" % party.satisfaction
+scenes/ingame/hud/modals/content/ModalContentGuestList.gd:272 -> detail_budget_val.text = "---"
+scenes/ingame/hud/modals/content/ModalContentGuestList.gd:300 -> detail_room_val.text = "---"
+scenes/ingame/hud/modals/content/ModalContentGuestList.gd:301 -> detail_satisfaction_val.text = "---"
+scenes/ingame/hud/modals/content/ModalContentGuestList.gd:302 -> detail_budget_val.text = "---"
+scenes/ingame/hud/modals/content/ModalContentGuestList.gd:303 -> detail_status_val.text = "---"
+scenes/ingame/hud/modals/content/ModalContentGuestList.gd:341 -> row.lbl_energy.text = "%d%%" % energy_val
+scenes/ingame/hud/modals/content/ModalContentGuestList.gd:350 -> row.lbl_budget.text = "---"
+scenes/ingame/hud/modals/content/ModalContentGuestList.gd:352 -> row.lbl_sat.text = "%d%%" % sat
+scenes/ingame/hud/modals/content/ModalContentGuestList.gd:361 -> detail_satisfaction_val.text = "%d%%" % sat
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.gd:28 -> val_stars.text = "%d / 5 Sterne" % stars
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.gd:29 -> val_rep.text = "%d / %d Rufpunkte" % [rep, rep_max]
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.gd:33 -> val_money.text = "%d \u20ac" % money
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.gd:75 -> val_occupancy.text = "Auslastung: %d%% (%d/%d Zimmer \u00b7 %d Betten)" % [pct, occupied_rooms, total_rooms, total_beds]
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.gd:77 -> val_occupancy.text = "Auslastung: 0% (0 Zimmer)"
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.gd:82 -> val_cleanliness.text = "\u00d8 Sauberkeit: %d%%" % round(avg_clean)
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.gd:84 -> val_cleanliness.text = "\u00d8 Sauberkeit: 100%"
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.gd:93 -> val_satisfaction.text = "\u00d8 Zufriedenheit: %d%% (%d Gruppen)" % [round(avg_sat), total_parties]
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.gd:95 -> val_satisfaction.text = "\u00d8 Zufriedenheit: Keine G\u00e4ste"
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.gd:97 -> val_satisfaction.text = "\u00d8 Zufriedenheit: \u2013"
+scenes/ingame/hud/modals/content/ModalContentInspectorReport.gd:32 -> val_avg_sat.text = "%.1f%%" % stats.avg_sat
+scenes/ingame/hud/modals/content/ModalContentInspectorReport.gd:36 -> val_clean.text = "%.1f%%" % stats.avg_clean
+scenes/ingame/hud/modals/content/ModalContentInspectorReport.gd:59 -> signature_label.text = "[font_size=26][i]Gez. " + inspector_name + "[/i][/font_size]"
+scenes/ingame/hud/modals/content/ModalContentReception.gd:453 -> (Toast) Checkout: %.0f € erhalten
+scenes/ingame/hud/modals/content/ModalContentRoomList.gd:140 -> lbl_clean.text = "%d%%" % clean
+scenes/ingame/hud/modals/content/ModalContentRoomList.gd:148 -> lbl_maint.text = "%d%%" % maint
+scenes/ingame/hud/modals/content/ModalContentRoomList.gd:227 -> row.lbl_clean.text = "%d%%" % clean
+scenes/ingame/hud/modals/content/ModalContentRoomList.gd:231 -> row.lbl_maint.text = "%d%%" % maint
+scenes/ingame/hud/modals/content/ModalContentRoomList.gd:239 -> detail_clean_val.text = "%d%%" % clean
+scenes/ingame/hud/modals/content/ModalContentRoomList.gd:240 -> detail_maint_val.text = "%d%%" % maint
+scenes/ingame/hud/modals/content/ModalContentRoomList.gd:275 -> detail_id_val.text = "---"
+scenes/ingame/hud/modals/content/ModalContentRoomList.gd:276 -> detail_guest_val.text = "---"
+scenes/ingame/hud/modals/content/ModalContentRoomList.gd:277 -> detail_clean_val.text = "---"
+scenes/ingame/hud/modals/content/ModalContentRoomList.gd:278 -> detail_maint_val.text = "---"
+scenes/ingame/hud/modals/content/ModalContentSettings.gd:120 -> lbl_zoom.text = "%.1fx" % slider_zoom.value
+scenes/ingame/hud/modals/content/ModalContentSettings.gd:122 -> lbl_zoom.text = "%.1fx" % val
+scenes/ingame/hud/modals/content/ModalContentStaff.gd:298 -> lbl_wage.text = "%d €" % int(item.get("daily_wage", 80))
+scenes/ingame/hud/modals/content/ModalContentStaff.gd:494 -> lbl_morale.text = "%d%%" % m
+scenes/ingame/hud/modals/content/ModalContentStaff.gd:548 -> detail_image_lbl.text = "👩‍🔧" if gender == "female" else "👨‍🔧"
+scenes/ingame/hud/modals/content/ModalContentStaff.gd:550 -> detail_image_lbl.text = "👩‍🍳" if gender == "female" else "👨‍🍳"
+scenes/ingame/hud/modals/content/ModalContentStaff.gd:552 -> detail_image_lbl.text = "👩‍💼" if gender == "female" else "👨‍💼"
+scenes/ingame/hud/modals/content/ModalContentStaff.gd:676 -> action_btn.text = "Kein Arbeitsplatz"
+scenes/ingame/hud/modals/content/ModalContentTutorials.gd:118 -> cat_btn.text = "▶ " + cat_name
+scenes/ingame/hud/modals/content/ModalContentTutorials.gd:136 -> cat_btn.text = "▼ " + cat_name
+scenes/ingame/hud/modals/content/ModalContentTutorials.gd:138 -> cat_btn.text = "▶ " + cat_name
+scenes/ingame/hud/modals/content/cards/CardAssignRoom.gd:44 -> lbl_status.text = "%d/%d" % [current, max_staff]
+scenes/ingame/hud/modals/content/cards/CardAssignStaff.gd:37 -> (Toast) Staff Clicked: 
+scenes/ingame/map/ParzelleBuildUI.gd:15 -> time_label.text = "%d%%  |  %dh %dm" % [int(progress * 100), r_h, r_m]
+scenes/intro/Intro.gd:66 -> lbl_presents.text = "presents"
+scenes/main_menu/MainMenu.gd:194 -> lbl_idcard_name.text = "Kein Profil"
+
+=== TSCN Files ===
+scenes/character/CharacterEdit.tscn:113 -> Charakter erstellen
+scenes/character/CharacterEdit.tscn:146 -> Geschlecht
+scenes/character/CharacterEdit.tscn:163 -> Männlich
+scenes/character/CharacterEdit.tscn:175 -> Weiblich
+scenes/character/CharacterEdit.tscn:187 -> Divers
+scenes/character/CharacterEdit.tscn:192 -> Hautfarbe
+scenes/character/CharacterEdit.tscn:209 -> Hell
+scenes/character/CharacterEdit.tscn:221 -> Mittel
+scenes/character/CharacterEdit.tscn:233 -> Dunkel
+scenes/character/CharacterEdit.tscn:238 -> Haarfarbe
+scenes/character/CharacterEdit.tscn:253 -> Blond
+scenes/character/CharacterEdit.tscn:267 -> Braun
+scenes/character/CharacterEdit.tscn:279 -> Schwarz
+scenes/character/CharacterEdit.tscn:291 -> Hellblond
+scenes/character/CharacterEdit.tscn:303 -> Rot
+scenes/character/CharacterEdit.tscn:315 -> Grau
+scenes/character/CharacterEdit.tscn:320 -> Outfit
+scenes/character/CharacterEdit.tscn:337 -> Anzug Schwarz
+scenes/character/CharacterEdit.tscn:349 -> Anzug Grau
+scenes/character/CharacterEdit.tscn:361 -> Casual
+scenes/character/CharacterEdit.tscn:373 -> Uniform
+scenes/character/CharacterEdit.tscn:384 -> VORSCHAU
+scenes/character/CharacterEdit.tscn:406 -> MANAGER · LEVEL 1
+scenes/character/CharacterEdit.tscn:425 -> Manager erstellen
+scenes/dashboard/DashboardHotelCard.tscn:108 -> Hotel Name
+scenes/dashboard/DashboardHotelCard.tscn:123 -> LEVEL
+scenes/dashboard/DashboardHotelCard.tscn:133 -> TAG
+scenes/dashboard/DashboardHotelCard.tscn:143 -> GÄSTE
+scenes/dashboard/DashboardHotelCard.tscn:153 -> RUF
+scenes/dashboard/DashboardHotelCard.tscn:163 -> KAPITAL
+scenes/dashboard/DashboardHotelCard.tscn:169 -> € 50.000
+scenes/hotel_select/HotelSelect.tscn:23 -> Deine Hotels
+scenes/hotel_select/HotelSelect.tscn:33 -> Hotel auswählen
+scenes/hotel_select/HotelSelect.tscn:38 -> Lade Hotels...
+scenes/ingame/InGameSaveModal.tscn:182 -> SPIEL SPEICHERN
+scenes/ingame/InGameSaveModal.tscn:195 -> Manuelle Spielstände
+scenes/ingame/InGameSaveModal.tscn:211 -> Autosaves
+scenes/ingame/InGameSaveModal.tscn:227 -> Name:
+scenes/ingame/InGameSaveModal.tscn:259 -> Speichern
+scenes/ingame/SimBrowser.tscn:92 -> home.sim
+scenes/ingame/SimBrowser.tscn:136 -> home.sim
+scenes/ingame/SimBrowser.tscn:141 -> Dein persönlicher Simulations-Browser
+scenes/ingame/SimBrowser.tscn:158 -> Tipp: Gib eine URL in die Adressleiste ein und drücke Enter.
+scenes/ingame/SimBrowserTile.tscn:118 -> HotelCheck
+scenes/ingame/SimBrowserTile.tscn:125 -> Bewertungsportal
+scenes/ingame/SimBrowserTile.tscn:133 -> Verfügbar
+scenes/ingame/SimBrowserTile.tscn:157 -> ▶ App öffnen
+scenes/ingame/hud/ActivityLogEntry.tscn:36 -> INFO
+scenes/ingame/hud/ActivityLogEntry.tscn:51 -> Raum gebaut: Flur
+scenes/ingame/hud/ActivityLogPanel.tscn:127 -> ALLE
+scenes/ingame/hud/BuildHintPanel.tscn:144 -> [R]
+scenes/ingame/hud/BuildHintPanel.tscn:151 -> Raum rotieren
+scenes/ingame/hud/BuildHintPanel.tscn:162 -> [.]
+scenes/ingame/hud/BuildHintPanel.tscn:168 -> Türposition rotieren
+scenes/ingame/hud/BuildHintPanel.tscn:179 -> [Shift]
+scenes/ingame/hud/BuildHintPanel.tscn:185 -> Mehrfachbau (Halten)
+scenes/ingame/hud/CustomTooltip.tscn:25 -> Raum
+scenes/ingame/hud/CustomTooltip.tscn:37 -> Status: Frei
+scenes/ingame/hud/CustomTooltip.tscn:44 -> Personal
+scenes/ingame/hud/CustomTooltip.tscn:95 -> Verschmutzung: 100%
+scenes/ingame/hud/CustomTooltip.tscn:115 -> Zustand: 100%
+scenes/ingame/hud/HUD.tscn:731 -> Keine Events
+scenes/ingame/hud/HUD.tscn:760 -> Keine Events
+scenes/ingame/hud/HUD.tscn:787 -> *** Spiel pausiert ***
+scenes/ingame/hud/StaffFollowTooltip.tscn:24 -> Name
+scenes/ingame/hud/StaffFollowTooltip.tscn:30 -> Role
+scenes/ingame/hud/StaffFollowTooltip.tscn:36 -> Stats: ...
+scenes/ingame/hud/StaffFollowTooltip.tscn:45 -> Ziel: ...
+scenes/ingame/hud/StaffFollowTooltip.tscn:51 -> Status: ...
+scenes/ingame/hud/TutorialPopup.tscn:48 -> Tutorial Title
+scenes/ingame/hud/TutorialPopup.tscn:72 -> Tutorial description goes here...
+scenes/ingame/hud/TutorialPopup.tscn:84 -> Verstanden
+scenes/ingame/hud/modals/DayTransitionModal.tscn:170 -> Ein neuer Tag beginnt...
+scenes/ingame/hud/modals/DialogModal.tscn:147 -> Titel
+scenes/ingame/hud/modals/DialogModal.tscn:183 -> Abbrechen
+scenes/ingame/hud/modals/GuestPipMonitor.tscn:85 ->   Gast
+scenes/ingame/hud/modals/GuestPipMonitor.tscn:123 -> Wartet
+scenes/ingame/hud/modals/GuestPipMonitor.tscn:129 -> Zufriedenheit: 100%
+scenes/ingame/hud/modals/GuestPipMonitor.tscn:159 -> HU: 100%
+scenes/ingame/hud/modals/GuestPipMonitor.tscn:185 -> DU: 100%
+scenes/ingame/hud/modals/GuestPipMonitor.tscn:211 -> EN: 100%
+scenes/ingame/hud/modals/GuestPipMonitor.tscn:237 -> SP: 100%
+scenes/ingame/hud/modals/LevelUpModal.tscn:47 -> LEVEL UP !
+scenes/ingame/hud/modals/LevelUpModal.tscn:116 -> XXX ist nun verfügbar
+scenes/ingame/hud/modals/LevelUpModal.tscn:122 -> Weiter
+scenes/ingame/hud/modals/ModalStarAchieved.tscn:47 -> GOURMET-STERN!
+scenes/ingame/hud/modals/ModalStarAchieved.tscn:116 -> XXX ist nun verfügbar
+scenes/ingame/hud/modals/ModalStarAchieved.tscn:122 -> Weiter
+scenes/ingame/hud/modals/RoomContextMenu.tscn:65 ->   ::: Aktionen
+scenes/ingame/hud/modals/RoomContextMenu.tscn:95 -> Details anzeigen
+scenes/ingame/hud/modals/RoomContextMenu.tscn:104 -> Service rufen
+scenes/ingame/hud/modals/RoomContextMenu.tscn:113 -> Zimmer abreißen
+scenes/ingame/hud/modals/RoomDetailsMonitor.tscn:76 ->   ::: Live-Details
+scenes/ingame/hud/modals/StandardModal.tscn:125 -> Titel
+scenes/ingame/hud/modals/content/KeybindingRow.tscn:29 -> Action Name
+scenes/ingame/hud/modals/content/KeybindingRow.tscn:37 -> Primary
+scenes/ingame/hud/modals/content/KeybindingRow.tscn:45 -> Alt
+scenes/ingame/hud/modals/content/KeybindingRow.tscn:52 ->  X 
+scenes/ingame/hud/modals/content/ModalContentDemoEnd.tscn:38 ->  Discord
+scenes/ingame/hud/modals/content/ModalContentDemoEnd.tscn:47 ->  BlueSky
+scenes/ingame/hud/modals/content/ModalContentDemoEnd.tscn:69 -> Weiterspielen
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:36 -> Finanzen
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:51 -> Übernachtungen
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:67 -> Restaurant
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:83 -> Services
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:99 -> Sonstige Einnahmen
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:121 -> Einnahmen gesamt
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:141 -> Personalkosten
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:157 -> Baukosten
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:173 -> Sonstige Ausgaben
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:194 -> Ausgaben gesamt
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:214 -> Tagesergebnis
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:238 -> Gäste & Ruf
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:253 -> Check-ins
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:269 -> Check-outs
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:289 -> Wütend abgereist
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:305 -> Vor Check-in gegangen
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:321 -> Abgewiesen
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:337 -> Angebot abgelehnt
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:362 -> Aktuell im Hotel
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:378 -> Abreise morgen
+scenes/ingame/hud/modals/content/ModalContentEndOfDay.tscn:394 -> WEITER ZU TAG X
+scenes/ingame/hud/modals/content/ModalContentFinances.tscn:21 -> Kassenbuch
+scenes/ingame/hud/modals/content/ModalContentFinances.tscn:43 -> Einnahmen Heute
+scenes/ingame/hud/modals/content/ModalContentFinances.tscn:68 -> Ausgaben Heute
+scenes/ingame/hud/modals/content/ModalContentFinances.tscn:93 -> Saldo Heute
+scenes/ingame/hud/modals/content/ModalContentFinances.tscn:128 -> Heute
+scenes/ingame/hud/modals/content/ModalContentFinances.tscn:161 -> Alle
+scenes/ingame/hud/modals/content/ModalContentFinances.tscn:195 -> Alle
+scenes/ingame/hud/modals/content/ModalContentFinances.tscn:232 -> Zeitpunkt
+scenes/ingame/hud/modals/content/ModalContentFinances.tscn:238 -> Kategorie
+scenes/ingame/hud/modals/content/ModalContentFinances.tscn:244 -> Beschreibung
+scenes/ingame/hud/modals/content/ModalContentFinances.tscn:250 -> Betrag
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:88 -> Name
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:95 -> Zimmer
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:103 -> Budget
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:110 -> Status
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:118 -> Sättigung
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:126 -> Zufr.
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:172 -> Bitte wähle...
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:186 -> Raum:
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:202 -> Zufriedenheit:
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:218 -> Status:
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:234 -> Budget:
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:269 -> Hunger: 100%
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:294 -> Durst: 100%
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:319 -> Energie: 100%
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:344 -> Spaß: 100%
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:356 -> Gehe zu Gast
+scenes/ingame/hud/modals/content/ModalContentGuestList.tscn:362 -> Beobachten (PIP)
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.tscn:28 -> Hotel Status
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.tscn:57 -> Sterne & Ruf
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.tscn:94 -> Finanzen
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.tscn:109 -> Heute: +0 €
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.tscn:131 -> Zimmer & Belegung
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.tscn:140 -> Auslastung: 0%
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.tscn:146 -> Sauberkeit: 100%
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.tscn:168 -> Gästezufriedenheit
+scenes/ingame/hud/modals/content/ModalContentHotelOverview.tscn:177 -> Gesamt: 0%
+scenes/ingame/hud/modals/content/ModalContentInspectorReport.tscn:30 -> Ergebnisse der Prüfung
+scenes/ingame/hud/modals/content/ModalContentInspectorReport.tscn:42 -> [center]Auswertung...[/center]
+scenes/ingame/hud/modals/content/ModalContentInspectorReport.tscn:57 -> Kriterium
+scenes/ingame/hud/modals/content/ModalContentInspectorReport.tscn:64 -> Erreicht
+scenes/ingame/hud/modals/content/ModalContentInspectorReport.tscn:71 -> Gefordert
+scenes/ingame/hud/modals/content/ModalContentInspectorReport.tscn:76 -> Inspektor-Zufriedenheit
+scenes/ingame/hud/modals/content/ModalContentInspectorReport.tscn:93 -> Ø Gästezufriedenheit
+scenes/ingame/hud/modals/content/ModalContentInspectorReport.tscn:110 -> Ø Sauberkeit
+scenes/ingame/hud/modals/content/ModalContentInspectorReport.tscn:127 -> Rufpunkte
+scenes/ingame/hud/modals/content/ModalContentInspectorReport.tscn:144 -> Zimmer (Gesamt)
+scenes/ingame/hud/modals/content/ModalContentInspectorReport.tscn:170 -> [i]Gez. Unbekannt[/i]
+scenes/ingame/hud/modals/content/ModalContentInspectorReport.tscn:177 -> Details zum Bericht bald verfuegbar -> SimBrowser -> Messages (internes Nachrichtensystem)
+scenes/ingame/hud/modals/content/ModalContentInspectorReport.tscn:188 -> Bericht schließen
+scenes/ingame/hud/modals/content/ModalContentLoad.tscn:17 -> Manuelle Spielstände
+scenes/ingame/hud/modals/content/ModalContentLoad.tscn:30 -> Autosaves
+scenes/ingame/hud/modals/content/ModalContentLoad.tscn:49 -> Laden
+scenes/ingame/hud/modals/content/ModalContentPause.tscn:62 -> Fortsetzen
+scenes/ingame/hud/modals/content/ModalContentPause.tscn:73 -> Speichern
+scenes/ingame/hud/modals/content/ModalContentPause.tscn:81 -> Laden
+scenes/ingame/hud/modals/content/ModalContentPause.tscn:89 -> Einstellungen
+scenes/ingame/hud/modals/content/ModalContentPause.tscn:100 -> Hauptmenü
+scenes/ingame/hud/modals/content/ModalContentQuestbook.tscn:67 -> Rang 1
+scenes/ingame/hud/modals/content/ModalContentQuestbook.tscn:72 -> Vergütung: 500 FP
+scenes/ingame/hud/modals/content/ModalContentQuestbook.tscn:82 -> Rang abschließen
+scenes/ingame/hud/modals/content/ModalContentReception.tscn:38 -> Wartende Gäste
+scenes/ingame/hud/modals/content/ModalContentReception.tscn:65 -> Verfügbare Zimmer
+scenes/ingame/hud/modals/content/ModalContentReception.tscn:92 -> CHECK-IN
+scenes/ingame/hud/modals/content/ModalContentReception.tscn:101 -> Eingecheckt
+scenes/ingame/hud/modals/content/ModalContentReception.tscn:128 -> Abreise
+scenes/ingame/hud/modals/content/ModalContentReception.tscn:152 -> CHECK-OUT
+scenes/ingame/hud/modals/content/ModalContentRoomList.tscn:52 -> Name / Typ
+scenes/ingame/hud/modals/content/ModalContentRoomList.tscn:59 -> Zimmer
+scenes/ingame/hud/modals/content/ModalContentRoomList.tscn:66 -> Gast
+scenes/ingame/hud/modals/content/ModalContentRoomList.tscn:73 -> Sauber
+scenes/ingame/hud/modals/content/ModalContentRoomList.tscn:81 -> Zustand
+scenes/ingame/hud/modals/content/ModalContentRoomList.tscn:124 -> Bitte wählen...
+scenes/ingame/hud/modals/content/ModalContentRoomList.tscn:138 -> Zimmer:
+scenes/ingame/hud/modals/content/ModalContentRoomList.tscn:154 -> Gast:
+scenes/ingame/hud/modals/content/ModalContentRoomList.tscn:170 -> Sauberkeit:
+scenes/ingame/hud/modals/content/ModalContentRoomList.tscn:186 -> Zustand:
+scenes/ingame/hud/modals/content/ModalContentRoomList.tscn:202 -> Gehe zu Raum
+scenes/ingame/hud/modals/content/ModalContentSave.tscn:18 -> Manuelle Spielstände
+scenes/ingame/hud/modals/content/ModalContentSave.tscn:33 -> Name:
+scenes/ingame/hud/modals/content/ModalContentSave.tscn:54 -> Speichern
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:69 -> Autosave
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:88 -> aus
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:111 -> Schnellvorlauf
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:131 -> x-fach
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:154 -> Tutorial-Tipps
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:196 -> Mehrfachbau (Gebäude)
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:239 -> Zoom-Empfindlichkeit
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:276 -> Kamera-Geschwindigkeit
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:325 -> Gesamtlautstärke
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:359 -> Hintergrundmusik
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:394 -> Menü-Musik
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:429 -> Sounds
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:461 -> settings.audio.door_sounds
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:480 -> aus
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:517 -> Sprache
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:537 -> Deutsch
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:560 -> UI-Skalierung
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:603 -> Toast-Position (Benachrichtigung)
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:623 -> Unten
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:646 -> Position HUD (unten)
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:666 -> Mitte
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:689 -> Technische Infos (FPS, etc.)
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:709 -> Aus
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:733 -> Fenstermodus
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:752 -> Fullscreen
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:776 -> Monitor
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:795 -> Monitor 1
+scenes/ingame/hud/modals/content/ModalContentSettings.tscn:841 -> Standard wiederherstellen
+scenes/ingame/hud/modals/content/ModalContentStaff.tscn:67 -> NAME
+scenes/ingame/hud/modals/content/ModalContentStaff.tscn:74 -> BERUF
+scenes/ingame/hud/modals/content/ModalContentStaff.tscn:81 -> ALTER
+scenes/ingame/hud/modals/content/ModalContentStaff.tscn:89 -> GEHALT
+scenes/ingame/hud/modals/content/ModalContentStaff.tscn:97 -> MORAL
+scenes/ingame/hud/modals/content/ModalContentStaff.tscn:106 -> STATUS
+scenes/ingame/hud/modals/content/ModalContentStaff.tscn:123 -> Keine Daten.
+scenes/ingame/hud/modals/content/ModalContentStaff.tscn:168 -> 👨‍💼
+scenes/ingame/hud/modals/content/ModalContentStaff.tscn:180 -> Name
+scenes/ingame/hud/modals/content/ModalContentStaff.tscn:187 -> Beruf
+scenes/ingame/hud/modals/content/ModalContentStaff.tscn:215 -> Gehe zu Personal
+scenes/ingame/hud/modals/content/ModalContentStaff.tscn:222 -> Aktion
+scenes/ingame/hud/modals/content/ModalContentTechtree.tscn:50 -> Aktuelle FP: 
+scenes/ingame/hud/modals/content/ModalContentTutorialEnd.tscn:38 ->  Discord
+scenes/ingame/hud/modals/content/ModalContentTutorialEnd.tscn:47 ->  BlueSky
+scenes/ingame/hud/modals/content/ModalContentTutorialEnd.tscn:69 -> Weiterspielen
+scenes/ingame/hud/modals/content/ModalContentTutorials.tscn:63 -> Tutorial Title
+scenes/ingame/hud/modals/content/ModalContentTutorials.tscn:85 -> Tutorial content goes here...
+scenes/ingame/hud/modals/content/cards/CardAssignRoom.tscn:31 -> Raumname
+scenes/ingame/hud/modals/content/cards/CardAssignStaff.tscn:40 -> Name
+scenes/ingame/hud/modals/content/cards/CardAssignStaff.tscn:48 -> Rolle
+scenes/ingame/hud/modals/content/cards/GuestCard.tscn:83 -> Max Mustermann
+scenes/ingame/hud/modals/content/cards/RoomCardAvailable.tscn:81 -> Z0001 (EZ)
+scenes/ingame/hud/modals/content/cards/RoomCardAvailable.tscn:88 -> Einzelzimmer | 60 € / Nacht
+scenes/ingame/hud/modals/content/cards/RowAssignedStaff.tscn:44 -> Name
+scenes/ingame/map/ParzelleBuildUI.tscn:23 -> Parzelle im Bau
+scenes/intro/Intro.tscn:70 -> Beliebige Taste zum Überspringen
+scenes/login/Login.tscn:122 -> Anmelden
+scenes/login/Login.tscn:144 -> Anmelden
+scenes/login/Login.tscn:162 -> ← Zurück zum Hauptmenü
+scenes/main_menu/MainMenu.tscn:256 -> Deine Hotel-Legende beginnt hier
+scenes/main_menu/MainMenu.tscn:322 -> Spiel starten
+scenes/main_menu/MainMenu.tscn:340 -> Einstellungen
+scenes/main_menu/MainMenu.tscn:361 -> Login / Register
+scenes/main_menu/MainMenu.tscn:382 -> Tutorial
+scenes/main_menu/MainMenu.tscn:401 -> Info
+scenes/main_menu/MainMenu.tscn:417 -> Beenden
+scenes/main_menu/MainMenu.tscn:430 -> v0.0.0
+scenes/main_menu/MainMenu.tscn:449 -> Made with Godot 4
+scenes/main_menu/MainMenu.tscn:456 -> © 2026 – Angelus2010
+scenes/main_menu/MainMenu.tscn:485 -> Anmelden
+scenes/main_menu/MainMenu.tscn:511 -> Benutzername merken
+scenes/main_menu/MainMenu.tscn:526 -> Anmelden
+scenes/main_menu/MainMenu.tscn:546 -> Abbrechen
+scenes/main_menu/MainMenu.tscn:557 -> Noch kein Account? Jetzt registrieren
+scenes/main_menu/MainMenu.tscn:596 -> TECHDEMO
+scenes/main_menu/MainMenu.tscn:643 -> Name
+scenes/main_menu/MainMenu.tscn:651 -> Klicken zum Wechseln
+scenes/main_menu/ModalContentDisclaimer.tscn:26 -> Disclaimer Text
+scenes/main_menu/ModalContentDisclaimer.tscn:38 -> Nicht mehr anzeigen
+scenes/main_menu/ModalContentDisclaimer.tscn:54 -> Verstanden!
+scenes/manager_select/ManagerSelect.tscn:90 -> Manager wählen
+scenes/manager_select/ManagerSelect.tscn:143 -> Freier Slot
+scenes/manager_select/ManagerSelect.tscn:158 -> Neu erstellen
+scenes/manager_select/ManagerSelect.tscn:186 -> MANAGER · LEVEL 1
+scenes/manager_select/ManagerSelect.tscn:213 -> Auswählen
+scenes/manager_select/ManagerSelect.tscn:258 -> Freier Slot
+scenes/manager_select/ManagerSelect.tscn:273 -> Neu erstellen
+scenes/manager_select/ManagerSelect.tscn:301 -> MANAGER · LEVEL 1
+scenes/manager_select/ManagerSelect.tscn:328 -> Auswählen
+scenes/manager_select/ManagerSelect.tscn:373 -> Freier Slot
+scenes/manager_select/ManagerSelect.tscn:388 -> Neu erstellen
+scenes/manager_select/ManagerSelect.tscn:416 -> MANAGER · LEVEL 1
+scenes/manager_select/ManagerSelect.tscn:443 -> Auswählen
+scenes/register/Register.tscn:211 -> Account erstellen
+scenes/register/Register.tscn:266 -> Account erstellen
+scenes/register/Register.tscn:283 -> Bereits registriert? Jetzt anmelden
+scenes/register/Register.tscn:297 -> Wir haben dir einen 6-stelligen Code per E-Mail geschickt.
+scenes/register/Register.tscn:313 -> Code bestätigen
+scenes/register/Register.tscn:350 -> Geschlecht
+scenes/register/Register.tscn:360 -> Männlich
+scenes/register/Register.tscn:374 -> Weiblich
+scenes/register/Register.tscn:386 -> Divers
+scenes/register/Register.tscn:396 -> Hautfarbe
+scenes/register/Register.tscn:406 -> Hell
+scenes/register/Register.tscn:420 -> Mittel
+scenes/register/Register.tscn:432 -> Dunkel
+scenes/register/Register.tscn:442 -> Haarfarbe
+scenes/register/Register.tscn:452 -> Blond
+scenes/register/Register.tscn:464 -> Braun
+scenes/register/Register.tscn:478 -> Schwarz
+scenes/register/Register.tscn:490 -> Hellblond
+scenes/register/Register.tscn:502 -> Rot
+scenes/register/Register.tscn:514 -> Grau
+scenes/register/Register.tscn:524 -> Outfit
+scenes/register/Register.tscn:534 -> Anzug Schwarz
+scenes/register/Register.tscn:548 -> Anzug Grau
+scenes/register/Register.tscn:560 -> Casual
+scenes/register/Register.tscn:572 -> Uniform
+scenes/register/Register.tscn:588 -> VORSCHAU
+scenes/register/Register.tscn:605 -> MANAGER · LEVEL 1
+scenes/register/Register.tscn:612 -> Manager erstellen
+scenes/shared/BuildTooltip.tscn:29 -> Error Text
+scenes/shared/ConfirmModal.tscn:140 -> Abbrechen
+scenes/shared/ConfirmModal.tscn:150 -> Bestätigen
+scenes/shared/ListModal.tscn:102 -> Abbrechen
+scenes/shared/NewHotelModal.tscn:91 -> Hotelname
+scenes/shared/NewHotelModal.tscn:113 -> Schwierigkeitsgrad
+scenes/shared/NewHotelModal.tscn:125 -> Einfach
+scenes/shared/NewHotelModal.tscn:133 -> Standard
+scenes/shared/NewHotelModal.tscn:141 -> Hart
+scenes/shared/NewHotelModal.tscn:149 -> Angepasst
+scenes/shared/NewHotelModal.tscn:163 -> Startkapital:
+scenes/shared/NewHotelModal.tscn:192 -> Baukosten-Rückerstattung:
+scenes/shared/NewHotelModal.tscn:223 -> EXP-Boost:
+scenes/shared/NewHotelModal.tscn:254 -> 🔒 Einige Settings sind in der TechDemo noch ohne Effekt.
+scenes/shared/NewHotelModal.tscn:258 -> Raum-Verschmutzung:
+scenes/shared/NewHotelModal.tscn:290 -> Raum-Zustandsverringerung:
+scenes/shared/NewHotelModal.tscn:321 -> 🔒 Einige Settings sind in der TechDemo noch ohne Effekt.
+scenes/shared/NewHotelModal.tscn:331 -> Startparzelle
+scenes/shared/NewHotelModal.tscn:365 -> Eingangsseite: Oben
+scenes/shared/NewHotelModal.tscn:385 -> Abbrechen
+scenes/shared/NewHotelModal.tscn:395 -> Hotel gründen
+scenes/shared/PipCamera.tscn:35 -> NO SIGNAL
+scenes/shared/TutorialAssistant.tscn:64 -> Hallo! Ich bin Angelus, der Entwickler von HO·MA·SIM. Ich helfe dir bei deinen ersten Schritten.
+scenes/shared/TutorialAssistant.tscn:73 -> Weiter
+scenes/video_intro/VideoIntro.tscn:49 -> Klicken zum Überspringen

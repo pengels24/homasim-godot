@@ -7,7 +7,7 @@
 ## ⚠️ Getroffene Design-Entscheidungen (nicht mehr diskutieren!)
 
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.55 | Stand: 15.09.2026
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.56 | Stand: 15.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -28,6 +28,11 @@
 - [x] **Refactoring:** Pausenzeiten in GuestDefinitions ausgelagert
 - [x] **Bugfix:** GuestActor consumption_type (Essen vs Trinken) im Live-Monitor
 - [x] **ANG-357:** Lobby Endlos-Loop Fix (Gäste verlassen die Lobby wieder, statt endlos Plätze zu tauschen)
+- [x] **Save-Migration:** TechDemo-Saves werden erkannt und migriert (v2_ Ordner-Struktur).
+- [x] **Hauptmenü:** "Pre-Alpha Info" Button hinzugefügt.
+- [x] **Bugfix:** Demo-Ende-Screen verarbeitet Abbruch per ESC/Klick sauber und behebt den EXP-Freeze für den ersten Stern + Auto-Save nach Abschluss.
+- [x] **Translation-Audit:** Ca. 400 hardcoded Strings dokumentiert.
+
 - [x] **ANG-362 HUD-Sterne Overlay (offen):** auf 5 Einzelsterne umgestellt.
 
 ---

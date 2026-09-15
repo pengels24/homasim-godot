@@ -19,6 +19,7 @@ const FADE_DURATION  := 1.2
 @onready var btn_login: Button = %BtnLogin
 @onready var btn_tutorial: Button = %BtnTutorial
 @onready var btn_credits: Button = %BtnCredits
+@onready var btn_info: Button = %BtnInfo
 @onready var btn_close_game: Button = %BtnCloseGame
 
 @onready var btn_idcard: Button = %BtnIDCard
@@ -90,13 +91,14 @@ func _ready() -> void:
 	_manager_modal.closed.connect(_on_manager_modal_closed)
 	_dashboard_modal.closed.connect(_on_dashboard_closed)
 	btn_credits.pressed.connect(_on_credits_pressed)
+	btn_info.pressed.connect(_on_info_pressed)
 	btn_close_game.pressed.connect(_on_quit_pressed)
 
 	if GameState.open_dashboard_next:
 		GameState.open_dashboard_next = false
 		_on_play_pressed()
 	else:
-		_check_disclaimer()
+		_check_for_legacy_saves()
 
 
 # =============================================================================
@@ -369,6 +371,11 @@ func _disconnect_confirm() -> void:
 
 
 # =============================================================================
+func _on_info_pressed() -> void:
+	SoundManager.play_button_click()
+	_disclaimer_modal.set_content("res://scenes/main_menu/ModalContentDisclaimer.tscn")
+	_disclaimer_modal.open(GameState.T("ui.disclaimer.prealpha.title", "Pre-Alpha Infos"))
+
 func _on_credits_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/credits/Credits.tscn")
 
@@ -383,3 +390,53 @@ func _check_disclaimer() -> void:
 	if not SettingsManager.dont_show_prealpha_disclaimer:
 		_disclaimer_modal.set_content("res://scenes/main_menu/ModalContentDisclaimer.tscn")
 		_disclaimer_modal.open(GameState.T("ui.disclaimer.prealpha.title"))
+
+
+# =============================================================================
+func _check_for_legacy_saves() -> void:
+	if DirAccess.dir_exists_absolute("user://hotels") and not FileAccess.file_exists("user://migration_v2.flag"):
+		var title = "Alte Spielstände gefunden"
+		var msg = "Die Pre-Alpha ist auf einem viel weiter fortgeschrittenen Stand als die TechDemo. Eine Fortführung alter Spielstände ist nicht zu empfehlen und kann zu massiven Balancing-Fehlern führen.\n\nSollen die Daten der TechDemo jetzt gelöscht werden, um Speicherplatz freizugeben?\n(Wenn du 'Nein' wählst, werden sie behalten, aber die Pre-Alpha nutzt in jedem Fall eigene, neue Ordner)."
+		_confirm_modal.ask(title, msg, "Ja, löschen", "Nein, behalten")
+		
+		if _confirm_modal.confirmed.is_connected(_on_legacy_delete_confirmed):
+			_confirm_modal.confirmed.disconnect(_on_legacy_delete_confirmed)
+		if _confirm_modal.cancelled.is_connected(_on_legacy_delete_cancelled):
+			_confirm_modal.cancelled.disconnect(_on_legacy_delete_cancelled)
+			
+		_confirm_modal.confirmed.connect(_on_legacy_delete_confirmed)
+		_confirm_modal.cancelled.connect(_on_legacy_delete_cancelled)
+		_confirm_modal.show()
+	else:
+		_check_disclaimer()
+
+func _on_legacy_delete_confirmed() -> void:
+	_delete_legacy_folders()
+	_mark_migration_done()
+	_confirm_modal.hide()
+	_check_disclaimer()
+
+func _on_legacy_delete_cancelled() -> void:
+	_mark_migration_done()
+	_confirm_modal.hide()
+	_check_disclaimer()
+
+func _mark_migration_done() -> void:
+	var f = FileAccess.open("user://migration_v2.flag", FileAccess.WRITE)
+	if f:
+		f.store_string("done")
+
+func _delete_legacy_folders() -> void:
+	var base = "user://"
+	for folder in ["hotels", "saves"]:
+		var d = DirAccess.open(base + folder)
+		if d:
+			d.list_dir_begin()
+			var file_name = d.get_next()
+			while file_name != "":
+				if not d.current_is_dir():
+					d.remove(file_name)
+				file_name = d.get_next()
+			DirAccess.remove_absolute(base + folder)
+	if FileAccess.file_exists(base + "profiles.cfg"):
+		DirAccess.remove_absolute(base + "profiles.cfg")

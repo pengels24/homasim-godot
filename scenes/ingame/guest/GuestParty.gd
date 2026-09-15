@@ -20,6 +20,7 @@ var state: String = "waiting" # "waiting"|"active"|"checkout"|"gone"
 var checkout_days: int = 0 # Tage die der Gast bereits in checkout-Spalte wartet
 var has_been_seen: bool = false
 var pays_surcharge: bool = false
+var visited_rooms: Dictionary = {}
 
 # Inspector specific
 var is_inspector: bool = false

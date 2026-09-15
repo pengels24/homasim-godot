@@ -35,6 +35,9 @@
 - [x] **Translation-Audit Phase 2:** PiP-Monitore, Räume (Lobby, Bar, Küche, Conference), Build-Menü Tooltips und Abriss/Kauf-Bestätigungen in GameState.T überführt.
 - [x] **Bugfix:** Kitchen Live Monitor zeigt nun den korrekten Namen des Gastes für die Bestellung (statt "Gast").
 - [x] **Translation-Audit Phase 3:** Settings, Questbook, Techtree, Tutorials übersetzt. Modals F1-F10 sind nun 100% lokalisiert.
+- [x] **Bugfix:** DevConsole `start-inspector` crasht nicht mehr ins Spiel ohne G1.4. Harter Block eingebaut, wenn Gourmetküche fehlt.
+- [x] **Bugfix:** W1.1 Wellness-Körbchen Bonus auf korrekte +5% Start-Zufriedenheit korrigiert (war fälschlicherweise 10%).
+- [x] **Balancing:** P1.1 City-Events erzeugen nun korrekterweise 1-3 gleichzeitige Buchungen pro Welle (statt starr 2-3), um Stress dosierter aufzubauen.
 
 - [x] **ANG-362 HUD-Sterne Overlay (offen):** auf 5 Einzelsterne umgestellt.
 
@@ -144,18 +147,16 @@ Zimmer-Typen bekommen Eigenschaften (z.B. `"wlan"`, `"desk"`). Wenn Gäste einch
 
 Aktuell gesperrte Nodes ohne Inhalt:
 
-| ID | Kategorie | Geplanter Inhalt |
-|---|---|---|
-| `G1.4` | Gastronomie | Gourmetküche (Vorstufe Gourmetsterne) |
-| `W1.1` | Wellness | Spa / Massage |
-| `W1.2` | Wellness | Pool / Außenbereich |
-| `W1.3` | Wellness | Wellness-Paket (Kombination) |
+| ~~`G1.4`~~ | ~~Gastronomie~~ | ~~Gourmetküche (Vorstufe Gourmetsterne)~~ ✅ Erledigt |
+| ~~`W1.1`~~ | ~~Wellness~~ | ~~Basis-Wellness (+5% Start-Zufriedenheit)~~ ✅ Erledigt |
+| ~~`W1.2`~~ | ~~Wellness~~ | ~~Pool / Außenbereich~~ ✅ Erledigt |
+| ~~`W1.3`~~ | ~~Wellness~~ | ~~Premium Spa / Sauna~~ ✅ Erledigt |
 | ~~`M1.2`~~ | ~~Management~~ | ~~Personalentwicklung (Schulungsbonus)~~ ✅ Erledigt |
 | ~~`M1.3`~~ | ~~Management~~ | ~~Prozessoptimierung (Effizienz-Bonus)~~ ✅ Erledigt |
-| `M1.4` | Management | Hotelleitung (Globaler Effizienz-Bonus) |
-| `P1.1` | Prestige | Events (Konzerte, Messen etc.) |
-| `P1.2` | Prestige | Veranstaltungszentrum |
-| `P1.3` | Prestige | Prestige-Paket |
+| ~~`M1.4`~~ | ~~Management~~ | ~~Hotelleitung (-20% Geduldsverlust)~~ ✅ Erledigt |
+| ~~`P1.1`~~ | ~~Prestige~~ | ~~Events (Konzerte, Messen etc.)~~ ✅ Erledigt |
+| ~~`P1.2`~~ | ~~Prestige~~ | ~~Veranstaltungszentrum (Konferenzraum)~~ ✅ Erledigt |
+| ~~`P1.3`~~ | ~~Prestige~~ | ~~Prestige-Paket (VIP-Gäste)~~ ✅ Erledigt |
 | Tier 2 | Alle | Req: Level 10 + 1 Stern – Tier-2-Nodes definieren |
 
 - Für jeden Node: Was genau schaltet er frei? Raum? Feature? Bonus?

@@ -450,7 +450,7 @@ func spawn_guests(amount: int = -1) -> int:
 	var party_count := amount if amount > 0 else 1
 	
 	if amount <= 0 and EventManager != null and EventManager.is_event_active():
-		party_count = randi_range(2, 3)
+		party_count = randi_range(1, 3) # ANG-348: City-Events erzeugen 1-3 Buchungen gleichzeitig
 		
 	var total_heads := 0
 	
@@ -526,7 +526,8 @@ func _generate_party(force_type_id: String = "") -> GuestParty:
 	# Start-Zufriedenheit würfeln (Müde von der Anreise)
 	party.satisfaction = randi_range(50, 80)
 	if TechtreeManager and TechtreeManager.is_tech_unlocked("W1.1"):
-		party.satisfaction += 10 # W1.1 Wellness-Körbchen Bonus
+		party.satisfaction += 5 # W1.1 Wellness-Körbchen Bonus (+5%)
+		if party.satisfaction > 100: party.satisfaction = 100
 		print("[Tech] W1.1 Wellness-Körbchen Bonus! Start-Zufriedenheit: ", party.satisfaction, "%")
 		
 	var def: Dictionary = GuestDefinitions.ALL[type_id]

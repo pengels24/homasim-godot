@@ -394,6 +394,11 @@ func _execute(cmd: String) -> void:
 			if not is_instance_valid(gm):
 				_log("Fehler: GuestManager nicht gefunden.", CLR_ERR)
 				return
+			
+			if TechtreeManager and not TechtreeManager.is_tech_unlocked("G1.4"):
+				_log("Abbruch: Gourmetküche (G1.4) ist noch nicht erforscht. Inspektor-Spawns sind gesperrt.", CLR_ERR)
+				return
+
 			# Guard: laufende andere Events prüfen
 			if EventManager:
 				if EventManager.active_event != EventManager.EventType.NONE:

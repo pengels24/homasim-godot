@@ -15,6 +15,7 @@
 
 ## 🧑‍🤝‍🧑 Akteure & KI
 - [x] **Gäste:** Checken ein, nutzen POIs (Essen/Trinken), haben Bedürfnisse (WLAN etc.), zahlen, checken aus.
+- [x] **VIP-Gäste:** Hochkarätige Gäste (freigeschaltet via Prestige-Paket), die das Hotel besuchen.
 - [x] **Tagungsgäste (TG):** Besuchen Konferenz (Vorträge, Speaker-Wechsel, Sitzplätze), gehen Mittagspause zu Bar/Restaurant, checken nach Tagungsende sauber aus – auch nach Autosave/Reload.
 - [x] **Geduldssystem:** Gäste haben einen Geduldsfaden. Warten sie zu lange (z. B. auf Essen), brechen sie die Aktion ab und verlieren Zufriedenheit.
 - [x] **Reinigungskraft:** Putzt Zimmer automatisch nach Checkout (`housekeeping`).
@@ -37,6 +38,7 @@
 - [x] **Level & EXP:** EXP-Bedarf steigt exponentiell bis Level 10. Startschwierigkeit (Boost) ist wählbar.
 - [x] **Soundsystem:** Hintergrundmusik (Playlist via JSON) und situative Sounds (Türklappern, Besen, Schraubenschlüssel, etc.) sind implementiert.
 - [x] **Gourmetsterne & Inspektor:** Anonyme Hotelprüfer besuchen das Hotel unerkannt und verleihen (oder entziehen) Sterne basierend auf Sauberkeit, Gästezufriedenheit und Reputationswerten.
+- [x] **City-Events:** Zufällige Stadt-Events (Messen, Konzerte) beeinflussen dynamisch das Buchungsverhalten und erhöhen den Stress an der Rezeption.
 
 ## 📊 UI & Management-Tools
 - [x] **Gästeliste:** Übersicht aller aktuellen Gäste inkl. Filter, Live-Vorschau (PiP) und Kamera-Sprung zum Gast.

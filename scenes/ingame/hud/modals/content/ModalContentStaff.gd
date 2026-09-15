@@ -875,7 +875,7 @@ func _build_assignment_ui() -> void:
 		for room in _map_grid.get_placed_rooms():
 			if not is_instance_valid(room): continue
 			var def = room.call("get_definition")
-			if def.get("is_poi", false) and def.get("in_build_menu", true):
+			if def.get("is_poi", false) and def.get("in_build_menu", true) and def.get("max_staff", 1) > 0:
 				poi_rooms.append(room)
 
 	if poi_rooms.is_empty():

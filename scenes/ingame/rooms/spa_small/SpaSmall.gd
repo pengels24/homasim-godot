@@ -181,7 +181,7 @@ func release_interaction(actor_id: String) -> void:
 func get_live_details() -> Array[Dictionary]:
 	var details: Array[Dictionary] = []
 	var now := TimeManager.get_game_time() if TimeManager else 0
-	var secs_per_min := TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 4.0
+	var _secs_per_min := TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 4.0
 	
 	for actor in get_tree().get_nodes_in_group("guest_actors"):
 		var valid_states = [3, 6, 7, 8, 9]

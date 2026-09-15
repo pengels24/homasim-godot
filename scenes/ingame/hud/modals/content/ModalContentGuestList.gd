@@ -21,6 +21,7 @@ class_name ModalContentGuestList
 @onready var lbl_energy: Label = %LblEnergy
 @onready var lbl_fun: Label = %LblFun
 @onready var btn_goto: Button = %BtnGoto
+@onready var btn_pip: Button = %BtnPip
 
 var _selected_guest: GuestActor = null
 var _guest_controller: GuestController = null
@@ -39,6 +40,7 @@ func _ready() -> void:
 		
 	_btn_group = ButtonGroup.new()
 	btn_goto.pressed.connect(_on_goto_pressed)
+	btn_pip.pressed.connect(_on_pip_pressed)
 	
 	# Set static localized labels
 	detail_room_lbl.text = GameState.T("room") + ":"
@@ -53,6 +55,7 @@ func _ready() -> void:
 
 func _apply_translations() -> void:
 	btn_goto.text = GameState.T("ui.guest_list.goto")
+	btn_pip.text = "Beobachten (PIP)"
 	
 	var header_hbox = find_child("TableHeaderPanel", true, false).get_child(0).get_child(0)
 	if header_hbox:
@@ -246,6 +249,11 @@ func _on_guest_selected(party: GuestParty, member: GuestMember, _btn: Button) ->
 		btn_goto.add_theme_stylebox_override("hover", load("res://assets/UI/menu_button_blue_hover.tres"))
 		btn_goto.add_theme_stylebox_override("pressed", load("res://assets/UI/menu_button_blue_pressed.tres"))
 		
+		btn_pip.disabled = false
+		btn_pip.add_theme_stylebox_override("normal", load("res://assets/UI/menu_button_blue.tres"))
+		btn_pip.add_theme_stylebox_override("hover", load("res://assets/UI/menu_button_blue_hover.tres"))
+		btn_pip.add_theme_stylebox_override("pressed", load("res://assets/UI/menu_button_blue_pressed.tres"))
+		
 		detail_name_lbl.text = member.name
 		if party.room_id == "" and party.event_poi_id != "":
 			detail_room_val.text = "Tagesgast"
@@ -285,6 +293,8 @@ func _clear_details() -> void:
 	pip_camera.set_target(null)
 	btn_goto.disabled = true
 	btn_goto.add_theme_stylebox_override("disabled", load("res://assets/UI/menu_button_darkblue_disabled.tres"))
+	btn_pip.disabled = true
+	btn_pip.add_theme_stylebox_override("disabled", load("res://assets/UI/menu_button_darkblue_disabled.tres"))
 	
 	detail_name_lbl.text = GameState.T("ui.guest_list.please_select")
 	detail_room_val.text = "---"
@@ -357,6 +367,18 @@ func _refresh_live_data() -> void:
 			_update_need_bar(need_thirst, lbl_thirst, GameState.T("need.thirst"), member.thirst)
 			_update_need_bar(need_energy, lbl_energy, GameState.T("need.energy"), member.energy)
 			_update_need_bar(need_fun, lbl_fun, GameState.T("need.fun"), member.fun)
+
+func _on_pip_pressed() -> void:
+	if not is_instance_valid(_selected_guest):
+		return
+	GameState.sig_guest_clicked.emit(_selected_guest)
+	
+	# Close the Modal automatically
+	var modal = self
+	while modal != null and not modal.has_method("close"):
+		modal = modal.get_parent()
+	if modal and modal.has_method("close"):
+		modal.close()
 
 func _on_goto_pressed() -> void:
 	if not is_instance_valid(_selected_guest):

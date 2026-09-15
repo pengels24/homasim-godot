@@ -1,17 +1,11 @@
-﻿# Übergabeprotokoll (Ende von Session 2)
+# Übergabeprotokoll (Stand: v0.1.55)
 
 ## Letzter Stand
-- Wir haben **ANG-361 (Ruhepausen-Bug & Budget-Loop)** vollständig behoben.
-- Gäste blieben zuvor in einem Endlos-Loop hängen, wenn sie sich nach einem POI-Besuch keinen weiteren (oder Essen bei Hunger) mehr leisten konnten. Sie sind nun gezwungen, in ihr Zimmer zu gehen (`_wander_in_room`), um ihre berechnete Pause abzusitzen, auch wenn sie extrem hungrig sind.
-- Die Ruhepausen-Dauern (`min_poi_rest_time`, `max_poi_rest_time`) wurden erfolgreich aus `GuestActor.gd` extrahiert und in `GuestDefinitions.ALL` für ein späteres einfaches Balancing angelegt.
-- Ein **Tooltip-Bug** für Lobby-Gäste wurde gefixt: Gäste, die sich im Zustand `State.SITTING` befanden, wurden vorher ignoriert. Jetzt erkennt der Room-Tooltip (z.B. der Lobby) sie korrekt.
+- Das HUD für die Gourmet-Sterne (ANG-362) wurde von einer einzelnen Progress-Bar auf 5 individuelle `TextureRect`-Sterne (`ang-star-filled.aseprite`, `ang-star-outline.aseprite`) umgebaut, die via Code (Gold #EAB308) eingefärbt werden.
+- Der PIP-Kamera Monitor (ANG-353) wurde visuell verfeinert (1px Goldrahmen, eckige Kanten, Snapping & Grouping-Funktion).
+- Alle ungenutzten alten Tooltip-Dateien (`GuestFollowTooltip`) wurden gelöscht.
+- Das komplette Projekt wurde von störenden Debugger-Warnungen befreit (Ternary-Casts, ungenutzte Variablen in StaffActor/SpaSmall, Shadowing in PoolSmall, Integer Division).
+- Der Start-Crash durch `GameState.hotel_stars` wurde gefixt.
 
-## Bearbeitete Systeme
-- `scenes/ingame/guest/GuestActor.gd`: Kompletter Rewrite des Zwangspausen-Triggers und Fix der Budget-Rückfall-Logik (nun `_wander_in_room()` anstatt Endlos-Schleife).
-- `data/GuestDefinitions.gd`: Einfügen der Pausenzeiten-Properties.
-- `scenes/ingame/hud/CustomTooltip.gd`: Fix der fehlenden `valid_states` für Sitzende Gäste.
-
-## Nächste Schritte (Start-Punkt für neuen Agenten)
-- Das Alpha-Backlog checken für die nächsten anstehenden Tasks.
-- Wir haben z.B. noch **ANG-362 (HUD Gourmet-Sterne Overlay auf gefüllte Sterne umstellen)** im Backlog offen.
-- Ggfs. weitere Polishing-Aufgaben oder Gameplay-Tuning gemäß Backlog.
+## Nächste Schritte
+- Der User meinte "es kommt noch mehr (später)", er wird also neue Aufgaben diktieren. Bereithalten für den nächsten Sprint.

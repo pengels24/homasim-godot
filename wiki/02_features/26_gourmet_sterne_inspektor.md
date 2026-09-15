@@ -32,7 +32,7 @@ Sterne werden **nicht** automatisch im Hintergrund vergeben oder abgezogen. Sie 
 - **Button:** `menu_button_blue.tres` / hover / pressed StyleBoxes
 
 ### Bekannte Offene Punkte (v0.1.53)
-- **ANG-362:** `star-progress_overlay.png` (140×24px) zeigt hohle Sternumrisse – muss auf gefüllte Sterne (★, Gold #EAB308) umgestellt werden.
+- **ANG-362 (Erledigt):** Das HUD wurde auf 5 individuelle `TextureRect`-Sterne (`ang-star-filled.aseprite` & `ang-star-outline.aseprite`) umgestellt, die dynamisch per Code in Gold eingefärbt werden.
 
 ## Schwellenwerte für den 1. Stern
 Der 1. Stern ist die Voraussetzung, um ins Tier 2 des Techtrees zu gelangen.

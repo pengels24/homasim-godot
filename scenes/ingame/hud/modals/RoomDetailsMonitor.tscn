@@ -11,20 +11,19 @@
 [ext_resource type="StyleBox" uid="uid://bc0pipuhgp5c7" path="res://assets/UI/menu_button_blue_hover.tres" id="9_blue_h"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eqh8p"]
-content_margin_left = 0.0
-content_margin_top = 0.0
-content_margin_right = 0.0
-content_margin_bottom = 0.0
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
 bg_color = Color(0.10196, 0.11765, 0.14118, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.41176, 0.3098, 0.02353, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9176, 0.702, 0.031, 1)
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 4
+shadow_offset = Vector2(2, 2)
 corner_detail = 5
 
 [node name="RoomDetailsMonitor" type="Control"]
@@ -45,7 +44,14 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_eqh8p")
 custom_minimum_size = Vector2(550, 150)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MenuPanel"]
-layout_mode = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 1.0
+offset_right = -1.0
+offset_bottom = -1.0
 theme_override_constants/separation = 0
 
 [node name="Header" type="HBoxContainer" parent="MenuPanel/VBoxContainer"]

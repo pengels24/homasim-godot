@@ -355,3 +355,9 @@ custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 text = "Gehe zu Gast"
 
+[node name="BtnPip" type="Button" parent="HBoxContainer/DetailPanel/MarginContainer/VBoxContainer/DetailsVBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Beobachten (PIP)"
+

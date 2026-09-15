@@ -200,7 +200,7 @@ func _on_handle_input(event: InputEvent) -> void:
 
 func _collect_group_siblings() -> void:
 	for sibling in get_parent().get_children():
-		if sibling == self or not sibling.has_method("get_target_room"):
+		if sibling == self or not sibling.name.ends_with("Monitor"):
 			continue
 		if not is_instance_valid(sibling):
 			continue
@@ -238,7 +238,7 @@ func _apply_snapping(new_pos: Vector2) -> Vector2:
 	var best_dy := INF
 	
 	for sibling in get_parent().get_children():
-		if sibling == self or not sibling.has_method("get_target_room"):
+		if sibling == self or not sibling.name.ends_with("Monitor"):
 			continue
 		if not is_instance_valid(sibling):
 			continue
@@ -326,7 +326,7 @@ func _snap_resize_height(raw_h: float) -> float:
 	var snapped_h := raw_h
 	
 	for sibling in get_parent().get_children():
-		if sibling == self or not sibling.has_method("get_target_room"):
+		if sibling == self or not sibling.name.ends_with("Monitor"):
 			continue
 		if not is_instance_valid(sibling):
 			continue

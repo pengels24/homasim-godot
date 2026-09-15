@@ -236,18 +236,18 @@ func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 	# Bademeister-Hochsitz: Blickrichtung zum Pool (ServicePoint) statt Stuhl-Rotation
 	if interaction_id.begins_with("staff_seat_"):
-		var result := super.claim_interaction(actor_id, interaction_id)
-		if result.has("target_pos"):
+		var seat_result := super.claim_interaction(actor_id, interaction_id)
+		if seat_result.has("target_pos"):
 			var pool_center: Vector2
 			var chair4 := get_node_or_null("Interior/Furniture/Chairs/Chair4")
 			if is_instance_valid(chair4):
 				pool_center = chair4.global_position
 			else:
 				pool_center = get_service_position() # Fallback
-			var chair_pos: Vector2 = result["target_pos"]
+			var chair_pos: Vector2 = seat_result["target_pos"]
 			var dir: Vector2 = (pool_center - chair_pos).normalized()
-			result["look_at_dir"] = dir.angle() + PI / 2.0
-		return result
+			seat_result["look_at_dir"] = dir.angle() + PI / 2.0
+		return seat_result
 
 	# Gäste: Beim ersten Claim Gesamtaufenthalt festlegen (60-180 Min, begrenzt auf Schliessung)
 	if not _guest_session_end.has(actor_id):

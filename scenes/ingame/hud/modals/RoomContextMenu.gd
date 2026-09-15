@@ -176,7 +176,7 @@ func _on_details_pressed() -> void:
 		
 		var monitor_scene = load("res://scenes/ingame/hud/modals/RoomDetailsMonitor.tscn")
 		var monitor = monitor_scene.instantiate()
-		get_parent().add_child(monitor)
+		get_parent().get_node("MonitorContainer").add_child(monitor)
 		
 		# Mittig im Viewport platzieren, leicht versetzt damit mehrere Fenster nicht genau übereinander liegen
 		var screen_size = get_viewport().get_visible_rect().size

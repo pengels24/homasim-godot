@@ -1,0 +1,239 @@
+[gd_scene format=3 uid="uid://cc5dbg7jtjn51"]
+
+[ext_resource type="Script" uid="uid://b07guwxt14vw3" path="res://scenes/ingame/hud/modals/GuestPipMonitor.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="2_theme"]
+[ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="3_l0jnf"]
+[ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="4_knild"]
+[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="5_0t5g4"]
+[ext_resource type="Texture2D" uid="uid://chug26ioff260" path="res://assets/icons/x.svg" id="6_2tvcn"]
+[ext_resource type="PackedScene" uid="uid://cxp1abc2def3g" path="res://scenes/shared/PipCamera.tscn" id="7_pip"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eqh8p"]
+content_margin_left = 1.0
+content_margin_top = 1.0
+content_margin_right = 1.0
+content_margin_bottom = 1.0
+bg_color = Color(0.10196, 0.11765, 0.14118, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.9176, 0.702, 0.031, 1)
+corner_detail = 5
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 4
+shadow_offset = Vector2(2, 2)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_info"]
+bg_color = Color(0.05, 0.05, 0.05, 0.8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bg"]
+bg_color = Color(0.55, 0.55, 0.55, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hunger"]
+bg_color = Color(0.1, 0.6, 0.1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_thirst"]
+bg_color = Color(0.2, 0.5, 0.9, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_energy"]
+bg_color = Color(0.8, 0.8, 0.1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fun"]
+bg_color = Color(0.8, 0.4, 0.1, 1)
+
+[node name="GuestPipMonitor" type="Control" unique_id=146221814]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 0
+offset_right = 280.0
+offset_bottom = 290.0
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
+
+[node name="MenuPanel" type="PanelContainer" parent="." unique_id=1621577886]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 290)
+layout_mode = 0
+offset_right = 280.0
+offset_bottom = 290.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_eqh8p")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuPanel" unique_id=873121383]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Header" type="HBoxContainer" parent="MenuPanel/VBoxContainer" unique_id=439482296]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="DragHandle" type="ColorRect" parent="MenuPanel/VBoxContainer/Header" unique_id=201890086]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.15, 0.15, 0.15, 1)
+
+[node name="Label" type="Label" parent="MenuPanel/VBoxContainer/Header/DragHandle" unique_id=121904140]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "  Gast"
+vertical_alignment = 1
+
+[node name="BtnClose" type="Button" parent="MenuPanel/VBoxContainer/Header" unique_id=202552022]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_override_constants/icon_max_width = 16
+theme_override_styles/normal = ExtResource("3_l0jnf")
+theme_override_styles/pressed = ExtResource("4_knild")
+theme_override_styles/hover = ExtResource("5_0t5g4")
+icon = ExtResource("6_2tvcn")
+
+[node name="PipCamera" parent="MenuPanel/VBoxContainer" unique_id=831929939 instance=ExtResource("7_pip")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InfoPanel" type="PanelContainer" parent="MenuPanel/VBoxContainer" unique_id=495310767]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_info")
+
+[node name="MarginContainer" type="MarginContainer" parent="MenuPanel/VBoxContainer/InfoPanel" unique_id=1666625299]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MenuPanel/VBoxContainer/InfoPanel/MarginContainer" unique_id=653758418]
+layout_mode = 2
+
+[node name="LblStatus" type="Label" parent="MenuPanel/VBoxContainer/InfoPanel/MarginContainer/VBoxContainer" unique_id=452175359]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Wartet"
+
+[node name="LblSat" type="Label" parent="MenuPanel/VBoxContainer/InfoPanel/MarginContainer/VBoxContainer" unique_id=1098945726]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Zufriedenheit: 100%"
+
+[node name="NeedsContainer" type="GridContainer" parent="MenuPanel/VBoxContainer/InfoPanel/MarginContainer/VBoxContainer" unique_id=1009551579]
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 4
+columns = 2
+
+[node name="NeedHunger" type="ProgressBar" parent="MenuPanel/VBoxContainer/InfoPanel/MarginContainer/VBoxContainer/NeedsContainer" unique_id=182232111]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TooltipProgressBar"
+theme_override_styles/background = SubResource("StyleBoxFlat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hunger")
+value = 100.0
+show_percentage = false
+
+[node name="LblHunger" type="Label" parent="MenuPanel/VBoxContainer/InfoPanel/MarginContainer/VBoxContainer/NeedsContainer/NeedHunger" unique_id=1919004504]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"TooltipText"
+theme_override_colors/font_color = Color(0.15, 0.15, 0.15, 1)
+theme_override_font_sizes/font_size = 18
+text = "HU: 100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NeedThirst" type="ProgressBar" parent="MenuPanel/VBoxContainer/InfoPanel/MarginContainer/VBoxContainer/NeedsContainer" unique_id=1005215279]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TooltipProgressBar"
+theme_override_styles/background = SubResource("StyleBoxFlat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_thirst")
+value = 100.0
+show_percentage = false
+
+[node name="LblThirst" type="Label" parent="MenuPanel/VBoxContainer/InfoPanel/MarginContainer/VBoxContainer/NeedsContainer/NeedThirst" unique_id=433563313]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"TooltipText"
+theme_override_colors/font_color = Color(0.15, 0.15, 0.15, 1)
+theme_override_font_sizes/font_size = 18
+text = "DU: 100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NeedEnergy" type="ProgressBar" parent="MenuPanel/VBoxContainer/InfoPanel/MarginContainer/VBoxContainer/NeedsContainer" unique_id=2132146922]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TooltipProgressBar"
+theme_override_styles/background = SubResource("StyleBoxFlat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_energy")
+value = 100.0
+show_percentage = false
+
+[node name="LblEnergy" type="Label" parent="MenuPanel/VBoxContainer/InfoPanel/MarginContainer/VBoxContainer/NeedsContainer/NeedEnergy" unique_id=1649807511]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"TooltipText"
+theme_override_colors/font_color = Color(0.15, 0.15, 0.15, 1)
+theme_override_font_sizes/font_size = 18
+text = "EN: 100%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NeedFun" type="ProgressBar" parent="MenuPanel/VBoxContainer/InfoPanel/MarginContainer/VBoxContainer/NeedsContainer" unique_id=1172588384]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 24)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"TooltipProgressBar"
+theme_override_styles/background = SubResource("StyleBoxFlat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fun")
+value = 100.0
+show_percentage = false
+
+[node name="LblFun" type="Label" parent="MenuPanel/VBoxContainer/InfoPanel/MarginContainer/VBoxContainer/NeedsContainer/NeedFun" unique_id=362965220]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_type_variation = &"TooltipText"
+theme_override_colors/font_color = Color(0.15, 0.15, 0.15, 1)
+theme_override_font_sizes/font_size = 18
+text = "SP: 100%"
+horizontal_alignment = 1
+vertical_alignment = 1

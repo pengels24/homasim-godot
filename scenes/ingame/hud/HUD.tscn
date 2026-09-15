@@ -213,14 +213,26 @@ horizontal_alignment = 2
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
 
-[node name="GourmetStars" type="TextureProgressBar" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars" unique_id=1165738142]
+[node name="GourmetStars" type="HBoxContainer" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars" unique_id=1165738142]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 4
-max_value = 5.0
-value = 5.0
-texture_under = ExtResource("6_eas3h")
-texture_progress = ExtResource("7_wqcpy")
+theme_override_constants/separation = 4
+
+[node name="Star1" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars/GourmetStars"]
+layout_mode = 2
+
+[node name="Star2" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars/GourmetStars"]
+layout_mode = 2
+
+[node name="Star3" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars/GourmetStars"]
+layout_mode = 2
+
+[node name="Star4" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars/GourmetStars"]
+layout_mode = 2
+
+[node name="Star5" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars/GourmetStars"]
+layout_mode = 2
 
 [node name="Gap" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1833546165]
 layout_mode = 2
@@ -775,6 +787,16 @@ theme_override_font_sizes/font_size = 48
 text = "*** Spiel pausiert ***"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="MonitorContainer" type="Control" parent="." unique_id=987654322]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="StandardModal" parent="." unique_id=979018255 instance=ExtResource("25_fiam6")]
 unique_name_in_owner = true

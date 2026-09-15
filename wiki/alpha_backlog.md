@@ -28,7 +28,7 @@
 - [x] **Refactoring:** Pausenzeiten in GuestDefinitions ausgelagert
 - [x] **Bugfix:** GuestActor consumption_type (Essen vs Trinken) im Live-Monitor
 - [x] **ANG-357:** Lobby Endlos-Loop Fix (Gäste verlassen die Lobby wieder, statt endlos Plätze zu tauschen)
-- [ ] **ANG-362 HUD-Sterne Overlay (offen):** star-progress_overlay.png auf gefüllte Sterne umstellen (140x24px, Gold #EAB308).
+- [x] **ANG-362 HUD-Sterne Overlay (offen):** auf 5 Einzelsterne umgestellt.
 
 ---
 

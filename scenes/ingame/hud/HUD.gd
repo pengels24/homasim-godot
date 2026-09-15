@@ -2,7 +2,7 @@ extends CanvasLayer
 
 # Referenzen
 @onready var label_level: Label = %Level
-@onready var hotel_stars: TextureProgressBar = %GourmetStars
+@onready var hotel_stars: HBoxContainer = %GourmetStars
 @onready var label_money: Label = %Capital
 @onready var label_guests_active: Label = %GuestsActive
 @onready var label_guests_checkin: Label = %GuestsCheckIn
@@ -86,6 +86,9 @@ func _ready() -> void:
 	# Initialen Pause-Status setzen (falls wir direkt pausiert ins Spiel starten)
 	set_pause_visuals(TimeManager.is_paused())
 	
+	if GameState.selected_hotel:
+		_on_hotel_stars_changed(GameState.selected_hotel.get("stars", 0))
+	
 	pause_label.text = GameState.T("hud.label.paused")
 	
 	btn_pause.tooltip_text = GameState.T("hud.top.right.tooltip.pause", _get_action_key_string("ui_pause"))
@@ -140,21 +143,36 @@ func _update_activity_badge(_entry = null) -> void:
 
 # =============================================================================
 func _on_guest_clicked(guest: Node2D) -> void:
-	# Wenn es schon einen laufenden Tooltip gibt, löschen wir ihn am besten
-	for child in get_children():
-		if child.name == "GuestFollowTooltip" or child.has_method("_update_target_text"):
-			child.queue_free()
+	# Check if this guest already has a PIP window
+	for child in %MonitorContainer.get_children():
+		if child.name.begins_with("GuestPipMonitor"):
+			if child.has_method("get_target_guest") and child.get_target_guest() == guest:
+				child.move_to_front()
+				return
+				
+	# Check limit (max 3)
+	var active_pips = []
+	for child in %MonitorContainer.get_children():
+		if child.name.begins_with("GuestPipMonitor"):
+			active_pips.append(child)
 			
-	var tooltip_scene = load("res://scenes/ingame/hud/GuestFollowTooltip.tscn")
-	var t = tooltip_scene.instantiate()
-	add_child(t)
-	t.setup(guest)
+	if active_pips.size() >= 3:
+		# Close oldest
+		active_pips[0].close()
+			
+	var pip_scene = load("res://scenes/ingame/hud/modals/GuestPipMonitor.tscn")
+	var p = pip_scene.instantiate()
+	# Random placement or fixed offset? We'll put it in bottom right corner with some offset
+	var vp_size = get_viewport().get_visible_rect().size
+	p.position = Vector2(vp_size.x - 300 - (active_pips.size() * 20), vp_size.y - 350 - (active_pips.size() * 20))
+	%MonitorContainer.add_child(p)
+	p.setup(guest)
 
 
 # =============================================================================
 func _on_staff_clicked(staff: Node2D) -> void:
 	for child in get_children():
-		if child.name == "StaffFollowTooltip" or child.name == "GuestFollowTooltip" or child.has_method("_update_target_text"):
+		if child.name == "StaffFollowTooltip" or child.has_method("_update_target_text"):
 			child.queue_free()
 			
 	var tooltip_scene = load("res://scenes/ingame/hud/StaffFollowTooltip.tscn")
@@ -189,8 +207,14 @@ func _on_hotel_money_changed(new_money: int) -> void:
 
 # =============================================================================
 func _on_hotel_stars_changed(stars: int) -> void:
-	hotel_stars.value = stars
-
+	for i in range(hotel_stars.get_child_count()):
+		var star_rect = hotel_stars.get_child(i)
+		if i < stars:
+			star_rect.texture = preload("res://assets/icons/angelus2010/ang-star-filled.aseprite")
+			star_rect.modulate = Color("EAB308")
+		else:
+			star_rect.texture = preload("res://assets/icons/angelus2010/ang-star-outline.aseprite")
+			star_rect.modulate = Color.WHITE
 
 # =============================================================================
 func _on_hotel_guests_active_changed(guests_active: int) -> void:
@@ -457,7 +481,7 @@ func update_state_visuals() -> void:
 					if now < 720:        # Vor 12:00 → Morgensession endet um 12:00
 						end_min = 720
 					var remaining: int = maxi(0, end_min - now)
-					var h: int = remaining / 60
+					var h: int = int(remaining / 60.0)
 					var m: int = remaining % 60
 					if h > 0:
 						timer_suffix = " (%dh%02dm)" % [h, m]
@@ -466,7 +490,7 @@ func update_state_visuals() -> void:
 				if names.size() > 1:
 					event_name_label.text = "%d Events%s" % [names.size(), timer_suffix]
 				else:
-					event_name_label.text = (names[0] if names.size() > 0 else "Event") + timer_suffix
+					event_name_label.text = (str(names[0]) if names.size() > 0 else "Event") + timer_suffix
 			if is_instance_valid(event_color):
 				if event_color is ColorRect:
 					event_color.color = col
@@ -550,7 +574,7 @@ func _get_action_key_string(action_name: String) -> String:
 	if events.size() > 0:
 		var event = events[0]
 		if event is InputEventKey:
-			var code = event.get_physical_keycode_with_modifiers() if event.physical_keycode != 0 else event.get_keycode_with_modifiers()
+			var code = event.get_physical_keycode_with_modifiers() if event.physical_keycode != KEY_NONE else event.get_keycode_with_modifiers()
 			var txt = OS.get_keycode_string(code)
 			var t_key = "key." + txt.to_lower().replace(" ", "_")
 			var translated = GameState.T(t_key)

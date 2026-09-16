@@ -518,7 +518,7 @@ func _generate_party(force_type_id: String = "") -> GuestParty:
 	var party_id := "P%04d" % _next_party_id
 	_next_party_id += 1
 	
-	if is_instance_valid(TutorialManager):
+	if is_instance_valid(TutorialManager) and type_id != "inspector":
 		TutorialManager.trigger("guest_" + type_id)
 
 	var party := GuestParty.new(party_id, type_id)
@@ -975,6 +975,9 @@ func evaluate_gourmet_stars(party: GuestParty) -> void:
 					stats["result"] = "down"
 					stats["stars_after"] = current_stars - 1
 
+	if is_instance_valid(TutorialManager):
+		TutorialManager.trigger("guest_inspector")
+		
 	sig_inspector_report_ready.emit(stats)
 
 

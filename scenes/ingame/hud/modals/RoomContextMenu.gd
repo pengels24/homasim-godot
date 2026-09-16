@@ -326,6 +326,8 @@ func _on_wlan_pressed() -> void:
 		
 	if FinanceManager: FinanceManager.add_transaction(-cost, "construction", "tx.construction|WLAN")
 	_target_room.acquired_traits.append("wlan")
+	var mg = get_tree().get_first_node_in_group("map_grid")
+	if mg and mg.has_method("save_all_rooms_to_db"): mg.save_all_rooms_to_db(GameState.active_hotel_id)
 	if is_instance_valid(Toast): Toast.show(GameState.T("toast.room.wlan_installed"), "build", false)
 	close()
 
@@ -340,5 +342,7 @@ func _on_klima_pressed() -> void:
 		
 	if FinanceManager: FinanceManager.add_transaction(-cost, "construction", "tx.construction|Klima")
 	_target_room.acquired_traits.append("klima")
+	var mg = get_tree().get_first_node_in_group("map_grid")
+	if mg and mg.has_method("save_all_rooms_to_db"): mg.save_all_rooms_to_db(GameState.active_hotel_id)
 	if is_instance_valid(Toast): Toast.show(GameState.T("toast.room.klima_installed"), "build", false)
 	close()

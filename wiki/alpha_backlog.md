@@ -40,6 +40,9 @@
 - [x] **Balancing:** P1.1 City-Events erzeugen nun korrekterweise 1-3 gleichzeitige Buchungen pro Welle (statt starr 2-3), um Stress dosierter aufzubauen.
 
 - [x] **ANG-362 HUD-Sterne Overlay (offen):** auf 5 Einzelsterne umgestellt.
+- [x] **Bugfix & Polishing:** Lobby speichert nun Raum-Upgrades (WLAN, Klima) korrekt.
+- [x] **Tutorial-Updates:** HUD Welcome-Texte überarbeitet, Tutorials für F9-Hotel-Overview und Overlays hinzugefügt.
+- [x] **Inspektor:** Codex-Eintrag für Gourmet Inspector hinzugefügt (wird erst nach Abreise freigeschaltet).
 
 ---
 

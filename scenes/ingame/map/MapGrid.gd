@@ -491,6 +491,10 @@ func _restore_rooms(built_plots: Array) -> void:
 		for room_data in rooms:
 			var type_id: String = room_data.get("room_type_id", "")
 			if type_id == "lobby":
+				var lobby = parcel.get_lobby()
+				if is_instance_valid(lobby):
+					room_data["guest_manager"] = guest_manager
+					lobby.configure(room_data)
 				continue
 			var room_def = GameState.room_registry.get(type_id, {})
 			var path: String = room_def.get("scene_path", "")
@@ -801,7 +805,7 @@ func save_all_rooms_to_db(hotel_id: int) -> void:
 			
 			var parcel_rooms: Array = []
 			for child: Node in parcel.get_children():
-				if child.has_method("to_dict") and child.get("room_type_id") != "lobby":
+				if child.has_method("to_dict"):
 					parcel_rooms.append(child.call("to_dict"))
 					
 			SaveManager.overwrite_rooms_in_plot(hotel_id, col_idx, row_idx, parcel_rooms)

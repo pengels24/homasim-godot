@@ -38,11 +38,19 @@ func _process_queue() -> void:
 	if is_instance_valid(_active) or _toast_queue.is_empty():
 		return
 		
+	var tree = get_tree()
+	if tree == null:
+		return
+		
+	var root = tree.get_root()
+	if root == null:
+		return
+		
 	var next_toast: Dictionary = _toast_queue.pop_front()
 	_active = TOAST_SCENE.instantiate() as ToastNotification
 	
 	# Verwende call_deferred für add_child, da sonst "busy setting up children" auftritt
-	get_tree().get_root().call_deferred("add_child", _active)
+	root.call_deferred("add_child", _active)
 	
 	# Da call_deferred das Hinzufügen verzögert, müssen wir auch das Aufrufen von play verzögern,
 	# damit @onready Variablen innerhalb des Toasts bereits initialisiert wurden!

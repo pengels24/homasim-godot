@@ -868,21 +868,7 @@ ui.disclaimer.text,"Schön, dass du dabei bist! Bevor du dein erstes Hotel baust
 ui.disclaimer.dont_show,Beim nächsten Mal nicht mehr anzeigen,Do not show this again
 ui.disclaimer.ok,Verstanden!,Got it!
 tutorial.welcome.title,Die Benutzeroberfläche HUD,The User Interface HUD
-tutorial.welcome.desc,"Willkommen in deinem neuen Hotel - hier ein kurzer Überblick:
-Oben: Deine wichtigsten Laufdaten wie Finanzen und Gäste, sowie die Zeitsteuerung.
-Unten rechts: Die Steuerung für die Musik.
-Unten mittig: Die zentralen Hauptfunktionen (Bauen, Rezeption, Personal, etc.).
-Unten links: Der Ansichtsmerker zum Zwischenspeichern der Kameraposition.
-Kamera-Steuerung: Mit WASD bewegst du die Kamera und mit dem Mausrad steuerst du den Zoom.","Welcome to your new hotel - here is a brief overview:
-Top: Your most important running data like finances and guests, as well as the time control.
-Bottom right: The music controls.
-Bottom center: The main core functions (Building, Reception, Staff, etc.).
-Bottom left: The view indicator to temporarily save the camera position.
-Camera control: Use WASD to move the camera and the mouse wheel to control the zoom."
-
-ingame.quit.message,"Bist du sicher, dass du das Spiel verlassen möchtest?",Are you sure you want to leave the game?
-ingame.quit.cancel,Abbrechen,Cancel
-settings.gameplay.tutorial_tips,Tipps (Tutorial),Tutorial Tips
+tutorial.welcome.desc,"Willkommen in deinem neuen Hotel - hier ein kurzer Überblick:\nOben: Deine wichtigsten Laufdaten wie Finanzen, Gäste und Zeitsteuerung.\nOben Rechts: Die Hauptmenüs für Rezeption, Listen, Personal etc. (F1-F10).\nLinks: Daten-Overlays (Filter für Belegung, Schmutz etc.).\nRechts: Das Activity Log für aktuelle Meldungen.\nUnten mittig: Das Baumenü für Räume und Einrichtung.\nOben Links (unter dem HUD): Aktuell laufende Events.\nMitte: Dein Hotel.\nKamera-Steuerung: Mit WASD bewegst du die Kamera und mit dem Mausrad steuerst du den Zoom.","Welcome to your new hotel - here is a brief overview:\nTop: Your most important running data like finances, guests, and time control.\nTop Right: The main menus for reception, lists, staff, etc. (F1-F10).\nLeft: Data overlays (filters for occupancy, dirt, etc.).\nRight: The Activity Log for recent messages.\nBottom Center: The build menu for rooms and furniture.\nTop Left (under the HUD): Currently running events.\nCenter: Your hotel.\nCamera control: Use WASD to move the camera and the mouse wheel to control the zoom."
 ui.tutorial.tab.tutorial,Tutorials,Tutorials
 ui.tutorial.tab.tipps,Tipps,Tips
 ui.tutorial.tab.codex,Codex,Codex
@@ -910,8 +896,8 @@ codex.guest_nomad.title,Digitaler Nomade,Digital Nomad
 codex.guest_nomad.desc,"Bleibt sehr lange (7-14 Nächte). Benötigt WLAN, verbringt den ganzen Tag im Zimmer. Freut sich über Zimmer-Service.","Stays very long (7-14 nights). Needs Wi-Fi, spends the whole day in the room. Happy about room service."
 codex.guest_event.title,Event-Teilnehmer,Event Attendee
 codex.guest_event.desc,"Bleibt nur kurz (1-2 Nächte) für ein Event. Keine besonderen Ansprüche, recht profitabel in der Masse.","Stays only briefly (1-2 nights) for an event. No special demands, quite profitable in mass."
-codex.guest_luxury.title,Gäste-Typ: VIP & Luxus,Guest Type: VIP & Luxury
-codex.guest_luxury.desc,Prominente und schwerreiche Gäste. Sie zahlen astronomische Summen für Übernachtungen und Services, sind aber extrem schnell verärgert, wenn die Qualität nicht ihren perfekten Standards entspricht. Sie erwarten eine hohe Luxus-Bewertung der Zimmer.\n\nBudget: Hoch\nGeduld: Sehr niedrig\nAnspruch: Perfektion\nPlatzbedarf: Einzel- oder Doppelzimmer (Suite bevorzugt),Guest Type: VIP & Luxury\n\nCelebrities and ultra-rich guests. They pay astronomical sums for stays and services but are extremely quick to anger if the quality doesn't meet their perfect standards. They expect a high luxury rating for rooms.\n\nBudget: High\nPatience: Very low\nExpectations: Perfection\nSpace Needs: Single or Double room (Suite preferred)
+codex.guest_luxury.title,VIP & Luxus,VIP & Luxury
+codex.guest_luxury.desc,"Prominente und schwerreiche Gäste. Sie zahlen astronomische Summen für Übernachtungen und Services, sind aber extrem schnell verärgert, wenn die Qualität nicht ihren perfekten Standards entspricht. Sie erwarten eine hohe Luxus-Bewertung der Zimmer.\n\nBudget: Hoch\nGeduld: Sehr niedrig\nAnspruch: Perfektion\nPlatzbedarf: Einzel- oder Doppelzimmer (Suite bevorzugt)","Celebrities and ultra-rich guests. They pay astronomical sums for stays and services but are extremely quick to anger if the quality doesn't meet their perfect standards. They expect a high luxury rating for rooms.\n\nBudget: High\nPatience: Very low\nExpectations: Perfection\nSpace Needs: Single or Double room (Suite preferred)"
 codex.guest_groups.title,Gäste vs. Gruppen,Guests vs. Groups
 codex.guest_groups.desc,In HO·MA·SIM wird unterschieden zwischen Gästen (Köpfe) und Reisegruppen (Partien). Gäste repräsentieren die absolute Anzahl an Personen in deinem Hotel. Eine Gruppe kann jedoch aus mehreren Gästen bestehen (z.B. eine Familie oder ein Pärchen).\n\nBeispiel: Ein Pärchen teilt sich ein Doppelzimmer. Es zählt als 1 Check-In (Gruppe), bringt aber 2 Gäste (Köpfe) in dein Hotel.,In HO·MA·SIM, there is a distinction between guests (heads) and travel groups (parties). Guests represent the total number of people in your hotel. However, a group can consist of multiple guests (e.g., a family or a couple).\n\nExample: A couple shares a double room. They count as 1 check-in (group) but bring 2 guests (heads) to your hotel.
 finances.time.today,Heute,Today
@@ -1278,70 +1264,70 @@ ui.techtree.feature.p1_2_conference,Konferenzraum,Conference Room
 ui.techtree.feature.p1_3_vip,VIP-Gäste,VIP Guests
 ui.tutorial.tab.rooms,Räume,Rooms
 room_category.guests,Gäste,Guests
-quest.guest.single.10.name,Einsamer Wolf,Einsamer Wolf
-quest.guest.single.10.desc,Beherberge insgesamt 10 Single-Gäste.,Beherberge insgesamt 10 Single-Gäste.
-quest.guest.single.25.name,Solo-Reisende,Solo-Reisende
-quest.guest.single.25.desc,Beherberge insgesamt 25 Single-Gäste.,Beherberge insgesamt 25 Single-Gäste.
-quest.guest.single.50.name,Unabhängigkeit,Unabhängigkeit
-quest.guest.single.50.desc,Beherberge insgesamt 50 Single-Gäste.,Beherberge insgesamt 50 Single-Gäste.
-quest.guest.single.100.name,Die Single-Hochburg,Die Single-Hochburg
-quest.guest.single.100.desc,Beherberge insgesamt 100 Single-Gäste.,Beherberge insgesamt 100 Single-Gäste.
-quest.guest.couple.10.name,Zweisamkeit,Zweisamkeit
-quest.guest.couple.10.desc,Beherberge insgesamt 10 Paare.,Beherberge insgesamt 10 Paare.
-quest.guest.couple.25.name,Romantische Auszeit,Romantische Auszeit
-quest.guest.couple.25.desc,Beherberge insgesamt 25 Paare.,Beherberge insgesamt 25 Paare.
-quest.guest.couple.50.name,Liegt Liebe in der Luft?,Liegt Liebe in der Luft?
-quest.guest.couple.50.desc,Beherberge insgesamt 50 Paare.,Beherberge insgesamt 50 Paare.
-quest.guest.couple.100.name,Flitterwochen-Ziel,Flitterwochen-Ziel
-quest.guest.couple.100.desc,Beherberge insgesamt 100 Paare.,Beherberge insgesamt 100 Paare.
-quest.guest.budget.10.name,Schmales Budget,Schmales Budget
-quest.guest.budget.10.desc,Beherberge insgesamt 10 Budgetreisende.,Beherberge insgesamt 10 Budgetreisende.
-quest.guest.budget.25.name,Sparfüchse,Sparfüchse
-quest.guest.budget.25.desc,Beherberge insgesamt 25 Budgetreisende.,Beherberge insgesamt 25 Budgetreisende.
-quest.guest.budget.50.name,Günstig & Gut,Günstig & Gut
-quest.guest.budget.50.desc,Beherberge insgesamt 50 Budgetreisende.,Beherberge insgesamt 50 Budgetreisende.
-quest.guest.budget.100.name,Backpacker-Paradies,Backpacker-Paradies
-quest.guest.budget.100.desc,Beherberge insgesamt 100 Budgetreisende.,Beherberge insgesamt 100 Budgetreisende.
-quest.guest.family.10.name,Familienausflug,Familienausflug
-quest.guest.family.10.desc,Beherberge insgesamt 10 Familien.,Beherberge insgesamt 10 Familien.
-quest.guest.family.25.name,Bunter Trubel,Bunter Trubel
-quest.guest.family.25.desc,Beherberge insgesamt 25 Familien.,Beherberge insgesamt 25 Familien.
-quest.guest.family.50.name,Großfamilien,Großfamilien
-quest.guest.family.50.desc,Beherberge insgesamt 50 Familien.,Beherberge insgesamt 50 Familien.
-quest.guest.family.100.name,Familien-Resort,Familien-Resort
-quest.guest.family.100.desc,Beherberge insgesamt 100 Familien.,Beherberge insgesamt 100 Familien.
-quest.guest.business.10.name,Geschäftig,Geschäftig
-quest.guest.business.10.desc,Beherberge insgesamt 10 Geschäftsreisende.,Beherberge insgesamt 10 Geschäftsreisende.
-quest.guest.business.25.name,Im Auftrag der Firma,Im Auftrag der Firma
-quest.guest.business.25.desc,Beherberge insgesamt 25 Geschäftsreisende.,Beherberge insgesamt 25 Geschäftsreisende.
+quest.guest.single.10.name,Einsamer Wolf,Lone Wolf
+quest.guest.single.10.desc,Beherberge insgesamt 10 Single-Gäste.,Host a total of 10 single guests.
+quest.guest.single.25.name,Solo-Reisende,Solo Travelers
+quest.guest.single.25.desc,Beherberge insgesamt 25 Single-Gäste.,Host a total of 25 single guests.
+quest.guest.single.50.name,Unabhängigkeit,Independence
+quest.guest.single.50.desc,Beherberge insgesamt 50 Single-Gäste.,Host a total of 50 single guests.
+quest.guest.single.100.name,Die Single-Hochburg,The Single Stronghold
+quest.guest.single.100.desc,Beherberge insgesamt 100 Single-Gäste.,Host a total of 100 single guests.
+quest.guest.couple.10.name,Zweisamkeit,Togetherness
+quest.guest.couple.10.desc,Beherberge insgesamt 10 Paare.,Host a total of 10 couples.
+quest.guest.couple.25.name,Romantische Auszeit,Romantic Getaway
+quest.guest.couple.25.desc,Beherberge insgesamt 25 Paare.,Host a total of 25 couples.
+quest.guest.couple.50.name,Liegt Liebe in der Luft?,Is Love in the Air?
+quest.guest.couple.50.desc,Beherberge insgesamt 50 Paare.,Host a total of 50 couples.
+quest.guest.couple.100.name,Flitterwochen-Ziel,Honeymoon Destination
+quest.guest.couple.100.desc,Beherberge insgesamt 100 Paare.,Host a total of 100 couples.
+quest.guest.budget.10.name,Schmales Budget,Tight Budget
+quest.guest.budget.10.desc,Beherberge insgesamt 10 Budgetreisende.,Host a total of 10 budget travelers.
+quest.guest.budget.25.name,Sparfüchse,Bargain Hunters
+quest.guest.budget.25.desc,Beherberge insgesamt 25 Budgetreisende.,Host a total of 25 budget travelers.
+quest.guest.budget.50.name,Günstig & Gut,Cheap & Good
+quest.guest.budget.50.desc,Beherberge insgesamt 50 Budgetreisende.,Host a total of 50 budget travelers.
+quest.guest.budget.100.name,Backpacker-Paradies,Backpacker Paradise
+quest.guest.budget.100.desc,Beherberge insgesamt 100 Budgetreisende.,Host a total of 100 budget travelers.
+quest.guest.family.10.name,Familienausflug,Family Trip
+quest.guest.family.10.desc,Beherberge insgesamt 10 Familien.,Host a total of 10 families.
+quest.guest.family.25.name,Bunter Trubel,Colorful Bustle
+quest.guest.family.25.desc,Beherberge insgesamt 25 Familien.,Host a total of 25 families.
+quest.guest.family.50.name,Großfamilien,Large Families
+quest.guest.family.50.desc,Beherberge insgesamt 50 Familien.,Host a total of 50 families.
+quest.guest.family.100.name,Familien-Resort,Family Resort
+quest.guest.family.100.desc,Beherberge insgesamt 100 Familien.,Host a total of 100 families.
+quest.guest.business.10.name,Geschäftig,Busy
+quest.guest.business.10.desc,Beherberge insgesamt 10 Geschäftsreisende.,Host a total of 10 business travelers.
+quest.guest.business.25.name,Im Auftrag der Firma,On Company Business
+quest.guest.business.25.desc,Beherberge insgesamt 25 Geschäftsreisende.,Host a total of 25 business travelers.
 quest.guest.business.50.name,Business Class,Business Class
-quest.guest.business.50.desc,Beherberge insgesamt 50 Geschäftsreisende.,Beherberge insgesamt 50 Geschäftsreisende.
-quest.guest.business.100.name,Das Konferenz-Zentrum,Das Konferenz-Zentrum
-quest.guest.business.100.desc,Beherberge insgesamt 100 Geschäftsreisende.,Beherberge insgesamt 100 Geschäftsreisende.
-quest.guest.nomad.10.name,Digitaler Nomade,Digitaler Nomade
-quest.guest.nomad.10.desc,Beherberge insgesamt 10 Digitale Nomaden.,Beherberge insgesamt 10 Digitale Nomaden.
+quest.guest.business.50.desc,Beherberge insgesamt 50 Geschäftsreisende.,Host a total of 50 business travelers.
+quest.guest.business.100.name,Das Konferenz-Zentrum,The Conference Center
+quest.guest.business.100.desc,Beherberge insgesamt 100 Geschäftsreisende.,Host a total of 100 business travelers.
+quest.guest.nomad.10.name,Digitaler Nomade,Digital Nomad
+quest.guest.nomad.10.desc,Beherberge insgesamt 10 Digitale Nomaden.,Host a total of 10 digital nomads.
 quest.guest.nomad.25.name,Remote Worker,Remote Worker
-quest.guest.nomad.25.desc,Beherberge insgesamt 25 Digitale Nomaden.,Beherberge insgesamt 25 Digitale Nomaden.
+quest.guest.nomad.25.desc,Beherberge insgesamt 25 Digitale Nomaden.,Host a total of 25 digital nomads.
 quest.guest.nomad.50.name,Workation,Workation
-quest.guest.nomad.50.desc,Beherberge insgesamt 50 Digitale Nomaden.,Beherberge insgesamt 50 Digitale Nomaden.
-quest.guest.nomad.100.name,Kreativ-Hub,Kreativ-Hub
-quest.guest.nomad.100.desc,Beherberge insgesamt 100 Digitale Nomaden.,Beherberge insgesamt 100 Digitale Nomaden.
-quest.guest.event.10.name,Feierlaune,Feierlaune
-quest.guest.event.10.desc,Beherberge insgesamt 10 Event-Gäste.,Beherberge insgesamt 10 Event-Gäste.
-quest.guest.event.25.name,Event-Gäste,Event-Gäste
-quest.guest.event.25.desc,Beherberge insgesamt 25 Event-Gäste.,Beherberge insgesamt 25 Event-Gäste.
-quest.guest.event.50.name,Die große Party,Die große Party
-quest.guest.event.50.desc,Beherberge insgesamt 50 Event-Gäste.,Beherberge insgesamt 50 Event-Gäste.
-quest.guest.event.100.name,Festival-Stimmung,Festival-Stimmung
-quest.guest.event.100.desc,Beherberge insgesamt 100 Event-Gäste.,Beherberge insgesamt 100 Event-Gäste.
-quest.guest.luxury.10.name,Gehobene Ansprüche,Gehobene Ansprüche
-quest.guest.luxury.10.desc,Beherberge insgesamt 10 Luxus-Gäste.,Beherberge insgesamt 10 Luxus-Gäste.
-quest.guest.luxury.25.name,VIP Gäste,VIP Gäste
-quest.guest.luxury.25.desc,Beherberge insgesamt 25 Luxus-Gäste.,Beherberge insgesamt 25 Luxus-Gäste.
+quest.guest.nomad.50.desc,Beherberge insgesamt 50 Digitale Nomaden.,Host a total of 50 digital nomads.
+quest.guest.nomad.100.name,Kreativ-Hub,Creative Hub
+quest.guest.nomad.100.desc,Beherberge insgesamt 100 Digitale Nomaden.,Host a total of 100 digital nomads.
+quest.guest.event.10.name,Feierlaune,Party Mood
+quest.guest.event.10.desc,Beherberge insgesamt 10 Event-Gäste.,Host a total of 10 event guests.
+quest.guest.event.25.name,Event-Gäste,Event Guests
+quest.guest.event.25.desc,Beherberge insgesamt 25 Event-Gäste.,Host a total of 25 event guests.
+quest.guest.event.50.name,Die große Party,The Big Party
+quest.guest.event.50.desc,Beherberge insgesamt 50 Event-Gäste.,Host a total of 50 event guests.
+quest.guest.event.100.name,Festival-Stimmung,Festival Vibe
+quest.guest.event.100.desc,Beherberge insgesamt 100 Event-Gäste.,Host a total of 100 event guests.
+quest.guest.luxury.10.name,Gehobene Ansprüche,High Standards
+quest.guest.luxury.10.desc,Beherberge insgesamt 10 Luxus-Gäste.,Host a total of 10 luxury guests.
+quest.guest.luxury.25.name,VIP Gäste,VIP Guests
+quest.guest.luxury.25.desc,Beherberge insgesamt 25 Luxus-Gäste.,Host a total of 25 luxury guests.
 quest.guest.luxury.50.name,High Society,High Society
-quest.guest.luxury.50.desc,Beherberge insgesamt 50 Luxus-Gäste.,Beherberge insgesamt 50 Luxus-Gäste.
-quest.guest.luxury.100.name,Die Elite,Die Elite
-quest.guest.luxury.100.desc,Beherberge insgesamt 100 Luxus-Gäste.,Beherberge insgesamt 100 Luxus-Gäste.
+quest.guest.luxury.50.desc,Beherberge insgesamt 50 Luxus-Gäste.,Host a total of 50 luxury guests.
+quest.guest.luxury.100.name,Die Elite,The Elite
+quest.guest.luxury.100.desc,Beherberge insgesamt 100 Luxus-Gäste.,Host a total of 100 luxury guests.
 
 ui.buildmenu.buy_plot,Parzelle kaufen,Buy Plot
 plot.buy,Kaufen,Buy
@@ -1362,14 +1348,14 @@ Funktion: Die Rezeption wird anfangs vom Spieler bedient, im späteren Spielverl
 
 Kosten: 0 € (Von Beginn an fest verbaut)
 
-Voraussetzungen: Keine (Standard)","Das Herzstück und der zentrale Empfangsbereich des Hotels. 
-Hier kommen neue Gäste an, werden empfangen, warten auf Zuweisung ihres Zimmers und checken bei Abreise wieder aus. 
+Voraussetzungen: Keine (Standard)","The heart and central reception area of the hotel.
+Here, new guests arrive, are welcomed, wait to be assigned to their room, and check out upon departure.
 
-Funktion: Die Rezeption wird anfangs vom Spieler bedient, im späteren Spielverlauf kann hier Personal (Rezeptionist) eingesetzt werden. Der Snack-Automat im Foyer dient als erste kleine Nahrungsquelle für Gäste. Die Lobby fungiert als zentraler Verteiler für alle Wegführungen im Hotel.
+Function: The reception is initially operated by the player; later in the game, staff (Receptionist) can be assigned here. The snack machine in the foyer serves as the first small food source for guests. The lobby acts as a central hub for all pathways in the hotel.
 
-Kosten: 0 € (Von Beginn an fest verbaut)
+Cost: 0 € (Permanently built from the start)
 
-Voraussetzungen: Keine (Standard)"
+Requirements: None (Standard)"
 tutorial.room_bed_standard.title,Einzelzimmer,Single Room
 tutorial.room_bed_standard.desc,"Ein einfaches und günstiges Zimmer für preisbewusste Gäste und Alleinreisende.
 
@@ -1377,13 +1363,13 @@ Funktion: Dient als grundlegender Schlaf- und Rückzugsort. Es ist die bevorzugt
 
 Kosten: 2.000 € (Basis-Einnahmen: 80 € / Nacht)
 
-Voraussetzungen: Keine (Standard)","Ein einfaches und günstiges Zimmer für preisbewusste Gäste und Alleinreisende.
+Voraussetzungen: Keine (Standard)","A simple and affordable room for budget-conscious guests and solo travelers.
 
-Funktion: Dient als grundlegender Schlaf- und Rückzugsort. Es ist die bevorzugte Wahl für Alleinreisende, Budget-Gäste, Geschäftsreisende, digitale Nomaden und Event-Gäste. Paare oder Familien buchen dieses Zimmer nicht.
+Function: Serves as a basic sleeping and retreat area. It is the preferred choice for solo travelers, budget guests, business travelers, digital nomads, and event guests. Couples or families do not book this room.
 
-Kosten: 2.000 € (Basis-Einnahmen: 80 € / Nacht)
+Cost: 2,000 € (Base revenue: 80 € / Night)
 
-Voraussetzungen: Keine (Standard)"
+Requirements: None (Standard)"
 tutorial.room_bed_double.title,Doppelzimmer,Double Room
 tutorial.room_bed_double.desc,"Ein geräumigeres Zimmer, das auf Paare ausgerichtet ist, aber auch als Ausweichzimmer für Singles genutzt werden kann.
 
@@ -1391,13 +1377,13 @@ Funktion: Bietet Platz für zwei Personen und bringt durch den höheren Standard
 
 Kosten: 3.500 €
 
-Voraussetzungen: Keine (Standard)","Ein geräumigeres Zimmer, das auf Paare ausgerichtet ist, aber auch als Ausweichzimmer für Singles genutzt werden kann.
+Voraussetzungen: Keine (Standard)","A more spacious room geared towards couples, but can also be used as a fallback room for singles.
 
-Funktion: Bietet Platz für zwei Personen und bringt durch den höheren Standard deutlich bessere Übernachtungseinnahmen als das Einzelzimmer (130 € / Nacht). Es ist die absolute Präferenz für Paare, kann aber auch von anderen Standard-Gästen gebucht werden. Dies führt an der Rezeption allerdings zu einer Rückfrage bezüglich des höheren Preises (Erfolgschance). Lehnt der Gast den Aufpreis ab, verlässt er das Hotel.
+Function: Offers space for two people and generates significantly better overnight revenue than the single room (130 € / Night) due to its higher standard. It is the absolute preference for couples but can also be booked by other standard guests. However, this leads to an inquiry at the reception regarding the higher price (success chance). If the guest rejects the surcharge, they leave the hotel.
 
-Kosten: 3.500 €
+Cost: 3,500 €
 
-Voraussetzungen: Keine (Standard)"
+Requirements: None (Standard)"
 tutorial.room_bed_family.title,Familienzimmer,Family Room
 tutorial.room_bed_family.desc,"Ein großer Schlafraum, der exklusiv für Familien reserviert ist.
 
@@ -1407,15 +1393,15 @@ Referenzen zu anderen Räumen: Familien haben oftmals höhere Platzansprüche un
 
 Kosten: 6.000 €
 
-Voraussetzungen: Techtree Z1.2 (Familienzimmer)","Ein großer Schlafraum, der exklusiv für Familien reserviert ist.
+Voraussetzungen: Techtree Z1.2 (Familienzimmer)","A large bedroom exclusively reserved for families.
 
-Funktion: Bietet genug Platz für Familien (Eltern mit 1 bis 3 Kindern, also insgesamt 3 bis 5 Personen). Ist sehr lukrativ (200 € / Nacht). 
+Function: Offers enough space for families (parents with 1 to 3 children, totaling 3 to 5 people). It is very lucrative (200 € / Night).
 
-Referenzen zu anderen Räumen: Familien haben oftmals höhere Platzansprüche und verlangen nach einem Pool im Hotel, um Unzufriedenheit zu vermeiden.
+References to other rooms: Families often have higher space requirements and demand a pool in the hotel to avoid dissatisfaction.
 
-Kosten: 6.000 €
+Cost: 6,000 €
 
-Voraussetzungen: Techtree Z1.2 (Familienzimmer)"
+Requirements: Techtree Z1.2 (Family Room)"
 tutorial.room_bed_superior.title,Superior-Zimmer,Superior Room
 tutorial.room_bed_superior.desc,"Die gehobene Luxus-Klasse unter den Zimmern für VIP-Gäste und Luxusreisende.
 
@@ -1423,13 +1409,13 @@ Funktion: Erfüllt hohe Ansprüche an Luxus und Privatsphäre. Bringt mit 400 �
 
 Kosten: 15.000 €
 
-Voraussetzungen: Techtree Z1.3 (Superior-Zimmer)","Die gehobene Luxus-Klasse unter den Zimmern für VIP-Gäste und Luxusreisende.
+Voraussetzungen: Techtree Z1.3 (Superior-Zimmer)","The upscale luxury class among rooms for VIP guests and luxury travelers.
 
-Funktion: Erfüllt hohe Ansprüche an Luxus und Privatsphäre. Bringt mit 400 € / Nacht mit die höchsten Einnahmen im Spiel, wird aber ausschließlich von den sehr seltenen Luxus-Gästen und VIPs gebucht. 
+Function: Fulfills high demands for luxury and privacy. Generates some of the highest revenues in the game at 400 € / Night, but is exclusively booked by very rare luxury guests and VIPs.
 
-Kosten: 15.000 €
+Cost: 15,000 €
 
-Voraussetzungen: Techtree Z1.3 (Superior-Zimmer)"
+Requirements: Techtree Z1.3 (Superior Room)"
 tutorial.room_bar.title,Bar,Bar
 tutorial.room_bar.desc,"Ein Treffpunkt für gesellige Gäste, der ab 12:00 Uhr mittags bis in die Nacht geöffnet ist (Adults only).
 
@@ -1439,15 +1425,15 @@ Referenzen zu anderen Räumen: Wenn im Hotel zusätzlich eine funktionierende kl
 
 Kosten: 1.800 €
 
-Voraussetzungen: Techtree G1.1 (Basis-Gastronomie)","Ein Treffpunkt für gesellige Gäste, der ab 12:00 Uhr mittags bis in die Nacht geöffnet ist (Adults only).
+Voraussetzungen: Techtree G1.1 (Basis-Gastronomie)","A meeting point for sociable guests, open from 12:00 PM until the night (Adults only).
 
-Funktion: Generiert zusätzliche Einnahmen (15 € Basis) durch den Verkauf von Getränken. Die Bar erfordert zwingend einen Barkeeper (Personal), um überhaupt öffnen zu können.
+Function: Generates additional revenue (15 € base) by selling drinks. The bar strictly requires a bartender (Staff) to open at all.
 
-Referenzen zu anderen Räumen: Wenn im Hotel zusätzlich eine funktionierende kleine Küche (inklusive Koch) vorhanden ist, können Gäste an der Bar optional auch Essen bestellen, wofür allerdings eine zusätzliche Servicekraft (Bedienung) an der Bar eingeteilt werden muss.
+References to other rooms: If the hotel also has a functioning small kitchen (including a chef), guests can optionally order food at the bar, which requires an additional service staff (Waiter) assigned to the bar.
 
-Kosten: 1.800 €
+Cost: 1,800 €
 
-Voraussetzungen: Techtree G1.1 (Basis-Gastronomie)"
+Requirements: Techtree G1.1 (Basic Gastronomy)"
 tutorial.room_kitchen_small.title,Kleine Küche,Small Kitchen
 tutorial.room_kitchen_small.desc,"Das logistische Herz der Gastronomie. Hier essen keine Gäste, hier wird nur gearbeitet!
 
@@ -1455,13 +1441,13 @@ Funktion: Die Küche bereitet Mahlzeiten zu. Sie erfordert zwingend einen Koch (
 
 Kosten: 3.000 €
 
-Voraussetzungen: Techtree G1.2 (Erweiterte Gastronomie)","Das logistische Herz der Gastronomie. Hier essen keine Gäste, hier wird nur gearbeitet!
+Voraussetzungen: Techtree G1.2 (Erweiterte Gastronomie)","The logistical heart of gastronomy. No guests eat here, this is strictly a workspace!
 
-Funktion: Die Küche bereitet Mahlzeiten zu. Sie erfordert zwingend einen Koch (Personal). Optional kann eine Bedienung eingeteilt werden, die die Kochgeschwindigkeit erhöht. Ohne eine aktive Küche können weder im Restaurant noch an der Bar Mahlzeiten verkauft werden.
+Function: The kitchen prepares meals. It strictly requires a chef (Staff). Optionally, a waiter can be assigned to increase cooking speed. Without an active kitchen, meals cannot be sold in the restaurant or at the bar.
 
-Kosten: 3.000 €
+Cost: 3,000 €
 
-Voraussetzungen: Techtree G1.2 (Erweiterte Gastronomie)"
+Requirements: Techtree G1.2 (Expanded Gastronomy)"
 tutorial.room_restaurant_small.title,Kleines Restaurant,Small Restaurant
 tutorial.room_restaurant_small.desc,"Ein Speisesaal für deine Gäste, der durch seine Öffnungszeiten (07:00 bis 22:00 Uhr) auch als Frühstücksraum genutzt wird, und in dem warme Mahlzeiten serviert werden.
 
@@ -1471,15 +1457,15 @@ Referenzen zu anderen Räumen: Ein Restaurant funktioniert niemals alleine! Es b
 
 Kosten: 5.000 €
 
-Voraussetzungen: Techtree G1.3 (Gehobene Küche)","Ein Speisesaal für deine Gäste, der durch seine Öffnungszeiten (07:00 bis 22:00 Uhr) auch als Frühstücksraum genutzt wird, und in dem warme Mahlzeiten serviert werden.
+Voraussetzungen: Techtree G1.3 (Gehobene Küche)","A dining hall for your guests, which is also used as a breakfast room due to its opening hours (07:00 AM to 10:00 PM) and serves warm meals.
 
-Funktion: Bietet Platz für bis zu 20 Gäste gleichzeitig. Gäste setzen sich hierher, um ihren Hunger zu stillen (generiert Einnahmen pro Gericht). 
+Function: Provides seating for up to 20 guests simultaneously. Guests sit here to satisfy their hunger (generates revenue per dish).
 
-Referenzen zu anderen Räumen: Ein Restaurant funktioniert niemals alleine! Es benötigt zwingend eine aktive Küche (mit Koch), die das Essen zubereitet, sowie eigenes Servicepersonal (Bedienung) im Restaurant, welches das Essen an die Tische bringt.
+References to other rooms: A restaurant never functions alone! It strictly requires an active kitchen (with a chef) to prepare the food, as well as its own service staff (Waiter) in the restaurant to bring the food to the tables.
 
-Kosten: 5.000 €
+Cost: 5,000 €
 
-Voraussetzungen: Techtree G1.3 (Gehobene Küche)"
+Requirements: Techtree G1.3 (Upscale Cuisine)"
 tutorial.room_staff_small.title,Kleiner Personalraum,Small Staff Room
 tutorial.room_staff_small.desc,"Ein zwingend notwendiger Rückzugsort für deine Angestellten.
 
@@ -1487,13 +1473,13 @@ Funktion: Ohne Personalraum lässt sich gar kein Personal einstellen! Jeder geba
 
 Kosten: 2.500 €
 
-Voraussetzungen: Level 2 (Personal-Freischaltung)","Ein zwingend notwendiger Rückzugsort für deine Angestellten.
+Voraussetzungen: Level 2 (Personal-Freischaltung)","An absolutely necessary retreat for your employees.
 
-Funktion: Ohne Personalraum lässt sich gar kein Personal einstellen! Jeder gebaute Personalraum erhöht dein Limit für einstellbares Personal um 4. Zudem verliert Personal durch die Arbeit stetig an Moral. Im Personalraum machen erschöpfte Mitarbeiter Pause, um ihre Moral wieder aufzufüllen. Sinkt die Moral in den Keller, arbeiten sie ineffizient oder stellen die Arbeit komplett ein.
+Function: Without a staff room, no staff can be hired at all! Each built staff room increases your limit for hireable staff by 4. Additionally, staff constantly lose morale from working. Exhausted employees take breaks in the staff room to replenish their morale. If morale hits rock bottom, they work inefficiently or stop working completely.
 
-Kosten: 2.500 €
+Cost: 2,500 €
 
-Voraussetzungen: Level 2 (Personal-Freischaltung)"
+Requirements: Level 2 (Staff Unlock)"
 ui.tutorial.tab.guests,Gäste,Guests
 codex.poi.title,Point of Interest (POI),Point of Interest (POI)
 codex.poi.desc,"Ein Point of Interest (POI) ist ein öffentlicher Bereich im Hotel, der für alle Gäste zugänglich ist, wie zum Beispiel die Lobby, Flure oder Aufenthaltsbereiche. Im Gegensatz zu Gästezimmern, die exklusiv gebucht werden, können POIs durch Upgrades (wie z.B. WLAN oder Klimaanlagen) aufgewertet werden, um die allgemeine Zufriedenheit aller Gäste im Hotel zu steigern.","A Point of Interest (POI) is a public area in the hotel accessible to all guests, such as the lobby, corridors, or lounge areas. Unlike guest rooms, which are booked exclusively, POIs can be upgraded (e.g., with Wi-Fi or air conditioning) to increase the overall satisfaction of all guests in the hotel."
@@ -1534,93 +1520,93 @@ staff.skill.vigilance,Wachsamkeit,Vigilance
 staff.skill.fitness,Fitness,Fitness
 staff.skill.empathy,Empathie,Empathy
 staff.skill.treatment_quality,Behandlung,Treatment
-quest.build.bar.1.name,Baue eine Bar,Baue eine Bar
-quest.build.bar.1.desc,Errichte eine Bar (min. 1 Tresen und Platz zum Stehen).,Errichte eine Bar (min. 1 Tresen und Platz zum Stehen).
-quest.build.kitchen.1.name,Baue eine Küche,Baue eine Küche
-quest.build.kitchen.1.desc,Errichte eine funktionale Küche für dein Hotel.,Errichte eine funktionale Küche für dein Hotel.
-quest.build.restaurant.1.name,Baue ein Restaurant,Baue ein Restaurant
-quest.build.restaurant.1.desc,Biete deinen Gästen Tische und Stühle für Mahlzeiten.,Biete deinen Gästen Tische und Stühle für Mahlzeiten.
-quest.cook.25.name,Küchen-Lehrling,Küchen-Lehrling
-quest.cook.25.desc,Koche 25 Gerichte.,Koche 25 Gerichte.
-quest.cook.100.name,Küchen-Chef,Küchen-Chef
-quest.cook.100.desc,Koche 100 Gerichte.,Koche 100 Gerichte.
-quest.cook.250.name,Sterne-Koch,Sterne-Koch
-quest.cook.250.desc,Koche 250 Gerichte.,Koche 250 Gerichte.
-quest.serve.50.name,Guter Service,Guter Service
-quest.serve.50.desc,Erledige 50 Bestellungen im Restaurant oder an der Bar.,Erledige 50 Bestellungen im Restaurant oder an der Bar.
-quest.serve.100.name,Routinierter Service,Routinierter Service
-quest.serve.100.desc,Erledige 100 Bestellungen.,Erledige 100 Bestellungen.
-quest.serve.250.name,Perfekter Service,Perfekter Service
-quest.serve.250.desc,Erledige 250 Bestellungen.,Erledige 250 Bestellungen.
-quest.build.pool.name,Baue einen Pool,Baue einen Pool
-quest.build.pool.desc,Errichte einen Poolbereich für deine Gäste.,Errichte einen Poolbereich für deine Gäste.
-quest.build.gym.name,Baue ein Gym,Baue ein Gym
-quest.build.gym.desc,Errichte einen Fitnessraum mit Laufband oder Hantelbank.,Errichte einen Fitnessraum mit Laufband oder Hantelbank.
-quest.build.spa.name,Baue ein Spa,Baue ein Spa
-quest.build.spa.desc,Errichte einen Spa-Bereich mit Sauna oder Massage.,Errichte einen Spa-Bereich mit Sauna oder Massage.
-quest.use.pool.5.name,Kühles Nass,Kühles Nass
-quest.use.pool.5.desc,Lass 5 Gäste den Pool nutzen.,Lass 5 Gäste den Pool nutzen.
-quest.use.pool.25.name,Wasserratten,Wasserratten
-quest.use.pool.25.desc,Lass 25 Gäste den Pool nutzen.,Lass 25 Gäste den Pool nutzen.
-quest.use.pool.50.name,Schwimmfest,Schwimmfest
-quest.use.pool.50.desc,Lass 50 Gäste den Pool nutzen.,Lass 50 Gäste den Pool nutzen.
-quest.use.pool.100.name,Aqua-Aerobic,Aqua-Aerobic
-quest.use.pool.100.desc,Lass 100 Gäste den Pool nutzen.,Lass 100 Gäste den Pool nutzen.
-quest.use.gym.5.name,Aufwärmen,Aufwärmen
-quest.use.gym.5.desc,Lass 5 Gäste das Gym nutzen.,Lass 5 Gäste das Gym nutzen.
-quest.use.gym.25.name,Muskelkater,Muskelkater
-quest.use.gym.25.desc,Lass 25 Gäste das Gym nutzen.,Lass 25 Gäste das Gym nutzen.
-quest.use.gym.50.name,Pumpen,Pumpen
-quest.use.gym.50.desc,Lass 50 Gäste das Gym nutzen.,Lass 50 Gäste das Gym nutzen.
+quest.build.bar.1.name,Baue eine Bar,Build a Bar
+quest.build.bar.1.desc,Errichte eine Bar (min. 1 Tresen und Platz zum Stehen).,Construct a bar (min. 1 counter and space to stand).
+quest.build.kitchen.1.name,Baue eine Küche,Build a Kitchen
+quest.build.kitchen.1.desc,Errichte eine funktionale Küche für dein Hotel.,Construct a functional kitchen for your hotel.
+quest.build.restaurant.1.name,Baue ein Restaurant,Build a Restaurant
+quest.build.restaurant.1.desc,Biete deinen Gästen Tische und Stühle für Mahlzeiten.,Provide tables and chairs for your guests to eat.
+quest.cook.25.name,Küchen-Lehrling,Kitchen Apprentice
+quest.cook.25.desc,Koche 25 Gerichte.,Cook 25 dishes.
+quest.cook.100.name,Küchen-Chef,Head Chef
+quest.cook.100.desc,Koche 100 Gerichte.,Cook 100 dishes.
+quest.cook.250.name,Sterne-Koch,Star Chef
+quest.cook.250.desc,Koche 250 Gerichte.,Cook 250 dishes.
+quest.serve.50.name,Guter Service,Good Service
+quest.serve.50.desc,Erledige 50 Bestellungen im Restaurant oder an der Bar.,Fulfill 50 orders in the restaurant or bar.
+quest.serve.100.name,Routinierter Service,Experienced Service
+quest.serve.100.desc,Erledige 100 Bestellungen.,Fulfill 100 orders.
+quest.serve.250.name,Perfekter Service,Perfect Service
+quest.serve.250.desc,Erledige 250 Bestellungen.,Fulfill 250 orders.
+quest.build.pool.name,Baue einen Pool,Build a Pool
+quest.build.pool.desc,Errichte einen Poolbereich für deine Gäste.,Construct a pool area for your guests.
+quest.build.gym.name,Baue ein Gym,Build a Gym
+quest.build.gym.desc,Errichte einen Fitnessraum mit Laufband oder Hantelbank.,Construct a fitness room with a treadmill or weight bench.
+quest.build.spa.name,Baue ein Spa,Build a Spa
+quest.build.spa.desc,Errichte einen Spa-Bereich mit Sauna oder Massage.,Construct a spa area with sauna or massage.
+quest.use.pool.5.name,Kühles Nass,Cool Water
+quest.use.pool.5.desc,Lass 5 Gäste den Pool nutzen.,Have 5 guests use the pool.
+quest.use.pool.25.name,Wasserratten,Water Rats
+quest.use.pool.25.desc,Lass 25 Gäste den Pool nutzen.,Have 25 guests use the pool.
+quest.use.pool.50.name,Schwimmfest,Swim Festival
+quest.use.pool.50.desc,Lass 50 Gäste den Pool nutzen.,Have 50 guests use the pool.
+quest.use.pool.100.name,Aqua-Aerobic,Aqua Aerobics
+quest.use.pool.100.desc,Lass 100 Gäste den Pool nutzen.,Have 100 guests use the pool.
+quest.use.gym.5.name,Aufwärmen,Warm Up
+quest.use.gym.5.desc,Lass 5 Gäste das Gym nutzen.,Have 5 guests use the gym.
+quest.use.gym.25.name,Muskelkater,Sore Muscles
+quest.use.gym.25.desc,Lass 25 Gäste das Gym nutzen.,Have 25 guests use the gym.
+quest.use.gym.50.name,Pumpen,Pumping Iron
+quest.use.gym.50.desc,Lass 50 Gäste das Gym nutzen.,Have 50 guests use the gym.
 quest.use.gym.100.name,Ironman,Ironman
-quest.use.gym.100.desc,Lass 100 Gäste das Gym nutzen.,Lass 100 Gäste das Gym nutzen.
-quest.use.spa.5.name,Durchatmen,Durchatmen
-quest.use.spa.5.desc,Lass 5 Gäste das Spa nutzen.,Lass 5 Gäste das Spa nutzen.
-quest.use.spa.25.name,Entspannung pur,Entspannung pur
-quest.use.spa.25.desc,Lass 25 Gäste das Spa nutzen.,Lass 25 Gäste das Spa nutzen.
-quest.use.spa.50.name,Wellness-Oase,Wellness-Oase
-quest.use.spa.50.desc,Lass 50 Gäste das Spa nutzen.,Lass 50 Gäste das Spa nutzen.
+quest.use.gym.100.desc,Lass 100 Gäste das Gym nutzen.,Have 100 guests use the gym.
+quest.use.spa.5.name,Durchatmen,Take a Breath
+quest.use.spa.5.desc,Lass 5 Gäste das Spa nutzen.,Have 5 guests use the spa.
+quest.use.spa.25.name,Entspannung pur,Pure Relaxation
+quest.use.spa.25.desc,Lass 25 Gäste das Spa nutzen.,Have 25 guests use the spa.
+quest.use.spa.50.name,Wellness-Oase,Wellness Oasis
+quest.use.spa.50.desc,Lass 50 Gäste das Spa nutzen.,Have 50 guests use the spa.
 quest.use.spa.100.name,Nirvana,Nirvana
-quest.use.spa.100.desc,Lass 100 Gäste das Spa nutzen.,Lass 100 Gäste das Spa nutzen.
-quest.build.conference.name,Baue Konferenzraum,Baue Konferenzraum
-quest.build.conference.desc,Errichte einen Raum für Meetings und Vorträge.,Errichte einen Raum für Meetings und Vorträge.
-quest.use.conf.5.name,Kleines Meeting,Kleines Meeting
-quest.use.conf.5.desc,Habe 5 Konferenz-Teilnehmer.,Habe 5 Konferenz-Teilnehmer.
+quest.use.spa.100.desc,Lass 100 Gäste das Spa nutzen.,Have 100 guests use the spa.
+quest.build.conference.name,Baue Konferenzraum,Build Conference Room
+quest.build.conference.desc,Errichte einen Raum für Meetings und Vorträge.,Construct a room for meetings and lectures.
+quest.use.conf.5.name,Kleines Meeting,Small Meeting
+quest.use.conf.5.desc,Habe 5 Konferenz-Teilnehmer.,Host 5 conference attendees.
 quest.use.conf.25.name,Workshop,Workshop
-quest.use.conf.25.desc,Habe 25 Konferenz-Teilnehmer.,Habe 25 Konferenz-Teilnehmer.
+quest.use.conf.25.desc,Habe 25 Konferenz-Teilnehmer.,Host 25 conference attendees.
 quest.use.conf.50.name,Symposium,Symposium
-quest.use.conf.50.desc,Habe 50 Konferenz-Teilnehmer.,Habe 50 Konferenz-Teilnehmer.
-quest.use.conf.100.name,Großer Kongress,Großer Kongress
-quest.use.conf.100.desc,Habe 100 Konferenz-Teilnehmer.,Habe 100 Konferenz-Teilnehmer.
-quest.milestone.guests.100.name,100 Gäste,100 Gäste
-quest.milestone.guests.100.desc,Empfange insgesamt 100 Gäste.,Empfange insgesamt 100 Gäste.
-quest.milestone.guests.200.name,200 Gäste,200 Gäste
-quest.milestone.guests.200.desc,Empfange insgesamt 200 Gäste.,Empfange insgesamt 200 Gäste.
-quest.milestone.guests.500.name,500 Gäste,500 Gäste
-quest.milestone.guests.500.desc,Empfange insgesamt 500 Gäste.,Empfange insgesamt 500 Gäste.
-quest.milestone.guests.1000.name,1000 Gäste,1000 Gäste
-quest.milestone.guests.1000.desc,Empfange insgesamt 1000 Gäste.,Empfange insgesamt 1000 Gäste.
-quest.milestone.rev.2500.name,2.500€ Tagesumsatz,2.500€ Tagesumsatz
-quest.milestone.rev.2500.desc,Erreiche einen Tagesumsatz von 2.500€.,Erreiche einen Tagesumsatz von 2.500€.
-quest.milestone.rev.5000.name,5.000€ Tagesumsatz,5.000€ Tagesumsatz
-quest.milestone.rev.5000.desc,Erreiche einen Tagesumsatz von 5.000€.,Erreiche einen Tagesumsatz von 5.000€.
-quest.milestone.rev.7500.name,7.500€ Tagesumsatz,7.500€ Tagesumsatz
-quest.milestone.rev.7500.desc,Erreiche einen Tagesumsatz von 7.500€.,Erreiche einen Tagesumsatz von 7.500€.
-quest.milestone.rev.10000.name,10.000€ Tagesumsatz,10.000€ Tagesumsatz
-quest.milestone.rev.10000.desc,Erreiche einen Tagesumsatz von 10.000€.,Erreiche einen Tagesumsatz von 10.000€.
-quest.milestone.sat.75.name,75% Zufriedenheit,75% Zufriedenheit
-quest.milestone.sat.75.desc,Beende einen Tag mit min. 75% durchschnittlicher Gästezufriedenheit.,Beende einen Tag mit min. 75% durchschnittlicher Gästezufriedenheit.
-quest.milestone.sat.90.name,90% Zufriedenheit,90% Zufriedenheit
-quest.milestone.sat.90.desc,Beende einen Tag mit min. 90% durchschnittlicher Gästezufriedenheit.,Beende einen Tag mit min. 90% durchschnittlicher Gästezufriedenheit.
-quest.milestone.sat.100.name,100% Zufriedenheit,100% Zufriedenheit
-quest.milestone.sat.100.desc,Beende einen Tag mit 100% durchschnittlicher Gästezufriedenheit.,Beende einen Tag mit 100% durchschnittlicher Gästezufriedenheit.
-quest.milestone.occupancy.name,Volle Hütte,Volle Hütte
-quest.milestone.occupancy.desc,Erreiche 100% Zimmerbelegung (alle verfügbaren Zimmer sind gebucht).,Erreiche 100% Zimmerbelegung (alle verfügbaren Zimmer sind gebucht).
-room_category.milestones,Meilensteine,Meilensteine
-quest.guest.vip.10.name,Roter Teppich,Roter Teppich
-quest.guest.vip.10.desc,Beherberge insgesamt 10 VIP-Gäste.,Beherberge insgesamt 10 VIP-Gäste.
-quest.guest.vip.25.name,Sterne-Status,Sterne-Status
-quest.guest.vip.25.desc,Beherberge insgesamt 25 VIP-Gäste.,Beherberge insgesamt 25 VIP-Gäste.
+quest.use.conf.50.desc,Habe 50 Konferenz-Teilnehmer.,Host 50 conference attendees.
+quest.use.conf.100.name,Großer Kongress,Major Congress
+quest.use.conf.100.desc,Habe 100 Konferenz-Teilnehmer.,Host 100 conference attendees.
+quest.milestone.guests.100.name,100 Gäste,100 Guests
+quest.milestone.guests.100.desc,Empfange insgesamt 100 Gäste.,Receive a total of 100 guests.
+quest.milestone.guests.200.name,200 Gäste,200 Guests
+quest.milestone.guests.200.desc,Empfange insgesamt 200 Gäste.,Receive a total of 200 guests.
+quest.milestone.guests.500.name,500 Gäste,500 Guests
+quest.milestone.guests.500.desc,Empfange insgesamt 500 Gäste.,Receive a total of 500 guests.
+quest.milestone.guests.1000.name,1000 Gäste,1000 Guests
+quest.milestone.guests.1000.desc,Empfange insgesamt 1000 Gäste.,Receive a total of 1000 guests.
+quest.milestone.rev.2500.name,2.500€ Tagesumsatz,"2,500€ Daily Revenue"
+quest.milestone.rev.2500.desc,Erreiche einen Tagesumsatz von 2.500€.,"Achieve a daily revenue of 2,500€."
+quest.milestone.rev.5000.name,5.000€ Tagesumsatz,"5,000€ Daily Revenue"
+quest.milestone.rev.5000.desc,Erreiche einen Tagesumsatz von 5.000€.,"Achieve a daily revenue of 5,000€."
+quest.milestone.rev.7500.name,7.500€ Tagesumsatz,"7,500€ Daily Revenue"
+quest.milestone.rev.7500.desc,Erreiche einen Tagesumsatz von 7.500€.,"Achieve a daily revenue of 7,500€."
+quest.milestone.rev.10000.name,10.000€ Tagesumsatz,"10,000€ Daily Revenue"
+quest.milestone.rev.10000.desc,Erreiche einen Tagesumsatz von 10.000€.,"Achieve a daily revenue of 10,000€."
+quest.milestone.sat.75.name,75% Zufriedenheit,75% Satisfaction
+quest.milestone.sat.75.desc,Beende einen Tag mit min. 75% durchschnittlicher Gästezufriedenheit.,End a day with at least 75% average guest satisfaction.
+quest.milestone.sat.90.name,90% Zufriedenheit,90% Satisfaction
+quest.milestone.sat.90.desc,Beende einen Tag mit min. 90% durchschnittlicher Gästezufriedenheit.,End a day with at least 90% average guest satisfaction.
+quest.milestone.sat.100.name,100% Zufriedenheit,100% Satisfaction
+quest.milestone.sat.100.desc,Beende einen Tag mit 100% durchschnittlicher Gästezufriedenheit.,End a day with 100% average guest satisfaction.
+quest.milestone.occupancy.name,Volle Hütte,Full House
+quest.milestone.occupancy.desc,Erreiche 100% Zimmerbelegung (alle verfügbaren Zimmer sind gebucht).,Reach 100% room occupancy (all available rooms are booked).
+room_category.milestones,Meilensteine,Milestones
+quest.guest.vip.10.name,Roter Teppich,Red Carpet
+quest.guest.vip.10.desc,Beherberge insgesamt 10 VIP-Gäste.,Host a total of 10 VIP guests.
+quest.guest.vip.25.name,Sterne-Status,Star Status
+quest.guest.vip.25.desc,Beherberge insgesamt 25 VIP-Gäste.,Host a total of 25 VIP guests.
 roomdef.name.long.vending_machine,Getränkeautomat,Vending Machine
 roomdef.name.short.vending_machine,Automat,Vending
 roomdef.name.long.lobby,Lobby,Lobby
@@ -1762,3 +1748,65 @@ settings.controls.bind_title,Taste belegen,Bind Key
 settings.controls.bind_desc,Bitte drücke jetzt eine Taste für:\n%s\n\n(ESC zum Abbrechen),Please press a key for:\n%s\n\n(ESC to cancel)
 settings.controls.collision_title,Taste bereits belegt,Key already bound
 settings.controls.collision_desc,Die Taste ist bereits für '%s' belegt. Überschreiben?,The key is already bound to '%s'. Overwrite?
+tutorial.room_pool_small.title,Hallenbad,Indoor Pool
+tutorial.room_pool_small.desc,"Ein erfrischendes Hallenbad zur Entspannung und körperlichen Ertüchtigung.
+
+Funktion: Bietet Gästen (insbesondere Familien) eine Möglichkeit, ihre Bedürfnisse nach Erholung zu stillen. Erfordert zwingend einen Bademeister (Personal), um zu funktionieren.
+
+Kosten: 8.000 €
+
+Voraussetzungen: Techtree W1.2 (Hallenbad)","A refreshing indoor pool for relaxation and physical exercise.
+
+Function: Offers guests (especially families) a way to satisfy their need for recreation. Strictly requires a lifeguard (Staff) to function.
+
+Cost: 8,000 €
+
+Requirements: Techtree W1.2 (Indoor Pool)"
+tutorial.room_spa_small.title,Wellness-Oase,Wellness Oasis
+tutorial.room_spa_small.desc,"Eine Wellness-Oase für maximale Entspannung und Luxus.
+
+Funktion: Zieht besonders Paare und VIPs an, die nach Erholung suchen. Ein Spa lindert den Stress der Gäste und erhöht ihre Zufriedenheit. Erfordert eine Spa-Fachkraft (Personal), um zu funktionieren.
+
+Kosten: 12.000 €
+
+Voraussetzungen: Techtree W1.3 (Wellness-Oase)","A wellness oasis for maximum relaxation and luxury.
+
+Function: Particularly attracts couples and VIPs looking for recreation. A spa relieves guests' stress and increases their satisfaction. Requires a wellness counselor (Staff) to function.
+
+Cost: 12,000 €
+
+Requirements: Techtree W1.3 (Wellness Oasis)"
+tutorial.room_gym_small.title,Fitnessstudio,Fitness Studio
+tutorial.room_gym_small.desc,"Ein voll ausgestattetes Fitnessstudio für sportliche Gäste.
+
+Funktion: Ideal für aktive Gäste, die ihr Trainingsprogramm auch im Urlaub nicht unterbrechen wollen. Gäste nutzen die Geräte selbstständig, es wird kein spezielles Personal benötigt.
+
+Kosten: 4.500 €
+
+Voraussetzungen: Techtree W1.1 (Basis-Wellness)","A fully equipped fitness studio for athletic guests.
+
+Function: Ideal for active guests who do not want to interrupt their workout routine while on vacation. Guests use the equipment independently; no special staff is required.
+
+Cost: 4,500 €
+
+Requirements: Techtree W1.1 (Basic Wellness)"
+tutorial.room_conference_small.title,Konferenzraum,Conference Room
+tutorial.room_conference_small.desc,"Ein repräsentativer Raum für geschäftliche Tagungen und Vorträge.
+
+Funktion: Schaltet lukrative Firmen-Events frei. Tagungsgäste buchen keine Zimmer, sondern besuchen tagsüber die Konferenz, hören Vorträge und konsumieren in den Pausen Speisen und Getränke in deinen Gastro-Einrichtungen.
+
+Kosten: 10.000 €
+
+Voraussetzungen: Techtree P1.2 (Tagungsräume)","A representative room for business meetings and lectures.
+
+Function: Unlocks lucrative corporate events. Conference guests do not book rooms; instead, they attend the conference during the day, listen to lectures, and consume food and drinks in your gastronomy facilities during breaks.
+
+Cost: 10,000 €
+
+Requirements: Techtree P1.2 (Conference Rooms)"
+codex.guest_inspector.title,Gourmet-Inspektor,Gourmet Inspector
+codex.guest_inspector.desc,"Ein verdeckter Prüfer, der inkognito das Hotel besucht. Er bewertet die Qualität der Gastronomie, die Sauberkeit und den Gesamtzustand des Hotels. Ist er zufrieden, verleiht er einen begehrten Stern, was den Ruf deines Hotels drastisch verbessert. Ist er enttäuscht, kann er Sterne auch wieder aberkennen!\n\nEr verhält sich wie ein normaler Gast, nutzt alle Einrichtungen und checkt nach einigen Tagen wieder aus.","An undercover reviewer who visits the hotel incognito. He evaluates the quality of gastronomy, cleanliness, and the overall condition of the hotel. If satisfied, he awards a coveted star, which drastically improves your hotel's reputation. If disappointed, he can revoke stars!\n\nHe behaves like a normal guest, uses all facilities, and checks out after a few days."
+tutorial.hotel_overview.title,Hotel-Übersicht,Hotel Overview
+tutorial.hotel_overview.desc,"Die Hotel-Übersicht (F9) ist dein zentrales Dashboard.\n\nHier siehst du alle wichtigen Statistiken deines Hotels auf einen Blick. Dazu gehören die aktuelle Zufriedenheit deiner Gäste, die Sauberkeit, Einnahmen und Ausgaben, sowie eine Zusammenfassung deines Personals und der Zimmer.\nNutze diese Ansicht regelmäßig, um Probleme frühzeitig zu erkennen.","The Hotel Overview (F9) is your central dashboard.\n\nHere you can see all important statistics of your hotel at a glance. This includes current guest satisfaction, cleanliness, income and expenses, as well as a summary of your staff and rooms.\nUse this view regularly to spot problems early."
+tutorial.overlays.title,Daten-Overlays,Data Overlays
+tutorial.overlays.desc,"Am linken Bildschirmrand findest du die Overlay-Leiste.\n\nMit diesen Schaltern kannst du dir wertvolle Informationen direkt in der Spielwelt einblenden lassen.\nLass dir beispielsweise anzeigen, welche Gäste aktuell unzufrieden sind, wo dein Personal gerade arbeitet, welche Räume dreckig sind oder wo sich Schmutz ansammelt. Die Overlays sind ein wichtiges Analyse-Werkzeug!","On the left edge of the screen you will find the Overlay bar.\n\nThese switches allow you to display valuable information directly in the game world.\nFor example, you can see which guests are currently dissatisfied, where your staff is working, which rooms are dirty or where dirt is accumulating. The overlays are an important analysis tool!"

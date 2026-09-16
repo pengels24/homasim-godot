@@ -67,6 +67,18 @@
             "image": "res://assets/images/tutorials/tutorial_sim_browser.png"
         },
         {
+            "id": "hotel_overview",
+            "title_key": "tutorial.hotel_overview.title",
+            "desc_key": "tutorial.hotel_overview.desc",
+            "image": "res://assets/images/tutorials/tutorial_finances.png"
+        },
+        {
+            "id": "overlays",
+            "title_key": "tutorial.overlays.title",
+            "desc_key": "tutorial.overlays.desc",
+            "image": "res://assets/images/tutorials/tutorial_build_mode.png"
+        },
+        {
             "id": "tip_130_exp",
             "category": "tipps",
             "title_key": "tutorial.tip_130_exp.title",
@@ -151,6 +163,13 @@
             "category": "codex",
             "title_key": "codex.guest_vip.title",
             "desc_key": "codex.guest_vip.desc",
+            "image": "res://assets/icons/guests/user-star.svg"
+        },
+        {
+            "id": "guest_inspector",
+            "category": "codex",
+            "title_key": "codex.guest_inspector.title",
+            "desc_key": "codex.guest_inspector.desc",
             "image": "res://assets/icons/guests/user-star.svg"
         },
         {

@@ -909,14 +909,21 @@ func open_hotel_overview() -> void:
 	else:
 		_standard_modal.open(GameState.T("modal.hotel_overview.title"))
 
+	if is_instance_valid(TutorialManager):
+		TutorialManager.trigger("hotel_overview")
 
 # =============================================================================
+
 # Overlay Logic
 # =============================================================================
 
 func _on_overlay_changed(type: String) -> void:
 	_current_overlay = type
 	_update_overlays()
+	
+	if type != "none" and is_instance_valid(TutorialManager):
+		TutorialManager.trigger("overlays")
+		
 	if is_instance_valid(_hud) and _hud.has_method("set_overlay_legend_visuals"):
 		_hud.set_overlay_legend_visuals(type)
 

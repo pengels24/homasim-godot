@@ -103,6 +103,8 @@ var _poi_rest_until: int = 0
 var _conference_break_poi_key: String = ""
 ## True wenn Gast gerade aus Konferenz-Pause zurueckkehrt (verhindert doppelte EXP)
 var _is_returning_from_break: bool = false
+## ANG-314: Verhindert doppelte Bezahlung/EXP beim Restore aus Savegame
+var _restoring_from_save: bool = false
 
 signal sig_poi_income(amount: int, world_pos: Vector2)
 
@@ -1171,7 +1173,8 @@ func _on_poi_arrived() -> void:
 			party.modify_satisfaction(bonus)
 
 	# Einnahmen buchen (falls Eintritt/Basis-Kosten existieren)
-	if income > 0:
+	# NICHT beim Restore aus Savegame – Gast hat bereits bezahlt!
+	if income > 0 and not _restoring_from_save:
 		_guest_member.spending_budget = max(0, _guest_member.spending_budget - income)
 		FinanceManager.add_transaction(
 			income, "gastro",
@@ -1183,8 +1186,8 @@ func _on_poi_arrived() -> void:
 			spawn_pos = room_node.global_position + Vector2(sz.x * 16.0, sz.y * 16.0)
 		sig_poi_income.emit(income, spawn_pos)
 
-	# EXP und Quest-Trigger NUR beim echten Erstbesuch (nicht bei Pause-Rueckkehr)
-	if was_fresh_claim:
+	# EXP und Quest-Trigger NUR beim echten Erstbesuch (nicht bei Pause-Rueckkehr oder Restore)
+	if was_fresh_claim and not _restoring_from_save:
 		var visit_exp: int = poi_def.get("visit_exp", 0)
 		# Event-Gaeste zahlen keinen visit_exp - analog zu income = 0 (Bezahlung via Event-Budget)
 		if is_instance_valid(my_party) and my_party.get("event_poi_id") != "":
@@ -1395,6 +1398,81 @@ func send_back_to_room() -> void:
 		_has_claimed_seat = false
 		_walk_to_room(_target_room, State.IN_ROOM)
 
+
+
+# =============================================================================
+# ANG-314: Serialisierung des physischen Actor-Zustands für Save/Load.
+# =============================================================================
+
+## Gibt den aktuellen physischen Zustand zurück (wird von GuestController
+## vor dem Speichern aufgerufen und in GuestParty.actor_states abgelegt).
+func get_save_state() -> Dictionary:
+	# Übergangs-States werden auf stabile States gemappt.
+	var save_state: int = current_state
+	match current_state:
+		State.WALKING, State.STUDYING_MENU:
+			# Gast war unterwegs oder schaut Menü: beim Laden im Zimmer starten
+			save_state = State.IN_ROOM
+		State.WAITING_FOR_FOOD:
+			# Bestellung wird nach Load neu aufgegeben: als IN_POI speichern
+			save_state = State.IN_POI
+	return {
+		"pos_x": global_position.x,
+		"pos_y": global_position.y,
+		"state": save_state,
+		"action_timer": _action_timer,
+		"current_poi_id": _current_poi_id,
+		"poi_rest_until": _poi_rest_until,
+		"checkin_poi_block_until": _checkin_poi_block_until,
+		"is_checkout_walk": _is_checkout_walk,
+	}
+
+
+## Stellt den physischen Zustand nach dem Laden wieder her.
+## Wird von GuestController.spawn_active_guests() aufgerufen statt start_checkin().
+func restore_save_state(state_data: Dictionary) -> void:
+	# ANG-314 FIX: _room_door_world Reset damit _get_logical_start_tile()
+	# nicht den alten gecachten Door-Tile als Start nutzt.
+	_room_door_world = Vector2.INF
+
+	_poi_rest_until = int(state_data.get("poi_rest_until", 0))
+	_checkin_poi_block_until = int(state_data.get("checkin_poi_block_until", 0))
+	_is_checkout_walk = state_data.get("is_checkout_walk", false)
+
+	var saved_state: int = int(state_data.get("state", State.IN_ROOM))
+	match saved_state:
+		State.IN_ROOM, State.SITTING, State.SLEEPING:
+			if is_instance_valid(_target_room):
+				# Hotel-Gast: setup() hat ihn korrekt an der Zimmertür platziert.
+				# Keine Position-Override nötig – Pathfinding funktioniert von dort.
+				pass
+			else:
+				# TG-Gast (kein Zimmer): gespeicherte Position restoren,
+				# sonst landen sie bei (0,0) außerhalb der Map.
+				var pos := Vector2(state_data.get("pos_x", 0.0), state_data.get("pos_y", 0.0))
+				global_position = pos
+			_change_state(State.IN_ROOM)
+			_action_timer = randf_range(2.0, 6.0)
+		State.IN_POI, State.EATING:
+			# POI-Gäste: Position restoren (sie waren INSIDE POI = kein Solid-Tile Problem)
+			var pos := Vector2(state_data.get("pos_x", 0.0), state_data.get("pos_y", 0.0))
+			global_position = pos
+			_current_poi_id = state_data.get("current_poi_id", "")
+			_has_claimed_seat = true  # Sitz war bereits geclaimed – kein Neuanspruch nötig
+			_restoring_from_save = true  # Blockiert Payment + EXP in _on_poi_arrived
+			_change_state(State.IN_POI)
+			_restoring_from_save = false
+			_action_timer = 1.0
+		State.AWAITING_CHECKOUT:
+			# Checkout-Gäste: Position restoren (sie waren in der Lobby = walkable)
+			var pos := Vector2(state_data.get("pos_x", 0.0), state_data.get("pos_y", 0.0))
+			global_position = pos
+			_change_state(State.AWAITING_CHECKOUT)
+			_current_poi_id = "lobby"
+			_action_timer = randf_range(1.0, 3.0)
+		_:
+			_change_state(State.IN_ROOM)
+			_action_timer = randf_range(2.0, 6.0)
 
 
 # =============================================================================
@@ -1786,12 +1864,19 @@ func _get_logical_start_tile() -> Vector2i:
 			start_tile = poi_room.get_target_tile(_map_grid)
 			
 	elif _current_poi_id.is_empty() and (current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING or current_state == State.IDLE):
-		if _room_door_world != Vector2.INF:
-			start_tile = _map_grid.world_to_tile(_room_door_world)
-		elif is_instance_valid(_target_room):
-			var t_exit_tile = _get_room_exit_tile(_target_room)
-			_room_door_world = _map_grid.tile_to_world(t_exit_tile)
-			start_tile = t_exit_tile
+		# ANG-314 FIX: Nur Room-Door-Logik anwenden wenn Gast tatsächlich im Raum steht.
+		# Auf Korridor (walkable tile) direkte Position verwenden.
+		var is_on_solid: bool = false
+		if is_instance_valid(_map_grid) and _map_grid.astar.is_in_boundsv(start_tile):
+			is_on_solid = _map_grid.astar.is_point_solid(start_tile)
+		if is_on_solid:
+			if _room_door_world != Vector2.INF:
+				start_tile = _map_grid.world_to_tile(_room_door_world)
+			elif is_instance_valid(_target_room):
+				var t_exit_tile = _get_room_exit_tile(_target_room)
+				_room_door_world = _map_grid.tile_to_world(t_exit_tile)
+				start_tile = t_exit_tile
+		# else: start_tile = world_to_tile(global_position) – korrekt für Flur
 	
 	var result := _get_closest_walkable_tile(start_tile)
 	

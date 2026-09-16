@@ -4,13 +4,15 @@ class_name IngameSaveController
 var _hotel: Dictionary
 var _guest_mgr: GuestManager
 var _map_grid: Node2D
+var _staff_controller: Node = null # ANG-314
 var _autosave_timer: Timer = null
 
 # =============================================================================
-func setup(hotel: Dictionary, guest_mgr: GuestManager, map_grid: Node2D = null) -> void:
+func setup(hotel: Dictionary, guest_mgr: GuestManager, map_grid: Node2D = null, staff_controller: Node = null) -> void:
 	_hotel = hotel
 	_guest_mgr = guest_mgr
 	_map_grid = map_grid
+	_staff_controller = staff_controller # ANG-314
 
 	_setup_autosave_timer()
 
@@ -30,6 +32,11 @@ func save_progress(game_time_min: int) -> void:
 	if hotel_id < 0 and hotel_id != GameState.TUTORIAL_HOTEL_ID:
 		return
 
+	# ANG-314: Physische Zustände vor dem Serialisieren einsammeln
+	if is_instance_valid(_staff_controller) and _staff_controller.has_method("capture_actor_states"):
+		_staff_controller.capture_actor_states()
+	# (Gast-States werden intern von GuestManager.to_save_dict() via _guest_controller geholt)
+
 	var save_data := {
 		"day": _hotel.get("day", 1),
 		"money": _hotel.get("money", 0),
@@ -38,7 +45,9 @@ func save_progress(game_time_min: int) -> void:
 		"rep": _hotel.get("rep", 500),       # ANG-fix: fehlte komplett
 		"game_time": game_time_min,
 		"guest_data": _guest_mgr.to_save_dict(),
-		"event_data": EventManager.to_save_dict() if EventManager else {}
+		"event_data": EventManager.to_save_dict() if EventManager else {},
+		"task_data": TaskManager.to_save_dict() if TaskManager else {},    # ANG-314
+		"gastro_data": GastroManager.to_save_dict() if GastroManager else {}, # ANG-314
 	}
 
 	for key: String in _hotel:

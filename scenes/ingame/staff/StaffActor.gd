@@ -136,6 +136,53 @@ func despawn() -> void:
 
 	queue_free()
 
+
+# =============================================================================
+# ANG-314: Serialisierung des physischen Staff-Zustands für Save/Load.
+# =============================================================================
+
+## Gibt den aktuellen physischen Zustand zurück.
+## Wird von StaffController.capture_actor_states() vor dem Speichern aufgerufen.
+func get_save_state() -> Dictionary:
+	return {
+		"pos_x": global_position.x,
+		"pos_y": global_position.y,
+		"state": _state,
+		"work_timer": _work_timer,
+		"current_task_id": _current_task.get("id", ""),
+	}
+
+
+## Stellt den physischen Zustand nach dem Laden wieder her.
+## Wird von StaffController._spawn_actor() aufgerufen wenn physical_state gesetzt ist.
+## HINWEIS: Position wird NICHT restored – configure() platziert Staff bereits korrekt
+## im Staff-Raum mit _current_room gesetzt. Nur State + Task werden restored.
+func restore_save_state(state_data: Dictionary) -> void:
+	# Kein global_position Override – configure() hat bereits korrekte Position + _current_room gesetzt.
+	# Frühere Versuche die gespeicherte Position zu nutzen führten durch NavBlocker-Solid-Tiles
+	# zu kaputtem Pathfinding (wrong _current_room vs actual position).
+	_work_timer = 0.0  # Immer frisch – verhindert sofortigen Break-Trigger nach Load
+	var restored_state: String = state_data.get("state", "idle")
+	# "working"-State nur wiederherstellen wenn TaskManager den Task noch kennt
+	if restored_state == "working":
+		var task_id: String = state_data.get("current_task_id", "")
+		var found_task: Dictionary = {}
+		for t in TaskManager._tasks:
+			if t.get("id", "") == task_id:
+				found_task = t
+				break
+		if not found_task.is_empty():
+			_current_task = found_task
+			_current_task["assigned_to"] = get_staff_id()
+			_current_task["status"] = "assigned"
+			_set_state("working")
+		else:
+			_set_state("idle")
+	else:
+		_set_state("idle")
+	# Kurze Denkpause nach Restore
+	_think_timer = 2.0
+
 func _physics_process(delta: float) -> void:
 	if TimeManager.is_paused():
 		return
@@ -710,7 +757,31 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 		start_tile = _map_grid.call("world_to_tile", global_position)
 		
 	var end_tile = room.get_target_tile(_map_grid)
-	
+
+	# ANG-314 FIX: start_tile auf walkable korrigieren wenn Staff auf Solid-Tile steht
+	# (z.B. mitten im Raum-NavBlocker). Sonst findet get_path_between_tiles keinen Pfad
+	# → Emergency-Fallback → Teleport durch Wände.
+	if _map_grid.astar.is_in_boundsv(start_tile) and _map_grid.astar.is_point_solid(start_tile):
+		var fixed: bool = false
+		for d in [Vector2i(1,0), Vector2i(-1,0), Vector2i(0,1), Vector2i(0,-1),
+				  Vector2i(1,1), Vector2i(-1,-1), Vector2i(1,-1), Vector2i(-1,1)]:
+			var n: Vector2i = start_tile + d
+			if _map_grid.astar.is_in_boundsv(n) and not _map_grid.astar.is_point_solid(n):
+				start_tile = n
+				fixed = true
+				break
+		if not fixed:
+			# Noch solid → end_tile als Fallback (löst start==end unten)
+			start_tile = end_tile
+
+	# ANG-314 FIX: Wenn start == end ist der Staff bereits in/an seinem Zielraum.
+	# Emergency-Fallback verhindern → direkt als „angekommen" behandeln.
+	if start_tile == end_tile:
+		_current_room = room
+		_arriving_room = null
+		_think_timer = 1.5
+		return
+
 	if room.has_method("get_room_entry_pos"):
 		_room_entry_pos = room.get_room_entry_pos(_map_grid)
 	else:
@@ -752,10 +823,13 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 		else:
 			_target_world_pos = global_position
 	else:
-		# var astar = _map_grid.get("astar") if _map_grid else null
-		# var s_solid = astar.is_point_solid(start_tile) if astar else false
-		# var e_solid = astar.is_point_solid(end_tile) if astar else false
-		# print("[StaffActor] _start_path_to_room FAILED: start=", start_tile, " (solid:", s_solid, ") end=", end_tile, " (solid:", e_solid, ") room=", room.name if room else "null")
+		var astar = _map_grid.get("astar") if _map_grid else null
+		var s_solid: bool = false
+		var e_solid: bool = false
+		if astar:
+			s_solid = astar.is_point_solid(start_tile)
+			e_solid = astar.is_point_solid(end_tile)
+		print("[StaffActor] PATH FAILED: start=", start_tile, " (solid:", s_solid, ") end=", end_tile, " (solid:", e_solid, ") room=", room.name if room else "null", " pos=", global_position)
 		if is_instance_valid(_debug_line):
 			_debug_line.default_color = Color.RED
 			var e_world = _map_grid.call("tile_to_world", end_tile)

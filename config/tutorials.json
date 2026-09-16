@@ -1,253 +1,253 @@
 {
-    "tutorials": [
-        {
-            "id": "welcome",
-            "title_key": "tutorial.welcome.title",
-            "desc_key": "tutorial.welcome.desc",
-            "image": "res://assets/images/tutorials/tutorial_build_mode.png"
-        },
-        {
-            "id": "gastro",
-            "title_key": "tutorial.gastro.title",
-            "desc_key": "tutorial.gastro.desc",
-            "image": "res://assets/images/tutorials/tutorial_reception.png"
-        },
-        {
-            "id": "build_mode",
-            "title_key": "tutorial.build_mode.title",
-            "desc_key": "tutorial.build_mode.desc",
-            "image": "res://assets/images/tutorials/tutorial_build_mode.png"
-        },
-        {
-            "id": "tech_tree",
-            "title_key": "tutorial.tech_tree.title",
-            "desc_key": "tutorial.tech_tree.desc",
-            "image": "res://assets/images/tutorials/tutorial_tech_tree.png"
-        },
-        {
-            "id": "staff",
-            "title_key": "tutorial.staff.title",
-            "desc_key": "tutorial.staff.desc",
-            "image": "res://assets/images/tutorials/tutorial_staff.png"
-        },
-        {
-            "id": "quest_book",
-            "title_key": "tutorial.questbook.title",
-            "desc_key": "tutorial.questbook.desc",
-            "image": "res://assets/images/tutorials/tutorial_questbook.png"
-        },
-        {
-            "id": "reception",
-            "title_key": "tutorial.reception.title",
-            "desc_key": "tutorial.reception.desc",
-            "image": "res://assets/images/tutorials/tutorial_reception.png"
-        },
-        {
-            "id": "guest_list",
-            "title_key": "tutorial.guest_list.title",
-            "desc_key": "tutorial.guest_list.desc",
-            "image": "res://assets/images/tutorials/tutorial_guest_list.png"
-        },
-        {
-            "id": "room_list",
-            "title_key": "tutorial.room_list.title",
-            "desc_key": "tutorial.room_list.desc",
-            "image": "res://assets/images/tutorials/tutorial_room_list.png"
-        },
-        {
-            "id": "finances",
-            "title_key": "tutorial.finances.title",
-            "desc_key": "tutorial.finances.desc",
-            "image": "res://assets/images/tutorials/tutorial_finances.png"
-        },
-        {
-            "id": "sim_browser",
-            "title_key": "tutorial.sim_browser.title",
-            "desc_key": "tutorial.sim_browser.desc",
-            "image": "res://assets/images/tutorials/tutorial_sim_browser.png"
-        },
-        {
-            "id": "hotel_overview",
-            "title_key": "tutorial.hotel_overview.title",
-            "desc_key": "tutorial.hotel_overview.desc",
-            "image": "res://assets/images/tutorials/tutorial_finances.png"
-        },
-        {
-            "id": "overlays",
-            "title_key": "tutorial.overlays.title",
-            "desc_key": "tutorial.overlays.desc",
-            "image": "res://assets/images/tutorials/tutorial_build_mode.png"
-        },
-        {
-            "id": "tip_130_exp",
-            "category": "tipps",
-            "title_key": "tutorial.tip_130_exp.title",
-            "desc_key": "tutorial.tip_130_exp.desc"
-        },
-        {
-            "id": "tip_fast_forward",
-            "category": "tipps",
-            "title_key": "tutorial.tip_fast_forward.title",
-            "desc_key": "tutorial.tip_fast_forward.desc"
-        },
-        {
-            "id": "gourmet_kitchen",
-            "category": "tipps",
-            "title_key": "tutorial.gourmet_kitchen.title",
-            "desc_key": "tutorial.gourmet_kitchen.desc"
-        },
-        {
-            "id": "events",
-            "category": "tipps",
-            "title_key": "tutorial.events.title",
-            "desc_key": "tutorial.events.desc"
-        },
-        {
-            "id": "guest_single",
-            "category": "codex",
-            "title_key": "codex.guest_single.title",
-            "desc_key": "codex.guest_single.desc",
-            "image": "res://assets/guesttypes/gt-icon-single.aseprite"
-        },
-        {
-            "id": "guest_couple",
-            "category": "codex",
-            "title_key": "codex.guest_couple.title",
-            "desc_key": "codex.guest_couple.desc",
-            "image": "res://assets/guesttypes/gt-icon-couple.aseprite"
-        },
-        {
-            "id": "guest_business",
-            "category": "codex",
-            "title_key": "codex.guest_business.title",
-            "desc_key": "codex.guest_business.desc",
-            "image": "res://assets/guesttypes/gt-icon-business.aseprite"
-        },
-        {
-            "id": "guest_family",
-            "category": "codex",
-            "title_key": "codex.guest_family.title",
-            "desc_key": "codex.guest_family.desc",
-            "image": "res://assets/guesttypes/gt-icon-family.aseprite"
-        },
-        {
-            "id": "guest_budget",
-            "category": "codex",
-            "title_key": "codex.guest_budget.title",
-            "desc_key": "codex.guest_budget.desc",
-            "image": "res://assets/guesttypes/gt-icon-budget.aseprite"
-        },
-        {
-            "id": "guest_nomad",
-            "category": "codex",
-            "title_key": "codex.guest_nomad.title",
-            "desc_key": "codex.guest_nomad.desc",
-            "image": "res://assets/icons/guests/laptop-minimal.svg"
-        },
-        {
-            "id": "guest_event",
-            "category": "codex",
-            "title_key": "codex.guest_event.title",
-            "desc_key": "codex.guest_event.desc",
-            "image": "res://assets/guesttypes/gt-icon-event.aseprite"
-        },
-        {
-            "id": "guest_luxury",
-            "category": "codex",
-            "title_key": "codex.guest_luxury.title",
-            "desc_key": "codex.guest_luxury.desc",
-            "image": "res://assets/icons/guests/user-star.svg"
-        },
-        {
-            "id": "guest_vip",
-            "category": "codex",
-            "title_key": "codex.guest_vip.title",
-            "desc_key": "codex.guest_vip.desc",
-            "image": "res://assets/icons/guests/user-star.svg"
-        },
-        {
-            "id": "guest_inspector",
-            "category": "codex",
-            "title_key": "codex.guest_inspector.title",
-            "desc_key": "codex.guest_inspector.desc",
-            "image": "res://assets/icons/guests/user-star.svg"
-        },
-        {
-            "id": "guest_groups",
-            "category": "codex",
-            "title_key": "codex.guest_groups.title",
-            "desc_key": "codex.guest_groups.desc",
-            "image": "res://assets/icons/guests/users.svg"
-        },
-        {
-            "id": "room_lobby",
-            "category": "rooms",
-            "title_key": "tutorial.room_lobby.title",
-            "desc_key": "tutorial.room_lobby.desc",
-            "image": "res://assets/roomtypes/lobby.aseprite"
-        },
-        {
-            "id": "room_bed_standard",
-            "category": "rooms",
-            "title_key": "tutorial.room_bed_standard.title",
-            "desc_key": "tutorial.room_bed_standard.desc",
-            "image": "res://assets/roomtypes/bed_standard.aseprite"
-        },
-        {
-            "id": "room_bed_double",
-            "category": "rooms",
-            "title_key": "tutorial.room_bed_double.title",
-            "desc_key": "tutorial.room_bed_double.desc",
-            "image": "res://assets/roomtypes/bed_double_landscape.aseprite"
-        },
-        {
-            "id": "room_bed_family",
-            "category": "rooms",
-            "title_key": "tutorial.room_bed_family.title",
-            "desc_key": "tutorial.room_bed_family.desc",
-            "image": "res://assets/roomtypes/bed_family.aseprite"
-        },
-        {
-            "id": "room_bed_superior",
-            "category": "rooms",
-            "title_key": "tutorial.room_bed_superior.title",
-            "desc_key": "tutorial.room_bed_superior.desc",
-            "image": "res://assets/roomtypes/bed_superior.aseprite"
-        },
-        {
-            "id": "room_bar",
-            "category": "rooms",
-            "title_key": "tutorial.room_bar.title",
-            "desc_key": "tutorial.room_bar.desc",
-            "image": "res://assets/roomtypes/bar.aseprite"
-        },
-        {
-            "id": "room_kitchen_small",
-            "category": "rooms",
-            "title_key": "tutorial.room_kitchen_small.title",
-            "desc_key": "tutorial.room_kitchen_small.desc",
-            "image": "res://assets/roomtypes/kittchen_small.aseprite"
-        },
-        {
-            "id": "room_restaurant_small",
-            "category": "rooms",
-            "title_key": "tutorial.room_restaurant_small.title",
-            "desc_key": "tutorial.room_restaurant_small.desc",
-            "image": "res://assets/roomtypes/restaurant_small.aseprite"
-        },
-        {
-            "id": "room_staff_small",
-            "category": "rooms",
-            "title_key": "tutorial.room_staff_small.title",
-            "desc_key": "tutorial.room_staff_small.desc",
-            "image": "res://assets/roomtypes/staff_small.aseprite"
-        },
-        {
-            "id": "codex_poi",
-            "category": "real_codex",
-            "title_key": "codex.poi.title",
-            "desc_key": "codex.poi.desc",
-            "image": "res://assets/icons/HUDBottom/map-pin.svg"
-        }
-    ]
+	"tutorials": [
+		{
+			"id": "welcome",
+			"title_key": "tutorial.welcome.title",
+			"desc_key": "tutorial.welcome.desc",
+			"image": "res://assets/images/tutorials/tutorial_hud.png"
+		},
+		{
+			"id": "gastro",
+			"title_key": "tutorial.gastro.title",
+			"desc_key": "tutorial.gastro.desc",
+			"image": "res://assets/images/tutorials/tutorial_reception.png"
+		},
+		{
+			"id": "build_mode",
+			"title_key": "tutorial.build_mode.title",
+			"desc_key": "tutorial.build_mode.desc",
+			"image": "res://assets/images/tutorials/tutorial_build_mode.png"
+		},
+		{
+			"id": "tech_tree",
+			"title_key": "tutorial.tech_tree.title",
+			"desc_key": "tutorial.tech_tree.desc",
+			"image": "res://assets/images/tutorials/tutorial_tech_tree.png"
+		},
+		{
+			"id": "staff",
+			"title_key": "tutorial.staff.title",
+			"desc_key": "tutorial.staff.desc",
+			"image": "res://assets/images/tutorials/tutorial_staff.png"
+		},
+		{
+			"id": "quest_book",
+			"title_key": "tutorial.questbook.title",
+			"desc_key": "tutorial.questbook.desc",
+			"image": "res://assets/images/tutorials/tutorial_questbook.png"
+		},
+		{
+			"id": "reception",
+			"title_key": "tutorial.reception.title",
+			"desc_key": "tutorial.reception.desc",
+			"image": "res://assets/images/tutorials/tutorial_reception.png"
+		},
+		{
+			"id": "guest_list",
+			"title_key": "tutorial.guest_list.title",
+			"desc_key": "tutorial.guest_list.desc",
+			"image": "res://assets/images/tutorials/tutorial_guest_list.png"
+		},
+		{
+			"id": "room_list",
+			"title_key": "tutorial.room_list.title",
+			"desc_key": "tutorial.room_list.desc",
+			"image": "res://assets/images/tutorials/tutorial_room_list.png"
+		},
+		{
+			"id": "finances",
+			"title_key": "tutorial.finances.title",
+			"desc_key": "tutorial.finances.desc",
+			"image": "res://assets/images/tutorials/tutorial_finances.png"
+		},
+		{
+			"id": "sim_browser",
+			"title_key": "tutorial.sim_browser.title",
+			"desc_key": "tutorial.sim_browser.desc",
+			"image": "res://assets/images/tutorials/tutorial_sim_browser.png"
+		},
+		{
+			"id": "hotel_overview",
+			"title_key": "tutorial.hotel_overview.title",
+			"desc_key": "tutorial.hotel_overview.desc",
+			"image": "res://assets/images/tutorials/tutorial_hotel_overview.png"
+		},
+		{
+			"id": "overlays",
+			"title_key": "tutorial.overlays.title",
+			"desc_key": "tutorial.overlays.desc",
+			"image": "res://assets/images/tutorials/tutorial_hud.png"
+		},
+		{
+			"id": "tip_130_exp",
+			"category": "tipps",
+			"title_key": "tutorial.tip_130_exp.title",
+			"desc_key": "tutorial.tip_130_exp.desc"
+		},
+		{
+			"id": "tip_fast_forward",
+			"category": "tipps",
+			"title_key": "tutorial.tip_fast_forward.title",
+			"desc_key": "tutorial.tip_fast_forward.desc"
+		},
+		{
+			"id": "gourmet_kitchen",
+			"category": "tipps",
+			"title_key": "tutorial.gourmet_kitchen.title",
+			"desc_key": "tutorial.gourmet_kitchen.desc"
+		},
+		{
+			"id": "events",
+			"category": "tipps",
+			"title_key": "tutorial.events.title",
+			"desc_key": "tutorial.events.desc"
+		},
+		{
+			"id": "guest_single",
+			"category": "codex",
+			"title_key": "codex.guest_single.title",
+			"desc_key": "codex.guest_single.desc",
+			"image": "res://assets/guesttypes/gt-icon-single.aseprite"
+		},
+		{
+			"id": "guest_couple",
+			"category": "codex",
+			"title_key": "codex.guest_couple.title",
+			"desc_key": "codex.guest_couple.desc",
+			"image": "res://assets/guesttypes/gt-icon-couple.aseprite"
+		},
+		{
+			"id": "guest_business",
+			"category": "codex",
+			"title_key": "codex.guest_business.title",
+			"desc_key": "codex.guest_business.desc",
+			"image": "res://assets/guesttypes/gt-icon-business.aseprite"
+		},
+		{
+			"id": "guest_family",
+			"category": "codex",
+			"title_key": "codex.guest_family.title",
+			"desc_key": "codex.guest_family.desc",
+			"image": "res://assets/guesttypes/gt-icon-family.aseprite"
+		},
+		{
+			"id": "guest_budget",
+			"category": "codex",
+			"title_key": "codex.guest_budget.title",
+			"desc_key": "codex.guest_budget.desc",
+			"image": "res://assets/guesttypes/gt-icon-budget.aseprite"
+		},
+		{
+			"id": "guest_nomad",
+			"category": "codex",
+			"title_key": "codex.guest_nomad.title",
+			"desc_key": "codex.guest_nomad.desc",
+			"image": "res://assets/icons/guests/laptop-minimal.svg"
+		},
+		{
+			"id": "guest_event",
+			"category": "codex",
+			"title_key": "codex.guest_event.title",
+			"desc_key": "codex.guest_event.desc",
+			"image": "res://assets/guesttypes/gt-icon-event.aseprite"
+		},
+		{
+			"id": "guest_luxury",
+			"category": "codex",
+			"title_key": "codex.guest_luxury.title",
+			"desc_key": "codex.guest_luxury.desc",
+			"image": "res://assets/icons/guests/user-star.svg"
+		},
+		{
+			"id": "guest_vip",
+			"category": "codex",
+			"title_key": "codex.guest_vip.title",
+			"desc_key": "codex.guest_vip.desc",
+			"image": "res://assets/icons/guests/user-star.svg"
+		},
+		{
+			"id": "guest_inspector",
+			"category": "codex",
+			"title_key": "codex.guest_inspector.title",
+			"desc_key": "codex.guest_inspector.desc",
+			"image": "res://assets/icons/guests/user-star.svg"
+		},
+		{
+			"id": "guest_groups",
+			"category": "codex",
+			"title_key": "codex.guest_groups.title",
+			"desc_key": "codex.guest_groups.desc",
+			"image": "res://assets/icons/guests/users.svg"
+		},
+		{
+			"id": "room_lobby",
+			"category": "rooms",
+			"title_key": "tutorial.room_lobby.title",
+			"desc_key": "tutorial.room_lobby.desc",
+			"image": "res://assets/roomtypes/lobby.aseprite"
+		},
+		{
+			"id": "room_bed_standard",
+			"category": "rooms",
+			"title_key": "tutorial.room_bed_standard.title",
+			"desc_key": "tutorial.room_bed_standard.desc",
+			"image": "res://assets/roomtypes/bed_standard.aseprite"
+		},
+		{
+			"id": "room_bed_double",
+			"category": "rooms",
+			"title_key": "tutorial.room_bed_double.title",
+			"desc_key": "tutorial.room_bed_double.desc",
+			"image": "res://assets/roomtypes/bed_double_landscape.aseprite"
+		},
+		{
+			"id": "room_bed_family",
+			"category": "rooms",
+			"title_key": "tutorial.room_bed_family.title",
+			"desc_key": "tutorial.room_bed_family.desc",
+			"image": "res://assets/roomtypes/bed_family.aseprite"
+		},
+		{
+			"id": "room_bed_superior",
+			"category": "rooms",
+			"title_key": "tutorial.room_bed_superior.title",
+			"desc_key": "tutorial.room_bed_superior.desc",
+			"image": "res://assets/roomtypes/bed_superior.aseprite"
+		},
+		{
+			"id": "room_bar",
+			"category": "rooms",
+			"title_key": "tutorial.room_bar.title",
+			"desc_key": "tutorial.room_bar.desc",
+			"image": "res://assets/roomtypes/bar.aseprite"
+		},
+		{
+			"id": "room_kitchen_small",
+			"category": "rooms",
+			"title_key": "tutorial.room_kitchen_small.title",
+			"desc_key": "tutorial.room_kitchen_small.desc",
+			"image": "res://assets/roomtypes/kittchen_small.aseprite"
+		},
+		{
+			"id": "room_restaurant_small",
+			"category": "rooms",
+			"title_key": "tutorial.room_restaurant_small.title",
+			"desc_key": "tutorial.room_restaurant_small.desc",
+			"image": "res://assets/roomtypes/restaurant_small.aseprite"
+		},
+		{
+			"id": "room_staff_small",
+			"category": "rooms",
+			"title_key": "tutorial.room_staff_small.title",
+			"desc_key": "tutorial.room_staff_small.desc",
+			"image": "res://assets/roomtypes/staff_small.aseprite"
+		},
+		{
+			"id": "codex_poi",
+			"category": "real_codex",
+			"title_key": "codex.poi.title",
+			"desc_key": "codex.poi.desc",
+			"image": "res://assets/icons/HUDBottom/map-pin.svg"
+		}
+	]
 }

@@ -13,9 +13,10 @@ signal sig_guests_spawned(count)
 signal sig_party_arrived(party: GuestParty)
 signal sig_party_rejected(party: GuestParty)
 
-# ── Konfiguration ─────────────────────────────────────────────────────────────
+# ── Konfiguration ─────────────────────────────────────────────────────────────────────
 var _hotel:	Dictionary
 var _map_grid: Node2D
+var _guest_controller: Node = null # ANG-314: Referenz auf GuestController für capture_actor_states()
 
 # ── Listen ────────────────────────────────────────────────────────────────────
 var _waiting:  Array = []   # Array[GuestParty]
@@ -1079,6 +1080,9 @@ func calculate_payout(party: GuestParty) -> float:
 
 # =============================================================================
 func to_save_dict() -> Dictionary:
+	# ANG-314: Physische Actor-States einsammeln bevor die Parties serialisiert werden.
+	if is_instance_valid(_guest_controller) and _guest_controller.has_method("capture_actor_states"):
+		_guest_controller.capture_actor_states()
 	var w: Array = []
 	var a: Array = []
 	var c: Array = []

@@ -40,8 +40,11 @@ func spawn_active_guests() -> void:
 				# aber auf IDLE, damit sie sofort POIs nutzen oder zum Event gehen können.
 				if party.room_id == "" and party.event_poi_id != "":
 					var actor = _create_actor(member, party.room_id, room)
-					actor.start_waiting_for_event(spawn_pos, event_delay_counter * 0.3)
-					event_delay_counter += 1
+					if party.actor_states.has(member.id):
+						actor.restore_save_state(party.actor_states[member.id])
+					else:
+						actor.start_waiting_for_event(spawn_pos, event_delay_counter * 0.3)
+						event_delay_counter += 1
 				elif party.room_id == "" and party.event_poi_id == "":
 					# TG-Gast nach Tagungsende: nach dem Loop sauber per GuestManager auschecken
 					if not tg_checkout_parties.has(party):
@@ -49,7 +52,10 @@ func spawn_active_guests() -> void:
 					break # Alle Member der Party werden via checkout_event_party verarbeitet
 				else:
 					var actor = _create_actor(member, party.room_id, room)
-					if room == null:
+					# ANG-314: Gespeicherten State wiederherstellen wenn vorhanden
+					if party.actor_states.has(member.id):
+						actor.restore_save_state(party.actor_states[member.id])
+					elif room == null:
 						# Fallback: Zimmer nicht gefunden (z.B. abgerissen oder Datenfehler)
 						# → Gast sicher in der Lobby platzieren statt bei (0,0) im Nirgendwo
 						push_warning("[GuestController] Kein Raum für Gast %s (party %s, room_id='%s') – Lobby-Fallback" % [guest_id, party.id, party.room_id])
@@ -70,8 +76,12 @@ func spawn_active_guests() -> void:
 			var guest_id = member.id
 			if not _actors.has(guest_id):
 				var actor = _create_actor(member, party.room_id, room)
-				# Da sie schon im Checkout sind, müssen sie direkt loslaufen
-				actor.start_checkout()
+				# ANG-314: Gespeicherten State wiederherstellen (sollte AWAITING_CHECKOUT sein)
+				if party.actor_states.has(member.id):
+					actor.restore_save_state(party.actor_states[member.id])
+				else:
+					# Da sie schon im Checkout sind, müssen sie direkt loslaufen
+					actor.start_checkout()
 	
 	# Auch wartende Gäste an der Rezeption sichtbar machen (nach Reload)
 	# Diese haben bereits gewartet aber wurden noch nicht eingecheckt.
@@ -95,6 +105,23 @@ func spawn_active_guests() -> void:
 	var ac = str(EventManager.active_conferences) if EventManager else "N/A"
 	print("[DAYSTART] active_conferences: " + ac)
 	print("[DAYSTART] ===============================")
+
+
+# =============================================================================
+## ANG-314: Einsammeln aller Actor-States vor dem Speichern.
+## Muss aufgerufen werden BEVOR GuestManager.to_save_dict() läuft.
+func capture_actor_states() -> void:
+	for party in _guest_manager._active:
+		for member in party.members:
+			var actor = _actors.get(member.id, null)
+			if is_instance_valid(actor):
+				party.actor_states[member.id] = actor.get_save_state()
+	# Auch Checkout-Gäste erfassen (warten noch sichtbar an der Rezeption)
+	for party in _guest_manager._checkout:
+		for member in party.members:
+			var actor = _actors.get(member.id, null)
+			if is_instance_valid(actor):
+				party.actor_states[member.id] = actor.get_save_state()
 
 # =============================================================================
 func _on_party_arrived(party: GuestParty) -> void:

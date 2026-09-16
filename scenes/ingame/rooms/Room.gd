@@ -36,7 +36,9 @@ var is_service_requested: bool = false
 var is_built := false
 var is_active := false
 
-const SHOW_DEBUG_PATHS := true # Umschalter für das rote/grüne Wegnetz im Raum
+# ── Debugging ─────────────────────────────────────────────────────────────────
+const SHOW_DEBUG_PATHS := false # Umschalter für das rote/grüne Wegnetz im Raum
+
 var is_pending_demolish: bool = false:
 	set(value):
 		is_pending_demolish = value

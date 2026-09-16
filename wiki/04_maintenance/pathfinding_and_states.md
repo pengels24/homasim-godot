@@ -34,3 +34,21 @@ func _get_logical_start_tile() -> Vector2i:
 ## Check-in & Lobby
 - Beim Spawn werden Gäste (aufgrund der überlappenden UI) sofort auf die Rezeptions-Slots gesetzt (ohne Animation).
 - Nach dem Check-in führt `_execute_walk` einen lokalen Pfad zur Lobby-Innentür aus, bevor der globale Pfad zum Zimmer generiert wird.
+
+## Save/Load Verhalten (ANG-314, v0.1.58)
+
+### GuestActor restore_save_state
+- **IN_ROOM (Hotel-Gast):** Position wird **nicht** restored – setup() platziert den Gast korrekt an der Zimmertür. Direkte Positions-Zuweisung aus dem Save würde oft auf Solid-Tiles landen (Gast war mid-Tween beim Speichern).
+- **IN_ROOM (TG ohne _target_room):** gespeicherte Position wird restored, da kein Zimmer als Referenz vorhanden.
+- **IN_POI / EATING:** gespeicherte Position wird restored. _restoring_from_save = true verhindert doppeltes Payment und EXP in _on_poi_arrived(). _has_claimed_seat = true verhindert erneuten Sitz-Claim.
+- **AWAITING_CHECKOUT:** Position restored (Lobby = walkable Tiles, kein Problem).
+
+### StaffActor restore_save_state
+- **Position:** Wird **nicht** restored. StaffController._spawn_actor() setzt die Position vor 
+estore_save_state() auf die Staff-Raum-Service-Position. Damit startet Staff immer im P-Raum nach einem Load.
+- **_work_timer:** Wird auf 0 gesetzt – verhindert sofortigen Break-Trigger wenn gespeicherter Timer hoch war.
+- **State/Task:** Wird korrekt restored (working → Task re-attached, sonst idle).
+- **Grund für kein Position-Restore:** configure() setzt _current_room = spawn_room (P-Raum). Würde Position auf POI-Inneres (Solid-Tile) gesetzt, widerspricht dies dem gesetzten _current_room → kaputtes Pathfinding.
+
+### Bekannte Einschränkung (ANG-364)
+Das 1-Layer-AStar-System unterscheidet nicht klar zwischen globalem Korridor-Netz und lokalem POI-Inneren. Akteure die innerhalb von Räumen (Solid-Tiles im globalen AStar) navigieren müssen, lösen Emergency-Fallbacks aus. **Lösung:** ANG-364 (Post-Alpha Pathfinding-Rework).

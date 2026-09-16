@@ -7,7 +7,7 @@
 ## ⚠️ Getroffene Design-Entscheidungen (nicht mehr diskutieren!)
 
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.56 | Stand: 15.09.2026
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.58 | Stand: 16.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -43,6 +43,9 @@
 - [x] **Bugfix & Polishing:** Lobby speichert nun Raum-Upgrades (WLAN, Klima) korrekt.
 - [x] **Tutorial-Updates:** HUD Welcome-Texte überarbeitet, Tutorials für F9-Hotel-Overview und Overlays hinzugefügt.
 - [x] **Inspektor:** Codex-Eintrag für Gourmet Inspector hinzugefügt (wird erst nach Abreise freigeschaltet).
+- [x] **ANG-314:** Actor-State-Serialisierung: GuestActor restore_save_state überarbeitet (IN_ROOM Hotel/TG, IN_POI korrekt), StaffActor spawnt im P-Raum nach Load (Position nicht restored – bewusste Entscheidung bis ANG-364), StaffController Spawn-Reihenfolge gefixed (Staff war bei 0,0 off-screen)
+- [x] **Exploit-Fix:** POI Doppel-Payment nach Load – `_restoring_from_save` Flag verhindert doppeltes income + EXP in `_on_poi_arrived()` beim Restore
+- [x] **ANG-364 angelegt:** Linear-Issue für Pathfinding-Komplett-Rework (Post-Alpha, nach v0.1 stable)
 
 ---
 

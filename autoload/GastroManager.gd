@@ -96,3 +96,29 @@ func try_gastro_order(guest_id: String, spending_budget: int, saturation: int, r
 		var ordered: bool = room_node.place_order_for_seat(guest_id, spending_budget, missing_sat)
 		result["ordered"] = ordered
 	return result
+
+
+# =============================================================================
+# ANG-314: Persistenz-Methoden
+# =============================================================================
+
+## Serialisiert alle aktiven Bestellungen.
+## active_orders ist bereits rein String-basiert → direkt serialisierbar.
+func to_save_dict() -> Dictionary:
+	return {"active_orders": active_orders.duplicate(true)}
+
+
+## Lädt aktive Bestellungen aus dem Save-Dict.
+## Status "cooking" wird auf "pending" zurückgesetzt (Koch startet neu).
+func load_from_dict(data: Dictionary) -> void:
+	active_orders.clear()
+	for order_id in data.get("active_orders", {}).keys():
+		var order: Dictionary = data["active_orders"][order_id].duplicate()
+		# Wenn der Koch mitten im Kochen war: Bestellung als "pending" wiederherstellen
+		# damit ein freier Koch sie erneut aufnehmen kann.
+		if order.get("status", "") == "cooking":
+			order["status"] = "pending"
+			order["kitchen_id"] = ""
+		# "served"-Bestellungen werden NICHT wiederhergestellt (sind abgeschlossen)
+		if order.get("status", "") != "served":
+			active_orders[order_id] = order

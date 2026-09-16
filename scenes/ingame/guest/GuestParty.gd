@@ -26,6 +26,10 @@ var visited_rooms: Dictionary = {}
 var is_inspector: bool = false
 var cover_type: String = ""
 
+# ANG-314: Physischer Actor-State pro Member (pos, state, timer etc.)
+# Wird vor dem Speichern vom GuestController befüllt.
+var actor_states: Dictionary = {} # member_id -> { pos_x, pos_y, state, ... }
+
 
 # =============================================================================
 func modify_satisfaction(amount: int) -> void:
@@ -92,6 +96,7 @@ func to_dict() -> Dictionary:
 		"pays_surcharge": pays_surcharge,
 		"is_inspector": is_inspector,
 		"cover_type": cover_type,
+		"actor_states": actor_states.duplicate(true), # ANG-314
 	}
 
 
@@ -122,6 +127,7 @@ static func from_dict(d: Dictionary) -> GuestParty:
 	p.pays_surcharge = d.get("pays_surcharge", false)
 	p.is_inspector = d.get("is_inspector", false)
 	p.cover_type = d.get("cover_type", "")
+	p.actor_states = d.get("actor_states", {}).duplicate(true) # ANG-314
 
 	for md: Dictionary in d.get("members", []):
 		p.members.append(GuestMember.from_dict(md))

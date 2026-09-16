@@ -1,5 +1,5 @@
 # TechDoku: StaffActor (Personal-Verhalten)
-*Stand: v0.1.42*
+*Stand: v0.1.58*
 
 Der `StaffActor` repräsentiert einen Angestellten im Hotel. Im Gegensatz zu Gästen, die stark bedürfnisgetrieben (Hunger, Schlaf) agieren, sind StaffActors primär **Aufgaben-getrieben (Task-driven)** und reagieren dynamisch auf das Hotel-Geschehen.
 
@@ -47,3 +47,10 @@ Die tatsächliche Dauer eines Tasks (z.B. "Wie lange dauert es, das Zimmer zu pu
 - **Moral-Malus**: Schlecht gelauntes Personal trödelt.
 - **Techtree-Boni**: Features wie "Prozessoptimierung" (M1.3) geben einen globalen Speed-Boost von +15%.
 Die Formel wird in `_process_working()` über `speed_mult` angewandt.
+
+## 6. Save/Load (ANG-314, v0.1.58)
+
+- **Position:** NICHT restored - configure() setzt Staff im P-Raum. Waere Position auf POI-Inneres (Solid), wuerde _current_room != actual_pos -> Emergency-Fallback -> Teleport.
+- **_work_timer:** Reset auf 0 nach Restore.
+- **State:** working -> Task re-attached; sonst idle. Think-Timer = 2.0s.
+- **get_save_state():** Speichert pos, state, work_timer, task_id (Position beim Laden ignoriert).

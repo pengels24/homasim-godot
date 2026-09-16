@@ -166,14 +166,23 @@ func _setup_subsystems() -> void:
 	_guest_controller = GuestController.new()
 	add_child(_guest_controller)
 	_guest_controller.setup(_guest_mgr, map_grid)
+	# ANG-314: GuestManager braucht Referenz auf GuestController für capture_actor_states()
+	_guest_mgr._guest_controller = _guest_controller
 	
 	if StaffManager:
 		if _hotel.has("staff"):
 			StaffManager.load_state(_hotel["staff"])
 		else:
 			StaffManager.load_state({})
-			
-	# StaffController
+
+	# ANG-314: Tasks VOR dem Staff-Spawn laden!
+	# restore_save_state() in StaffActor braucht TaskManager._tasks bereits befüllt.
+	if TaskManager and _hotel.has("task_data"):
+		TaskManager.load_from_dict(_hotel["task_data"], map_grid)
+	if GastroManager and _hotel.has("gastro_data"):
+		GastroManager.load_from_dict(_hotel["gastro_data"])
+		
+	# StaffController (spawnt Staff via restore_save_state oder normal)
 	_staff_controller = StaffController.new()
 	add_child(_staff_controller)
 	_staff_controller.configure(map_grid)
@@ -227,7 +236,7 @@ func _setup_subsystems() -> void:
 	# Save-Controller (Archivar)
 	_save_ctrl = IngameSaveController.new()
 	add_child(_save_ctrl)
-	_save_ctrl.setup(_hotel, _guest_mgr, map_grid)
+	_save_ctrl.setup(_hotel, _guest_mgr, map_grid, _staff_controller) # ANG-314: staff_controller übergeben
 
 	# UI-Manager (Zeremonienmeister)
 	_ui_mgr = IngameUIManager.new()

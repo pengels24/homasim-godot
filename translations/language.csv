@@ -254,6 +254,8 @@ ingame.ctx.move_door,Tür verschieben,Move Door
 ingame.ctx.flip_room,Raum drehen,Flip Room
 ingame.quit.title,Spiel verlassen?,Leave Game?
 ingame.quit.confirm,"Ja, verlassen","Yes, leave"
+ingame.quit.message,"Bist du sicher, dass du das Spiel verlassen möchtest?","Are you sure you want to leave the game?"
+ingame.quit.cancel,Abbrechen,Cancel
 ingame.submenu.coming_soon,(kommt mit dem Feature),(coming with the feature)
 modal.pause.title,Pause,Pause
 modal.pause.button.continue,Fortsetzen,Continue

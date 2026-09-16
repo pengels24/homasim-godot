@@ -33,7 +33,8 @@ func _spawn_actor(staff_data: Dictionary) -> void:
 	actor.configure(staff_data, _map_grid, self, spawn_room)
 	_actors.append(actor)
 	
-	# Spawn-Punkt: Personalraum mit freier Kapazität -> Lobby
+	# Standard-Spawn: Personalraum → Lobby als Fallback.
+	# IMMER ausführen – restore_save_state überschreibt global_position nicht mehr.
 	var spawn_pos = Vector2.INF
 	if is_instance_valid(spawn_room):
 		if spawn_room.has_method("get_service_position"):
@@ -41,13 +42,18 @@ func _spawn_actor(staff_data: Dictionary) -> void:
 		else:
 			var interior = spawn_room.get_node_or_null("Interior")
 			spawn_pos = interior.global_position if interior else spawn_room.global_position
-			
+		
 	if spawn_pos == Vector2.INF:
 		spawn_pos = _get_lobby_spawn_pos()
 		
-	# Nur noch ein sehr kleiner Scatter, damit sie nicht exakt 100% clippen
 	spawn_pos += Vector2(randf_range(-4.0, 4.0), randf_range(-4.0, 4.0))
 	actor.global_position = spawn_pos
+	
+	# ANG-314: Gespeicherten State (working/idle + Task) wiederherstellen
+	if staff_data.has("physical_state"):
+		var ps: Dictionary = staff_data["physical_state"]
+		if not ps.is_empty():
+			actor.restore_save_state(ps)
 
 func _get_staff_room(staff_data: Dictionary) -> Node2D:
 	if not is_instance_valid(_map_grid) or not _map_grid.has_method("get_placed_rooms"):
@@ -121,3 +127,14 @@ func _get_lobby_spawn_pos() -> Vector2:
 	if is_instance_valid(_map_grid) and _map_grid.has_method("get_lobby_spawn_pos_world"):
 		return _map_grid.call("get_lobby_spawn_pos_world")
 	return Vector2.ZERO
+
+
+# =============================================================================
+## ANG-314: Physische Zustände aller Actors vor dem Speichern einsammeln.
+## Schreibt den State direkt in hired_staff[id]["physical_state"].
+func capture_actor_states() -> void:
+	for actor in _actors:
+		if is_instance_valid(actor) and actor.has_method("get_save_state"):
+			var staff_id: String = actor.get_staff_id()
+			if StaffManager.hired_staff.has(staff_id):
+				StaffManager.hired_staff[staff_id]["physical_state"] = actor.get_save_state()

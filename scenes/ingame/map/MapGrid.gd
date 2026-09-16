@@ -53,7 +53,7 @@ var _occ_h: int
 
 # ── Debugging ─────────────────────────────────────────────────────────────────
 @warning_ignore("unused_private_class_variable")
-var _show_debug_grid: bool = true
+var _show_debug_grid: bool = false
 var _debug_paths: Dictionary = {}  # {id: {path, label}}
 var _failed_paths: Array[Dictionary] = []
 

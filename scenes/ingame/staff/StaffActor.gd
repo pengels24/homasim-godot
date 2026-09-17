@@ -780,6 +780,7 @@ func _start_path_to_room(room: Node2D, extra_pos: Vector2 = Vector2.INF) -> void
 		_current_room = room
 		_arriving_room = null
 		_think_timer = 1.5
+		_path.assign([end_tile]) # Verhindert "Path failed" Fehler in caller
 		return
 
 	if room.has_method("get_room_entry_pos"):

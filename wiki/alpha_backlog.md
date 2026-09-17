@@ -7,7 +7,7 @@
 ## ⚠️ Getroffene Design-Entscheidungen (nicht mehr diskutieren!)
 
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.58 | Stand: 16.09.2026
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.59 | Stand: 17.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -46,6 +46,10 @@
 - [x] **ANG-314:** Actor-State-Serialisierung: GuestActor restore_save_state überarbeitet (IN_ROOM Hotel/TG, IN_POI korrekt), StaffActor spawnt im P-Raum nach Load (Position nicht restored – bewusste Entscheidung bis ANG-364), StaffController Spawn-Reihenfolge gefixed (Staff war bei 0,0 off-screen)
 - [x] **Exploit-Fix:** POI Doppel-Payment nach Load – `_restoring_from_save` Flag verhindert doppeltes income + EXP in `_on_poi_arrived()` beim Restore
 - [x] **ANG-364 angelegt:** Linear-Issue für Pathfinding-Komplett-Rework (Post-Alpha, nach v0.1 stable)
+- [x] **ANG-354:** Raum-Bewertungshistorie (visited_rooms) – Tagweise Inspektor-Daten pro Party & Raum, serialisiert in GuestParty Save
+- [x] **Techtree M1.2/M1.3/M1.4:** Schulungsbonus (StaffManager), Effizienz +15% Speed (StaffActor), Hotelleitung (Ankunfts-Geduld +20%, Drain -20%)
+- [x] **Bugfix StaffActor:** Endlos-Loop "Path failed to target_room" wenn Staff schon im Zielraum – Fake-Pfad verhindert Neustart
+- [x] **Bugfix GuestActor (kritisch):** TG-Gäste verließen Bar/Restaurant sofort bei Mittagspause. Root-Cause: Pre-Claim in `_walk_to_poi` speicherte keine Sitzposition. Fix: `_pre_claimed_seat_pos` / `_pre_claimed_duration` werden beim Pre-Claim gesetzt und in `_on_poi_arrived` direkt verwendet. Kein Release/Re-Claim mehr nötig.
 
 ---
 

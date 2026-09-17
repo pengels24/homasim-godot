@@ -95,6 +95,9 @@ var _base_speed: float = 40.0
 var _active_tween: Tween
 var _last_interaction_id: String = ""
 var _has_claimed_seat: bool = false
+## Voraus-geclaimte Sitzposition (gesetzt in _walk_to_poi, verbraucht in _on_poi_arrived)
+var _pre_claimed_seat_pos: Vector2 = Vector2.INF
+var _pre_claimed_duration: float = 0.0
 ## Nach Check-in: POI-Sperre fuer 60 Ingame-Minuten (Gast kommt erst an)
 var _checkin_poi_block_until: int = 0
 ## ANG-361: Pflicht-Ruhepause nach POI-Besuch (in Spielminuten seit Mitternacht)
@@ -211,8 +214,8 @@ func _process(delta: float) -> void:
 	if has_node("EventOverlay"):
 		var ev_node = get_node("EventOverlay")
 		var t = Time.get_ticks_msec() / 1000.0
-		# Nutze den Base-Scale von 0.25 und pulsiere sanft darum (z.B. +/- 0.02)
-		var s = 0.25 + sin(t * 4.0) * 0.02
+		# Nutze den Base-Scale von 0.15 und pulsiere sanft darum (z.B. +/- 0.02)
+		var s = 0.15 + sin(t * 4.0) * 0.02
 		ev_node.scale = Vector2(s, s)
 
 	if has_node("HungryIcon"):
@@ -241,6 +244,9 @@ func _process_impatient(delta: float) -> void:
 		_waiting_for_food_timer += delta * speed
 		# Wenn das Limit erreicht ist, bricht der Gast wütend ab
 		var wait_limit_seconds = FOOD_WAIT_TIME_MINUTES * (TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 1.0)
+		if TechtreeManager and TechtreeManager.is_tech_unlocked("M1.4"):
+			wait_limit_seconds *= 1.2
+			
 		if _waiting_for_food_timer >= wait_limit_seconds:
 			print("[GuestActor] %s: Timeout erreicht beim Warten auf Essen! Breche ab." % [(_guest_member.name if _guest_member else "?")])
 			var party = _get_my_party()
@@ -258,7 +264,11 @@ func _process_impatient(delta: float) -> void:
 			_decide_next_action()
 			return
 			
-	if _impatient_timer >= 60.0: # Alle 60 Ingame-Sekunden
+	var imp_limit = 60.0
+	if TechtreeManager and TechtreeManager.is_tech_unlocked("M1.4"):
+		imp_limit = 72.0 # +20% längeres Intervall = -20% Zufriedenheitsverlust pro Zeit
+
+	if _impatient_timer >= imp_limit: # Alle 60/72 Ingame-Sekunden
 		_impatient_timer = 0.0
 		var party = _get_my_party()
 		if party:
@@ -1044,8 +1054,20 @@ func _check_room_conditions(room: Node2D) -> void:
 	var party = _get_my_party()
 	if party == null:
 		return
-	if party.visited_rooms.has(room_id):
-		return # Bereits bewertet
+		
+	if not party.visited_rooms.has(room_id):
+		party.visited_rooms[room_id] = {
+			"name": GameState.T(room.get_definition().get("name", "")) if room.has_method("get_definition") else "Room",
+			"reviews": []
+		}
+		
+	var room_log = party.visited_rooms[room_id]
+	var current_day = TimeManager.get_day() if TimeManager else 1
+	
+	# Prüfen ob am HÜTIGEN Tag bereits bewertet
+	for rev in room_log.reviews:
+		if rev.get("day", -1) == current_day:
+			return 
 	
 	var clean = room.get("cleanliness_level") if "cleanliness_level" in room else 100
 	var cond = room.get("maintenance_level") if "maintenance_level" in room else 100
@@ -1056,12 +1078,12 @@ func _check_room_conditions(room: Node2D) -> void:
 	if cond < 50:
 		penalty += randi_range(2, 7)
 		
-	party.visited_rooms[room_id] = {
-		"name": GameState.T(room.get_definition().get("name", "")) if room.has_method("get_definition") else "Room",
+	room_log.reviews.append({
+		"day": current_day,
 		"cleanliness": clean,
 		"condition": cond,
 		"sat_delta": -penalty
-	}
+	})
 	
 	if penalty > 0:
 		party.modify_satisfaction(-penalty)
@@ -1151,10 +1173,17 @@ func _on_poi_arrived() -> void:
 					var dur = claim_result.get("duration", randf_range(15.0, 30.0))
 					_action_timer = dur * (TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 4.0)
 		else:
-			seat_pos = global_position # bereits geclaimed, dummy um Abbruch zu verhindern
+			# Sitz wurde in _walk_to_poi voraus-geclaimt – gespeicherte Position + Duration direkt verwenden.
+			if _pre_claimed_seat_pos != Vector2.INF and _pre_claimed_seat_pos != Vector2.ZERO:
+				seat_pos = _pre_claimed_seat_pos
+				_action_timer = _pre_claimed_duration * (TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 4.0)
+			else:
+				seat_pos = global_position # Fallback falls kein Pre-Claim gespeichert
+			# Einmalig zurücksetzen
+			_pre_claimed_seat_pos = Vector2.INF
+			_pre_claimed_duration = 0.0
 	
 	if not _has_claimed_seat and (seat_pos == Vector2.ZERO or seat_pos == Vector2.INF):
-		print("[GuestActor] %s bricht Besuch in %s ab: kein Platz verfügbar." % [_guest_member.name, _current_poi_id])
 		send_back_to_room()
 		return
 	
@@ -1708,6 +1737,9 @@ func _walk_to_poi(poi_id: String) -> void:
 					if claim_data.has("target_pos"):
 						seat_pos = claim_data.target_pos
 						_has_claimed_seat = true
+						# Seat-Position und Duration für _on_poi_arrived merken
+						_pre_claimed_seat_pos = claim_data.target_pos
+						_pre_claimed_duration = claim_data.get("duration", randf_range(15.0, 30.0))
 			# --- LEGACY FALLBACK FÜR ALTE RÄUME ---
 			elif target_room.has_method("claim_seat"):
 				pass # Legacy system commented out

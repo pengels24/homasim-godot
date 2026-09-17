@@ -97,6 +97,7 @@ func to_dict() -> Dictionary:
 		"is_inspector": is_inspector,
 		"cover_type": cover_type,
 		"actor_states": actor_states.duplicate(true), # ANG-314
+		"visited_rooms": visited_rooms.duplicate(true),
 	}
 
 
@@ -128,6 +129,7 @@ static func from_dict(d: Dictionary) -> GuestParty:
 	p.is_inspector = d.get("is_inspector", false)
 	p.cover_type = d.get("cover_type", "")
 	p.actor_states = d.get("actor_states", {}).duplicate(true) # ANG-314
+	p.visited_rooms = d.get("visited_rooms", {}).duplicate(true)
 
 	for md: Dictionary in d.get("members", []):
 		p.members.append(GuestMember.from_dict(md))

@@ -61,6 +61,18 @@ func has_active_orders_for_room(room_id: String) -> bool:
 				return true
 	return false
 
+## Prüft ob es noch Bestellungen gibt, die GEKOCHT werden müssen (pending/cooking).
+## Wird für den Überstunden-Check des Kochs verwendet.
+## 'ready' und 'serving' sind Kellner-Aufgaben, die den Koch nicht aufhalten sollen.
+func has_cookable_orders_for_room(kitchen_id: String) -> bool:
+	for order_id in active_orders.keys():
+		var order = active_orders[order_id]
+		if order.get('kitchen_id', '') == kitchen_id or order.get('status', '') == 'pending':
+			var status = order.get('status', '')
+			if status == 'pending' or status == 'cooking':
+				return true
+	return false
+
 func get_ready_orders_for_restaurant(restaurant_id: String) -> Array:
 	var ready_orders_list = []
 	for order_id in active_orders.keys():
@@ -102,23 +114,19 @@ func try_gastro_order(guest_id: String, spending_budget: int, saturation: int, r
 # ANG-314: Persistenz-Methoden
 # =============================================================================
 
-## Serialisiert alle aktiven Bestellungen.
-## active_orders ist bereits rein String-basiert → direkt serialisierbar.
+## Bestellungen werden bewusst NICHT persistiert.
+## Grund: Gäste werden nach Reload nicht in Gastro-States restored → Bestellungen wären
+## tote Leichen die Staff-Actors nach Schichtende im Raum festhalten würden.
 func to_save_dict() -> Dictionary:
-	return {"active_orders": active_orders.duplicate(true)}
+	return {"active_orders": {}}
 
 
 ## Lädt aktive Bestellungen aus dem Save-Dict.
-## Status "cooking" wird auf "pending" zurückgesetzt (Koch startet neu).
-func load_from_dict(data: Dictionary) -> void:
+## ANG-314 FIX: Bestellungen werden NICHT wiederhergestellt.
+## Grund: Gäste werden nach einem Reload nicht in ihren Gastro-States restored
+## (kein WAITING_FOR_FOOD, kein EATING). Offene Bestellungen würden als "tote Leichen"
+## in active_orders verbleiben und via has_active_orders_for_room() verhindern,
+## dass Koch/Barkeeper nach Schichtende in den Personalraum gehen.
+func load_from_dict(_data: Dictionary) -> void:
 	active_orders.clear()
-	for order_id in data.get("active_orders", {}).keys():
-		var order: Dictionary = data["active_orders"][order_id].duplicate()
-		# Wenn der Koch mitten im Kochen war: Bestellung als "pending" wiederherstellen
-		# damit ein freier Koch sie erneut aufnehmen kann.
-		if order.get("status", "") == "cooking":
-			order["status"] = "pending"
-			order["kitchen_id"] = ""
-		# "served"-Bestellungen werden NICHT wiederhergestellt (sind abgeschlossen)
-		if order.get("status", "") != "served":
-			active_orders[order_id] = order
+	# Bestellungen werden bewusst nicht wiederhergestellt.

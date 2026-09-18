@@ -167,7 +167,7 @@ const ALL: Dictionary = {
 		"preferred_rooms": ["bed_superior"],
 		"preferred_pois":  ["conference_small", "spa_small", "spa_small", "restaurant_small", "bar"],
 		"requirements":    ["luxury", "privacy"],
-		"spawn_chance":    5,
+		"spawn_chance":    20, # TODO: Pre-Alpha Test-Boost! Vor Release auf 5 zurück
 		"min_stay":        1,
 		"max_stay":        3,
 		"min_base_price":  300,

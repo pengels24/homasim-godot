@@ -444,12 +444,12 @@ func get_xp_needed_for_level(level: int) -> int:
 		3: return 1500
 		4: return 3000
 		5: return 6000
-		6: return 9000
-		7: return 13500
-		8: return 20000
-		9: return 30000
-		10: return 45000
-		_: return 45000 # Max-Level 10 erreicht
+		6: return 6000   # reduziert von 9000
+		7: return 8000   # reduziert von 13500
+		8: return 10000  # reduziert von 20000
+		9: return 13000  # reduziert von 30000
+		10: return 18000 # reduziert von 45000
+		_: return 18000  # Max-Level 10 erreicht
 
 
 # =============================================================================

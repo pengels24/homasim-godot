@@ -900,6 +900,8 @@ codex.guest_event.title,Event-Teilnehmer,Event Attendee
 codex.guest_event.desc,"Bleibt nur kurz (1-2 Nächte) für ein Event. Keine besonderen Ansprüche, recht profitabel in der Masse.","Stays only briefly (1-2 nights) for an event. No special demands, quite profitable in mass."
 codex.guest_luxury.title,VIP & Luxus,VIP & Luxury
 codex.guest_luxury.desc,"Prominente und schwerreiche Gäste. Sie zahlen astronomische Summen für Übernachtungen und Services, sind aber extrem schnell verärgert, wenn die Qualität nicht ihren perfekten Standards entspricht. Sie erwarten eine hohe Luxus-Bewertung der Zimmer.\n\nBudget: Hoch\nGeduld: Sehr niedrig\nAnspruch: Perfektion\nPlatzbedarf: Einzel- oder Doppelzimmer (Suite bevorzugt)","Celebrities and ultra-rich guests. They pay astronomical sums for stays and services but are extremely quick to anger if the quality doesn't meet their perfect standards. They expect a high luxury rating for rooms.\n\nBudget: High\nPatience: Very low\nExpectations: Perfection\nSpace Needs: Single or Double room (Suite preferred)"
+codex.guest_vip.title,VIP-Gast,VIP Guest
+codex.guest_vip.desc,"Ein sehr seltener und zahlungskräftiger Gast (Spawn-Chance: 5%). VIPs buchen ausschließlich Superior-Zimmer und erwarten höchste Qualität. Sie zahlen zwischen 300–600 € pro Nacht und geben viel für Services aus.\n\nBudget: Sehr hoch\nGeduld: Niedrig\nAnspruch: Luxury & Privacy\nAufenthalt: 1–3 Nächte","A very rare and high-paying guest (spawn chance: 5%). VIPs book exclusively Superior rooms and expect the highest quality. They pay between €300–600 per night and spend heavily on services.\n\nBudget: Very high\nPatience: Low\nExpectations: Luxury & Privacy\nStay: 1–3 nights"
 codex.guest_groups.title,Gäste vs. Gruppen,Guests vs. Groups
 codex.guest_groups.desc,In HO·MA·SIM wird unterschieden zwischen Gästen (Köpfe) und Reisegruppen (Partien). Gäste repräsentieren die absolute Anzahl an Personen in deinem Hotel. Eine Gruppe kann jedoch aus mehreren Gästen bestehen (z.B. eine Familie oder ein Pärchen).\n\nBeispiel: Ein Pärchen teilt sich ein Doppelzimmer. Es zählt als 1 Check-In (Gruppe), bringt aber 2 Gäste (Köpfe) in dein Hotel.,In HO·MA·SIM, there is a distinction between guests (heads) and travel groups (parties). Guests represent the total number of people in your hotel. However, a group can consist of multiple guests (e.g., a family or a couple).\n\nExample: A couple shares a double room. They count as 1 check-in (group) but bring 2 guests (heads) to your hotel.
 finances.time.today,Heute,Today
@@ -1098,7 +1100,7 @@ ui.modal.techdemo_end.title,TechDemo Abgeschlossen,TechDemo Completed
 settings.gameplay.maintenance.normal,Standard,Normal
 settings.gameplay.maintenance.low,Niedrig,Low
 settings.gameplay.maintenance.high,Hoch,High
-room.action.details,Details anzeigen,Show Details
+room.action.details,Live-Monitor,Live-Monitor
 room.action.maintenance,Wartung rufen,Call Maintenance
 room.action.coming_soon,Coming soon!,Coming soon!
 room.action.demolish_queued_toast,%s für Abriss vorgemerkt.,%s marked for demolition.
@@ -1145,6 +1147,7 @@ browser.cta.denied,Zugriff verweigert,Access denied
 room.tooltip.and_more,... und %d weitere,... and %d more
 hud.top.next_event.none,Keine Events,No Events
 hud.top.next_event.guests,Gäste Ankunft,Guest Arrival
+hud.event.city_event,Veranstaltung in der Nähe (Tagesevent),Event Nearby (All Day)
 event.day_start,Tagesbeginn,Day Start
 event.reception_open,Rezeption öffnet,Reception Opens
 event.reception_last_call,Rezeption schließt bald,Last Call

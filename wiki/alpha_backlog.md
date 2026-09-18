@@ -7,7 +7,7 @@
 ## ⚠️ Getroffene Design-Entscheidungen (nicht mehr diskutieren!)
 
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.59 | Stand: 17.09.2026
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.60 | Stand: 19.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -50,6 +50,13 @@
 - [x] **Techtree M1.2/M1.3/M1.4:** Schulungsbonus (StaffManager), Effizienz +15% Speed (StaffActor), Hotelleitung (Ankunfts-Geduld +20%, Drain -20%)
 - [x] **Bugfix StaffActor:** Endlos-Loop "Path failed to target_room" wenn Staff schon im Zielraum – Fake-Pfad verhindert Neustart
 - [x] **Bugfix GuestActor (kritisch):** TG-Gäste verließen Bar/Restaurant sofort bei Mittagspause. Root-Cause: Pre-Claim in `_walk_to_poi` speicherte keine Sitzposition. Fix: `_pre_claimed_seat_pos` / `_pre_claimed_duration` werden beim Pre-Claim gesetzt und in `_on_poi_arrived` direkt verwendet. Kein Release/Re-Claim mehr nötig.
+- [x] **Bugfix GuestActor (kritisch):** `is_event_time` PM-Start war `830` (13:50) statt `810` (13:30) → TG-Gäste wurden nach Rückkehr aus Pause sofort wieder rausgeworfen. Fix: Magic Number korrigiert.
+- [x] **Bugfix ConferenceSmall:** `_start_break()` löschte Sitzplätze → Race Condition bei Rückkehr. Fix: Sitze bleiben reserviert (`occupied_by` erhalten), jeder TG findet seinen eigenen Platz.
+- [x] **Bugfix Max-Guests-Check:** `_get_open_pois()` zählte WALKING-Gäste → POIs galten als voll. Fix: Nur aktive IN_POI-States zählen.
+- [x] **Bugfix CustomTooltip:** Doppelzählung bei mehreren Gym/Pool/Spa-Instanzen. Fix: `get_live_details()` für instanzspezifische Zählung nutzen.
+- [ ] **Offen:** Luftlinien-Pathfinding beim Reload aus POI heraus (TG in Bar/Restaurant nach Reload gehen durch Wände)
+- [ ] **Offen:** Conference POI aus `_get_open_pois()` für normale Gäste ausblenden wenn Event läuft
+- [ ] **ANG-365:** Techtree/Level Alignment (`req_level` in techtree.json vs `UNLOCK_LEVELS` in GameState)
 
 ---
 

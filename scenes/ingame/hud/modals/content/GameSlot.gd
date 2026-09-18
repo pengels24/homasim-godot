@@ -34,13 +34,13 @@ func _ready() -> void:
 	set_selected(false)
 
 	# Fonts anpassen laut Styleguide
-	label_name.add_theme_font_size_override("font_size", 20)
+	label_name.add_theme_font_size_override("font_size", 22)
 	label_name.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
 	
-	label_number.add_theme_font_size_override("font_size", 18)
+	label_number.add_theme_font_size_override("font_size", 20)
 	label_number.add_theme_color_override("font_color", Color(0.63, 0.63, 0.67))
 	
-	label_info.add_theme_font_size_override("font_size", 18)
+	label_info.add_theme_font_size_override("font_size", 22)
 	label_info.add_theme_color_override("font_color", Color(0.63, 0.63, 0.67))
 
 # =============================================================================

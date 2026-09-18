@@ -110,7 +110,9 @@ func get_live_details() -> Array[Dictionary]:
 				var mem = a.get("_guest_member")
 				if mem and mem.id == seat["occupied_by"]:
 					guest_name = mem.name + " (TG)"
-					if a.get("current_state") == 1: # State.WALKING
+					# Gast in Pause oder walking? → aus Tooltip ausblenden
+					var gst_poi = a.get("_current_poi_id")
+					if a.get("current_state") == 1 or gst_poi != "conference_small":
 						is_walking = true
 					break
 			
@@ -182,8 +184,28 @@ func _init_phase_from_time() -> void:
 		_phase = "break"
 	elif t < TIME_SESSION_PM_START:
 		_phase = "wander_pm"
+		# Reload-Fix: _room_seats wird nach Reload immer leer neu gebaut (aus Scene-Nodes).
+		# Sitze explizit leeren ist nicht nötig, bleibt zur Sicherheit.
+		for s in _room_seats:
+			s["occupied_by"] = ""
+		_speaker_id = ""
+		_designated_speaker_id = ""
+		# Gäste zurückrufen (Break hat schon geendet, Signal kam nach Reload nicht)
+		get_tree().create_timer(1.5).timeout.connect(
+			func(): _broadcast_to_event_guests("return_from_conference_break")
+		)
 	elif t < TIME_END:
 		_phase = "session_pm"
+		# Reload-Fix: _room_seats leer nach Reload → Gäste müssen neu Platz nehmen.
+		# Seats explizit leeren zur Sicherheit (falls je in-memory Reste da wären).
+		for s in _room_seats:
+			s["occupied_by"] = ""
+		_speaker_id = ""
+		_designated_speaker_id = ""
+		# Gäste zurückrufen (Session PM läuft, Gäste kennen aber ihre Pflicht nicht)
+		get_tree().create_timer(1.5).timeout.connect(
+			func(): _broadcast_to_event_guests("return_from_conference_break")
+		)
 	else:
 		_phase = "end"
 
@@ -206,6 +228,9 @@ func _on_minute_passed(total_game_minutes: int) -> void:
 			if _phase == "wander_pm":
 				_phase = "session_pm"
 				_speaker_time = 0  # Frischer Start nach Pause
+				# Erst JETZT Gäste zurückrufen – Raum ist in session_pm
+				_broadcast_to_event_guests("return_from_conference_break")
+				print("[CONF] 13:30 | session_pm gestartet, TG kehren zurück")
 		TIME_END:
 			if _phase == "session_pm" or _phase == "wander_pm":
 				_broadcast_to_event_guests("end_conference_day")
@@ -373,17 +398,26 @@ func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
 	if interaction_id.begins_with("seat_"):
 		var idx = interaction_id.replace("seat_", "").to_int()
 		var s = _room_seats[idx]
-		# Konferenz-Sitze: Gaeste bleiben bis Swap oder Session-Ende (kein 10-20 Min Zucken)
-		res["duration"] = 999.0
-		if s["node"].name == "ChairSpeaker":
-			_speaker_id = actor_id
-			_designated_speaker_id = actor_id
-			_speaker_time = 0
-			# Phase sicherstellen falls noch idle (Reload-Fallback)
-			if _phase == "idle":
-				_init_phase_from_time()
 		
-		# Blickrichtung fuer ALLE Sitze: immer zum Speakertable
+		# Prüfen ob gerade eine Tagung aktiv ist (entscheidet über Dauer und Speaker-Logik)
+		var gm_nodes = get_tree().get_nodes_in_group("guest_manager")
+		var rkey2 = gm_nodes[0]._room_key(self) if gm_nodes.size() > 0 else ""
+		var is_event_active2 = EventManager.active_conferences.has(rkey2)
+		
+		if is_event_active2:
+			# Tagungsgast: bleibt bis Swap oder Session-Ende
+			res["duration"] = 999.0
+			if s["node"].name == "ChairSpeaker":
+				_speaker_id = actor_id
+				_designated_speaker_id = actor_id
+				_speaker_time = 0
+				if _phase == "idle":
+					_init_phase_from_time()
+		else:
+			# Normaler Hotel-Gast (kein Event): kurzer POI-Besuch wie in anderen Räumen
+			res["duration"] = randf_range(20.0, 45.0)
+		
+		# Blickrichtung für ALLE Sitze: immer zum Speakertable
 		var is_portrait := room_rotation % 2 == 1
 		var root = get_node_or_null("Portrait/Interior") if is_portrait else get_node_or_null("Landscape/Interior")
 		if root:
@@ -417,16 +451,15 @@ func _start_break() -> void:
 	_speaker_id = ""
 	_speaker_time = 0
 	_designated_speaker_id = ""
-	# Alle Sitze freigeben (die GuestActor-Methode macht den Rest)
-	for s in _room_seats:
-		s["occupied_by"] = ""
-	print("[CONF] _start_break | 12:00 | alle Sitze frei, TG werden rausgeschickt")
+	# Sitze NICHT löschen! Jeder TG behält seinen Platz reserviert.
+	# Bei Rückkehr findet er ihn via s["occupied_by"] == actor_id wieder.
+	print("[CONF] _start_break | 12:00 | Plätze reserviert, TG gehen in Pause")
 	_broadcast_to_event_guests("go_conference_break")
 
 func _end_break() -> void:
 	_phase = "wander_pm"
-	print("[CONF] _end_break | 13:50 | TG kehren zurück (wander_pm bis 14:00)")
-	_broadcast_to_event_guests("return_from_conference_break")
+	print("[CONF] _end_break | 13:15 | TG wandern frei bis 13:30 (wander_pm)")
+	# Kein Broadcast hier! Gäste wandern bis session_pm startet.
 
 func _end_conference() -> void:
 	_phase = "end"

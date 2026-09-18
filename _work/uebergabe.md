@@ -1,29 +1,19 @@
-# Übergabe-Protokoll – v0.1.59 (17.09.2026)
+# Übergabeprotokoll: HO·MA·SIM Alpha (Branch: dev)
 
-## Letzter Stand
-Session beendet nach erfolgreicher Behebung eines kritischen Gastro-Bugs kurz vor dem Pre-Alpha-Release.
+## Letzter Stand (v0.1.59)
+- **Erledigt in dieser Session:**
+  - Parzellen-Bau-Timer Bug gefixt (Timer wurden beim Savegame Restore fälschlicherweise auf 720 Minuten blockiert, Wände wurden nicht neu generiert).
+  - Hardcoded Toast-String ("xxx wütend abgereist") durch `GameState.T("toast.guest.angry_leave")` inkl. `%s` in `language.csv` ersetzt.
+  - Neues Feature: Animierter Schraffur-Shader (`construction_hatch.gdshader`) für Parzellen, die sich im Bau befinden.
 
-## Geänderte Dateien
-- `scenes/ingame/guest/GuestActor.gd` – Haupt-Fixes (Pre-Claim Sitzposition, M1.4, visited_rooms)
-- `scenes/ingame/guest/GuestParty.gd` – visited_rooms Serialisierung (to_dict/from_dict)
-- `scenes/ingame/staff/StaffActor.gd` – Pathfinding Endlos-Loop Fix
-- `autoload/StaffManager.gd` – M1.2 Schulungsbonus
-- `version.txt` – v0.1.59
-- `changelog/gd-0.1.59.md` – neu erstellt
-- `wiki/alpha_backlog.md` – aktualisiert
+- **Was GERADE untersucht wird (Offener Bug):**
+  - **Der Koch (Küche) und der Barkeeper (Bar) gehen nach Schließung (22:00 bzw. 23:30) NICHT mehr in den Personalraum.**
+  - Sie bleiben in den geschlossenen Räumen stehen.
+  - Das hat laut User in der Vergangenheit funktioniert und ist nun kaputt.
+  - WICHTIG: Der User hat explizit angewiesen, **NICHT** mit "GastroManager.active_orders (Geisterbestellungen)" oder "Savegames" zu argumentieren. Der Bug liegt im Ablauf ab dem Punkt "POI schließt".
+  - Vermutung: Pathfinding/AStar-Logic für StaffActor (evtl. in `_is_shift_over` oder `_process_idle`), bzw. die Evaluierung von `is_night` für Backend-Räume wie die Küche (die keine harten `open_to`-Zeiten im JSON haben).
 
-## Was getestet wurde ✅
-- Gym: Mehrere Gäste gleichzeitig → funktioniert
-- Bar: TG-Mittagspause mit 8+ Gästen → alle bleiben sitzen (Studying Menu / Bestellung)
-- Restaurant: TG-Mittagspause → alle bleiben sitzen
-- StaffActor: Kein Path-Spam mehr wenn schon im Zielraum
-
-## Sofortige nächste Schritte (für morgen)
-1. **Inspektor-Events (ANG-355):** Logik für Inspector-Spawn, Report-Generierung mit `visited_rooms`-Daten
-2. **Bau-Validierung (ANG-349):** Max. 1 Konferenzraum beim Bauen prüfen
-3. **Abschluss-Tests** vor Pre-Alpha-Release: Kompletter Durchlauf Tag 1-4, Checkout, Inspektor
-
-## Wichtige Architektur-Details
-- `_pre_claimed_seat_pos` / `_pre_claimed_duration` in GuestActor: Werden in `_walk_to_poi()` beim Pre-Claim gesetzt, in `_on_poi_arrived()` konsumiert und danach auf INF/0 zurückgesetzt.
-- `visited_rooms` in GuestParty: Dict mit room_id → `{name, reviews: [{day, cleanliness, condition, sat_delta}]}`. Einmal pro Tag & Raum beschrieben.
-- Techtree M1.4: Feature-Key `"ui.techtree.feature.M1.4"` in TechtreeManager prüfen.
+## Sofortige nächste Schritte
+1. Lies den Code von `StaffActor.gd`, insb. `_is_shift_over()` und `_process_idle()`.
+2. Finde heraus, warum der Pathfinding-Fallback (Lobby) oder das reguläre Staff-Room Pathing fehlschlägt oder warum `is_night` nicht korrekt ausgelöst wird.
+3. Behebe den Logikfehler, damit Koch und Barkeeper nach Schichtende wieder in den Personalraum laufen.

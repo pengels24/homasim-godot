@@ -183,39 +183,44 @@ func get_live_details() -> Array[Dictionary]:
 	var now := TimeManager.get_game_time() if TimeManager else 0
 	var _secs_per_min := TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 4.0
 	
+	# _guest_session_end ist instanzspezifisch → korrekter Filter für mehrere Spa-Instanzen
 	for actor in get_tree().get_nodes_in_group("guest_actors"):
+		var gm = actor.get("_guest_member")
+		if not gm:
+			continue
+		var guest_id: String = gm.id
+		# Nur Gäste zeigen, die in DIESER Spa-Instanz registriert sind
+		if not _guest_session_end.has(guest_id):
+			continue
 		var valid_states = [3, 6, 7, 8, 9]
-		if actor.get("current_state") in valid_states and actor.get("_current_poi_id") == "spa_small":
-			var gm = actor.get("_guest_member")
-			if gm:
-				var guest_id: String = gm.id
-				var time_left_mins: int = 0
-				if _guest_session_end.has(guest_id):
-					time_left_mins = max(0, _guest_session_end[guest_id] - now)
-				
-				var status_text: String
-				var color: Color
-				if time_left_mins <= 0:
-					status_text = GameState.T("poi.status.leaving_soon")
+		if not (actor.get("current_state") in valid_states):
+			continue
+		
+		var time_left_mins: int = max(0, _guest_session_end[guest_id] - now)
+		var status_text: String
+		var color: Color
+		if time_left_mins <= 0:
+			status_text = GameState.T("poi.status.leaving_soon")
+			color = Color("#818cf8")
+		else:
+			status_text = GameState.T("poi.spa.relaxing")
+			color = Color("#3b82f6")
+			# Liege oder Stuhl?
+			for b in _room_beds:
+				if b["occupied_by"] == guest_id:
+					status_text = GameState.T("poi.spa.lying_down")
 					color = Color("#818cf8")
-				else:
-					status_text = GameState.T("poi.spa.relaxing")
-					color = Color("#3b82f6")
-					# Liege oder Stuhl?
-					for b in _room_beds:
-						if b["occupied_by"] == guest_id:
-							status_text = GameState.T("poi.spa.lying_down")
-							color = Color("#818cf8")
-							break
-					status_text += " (%dm)" % time_left_mins
-				
-				details.append({
-					"left": gm.name,
-					"right": status_text,
-					"color": color,
-					"_sort": time_left_mins
-				})
+					break
+			status_text += " (%dm)" % time_left_mins
+		
+		details.append({
+			"left": gm.name,
+			"right": status_text,
+			"color": color,
+			"_sort": time_left_mins
+		})
 	
 	# Aufsteigend: kleinste Zeit zuerst
 	details.sort_custom(func(a, b): return a["_sort"] < b["_sort"])
 	return details
+

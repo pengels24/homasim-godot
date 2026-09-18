@@ -5,8 +5,10 @@
 [ext_resource type="Script" uid="uid://cpe2f0o26vphm" path="res://scenes/ingame/hud/modals/content/ModalContentLoad.gd" id="2_vncp5"]
 [ext_resource type="StyleBox" uid="uid://2rxcfg77t4wa" path="res://assets/UI/menu_button_green_pressed.tres" id="3_vncp5"]
 [ext_resource type="StyleBox" uid="uid://b802q2dq055uh" path="res://assets/UI/menu_button_green_hover.tres" id="4_i5kiy"]
+[ext_resource type="StyleBox" path="res://assets/UI/menu_button_darkblue_disabled.tres" id="5_darkblue"]
 
 [node name="ModalContentLoad" type="VBoxContainer" unique_id=279179450]
+custom_minimum_size = Vector2(800, 0)
 theme = ExtResource("1_2nls7")
 script = ExtResource("2_vncp5")
 
@@ -46,4 +48,5 @@ layout_mode = 2
 theme_override_styles/normal = ExtResource("2_qjcy4")
 theme_override_styles/pressed = ExtResource("3_vncp5")
 theme_override_styles/hover = ExtResource("4_i5kiy")
+theme_override_styles/disabled = ExtResource("5_darkblue")
 text = "Laden"

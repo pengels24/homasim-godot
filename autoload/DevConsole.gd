@@ -133,6 +133,7 @@ func _execute(cmd: String) -> void:
 			_log("  fix-savegame      - Bereinigt verbuggte Events und Tagungsgäste", CLR_INFO)
 			_log("  start-inspector   - Spawnt den Gourmet-Inspektor manuell", CLR_INFO)
 			_log("  list-guests       - Listet alle aktiven/wartenden/checkout Gäste", CLR_INFO)
+			_log("  list-pois         - Listet alle POI-Räume mit Status, Besuchern, Open", CLR_INFO)
 
 		"fix-savegame":
 			if EventManager:
@@ -184,6 +185,59 @@ func _execute(cmd: String) -> void:
 				_log("active_event (Boost): " + ae, CLR_INFO)
 				_log("inspector_today: " + insp, CLR_INFO)
 				_log("==================", CLR_INFO)
+
+		"list-pois":
+			var scene_root = get_tree().current_scene
+			var mg = scene_root.find_child("MapGrid", true, false) if scene_root else null
+			if not is_instance_valid(mg):
+				_log("MapGrid nicht gefunden.", CLR_ERR)
+			else:
+				var current_time: int = TimeManager.get_game_time() if TimeManager else 480
+				_log("=== POI-Status (Zeit: %02d:%02d) ===" % [current_time / 60, current_time % 60], CLR_INFO)
+				var poi_count := 0
+				for room in mg.get_placed_rooms():
+					var def: Dictionary = {}
+					if room.has_method("get_definition"):
+						def = room.get_definition()
+					# Nur echte Gast-POIs (keine Staff-only Räume wie Kitchen)
+					if not def.get("is_guest_poi", false):
+						continue
+					poi_count += 1
+					var rnum: String = str(room.get("room_number"))
+					if rnum == "" or rnum == "null" or rnum == "0":
+						rnum = str(def.get("id", "?"))
+					var rtype: String = str(def.get("id", "?"))
+					# Open/Closed prüfen (open_to=0 → immer offen)
+					var open_from: int = int(def.get("open_from", 0))
+					var open_to: int   = int(def.get("open_to", 0))
+					var is_open: bool
+					if open_to == 0:
+						is_open = true  # kein Zeitlimit → immer offen
+					else:
+						is_open = current_time >= open_from and current_time < open_to
+					var open_str: String = "OPEN" if is_open else "CLOSED"
+					# Besucher aus _room_seats zählen (raumspezifisch!)
+					var visitors: int = 0
+					var max_guests: int = int(def.get("max_guests", 0))  # Immer aus der Def!
+					if room.get("_room_seats") != null:
+						for seat in room.get("_room_seats"):
+							if seat.get("occupied_by", "") != "":
+								visitors += 1
+					# Phase (Konferenz)
+					var phase_str: String = ""
+					if room.get("_phase") != null:
+						phase_str = " phase=" + str(room.get("_phase"))
+					# Staff
+					var staff_str: String = "no-staff"
+					if def.get("min_staff", 0) > 0 or def.get("max_staff", 0) > 0:
+						staff_str = "staff-slot"
+						if room.get("assigned_staff") != null and (room.get("assigned_staff") as Array).size() > 0:
+							staff_str = "staff:" + str((room.get("assigned_staff") as Array).size())
+					var clr := CLR_OK if is_open else CLR_ERR
+					_log("  [%s] %s | %s | guests:%d/%d | %s%s" % [rnum, rtype, open_str, visitors, max_guests, staff_str, phase_str], clr)
+				if poi_count == 0:
+					_log("  Keine POI-Räume gefunden.", CLR_INFO)
+				_log("==============================", CLR_INFO)
 
 		"set-conference":
 			if val_s == "on":

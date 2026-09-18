@@ -148,7 +148,15 @@ func _build_slot_row(idx: int, snap: Variant, is_auto: bool) -> Control:
 	hbox.add_child(date_lbl)
 
 	if snap != null and snap is Dictionary:
-		name_lbl.text = snap.get("name", "Spielstand %d" % (idx + 1))
+		var snap_name: String = snap.get("name", "Spielstand %d" % (idx + 1))
+		# Autosaves: In-Game-Tag und Uhrzeit ergänzen für bessere Orientierung
+		if is_auto:
+			var game_day: int = snap.get("day", 1)
+			var game_time: int = snap.get("game_time", 0)
+			var h: int = game_time / 60
+			var m: int = game_time % 60
+			snap_name = "Tag %d  ·  %02d:%02d" % [game_day, h, m]
+		name_lbl.text = snap_name
 		name_lbl.add_theme_color_override("font_color", Color(0.90, 0.90, 0.90))
 		var ts: int = snap.get("timestamp", 0)
 		if ts > 0:

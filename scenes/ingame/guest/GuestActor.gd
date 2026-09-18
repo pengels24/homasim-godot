@@ -90,6 +90,8 @@ var consumption_type: String = "food" # "food" or "drink"
 # Interner Timer für Aufenthaltsdauer
 var _action_timer: float = 0.0
 var _impatient_timer: float = 0.0
+## Night-Rescue: Unabhängiger Timer, der Gäste nach 23:00 aktiv ins Bett schickt
+var _night_rescue_timer: float = 30.0
 var _base_speed: float = 40.0
 
 var _active_tween: Tween
@@ -133,10 +135,10 @@ func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null, guest
 	if party and party.type == "vip":
 		var vip_node = Sprite2D.new()
 		vip_node.name = "VIPOverlay"
-		vip_node.texture = preload("res://assets/icons/guests/user-star.svg")
-		vip_node.modulate = Color(1.0, 0.84, 0.0)
-		vip_node.scale = Vector2(0.6, 0.6)
-		vip_node.position = Vector2(0, -32)
+		vip_node.texture = preload("res://assets/icons/angelus2010/ang-star-filled.aseprite")
+		vip_node.modulate = Color(1.0, 0.84, 0.0)  # Gold
+		vip_node.scale = Vector2(0.15, 0.15)  # Gleiche Scale wie Event-Badge
+		vip_node.position = Vector2(0, -4)
 		vip_node.z_index = 50
 		add_child(vip_node)
 		
@@ -208,7 +210,8 @@ func _process(delta: float) -> void:
 	if has_node("VIPOverlay"):
 		var vip_node = get_node("VIPOverlay")
 		var t = Time.get_ticks_msec() / 1000.0
-		var s = 0.6 + sin(t * 4.0) * 0.1
+		# Base-Scale 0.15 wie Event-Badge, sanfter Goldpuls ±0.02
+		var s = 0.15 + sin(t * 3.0) * 0.02
 		vip_node.scale = Vector2(s, s)
 		
 	if has_node("EventOverlay"):
@@ -277,6 +280,29 @@ func _process_impatient(delta: float) -> void:
 
 # =============================================================================
 func _process_waiting(delta: float) -> void:
+	# === NIGHT RESCUE: Läuft unabhängig vom _action_timer ===
+	# Wenn ein Gast nach 23:00 noch nicht schläft/geht (egal ob Timer hängt oder 0 ist),
+	# wird er spätestens alle 30 Sek aktiv in sein Zimmer geschickt.
+	if TimeManager and not TimeManager.is_paused():
+		var rescue_hour = TimeManager.get_hour()
+		if rescue_hour >= 23 or rescue_hour < 6:
+			var rescue_states := [State.SLEEPING, State.WALKING, State.LEAVING,
+								  State.AWAITING_CHECKOUT, State.WAITING_IN_LINE]
+			if current_state not in rescue_states:
+				_night_rescue_timer -= delta * TimeManager.user_speed
+				if _night_rescue_timer <= 0.0:
+					_night_rescue_timer = 30.0
+					if is_instance_valid(_target_room):
+						print("[GuestActor] NIGHT RESCUE: %s → walk to room (state=%s)" % [
+							(_guest_member.name if _guest_member else "?"), get_state_name(current_state)])
+						_action_timer = 0.0
+						_decide_next_action()
+						return
+			else:
+				_night_rescue_timer = 30.0 # Reset sobald Gast schläft/geht
+		else:
+			_night_rescue_timer = 30.0 # Reset am Tag
+
 	if _action_timer <= 0.0:
 		return # Gast ruht – kein Timer-Countdown
 
@@ -294,8 +320,8 @@ func _process_waiting(delta: float) -> void:
 		
 	var party = _get_my_party()
 	if party and party.event_poi_id != "":
-		# 07:45 (465) bis 12:00 (720) UND 13:50 (830) bis 17:00 (1020)
-		var is_event_time = (current_time >= 465 and current_time < 720) or (current_time >= 830 and current_time < 1020)
+		# 07:45 (465) bis 12:00 (720) UND 13:30 (810) bis 17:00 (1020) [TIME_SESSION_PM_START]
+		var is_event_time = (current_time >= 465 and current_time < 720) or (current_time >= 810 and current_time < 1020)
 		
 		# Den konkreten Event-Raum explizit über die Party-ID ermitteln!
 		var event_room_node = null
@@ -536,7 +562,9 @@ func _get_open_pois() -> Array[String]:
 		# Gastro-Räume: Mindestbudget 5€ und Hunger-Prüfung
 		if room.has_method("is_gastro") and room.is_gastro():
 			cost = max(cost, 5)
-			if _guest_member.saturation > 50:
+			# TG-Gäste in der Pause: Hunger-Schwelle erhöht (Mittagspause!)
+			var hunger_threshold = 80 if (_conference_break_poi_key != "" or (party and party.total_stay_days == 0)) else 50
+			if _guest_member.saturation > hunger_threshold:
 				continue
 			
 		if _guest_member.spending_budget < cost:
@@ -551,12 +579,13 @@ func _get_open_pois() -> Array[String]:
 			if not room.is_operational():
 				continue
 			
-		# Max Guests Check
+		# Max Guests Check – nur Gäste zählen die WIRKLICH drin sind (nicht auf dem Weg)
 		var max_guests = def.get("max_guests", 0)
 		if max_guests > 0:
 			var current_count = 0
+			var active_states = [3, 6, 7, 8, 9]  # IN_POI, STUDYING_MENU, WAITING_FOR_FOOD, EATING, SITTING
 			for guest in get_tree().get_nodes_in_group("guest_actors"):
-				if guest._current_poi_id == room_id:
+				if guest._current_poi_id == room_id and guest.get("current_state") in active_states:
 					current_count += 1
 			if current_count >= max_guests:
 				continue

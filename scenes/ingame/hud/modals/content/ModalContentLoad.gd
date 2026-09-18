@@ -54,10 +54,10 @@ func _generate_slots() -> void:
 		var snap = manual_saves[array_index] if array_index < manual_saves.size() else null
 		_create_slot_instance(manual_slot_container, slots_manual_ui, i, snap, "manual")
 
-	# 4. Autosave Slots generieren (nur so viele wie existieren, max 5)
-	for i in range(1, auto_saves.size() + 1):
-		var snap = auto_saves[i - 1]
-		_create_slot_instance(auto_slot_container, slots_auto_ui, i, snap, "auto")
+	# 4. Autosave Slots generieren (neuester zuerst = Index 0, kein visual_index nötig)
+	for i in range(auto_saves.size()):
+		var snap = auto_saves[i]
+		_create_slot_instance(auto_slot_container, slots_auto_ui, i + 1, snap, "auto")
 
 
 # =============================================================================
@@ -72,11 +72,29 @@ func _create_slot_instance(parent_container: Node, ui_array: Array, visual_index
 	var info_text = "" if slot_type == "auto" else GameState.T("modal.save.slot.new")
 
 	if not is_empty:
-		save_name = snap.get("name", "Unbenannt")
+		if slot_type == "auto":
+			# Autosaves: In-Game-Tag und Uhrzeit anzeigen statt generischem "Autosave"
+			var game_day: int = snap.get("day", 1)
+			var game_time: int = snap.get("game_time", 0)
+			var h: int = game_time / 60
+			var m: int = game_time % 60
+			save_name = "%s %d  ·  %02d:%02d" % [GameState.T("label.day"), game_day, h, m]
+		else:
+			save_name = snap.get("name", "Unbenannt")
 		var ts = snap.get("timestamp", 0)
-		info_text = GameState.format_timestamp(ts)
+		# Manuelle Saves: In-Game-Tag als Kontext zum Real-Timestamp hinzufügen
+		var game_day: int = snap.get("day", 1)
+		var game_time: int = snap.get("game_time", 0)
+		var h: int = game_time / 60
+		var m: int = game_time % 60
+		var ingame_info: String = "%s%d %02d:%02d" % [GameState.T("label.day")[0], game_day, h, m]
+		info_text = ingame_info + "  ·  " + GameState.format_timestamp(ts)
 
 	slot_instance.setup(visual_index, save_name, info_text, is_empty)
+
+	# Autosaves: Nummer ausblenden (Reihenfolge = Aktualität, kein Index nötig)
+	if slot_type == "auto":
+		slot_instance.label_number.text = ""
 
 	# .bind(slot_type) gibt dem Signal heimlich den Typ mit (manual oder auto)
 	slot_instance.sig_slot_clicked.connect(_on_slot_clicked.bind(slot_type))

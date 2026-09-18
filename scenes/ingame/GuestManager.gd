@@ -180,16 +180,14 @@ func get_free_rooms() -> Array:
 	for room in all_rooms:
 		var type_id: String = str(room.get("room_type_id"))
 		
-		# Neu: Wenn Zimmer zum Abriss markiert ist, darf es nicht belegt werden
+		# Wenn Zimmer zum Abriss markiert ist, darf es nicht belegt werden
 		if room.get("is_pending_demolish"):
 			continue
 
 		# Falls wir die Def noch nicht im Cache haben, hier kurz holen (Lazy Loading)
 		if not _room_definitions.has(type_id):
-
 			if room.has_method("get_definition"):
 				_room_definitions[type_id] = room.get_definition()
-
 			else:
 				continue
 
@@ -202,8 +200,18 @@ func get_free_rooms() -> Array:
 
 		if not _room_assign.has(rid):
 			result.append(room)
+		else:
+			# Stale-Check: Party existiert noch?
+			var status = _room_assign[rid]
+			if typeof(status) == TYPE_STRING and status != "DIRTY" and not status.begins_with("RSV_"):
+				var party = get_party(status)
+				if party == null:
+					# Party bereits gone → Eintrag bereinigen, Zimmer als frei markieren
+					_room_assign.erase(rid)
+					result.append(room)
 
 	return result
+
 
 
 # =============================================================================
@@ -576,6 +584,32 @@ func _generate_party(force_type_id: String = "") -> GuestParty:
 				var is_boy: bool = randf() > 0.5
 				var child_gender: String = "male" if is_boy else "female"
 				_add_member(party, c_first, last, "child", child_gender, true, party_speed)
+
+		"vip":
+			# 🎉 Easter Egg: Sullivan Cooper (YouTuber) – immer der erste VIP wenn er nicht schon im Hotel ist
+			var sulli_exists := false
+			for p: GuestParty in _active:
+				if p.type == "vip":
+					for m: GuestMember in p.members:
+						if m.name == "Sullivan Cooper":
+							sulli_exists = true
+							break
+			for p: GuestParty in _waiting:
+				if p.type == "vip":
+					for m: GuestMember in p.members:
+						if m.name == "Sullivan Cooper":
+							sulli_exists = true
+							break
+
+			if not sulli_exists:
+				print("[VIP] 🌟 Sullivan Cooper betritt das Hotel!")
+				_add_member(party, "Sullivan", "Cooper", "primary", "male", false, party_speed)
+			else:
+				var last  := NameDatabase.random_last()
+				var is_male: bool = randf() > 0.5
+				var first := NameDatabase.random_male() if is_male else NameDatabase.random_female()
+				var gender: String = "male" if is_male else "female"
+				_add_member(party, first, last, "primary", gender, false, party_speed)
 
 		_:
 			var last  := NameDatabase.random_last()

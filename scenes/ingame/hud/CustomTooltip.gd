@@ -154,7 +154,16 @@ func _update_content() -> void:
 		if def.get("is_poi", false):
 			var current_visitors = 0
 			var visitor_names = []
-			if is_instance_valid(ingame):
+			# Instanzspezifisch via get_live_details() falls verfügbar (z.B. Gym, Pool, Spa)
+			if _target_room.has_method("get_live_details") and not def.get("is_staff_poi", false):
+				var live = _target_room.get_live_details()
+				current_visitors = live.size()
+				for entry in live:
+					var gname = entry.get("left", "")
+					if gname != "":
+						visitor_names.append("👤 " + gname)
+			elif is_instance_valid(ingame):
+				# Fallback: Type-basiert für Räume ohne get_live_details()
 				var ctrl = ingame.get("_guest_controller")
 				if ctrl:
 					for actor in get_tree().get_nodes_in_group("guest_actors"):
@@ -162,7 +171,7 @@ func _update_content() -> void:
 						var valid_states = [actor.State.IN_POI, actor.State.STUDYING_MENU, actor.State.WAITING_FOR_FOOD, actor.State.EATING, actor.State.AWAITING_CHECKOUT, actor.State.IDLE, actor.State.WAITING_IN_LINE, actor.State.WALKING, actor.State.SITTING]
 						var gm = get_tree().current_scene.find_child("GuestManager", true, false)
 						var rkey = gm._room_key(_target_room) if is_instance_valid(gm) else ""
-						# ANG-356: WALKING nur zählen wenn Gast sich physisch im Raum befindet (verhindert Zählen am anderen Ende des Hotels)
+						# ANG-356: WALKING nur zählen wenn Gast sich physisch im Raum befindet
 						if actor.current_state == actor.State.WALKING:
 							var local_pos = _target_room.to_local(actor.global_position)
 							var sz = _target_room.get_tile_size() if _target_room.has_method("get_tile_size") else Vector2(2, 2)

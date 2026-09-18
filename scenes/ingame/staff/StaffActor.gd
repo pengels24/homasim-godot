@@ -369,9 +369,10 @@ func _is_shift_over() -> bool:
 			is_night = true # Raum ist geschlossen
 			
 			# Überstunden-Check: Gibt es noch was zu tun?
+			# Nur 'pending'/'cooking' halten Koch fest – der Rest ist Kellner-Aufgabe.
 			var room_id = GuestManager._room_key(assigned_room)
-			if GastroManager and GastroManager.has_active_orders_for_room(room_id):
-				is_night = false # Bleibt, bis alle versorgt sind
+			if GastroManager and GastroManager.has_cookable_orders_for_room(room_id):
+				is_night = false # Bleibt, bis alle Gerichte fertig gekocht sind
 	else:
 		# Fallback für Personal ohne feste Raum-Öffnungszeiten (Housekeeping, Maintenance)
 		var current_time = TimeManager.get_game_time()

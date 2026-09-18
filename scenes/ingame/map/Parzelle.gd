@@ -34,7 +34,7 @@ func _ready() -> void:
 	
 	# Panel auf CanvasLayer → Screen-Space, kein Blur, kein Mouse-Blocking
 	_ui_canvas = CanvasLayer.new()
-	_ui_canvas.layer = 10
+	_ui_canvas.layer = 5  # Unter allen Modals (80+) und dem HUD (10+)
 	add_child(_ui_canvas)
 	
 	build_ui_panel = PARZELLE_BUILD_UI.instantiate()
@@ -81,7 +81,8 @@ func _process(_delta: float) -> void:
 			
 		if current_time >= construction_end_time:
 			buy(GameState.active_hotel_id)
-			var map = get_parent().get_parent()
+			# Baum: Parzelle → ParcelsRoot → WorldRoot → MapGrid (3 Ebenen hoch!)
+			var map = get_parent().get_parent().get_parent()
 			# Occupancy-Grid für die neue Parzelle freischalten (sonst: alle Tiles SOLID)
 			if map.has_method("_mark_parcel_walls"):
 				var gx := int(name.get_slice("_", 1))

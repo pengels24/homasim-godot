@@ -335,6 +335,9 @@ func claim_quest(t_id: String) -> void:
 		# Belohnung ausschütten
 		GameState.add_fp(t_def.get("reward_fp", 0))
 		FinanceManager.add_transaction(t_def.get("reward_money", 0), "quest", GameState.T("toast.quest.reward", GameState.T(t_def.get("name", ""))))
+		# EXP-Belohnung: Rang × 25 (Rang1=25, Rang2=50, ...)
+		var task_rank: int = cat_state.get("current_rank", 1)
+		GameState.add_exp(task_rank * 25, "Quest-Task")
 		
 		t_state["state"] = "claimed"
 		sig_quest_claimed.emit(t_id)
@@ -372,6 +375,9 @@ func claim_rank(cat_id: String) -> void:
 		
 		GameState.add_fp(r_def.get("reward_fp", 0))
 		FinanceManager.add_transaction(r_def.get("reward_money", 0), "quest", GameState.T("toast.quest.rank_reward", r_id))
+		# EXP-Belohnung: Rang × 200 (Rang1=200, Rang2=400, ...)
+		var rank_num: int = int(r_id)
+		GameState.add_exp(rank_num * 200, "Rang-Abschluss")
 		
 		cat_state["rank_claimable"] = false
 		cat_state["current_rank"] += 1

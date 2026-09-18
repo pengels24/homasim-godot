@@ -990,15 +990,22 @@ func _update_overlays() -> void:
 								color = Color(0.0, 0.0, 1.0, 0.75) # Blue for reserved
 							else:
 								var party = _guest_mgr.get_party(status)
-								if party and party.get("state") == "checkout":
+								if party == null:
+									# Party bereits gone aber _room_assign stale → bereinigen
+									_guest_mgr._room_assign.erase(rid)
+									color = Color(0.0, 1.0, 0.0, 0.75) # Grün: effektiv frei
+								elif party.get("state") == "checkout":
 									color = Color(1.0, 0.5, 0.0, 0.75) # Orange if leaving
 								else:
 									color = Color(1.0, 0.0, 0.0, 0.75) # Red for occupied
 						else:
-							color = Color(1.0, 0.0, 0.0, 0.75)
+							# Ungültiger Status-Typ → bereinigen
+							_guest_mgr._room_assign.erase(rid)
+							color = Color(0.0, 1.0, 0.0, 0.75)
 					else:
 						# Free
 						color = Color(0.0, 1.0, 0.0, 0.75)
+
 						
 			"category":
 				var cat = def.get("category", "")

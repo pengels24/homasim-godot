@@ -40,8 +40,9 @@ func set_next_event(text: String) -> void:
 @onready var activity_badge_label: Label = $ActivityLogContainer/Badge/Label
 @onready var activity_panel: ActivityLogPanel = $ActivityLogPanel
 
-var _is_building: bool = false
 var _is_paused: bool = false
+var _is_building: bool = false
+var _pending_levelup_exp: int = 0  # ANG-365: EXP-Bonus bei Level-Up
 
 
 # =============================================================================
@@ -305,38 +306,34 @@ func _on_hotel_level_up(new_level: int) -> void:
 			reward_money = 2500
 			reward_fp    = 500
 		4:
-			unlock_text  = GameState.T("levelup.unlock.l4_gastro")
 			reward_money = 4000
 			reward_fp    = 600
 		5:
-			unlock_text  = GameState.T("levelup.unlock.l5_milestone")
 			reward_money = 5000
 			reward_fp    = 750
 		6:
-			unlock_text  = GameState.T("levelup.unlock.l6_guest_needs")
 			reward_money = 6000
 			reward_fp    = 900
 		7:
-			unlock_text  = GameState.T("levelup.unlock.l7_gourmet_kitchen")
 			reward_money = 7000
 			reward_fp    = 1100
 		8:
-			unlock_text  = GameState.T("levelup.unlock.l8_wellness")
 			reward_money = 8000
 			reward_fp    = 1300
 		9:
-			unlock_text  = GameState.T("levelup.unlock.l9_stars")
 			reward_money = 10000
 			reward_fp    = 1500
 		10:
-			unlock_text  = GameState.T("levelup.unlock.l10_tier2")
 			reward_money = 15000
 			reward_fp    = 2000
-	# Parzellen-Erweiterung (jede gerade Stufe ab Level 4)
-	if new_level >= 4 and new_level % 2 == 0:
-		if unlock_text != "":
-			unlock_text += "\n\n"
-		unlock_text += "+ " + GameState.T("levelup.unlock.more_plots")
+
+	# ANG-365: +5% EXP des naechsten Levels als Bonus
+	# TODO (post-pre-alpha): Nach Level staffeln
+	var next_exp_needed: int = GameState.get_xp_needed_for_level(new_level + 1)
+	_pending_levelup_exp = int(next_exp_needed * 0.05)
+
+	# Parzellen-Erweiterung (jede gerade Stufe ab Level 4) - TODO ANG-365
+	# Ausgeblendet bis unlock_text-Texte korrekt gepflegt sind
 
 	%LevelUpModal.setup(new_level, reward_money, reward_fp, unlock_text)
 	%LevelUpModal.open()
@@ -353,14 +350,19 @@ func _on_level_up_rewards_claimed(money: int, fp: int) -> void:
 		spawn_pos = camera.get_screen_center_position()
 
 	if money > 0:
-		# NEU: Über den FinanceManager routen
+		# Über den FinanceManager routen
 		FinanceManager.add_transaction(money, "reward", "tx.level_up_bonus")
-
 		EffectManager.spawn_money_text(money, spawn_pos)
 
 	if fp > 0:
 		GameState.add_fp(fp)
-		EffectManager.spawn_fp_text(fp, spawn_pos)
+		EffectManager.spawn_fp_text(fp, spawn_pos + Vector2(0, -40))
+
+	# ANG-365: EXP-Bonus auszahlen (5% des naechsten Level-EXP)
+	if _pending_levelup_exp > 0:
+		GameState.add_exp(_pending_levelup_exp, "Level-Up Bonus")
+		EffectManager.spawn_exp_text(_pending_levelup_exp, spawn_pos + Vector2(0, -80))
+		_pending_levelup_exp = 0
 
 
 # =============================================================================
@@ -454,76 +456,56 @@ func update_state_visuals() -> void:
 		state_border.visible = true
 	else:
 		state_border.visible = false
-		
+
 	if EventManager and EventManager.is_any_event_active() and not _is_building:
 		if is_instance_valid(event_indicator):
 			event_indicator.visible = true
-			var names = []
-			var col = Color(0.6, 0.2, 0.8) # Standard-Lila für Events
-			
-			# Konferenzen auslesen
+			var conf_name := ""
+			var col := Color(0.6, 0.2, 0.8)
+			var has_conference := EventManager.active_conferences.size() > 0
+			var has_city_event := EventManager.is_event_active()
+
+			# Konferenzname + Farbe auslesen
 			for cfg in EventManager.active_conferences.values():
-				if not names.has(cfg.get("name", "Tagung")):
-					names.append(cfg.get("name", "Tagung"))
+				if conf_name.is_empty():
+					conf_name = cfg.get("name", "Tagung")
 				if cfg.has("color"):
 					col = Color(cfg["color"])
-					
-			# Falls nur ein City-Event aktiv ist und keine Tagung
-			if names.size() == 0 and EventManager.is_event_active():
-				match EventManager.get_active_event():
-					EventManager.EventType.TRADE_FAIR:
-						names.append("Fachmesse")
-					EventManager.EventType.CONCERT:
-						names.append("Konzert")
-					EventManager.EventType.HOLIDAY:
-						names.append("Feiertag")
-				col = Color(0.8, 0.5, 0.1) # Orange für City-Events
-			
+
+			# Row 1: Konferenzname mit Timer ODER "Veranstaltung in der Nähe" (nur City-Event)
 			if is_instance_valid(event_name_label):
-				# Timer-Suffix: zeige Restzeit bis Ende der Tagungssession
-				var timer_suffix := ""
-				if TimeManager and EventManager.active_conferences.size() > 0:
-					var now: int = TimeManager.get_game_time()  # Minuten seit Mitternacht
-					var end_min: int = 1020  # 17:00 (Nachmittag-Ende)
-					if now < 720:        # Vor 12:00 → Morgensession endet um 12:00
-						end_min = 720
-					var remaining: int = maxi(0, end_min - now)
-					var h: int = int(remaining / 60.0)
-					var m: int = remaining % 60
-					if h > 0:
-						timer_suffix = " (%dh%02dm)" % [h, m]
-					else:
-						timer_suffix = " (%dmin)" % m
-				if names.size() > 1:
-					event_name_label.text = "%d Events%s" % [names.size(), timer_suffix]
+				if has_conference:
+					var timer_suffix := ""
+					if TimeManager:
+						var now: int = TimeManager.get_game_time()
+						var remaining: int = maxi(0, 1020 - now)  # Konferenzen enden immer 17:00
+						var h: int = int(remaining / 60.0)
+						var m: int = remaining % 60
+						if h > 0:
+							timer_suffix = " (%dh%02dm)" % [h, m]
+						else:
+							timer_suffix = " (%dmin)" % m
+					event_name_label.text = conf_name + timer_suffix
 				else:
-					event_name_label.text = (str(names[0]) if names.size() > 0 else "Event") + timer_suffix
+					# Nur City-Event aktiv → in Zeile 1 anzeigen
+					event_name_label.text = GameState.T("hud.event.city_event")
+					col = Color(0.8, 0.5, 0.1)
+
+			# Farbe des Farbblocks setzen
 			if is_instance_valid(event_color):
 				if event_color is ColorRect:
 					event_color.color = col
 				elif "modulate" in event_color:
 					event_color.modulate = col
-					
-			# CityEventIcon pulsieren lassen
-			var city_icon = event_indicator.find_child("CityEventIcon", true, false)
-			if is_instance_valid(city_icon):
-				if EventManager.is_event_active():
-					city_icon.visible = true
-					if not city_icon.has_meta("is_pulsing"):
-						city_icon.set_meta("is_pulsing", true)
-						var t = create_tween().set_loops()
-						t.tween_property(city_icon, "modulate:a", 0.3, 1.0).set_trans(Tween.TRANS_SINE)
-						t.tween_property(city_icon, "modulate:a", 1.0, 1.0).set_trans(Tween.TRANS_SINE)
-						city_icon.set_meta("tween", t)
-				else:
-					city_icon.visible = false
-					if city_icon.has_meta("is_pulsing"):
-						city_icon.set_meta("is_pulsing", false)
-						var t = city_icon.get_meta("tween")
-						if t and is_instance_valid(t):
-							t.kill()
-						city_icon.modulate.a = 1.0
-						
+
+			# Row 2: CityEventRow nur zeigen wenn BEIDE gleichzeitig aktiv sind
+			var city_row := event_indicator.get_node_or_null("%CityEventRow")
+			if is_instance_valid(city_row):
+				city_row.visible = has_conference and has_city_event
+				var city_label := city_row.get_node_or_null("%CityEventLabel")
+				if is_instance_valid(city_label):
+					city_label.text = GameState.T("hud.event.city_event")
+
 	else:
 		if is_instance_valid(event_indicator):
 			event_indicator.visible = false

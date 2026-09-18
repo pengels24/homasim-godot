@@ -10,6 +10,8 @@ Der Tagungsraum (Conference Small) bietet Platz für bis zu 12 Personen (11 Zuh�
    - Die Zahlung pro Teilnehmer erfolgt erst um **07:45 Uhr** direkt über den `ConferenceSmall` Raum (Vorpuffer-Öffnung), nicht im `EventManager`.
    - Reguläre Hotelgäste (VIPs, Business-Gäste ohne Event) dürfen den Raum nicht betreten.
    - Tagungsgäste haben einen strikten Tagesablauf: 07:45–12:00 Konferenz, 12:00–13:15 Mittagspause (Bar/Restaurant), 13:30–17:00 Nachmittagssession.
+   - **Wichtig:** In `GuestActor._process_waiting()` muss `is_event_time` den PM-Start bei `810` (13:30) haben, nicht `830` – sonst werden Gäste nach der Pause sofort wieder rausgeworfen.
+
 
 2. **Regulärer Modus (Modus B):**
    - Findet kein Event statt, verhält sich der Raum wie ein regulärer POI. 
@@ -25,6 +27,11 @@ Der Raum wickelt die Sitzplätze dynamisch über `get_available_interactions` un
 ### Wichtig: Eigener Sitz in `get_available_interactions`
 Die Bedingung für freie Sitzplätze lautet `occupied_by == "" or occupied_by == actor_id`.
 **Warum:** Wenn der Timer eines sitzenden Gastes abläuft, ruft `_process_waiting` `get_available_interactions(self)` auf. Da der Gast seinen eigenen Sitz belegt, würde bei `occupied_by == ""` das Ergebnis 0 sein → Fallthrough zu `_decide_next_action()` → globaler Walk → erneutes `_on_poi_arrived()` → **EXP-Spam**. Durch das Einschließen des eigenen Sitzes bekommt der Gast seine aktuelle Position zurück, bewegt sich minimal (`_execute_poi_move`) und bleibt im Raum – ohne State-Change und ohne EXP.
+
+### Sitzplatz-Reservierung während Mittagspause
+`_start_break()` (12:00) löscht die `occupied_by`-Einträge **NICHT**. Jeder TG-Gast behält seinen Sitzplatz reserviert. Bei Rückkehr (13:30) findet er via `s["occupied_by"] == actor_id` exakt seinen eigenen Platz – kein Race Condition, keine leeren Fehlversuche.
+- **Reload-Verhalten:** Nach einem Reload sind `_room_seats` immer leer (Scene-Node-Rebuild). `_init_phase_from_time()` leert die Sitze sicherheitshalber und broadcastet `return_from_conference_break`, damit Gäste neu Plätze belegen.
+- **Tooltip:** `get_live_details()` blendet Gäste aus, deren `_current_poi_id != "conference_small"` ist (= auf Pause unterwegs).
 
 ### Fallthrough-Guard in `GuestActor._process_waiting`
 Falls trotzdem `interactions.size() == 0` (z.B. designierter Speaker darf nicht auf Zuhörersitz), wird **vor** `_decide_next_action()` der Sitz via `release_interaction` freigegeben und `_has_claimed_seat = false` gesetzt. Verhindert, dass `_on_poi_arrived` via den `_has_claimed_seat`-Bypass EXP vergibt, obwohl der Gast nicht wirklich neu ankommt.

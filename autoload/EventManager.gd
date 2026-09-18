@@ -28,6 +28,7 @@ var _conference_configs: Array = []
 func _ready() -> void:
 	_load_conference_configs()
 	TimeManager.sig_morning_struck.connect(_on_morning_struck)
+	TimeManager.sig_minute_passed.connect(_on_minute_passed)
 
 func _load_conference_configs() -> void:
 	var path := "res://config/events.json"
@@ -36,6 +37,12 @@ func _load_conference_configs() -> void:
 		var res = JSON.parse_string(f.get_as_text())
 		if res is Array:
 			_conference_configs = res
+# =============================================================================
+func _on_minute_passed(current_time: int) -> void:
+	if current_time == 1020: # 17:00 (Konferenz-Ende)
+		if active_conferences.size() > 0:
+			active_conferences.clear()
+			_update_hud()
 
 # =============================================================================
 func _on_morning_struck() -> void:
@@ -48,8 +55,6 @@ func _on_morning_struck() -> void:
 			# Damit es nicht immer genau nach 30 Tagen ist, würfeln wir (oder fix bei Tag 35)
 			if randf() < 0.20 or today - last_visit >= 35:
 				is_inspector_coming_today = true
-				if Toast:
-					Toast.show("Gerüchte besagen, dass ein Gourmet-Kritiker in der Stadt ist...", "event", false)
 	# 1. Konferenzen (P1.2) aufräumen und ggf. neu starten
 	active_conferences.clear()
 	if TechtreeManager and TechtreeManager.is_tech_unlocked("P1.2"):
@@ -244,3 +249,6 @@ func load_from_dict(data: Dictionary) -> void:
 	event_days_remaining = data.get("event_days_remaining", 0)
 	active_conferences = data.get("active_conferences", {})
 	is_inspector_coming_today = data.get("is_inspector_coming_today", false)
+	
+	if TimeManager and TimeManager.get_game_time() >= 1020:
+		active_conferences.clear()

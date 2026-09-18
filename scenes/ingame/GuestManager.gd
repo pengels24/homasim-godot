@@ -864,7 +864,8 @@ func clear_waiting_guests_with_penalty() -> void:
 	# Ruf abziehen und Toast für den Spieler anzeigen
 	if total_penalty > 0:
 		GameState.add_rep(-total_penalty)
-		Toast.show("%d Gästegruppen wütend abgereist! (-%d Ruf)" % [kicked_count, total_penalty], "guest", false)
+		var msg = GameState.T("toast.guest.angry_leave", "%d Gästegruppen wütend abgereist! (-%d Ruf)") % [kicked_count, total_penalty]
+		Toast.show(msg, "guest", false)
 
 # ── Checkout ──────────────────────────────────────────────────────────────────
 
@@ -876,6 +877,7 @@ func checkout_event_party(party: GuestParty) -> void:
 	_active.erase(party)
 	party.state = "gone"
 	sig_party_checked_out_physically.emit(party)
+	parties_changed.emit()
 
 # =============================================================================
 func do_checkout(party: GuestParty) -> float:

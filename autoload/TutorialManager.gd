@@ -7,6 +7,7 @@ const CONFIG_PATH = "res://config/tutorials.json"
 
 var tutorial_registry: Dictionary = {}
 var unlocked_tutorials: Array = []
+var hidden_tabs: Array = []  # Aus tutorials.json "hidden_tabs" geladen
 
 # =============================================================================
 func _ready() -> void:
@@ -27,6 +28,9 @@ func _load_config() -> void:
 	if error == OK:
 		var data = json.data
 		if typeof(data) == TYPE_DICTIONARY and data.has("tutorials"):
+			# hidden_tabs laden
+			if data.has("hidden_tabs"):
+				hidden_tabs = data["hidden_tabs"]
 			var tuts = data["tutorials"]
 			tutorial_registry.clear()
 			for tut in tuts:
@@ -110,6 +114,8 @@ func get_unlocked_data(category: String = "") -> Array:
 	for t_id in unlocked_tutorials:
 		if tutorial_registry.has(t_id):
 			var tut = tutorial_registry[t_id]
+			if tut.get("hidden", false):
+				continue  # Versteckte Einträge überspringen
 			if category == "" or tut.get("category", "tutorial") == category:
 				result.append(tut)
 	return result

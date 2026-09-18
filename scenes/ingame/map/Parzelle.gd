@@ -22,6 +22,7 @@ var entrance_dir: String = ""
 # ── UI ────────────────────────────────────────────────────────────────────────
 var build_ui_panel: Control
 var _ui_canvas: CanvasLayer  # Screen-Space → nie verwaschen, nie blockierend
+var _construction_overlay: ColorRect
 const PARZELLE_BUILD_UI = preload("res://scenes/ingame/map/ParzelleBuildUI.tscn")
 
 func _ready() -> void:
@@ -40,6 +41,16 @@ func _ready() -> void:
 	build_ui_panel.visible = false
 	_ui_canvas.add_child(build_ui_panel)
 	
+	_construction_overlay = ColorRect.new()
+	_construction_overlay.size = Vector2(PARCEL_TILES * TILE_PX - 20, PARCEL_TILES * TILE_PX - 20)
+	_construction_overlay.position = Vector2(10, 10)
+	_construction_overlay.z_index = 5
+	var mat = ShaderMaterial.new()
+	mat.shader = preload("res://assets/shaders/construction_hatch.gdshader")
+	_construction_overlay.material = mat
+	_construction_overlay.visible = false
+	add_child(_construction_overlay)
+	
 var _in_buy_mode: bool = false
 func set_buy_mode(active: bool) -> void:
 	_in_buy_mode = active
@@ -52,6 +63,7 @@ func _process(_delta: float) -> void:
 		# Progressbar IMMER anzeigen während des Baus (auch im Buy-Modus)
 		if not build_ui_panel.visible:
 			build_ui_panel.visible = true
+			_construction_overlay.visible = true
 		
 		# Screen-Space Zentrierung
 		var center_local := Vector2(PARCEL_TILES * TILE_PX, PARCEL_TILES * TILE_PX) / 2.0
@@ -59,6 +71,14 @@ func _process(_delta: float) -> void:
 		build_ui_panel.position = screen_pos - build_ui_panel.size / 2.0
 		
 		var current_time = TimeManager.get_absolute_time()
+		
+		# Workaround for corrupted savegames where construction_end_time became exactly 720
+		if construction_end_time == 720:
+			construction_end_time = current_time + 720
+			var _gx = int(name.get_slice("_", 1))
+			var _gy = int(name.get_slice("_", 2))
+			SaveManager.set_plot_constructing(GameState.active_hotel_id, _gx, _gy, construction_end_time)
+			
 		if current_time >= construction_end_time:
 			buy(GameState.active_hotel_id)
 			var map = get_parent().get_parent()
@@ -72,43 +92,19 @@ func _process(_delta: float) -> void:
 			if map.has_method("_update_all_floor_neighbors"):
 				map._update_all_floor_neighbors()
 			queue_redraw()  # Overlay entfernen
+			_construction_overlay.visible = false
 		else:
-			var start_time = construction_end_time - 1440
-			var progress = clampf(float(current_time - start_time) / 1440.0, 0.0, 1.0)
+			var start_time = construction_end_time - 720
+			var progress = clampf(float(current_time - start_time) / 720.0, 0.0, 1.0)
 			var remaining = int(construction_end_time - current_time)
 			build_ui_panel.update_progress(progress, remaining)
 			queue_redraw()  # Overlay aktuell halten
+			_construction_overlay.visible = true
 	else:
 		if _was_constructing:
 			_was_constructing = false
 			queue_redraw()
-
-# =============================================================================
-# Bau-Overlay: Gelb-schwarze Schraffur während is_constructing
-func _draw() -> void:
-	if not is_constructing:
-		return
-	
-	var size := Vector2(PARCEL_TILES * TILE_PX, PARCEL_TILES * TILE_PX)
-	
-	# Halbtransparentes dunkles Basisräume
-	draw_rect(Rect2(Vector2.ZERO, size), Color(0.1, 0.1, 0.1, 0.45))
-	
-	# Diagonale gelb-schwarze Warnstreifen
-	var stripe_w: int = 8
-	var stripe_gap: int = 8
-	var total: int = int(size.x + size.y)
-	var sx: int = int(size.x)
-	var sy: int = int(size.y)
-	var i: int = 0
-	while i < total:
-		var x1: int = clampi(i - sy, 0, sx)
-		var y1: int = clampi(sy - i, 0, sy)
-		var x2: int = clampi(i, 0, sx)
-		var y2: int = 0
-		if x2 > x1:
-			draw_line(Vector2(x1, y1), Vector2(x2, y2), Color(0.95, 0.75, 0.05, 0.5), float(stripe_w))
-		i += stripe_w + stripe_gap
+			_construction_overlay.visible = false
 
 
 

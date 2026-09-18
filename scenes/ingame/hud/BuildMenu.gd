@@ -235,10 +235,28 @@ func _show_category(cat_name: String) -> void:
 		var cost: int = def.get("build_cost", 0)
 		var money_ok: bool = int(GameState.selected_hotel.get("money", 0)) >= cost
 
+		var max_count: int = def.get("max_count", -1)
+		var limit_ok: bool = true
+		var current_count = 0
+		if max_count > 0:
+			var ingame = get_tree().get_root().get_node_or_null("Ingame")
+			if ingame:
+				var map_grid = ingame.get("map_grid")
+				if is_instance_valid(map_grid) and map_grid.has_method("get_placed_rooms"):
+					for r in map_grid.get_placed_rooms():
+						if "room_type_id" in r and r.room_type_id == def.get("id"):
+							current_count += 1
+			if current_count >= max_count:
+				limit_ok = false
+
 		if level_ok and tech_ok:
 			var item_name = GameState.T(def.get("name", "Raum"))
 			
-			if not money_ok:
+			if not limit_ok:
+				btn.disabled = true
+				btn.self_modulate = Color("e53935") # Rot
+				btn.tooltip_text = GameState.T("tt.build.room.limit_reached", current_count, max_count)
+			elif not money_ok:
 				btn.disabled = true
 				btn.self_modulate = Color("e53935") # Rot
 				btn.tooltip_text = GameState.T("tt.build.room.too_expensive", item_name, cost)

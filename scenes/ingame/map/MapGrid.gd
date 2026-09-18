@@ -457,7 +457,7 @@ func _show_built_parcels(built_plots: Array) -> void:
 			# Wenn der gespeicherte Wert suspekt klein ist, sofort fertigstellen.
 			var current_abs := TimeManager.get_absolute_time()
 			if saved_end < current_abs - 1440:
-				# Offensichtlich alter oder abgelaufener Wert → sofort fertig
+				# Offensichtlich alter oder abgelaufener Wert   sofort fertig
 				p.construction_end_time = current_abs - 1
 			else:
 				p.construction_end_time = saved_end
@@ -540,7 +540,7 @@ func _is_visible(x: int, y: int) -> bool:
 	if x < 0 or x >= grid_cols or y < 0 or y >= grid_rows:
 		return false
 	var p = _grid[y][x]
-	return p.is_built or p.is_constructing
+	return p.is_built
 
 func _process(_delta: float) -> void:
 	if _show_debug_grid:
@@ -1157,7 +1157,7 @@ func _on_plot_buy_clicked(x: int, y: int, price: int) -> void:
 			EffectManager.spawn_money_text(-price, spawn_pos)
 			
 		var p = _grid[y][x]
-		p.start_construction(GameState.active_hotel_id, TimeManager.get_absolute_time() + 1440)
+		p.start_construction(GameState.active_hotel_id, TimeManager.get_absolute_time() + 720)
 		
 		if is_instance_valid(Toast): Toast.show(GameState.T("ui.toast.plot_bought", "Parzelle gekauft! Bau beginnt."), "build")
 		

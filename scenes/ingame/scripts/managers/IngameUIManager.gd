@@ -891,6 +891,9 @@ func open_finances() -> void:
 
 # =============================================================================
 func open_hotel_overview() -> void:
+	# Pre-Alpha: Button disabled → Hotkey ebenfalls blockieren
+	if is_instance_valid(_bottom_bar) and _bottom_bar.hotel_overview.disabled:
+		return
 	if _standard_modal.visible and _standard_modal.get_title() == GameState.T("modal.hotel_overview.title"):
 		_standard_modal.close()
 		return

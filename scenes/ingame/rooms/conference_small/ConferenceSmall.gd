@@ -20,6 +20,7 @@ static func get_definition() -> Dictionary:
 		"max_beds": 0,
 		"is_poi": true,
 		"is_guest_poi": true,
+		"max_count": 1,
 		"visit_income": 35, # Wird an Event-Tagen ignoriert
 		"visit_exp": 30,
 		"supply_cost_per_visit": 10,

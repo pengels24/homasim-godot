@@ -1,4 +1,5 @@
 {
+	"hidden_tabs": ["real_codex"],
 	"tutorials": [
 		{
 			"id": "welcome",
@@ -68,6 +69,7 @@
 		},
 		{
 			"id": "hotel_overview",
+			"hidden": true,
 			"title_key": "tutorial.hotel_overview.title",
 			"desc_key": "tutorial.hotel_overview.desc",
 			"image": "res://assets/images/tutorials/tutorial_hotel_overview.png"

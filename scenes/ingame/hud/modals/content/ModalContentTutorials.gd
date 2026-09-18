@@ -25,7 +25,11 @@ func _ready() -> void:
 	_load_data()
 
 func _setup_tabs() -> void:
+	var hidden: Array = TutorialManager.hidden_tabs if TutorialManager else []
 	for i in _tabs.size():
+		if _tabs[i] in hidden:
+			_tab_buttons.append(null)  # Platzhalter damit Index-Mapping stimmt
+			continue
 		var btn = Button.new()
 		btn.text = GameState.T(_tab_labels[i]) if GameState else _tab_labels[i]
 		btn.custom_minimum_size = Vector2(150, 40)
@@ -64,6 +68,7 @@ func _load_data() -> void:
 		
 	# Style tabs
 	for i in _tabs.size():
+		if _tab_buttons[i] == null: continue  # Versteckter Tab
 		if _tabs[i] == _current_tab:
 			_set_btn_style(_tab_buttons[i], SB_BLUE, SB_BLUE_HOVER, SB_BLUE_PRESSED)
 		else:

@@ -114,7 +114,10 @@ static func from_dict(d: Dictionary) -> GuestParty:
 		p.room_id = ""
 	
 	p.stay_days = d.get("stay_days", 1)
-	p.total_stay_days = d.get("total_stay_days", max(1, p.stay_days)) # Fallback für alte Savegames
+	if p.event_poi_id != "" and p.room_id == "":
+		p.total_stay_days = int(d.get("total_stay_days", 0))
+	else:
+		p.total_stay_days = int(d.get("total_stay_days", max(1, p.stay_days)))
 	p.base_price = int(d.get("base_price", 0))
 	p.satisfaction = int(d.get("satisfaction", 100))
 	p.patience = float(d.get("patience", 1.0))

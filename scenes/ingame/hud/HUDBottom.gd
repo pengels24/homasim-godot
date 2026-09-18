@@ -90,6 +90,10 @@ func _ready() -> void:
 	tutorial.tooltip_text = GameState.T("hud.bottom.tutorials_tt", _get_action_key_string("ui_tutorial"))
 	hotel_overview.tooltip_text = GameState.T("hud.bottom.hotel_overview_tt", _get_action_key_string("ui_hotel_overview"))
 
+	# Pre-Alpha: Hotel-Übersicht noch nicht verfügbar
+	hotel_overview.disabled = true
+	hotel_overview.tooltip_text = GameState.T("ui.coming_soon", "Bald verfügbar")
+
 	ind_reception.hide()
 	ind_sim_browser.modulate = Color.GREEN
 	ind_sim_browser.hide()

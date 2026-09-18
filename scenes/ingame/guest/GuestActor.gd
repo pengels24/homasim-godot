@@ -1870,7 +1870,13 @@ func _execute_walk(path_tiles: Array[Vector2i], finish_state: State, face_pos: V
 	
 	if finish_state == State.LEAVING:
 		_active_tween.tween_property(self, "modulate:a", 0.0, 0.4)
-		_active_tween.tween_callback(queue_free)
+		_active_tween.tween_callback(func():
+			var party = _get_my_party()
+			if is_instance_valid(party) and party.total_stay_days == 0:
+				if is_instance_valid(_guest_manager) and _guest_manager.has_method("checkout_event_party"):
+					_guest_manager.checkout_event_party(party)
+			queue_free()
+		)
 	else:
 		_active_tween.tween_callback(func(): _on_walk_finished(finish_state))
 

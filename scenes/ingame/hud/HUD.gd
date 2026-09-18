@@ -85,6 +85,8 @@ func _ready() -> void:
 
 	# Initialen Pause-Status setzen (falls wir direkt pausiert ins Spiel starten)
 	set_pause_visuals(TimeManager.is_paused())
+	# Deferred: EventManager hat zum _ready-Zeitpunkt ggf. noch kein Save geladen
+	update_state_visuals.call_deferred()
 	
 	if GameState.selected_hotel:
 		_on_hotel_stars_changed(GameState.selected_hotel.get("stars", 0))
@@ -110,11 +112,16 @@ func _ready() -> void:
 	var room_menu_instance = room_menu_scene.instantiate()
 	add_child(room_menu_instance)
 	
-	# Feature: Klick auf Event-Indikator → Kamera springt zum Tagungsraum
-	# event_indicator muss ein Control sein (mouse_filter != IGNORE), damit gui_input feuert.
+	# Feature: Klick auf Event-Indikator → Kamera springt zum aktiven Tagungsraum
 	if is_instance_valid(event_indicator) and event_indicator is Control:
 		event_indicator.mouse_filter = Control.MOUSE_FILTER_STOP
-		event_indicator.gui_input.connect(_on_event_indicator_clicked)
+		event_indicator.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		# Kind-Nodes auf PASS setzen, damit Klicks zum Parent durchgehen
+		for child in event_indicator.find_children("*", "Control", true, false):
+			child.mouse_filter = Control.MOUSE_FILTER_PASS
+			child.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		if not event_indicator.gui_input.is_connected(_on_event_indicator_clicked):
+			event_indicator.gui_input.connect(_on_event_indicator_clicked)
 
 # =============================================================================
 func _on_tech_unlocked(tech_id: String) -> void:
@@ -597,17 +604,25 @@ func _on_event_indicator_clicked(event: InputEvent) -> void:
 func _jump_to_conference_room() -> void:
 	if not EventManager or EventManager.active_conferences.is_empty():
 		return
-	
-	# Aktiven Tagungsraum in der Szene suchen (via room_type_id + room_key Matching)
+
+	# map_grid via Ingame-Scene holen (wie RoomList-Modal)
+	var ingame = get_tree().get_root().get_node_or_null("Ingame")
+	if not ingame:
+		return
+	var map_grid = ingame.get("map_grid")
+	if not is_instance_valid(map_grid) or not map_grid.has_method("get_placed_rooms"):
+		return
+
+	# Ersten aktiven Tagungsraum finden
 	var target_room: Node2D = null
-	for room in get_tree().get_nodes_in_group("placed_rooms"):
+	for room in map_grid.get_placed_rooms():
 		var rtype: String = room.get("room_type_id") if room.get("room_type_id") != null else ""
 		if rtype.begins_with("conference_"):
 			var rkey: String = GuestManager._room_key(room)
 			if EventManager.active_conferences.has(rkey):
 				target_room = room
 				break
-	
+
 	if not is_instance_valid(target_room):
 		return
 	

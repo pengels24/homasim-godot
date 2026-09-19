@@ -1468,15 +1468,22 @@ func get_save_state() -> Dictionary:
 	# Übergangs-States werden auf stabile States gemappt.
 	var save_state: int = current_state
 	match current_state:
-		State.WALKING, State.STUDYING_MENU:
-			# Gast war unterwegs oder schaut Menü: beim Laden im Zimmer starten
+		State.WALKING:
+			# Gast war unterwegs: beim Laden im Zimmer / vom letzten POI aus starten
 			save_state = State.IN_ROOM
+		State.STUDYING_MENU:
+			# Gast saß noch im Restaurant/Bar (liest Menü): als IN_POI speichern,
+			# damit _current_poi_id beim Restore gesetzt bleibt und Phase 1 von
+			# _execute_walk() den korrekten Austrittspfad generiert (kein Luftlinien-Bug).
+			save_state = State.IN_POI
 		State.WAITING_FOR_FOOD:
 			# Bestellung wird nach Load neu aufgegeben: als IN_POI speichern
 			save_state = State.IN_POI
+	
+	var save_pos := global_position
 	return {
-		"pos_x": global_position.x,
-		"pos_y": global_position.y,
+		"pos_x": save_pos.x,
+		"pos_y": save_pos.y,
 		"state": save_state,
 		"action_timer": _action_timer,
 		"current_poi_id": _current_poi_id,
@@ -1484,6 +1491,7 @@ func get_save_state() -> Dictionary:
 		"checkin_poi_block_until": _checkin_poi_block_until,
 		"is_checkout_walk": _is_checkout_walk,
 	}
+
 
 
 ## Stellt den physischen Zustand nach dem Laden wieder her.
@@ -1505,22 +1513,34 @@ func restore_save_state(state_data: Dictionary) -> void:
 				# Keine Position-Override nötig – Pathfinding funktioniert von dort.
 				pass
 			else:
-				# TG-Gast (kein Zimmer): gespeicherte Position restoren,
-				# sonst landen sie bei (0,0) außerhalb der Map.
+				# TG-Gast (kein Zimmer): gespeicherte Position restoren.
 				var pos := Vector2(state_data.get("pos_x", 0.0), state_data.get("pos_y", 0.0))
 				global_position = pos
+				# _current_poi_id nur setzen wenn Gast wirklich INNERHALB eines POI-Raums war
+				# (solid tile = Möbel/Innenbereich). Gäste die im Korridor (walkable) gespeichert
+				# wurden (z.B. beim WALKING) bekommen keine falsche Raum-ID für Phase 1.
+				if is_instance_valid(_map_grid):
+					var saved_tile: Vector2i = _map_grid.world_to_tile(pos)
+					if _map_grid.astar.is_point_solid(saved_tile):
+						_current_poi_id = state_data.get("current_poi_id", "")
 			_change_state(State.IN_ROOM)
 			_action_timer = randf_range(2.0, 6.0)
 		State.IN_POI, State.EATING:
-			# POI-Gäste: Position restoren (sie waren INSIDE POI = kein Solid-Tile Problem)
+			# Gast war in einem POI (Restaurant, Bar, etc.): Position und POI-ID restoren.
+			# State bleibt IN_POI damit der Gast am Platz sitzen bleibt bis sein Timer
+			# natürlich abläuft – kein "Feueralarm"-Exodus beim Laden.
+			# WICHTIG: _current_poi_id gesetzt halten! _get_current_room_node() nutzt es
+			# in Phase 1 von _execute_walk() für den korrekten lokalen Austrittspfad.
 			var pos := Vector2(state_data.get("pos_x", 0.0), state_data.get("pos_y", 0.0))
 			global_position = pos
 			_current_poi_id = state_data.get("current_poi_id", "")
-			_has_claimed_seat = true  # Sitz war bereits geclaimed – kein Neuanspruch nötig
+			_has_claimed_seat = false  # Room-State nach Reload zurückgesetzt – kein Doppel-Claim
 			_restoring_from_save = true  # Blockiert Payment + EXP in _on_poi_arrived
 			_change_state(State.IN_POI)
 			_restoring_from_save = false
-			_action_timer = 1.0
+			# Timer aus Save restoren – aber mindestens 5s damit Map-Init abgeschlossen ist
+			var saved_timer: float = float(state_data.get("action_timer", 0.0))
+			_action_timer = max(5.0, saved_timer)
 		State.AWAITING_CHECKOUT:
 			# Checkout-Gäste: Position restoren (sie waren in der Lobby = walkable)
 			var pos := Vector2(state_data.get("pos_x", 0.0), state_data.get("pos_y", 0.0))
@@ -1531,6 +1551,7 @@ func restore_save_state(state_data: Dictionary) -> void:
 		_:
 			_change_state(State.IN_ROOM)
 			_action_timer = randf_range(2.0, 6.0)
+
 
 
 # =============================================================================

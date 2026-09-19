@@ -1,5 +1,5 @@
 # TechDoku: GuestActor (Gäste-Verhalten)
-*Stand: v0.1.50 – 2026-09-10 (get_status_text, UI-Refactoring)*
+*Stand: v0.1.61 – 19.09.2026 (Save/Load Fix, Luftlinien-Bugfix)*
 
 Der `GuestActor` steuert die visuelle und logische Repräsentation eines einzelnen Hotelgastes auf der Karte. Jeder `GuestActor` ist an ein `GuestMember`-Datenobjekt gekoppelt, welches die eigentlichen Werte (Sättigung, Geduld, Geldbeutel, Budget) hält.
 
@@ -8,11 +8,6 @@ Der `GuestActor` steuert die visuelle und logische Repräsentation eines einzeln
 - **Setup**: `setup(member, map_grid, start_room, guest_manager)` verknüpft Actor mit Datenmodell.
 - **Despawn**: Nach Checkout und Verlassen des Grundstücks (`LEAVING`) wird der Actor entfernt.
 
-## 2. State-Machine (Zustände)
-- `IDLE`: Gast überlegt. Sucht offene POIs, geht aufs Zimmer oder wartet.
-- `WALKING`: Bewegt sich entlang eines AStar-Pfads.
-- `IN_ROOM`: Im eigenen gebuchten Zimmer (Schlafen, Erholen).
-- `IN_POI`: In einem besuchbaren Raum (Lobby, Pool, Gym, Spa, Konferenz, etc.).
 - `SITTING`: Unterzustand für feste Platzbindung (z.B. Tagungsgast sitzt während Vortrag).
 - `SLEEPING`: Gast schläft im Zimmer.
 - `STUDYING_MENU`: Liest Speisekarte – wird von `is_gastro() == true` ausgelöst.
@@ -146,3 +141,39 @@ Gäste nutzen `MapGrid.get_path_astar()` für globale Pfade und `room.get_local_
 
 ### Zwangspause nach POI-Besuch (ANG-361)
 Um zu verhindern, dass Gäste hektisch von POI zu POI rennen, wurde eine Zwangspause implementiert. Beim Verlassen eines beliebigen POIs (inklusive Lobby) wird `_poi_rest_until` gesetzt. Solange dieser Timer aktiv ist, werden alle `open_pois` blockiert, wodurch der Gast zwingend auf sein Zimmer geht und dort über `_wander_in_room()` die Zeit absitzt. Einzig enormer Hunger (`< HUNGER_THRESHOLD`) kann diese Zwangspause überschreiben, sofern sich der Gast noch eine Mahlzeit leisten kann.
+
+## 11. Save/Load – State-Serialisierung (v0.1.61)
+
+### State-Mapping in get_save_state()
+
+| Aktueller State | Gespeicherter State | Begründung |
+|---|---|---|
+| `WALKING` | `IN_ROOM` | Unterwegs → beim Laden neu starten |
+| `STUDYING_MENU` | `IN_POI` | Sitzt im POI-Raum → `_current_poi_id` muss erhalten bleiben! |
+| `WAITING_FOR_FOOD` | `IN_POI` | Bestellung wird nach Load neu aufgegeben |
+| alle anderen | unverändert | Direkt persistiert |
+
+> ⚠️ `STUDYING_MENU` muss als `IN_POI` gespeichert werden! Sonst ist `_current_poi_id` nach Reload leer → Phase 1 von `_execute_walk()` kann Austrittspfad nicht generieren → Luftlinie durch Wände.
+
+### restore_save_state() – IN_POI/EATING Branch
+
+Gäste bleiben nach Reload in `IN_POI` (nicht `IN_ROOM`):
+- Visuell an ihrem gespeicherten Platz (Restaurant, Bar etc.)
+- `_current_poi_id` erhalten → Phase 1 von `_execute_walk()` findet den Raum
+- Timer aus Save restored (min. 5s) → kein "Feueralarm"-Exodus aller Gäste gleichzeitig
+- `_restoring_from_save = true` → blockiert doppeltes Payment/EXP
+
+### restore_save_state() – IN_ROOM Branch (TG-Gäste)
+
+`_current_poi_id` wird nur gesetzt wenn saved position ein **solid tile** ist (= wirklich innerhalb eines POI-Raums). Gäste im Korridor (WALKING-State beim Speichern) bekommen keine falsche Raum-ID.
+
+### Warum _current_poi_id für Phase 1 entscheidend ist
+
+`_get_current_room_node()` prüft `_current_poi_id` zuerst:
+```gdscript
+if not _current_poi_id.is_empty():
+    return _get_poi_room_node(_current_poi_id)  # POI-Raum gefunden!
+```
+→ Phase 1 von `_execute_walk()` generiert `get_local_path(seat, door_inside)` korrekt → kein Luftlinie.
+
+> Siehe auch: `wiki/_dev/ang364_nav_rework.md` für den Post-Alpha Nav-Rework Plan.

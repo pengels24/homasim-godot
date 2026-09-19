@@ -1,19 +1,35 @@
-# Übergabeprotokoll: HO·MA·SIM Alpha (Branch: dev)
+# Übergabe-Protokoll – v0.1.60 (19.09.2026)
 
-## Letzter Stand (v0.1.59)
-- **Erledigt in dieser Session:**
-  - Parzellen-Bau-Timer Bug gefixt (Timer wurden beim Savegame Restore fälschlicherweise auf 720 Minuten blockiert, Wände wurden nicht neu generiert).
-  - Hardcoded Toast-String ("xxx wütend abgereist") durch `GameState.T("toast.guest.angry_leave")` inkl. `%s` in `language.csv` ersetzt.
-  - Neues Feature: Animierter Schraffur-Shader (`construction_hatch.gdshader`) für Parzellen, die sich im Bau befinden.
+## Letzter Stand
 
-- **Was GERADE untersucht wird (Offener Bug):**
-  - **Der Koch (Küche) und der Barkeeper (Bar) gehen nach Schließung (22:00 bzw. 23:30) NICHT mehr in den Personalraum.**
-  - Sie bleiben in den geschlossenen Räumen stehen.
-  - Das hat laut User in der Vergangenheit funktioniert und ist nun kaputt.
-  - WICHTIG: Der User hat explizit angewiesen, **NICHT** mit "GastroManager.active_orders (Geisterbestellungen)" oder "Savegames" zu argumentieren. Der Bug liegt im Ablauf ab dem Punkt "POI schließt".
-  - Vermutung: Pathfinding/AStar-Logic für StaffActor (evtl. in `_is_shift_over` oder `_process_idle`), bzw. die Evaluierung von `is_night` für Backend-Räume wie die Küche (die keine harten `open_to`-Zeiten im JSON haben).
+Session abgeschlossen mit dem großen TG-PM-Session-Durchbruch: Tagungsgäste kehren nun korrekt nach der Mittagspause um 13:30 in den Konferenzraum zurück und bleiben dort bis 17:00.
+
+## Bearbeitete Systeme
+
+### GuestActor.gd
+- **is_event_time Fix (kritisch):** PM-Start war `830` (13:50) statt `810` (13:30). Fix in `_process_waiting()` Zeile 324.
+- **Max-Guests-Check:** `_get_open_pois()` zählt jetzt nur Gäste in active_states [3,6,7,8,9] – nicht mehr WALKING-Gäste.
+
+### ConferenceSmall.gd
+- **Sitzplatz-Reservierung:** `_start_break()` löscht `occupied_by` NICHT mehr. Jeder TG behält seinen Platz reserviert. Bei Rückkehr findet er via `occupied_by == actor_id` seinen Platz.
+- **Tooltip-Fix:** `get_live_details()` blendet Gäste aus die nicht `_current_poi_id == "conference_small"` haben.
+- **Reload-Kommentare:** `_init_phase_from_time()` Kommentare aktualisiert.
+- **Broadcast-Timing:** `return_from_conference_break` wird bei `TIME_SESSION_PM_START` (810 = 13:30) gesendet.
+
+### CustomTooltip.gd
+- **Multi-Instance Fix:** Tooltip nutzt `get_live_details()` wenn verfügbar (Gym, Pool, Spa) statt typ-basierter Zählung. Vorher zeigten beide Gym-Instanzen dieselben Gäste.
 
 ## Sofortige nächste Schritte
-1. Lies den Code von `StaffActor.gd`, insb. `_is_shift_over()` und `_process_idle()`.
-2. Finde heraus, warum der Pathfinding-Fallback (Lobby) oder das reguläre Staff-Room Pathing fehlschlägt oder warum `is_night` nicht korrekt ausgelöst wird.
-3. Behebe den Logikfehler, damit Koch und Barkeeper nach Schichtende wieder in den Personalraum laufen.
+
+1. **Luftlinien-Pathfinding nach Reload aus POI:** TG-Gäste die beim Speichern in Bar/Restaurant waren, spawnen nach Reload an ihrem POI und gehen dann Luftlinie durch Wände zur Lobby. Root-Cause: beim Restore aus IN_POI-State in Bar/Restaurant fehlt der korrekte Inroom-Nav → Global-Nav Übergang.
+
+2. **Conference POI für normale Gäste ausblenden:** Wenn Event läuft, sollte `conference_small` nicht in `_get_open_pois()` für normale Gäste auftauchen. Lösung: `is_guest_allowed()` in ConferenceSmall prüft ob Event aktiv ist und Gast kein TG-Gast ist → return false.
+
+3. **ANG-365:** Techtree/Level Alignment (`req_level` in techtree.json vs `UNLOCK_LEVELS` in GameState.gd).
+
+## Wichtige Architektur-Notizen
+
+- `is_event_time` Zeitfenster: AM = 465–720 (07:45–12:00), PM = 810–1020 (13:30–17:00)
+- `_current_poi_id` ist IMMER typ-basiert ("gym_small", "conference_small"), NICHT instance-key-basiert
+- `_room_seats` wird nach Reload IMMER leer neu gebaut (Scene-Node-Rebuild) – Seat-Reservierung ist nur runtime-relevant
+- TG-Gäste: `party.event_poi_id` enthält den Raum-Key (z.B. "P0001") und darf NICHT geleert werden bis 17:00

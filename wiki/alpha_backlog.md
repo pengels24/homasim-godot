@@ -7,7 +7,7 @@
 ## ⚠️ Getroffene Design-Entscheidungen (nicht mehr diskutieren!)
 
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.60 | Stand: 19.09.2026
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.61 | Stand: 19.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -54,7 +54,8 @@
 - [x] **Bugfix ConferenceSmall:** `_start_break()` löschte Sitzplätze → Race Condition bei Rückkehr. Fix: Sitze bleiben reserviert (`occupied_by` erhalten), jeder TG findet seinen eigenen Platz.
 - [x] **Bugfix Max-Guests-Check:** `_get_open_pois()` zählte WALKING-Gäste → POIs galten als voll. Fix: Nur aktive IN_POI-States zählen.
 - [x] **Bugfix CustomTooltip:** Doppelzählung bei mehreren Gym/Pool/Spa-Instanzen. Fix: `get_live_details()` für instanzspezifische Zählung nutzen.
-- [ ] **Offen:** Luftlinien-Pathfinding beim Reload aus POI heraus (TG in Bar/Restaurant nach Reload gehen durch Wände)
+- [x] **Fix v0.1.61:** Luftlinien-Pathfinding beim Reload aus POI heraus – `_current_poi_id` nach Restore erhalten, `STUDYING_MENU` als `IN_POI` speichern, Gäste bleiben in `IN_POI`-State nach Load (kein Feueralarm-Exodus)
+- [ ] **Offen:** TG Pre-Trigger bei 13:20 fehlt – Gäste kommen 7 Min zu spät zur Nachmittags-Session (aktuell: 13:37 statt 13:30)
 - [ ] **Offen:** Conference POI aus `_get_open_pois()` für normale Gäste ausblenden wenn Event läuft
 - [ ] **ANG-365:** Techtree/Level Alignment (`req_level` in techtree.json vs `UNLOCK_LEVELS` in GameState)
 

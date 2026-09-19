@@ -808,7 +808,7 @@ func _decide_next_action() -> void:
 	party = _get_my_party()
 	if is_instance_valid(party) and party.event_poi_id != "":
 		var t = TimeManager.get_game_time() if TimeManager else 0
-		var is_event_time = (t >= 465 and t < 720) or (t >= 825 and t < 1020)
+		var is_event_time = (t >= 465 and t < 720) or (t >= 800 and t < 1020)  # PM-Start 800 (13:20) = 10 Min Vorlauf
 		if is_event_time:
 			# Prüfen ob der Event-Raum bereits geöffnet hat
 			var event_room_node = null

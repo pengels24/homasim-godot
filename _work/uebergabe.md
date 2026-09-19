@@ -1,43 +1,53 @@
-# Übergabeprotokoll – v0.1.61
-> Erstellt: 19.09.2026 | Commit: 2c1baa9
-
----
+# Übergabe-Protokoll – v0.1.62 (19.09.2026)
 
 ## Letzter Stand
 
-Der Luftlinien-Pathfinding-Bug nach Save/Load ist **weitgehend gefixt** (2 von 3 Reloads sauber mit altem Save, frische Saves laufen sauber). TG-Gäste sitzen nach Reload wieder in Restaurant/Bar und verlassen es erst wenn ihr Timer natürlich abläuft. Kein "Feueralarm"-Exodus mehr.
+Session abgeschlossen. Commit: `b670cef` auf Branch `dev`.
 
-## Was wurde gearbeitet
+## Bearbeitete Systeme
 
-### GuestActor.gd – Save/Load Fix (Luftlinie)
-- `get_save_state()`: `STUDYING_MENU` → `IN_POI` (statt `IN_ROOM`). Erhält `_current_poi_id` im Save.
-- `restore_save_state()` IN_POI/EATING: State bleibt `IN_POI`, Timer aus Save restored (min. 5s), `_restoring_from_save` Flag aktiv.
-- `restore_save_state()` IN_ROOM (TG-Gäste): `_current_poi_id` nur setzen wenn saved position ein solid tile ist.
-- `_snap_to_poi_exit_deferred()` entfernt (war veralteter Workaround).
+### ANG-365: UNLOCK_LEVELS komplett entfernt
+- `GameState.gd`: Konstante `UNLOCK_LEVELS` entfernt. Nur `MAX_HOTEL_LEVEL = 10` bleibt.
+- `HUD.gd`: Dynamische Abfragen via `TechtreeManager.tiers_config` (Tier-Gate) und Literale.
+- `IngameUIManager.gd` (Z. 727, 750): Literale 2 und 3 mit Kommentar-Referenz.
+- `RoomContextMenu.gd` (Z. 74, 229): Literal `2` für Staff-Level.
+- `GuestManager.gd` (Z. 323, 1043) + `Room.gd` (Z. 588, 602): `auto_staff` als Literal `100` (TODO: Tier-2-Feature).
 
-### Warum es vorher nicht funktionierte
-`_get_current_room_node()` prüft `_current_poi_id` ZUERST. War die ID leer → Phase 1 von `_execute_walk()` fand keinen Raum → kein lokaler Austrittspfad → Luftlinie. Die ID war leer weil STUDYING_MENU als IN_ROOM gespeichert wurde und der IN_ROOM-Restore-Branch die ID nicht setzte.
+### req_level in Raum-Definitionen
+Alle Raum-GD-Files haben `req_level` in `get_data()`:
+- `BedFamily` → 6, `BedSuperior` → 5
+- `KitchenSmall` / `RestaurantSmall` → 4
+- `PoolSmall` / `SpaSmall` → 6
+- `GymSmall` → 8, `ConferenceSmall` → 6
 
-### Architektur-Notizen
-- `wiki/_dev/ang364_nav_rework.md` angelegt: Peters Konzept für Post-Alpha Nav-Rework (einheitliches 4×4 Grid, Tile-IDs statt Welt-Koordinaten)
-- `wiki/02_features/25_techdoku_guestactor.md`: Save/Load Sektion (Kapitel 11) hinzugefügt
+### techtree.json
+- `req_level` für alle Tier-1-Nodes gesetzt (Z1.1–Z1.5, G1.1–G1.4, W1.1–W1.4, M1.1–M1.4, P1.1–P1.3)
+- W1.4 Dependencies korrigiert: `["W1.1", "W1.2"]`
+- Zimmer-Nodes umbenannt nach Unlock-Reihenfolge:
+  - Z1.3 → Z1.2 (Superior, L5), Z1.4 → Z1.3 (WLAN, L5), Z1.5 → Z1.4 (Klima, L5), Z1.2 → Z1.5 (Family, L6)
+- Zimmer col/row-Layout auf 4 Spalten angepasst:
+  - col=0: Z1.1, col=1: Z1.2, col=2: Z1.3+Z1.4, col=3: Z1.5
 
----
+### Techtree UI (ModalContentTechtree.gd + TechNodeButton.gd)
+- Rendering-Bug gefixt: `await get_tree().process_frame` + `update_button_states()` nach `_build_ui()` in `_ready()`
+- `_update_single_button()`: Kein permanenter Glow mehr für unlocked Nodes (`set_glow_state(false, ...)` für alle States). Nur Font-Color differenziert Zustände.
+- `_generate_tooltip()`: `req_level = max(tier_gate_level, node_req_level)` – zeigt korrekte Level-Anforderung pro Node.
 
-## Offene Punkte (priorisiert)
+### Sonstiges
+- `quests.json`, `language.csv` – Z1.2–Z1.5 IDs und Keys aktualisiert (atomic rename via Python-Script)
+- `wiki/02_features/01_architektur_techtree_und_fp.md` – auf v0.1.62 aktualisiert
 
-1. **TG Pre-Trigger bei 13:20** (NEU): TG-Gäste kommen 7 Min zu spät zur Nachmittags-Session. `is_event_time` feuert erst bei 810 (13:30). Sollte bei ~800 (13:20) feuern damit Gäste um 13:30 ankommen.
-   - Datei: `GuestActor.gd`, `_process_waiting()`, Zeile ~324
-   - Trigger: `var is_pre_event_time = (current_time >= 455 and current_time < 465) or (current_time >= 800 and current_time < 810)`
+## Sofortige nächste Schritte
 
-2. **Conference POI ausblenden für normale Gäste** wenn Event läuft: `_get_open_pois()` zeigt Conference auch normalen Gästen.
+1. **Techtree Layout** – Die anderen Kategorien (Gastro, Wellness etc.) sind layout-mäßig OK. Falls der User weitere col/row-Anpassungen wünscht, nur in `techtree.json`.
+2. **EXP-Kurven-Anpassung** – Noch offen: Kalibrierung der EXP-Kurve für 2–3 Stunden Spielzeit (aktuell dauert es zu lang oder zu kurz bis Level 8).
+3. **Conference POI / TG Pre-Trigger** – Zwei offene Punkte aus dem Alpha-Backlog:
+   - Conference POI aus `_get_open_pois()` für normale Gäste ausblenden wenn Event läuft
+   - TG Pre-Trigger bei 13:20 fehlt (Gäste kommen 7 Min zu spät)
+4. **GuestActor.gd** – Nach aktuellen Bugfixes: Techdoku aktuell? Ggf. nachfragen.
 
-3. **ANG-365:** Techtree/Level Alignment.
+## Offene Punkte (nicht blockierend)
 
-4. **Race-Condition (selten)**: ~1 von 3 Reloads zeigt noch einen Gast mit Luftlinie. Verschwindet nach neuem Save. Wahrscheinlich AStar nicht vollständig initialisiert beim ersten `_process_waiting` Tick.
-
----
-
-## Sofortiger nächster Schritt
-
-Pre-Trigger für TG-Nachmittags-Session in `_process_waiting()` einbauen. Einfache Änderung: Zeitbereich auf 800-810 für Pre-Event und Bewegung auslösen. Oder `is_event_time` Grenze auf 800 statt 810 für Nachmittag setzen.
+- `wiki/rooms/bed_family.md` und `wiki/rooms/bed_superior.md` zeigen noch alte Z1.2/Z1.3 IDs → kosmetisch, nicht kritisch
+- `room_tutorial_draft.md` hat noch alte Refs → kosmetisch
+- `_dev/GDD.md` hat noch alte Zimmer-Nummern → kosmetisch

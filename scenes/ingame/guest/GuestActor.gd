@@ -320,8 +320,9 @@ func _process_waiting(delta: float) -> void:
 		
 	var party = _get_my_party()
 	if party and party.event_poi_id != "":
-		# 07:45 (465) bis 12:00 (720) UND 13:30 (810) bis 17:00 (1020) [TIME_SESSION_PM_START]
-		var is_event_time = (current_time >= 465 and current_time < 720) or (current_time >= 810 and current_time < 1020)
+		# 07:45 (465) bis 12:00 (720) UND 13:20 (800) bis 17:00 (1020)
+		# PM-Start bei 800 (13:20) statt 810 (13:30): 10 Min Vorlauf damit Gäste pünktlich ankommen
+		var is_event_time = (current_time >= 465 and current_time < 720) or (current_time >= 800 and current_time < 1020)
 		
 		# Den konkreten Event-Raum explizit über die Party-ID ermitteln!
 		var event_room_node = null
@@ -528,7 +529,15 @@ func _get_open_pois() -> Array[String]:
 		
 		var room_id: String = def.get("id", "")
 		
-		# Event-Gast POI Einschränkungen
+		# Conference-Räume während eines laufenden Events für normale Gäste sperren.
+		# TG-Gäste (is_event_guest) dürfen weiterhin rein – die haben Vorrang.
+		var is_conference_room = (room_id == "conference_small" or room_id == "conference_large")
+		if is_conference_room:
+			var party = _get_my_party()
+			var is_event_guest = (party and party.event_poi_id != "") or _conference_break_poi_key != "" or (party and party.total_stay_days == 0)
+			if not is_event_guest and EventManager and EventManager.active_conferences.size() > 0:
+				continue
+		
 		var party = _get_my_party()
 		var is_event_guest = false
 		if party and party.event_poi_id != "":

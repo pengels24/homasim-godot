@@ -28,20 +28,13 @@ signal sig_hotel_guests_checkout_changed(guests_checkout: int)
 signal sig_hotel_exp_changed(exp: int, exp_max: int)
 
 signal sig_hotel_rep_changed(rep: int, rep_max: int)
-# Globale Level-Voraussetzungen für Core-Module
 const MAX_HOTEL_LEVEL: int = 15
-const UNLOCK_LEVELS = {
-	"staff":          2,  # Personal einstellen
-	"techtree":       3,  # Techtree + Forschung
-	"gastro":         4,  # Gastronomie-Forschung (Küche, Restaurant)
-	"staff_room":     5,  # Personalraum
-	"guest_needs":    6,  # Gästebedürfnisse aktiv
-	"gourmet_kitchen":7,  # Gourmetküche-Forschung
-	"wellness":       8,  # Wellness-Forschung (Spa, Pool)
-	"gourmet_stars":  9,  # Gourmetsterne + Inspektor
-	"tier2":          10, # Techtree Tier 2 + Zufallsereignisse
-	"auto_staff":     100 # TODO: Später ins Techtree/Tier 3 verlegen
-}
+# UNLOCK_LEVELS entfernt (ANG-365): Feature-Gates liegen jetzt in
+# - techtree.json (req_level pro Node)
+# - Room-Definitionen (req_level in den .gd Dateien)
+# - staff unlock: StaffSmall.get_definition()["req_level"] = 2
+# - techtree unlock: TechTreeManager.tiers_config["1"]["gate"]["req_level"] = 3
+# - auto_staff: Tier-2-Feature, noch nicht implementiert (Literal 100)
 signal sig_hotel_fp_changed(new_fp: String)
 signal sig_hotel_day_changed(day_number: int)
 signal sig_hotel_time_changed(time_string: String)

@@ -724,8 +724,8 @@ func _sync_guest_ui() -> void:
 func open_staff() -> void:
 	var level = GameState.selected_hotel.get("level", 1)
 	
-	if level < GameState.UNLOCK_LEVELS.staff:
-		Toast.show(GameState.T("toast.hr.locked") % GameState.UNLOCK_LEVELS.staff, "staff", false)
+	if level < 2: # ANG-365: StaffSmall.req_level = 2
+		Toast.show(GameState.T("toast.hr.locked") % 2, "staff", false)
 		return
 		
 	if TutorialManager:
@@ -747,8 +747,8 @@ func open_staff() -> void:
 
 # =============================================================================
 func open_tech_tree() -> void:
-	if GameState.selected_hotel.get("level", 1) < GameState.UNLOCK_LEVELS.techtree:
-		Toast.show(GameState.T("toast.techtree.locked") % GameState.UNLOCK_LEVELS.techtree, "research", false)
+	if GameState.selected_hotel.get("level", 1) < 3: # ANG-365: Tier-1-Gate req_level = 3
+		Toast.show(GameState.T("toast.techtree.locked") % 3, "research", false)
 		return
 
 	cleanup_current_states(true)

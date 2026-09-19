@@ -37,7 +37,7 @@
               "target_count": 5,
               "reward_fp": 100,
               "reward_money": 1000,
-              "requires_tech": "Z1.2"
+              "requires_tech": "Z1.5"
             },
             {
               "id": "q_build_superior_5",
@@ -48,7 +48,7 @@
               "target_count": 5,
               "reward_fp": 150,
               "reward_money": 1500,
-              "requires_tech": "Z1.3"
+              "requires_tech": "Z1.2"
             }
           ]
         },
@@ -87,7 +87,7 @@
               "target_count": 10,
               "reward_fp": 250,
               "reward_money": 2500,
-              "requires_tech": "Z1.2"
+              "requires_tech": "Z1.5"
             },
             {
               "id": "q_build_superior_10",
@@ -98,7 +98,7 @@
               "target_count": 10,
               "reward_fp": 350,
               "reward_money": 3500,
-              "requires_tech": "Z1.3"
+              "requires_tech": "Z1.2"
             }
           ]
         },
@@ -137,7 +137,7 @@
               "target_count": 25,
               "reward_fp": 800,
               "reward_money": 8000,
-              "requires_tech": "Z1.2"
+              "requires_tech": "Z1.5"
             },
             {
               "id": "q_build_superior_25",
@@ -148,7 +148,7 @@
               "target_count": 25,
               "reward_fp": 1000,
               "reward_money": 10000,
-              "requires_tech": "Z1.3"
+              "requires_tech": "Z1.2"
             }
           ]
         }
@@ -368,7 +368,7 @@
               "target_count": 10,
               "reward_fp": 100,
               "reward_money": 1000,
-              "requires_tech": "Z1.2"
+              "requires_tech": "Z1.5"
             },
             {
               "id": "q_serve_business_10",
@@ -429,7 +429,7 @@
               "target_count": 25,
               "reward_fp": 250,
               "reward_money": 2500,
-              "requires_tech": "Z1.2"
+              "requires_tech": "Z1.5"
             },
             {
               "id": "q_serve_business_25",
@@ -512,7 +512,7 @@
               "target_count": 50,
               "reward_fp": 500,
               "reward_money": 5000,
-              "requires_tech": "Z1.2"
+              "requires_tech": "Z1.5"
             },
             {
               "id": "q_serve_business_50",
@@ -556,7 +556,7 @@
               "target_count": 10,
               "reward_fp": 100,
               "reward_money": 1000,
-              "requires_tech": "Z1.3"
+              "requires_tech": "Z1.2"
             },
             {
               "id": "q_serve_vip_10",
@@ -584,7 +584,7 @@
               "target_count": 100,
               "reward_fp": 1000,
               "reward_money": 10000,
-              "requires_tech": "Z1.2"
+              "requires_tech": "Z1.5"
             },
             {
               "id": "q_serve_business_100",
@@ -650,7 +650,7 @@
               "target_count": 25,
               "reward_fp": 250,
               "reward_money": 2500,
-              "requires_tech": "Z1.3"
+              "requires_tech": "Z1.2"
             },
             {
               "id": "q_serve_luxury_50",
@@ -661,7 +661,7 @@
               "target_count": 50,
               "reward_fp": 500,
               "reward_money": 5000,
-              "requires_tech": "Z1.3"
+              "requires_tech": "Z1.2"
             },
             {
               "id": "q_serve_luxury_100",
@@ -672,7 +672,7 @@
               "target_count": 100,
               "reward_fp": 1000,
               "reward_money": 10000,
-              "requires_tech": "Z1.3"
+              "requires_tech": "Z1.2"
             },
             {
               "id": "q_serve_vip_25",

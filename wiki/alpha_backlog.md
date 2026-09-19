@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.54 | Stand: 14.09.2026
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.62 | Stand: 19.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -57,7 +57,9 @@
 - [x] **Fix v0.1.61:** Luftlinien-Pathfinding beim Reload aus POI heraus – `_current_poi_id` nach Restore erhalten, `STUDYING_MENU` als `IN_POI` speichern, Gäste bleiben in `IN_POI`-State nach Load (kein Feueralarm-Exodus)
 - [ ] **Offen:** TG Pre-Trigger bei 13:20 fehlt – Gäste kommen 7 Min zu spät zur Nachmittags-Session (aktuell: 13:37 statt 13:30)
 - [ ] **Offen:** Conference POI aus `_get_open_pois()` für normale Gäste ausblenden wenn Event läuft
-- [ ] **ANG-365:** Techtree/Level Alignment (`req_level` in techtree.json vs `UNLOCK_LEVELS` in GameState)
+- [x] **ANG-365:** Techtree/Level Alignment – `UNLOCK_LEVELS` vollständig entfernt. `req_level` dezentralisiert in Raum-GDs und techtree.json. Tooltip-Bug (Level zeigte immer 3) behoben. Z1.2–Z1.5 nach Unlock-Reihenfolge umbenannt. Zimmer-Layout auf 4 Spalten erweitert.
+- [x] **Bugfix Techtree UI:** Rendering-Bug beim Öffnen – Buttons zeigen jetzt sofort korrekten Init-State (via `await process_frame` + `update_button_states()`).
+- [x] **Tooltip req_level:** `_generate_tooltip()` zeigt nun `max(tier_gate, node_req_level)` statt immer Tier-Gate-Level.
 
 ---
 

@@ -194,9 +194,12 @@ func _on_hotel_level_changed(new_level: int) -> void:
 	label_level.text = str(new_level)
 	if is_instance_valid(bottom_bar):
 		if bottom_bar.has_method("set_staff_locked"):
-			bottom_bar.set_staff_locked(new_level < GameState.UNLOCK_LEVELS.staff)
+			# ANG-365: Literal aus StaffSmall.req_level = 2 (kein RoomRegistry-Autoload)
+			bottom_bar.set_staff_locked(new_level < 2)
 		if bottom_bar.has_method("set_techtree_locked"):
-			bottom_bar.set_techtree_locked(new_level < GameState.UNLOCK_LEVELS.techtree)
+			# ANG-365: Aus TechTree Tier-1-Gate req_level = 3
+			var techtree_unlock: int = TechtreeManager.tiers_config.get("1", {}).get("gate", {}).get("req_level", 3)
+			bottom_bar.set_techtree_locked(new_level < techtree_unlock)
 		
 		await get_tree().process_frame
 		if is_instance_valid(bottom_bar) and bottom_bar.has_method("set_browser_locked"):
@@ -297,11 +300,11 @@ func _on_hotel_level_up(new_level: int) -> void:
 	var unlock_text  := ""
 
 	match new_level:
-		GameState.UNLOCK_LEVELS.staff:
+		2: # Staff-Unlock (= StaffSmall.req_level)
 			unlock_text  = GameState.T("levelup.unlock.hr_hint")
 			reward_money = 1500
 			reward_fp    = 250
-		GameState.UNLOCK_LEVELS.techtree:
+		3: # Techtree-Unlock (= Tier-1-Gate req_level)
 			unlock_text  = GameState.T("modal.techtree.title")
 			reward_money = 2500
 			reward_fp    = 500

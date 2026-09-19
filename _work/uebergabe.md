@@ -1,35 +1,43 @@
-# Übergabe-Protokoll – v0.1.60 (19.09.2026)
+# Übergabeprotokoll – v0.1.61
+> Erstellt: 19.09.2026 | Commit: 2c1baa9
+
+---
 
 ## Letzter Stand
 
-Session abgeschlossen mit dem großen TG-PM-Session-Durchbruch: Tagungsgäste kehren nun korrekt nach der Mittagspause um 13:30 in den Konferenzraum zurück und bleiben dort bis 17:00.
+Der Luftlinien-Pathfinding-Bug nach Save/Load ist **weitgehend gefixt** (2 von 3 Reloads sauber mit altem Save, frische Saves laufen sauber). TG-Gäste sitzen nach Reload wieder in Restaurant/Bar und verlassen es erst wenn ihr Timer natürlich abläuft. Kein "Feueralarm"-Exodus mehr.
 
-## Bearbeitete Systeme
+## Was wurde gearbeitet
 
-### GuestActor.gd
-- **is_event_time Fix (kritisch):** PM-Start war `830` (13:50) statt `810` (13:30). Fix in `_process_waiting()` Zeile 324.
-- **Max-Guests-Check:** `_get_open_pois()` zählt jetzt nur Gäste in active_states [3,6,7,8,9] – nicht mehr WALKING-Gäste.
+### GuestActor.gd – Save/Load Fix (Luftlinie)
+- `get_save_state()`: `STUDYING_MENU` → `IN_POI` (statt `IN_ROOM`). Erhält `_current_poi_id` im Save.
+- `restore_save_state()` IN_POI/EATING: State bleibt `IN_POI`, Timer aus Save restored (min. 5s), `_restoring_from_save` Flag aktiv.
+- `restore_save_state()` IN_ROOM (TG-Gäste): `_current_poi_id` nur setzen wenn saved position ein solid tile ist.
+- `_snap_to_poi_exit_deferred()` entfernt (war veralteter Workaround).
 
-### ConferenceSmall.gd
-- **Sitzplatz-Reservierung:** `_start_break()` löscht `occupied_by` NICHT mehr. Jeder TG behält seinen Platz reserviert. Bei Rückkehr findet er via `occupied_by == actor_id` seinen Platz.
-- **Tooltip-Fix:** `get_live_details()` blendet Gäste aus die nicht `_current_poi_id == "conference_small"` haben.
-- **Reload-Kommentare:** `_init_phase_from_time()` Kommentare aktualisiert.
-- **Broadcast-Timing:** `return_from_conference_break` wird bei `TIME_SESSION_PM_START` (810 = 13:30) gesendet.
+### Warum es vorher nicht funktionierte
+`_get_current_room_node()` prüft `_current_poi_id` ZUERST. War die ID leer → Phase 1 von `_execute_walk()` fand keinen Raum → kein lokaler Austrittspfad → Luftlinie. Die ID war leer weil STUDYING_MENU als IN_ROOM gespeichert wurde und der IN_ROOM-Restore-Branch die ID nicht setzte.
 
-### CustomTooltip.gd
-- **Multi-Instance Fix:** Tooltip nutzt `get_live_details()` wenn verfügbar (Gym, Pool, Spa) statt typ-basierter Zählung. Vorher zeigten beide Gym-Instanzen dieselben Gäste.
+### Architektur-Notizen
+- `wiki/_dev/ang364_nav_rework.md` angelegt: Peters Konzept für Post-Alpha Nav-Rework (einheitliches 4×4 Grid, Tile-IDs statt Welt-Koordinaten)
+- `wiki/02_features/25_techdoku_guestactor.md`: Save/Load Sektion (Kapitel 11) hinzugefügt
 
-## Sofortige nächste Schritte
+---
 
-1. **Luftlinien-Pathfinding nach Reload aus POI:** TG-Gäste die beim Speichern in Bar/Restaurant waren, spawnen nach Reload an ihrem POI und gehen dann Luftlinie durch Wände zur Lobby. Root-Cause: beim Restore aus IN_POI-State in Bar/Restaurant fehlt der korrekte Inroom-Nav → Global-Nav Übergang.
+## Offene Punkte (priorisiert)
 
-2. **Conference POI für normale Gäste ausblenden:** Wenn Event läuft, sollte `conference_small` nicht in `_get_open_pois()` für normale Gäste auftauchen. Lösung: `is_guest_allowed()` in ConferenceSmall prüft ob Event aktiv ist und Gast kein TG-Gast ist → return false.
+1. **TG Pre-Trigger bei 13:20** (NEU): TG-Gäste kommen 7 Min zu spät zur Nachmittags-Session. `is_event_time` feuert erst bei 810 (13:30). Sollte bei ~800 (13:20) feuern damit Gäste um 13:30 ankommen.
+   - Datei: `GuestActor.gd`, `_process_waiting()`, Zeile ~324
+   - Trigger: `var is_pre_event_time = (current_time >= 455 and current_time < 465) or (current_time >= 800 and current_time < 810)`
 
-3. **ANG-365:** Techtree/Level Alignment (`req_level` in techtree.json vs `UNLOCK_LEVELS` in GameState.gd).
+2. **Conference POI ausblenden für normale Gäste** wenn Event läuft: `_get_open_pois()` zeigt Conference auch normalen Gästen.
 
-## Wichtige Architektur-Notizen
+3. **ANG-365:** Techtree/Level Alignment.
 
-- `is_event_time` Zeitfenster: AM = 465–720 (07:45–12:00), PM = 810–1020 (13:30–17:00)
-- `_current_poi_id` ist IMMER typ-basiert ("gym_small", "conference_small"), NICHT instance-key-basiert
-- `_room_seats` wird nach Reload IMMER leer neu gebaut (Scene-Node-Rebuild) – Seat-Reservierung ist nur runtime-relevant
-- TG-Gäste: `party.event_poi_id` enthält den Raum-Key (z.B. "P0001") und darf NICHT geleert werden bis 17:00
+4. **Race-Condition (selten)**: ~1 von 3 Reloads zeigt noch einen Gast mit Luftlinie. Verschwindet nach neuem Save. Wahrscheinlich AStar nicht vollständig initialisiert beim ersten `_process_waiting` Tick.
+
+---
+
+## Sofortiger nächster Schritt
+
+Pre-Trigger für TG-Nachmittags-Session in `_process_waiting()` einbauen. Einfache Änderung: Zeitbereich auf 800-810 für Pre-Event und Bewegung auslösen. Oder `is_event_time` Grenze auf 800 statt 810 für Nachmittag setzen.

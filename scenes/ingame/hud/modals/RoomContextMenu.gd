@@ -71,7 +71,7 @@ func _on_service_pressed() -> void:
 		if _target_room.get("is_service_requested"):
 			Toast.show(GameState.T("toast.room.service_active"), "build")
 		else:
-			if GameState.selected_hotel.get("level", 1) < GameState.UNLOCK_LEVELS.get("staff", 2):
+			if GameState.selected_hotel.get("level", 1) < 2: # ANG-365: StaffSmall.req_level = 2
 				Toast.show(GameState.T("toast.room.staff_locked"), "personal")
 			else:
 				_target_room.set("is_service_requested", true)
@@ -122,12 +122,12 @@ func open(room: Node2D) -> void:
 	btn_wlan.visible = false
 	btn_klima.visible = false
 	if _target_room.has_method("has_trait"):
-		var has_wlan = (TechtreeManager and TechtreeManager.is_tech_unlocked("Z1.4"))
+		var has_wlan = (TechtreeManager and TechtreeManager.is_tech_unlocked("Z1.3"))
 		if has_wlan and not _target_room.has_trait("wlan"):
 			btn_wlan.visible = true
 			btn_wlan.disabled = is_pending
 			
-		var has_klima = (TechtreeManager and TechtreeManager.is_tech_unlocked("Z1.5"))
+		var has_klima = (TechtreeManager and TechtreeManager.is_tech_unlocked("Z1.4"))
 		if has_klima and not _target_room.has_trait("klima"):
 			btn_klima.visible = true
 			btn_klima.disabled = is_pending
@@ -226,7 +226,7 @@ func _on_repair_pressed() -> void:
 		if _target_room.get("is_repair_requested"):
 			Toast.show(GameState.T("toast.room.repair_active"), "build")
 		else:
-			if GameState.selected_hotel.get("level", 1) < GameState.UNLOCK_LEVELS.get("staff", 2):
+			if GameState.selected_hotel.get("level", 1) < 2: # ANG-365: StaffSmall.req_level = 2
 				Toast.show(GameState.T("toast.room.staff_locked"), "personal")
 			else:
 				_target_room.set("is_repair_requested", true)

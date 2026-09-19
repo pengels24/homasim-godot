@@ -24,7 +24,7 @@ static func get_definition() -> Dictionary:
 		"locked": false,
 		"max_guests": 8,
 		"in_build_menu": true,
-		"req_level": 4,
+		"req_level": 6,
 		"req_tech": "W1.2",
 		"max_beds": 0,
 		"is_poi": true,

@@ -320,7 +320,7 @@ func _on_speed_changed(is_paused: bool, _speed: float) -> void:
 			var room = _get_room_node(rid)
 			if room:
 				room.set("cleanliness_level", 0)
-				if GameState.selected_hotel.get("level", 1) >= GameState.UNLOCK_LEVELS.get("auto_staff", 100):
+				if GameState.selected_hotel.get("level", 1) >= 100: # TODO: Tier-2-Feature, noch nicht implementiert
 					room.set_service_requested(true)
 					GameState.sig_room_needs_cleaning.emit(room)
 				else:
@@ -1040,7 +1040,7 @@ func _finalize_checkout(party: GuestParty, payout: int, auto: bool) -> void:
 		else:
 			if room:
 				room.set("cleanliness_level", 0)
-				if GameState.selected_hotel.get("level", 1) >= GameState.UNLOCK_LEVELS.get("auto_staff", 100):
+				if GameState.selected_hotel.get("level", 1) >= 100: # TODO: Tier-2-Feature, noch nicht implementiert
 					room.set_service_requested(true)
 					GameState.sig_room_needs_cleaning.emit(room)
 				else:

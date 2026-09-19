@@ -530,10 +530,10 @@ techtree.node.tooltip.unlock,Klicken zum Erforschen,Click to Research
 techtree.gastro.bar.name,Bar,Bar
 techtree.gastro.bar.desc,Eine kleine Bar für Gäste die noch nicht müde sind.,A cozy bar for guests who aren't tired yet.
 techtree.zimmer.z1_1,Komfort-Grundlagen,Comfort Basics
-techtree.zimmer.z1_2,Familienzimmer,Family Rooms
-techtree.zimmer.z1_3,Superior-Zimmer,Superior Rooms
-techtree.zimmer.z1_4,Premium-Upgrade,Premium Upgrade
-techtree.zimmer.z1_5,Luxus Suite,Luxury Suite
+techtree.zimmer.z1_5,Familienzimmer,Family Rooms
+techtree.zimmer.z1_2,Superior-Zimmer,Superior Rooms
+techtree.zimmer.z1_3,Premium-Upgrade,Premium Upgrade
+techtree.zimmer.z1_4,Luxus Suite,Luxury Suite
 techtree.gastro.g1_1,Basis-Gastronomie,Basic Gastronomy
 techtree.gastro.g1_2,Erweiterte Gastronomie,Extended Gastronomy
 techtree.gastro.g1_3,Gehobene Küche,Fine Dining
@@ -1234,8 +1234,8 @@ techtree.category.wellness,Wellness,Wellness
 techtree.category.management,Management,Management
 techtree.category.prestige,Prestige,Prestige
 techtree.zimmer.z1_1.desc,Eine solide Basis für jedes gute Hotel. Zufriedenes Personal arbeitet effizienter und legt den Grundstein für deinen Erfolg.,A solid foundation for any good hotel. Satisfied staff work more efficiently and lay the groundwork for your success.,Unlocks the room branch. Base comfort also allows your service staff to work 5% faster.
-techtree.zimmer.z1_2.desc,"Mehr Platz für die ganze Familie. Ein größeres Raumangebot lockt Reisegruppen an, die Wert auf gemeinsame Zeit legen.",More space for the whole family. A larger room offering attracts travel groups who value time together.
-techtree.zimmer.z1_3.desc,"Für Gäste mit gehobenen Ansprüchen. Bessere Ausstattung bedeutet höhere Einnahmen, aber auch kritischere Blicke beim Service.","For guests with high standards. Better amenities mean higher income, but also a more critical eye on the service.",Unlocks superior rooms. Generates more income but requires a TV and a sofa.
+techtree.zimmer.z1_5.desc,"Mehr Platz für die ganze Familie. Ein größeres Raumangebot lockt Reisegruppen an, die Wert auf gemeinsame Zeit legen.",More space for the whole family. A larger room offering attracts travel groups who value time together.
+techtree.zimmer.z1_2.desc,"Für Gäste mit gehobenen Ansprüchen. Bessere Ausstattung bedeutet höhere Einnahmen, aber auch kritischere Blicke beim Service.","For guests with high standards. Better amenities mean higher income, but also a more critical eye on the service.",Unlocks superior rooms. Generates more income but requires a TV and a sofa.
 techtree.gastro.g1_1.desc,"Der perfekte Ort, um den Abend ausklingen zu lassen. Exzellente Drinks an der Bar lockern den Geldbeutel der Gäste spürbar.",The perfect place to end the evening. Excellent drinks at the bar noticeably loosen the guests wallets.
 techtree.gastro.g1_2.desc,Ein hungriger Gast ist ein unzufriedener Gast. Mit einer grundlegenden Verpflegung aus der eigenen Küche sicherst du das Überleben – und die Laune – deiner Kundschaft.,"A hungry guest is a dissatisfied guest. With basic catering from your own kitchen, you ensure the survival - and the mood - of your clientele."
 techtree.gastro.g1_3.desc,"Mehr Platz, mehr Tische. Ein eigenes kleines Restaurant bewältigt den Ansturm zur Stoßzeit deutlich besser und bringt das Hotel auf die kulinarische Landkarte.","More space, more tables. A dedicated small restaurant handles the rush hour crowd much better and puts the hotel on the culinary map.",Unlocks the bar. An additional evening income source where guests can enjoy cocktails.
@@ -1398,7 +1398,7 @@ Referenzen zu anderen Räumen: Familien haben oftmals höhere Platzansprüche un
 
 Kosten: 6.000 €
 
-Voraussetzungen: Techtree Z1.2 (Familienzimmer)","A large bedroom exclusively reserved for families.
+Voraussetzungen: Techtree Z1.5 (Familienzimmer)","A large bedroom exclusively reserved for families.
 
 Function: Offers enough space for families (parents with 1 to 3 children, totaling 3 to 5 people). It is very lucrative (200 € / Night).
 
@@ -1406,7 +1406,7 @@ References to other rooms: Families often have higher space requirements and dem
 
 Cost: 6,000 €
 
-Requirements: Techtree Z1.2 (Family Room)"
+Requirements: Techtree Z1.5 (Family Room)"
 tutorial.room_bed_superior.title,Superior-Zimmer,Superior Room
 tutorial.room_bed_superior.desc,"Die gehobene Luxus-Klasse unter den Zimmern für VIP-Gäste und Luxusreisende.
 
@@ -1414,13 +1414,13 @@ Funktion: Erfüllt hohe Ansprüche an Luxus und Privatsphäre. Bringt mit 400 �
 
 Kosten: 15.000 €
 
-Voraussetzungen: Techtree Z1.3 (Superior-Zimmer)","The upscale luxury class among rooms for VIP guests and luxury travelers.
+Voraussetzungen: Techtree Z1.2 (Superior-Zimmer)","The upscale luxury class among rooms for VIP guests and luxury travelers.
 
 Function: Fulfills high demands for luxury and privacy. Generates some of the highest revenues in the game at 400 € / Night, but is exclusively booked by very rare luxury guests and VIPs.
 
 Cost: 15,000 €
 
-Requirements: Techtree Z1.3 (Superior Room)"
+Requirements: Techtree Z1.2 (Superior Room)"
 tutorial.room_bar.title,Bar,Bar
 tutorial.room_bar.desc,"Ein Treffpunkt für gesellige Gäste, der ab 12:00 Uhr mittags bis in die Nacht geöffnet ist (Adults only).
 

@@ -30,6 +30,10 @@ func _ready() -> void:
 	
 	_on_fp_changed(GameState.selected_hotel.get("fp", 0))
 	_build_ui()
+	# Bugfix ANG-365: Buttons initial korrekt colorieren (Gold/Weiß/Dunkel)
+	# await sichert dass TechNodeButton._ready() gelaufen ist bevor set_glow_state aufgerufen wird
+	await get_tree().process_frame
+	update_button_states()
 
 # =============================================================================
 func _on_fp_changed(new_fp: int) -> void:
@@ -322,8 +326,9 @@ func _update_single_button(tech_id: String) -> void:
 		btn.add_theme_color_override("font_hover_color", Color("#4da370"))
 		btn.add_theme_color_override("font_focus_color", Color("#366e4d"))
 		btn.add_theme_color_override("font_pressed_color", Color("#264d36"))
-		btn.set_glow_state(true, true)
-		btn.get_glow_node().modulate.a = 1.0
+		# Kein permanenter Glow – nur Font-Color zeigt "erforscht"
+		# Glow kommt ausschließlich per Hover via _highlight_dependencies
+		btn.set_glow_state(false, true)
 	elif TechtreeManager.is_tech_available(tech_id):
 		btn.disabled = false
 		btn.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
@@ -389,7 +394,9 @@ func _generate_tooltip(tech_id: String) -> String:
 	
 	tt += GameState.T("ui.techtree.tooltip.reqs_title", "Voraussetzungen:") + "\n"
 	var tier_id = n.get("tier", "1")
-	var req_level = int(TechtreeManager.tiers_config.get(tier_id, {}).get("gate", {}).get("req_level", 0))
+	var tier_gate_level = int(TechtreeManager.tiers_config.get(tier_id, {}).get("gate", {}).get("req_level", 0))
+	var node_req_level = int(n.get("req_level", 0))
+	var req_level = max(tier_gate_level, node_req_level)  # ANG-365: Node-eigenes req_level hat Vorrang
 	if req_level > 0:
 		var has_level = GameState.selected_hotel.get("level", 1) >= req_level
 		tt += ("✅ " if has_level else "❌ ") + GameState.T("ui.techtree.req.level", req_level).strip_edges() + "\n"

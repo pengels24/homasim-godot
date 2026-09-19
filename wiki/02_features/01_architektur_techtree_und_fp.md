@@ -2,7 +2,7 @@
 
 _Planungsdokument – Technische Basis & Implementierungs-Leitfaden_
 
-_Stand: 15.06.2026_
+_Stand: 19.09.2026 (v0.1.62)_
 
 ## 1. Grundprinzip der Implementierung
 
@@ -14,26 +14,30 @@ _Stand: 15.06.2026_
 Das System nutzt ein zentrales Register (Dictionary), das alle Technologien starr definiert.
 Jeder Eintrag in der JSON nutzt folgende Felder:
 - `id` (z. B. "Z1.1")
-- `name` (Translation-Key, z. B. "techtree.zimmer.z11")
+- `name` (Translation-Key, z. B. "techtree.zimmer.z1_1")
 - `category` (z. B. "zimmer" / "gastronomie")
 - `col` & `row` (Grid-Koordinaten für die Darstellung im UI)
 - `cost_fp` (z. B. 100)
 - `cost_money` (z. B. 1000 - Zusätzliche monetäre Kosten für Forschung)
+- `req_level` (Hotel-Level-Gate, z. B. 5 – **NEU ab v0.1.62** – pro Node individuell, nicht mehr zentral in `UNLOCK_LEVELS`)
+- `req_stars` (optional, Gourmet-Sterne-Gate)
 - `dependencies` (Array aus IDs der zwingenden Vorgänger, z.B. `["Z1.1"]` oder leer `[]`)
 - `unlocks_emojis` (Optischer Indikator für das UI, z. B. "🛏️ 🚿")
 - `demo_locked` (Boolean-Flag, ob die Forschung in der Demo gesperrt ist)
 
-**Wichtig zur Freischaltung (Inverted Dependency):** 
-Im Gegensatz zu früheren Planungen gibt es im Techtree **kein `unlocks`-Array**. Stattdessen prüfen die Räume selbst ihre Vorbedingungen. In den Basis-Daten der Raum-Skripte (z.B. `BedFamily.gd`) wird dafür die Eigenschaft `"req_tech": "Z1.2"` definiert.
+**Wichtig zur Freischaltung (Inverted Dependency):**
+Im Gegensatz zu früheren Planungen gibt es im Techtree **kein `unlocks`-Array** und keine zentrale `UNLOCK_LEVELS`-Konstante mehr (entfernt in v0.1.62). Stattdessen prüfen die Räume selbst ihre Vorbedingungen. In den Basis-Daten der Raum-Skripte (z.B. `BedFamily.gd`) wird dafür die Eigenschaft `"req_tech": "Z1.5"` definiert. Das Hotel-Level-Gate steht direkt als `req_level` im Node der `techtree.json`.
 
 ## 3. Der Progression-Manager (Hintergrund-Logik)
 
 Ein unsichtbarer Verwalter speichert den Fortschritt und prüft Freigaben.
 - **Unlocked Techs:** Ein Array speichert alle bereits erforschten `id`s.
-- **Validierung:** Bevor ein Techtree-Knoten freigeschaltet werden kann, checkt die Funktion `is_available(tech_id)`:
-    1. Ist das globale Tier-Gate offen? (Für Tier 1: Hotel-Level 5 erreicht).
-    2. Sind alle IDs aus `dependencies` bereits im Unlocked-Array?
-    3. Ist der aktuelle FP-Kontostand ≥ `cost_fp`?
+- **Validierung:** Bevor ein Techtree-Knoten freigeschaltet werden kann, checkt `is_tech_available(tech_id)` in `TechtreeManager.gd`:
+    1. Ist das globale Tier-Gate offen?
+    2. Hat das Hotel den Node-eigenen `req_level` (aus techtree.json) erreicht?
+    3. Sind alle IDs aus `dependencies` bereits im Unlocked-Array?
+    4. Ist der aktuelle FP-Kontostand ≥ `cost_fp`?
+    5. Ist der Geldstand ≥ `cost_money`?
 
 ## 4. Die FP-Engine (Forschungspunkte-Generierung)
 
@@ -70,8 +74,9 @@ _Nach der Ausschüttung springt der Aktionszähler für die nächste Ingame-Stun
 ## 5. Das Techtree-UI (Visualisierung)
 
 Angelehnt an das Master-Layout besteht das UI aus 5 parallelen Bahnen (Kategorien).
-Jeder Knoten (Button) hat einen von vier optischen Zuständen:
-1. **Gesperrt / Versteckt:** Das übergeordnete Tier-Gate (z.B. Tier 1) ist noch nicht erreicht.
-2. **Ausgegraut (Sichtbar):** Tier-Gate ist offen, aber es fehlen Vorgänger-Forschungen oder FP.
-3. **Klickbar (Pulsierend):** Alle Vorbedingungen erfüllt, genug FP vorhanden. Bereit zum Instant-Unlock.
-4. **Erforscht (Gold / Farbig markiert):** Bereits im Unlocked-Array, Item ist im Baumenü verfügbar.
+Jeder Knoten (Button) hat einen von drei optischen Zuständen (v0.1.62):
+1. **Gesperrt / Ausgegraut** (`btn.disabled = true`, `modulate = 0.4`): Tier-Gate nicht offen, `req_level` nicht erreicht oder Dependencies fehlen.
+2. **Verfügbar (Klickbar):** Alle Bedingungen erfüllt, genug FP/Geld vorhanden. Kein dauerhafter Glow – nativer Gold-Border des Buttons (aus `menu_button_darkblue.tres`) sichtbar.
+3. **Erforscht:** Bereits im Unlocked-Array. Grüner Font-Color (`#366e4d`). Glow-Overlay erscheint nur bei Hover via `_highlight_dependencies()`.
+
+**Hover-Verhalten:** Beim Überfahren eines Nodes leuchten der Node und seine Dependencies kurz auf (GlowOverlay mit grünem/rotem Border, animiertes Pulsieren bei nicht-erforschten Deps).

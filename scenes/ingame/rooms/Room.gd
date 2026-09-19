@@ -585,7 +585,7 @@ func add_dirt_from_visits(visits: int) -> void:
 	cleanliness_level = clampi(cleanliness_level - (base_drop + rand_drop), 0, 100)
 	
 	if cleanliness_level < 50 and not is_service_requested:
-		if GameState.selected_hotel.get("level", 1) >= GameState.UNLOCK_LEVELS.get("auto_staff", 100):
+		if GameState.selected_hotel.get("level", 1) >= 100: # TODO: Tier-2-Feature, noch nicht implementiert
 			is_service_requested = true
 			GameState.sig_room_needs_cleaning.emit(self)
 		_update_indicator()
@@ -599,7 +599,7 @@ func degrade_condition_from_visits(visits: int) -> void:
 		maintenance_level = clampi(maintenance_level - drop, 0, 100)
 		
 		if maintenance_level < 50 and not is_repair_requested:
-			if GameState.selected_hotel.get("level", 1) >= GameState.UNLOCK_LEVELS.get("auto_staff", 100):
+			if GameState.selected_hotel.get("level", 1) >= 100: # TODO: Tier-2-Feature, noch nicht implementiert
 				is_repair_requested = true
 				GameState.sig_room_needs_repair.emit(self)
 			_update_indicator()
@@ -630,9 +630,9 @@ func configure(data: Dictionary) -> void:
 			custom_color = Color(col_str)
 
 	if data.get("is_new_build", false):
-		if TechtreeManager and TechtreeManager.is_tech_unlocked("Z1.4"):
+		if TechtreeManager and TechtreeManager.is_tech_unlocked("Z1.3"):
 			acquired_traits.append("wlan")
-		if TechtreeManager and TechtreeManager.is_tech_unlocked("Z1.5"):
+		if TechtreeManager and TechtreeManager.is_tech_unlocked("Z1.4"):
 			acquired_traits.append("klima")
 	elif data.has("acquired_traits"):
 		# Only reset traits when the data dict actually carries them.

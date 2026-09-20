@@ -763,8 +763,13 @@ func remove_room(room: Node2D) -> void:
 			unique_id = gm._room_key(room)
 		if def and def.has("id"):
 			GameState.sig_room_demolished.emit(def["id"], unique_id)
+	# WICHTIG: Erst aus dem Parcel-Tree entfernen, DANN queue_free.
+	# queue_free() ist asynchron (Frame-Ende). save_all_rooms_to_db() laeuft
+	# sofort danach und wuerde den Node sonst noch als Kind sehen und re-speichern!
+	if is_instance_valid(room) and room.get_parent():
+		room.get_parent().remove_child(room)
 	room.queue_free()
-	
+
 	_update_all_floor_neighbors()
 	save_all_rooms_to_db(GameState.active_hotel_id)
 

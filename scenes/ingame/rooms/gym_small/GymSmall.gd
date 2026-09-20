@@ -13,6 +13,7 @@ static func get_definition() -> Dictionary:
 		"icon": "res://assets/icons/angelus2010/Rooms/ang-gym-small.aseprite",
 		"nightly_price": 0,
 		"locked": false,
+		"max_count": 1,
 		"max_guests": 6,
 		"in_build_menu": true,
 		"req_level": 8,
@@ -105,7 +106,15 @@ func is_guest_allowed(actor: Node2D) -> bool:
 	var gm = actor.get("_guest_member")
 	var guest_id: String = gm.id if gm else ""
 	var now := TimeManager.get_game_time() if TimeManager else 0
+	# Gast hat bereits eine aktive Session → Spot-Wechsel erlauben (kein Re-Entry-Check)
+	if _guest_session_end.has(guest_id):
+		return not (_guest_cooldown_end.has(guest_id) and now < _guest_cooldown_end[guest_id])
+	# Cooldown-Check: nach Session-Ende darf Gast 60 Min nicht mehr rein
 	if _guest_cooldown_end.has(guest_id) and now < _guest_cooldown_end[guest_id]:
+		return false
+	# max_guests-Limit: aktive Sessions zählen als belegte Plätze
+	var max_g: int = get_definition().get("max_guests", 0)
+	if max_g > 0 and _guest_session_end.size() >= max_g:
 		return false
 	return true
 
@@ -119,7 +128,13 @@ func get_available_interactions(actor: Node2D) -> Array[Dictionary]:
 	return interactions.filter(func(i): return i.type != "wander")
 
 func claim_interaction(actor_id: String, interaction_id: String) -> Dictionary:
+	# Hard gate (Race Condition Fix): beim Ankommen nochmals prüfen.
+	# is_guest_allowed greift nur beim Entscheiden – bis zum Ankommen kann sich die Situation ändern.
 	if not _guest_session_end.has(actor_id):
+		var max_g: int = get_definition().get("max_guests", 0)
+		if max_g > 0 and _guest_session_end.size() >= max_g:
+			return {}  # Voll → GuestActor ruft send_back_to_room()
+
 		var stay_dur := randf_range(60.0, 90.0)
 		var def = get_definition()
 		if def.has("open_to"):

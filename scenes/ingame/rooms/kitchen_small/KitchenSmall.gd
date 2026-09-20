@@ -13,6 +13,7 @@ static func get_definition() -> Dictionary:
 		"icon": "res://assets/icons/angelus2010/Rooms/ang-kitchen-small.aseprite",
 		"nightly_price": 0,
 		"locked": false,
+		"max_count": 1,
 		"in_build_menu": true,
 		"req_level": 4,
 		"req_tech": "G1.2",

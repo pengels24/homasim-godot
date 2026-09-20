@@ -18,6 +18,7 @@ static func get_definition() -> Dictionary:
 		"req_tech": "G1.3",
 		"max_beds": 0,
 		"is_poi": true,
+		"max_count": 1,
 		"max_guests": 20,
 		"visit_income": 0, # Wird durch Rezepte bestimmt
 		"visit_exp": 15,

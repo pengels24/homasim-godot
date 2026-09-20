@@ -588,9 +588,11 @@ func _get_open_pois() -> Array[String]:
 			if not room.is_operational():
 				continue
 			
-		# Max Guests Check – nur Gäste zählen die WIRKLICH drin sind (nicht auf dem Weg)
+		# Max Guests Check – nur für Räume OHNE eigenes is_guest_allowed().
+		# Räume mit is_guest_allowed() (Gym, Pool, Spa) prüfen das Limit instanzspezifisch.
+		# Der globale Count nutzt nur den Typ-ID und würde alle Instanzen zusammenzählen!
 		var max_guests = def.get("max_guests", 0)
-		if max_guests > 0:
+		if max_guests > 0 and not room.has_method("is_guest_allowed"):
 			var current_count = 0
 			var active_states = [3, 6, 7, 8, 9]  # IN_POI, STUDYING_MENU, WAITING_FOR_FOOD, EATING, SITTING
 			for guest in get_tree().get_nodes_in_group("guest_actors"):

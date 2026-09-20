@@ -20,6 +20,7 @@ static func get_definition() -> Dictionary:
 		"req_tech": "G1.1",
 		"max_beds": 0,
 		"is_poi": true,
+		"max_count": 1,
 		"max_guests": 8,
 		"visit_income": 15,  # Basis-Eintritt (Getränke)
 		"visit_exp": 10,

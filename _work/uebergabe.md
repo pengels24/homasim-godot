@@ -1,8 +1,17 @@
-# Übergabe-Protokoll – v0.1.62 (19.09.2026)
+# Übergabe-Protokoll – v0.1.62 (19.09.2026, Abend-Nachtrag)
 
 ## Letzter Stand
 
-Session abgeschlossen. Commit: `b670cef` auf Branch `dev`.
+Session abgeschlossen. Branch `dev`. Zwei Commits:
+- `b670cef` – ANG-365 Hauptarbeit
+- `09bc6e5` – TG PM-Trigger Fix + Backlog-Cleanup
+
+## Zusätzlich in Abendsession erledigt
+
+- **TG PM-Trigger Fix:** `GuestActor._decide_next_action()` Z. 811: `825 → 800` (13:45 → 13:20). TG-Gäste gehen jetzt pünktlich zur Nachmittags-Session.
+- **Conference POI Hide:** Bereits implementiert in `_get_open_pois()` – kein Fix nötig, Backlog-Eintrag war veraltet.
+- **EXP-Kurven-Analyse:** Simulation zeigt ~2.9h für L1→L8 (inkl. POI/Quest/Task EXP). Aktuelle Kurve ist OK – kein Anpassungsbedarf.
+- **Test-Review erweitert:** TG-Ende Flow + Gym als `[~]` Beobachtungspunkte eingetragen.
 
 ## Bearbeitete Systeme
 

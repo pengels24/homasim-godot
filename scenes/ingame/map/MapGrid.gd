@@ -828,16 +828,19 @@ func remove_room(room: Node2D) -> void:
 ## Behebt Ghost-Room Blocking (Zellen belegt ohne Room-Node).
 ## Aufruf: DevConsole-Befehl "repair-grid" oder nach Sanitize-Fehlschlag.
 func rebuild_occ_from_active_rooms() -> void:
-	# Schritt 1: Alle Raum-Körper-Cells (Wert 1) auf 0 zurücksetzen
+	# Schritt 1: Alle Raum-Körper (1) UND Exit-Tiles (2) auf 0 zurücksetzen.
+	# Wert 2 (Ghost-Exit) blockiert ebenfalls _occ_free_for_room() und wird
+	# nach dem Rebuild sauber für jede echte active_room neu gesetzt.
 	for i in _occ.size():
-		if _occ[i] == 1:
+		var v: int = _occ[i]
+		if v == 1 or v == 2:
 			_occ[i] = 0
 			var gx_i: int = i % _occ_w
 			var gy_i: int = i / _occ_w
 			if astar:
 				astar.set_point_solid(Vector2i(gx_i, gy_i), false)
 
-	# Schritt 2: Nur echte active_rooms neu markieren
+	# Schritt 2: Nur echte active_rooms neu markieren (Körper + Exit)
 	for room: Node2D in active_rooms:
 		if not is_instance_valid(room) or not room.has_method("get_tile_size"):
 			continue

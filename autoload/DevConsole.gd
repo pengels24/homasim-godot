@@ -134,6 +134,15 @@ func _execute(cmd: String) -> void:
 			_log("  start-inspector   - Spawnt den Gourmet-Inspektor manuell", CLR_INFO)
 			_log("  list-guests       - Listet alle aktiven/wartenden/checkout Gäste", CLR_INFO)
 			_log("  list-pois         - Listet alle POI-Räume mit Status, Besuchern, Open", CLR_INFO)
+			_log("  repair-grid       - Rebuild OCC-Grid aus active_rooms (Ghost-Room Fix)", CLR_INFO)
+
+		"repair-grid":
+			var mg_rg = get_tree().current_scene.find_child("MapGrid", true, false) if get_tree().current_scene else null
+			if not is_instance_valid(mg_rg) or not mg_rg.has_method("rebuild_occ_from_active_rooms"):
+				_log("MapGrid nicht gefunden oder rebuild_occ nicht verfügbar.", CLR_ERR)
+			else:
+				mg_rg.rebuild_occ_from_active_rooms()
+				_log("Grid-Reparatur abgeschlossen! OCC neu aufgebaut aus %d active_rooms." % mg_rg.active_rooms.size(), CLR_OK)
 
 		"fix-savegame":
 			if EventManager:

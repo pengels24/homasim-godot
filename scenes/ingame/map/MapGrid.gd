@@ -824,6 +824,53 @@ func remove_room(room: Node2D) -> void:
 
 
 # =============================================================================
+## Baut die OCC-Grid komplett aus active_rooms neu auf.
+## Behebt Ghost-Room Blocking (Zellen belegt ohne Room-Node).
+## Aufruf: DevConsole-Befehl "repair-grid" oder nach Sanitize-Fehlschlag.
+func rebuild_occ_from_active_rooms() -> void:
+	# Schritt 1: Alle Raum-Körper-Cells (Wert 1) auf 0 zurücksetzen
+	for i in _occ.size():
+		if _occ[i] == 1:
+			_occ[i] = 0
+			var gx_i: int = i % _occ_w
+			var gy_i: int = i / _occ_w
+			if astar:
+				astar.set_point_solid(Vector2i(gx_i, gy_i), false)
+
+	# Schritt 2: Nur echte active_rooms neu markieren
+	for room: Node2D in active_rooms:
+		if not is_instance_valid(room) or not room.has_method("get_tile_size"):
+			continue
+		if not is_instance_valid(room.get_parent()):
+			continue
+		var parts: PackedStringArray = room.get_parent().name.split("_")
+		if parts.size() < 3:
+			continue
+		var px: int = int(parts[1])
+		var py: int = int(parts[2])
+		var sz: Vector2i = room.get_tile_size()
+		var tx: int = int(room.position.x / TILE_PX)
+		var ty: int = int(room.position.y / TILE_PX)
+		var gx: int = px * PARCEL_SZ + tx
+		var gy: int = py * PARCEL_SZ + ty
+		_occ_mark(gx, gy, sz.x, sz.y)
+		var door_rot: int = room.get("door_rotation") if room.get("door_rotation") != null else 0
+		var door_off: int = room.get("door_offset") if room.get("door_offset") != null else 0
+		var exit_tile := _exit_global(px, py, tx, ty, sz.x, sz.y, door_rot, door_off)
+		_occ_mark_exit(exit_tile.x, exit_tile.y)
+
+	# Schritt 3: Exit-Tiles (Wert 2) müssen non-solid bleiben
+	if astar:
+		for gy: int in _occ_h:
+			for gx: int in _occ_w:
+				if _occ[gy * _occ_w + gx] == 2:
+					astar.set_point_solid(Vector2i(gx, gy), false)
+
+	save_all_rooms_to_db(GameState.active_hotel_id)
+
+
+
+# =============================================================================
 func demolish_marked_rooms(silent: bool = false) -> void:
 	var to_remove = []
 	for room in active_rooms:

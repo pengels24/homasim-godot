@@ -54,6 +54,7 @@ var _occ_h: int
 # ── Debugging ─────────────────────────────────────────────────────────────────
 @warning_ignore("unused_private_class_variable")
 var _show_debug_grid: bool = false
+var _show_occ_overlay: bool = false  # DevConsole: occ-overlay
 var _debug_paths: Dictionary = {}  # {id: {path, label}}
 var _failed_paths: Array[Dictionary] = []
 
@@ -592,7 +593,7 @@ func _is_visible(x: int, y: int) -> bool:
 	return p.is_built
 
 func _process(_delta: float) -> void:
-	if _show_debug_grid:
+	if _show_debug_grid or _show_occ_overlay:
 		queue_redraw()
 
 func _draw() -> void:
@@ -641,6 +642,25 @@ func _draw() -> void:
 		draw_line(st_pos, et_pos, Color(1.0, 0.0, 1.0, 0.8), 6.0)
 		draw_circle(st_pos, 10.0, Color(1.0, 0.0, 1.0, 0.8))
 		draw_circle(et_pos, 10.0, Color(1.0, 0.0, 1.0, 0.8))
+
+	# OCC-Wert-Overlay: Alle Zellen != 0 mit Farbe + Zahl zeichnen
+	if _show_occ_overlay and _occ.size() > 0:
+		var font := ThemeDB.fallback_font
+		for gy2: int in _occ_h:
+			for gx2: int in _occ_w:
+				var v2: int = _occ[gy2 * _occ_w + gx2]
+				if v2 == 0:
+					continue
+				var col: Color
+				match v2:
+					1: col = Color(1.0, 0.1, 0.1, 0.65)   # Rot = Raumkörper
+					2: col = Color(0.1, 0.3, 1.0, 0.75)   # Blau = Exit-Tile
+					3: col = Color(0.3, 0.3, 0.3, 0.50)   # Grau = Wand/Wiese
+					4: col = Color(1.0, 0.6, 0.0, 0.65)   # Orange = Clearance
+					_: col = Color(1.0, 0.0, 1.0, 0.65)   # Magenta = unbekannt
+				var c2 := to_local(tile_to_world(Vector2i(gx2, gy2)))
+				draw_rect(Rect2(c2.x - tile_w * 0.5, c2.y - tile_h * 0.5, tile_w, tile_h), col)
+				draw_string(font, c2 + Vector2(-4, 5), str(v2), HORIZONTAL_ALIGNMENT_LEFT, -1, 9, Color.WHITE)
 
 # =============================================================================
 func _exit_outside_parcel(_px: int, _py: int, exit: Vector2i, _door_rot: int) -> bool:

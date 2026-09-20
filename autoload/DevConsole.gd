@@ -144,6 +144,15 @@ func _execute(cmd: String) -> void:
 				mg_rg.rebuild_occ_from_active_rooms()
 				_log("Grid-Reparatur abgeschlossen! OCC neu aufgebaut aus %d active_rooms." % mg_rg.active_rooms.size(), CLR_OK)
 
+		"occ-overlay":
+			var mg_ov = get_tree().current_scene.find_child("MapGrid", true, false) if get_tree().current_scene else null
+			if not is_instance_valid(mg_ov):
+				_log("MapGrid nicht gefunden.", CLR_ERR)
+			else:
+				mg_ov._show_occ_overlay = not mg_ov._show_occ_overlay
+				var state := "AN" if mg_ov._show_occ_overlay else "AUS"
+				_log("OCC-Overlay %s | Farben: Rot=1(Raum), Blau=2(Exit), Grau=3(Wand), Orange=4(Clearance)" % state, CLR_OK)
+
 		"fix-savegame":
 			if EventManager:
 				EventManager.active_conferences.clear()

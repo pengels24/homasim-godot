@@ -526,6 +526,55 @@ func _restore_rooms(built_plots: Array) -> void:
 				if _occ[gy * _occ_w + gx] == 2:
 					astar.set_point_solid(Vector2i(gx, gy), false)
 
+	# Save-Reparatur: Entfernt Ghost-Rooms die durch den Queue-Free-Save-Bug
+	# doppelt im Save gelandet sind (z.B. abgerissenes Gym taucht nach Reload wieder auf).
+	_sanitize_restored_rooms()
+
+
+# =============================================================================
+## Entfernt ueberzaehlige Room-Instanzen (Ghost-Rooms aus Queue-Free-Save-Bug).
+## Raeume mit max_count:1 (Gym, Pool, Spa, Bar, Restaurant, Küche) dürfen
+## nach dem Load nur genau 1x existieren. Extras werden still entfernt und
+## das Savegame sofort repariert.
+func _sanitize_restored_rooms() -> void:
+	var type_counts: Dictionary = {}  # type_id -> count
+	var to_remove: Array[Node2D] = []
+
+	for room: Node2D in active_rooms:
+		if not is_instance_valid(room) or not room.has_method("get_definition"):
+			continue
+		var def: Dictionary = room.get_definition()
+		var type_id: String = def.get("id", "")
+		var max_c: int = def.get("max_count", -1)
+		if max_c <= 0:
+			continue  # Kein Limit definiert → überspringen
+		type_counts[type_id] = type_counts.get(type_id, 0) + 1
+		if type_counts[type_id] > max_c:
+			to_remove.append(room)
+
+	if to_remove.is_empty():
+		return
+
+	for room: Node2D in to_remove:
+		var def: Dictionary = room.get_definition()
+		push_warning("MapGrid._sanitize: Ghost-Room '%s' entfernt (Queue-Free-Save-Bug repariert)" % def.get("id", "?"))
+		var sz: Vector2i = room.get_tile_size()
+		var tx: int = int(room.position.x / TILE_PX)
+		var ty: int = int(room.position.y / TILE_PX)
+		var parcel_name: String = room.get_parent().name
+		var px: int = int(parcel_name.split("_")[1])
+		var py: int = int(parcel_name.split("_")[2])
+		unmark_placement(px, py, tx, ty, sz.x, sz.y,
+			room.get("door_rotation") if room.get("door_rotation") != null else 0,
+			room.get("door_offset") if room.get("door_offset") != null else 0)
+		active_rooms.erase(room)
+		if is_instance_valid(room) and room.get_parent():
+			room.get_parent().remove_child(room)
+		room.queue_free()
+
+	# Sofort sauber speichern damit der Bug nicht beim nächsten Load wieder auftritt
+	save_all_rooms_to_db(GameState.active_hotel_id)
+
 
 # =============================================================================
 func _is_built(x: int, y: int) -> bool:

@@ -142,7 +142,7 @@ func get_path_between_tiles(start_tile: Vector2i, end_tile: Vector2i, debug_labe
 		astar.set_point_solid(end_tile, true)
 		
 	if path.is_empty():
-		print("[MapGrid] Path failed: NO PATH FOUND by AStar. start: ", start_tile, " end: ", end_tile)
+		# print("[MapGrid] Path failed: NO PATH FOUND by AStar. start: ", start_tile, " end: ", end_tile)
 		_failed_paths.append({"start": start_tile, "end": end_tile})
 		if _failed_paths.size() > 5:
 			_failed_paths.pop_front()
@@ -157,7 +157,7 @@ func get_path_between_tiles(start_tile: Vector2i, end_tile: Vector2i, debug_labe
 		print("-------------------------")
 	else:
 		var lbl = debug_label if not debug_label.is_empty() else "?"
-		print("[MapGrid] Path OK: ", lbl, " | ", start_tile, " -> ", end_tile, " len=", path.size())
+		# print("[MapGrid] Path OK: ", lbl, " | ", start_tile, " -> ", end_tile, " len=", path.size())
 		if debug_label != "":
 			_debug_paths[debug_label] = {"path": path, "label": lbl}
 		queue_redraw()

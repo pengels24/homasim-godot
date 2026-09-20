@@ -246,12 +246,12 @@ func _process_impatient(delta: float) -> void:
 	if current_state == State.WAITING_FOR_FOOD:
 		_waiting_for_food_timer += delta * speed
 		# Wenn das Limit erreicht ist, bricht der Gast wütend ab
-		var wait_limit_seconds = FOOD_WAIT_TIME_MINUTES * (TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 1.0)
+		var wait_limit_seconds = FOOD_WAIT_TIME_MINUTES * (float(TimeManager.SECONDS_PER_GAME_MINUTE) if TimeManager else 1.0)
 		if TechtreeManager and TechtreeManager.is_tech_unlocked("M1.4"):
 			wait_limit_seconds *= 1.2
 			
 		if _waiting_for_food_timer >= wait_limit_seconds:
-			print("[GuestActor] %s: Timeout erreicht beim Warten auf Essen! Breche ab." % [(_guest_member.name if _guest_member else "?")])
+			# print("[GuestActor] %s: Timeout erreicht beim Warten auf Essen! Breche ab." % [(_guest_member.name if _guest_member else "?")])
 			var party = _get_my_party()
 			if party:
 				party.modify_satisfaction(-15) # Starke Strafe
@@ -293,8 +293,8 @@ func _process_waiting(delta: float) -> void:
 				if _night_rescue_timer <= 0.0:
 					_night_rescue_timer = 30.0
 					if is_instance_valid(_target_room):
-						print("[GuestActor] NIGHT RESCUE: %s → walk to room (state=%s)" % [
-							(_guest_member.name if _guest_member else "?"), get_state_name(current_state)])
+						# print("[GuestActor] NIGHT RESCUE: %s → walk to room (state=%s)" % [
+						# 	(_guest_member.name if _guest_member else "?"), get_state_name(current_state)])
 						_action_timer = 0.0
 						_decide_next_action()
 						return
@@ -387,9 +387,9 @@ func _process_waiting(delta: float) -> void:
 			# Einmalige Wartezeit falls Raum noch nicht funktional ist
 			if room_node.has_method("is_functional") and not room_node.is_functional():
 				if not _has_waited_for_functional:
-					print("[GuestActor] %s: Raum nicht funktional. Warte %s Minuten." % [(_guest_member.name if _guest_member else "?"), POI_WAIT_TIME_MINUTES])
+					# print("[GuestActor] %s: Raum nicht funktional. Warte %s Minuten." % [(_guest_member.name if _guest_member else "?"), POI_WAIT_TIME_MINUTES])
 					_has_waited_for_functional = true
-					_action_timer = POI_WAIT_TIME_MINUTES * (TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 5.0)
+					_action_timer = POI_WAIT_TIME_MINUTES * (float(TimeManager.SECONDS_PER_GAME_MINUTE) if TimeManager else 5.0)
 					return
 			
 			_has_waited_for_functional = false
@@ -529,15 +529,6 @@ func _get_open_pois() -> Array[String]:
 		
 		var room_id: String = def.get("id", "")
 		
-		# Conference-Räume während eines laufenden Events für normale Gäste sperren.
-		# TG-Gäste (is_event_guest) dürfen weiterhin rein – die haben Vorrang.
-		var is_conference_room = (room_id == "conference_small" or room_id == "conference_large")
-		if is_conference_room:
-			var party = _get_my_party()
-			var is_event_guest = (party and party.event_poi_id != "") or _conference_break_poi_key != "" or (party and party.total_stay_days == 0)
-			if not is_event_guest and EventManager and EventManager.active_conferences.size() > 0:
-				continue
-		
 		var party = _get_my_party()
 		var is_event_guest = false
 		if party and party.event_poi_id != "":
@@ -547,6 +538,12 @@ func _get_open_pois() -> Array[String]:
 		elif party and party.total_stay_days == 0:
 			is_event_guest = true
 			
+		# Conference-Räume während eines laufenden Events für normale Gäste sperren.
+		# TG-Gäste (is_event_guest) dürfen weiterhin rein – die haben Vorrang.
+		var is_conference_room = (room_id == "conference_small" or room_id == "conference_large")
+		if is_conference_room:
+			if not is_event_guest and EventManager and EventManager.active_conferences.size() > 0:
+				continue
 		if is_event_guest:
 			# Event-Gäste dürfen nur Gastro-Räume und Lobby besuchen
 			var is_gastro_room = room.has_method("is_gastro") and room.is_gastro()
@@ -572,7 +569,7 @@ func _get_open_pois() -> Array[String]:
 		if room.has_method("is_gastro") and room.is_gastro():
 			cost = max(cost, 5)
 			# TG-Gäste in der Pause: Hunger-Schwelle erhöht (Mittagspause!)
-			var hunger_threshold = 80 if (_conference_break_poi_key != "" or (party and party.total_stay_days == 0)) else 50
+			var hunger_threshold = 80 if (_conference_break_poi_key != "" or (party and party.total_stay_days == 0)) else 80
 			if _guest_member.saturation > hunger_threshold:
 				continue
 			
@@ -661,7 +658,8 @@ func _decide_next_action() -> void:
 	var open_pois := _get_open_pois()
 	
 	if _current_poi_id == "lobby":
-		print("[LOBBY DEBUG] %s started _decide_next_action. state=%s, target_room=%s, open_pois=%s" % [_guest_member.get("name") if _guest_member else "?", get_state_name(current_state), "VALID" if is_instance_valid(_target_room) else "INVALID", str(open_pois)])
+		pass
+		# print("[LOBBY DEBUG] %s started _decide_next_action. state=%s, target_room=%s, open_pois=%s" % [_guest_member.get("name") if _guest_member else "?", get_state_name(current_state), "VALID" if is_instance_valid(_target_room) else "INVALID", str(open_pois)])
 
 	
 	# Check-in Sperre: 60 Min nach Ankunft keine POIs
@@ -678,7 +676,7 @@ func _decide_next_action() -> void:
 		if _leaving_poi and _current_poi_id != "":
 			var now_r := TimeManager.get_game_time() if TimeManager else 0
 			_poi_rest_until = now_r + _get_poi_rest_duration()
-			print("[GuestActor] %s beendet POI-Besuch (%s). Zwangspause bis %s gesetzt." % [(_guest_member.name if _guest_member else "?"), _current_poi_id, _poi_rest_until])
+			# print("[GuestActor] %s beendet POI-Besuch (%s). Zwangspause bis %s gesetzt." % [(_guest_member.name if _guest_member else "?"), _current_poi_id, _poi_rest_until])
 
 	# ANG-361: Pflicht-Ruhepause nach POI-Besuch (ueberspringen bei Hunger, ausser Gast hat kein Geld fuer Essen)
 	if _poi_rest_until > 0:
@@ -702,19 +700,19 @@ func _decide_next_action() -> void:
 		else:
 			_poi_rest_until = 0  # Pause abgelaufen
 	
-	# 2. Nachtruhe-Logik (22:00 - 06:00): 
+	# 2. Nachtruhe-Logik (23:00 - 06:00): 
 	# Die Lobby ist nachts als reiner "Zeitvertreib" tabu, um Endlos-Pendeln zu verhindern.
 	# Echte POIs wie die Bar (die bis 23:30 auf hat) bleiben aber erlaubt!
-	var current_hour = 12
+	var current_time = 720
 	if TimeManager:
-		current_hour = TimeManager.get_hour()
+		current_time = TimeManager.get_game_time()
 		
-	if current_hour >= 23 or current_hour < 6:
+	if current_time >= 1380 or current_time < 360: # 1380 = 23:00, 360 = 06:00
 		# Nachtruhe! Ab ins Zimmer und schlafen.
 		open_pois.clear()
 		if current_state == State.SLEEPING:
 			_action_timer = randf_range(30.0, 60.0)
-			return
+			return # Einfach weiterschlafen
 		elif current_state == State.IN_ROOM or current_state == State.SITTING:
 			if is_instance_valid(_target_room):
 				_wander_in_room(_target_room, true) # true = force sleep
@@ -726,6 +724,17 @@ func _decide_next_action() -> void:
 				_change_state(State.LEAVING)
 				_walk_to_exit()
 			return
+			
+	# 2.5 Wachwerd-Phase (06:00 - 06:15)
+	# Gäste bleiben auf ihren Zimmern und warten, bis das Restaurant öffnet.
+	if current_time >= 360 and current_time < 375:
+		if _current_poi_id.begins_with("bed_") or current_state == State.IN_ROOM or current_state == State.SLEEPING or current_state == State.SITTING:
+			_action_timer = 5.0 # Checke regelmäßig ob 06:15 erreicht ist
+			return # Nicht auf die Suche nach POIs gehen (würde bei Hunger zum Verlassen führen!)
+		else:
+			if is_instance_valid(_target_room):
+				send_back_to_room()
+			return
 	
 	# Kein offener POI? Gast wartet etwas und probiert es später wieder
 	# ANG-357: Wenn kein POI verfügbar (z.B. spending_budget leer), Gast ins Zimmer schicken
@@ -734,10 +743,10 @@ func _decide_next_action() -> void:
 			# Frühphase ohne POIs: Gast geht in die Lobby zum Zeitvertreib (statt im Zimmer zu versauern)
 			var lobby = _get_lobby_room()
 			if is_instance_valid(lobby) and _current_poi_id == "lobby":
-				print("[GuestActor] Fallback (No POIs active) -> _wander_in_room(lobby) for %s" % [_guest_member.get("name") if _guest_member else "?"])
+				# print("[GuestActor] Fallback (No POIs active) -> _wander_in_room(lobby) for %s" % [_guest_member.get("name") if _guest_member else "?"])
 				_wander_in_room(lobby)
 			else:
-				print("[GuestActor] Fallback (No POIs active) -> _walk_to_poi(lobby) for %s" % [_guest_member.get("name") if _guest_member else "?"])
+				# print("[GuestActor] Fallback (No POIs active) -> _walk_to_poi(lobby) for %s" % [_guest_member.get("name") if _guest_member else "?"])
 				_walk_to_poi("lobby")
 			return
 			
@@ -747,12 +756,12 @@ func _decide_next_action() -> void:
 			return
 		elif current_state != State.WALKING and current_state != State.IDLE:
 			if is_instance_valid(_target_room):
-				print("[GuestActor] %s -> _walk_to_room(State.IN_ROOM) via open_pois empty (not idle/walking)" % [_guest_member.get("name") if _guest_member else "?"])
+				# print("[GuestActor] %s -> _walk_to_room(State.IN_ROOM) via open_pois empty (not idle/walking)" % [_guest_member.get("name") if _guest_member else "?"])
 				_walk_to_room(_target_room, State.IN_ROOM)
 			else:
 				party = _get_my_party()
 				if is_instance_valid(party) and party.event_poi_id != "":
-					print("[GuestActor] %s -> _walk_to_poi(lobby) via open_pois empty (event)" % [_guest_member.get("name") if _guest_member else "?"])
+					# print("[GuestActor] %s -> _walk_to_poi(lobby) via open_pois empty (event)" % [_guest_member.get("name") if _guest_member else "?"])
 					_walk_to_poi("lobby")
 				else:
 					_change_state(State.LEAVING)
@@ -767,7 +776,7 @@ func _decide_next_action() -> void:
 				var r_name = _target_room.get("room_number") if "room_number" in _target_room else "unknown"
 				if _target_room.has_method("get_definition"):
 					r_name = str(r_name) + " (" + _target_room.call("get_definition").get("id", "??") + ")"
-				print("[GuestActor] Fallback -> _walk_to_room(_target_room=%s) for %s" % [r_name, _guest_member.get("name") if _guest_member else "?"])
+				# print("[GuestActor] Fallback -> _walk_to_room(_target_room=%s) for %s" % [r_name, _guest_member.get("name") if _guest_member else "?"])
 				_walk_to_room(_target_room, State.IN_ROOM)
 			else:
 				# Kein Zimmer und Hotel hat POIs, aber Gast hat kein Ziel -> Lobby Wartepunkt
@@ -886,14 +895,14 @@ func _decide_next_action() -> void:
 				else:
 					var lobby = _get_lobby_room()
 					if is_instance_valid(lobby) and chosen == "lobby":
-						print("[GuestActor] %s -> _wander_in_room(lobby) (Same POI fallback)" % [_guest_member.get("name") if _guest_member else "?"])
+						# print("[GuestActor] %s -> _wander_in_room(lobby) (Same POI fallback)" % [_guest_member.get("name") if _guest_member else "?"])
 						_wander_in_room(lobby)
 					else:
-						print("[GuestActor] %s -> _walk_to_poi(lobby) (Same POI fallback)" % [_guest_member.get("name") if _guest_member else "?"])
+						# print("[GuestActor] %s -> _walk_to_poi(lobby) (Same POI fallback)" % [_guest_member.get("name") if _guest_member else "?"])
 						_walk_to_poi("lobby")
 					return
 			else:
-				print("[GuestActor] %s -> chosen = room (Same POI fallback)" % [_guest_member.get("name") if _guest_member else "?"])
+				# print("[GuestActor] %s -> chosen = room (Same POI fallback)" % [_guest_member.get("name") if _guest_member else "?"])
 				chosen = "room"
 	
 	if chosen == "room":
@@ -966,9 +975,9 @@ func _change_state(new_state: State) -> void:
 	var old_state = current_state
 	previous_state = old_state
 	
-	var g_name = _guest_member.get("name") if _guest_member else "Unknown"
-	var poi_info = (" [" + _current_poi_id + "]") if new_state == State.IN_POI and not _current_poi_id.is_empty() else ""
-	print("[GuestActor] %s changed state: %s -> %s%s" % [g_name, get_state_name(old_state), get_state_name(new_state), poi_info])
+	# var g_name = _guest_member.get("name") if _guest_member else "Unknown"
+	# var poi_info = (" [" + _current_poi_id + "]") if new_state == State.IN_POI and not _current_poi_id.is_empty() else ""
+	# print("[GuestActor] %s changed state: %s -> %s%s" % [g_name, get_state_name(old_state), get_state_name(new_state), poi_info])
 	
 	
 	_has_waited_for_functional = false
@@ -1032,7 +1041,7 @@ func _change_state(new_state: State) -> void:
 				call_deferred("_auto_checkout_tg_guest")
 		State.STUDYING_MENU:
 			_action_timer = randf_range(5.0, 10.0)
-			print("[GuestActor] %s betritt STUDYING_MENU. Wartet %s Sekunden..." % [(_guest_member.name if _guest_member else "?"), _action_timer])
+			# print("[GuestActor] %s betritt STUDYING_MENU. Wartet %s Sekunden..." % [(_guest_member.name if _guest_member else "?"), _action_timer])
 			avatar.visible = true
 			if has_node("ClickArea"): get_node("ClickArea").input_pickable = true
 		State.WAITING_FOR_FOOD:
@@ -1211,12 +1220,12 @@ func _on_poi_arrived() -> void:
 					was_fresh_claim = true
 					# Timer aus claim_result setzen damit Gast NICHT sofort weiterwechselt
 					var dur = claim_result.get("duration", randf_range(15.0, 30.0))
-					_action_timer = dur * (TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 4.0)
+					_action_timer = dur * (float(TimeManager.SECONDS_PER_GAME_MINUTE) if TimeManager else 4.0)
 		else:
 			# Sitz wurde in _walk_to_poi voraus-geclaimt – gespeicherte Position + Duration direkt verwenden.
 			if _pre_claimed_seat_pos != Vector2.INF and _pre_claimed_seat_pos != Vector2.ZERO:
 				seat_pos = _pre_claimed_seat_pos
-				_action_timer = _pre_claimed_duration * (TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 4.0)
+				_action_timer = _pre_claimed_duration * (float(TimeManager.SECONDS_PER_GAME_MINUTE) if TimeManager else 4.0)
 			else:
 				seat_pos = global_position # Fallback falls kein Pre-Claim gespeichert
 			# Einmalig zurücksetzen
@@ -1415,7 +1424,7 @@ func start_checkout() -> void:
 		
 	var path_tiles = _map_grid.get_path_between_tiles(start_tile, exit_tile, (str(_guest_member.get("name")) if _guest_member else "?"))
 	if path_tiles.is_empty():
-		print("[GuestActor] Checkout failed for ", _guest_member.id, ". Path empty from ", start_tile, " to ", exit_tile, ". current_state=", current_state)
+		# print("[GuestActor] Checkout failed for ", _guest_member.id, ". Path empty from ", start_tile, " to ", exit_tile, ". current_state=", current_state)
 		queue_free()
 		return
 		
@@ -1712,7 +1721,7 @@ func _walk_to_poi(poi_id: String) -> void:
 			var income: int = poi_def.get("visit_income", 0)
 			if income > 0 and _guest_member.spending_budget < income:
 				# Kein Geld mehr für diesen POI -> Zwangspause im Zimmer
-				print("[GuestActor] %s kann sich %s nicht leisten. Geht aufs Zimmer." % [(_guest_member.name if _guest_member else "?"), poi_id])
+				# print("[GuestActor] %s kann sich %s nicht leisten. Geht aufs Zimmer." % [(_guest_member.name if _guest_member else "?"), poi_id])
 				if is_instance_valid(_target_room):
 					if current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING:
 						_wander_in_room(_target_room)
@@ -1723,7 +1732,7 @@ func _walk_to_poi(poi_id: String) -> void:
 				return
 				
 	if poi_id == "vending_machine" and _guest_member.spending_budget < 5:
-		print("[GuestActor] %s kann sich Automaten-Snack nicht leisten. Geht aufs Zimmer." % [(_guest_member.name if _guest_member else "?")])
+		# print("[GuestActor] %s kann sich Automaten-Snack nicht leisten. Geht aufs Zimmer." % [(_guest_member.name if _guest_member else "?")])
 		if is_instance_valid(_target_room):
 			if current_state == State.IN_ROOM or current_state == State.SITTING or current_state == State.SLEEPING:
 				_wander_in_room(_target_room)
@@ -1986,9 +1995,9 @@ func _get_logical_start_tile() -> Vector2i:
 		var lobby: Node2D = _get_lobby_room()
 		if is_instance_valid(lobby) and lobby.has_method("get_target_tile"):
 			var lobby_door: Vector2i = lobby.get_target_tile(_map_grid)
-			print("[GuestActor] Safety fallback: ", _guest_member.get("name") if _guest_member else "?",
-				" stuck at ", result, " (solid) -> using lobby door ", lobby_door,
-				" | poi=", _current_poi_id)
+			# print("[GuestActor] Safety fallback: ", _guest_member.get("name") if _guest_member else "?",
+			# 	" stuck at ", result, " (solid) -> using lobby door ", lobby_door,
+			# 	" | poi=", _current_poi_id)
 			result = lobby_door
 	
 	return result
@@ -2109,7 +2118,7 @@ func _wander_in_room(room: Node2D, force_sleep: bool = false, initial_wait: bool
 		current_pos = point
 		
 	_active_tween.tween_callback(func(): 
-		print("[GuestActor] %s tween finished. changing to next_state=%s (%d)" % [_guest_member.get("name") if _guest_member else "Unknown", get_state_name(next_state), next_state])
+		# print("[GuestActor] %s tween finished. changing to next_state=%s (%d)" % [_guest_member.get("name") if _guest_member else "Unknown", get_state_name(next_state), next_state])
 		if next_state == State.SLEEPING or next_state == State.SITTING:
 			avatar.rotation = 0
 			if next_state == State.SITTING and is_instance_valid(_target_room):

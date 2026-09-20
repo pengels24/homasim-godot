@@ -76,12 +76,8 @@ func spawn_active_guests() -> void:
 			var guest_id = member.id
 			if not _actors.has(guest_id):
 				var actor = _create_actor(member, party.room_id, room)
-				# ANG-314: Gespeicherten State wiederherstellen (sollte AWAITING_CHECKOUT sein)
-				if party.actor_states.has(member.id):
-					actor.restore_save_state(party.actor_states[member.id])
-				else:
-					# Da sie schon im Checkout sind, müssen sie direkt loslaufen
-					actor.start_checkout()
+				# IMMER Checkout erzwingen, selbst wenn sie vorher geschlafen haben!
+				actor.start_checkout()
 	
 	# Auch wartende Gäste an der Rezeption sichtbar machen (nach Reload)
 	# Diese haben bereits gewartet aber wurden noch nicht eingecheckt.

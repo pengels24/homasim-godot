@@ -270,7 +270,7 @@ func _on_autosave_changed(val: int) -> void:
 	if val > 0:
 		SettingsManager.autosave_interval_minutes = val
 	SettingsManager.save()
-	SettingsManager.sig_settings_changed.emit()
+	SettingsManager.emit_settings_changed()
 
 
 # =============================================================================

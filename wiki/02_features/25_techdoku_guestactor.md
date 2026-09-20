@@ -163,6 +163,9 @@ Gäste bleiben nach Reload in `IN_POI` (nicht `IN_ROOM`):
 - Timer aus Save restored (min. 5s) → kein "Feueralarm"-Exodus aller Gäste gleichzeitig
 - `_restoring_from_save = true` → blockiert doppeltes Payment/EXP
 
+### restore_save_state() – Checkout-Gäste
+Gäste in der `_checkout`-Liste (Abreise am gleichen Tag) ignorieren den gespeicherten Zustand komplett (selbst wenn sie im Bett lagen). `GuestController` ruft für diese Gäste beim Laden **immer** `start_checkout()` auf, um zu verhindern, dass sie nach dem Aufwachen Frühstück suchen und POIs blockieren.
+
 ### restore_save_state() – IN_ROOM Branch (TG-Gäste)
 
 `_current_poi_id` wird nur gesetzt wenn saved position ein **solid tile** ist (= wirklich innerhalb eines POI-Raums). Gäste im Korridor (WALKING-State beim Speichern) bekommen keine falsche Raum-ID.

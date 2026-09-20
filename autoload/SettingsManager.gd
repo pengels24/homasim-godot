@@ -17,6 +17,10 @@ signal sig_camera_pan_speed_changed(new_speed: float)
 ## Wird emittiert wenn Autosave-Einstellung geaendert wird (z.B. Timer neu aufsetzen)
 signal sig_settings_changed
 
+# Wrapper für Signaleum Godot-Warnung (never explicitly used in class) zu vermeiden
+func emit_settings_changed() -> void:
+	sig_settings_changed.emit()
+
 const SETTINGS_PATH := "user://settings.cfg"
 
 # ── Gameplay ──────────────────────────────────────────────────────────────────

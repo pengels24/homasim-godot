@@ -1,13 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.63 | Stand: 20.09.2026
-> Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
-
----
-
-## ⚠️ Getroffene Design-Entscheidungen (nicht mehr diskutieren!)
-
-# HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.61 | Stand: 19.09.2026
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.64 | Stand: 20.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -21,6 +13,9 @@
 ---
 
 ## 🚨 Ungeplante Fixes & Features (Aktuelle Session)
+- [x] **Bugfix GuestFlow:** Abreisende Gäste (im Checkout) wachten nach dem Laden eines Spielstands fälschlicherweise wieder im `SLEEPING`/`IN_ROOM` State auf und blockierten das Restaurant/Hotel, anstatt zur Rezeption zu gehen. Fix: GuestController erzwingt beim Spawnen von Checkout-Gästen sofort `start_checkout()`.
+- [x] **Bugfix Wachwerd-Phase:** Die Phase zwischen 06:00 und 06:15 Uhr wurde für Gäste im Bett korrigiert, sodass diese nicht vor 06:15 Uhr aufstehen und direkt hungrig herumlaufen.
+- [x] **Code-Bereinigung:** Diverse Godot-Warnungen behoben (Ternary-Operator Typ-Konflikte, redundante Scopes, ungenutzte Variablen, Signal-Warnings in SettingsManager).
 - [x] **ANG-348:** Pre-Alpha Polishing (Tutorial-Button deaktiviert mit Verbotsschild, Tagungs-Badges korrigiert, Tagungszahlung auf 07:45 verlegt inkl. Kassenbuch)
 - [x] **ANG-358:** Frühstücks-Flow (Restaurant/Küche öffnen 06:15, Automaten-Rusch durch Öffnungszeit um 07:00 gelöst)
 - [x] **ANG-361:** Zwangspause nach POI-Besuch komplettiert & Budget-Endlosschleife gefixt

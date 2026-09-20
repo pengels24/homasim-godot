@@ -96,8 +96,9 @@ func _on_minute_passed(_total_game_minutes: int) -> void:
 		if not conf_active and not city_active:
 			EventManager.is_inspector_coming_today = false
 			spawn_inspector()
-		# Wenn ein anderes Event läuft: Flag bleibt, Inspector kommt später nicht mehr.
-		# Das ist gewollt - der Inspector-Tag wird verpasst (kein Nachholen).
+		# Wenn ein anderes Event läuft: Flag bleibt auf true!
+		# Dadurch wird der Spawn jede Ingame-Minute erneut geprüft und der Inspektor 
+		# spawnt automatisch sobald das Event vorbei (oder manuell beendet) ist.
 # =============================================================================
 func set_patience_rate(rate: float) -> void:
 	_patience_rate = rate
@@ -1159,6 +1160,12 @@ func load_from_dict(d: Dictionary) -> void:
 	for pd: Dictionary in d.get("waiting",  []): _waiting.append(GuestParty.from_dict(pd))
 	for pd: Dictionary in d.get("active",   []): _active.append(GuestParty.from_dict(pd))
 	for pd: Dictionary in d.get("checkout", []): _checkout.append(GuestParty.from_dict(pd))
+	
+	# === DEBUG PRINT WIE GEWÜNSCHT ===
+	# print("\n--- [DEBUG LOAD] GUEST LISTS ---")
+	# ... (auskommentiert)
+	# =================================
+	
 	_room_assign	= d.get("room_assign",	{})
 	_next_party_id  = d.get("next_party_id",  1)
 	_next_member_id = d.get("next_member_id", 1)

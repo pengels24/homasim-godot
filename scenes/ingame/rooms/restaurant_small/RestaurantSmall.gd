@@ -223,12 +223,13 @@ func get_dirty_seat_position() -> Vector2:
 			return seat["node"].global_position
 	return Vector2.ZERO
 func place_order_for_seat(guest_id: String, budget: int = 9999, missing_sat: int = 100) -> bool:
-	# [DEBUG] Seat-Status ausgeben
+	print("[RestaurantSmall] place_order_for_seat called for guest: ", guest_id, " budget: ", budget, " missing_sat: ", missing_sat)
 	var seat_found = false
 	for seat in _room_seats:
 		if seat["occupied_by"] == guest_id:
 			seat_found = true
 			if seat["status"] != "clean":
+				print("[RestaurantSmall] Failed: Seat is not clean! Status: ", seat["status"])
 				return false
 				
 			if _room_id == "":
@@ -236,6 +237,7 @@ func place_order_for_seat(guest_id: String, budget: int = 9999, missing_sat: int
 				
 			var has_waiter = _has_waiter_assigned()
 			if not has_waiter:
+				print("[RestaurantSmall] Failed: No waiter assigned for room ", _room_id)
 				return false
 				
 			var kitchen_is_open = false
@@ -251,6 +253,7 @@ func place_order_for_seat(guest_id: String, budget: int = 9999, missing_sat: int
 								break
 				
 			if not kitchen_is_open:
+				print("[RestaurantSmall] Failed: Kitchen is not open or not staffed!")
 				return false
 				
 			var possible_recipes = []
@@ -265,11 +268,14 @@ func place_order_for_seat(guest_id: String, budget: int = 9999, missing_sat: int
 				if GastroManager:
 					var order_id = GastroManager.place_order(guest_id, chosen.get("id"), _room_id)
 					seat["order_id"] = order_id
+					print("[RestaurantSmall] Success: Order placed! Recipe: ", chosen.get("id"))
 					return true
-			return false  # Sollte nicht erreicht werden, aber Sicherheitsnetz
+			else:
+				print("[RestaurantSmall] Failed: No affordable/fitting recipes found in GameState.recipes!")
+			return false
 	
 	if not seat_found:
-		pass
+		print("[RestaurantSmall] Failed: Seat not found for guest ", guest_id)
 	return false
 
 ## Prüft ob ein Waiter (Bedienung) für dieses Restaurant zugewiesen ist

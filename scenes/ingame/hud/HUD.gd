@@ -508,6 +508,8 @@ func update_state_visuals() -> void:
 				var city_label := city_row.get_node_or_null("%CityEventLabel")
 				if is_instance_valid(city_label):
 					city_label.text = GameState.T("hud.event.city_event")
+			
+			event_indicator.size.y = 0
 
 	else:
 		if is_instance_valid(event_indicator):

@@ -277,7 +277,9 @@ func _execute(cmd: String) -> void:
 						_log("Fehler: EventManager hat keine force_conference Methode.", CLR_ERR)
 			elif val_s == "off":
 				if EventManager:
-					EventManager.end_event()
+					EventManager.active_conferences.clear()
+					if EventManager.has_method("_update_hud"):
+						EventManager._update_hud()
 				_log("Konferenz-Event manuell beendet (Gäste bleiben ggf. bis 17 Uhr).", CLR_OK)
 			else:
 				_log("Verwendung: set-conference:on oder set-conference:off", CLR_ERR)

@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.62 | Stand: 19.09.2026
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.63 | Stand: 20.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -60,6 +60,12 @@
 - [x] **ANG-365:** Techtree/Level Alignment – `UNLOCK_LEVELS` vollständig entfernt. `req_level` dezentralisiert in Raum-GDs und techtree.json. Tooltip-Bug (Level zeigte immer 3) behoben. Z1.2–Z1.5 nach Unlock-Reihenfolge umbenannt. Zimmer-Layout auf 4 Spalten erweitert.
 - [x] **Bugfix Techtree UI:** Rendering-Bug beim Öffnen – Buttons zeigen jetzt sofort korrekten Init-State (via `await process_frame` + `update_button_states()`).
 - [x] **Tooltip req_level:** `_generate_tooltip()` zeigt nun `max(tier_gate, node_req_level)` statt immer Tier-Gate-Level.
+- [x] **ANG-366 (Pre-Alpha Workaround):** `max_count:1` für alle POIs (Gym, Pool, Spa, Bar, Restaurant, Küche) – verhindert Doppelbau-Deduplication-Bug.
+- [x] **Bugfix Queue-Free-Save (ANG-366):** `remove_room()` ruft `remove_child()` vor `queue_free()` auf – Ghost-Rooms beim Abriss behoben.
+- [x] **feat: _sanitize_restored_rooms():** Load-Repair entfernt überzählige Ghost-Rooms bei max_count-Typen.
+- [x] **feat: repair-grid & occ-overlay:** DevConsole-Befehle zur Grid-Diagnose und Reparatur.
+- [ ] **🔴 OFFEN: Ghost-Room Blocking** – `occ-overlay` hatte Early-Return-Bug (erst v0.1.63 gefixt). Ursache des Blockings noch visuell zu bestätigen.
+- [ ] **🔴 OFFEN: HUD Event-Panel bleibt 2-zeilig** nach Tagungsende. Fix noch ausstehend.
 
 ---
 

@@ -597,7 +597,7 @@ func _process(_delta: float) -> void:
 		queue_redraw()
 
 func _draw() -> void:
-	if not _show_debug_grid: return
+	if not _show_debug_grid and not _show_occ_overlay: return
 	# _draw() laeuft im lokalen Koordinatenraum des MapGrid-Nodes.
 	# tile_to_world() liefert globale Koord. (via $WorldRoot.to_global).
 	# to_local(tile_to_world(tile)) = korrekte lokale Zeichenposition.

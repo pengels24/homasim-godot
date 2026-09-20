@@ -150,6 +150,7 @@ func _execute(cmd: String) -> void:
 				_log("MapGrid nicht gefunden.", CLR_ERR)
 			else:
 				mg_ov._show_occ_overlay = not mg_ov._show_occ_overlay
+				mg_ov.queue_redraw()  # einmalig triggern damit AUS auch wirklich löscht
 				var state := "AN" if mg_ov._show_occ_overlay else "AUS"
 				_log("OCC-Overlay %s | Farben: Rot=1(Raum), Blau=2(Exit), Grau=3(Wand), Orange=4(Clearance)" % state, CLR_OK)
 

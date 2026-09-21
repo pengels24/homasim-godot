@@ -181,3 +181,8 @@ if not _current_poi_id.is_empty():
 → Phase 1 von `_execute_walk()` generiert `get_local_path(seat, door_inside)` korrekt → kein Luftlinie.
 
 > Siehe auch: `wiki/_dev/ang364_nav_rework.md` für den Post-Alpha Nav-Rework Plan.
+
+## 12. Gestaffeltes Aufwachen (Staggered Wake-Up)
+Um extreme Auslastungsspitzen in der Gastronomie um 06:15 Uhr zu vermeiden, wachen Gäste nun gestaffelt auf.
+Die individuelle Aufwachzeit (`_my_wake_up_time`) wird in `setup()` anhand der `GuestDefinitions` (`wake_up_min`, `wake_up_max`) des Gästetyps zufällig via `randi_range()` ausgewürfelt.
+In der Wachwerd-Phase (`current_time >= 360 and current_time < _my_wake_up_time`) bleiben die Gäste in ihren Zimmern. Erst nach Ablauf der individuellen Zeit gehen sie auf POI-Suche.

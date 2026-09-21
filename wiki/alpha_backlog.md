@@ -13,6 +13,7 @@
 ---
 
 ## 🔧 Ungeplante Fixes & Features (Aktuelle Session)
+- [x] **Gestaffelte Aufwachphase (Load Balancing):** Massive Überlastung der Gastronomie behoben, indem Gäste nicht mehr alle synchron um 06:15 Uhr aufstehen. Aufwachzeit ist nun abhängig vom Gästetyp (`GuestDefinitions`) in 3 Blöcke unterteilt (06:00-06:20, 06:20-06:40, 06:40-07:00) inklusive `randi_range` für natürliches Tröpfeln.
 - [x] **Bugfix Gastro-Tutorial-Tipp:** Trigger-Logik für `tip_gastro_overload` neu geschrieben. Zählt nun physisch sitzende Gäste via `GuestActor`-State anstatt auf reine Sitzplatz-Reservierungen (`occupied_by`) zu vertrauen. Verhindert das verfrühte Auslösen bei vollem Restaurant.
 - [x] **Gedulds-Balancing:** Patience-Verlustrate in `GuestActor` (`_impatient_timer`) halbiert, damit die Gäste bei großen Anstürmen realistischer warten.
 - [x] **Bugfix Gastro-Timer:** Kritischer Fehler im `GuestActor`, bei dem der Warte-Timer beim Eintreten ins Restaurant durch einen State-Wechsel auf `0.01` überschrieben wurde. Gäste blieben nicht sitzen und verließen volle POIs sofort.

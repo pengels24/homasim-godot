@@ -81,6 +81,7 @@ var _waiting_for_food_timer: float = 0.0
 
 ## Verhindert, dass wake_up() den Checkout-Lauf überschreibt
 var _is_checkout_walk: bool = false
+var _my_wake_up_time: int = 375
 
 var _angry_timer: float = 0.0
 
@@ -135,6 +136,14 @@ func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null, guest
 			GastroManager.sig_order_served.connect(_on_order_served)
 	
 	var party = _get_my_party()
+	
+	if party:
+		var type_def = party.get_type_def()
+		if type_def:
+			var wu_min = type_def.get("wake_up_min", 360)
+			var wu_max = type_def.get("wake_up_max", 375)
+			_my_wake_up_time = randi_range(wu_min, wu_max)
+			
 	if party and party.type == "vip":
 		var vip_node = Sprite2D.new()
 		vip_node.name = "VIPOverlay"
@@ -741,11 +750,11 @@ func _decide_next_action() -> void:
 				_walk_to_exit()
 			return
 			
-	# 2.5 Wachwerd-Phase (06:00 - 06:15)
-	# Gäste bleiben auf ihren Zimmern und warten, bis das Restaurant öffnet.
-	if current_time >= 360 and current_time < 375:
+	# 2.5 Wachwerd-Phase (06:00 - individuell)
+	# Gäste bleiben auf ihren Zimmern und warten gestaffelt, bis ihre Aufwachzeit erreicht ist.
+	if current_time >= 360 and current_time < _my_wake_up_time:
 		if _current_poi_id.begins_with("bed_") or current_state == State.IN_ROOM or current_state == State.SLEEPING or current_state == State.SITTING:
-			_action_timer = 5.0 # Checke regelmäßig ob 06:15 erreicht ist
+			_action_timer = 5.0 # Checke regelmäßig ob Aufwachzeit erreicht ist
 			return # Nicht auf die Suche nach POIs gehen (würde bei Hunger zum Verlassen führen!)
 		else:
 			if is_instance_valid(_target_room):

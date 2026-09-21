@@ -9,3 +9,8 @@
   - Trigger-Bedingung überarbeitet: Feuert nun erst, wenn alle Sitzplätze physisch von Gästen belegt sind (Status: IN_POI, STUDYING_MENU, WAITING_FOR_FOOD, EATING).
   - Personalabfrage global über `StaffManager.hired_staff` optimiert (zuverlässige Zählung der Köche/Bedienungen statt instanzspezifischer Check).
   - Fehlende Lokalisierung (`tutorial.tip_gastro_overload.title` & `.desc`) in `language.csv` ergänzt.
+
+## Features & Balancing
+- **Gestaffelte Aufwachphase (Staggered Wake-Up):** Zur massiven Entlastung der Gastronomie-Lastspitzen um 06:15 Uhr wachen Gäste nun gestaffelt in 20-Minuten-Blöcken auf. 
+  - Die Aufwachzeit richtet sich primär nach dem Gästetyp (z.B. `business` wachen als Erstes auf, `family` als Letztes).
+  - Ein zusätzlicher Zufalls-Timer `randi_range(min, max)` sorgt dafür, dass die Zimmertüren organisch nacheinander aufgehen ("Tröpfchen"-Verteilung) anstatt eines massiven Pulks, was die Simulation realistischer und stabiler macht.

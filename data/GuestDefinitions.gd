@@ -17,6 +17,8 @@ const ALL: Dictionary = {
 		"min_poi_rest_time": 45,
 		"max_poi_rest_time": 90,
 		"poi_budget_multiplier": 0.8,
+		"wake_up_min":     360,
+		"wake_up_max":     380,
 		"icon":            "res://assets/guesttypes/gt-icon-single.aseprite",
 		"base_exp": 20,
 		"rep_penalty": 5
@@ -37,6 +39,8 @@ const ALL: Dictionary = {
 		"min_poi_rest_time": 45,
 		"max_poi_rest_time": 90,
 		"poi_budget_multiplier": 1.0,
+		"wake_up_min":     380,
+		"wake_up_max":     400,
 		"icon":            "res://assets/guesttypes/gt-icon-couple.aseprite",
 		"base_exp": 30,
 		"rep_penalty": 5
@@ -57,6 +61,8 @@ const ALL: Dictionary = {
 		"min_poi_rest_time": 15,
 		"max_poi_rest_time": 30,
 		"poi_budget_multiplier": 1.5,
+		"wake_up_min":     360,
+		"wake_up_max":     380,
 		"icon":            "res://assets/guesttypes/gt-icon-business.aseprite",
 		"base_exp": 40,
 		"rep_penalty": 10
@@ -77,6 +83,8 @@ const ALL: Dictionary = {
 		"min_poi_rest_time": 60,
 		"max_poi_rest_time": 120,
 		"poi_budget_multiplier": 0.8,
+		"wake_up_min":     400,
+		"wake_up_max":     420,
 		"icon":            "res://assets/guesttypes/gt-icon-family.aseprite",
 		"base_exp": 30,
 		"rep_penalty": 5
@@ -97,6 +105,8 @@ const ALL: Dictionary = {
 		"min_poi_rest_time": 20,
 		"max_poi_rest_time": 45,
 		"poi_budget_multiplier": 0.2,
+		"wake_up_min":     380,
+		"wake_up_max":     400,
 		"icon":            "res://assets/guesttypes/gt-icon-budget.aseprite",
 		"base_exp": 10,
 		"rep_penalty": 2,
@@ -117,6 +127,8 @@ const ALL: Dictionary = {
 		"min_poi_rest_time": 15,
 		"max_poi_rest_time": 30,
 		"poi_budget_multiplier": 0.6,
+		"wake_up_min":     360,
+		"wake_up_max":     380,
 		"icon":            "res://assets/icons/guests/laptop-minimal.svg",
 		"base_exp": 20,
 		"rep_penalty": 5
@@ -137,6 +149,8 @@ const ALL: Dictionary = {
 		"min_poi_rest_time": 15,
 		"max_poi_rest_time": 30,
 		"poi_budget_multiplier": 1.0,
+		"wake_up_min":     380,
+		"wake_up_max":     400,
 		"icon":            "res://assets/guesttypes/gt-icon-event.aseprite",
 		"base_exp": 20,
 		"rep_penalty": 5
@@ -157,6 +171,8 @@ const ALL: Dictionary = {
 		"min_poi_rest_time": 90,
 		"max_poi_rest_time": 150,
 		"poi_budget_multiplier": 2.5,
+		"wake_up_min":     400,
+		"wake_up_max":     420,
 		"icon":            "res://assets/icons/guests/user-star.svg",
 		"base_exp": 50,
 		"rep_penalty": 15
@@ -177,6 +193,8 @@ const ALL: Dictionary = {
 		"min_poi_rest_time": 90,
 		"max_poi_rest_time": 150,
 		"poi_budget_multiplier": 5.0,
+		"wake_up_min":     400,
+		"wake_up_max":     420,
 		"icon":            "res://assets/icons/guests/user-star.svg",
 		"base_exp": 100,
 		"rep_penalty": 30
@@ -197,6 +215,8 @@ const ALL: Dictionary = {
 		"min_poi_rest_time": 15,
 		"max_poi_rest_time": 15,
 		"poi_budget_multiplier": 3.0,
+		"wake_up_min":     400,
+		"wake_up_max":     420,
 		"icon":            "res://assets/icons/guests/user-star.svg",
 		"base_exp": 100,
 		"rep_penalty": 50

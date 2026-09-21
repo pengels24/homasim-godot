@@ -82,6 +82,7 @@ var _waiting_for_food_timer: float = 0.0
 ## Verhindert, dass wake_up() den Checkout-Lauf überschreibt
 var _is_checkout_walk: bool = false
 var _my_wake_up_time: int = 375
+var _my_wander_interval: float = 15.0
 
 var _angry_timer: float = 0.0
 
@@ -130,6 +131,7 @@ func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null, guest
 	add_to_group("guest_actors")
 	avatar.setup(member)
 	_base_speed = max(10.0, 40.0 + member.speed_offset)
+	_my_wander_interval = randf_range(4.0, 10.0) # Jeder Gast hat sein eigenes, einzigartiges Wechsel-Intervall
 	
 	if GastroManager:
 		if not GastroManager.sig_order_served.is_connected(_on_order_served):
@@ -207,6 +209,7 @@ func setup(member: GuestMember, map_grid: Node, start_room: Node2D = null, guest
 		var ca = get_node("ClickArea")
 		ca.process_mode = Node.PROCESS_MODE_ALWAYS
 		ca.z_index = 10 # Sicherstellen, dass Gäste über dem Raum-ClickArea liegen
+		ca.priority = 100 # Höchste Priorität für das Klicken, damit Räume (insb. große wie die Lobby) den Klick nicht klauen
 		if not ca.input_event.is_connected(_on_click_area_input_event):
 			ca.input_event.connect(_on_click_area_input_event)
 
@@ -579,6 +582,12 @@ func _get_open_pois() -> Array[String]:
 		# SMART ROOM: Der Raum entscheidet selbst, ob der Gast rein darf!
 		if room.has_method("is_guest_allowed") and not room.is_guest_allowed(self):
 			continue
+			
+		# ANG-XXX: Räume, die extrem dreckig oder kaputt sind, werden gemieden
+		var clean = room.get("cleanliness_level") if "cleanliness_level" in room else 100
+		var cond = room.get("maintenance_level") if "maintenance_level" in room else 100
+		if clean < 10 or cond < 10:
+			continue
 		
 		# Gasttyp-Filter: allowed_guest_types aus Raumdefinition
 		var allowed_types: Array = def.get("allowed_guest_types", [])
@@ -754,7 +763,10 @@ func _decide_next_action() -> void:
 	# Gäste bleiben auf ihren Zimmern und warten gestaffelt, bis ihre Aufwachzeit erreicht ist.
 	if current_time >= 360 and current_time < _my_wake_up_time:
 		if _current_poi_id.begins_with("bed_") or current_state == State.IN_ROOM or current_state == State.SLEEPING or current_state == State.SITTING:
-			_action_timer = 5.0 # Checke regelmäßig ob Aufwachzeit erreicht ist
+			if is_instance_valid(_target_room):
+				_wander_in_room(_target_room)
+			else:
+				_action_timer = 5.0
 			return # Nicht auf die Suche nach POIs gehen (würde bei Hunger zum Verlassen führen!)
 		else:
 			if is_instance_valid(_target_room):
@@ -891,8 +903,8 @@ func _decide_next_action() -> void:
 			var b_def = _get_poi_def("bar")
 			if b_def and _guest_member.spending_budget >= b_def.get("visit_income", 0): food_pois.append("bar")
 		
-		# Zu 80% Wahrscheinlichkeit einen Essens-POI erzwingen, falls verfügbar
-		if food_pois.size() > 0 and randf() > 0.2:
+		# Zu 100% Wahrscheinlichkeit einen Essens-POI erzwingen, falls verfügbar
+		if food_pois.size() > 0:
 			chosen = food_pois.pick_random()
 			
 	# print("[DEBUG] Gast ", _guest_member.id if _guest_member else "?", " _decide_next_action -> chosen: ", chosen, " | current_poi: ", _current_poi_id, " | state: ", current_state)
@@ -976,7 +988,7 @@ func wake_up() -> void:
 	if current_state == State.LEAVING or current_state == State.WAITING_IN_LINE:
 		return
 	_poi_rest_until = 0  # ANG-361: Ruhepause nach Nacht zurücksetzen
-	_action_timer = randf_range(5.0, 30.0)
+	_action_timer = randf_range(2.0, 10.0) # Morgens schneller anfangen sich zu bewegen, damit nicht alle starr rumstehen
 
 
 # =============================================================================
@@ -1066,7 +1078,7 @@ func _change_state(new_state: State) -> void:
 			# Sichtbar in der Lobby am Checkout warten
 			_action_timer = 0.0
 			avatar.visible = true
-			if has_node("ClickArea"): get_node("ClickArea").input_pickable = false
+			if has_node("ClickArea"): get_node("ClickArea").input_pickable = true
 			# TG-Gäste haben kein Zimmer → auto-checkout ohne Spieler-Klick
 			if _target_room == null:
 				call_deferred("_auto_checkout_tg_guest")
@@ -1253,7 +1265,7 @@ func _on_poi_arrived() -> void:
 					var dur = claim_result.get("duration", randf_range(15.0, 30.0))
 					_action_timer = dur * (float(TimeManager.SECONDS_PER_GAME_MINUTE) if TimeManager else 4.0)
 		else:
-			# Sitz wurde in _walk_to_poi voraus-geclaimt – gespeicherte Position + Duration direkt verwenden.
+			# Sitz wurde in _walk_to_poi voraus-geclaimte – gespeicherte Position + Duration direkt verwenden.
 			if _pre_claimed_seat_pos != Vector2.INF and _pre_claimed_seat_pos != Vector2.ZERO:
 				seat_pos = _pre_claimed_seat_pos
 				_action_timer = _pre_claimed_duration * (float(TimeManager.SECONDS_PER_GAME_MINUTE) if TimeManager else 4.0)
@@ -2175,10 +2187,9 @@ func _wander_in_room(room: Node2D, force_sleep: bool = false, initial_wait: bool
 	)
 	
 	_active_tween.tween_callback(func(): 
+		var spgm = TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 1.0
 		if initial_wait:
-			_action_timer = randf_range(45.0, 120.0)
-		elif TimeManager:
-			_action_timer = 15.0 * TimeManager.SECONDS_PER_GAME_MINUTE
+			_action_timer = _my_wander_interval * randf_range(2.0, 3.0) * spgm
 		else:
-			_action_timer = 60.0
+			_action_timer = _my_wander_interval * spgm
 	)

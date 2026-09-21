@@ -115,8 +115,14 @@ func _refresh_list() -> void:
 		var def = _target_room.get_definition()
 		var is_functional = _target_room.is_functional() if _target_room.has_method("is_functional") else true
 		
+		var clean = _target_room.get("cleanliness_level") if "cleanliness_level" in _target_room else 100
+		var maint = _target_room.get("maintenance_level") if "maintenance_level" in _target_room else 100
+		var is_locked_due_to_condition = (clean < 10 or maint < 10)
+
 		if not is_functional:
 			label_title.add_theme_color_override("font_color", Color("#ef4444")) # Rot (Geschlossen wg. Unterbesetzung)
+		elif is_locked_due_to_condition:
+			label_title.add_theme_color_override("font_color", Color("#ef4444")) # Rot (Geschlossen wg. Schmutz/Defekt)
 		elif def.get("open_from", 0) != 0 or def.get("open_to", 0) != 0:
 			var taking_orders = GameState.is_facility_open(def, 30)
 			var is_open = GameState.is_facility_open(def, 0)

@@ -1819,3 +1819,4 @@ ui.coming_soon,Bald verfügbar,Coming soon
 tt.build.room.limit_reached,Limit erreicht (###/***),Limit reached (###/***)
 tutorial.tip_gastro_overload.title,Gastronomie überlastet!,Gastronomy Overloaded!
 tutorial.tip_gastro_overload.desc,"Dein Restaurant ist voll, aber du hast zu wenig Personal. Stelle mehr Bedienungen oder Köche ein, damit deine Gäste nicht zu lange warten müssen.","Your restaurant is full, but you don't have enough staff. Hire more waiters or chefs so your guests don't have to wait too long."
+room.tooltip.closed_condition,Geschlossen (Wartung/Reinigung),Closed (Maintenance/Cleaning)

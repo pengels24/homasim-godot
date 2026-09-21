@@ -142,7 +142,13 @@ func _update_content() -> void:
 		
 		var is_assigned = StaffManager.is_poi_staffed(def, room_id)
 		
-		if not is_assigned:
+		var clean = _target_room.get("cleanliness_level") if "cleanliness_level" in _target_room else 100
+		var maint = _target_room.get("maintenance_level") if "maintenance_level" in _target_room else 100
+		var is_locked_due_to_condition = (clean < 10 or maint < 10)
+		
+		if is_locked_due_to_condition:
+			status = "[color=#e74c3c]" + GameState.T("room.tooltip.closed_condition") + "[/color]"
+		elif not is_assigned:
 			status = "[color=#e74c3c]" + GameState.T("room.tooltip.understaffed") + "[/color]"
 		elif is_open_now and is_staffed:
 			status = "[color=#2ecc71]" + (GameState.T("room.tooltip.open") % [opens_str, closes_str]) + "[/color]"

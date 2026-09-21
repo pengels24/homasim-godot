@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.65 | Stand: 21.09.2026
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.66 | Stand: 21.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -13,6 +13,10 @@
 ---
 
 ## 🔧 Ungeplante Fixes & Features (Aktuelle Session)
+- [x] **Bugfix Lobby Clicks:** Gäste lassen sich nun auch in der Lobby anklicken (z.B. im `AWAITING_CHECKOUT` State). `input_pickable` wird nicht mehr auf `false` gezwungen und Area-Priority auf 100 erhöht.
+- [x] **Asynchrones Aufwachen & Zimmer-Wandern:** Die 15-Minuten starren Intervall-Loops in GuestActor wurden aufbrochen. Jeder Gast nutzt nun `_my_wander_interval` (4-10 Min).
+- [x] **Bugfix POI-Sperre:** Gäste betreten keine POIs mehr, deren Zustand oder Sauberkeit < 10% ist. Tooltips zeigen korrekterweise nun "Geschlossen (Reinigung/Wartung)".
+- [x] **GuestActor Crash Fix:** Fehlerhaften Zugriff auf `GuestParty` im `GuestPipMonitor` behoben.
 - [x] **Gestaffelte Aufwachphase (Load Balancing):** Massive Überlastung der Gastronomie behoben, indem Gäste nicht mehr alle synchron um 06:15 Uhr aufstehen. Aufwachzeit ist nun abhängig vom Gästetyp (`GuestDefinitions`) in 3 Blöcke unterteilt (06:00-06:20, 06:20-06:40, 06:40-07:00) inklusive `randi_range` für natürliches Tröpfeln.
 - [x] **Bugfix Gastro-Tutorial-Tipp:** Trigger-Logik für `tip_gastro_overload` neu geschrieben. Zählt nun physisch sitzende Gäste via `GuestActor`-State anstatt auf reine Sitzplatz-Reservierungen (`occupied_by`) zu vertrauen. Verhindert das verfrühte Auslösen bei vollem Restaurant.
 - [x] **Gedulds-Balancing:** Patience-Verlustrate in `GuestActor` (`_impatient_timer`) halbiert, damit die Gäste bei großen Anstürmen realistischer warten.

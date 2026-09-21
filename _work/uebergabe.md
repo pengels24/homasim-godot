@@ -1,14 +1,18 @@
-# Übergabeprotokoll (Session: Gastro & Gedulds-Balancing)
+# Übergabeprotokoll (Session: Gestaffelte Aufwachphase & Balancing)
 
 ## Letzter Stand
-Der User hat erfolgreich die Gastro-Logik und das Gedulds-Balancing getestet. Der `tip_gastro_overload` Tutorial-Tipp feuert jetzt korrekt und fehlerfrei nur dann, wenn physisch alle Plätze im Restaurant belegt sind (Gäste-Status: IN_POI, STUDYING_MENU, WAITING_FOR_FOOD, EATING) und global zu wenig Personal existiert. Alle Syntax-Fehler bezüglich Godot 4 `Object.get()` wurden behoben. Die fehlenden Loca-Strings sind in `language.csv` eingetragen.
+Der User hat erfolgreich die **gestaffelte Aufwachphase** (Staggered Wake-Up) getestet. Das neue System weist Gästen anhand ihres Typs (`GuestDefinitions`) und eines Zufallswerts ein individuelles Aufwach-Zeitfenster zwischen 06:00 und 07:00 Uhr zu. Dadurch wurde die massive Auslastungsspitze in der Gastronomie ("Flashmob" um 06:15 Uhr) eliminiert. Die Bedienung kommt nun hinterher, und die Gäste rotieren organisch durch das Restaurant.
 
 ## Bearbeitete Systeme
-1. **`RestaurantSmall.gd`:** Gastro-Tipp Trigger (`_check_gastro_overload_tip`) robust gegen Ghost-Seats und asynchrone Gast-Spawns gemacht.
-2. **`GuestActor.gd`:** Patience-Limits verdoppelt (Timer verlangsamt) und Bugs im Status-Wechsel eliminiert.
-3. **`language.csv`:** Tutorial-Texte für `tip_gastro_overload` ergänzt.
+1. **`data/GuestDefinitions.gd`:** Keys `"wake_up_min"` und `"wake_up_max"` für jeden Gästetyp (single, couple, business, family, etc.) hinzugefügt, aufgeteilt in drei 20-Minuten-Blöcke.
+2. **`scenes/ingame/guest/GuestActor.gd`:** 
+   - Variable `_my_wake_up_time` in `setup()` initialisiert.
+   - Harter Cut bei 06:15 Uhr in Phase 2.5 (Wachwerd-Phase) entfernt und durch personalisierten Timer ersetzt.
+3. **Tech-Doku:** Die Logik ist nun auch im `wiki/02_features/25_techdoku_guestactor.md` unter Punkt 12 hinterlegt.
 
 ## Nächste Schritte für neuen Agenten
-- Die Gastro-Stabilitätsphase ist laut Alpha-Backlog weitestgehend abgeschlossen.
-- Wenn der User keine direkten Bug-Reports mehr zur Gastro hat, ist der nächste große Schritt laut Backlog vermutlich der **Pre-Alpha End-Screen** oder das **Gourmet-Inspektor-Event**.
-- Kläre beim Start mit dem User, ob weitere Gastro-Polishing-Tasks anstehen oder wir zu den verbleibenden Core-Features übergehen sollen.
+- Die Gastro-Stabilitätsphase inklusive Load-Balancing am Morgen ist damit offiziell und stabil abgeschlossen.
+- Als nächstes große Tasks stehen laut `alpha_backlog.md` an:
+  1. **Pre-Alpha End-Screen** 
+  2. **Gourmet-Inspektor-Event**
+- Frage den User explizit, welches dieser beiden Features nun gestartet werden soll.

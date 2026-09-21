@@ -65,7 +65,8 @@ func _refresh_details() -> void:
 		
 	var member = _target_guest.get("_guest_member")
 	if member:
-		var sat = int(member.satisfaction) if "satisfaction" in member else 100
+		var party = _target_guest._get_my_party() if _target_guest.has_method("_get_my_party") else null
+		var sat = int(party.satisfaction) if party and "satisfaction" in party else 100
 		var emoji = "🙂"
 		if sat > 80: emoji = "😁"
 		elif sat > 50: emoji = "🙂"

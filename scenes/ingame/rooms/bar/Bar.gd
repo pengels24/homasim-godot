@@ -431,6 +431,10 @@ func get_live_details() -> Array[Dictionary]:
 			details.append({"left": guest_name, "right": status_text, "color": c})
 	
 	if details.is_empty():
-		details.append({"left": GameState.T("room.kitchen.status"), "right": GameState.T("room.bar.empty")})
+		details.append({
+			"left": GameState.T("room.kitchen.status"),
+			"right": GameState.T("room.bar.empty"),
+			"is_fallback": true
+		})
 	
 	return details

@@ -12,7 +12,9 @@
 
 ---
 
-## 🚨 Ungeplante Fixes & Features (Aktuelle Session)
+## 🔧 Ungeplante Fixes & Features (Aktuelle Session)
+- [x] **Bugfix Gastro-Tutorial-Tipp:** Trigger-Logik für `tip_gastro_overload` neu geschrieben. Zählt nun physisch sitzende Gäste via `GuestActor`-State anstatt auf reine Sitzplatz-Reservierungen (`occupied_by`) zu vertrauen. Verhindert das verfrühte Auslösen bei vollem Restaurant.
+- [x] **Gedulds-Balancing:** Patience-Verlustrate in `GuestActor` (`_impatient_timer`) halbiert, damit die Gäste bei großen Anstürmen realistischer warten.
 - [x] **Bugfix Gastro-Timer:** Kritischer Fehler im `GuestActor`, bei dem der Warte-Timer beim Eintreten ins Restaurant durch einen State-Wechsel auf `0.01` überschrieben wurde. Gäste blieben nicht sitzen und verließen volle POIs sofort.
 - [x] **Bugfix GuestFlow:** Abreisende Gäste (im Checkout) wachten nach dem Laden eines Spielstands fälschlicherweise wieder im `SLEEPING`/`IN_ROOM` State auf und blockierten das Restaurant/Hotel, anstatt zur Rezeption zu gehen. Fix: GuestController erzwingt beim Spawnen von Checkout-Gästen sofort `start_checkout()`.
 - [x] **Bugfix Wachwerd-Phase:** Die Phase zwischen 06:00 und 06:15 Uhr wurde für Gäste im Bett korrigiert, sodass diese nicht vor 06:15 Uhr aufstehen und direkt hungrig herumlaufen.

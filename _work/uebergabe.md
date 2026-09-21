@@ -1,16 +1,17 @@
-# Übergabeprotokoll
+# Übergabeprotokoll (v0.1.65)
+*Stand: 21.09.2026*
 
-**Letzter Stand (Version v0.1.64):**
-- Ein kritischer Bug im Savegame-System wurde behoben, der dazu führte, dass abreisende Gäste nach einem Reload nicht auscheckten. Die Gäste waren stattdessen im alten "Schlaf"-Status gefangen und begannen nach der Wachwerd-Phase das Hotel (inkl. Restaurant) zu stürmen.
-- Der Fix in `GuestController.gd` erzwingt nun für die `_checkout`-Liste beim Laden bedingungslos ein `start_checkout()`.
-- Die Wachwerd-Phase im `GuestActor.gd` (06:00 bis 06:15) wurde korrigiert, damit Gäste vor 06:15 Uhr nicht loslaufen (durch Behebung eines Scope-Fehlers bei `is_event_guest`).
-- Sämtliche Godot-Warnungen (Integer/Float Ternary Operator Mismatches, ungenutzte Variablen, Signal-Warnungen) wurden beseitigt, die Konsole ist sauber.
+## Letzter Stand der Session
+Die Session konzentrierte sich auf massive Bugfixes im Bereich des Gastronomie-Systems, insbesondere bezüglich der Navigation und des Timings der Gäste. Der langwierige Bug, bei dem Gäste Restaurants sofort nach Betreten wieder verließen (und bei einem vollen Restaurant endlos zwischen POI und Walking State pendelten), wurde erfolgreich behoben. Die Gäste reservieren nun ihre Plätze, laufen zum Stuhl und warten dort korrekt.
 
-**Aktuell bearbeitete Systeme:**
-- `GuestController.gd` (Savegame Ladelogik für Checkout-Gäste)
-- `GuestActor.gd` (State-Machine, POI-Zwangspausen, Code-Bereinigung)
-- `SettingsManager.gd` (Signal Wrapper)
+## Bearbeitete Systeme & Refactorings
+- **GuestActor.gd (`_change_state`, `_on_poi_arrived`, `_process_waiting`)**: 
+  - Der `_action_timer` wurde beim Wechsel in den `IN_POI` State versehentlich hart auf `0.01` überschrieben (Altlast). Dies wurde entfernt. 
+  - Die `_on_poi_arrived()` Funktion setzt den `_action_timer` nun korrekt und dauerhaft auf die Berechnungen aus der `claim_interaction()` (z.B. 120 Sekunden), ohne dass der State-Wechsel dies sofort zunichtemacht.
+  - Das verhinderte die Endlosschleife und garantiert nun, dass Gäste ihren Platz behalten und die Bestellung durchführen.
+- **GuestFlow bei Spielstand-Reload (`GuestController`)**: Abreisende Gäste blockieren nicht mehr nach einem Reload das Restaurant.
 
-**Sofortige nächste Schritte (für den nächsten Agenten):**
-- Weiteres Vorgehen gemäß Alpha Backlog (offen sind aktuell Ghost-Room Blocking und HUD Event-Panel).
-- Ggf. Start der Arbeiten an Pre-Alpha End-Screen und Gourmet-Inspektor-Event (wie vom User initial als Ziele formuliert, falls Stabilisierung abgeschlossen ist).
+## Sofortige nächste Schritte
+- **Offener Punkt aus Alpha-Backlog**: Das HUD Event-Panel bleibt fälschlicherweise nach dem Tagungsende zweizeilig. Dieser UI-Bug muss behoben werden.
+- **Pre-Alpha End-Screen**: Muss nach der Stabilitätsphase implementiert werden.
+- **Gourmet-Inspektor-Event**: Überprüfung der Funktionsweise, da das Gastro-System (als Voraussetzung) nun stabil läuft.

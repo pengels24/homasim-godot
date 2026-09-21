@@ -157,11 +157,14 @@ func _update_content() -> void:
 			# Instanzspezifisch via get_live_details() falls verfügbar (z.B. Gym, Pool, Spa)
 			if _target_room.has_method("get_live_details") and not def.get("is_staff_poi", false):
 				var live = _target_room.get_live_details()
-				current_visitors = live.size()
+				current_visitors = 0
 				for entry in live:
+					if entry.get("is_fallback", false):
+						continue
 					var gname = entry.get("left", "")
-					if gname != "":
+					if gname != "" and gname != GameState.T("room.kitchen.status"):
 						visitor_names.append("👤 " + gname)
+						current_visitors += 1
 			elif is_instance_valid(ingame):
 				# Fallback: Type-basiert für Räume ohne get_live_details()
 				var ctrl = ingame.get("_guest_controller")

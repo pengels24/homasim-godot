@@ -374,7 +374,7 @@ func is_functional() -> bool:
 					found_actor = actor.name
 					return true
 					
-	print("[GASTRO TRACE] Room.is_functional() failed for ", self.name, "! No actor found with role: ", req_role)
+	# print("[GASTRO TRACE] Room.is_functional() failed for ", self.name, "! No actor found with role: ", req_role)
 	return false
 
 # =============================================================================

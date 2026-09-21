@@ -86,14 +86,14 @@ func _check_for_new_orders() -> void:
 	# Küche arbeitet nur, wenn mindestens ein Koch da ist
 	if not has_chef: return
 	
-	# Wie viele Gerichte können wir gleichzeitig kochen? (1 pro Koch)
-	var max_concurrent = 1
+	# Wie viele Gerichte können wir gleichzeitig kochen? (2 pro Koch)
+	var max_concurrent = 2
 	for s in assigned:
 		if not StaffManager.is_staff_available(s):
 			continue
 			
-		if s.get("role") == "chef" and max_concurrent == 1:
-			pass # Der erste Koch ist schon in max_concurrent=1 enthalten
+		if s.get("role") == "chef" and max_concurrent == 2:
+			pass # Der erste Koch ist schon in max_concurrent=2 enthalten
 		elif s.get("role") == "chef":
 			max_concurrent += 1
 

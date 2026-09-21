@@ -204,7 +204,8 @@ func get_live_details() -> Array[Dictionary]:
 	if details.is_empty():
 		details.append({
 			"left": GameState.T("room.kitchen.status"),
-			"right": GameState.T("room.restaurant.empty")
+			"right": GameState.T("room.restaurant.empty"),
+			"is_fallback": true
 		})
 	return details
 
@@ -293,6 +294,55 @@ func _has_waiter_assigned() -> bool:
 ## Prüft ob physisch eine Bedienung im Raum ist (für den Gast)
 
 
+func _check_gastro_overload_tip() -> void:
+	if not TutorialManager or TutorialManager.unlocked_tutorials.has("tip_gastro_overload"):
+		return
+		
+	if _room_seats.is_empty():
+		return
+		
+	# 1. Ist das Restaurant voll? (Wir zählen nur Gäste, die sich physisch im Restaurant befinden)
+	var active_guest_states = {}
+	for actor in get_tree().get_nodes_in_group("guest_actors"):
+		var gm_prop = actor.get("_guest_member")
+		if gm_prop:
+			active_guest_states[gm_prop.id] = actor.get("current_state")
+			
+	var physical_visitors = 0
+	for seat in _room_seats:
+		var g_id = seat.get("occupied_by", "")
+		if g_id != "" and active_guest_states.has(g_id):
+			var state = active_guest_states[g_id]
+			# GuestActor.State: 3 = IN_POI, 6 = STUDYING_MENU, 7 = WAITING_FOR_FOOD, 8 = EATING
+			if state in [3, 6, 7, 8]:
+				physical_visitors += 1
+				
+	# Wenn alle Plätze physisch besetzt sind (oder zumindest >= 20)
+	if physical_visitors < _room_seats.size():
+		return
+		
+	# 2. Personal global prüfen (wie vom User vorgeschlagen)
+	var total_waiters = 0
+	var total_chefs = 0
+	var total_helpers = 0
+	
+	if StaffManager:
+		for staff in StaffManager.hired_staff.values():
+			if staff.get("role") == "waiter": total_waiters += 1
+			elif staff.get("role") == "chef": total_chefs += 1
+			elif staff.get("role") == "kitchen_helper": total_helpers += 1
+			
+	# 3. Bedingungen für Überlastung
+	var is_overloaded = false
+	if total_waiters < 2:
+		is_overloaded = true
+	if total_chefs < 2 and total_helpers == 0:
+		is_overloaded = true
+		
+	if is_overloaded:
+		TutorialManager.trigger("tip_gastro_overload")
+
+
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint(): return
 	
@@ -300,6 +350,7 @@ func _process(_delta: float) -> void:
 		_room_id = GuestManager._room_key(self)
 		
 	if Engine.get_frames_drawn() % 60 == 0:
+		_check_gastro_overload_tip()
 		if GastroManager:
 			if _room_id == "":
 				_room_id = GuestManager._room_key(self)

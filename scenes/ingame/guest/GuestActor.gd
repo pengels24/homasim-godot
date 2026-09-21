@@ -82,6 +82,8 @@ var _waiting_for_food_timer: float = 0.0
 ## Verhindert, dass wake_up() den Checkout-Lauf überschreibt
 var _is_checkout_walk: bool = false
 
+var _angry_timer: float = 0.0
+
 ## Welcher POI aktuell besucht wird (z.B. "lobby", "bar", "spa")
 var _current_poi_id: String = ""
 var _current_order_id: String = ""
@@ -90,6 +92,7 @@ var consumption_type: String = "food" # "food" or "drink"
 # Interner Timer für Aufenthaltsdauer
 var _action_timer: float = 0.0
 var _impatient_timer: float = 0.0
+var _total_wait_timer: float = 0.0
 ## Night-Rescue: Unabhängiger Timer, der Gäste nach 23:00 aktiv ins Bett schickt
 var _night_rescue_timer: float = 30.0
 var _base_speed: float = 40.0
@@ -221,8 +224,15 @@ func _process(delta: float) -> void:
 		var s = 0.15 + sin(t * 4.0) * 0.02
 		ev_node.scale = Vector2(s, s)
 
+	if _angry_timer > 0.0:
+		_angry_timer -= delta * (float(TimeManager.time_multiplier) if TimeManager else 1.0)
+		
+	var show_angry = avatar.visible and _angry_timer > 0.0
+	if has_node("AngryIcon"):
+		$AngryIcon.visible = show_angry
+		
 	if has_node("HungryIcon"):
-		if avatar.visible and _guest_member.saturation <= 40:
+		if avatar.visible and _guest_member.saturation <= 40 and not show_angry:
 			$HungryIcon.visible = true
 		else:
 			$HungryIcon.visible = false
@@ -242,6 +252,7 @@ func _process_impatient(delta: float) -> void:
 		
 	var speed = TimeManager.user_speed if TimeManager else 1.0
 	_impatient_timer += delta * speed
+	_total_wait_timer += delta * speed
 	
 	if current_state == State.WAITING_FOR_FOOD:
 		_waiting_for_food_timer += delta * speed
@@ -252,6 +263,7 @@ func _process_impatient(delta: float) -> void:
 			
 		if _waiting_for_food_timer >= wait_limit_seconds:
 			# print("[GuestActor] %s: Timeout erreicht beim Warten auf Essen! Breche ab." % [(_guest_member.name if _guest_member else "?")])
+			make_angry(60.0)
 			var party = _get_my_party()
 			if party:
 				party.modify_satisfaction(-15) # Starke Strafe
@@ -267,11 +279,11 @@ func _process_impatient(delta: float) -> void:
 			_decide_next_action()
 			return
 			
-	var imp_limit = 60.0
+	var imp_limit = 120.0
 	if TechtreeManager and TechtreeManager.is_tech_unlocked("M1.4"):
-		imp_limit = 72.0 # +20% längeres Intervall = -20% Zufriedenheitsverlust pro Zeit
+		imp_limit = 144.0 # +20% längeres Intervall = -20% Zufriedenheitsverlust pro Zeit
 
-	if _impatient_timer >= imp_limit: # Alle 60/72 Ingame-Sekunden
+	if _impatient_timer >= imp_limit: # Alle 120/144 Ingame-Sekunden
 		_impatient_timer = 0.0
 		var party = _get_my_party()
 		if party:
@@ -935,6 +947,9 @@ func rest() -> void:
 
 
 # =============================================================================
+func make_angry(duration: float = 60.0) -> void:
+	_angry_timer = max(_angry_timer, duration)
+
 ## Gast wacht auf (morgens 06:00 via sig_morning_struck). Timer startet neu.
 func wake_up() -> void:
 	# Engine-Pause um 24:00 kann laufende Tweens einfrieren.
@@ -978,6 +993,7 @@ func _get_poi_rest_duration() -> int:
 func _change_state(new_state: State) -> void:
 	var old_state = current_state
 	previous_state = old_state
+	_total_wait_timer = 0.0
 	
 	# var g_name = _guest_member.get("name") if _guest_member else "Unknown"
 	# var poi_info = (" [" + _current_poi_id + "]") if new_state == State.IN_POI and not _current_poi_id.is_empty() else ""

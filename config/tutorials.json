@@ -1,5 +1,7 @@
 {
-	"hidden_tabs": ["real_codex"],
+	"hidden_tabs": [
+		"real_codex"
+	],
 	"tutorials": [
 		{
 			"id": "welcome",
@@ -85,6 +87,12 @@
 			"category": "tipps",
 			"title_key": "tutorial.tip_130_exp.title",
 			"desc_key": "tutorial.tip_130_exp.desc"
+		},
+		{
+			"id": "tip_gastro_overload",
+			"category": "tipps",
+			"title_key": "tutorial.tip_gastro_overload.title",
+			"desc_key": "tutorial.tip_gastro_overload.desc"
 		},
 		{
 			"id": "tip_fast_forward",

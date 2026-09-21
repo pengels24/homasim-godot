@@ -10,10 +10,12 @@ extends Control
 @onready var lbl_thirst: Label = %LblThirst
 @onready var lbl_energy: Label = %LblEnergy
 @onready var lbl_fun: Label = %LblFun
+@onready var lbl_patience: Label = %LblPatience
 @onready var need_hunger: ProgressBar = %NeedHunger
 @onready var need_thirst: ProgressBar = %NeedThirst
 @onready var need_energy: ProgressBar = %NeedEnergy
 @onready var need_fun: ProgressBar = %NeedFun
+@onready var need_patience: ProgressBar = %NeedPatience
 @onready var panel = %MenuPanel
 
 var _target_guest: GuestActor = null
@@ -82,15 +84,37 @@ func _refresh_details() -> void:
 		var sat_energy = int(member.energy) if "energy" in member else 100
 		var sat_fun = int(member.fun) if "fun" in member else 100
 		
+		# Calculate patience based on current wait state
+		var patience_val = 100
+		if _target_guest.current_state == GuestActor.State.WAITING_FOR_FOOD:
+			var wait_limit = GuestActor.FOOD_WAIT_TIME_MINUTES * (float(TimeManager.SECONDS_PER_GAME_MINUTE) if TimeManager else 1.0)
+			if TechtreeManager and TechtreeManager.is_tech_unlocked("M1.4"):
+				wait_limit *= 1.2
+			var ratio = _target_guest._waiting_for_food_timer / wait_limit
+			patience_val = int(clamp(100 - (ratio * 100.0), 0, 100))
+		elif _target_guest.current_state in [GuestActor.State.AWAITING_CHECKOUT, GuestActor.State.WAITING_IN_LINE]:
+			var imp_limit = 120.0
+			if TechtreeManager and TechtreeManager.is_tech_unlocked("M1.4"):
+				imp_limit = 144.0
+			# Zeige die Geduld relativ zu 5 Ticks (600 Ingame-Sekunden = 10 Ingame-Minuten), dann ist sie optisch leer
+			# und ab dann ploppt das Wütend-Icon auf (da Satisfaction weiter sinkt)
+			var max_visual_wait = imp_limit * 5.0 
+			var timer_val = _target_guest.get("_total_wait_timer")
+			if typeof(timer_val) == TYPE_NIL: timer_val = 0.0
+			var ratio = timer_val / max_visual_wait
+			patience_val = int(clamp(100 - (ratio * 100.0), 0, 100))
+		
 		if is_instance_valid(need_hunger): need_hunger.value = sat_hunger
 		if is_instance_valid(need_thirst): need_thirst.value = sat_thirst
 		if is_instance_valid(need_energy): need_energy.value = sat_energy
 		if is_instance_valid(need_fun): need_fun.value = sat_fun
+		if is_instance_valid(need_patience): need_patience.value = patience_val
 		
 		if is_instance_valid(lbl_hunger): lbl_hunger.text = GameState.T("need.hunger.short", "HU") + ": %d%%" % sat_hunger
 		if is_instance_valid(lbl_thirst): lbl_thirst.text = GameState.T("need.thirst.short", "DU") + ": %d%%" % sat_thirst
 		if is_instance_valid(lbl_energy): lbl_energy.text = GameState.T("need.energy.short", "EN") + ": %d%%" % sat_energy
 		if is_instance_valid(lbl_fun): lbl_fun.text = GameState.T("need.fun.short", "SP") + ": %d%%" % sat_fun
+		if is_instance_valid(lbl_patience): lbl_patience.text = "PA: %d%%" % patience_val
 	else:
 		lbl_sat.text = "Zufriedenheit: Unbekannt"
 		

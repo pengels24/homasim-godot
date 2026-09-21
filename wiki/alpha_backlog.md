@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.64 | Stand: 20.09.2026
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.65 | Stand: 21.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -13,6 +13,7 @@
 ---
 
 ## 🚨 Ungeplante Fixes & Features (Aktuelle Session)
+- [x] **Bugfix Gastro-Timer:** Kritischer Fehler im `GuestActor`, bei dem der Warte-Timer beim Eintreten ins Restaurant durch einen State-Wechsel auf `0.01` überschrieben wurde. Gäste blieben nicht sitzen und verließen volle POIs sofort.
 - [x] **Bugfix GuestFlow:** Abreisende Gäste (im Checkout) wachten nach dem Laden eines Spielstands fälschlicherweise wieder im `SLEEPING`/`IN_ROOM` State auf und blockierten das Restaurant/Hotel, anstatt zur Rezeption zu gehen. Fix: GuestController erzwingt beim Spawnen von Checkout-Gästen sofort `start_checkout()`.
 - [x] **Bugfix Wachwerd-Phase:** Die Phase zwischen 06:00 und 06:15 Uhr wurde für Gäste im Bett korrigiert, sodass diese nicht vor 06:15 Uhr aufstehen und direkt hungrig herumlaufen.
 - [x] **Code-Bereinigung:** Diverse Godot-Warnungen behoben (Ternary-Operator Typ-Konflikte, redundante Scopes, ungenutzte Variablen, Signal-Warnings in SettingsManager).
@@ -59,7 +60,7 @@
 - [x] **Bugfix Queue-Free-Save (ANG-366):** `remove_room()` ruft `remove_child()` vor `queue_free()` auf – Ghost-Rooms beim Abriss behoben.
 - [x] **feat: _sanitize_restored_rooms():** Load-Repair entfernt überzählige Ghost-Rooms bei max_count-Typen.
 - [x] **feat: repair-grid & occ-overlay:** DevConsole-Befehle zur Grid-Diagnose und Reparatur.
-- [ ] **🔴 OFFEN: Ghost-Room Blocking** – `occ-overlay` hatte Early-Return-Bug (erst v0.1.63 gefixt). Ursache des Blockings noch visuell zu bestätigen.
+- [x] **Ghost-Room Blocking (Erledigt):** `occ-overlay` hatte Early-Return-Bug (erst v0.1.63 gefixt). Ursache des Blockings bestätigt und behoben.
 - [ ] **🔴 OFFEN: HUD Event-Panel bleibt 2-zeilig** nach Tagungsende. Fix noch ausstehend.
 
 ---

@@ -394,10 +394,12 @@ func _process_waiting(delta: float) -> void:
 			
 			_has_waited_for_functional = false
 			
+			print("[GASTRO TRACE] ", _guest_member.get("name") if _guest_member else "?", " is in STUDYING_MENU. Calling try_gastro_order...")
 			# GastroManager versucht die Bestellung – er kennt is_functional und can_serve_solo
 			var gastro_result = GastroManager.try_gastro_order(
 				_guest_member.id, _guest_member.spending_budget, _guest_member.saturation, room_node
 			)
+			print("[GASTRO TRACE] ", _guest_member.get("name") if _guest_member else "?", " try_gastro_order returned: ", gastro_result)
 			
 			if gastro_result.get("ordered", false):
 				_change_state(State.WAITING_FOR_FOOD)
@@ -407,6 +409,7 @@ func _process_waiting(delta: float) -> void:
 				_change_state(State.EATING)
 			else:
 				# Kein Personal → Platz freigeben und abbrechen
+				print("[GASTRO TRACE] ", _guest_member.get("name") if _guest_member else "?", " ordered=false and solo_mode=false. Leaving seat and calling _decide_next_action()")
 				if room_node.has_method("release_interaction"):
 					room_node.release_interaction(_guest_member.id)
 				if room_node.has_method("leave_seat"):
@@ -492,6 +495,7 @@ func _execute_poi_move(target_pos: Vector2, room_node: Node) -> void:
 		
 	# Gastro-Räume wechseln nach Ankunft in STUDYING_MENU (Raum sagt das selbst via is_gastro())
 	if is_instance_valid(room_node) and room_node.has_method("is_gastro") and room_node.is_gastro():
+		print("[GASTRO TRACE] ", _guest_member.get("name") if _guest_member else "?", " arrived at gastro POI. Tweening to STUDYING_MENU.")
 		_active_tween.tween_callback(func(): _change_state(State.STUDYING_MENU))
 
 # =============================================================================
@@ -979,6 +983,9 @@ func _change_state(new_state: State) -> void:
 	# var poi_info = (" [" + _current_poi_id + "]") if new_state == State.IN_POI and not _current_poi_id.is_empty() else ""
 	# print("[GuestActor] %s changed state: %s -> %s%s" % [g_name, get_state_name(old_state), get_state_name(new_state), poi_info])
 	
+	if _current_poi_id == "restaurant_small":
+		print("[GASTRO TRACE] ", _guest_member.get("name") if _guest_member else "?", " changed state: ", get_state_name(old_state), " -> ", get_state_name(new_state))
+	
 	
 	_has_waited_for_functional = false
 	if new_state == State.WAITING_FOR_FOOD:
@@ -1026,9 +1033,8 @@ func _change_state(new_state: State) -> void:
 			avatar.visible = true
 			if has_node("ClickArea"): get_node("ClickArea").input_pickable = true
 		State.IN_POI:
-			# Aufenthaltsdauer kommt jetzt via duration aus claim_interaction – kein _poi_stay_timer mehr.
-			# action_timer = 0.01 triggert sofort den ersten get_available_interactions/claim Zyklus.
-			_action_timer = 0.01
+			# Aufenthaltsdauer kommt jetzt via duration aus claim_interaction oder _on_poi_arrived().
+			# BUGFIX: Timer hier NICHT überschreiben (zuvor _action_timer = 0.01), da _on_poi_arrived ihn bereits gesetzt hat!
 			avatar.visible = true
 			if has_node("ClickArea"): get_node("ClickArea").input_pickable = true
 		State.AWAITING_CHECKOUT:

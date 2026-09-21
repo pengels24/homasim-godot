@@ -96,10 +96,15 @@ func try_gastro_order(guest_id: String, spending_budget: int, saturation: int, r
 	if room_node.has_method("is_functional"):
 		is_func = room_node.is_functional()
 
+	print("[GASTRO TRACE] try_gastro_order: room_node.is_functional() = ", is_func)
+
 	if not is_func:
 		# Solo-Modus prüfen (z.B. Bar ohne Waiter, aber Barkeeper ist da)
 		if room_node.has_method("can_serve_solo") and room_node.can_serve_solo():
 			result["solo_mode"] = true
+			print("[GASTRO TRACE] try_gastro_order: is_func is false, but can_serve_solo is true.")
+		else:
+			print("[GASTRO TRACE] try_gastro_order: is_func is false, and can_serve_solo is false. Aborting order.")
 		return result
 
 	# Raum ist funktional → Bestellung aufgeben

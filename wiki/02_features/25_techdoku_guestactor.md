@@ -95,9 +95,10 @@ Session-Timer (60-180 Min)
 ```
 
 ### Ablauf beim ersten Betreten (`_on_poi_arrived`)
-1. `get_available_interactions(self)` → freie Spots
+1. `get_available_interactions(self)` → freie Spots (falls nicht bereits voraus-geclaimt)
 2. `claim_interaction(id, spot_id)` → gibt `target_pos` + `duration` (Spot-Timer)
-3. **`_action_timer = duration * SECONDS_PER_GAME_MINUTE`** ← setzt ersten Timer korrekt
+3. **`_action_timer = duration * SECONDS_PER_GAME_MINUTE`** ← setzt ersten Timer korrekt.
+   *(Achtung: Dieser Timer darf nachfolgend von `_change_state` nicht überschrieben werden!)*
 4. EXP + Income vergeben (einmalig)
 5. `_execute_poi_move(seat_pos, room_node)` → Gast läuft zum Platz
 

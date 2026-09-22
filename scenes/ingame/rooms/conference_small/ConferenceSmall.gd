@@ -109,8 +109,12 @@ func get_live_details() -> Array[Dictionary]:
 			for a in get_tree().get_nodes_in_group("guest_actors"):
 				var mem = a.get("_guest_member")
 				if mem and mem.id == seat["occupied_by"]:
-					guest_name = mem.name + " (TG)"
-					# Gast in Pause oder walking? → aus Tooltip ausblenden
+					var p = a.call("_get_my_party") if a.has_method("_get_my_party") else null
+					if is_instance_valid(p) and p.get("event_poi_id") != "":
+						guest_name = mem.name + " (TG)"
+					else:
+						guest_name = mem.name
+					# Gast in Pause oder walking? -> aus Tooltip ausblenden
 					var gst_poi = a.get("_current_poi_id")
 					if a.get("current_state") == 1 or gst_poi != "conference_small":
 						is_walking = true
@@ -121,13 +125,19 @@ func get_live_details() -> Array[Dictionary]:
 			
 			shown_ids.append(seat["occupied_by"])
 			var status_text = GameState.T("poi.conference.attending")
+			var gcolor = Color("#8b5cf6")
+			if not guest_name.ends_with("(TG)"):
+				status_text = GameState.T("poi.working", "Arbeiten")
+				gcolor = Color("#6b7280")
+				
 			if seat["occupied_by"] == _speaker_id:
 				status_text = GameState.T("poi.conference.speaking")
+				gcolor = Color("#f59e0b")
 				
 			details.append({
 				"left": guest_name,
 				"right": status_text,
-				"color": Color("#8b5cf6") if seat["occupied_by"] != _speaker_id else Color("#f59e0b")
+				"color": gcolor
 			})
 	
 	# 2. Wuselnde Gäste anzeigen (vor Event-Start, noch kein Sitz)
@@ -247,9 +257,21 @@ func _swap_speaker() -> void:
 	# print("[TGCHANGE] SWAP_SPEAKER called | %02d:%02d | current_speaker=%s | speaker_time=%d" % [t/60, t%60, _speaker_id, _speaker_time])
 	# Wähle einen ZUFÄLLIGEN Zuhörer als neuen Speaker
 	var possible_listeners = []
+	var gm = get_tree().current_scene.find_child("GuestManager", true, false)
+	var rkey = gm._room_key(self) if is_instance_valid(gm) else ""
+	
 	for s in _room_seats:
 		if s["node"].name != "ChairSpeaker" and s["occupied_by"] != "":
-			possible_listeners.append(s["occupied_by"])
+			var is_tg = false
+			for node in get_tree().get_nodes_in_group("guest_actors"):
+				var mem = node.get("_guest_member")
+				if mem and mem.id == s["occupied_by"]:
+					var p = node.call("_get_my_party") if node.has_method("_get_my_party") else null
+					if is_instance_valid(p) and p.get("event_poi_id") == rkey:
+						is_tg = true
+					break
+			if is_tg:
+				possible_listeners.append(s["occupied_by"])
 			
 	if possible_listeners.is_empty():
 		_speaker_time = 0

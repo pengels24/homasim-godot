@@ -208,7 +208,11 @@ func _physics_process(delta: float) -> void:
 			_process_walking(delta, actual_speed)
 		"working":
 			_process_working(delta, speed_mult)
-		"returning", "walking_to_break":
+		"returning":
+			if _check_for_tasks():
+				return # Found a task, state is now walking!
+			_process_walking(delta, actual_speed)
+		"walking_to_break":
 			_process_walking(delta, actual_speed)
 		"resting":
 			_process_resting(delta, speed_mult)

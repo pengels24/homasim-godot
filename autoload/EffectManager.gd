@@ -27,6 +27,8 @@ func spawn_money_text(amount: int, world_pos: Vector2) -> void:
 # Wird gerufen, wenn man EXP bekommt
 func spawn_exp_text(amount: int, world_pos: Vector2) -> void:
 	if ui_exp_node != null and amount > 0:
+		if GameState.get_level() >= GameState.MAX_HOTEL_LEVEL:
+			return # Keine EXP-Zahlen spammen, wenn das Max-Level erreicht ist
 		FloatingValues.spawn("+%d EXP" % amount, 1.0, world_pos, ui_exp_node, Vector2(48.0, 0.0))
 
 

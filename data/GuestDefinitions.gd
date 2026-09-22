@@ -217,7 +217,7 @@ const ALL: Dictionary = {
 		"poi_budget_multiplier": 3.0,
 		"wake_up_min":     400,
 		"wake_up_max":     420,
-		"icon":            "res://assets/icons/guests/user-star.svg",
+		"icon":            "res://assets/guesttypes/gt-icon-business.aseprite",
 		"base_exp": 100,
 		"rep_penalty": 50
 	}

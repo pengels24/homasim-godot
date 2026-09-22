@@ -313,7 +313,8 @@ Conference-Gäste (`party.event_poi_id != ""`) verhalten sich anders:
 ## 10. Pathfinding & Bewegung
 Gäste nutzen `MapGrid.get_path_astar()` für globale Pfade und `room.get_local_path()` für Bewegungen innerhalb von Räumen. Geschwindigkeit (`_base_speed`) skaliert mit `TimeManager.user_speed`.
 
-## Gastro Consumption Type
+## Gastro Consumption Type & Bestell-Logik
+- **Bestell-Priorität (GastroManager):** Wenn ein Gast an der Bar/Restaurant etwas bestellen will, wird an den `GastroManager` nun `min(saturation, thirst)` übergeben. Das verhindert, dass rein durstige (aber gesättigte) Gäste wegen fehlenden Hungers nicht bedient werden.
 - **`consumption_type`**: Gibt an, ob der Gast gerade ein Getränk (`"drink"`) oder eine Mahlzeit (`"food"`) zu sich nimmt. Wird in `_on_order_served` anhand des Rezept-Typs gesetzt oder auf `"drink"` bei Solo-Bestellungen an der Bar.
 - **Live-Monitor:** Räume wie Bar und Restaurant lesen diesen Typ aus (während der Gast im `State.EATING` ist), um korrekt zwischen *Trinkt gerade* und *Isst gerade* zu unterscheiden.
 

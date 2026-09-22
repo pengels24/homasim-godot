@@ -28,7 +28,7 @@ signal sig_hotel_guests_checkout_changed(guests_checkout: int)
 signal sig_hotel_exp_changed(exp: int, exp_max: int)
 
 signal sig_hotel_rep_changed(rep: int, rep_max: int)
-const MAX_HOTEL_LEVEL: int = 15
+const MAX_HOTEL_LEVEL: int = 8
 # UNLOCK_LEVELS entfernt (ANG-365): Feature-Gates liegen jetzt in
 # - techtree.json (req_level pro Node)
 # - Room-Definitionen (req_level in den .gd Dateien)

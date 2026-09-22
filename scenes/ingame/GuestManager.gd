@@ -251,7 +251,7 @@ func spawn_conference_guests(current_time: int) -> void:
 		
 		while spawned_this_wave < spawn_now:
 			var party = _generate_party("business")
-			party.stay_days = 2
+			party.stay_days = 0
 			party.total_stay_days = 0 
 			
 			party.room_id = "" 

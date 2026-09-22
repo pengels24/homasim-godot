@@ -420,8 +420,9 @@ func _process_waiting(delta: float) -> void:
 			
 			print("[GASTRO TRACE] ", _guest_member.get("name") if _guest_member else "?", " is in STUDYING_MENU. Calling try_gastro_order...")
 			# GastroManager versucht die Bestellung – er kennt is_functional und can_serve_solo
+			var effective_sat = min(_guest_member.saturation, _guest_member.thirst)
 			var gastro_result = GastroManager.try_gastro_order(
-				_guest_member.id, _guest_member.spending_budget, _guest_member.saturation, room_node
+				_guest_member.id, _guest_member.spending_budget, effective_sat, room_node
 			)
 			print("[GASTRO TRACE] ", _guest_member.get("name") if _guest_member else "?", " try_gastro_order returned: ", gastro_result)
 			
@@ -474,6 +475,7 @@ func _process_waiting(delta: float) -> void:
 					if room_node.has_method("claim_interaction"):
 						var claim_result = room_node.claim_interaction(_guest_member.id, choice.get("id", ""))
 						if claim_result.has("target_pos"):
+							_has_claimed_seat = true
 							_execute_poi_move(claim_result.target_pos, room_node)
 							var dur = claim_result.get("duration", randf_range(15.0, 30.0))
 							_action_timer = dur * TimeManager.SECONDS_PER_GAME_MINUTE
@@ -488,6 +490,17 @@ func _process_waiting(delta: float) -> void:
 				if _has_claimed_seat and room_node.has_method("release_interaction"):
 					room_node.release_interaction(_guest_member.id)
 					_has_claimed_seat = false
+					
+					# ANG-XXX: need_restoration Werte für Non-Gastro-POIs anwenden!
+					if _current_poi_id != "" and not (room_node.has_method("is_gastro") and room_node.is_gastro()):
+						var poi_def = _get_poi_def(_current_poi_id)
+						if poi_def != null and poi_def.has("need_restoration"):
+							var rests = poi_def.get("need_restoration")
+							if _guest_member != null:
+								if rests.has("fun"): _guest_member.fun = min(100, max(0, _guest_member.fun + rests.fun))
+								if rests.has("energy"): _guest_member.energy = min(100, max(0, _guest_member.energy + rests.energy))
+								if rests.has("thirst"): _guest_member.thirst = min(100, max(0, _guest_member.thirst + rests.thirst))
+								if rests.has("hunger"): _guest_member.hunger = min(100, max(0, _guest_member.hunger + rests.hunger))
 					
 				# Wenn wir in der Lobby waren und schon saßen, flag zurücksetzen für nächstes Mal
 				if _current_poi_id == "lobby" and _has_waited_for_functional:
@@ -641,15 +654,18 @@ func _get_open_pois() -> Array[String]:
 		var lobby = _get_lobby_room()
 		var is_hungry = false
 		var vending_open = true
+		var is_thirsty = false
 		if is_instance_valid(lobby):
 			if "VENDING_MACHINE_HUNGER_THRESHOLD" in lobby:
 				is_hungry = _guest_member.saturation < lobby.VENDING_MACHINE_HUNGER_THRESHOLD
+				is_thirsty = _guest_member.thirst < lobby.VENDING_MACHINE_HUNGER_THRESHOLD
 			if lobby.has_method("is_vending_machine_open") and TimeManager:
 				vending_open = lobby.is_vending_machine_open(TimeManager.get_game_time())
 		else:
 			is_hungry = _guest_member.saturation < HUNGER_THRESHOLD
+			is_thirsty = _guest_member.thirst < HUNGER_THRESHOLD
 			
-		if (is_hungry and can_afford and vending_open) or _current_poi_id == "vending_machine":
+		if ((is_hungry or is_thirsty) and can_afford and vending_open) or _current_poi_id == "vending_machine":
 			open_pois.append("vending_machine")
 	
 	return open_pois
@@ -717,7 +733,9 @@ func _decide_next_action() -> void:
 		var now_r := TimeManager.get_game_time() if TimeManager else 0
 		if now_r < _poi_rest_until:
 			var is_hungry_now := _guest_member != null and _guest_member.saturation < HUNGER_THRESHOLD
-			if is_hungry_now:
+			var is_thirsty_now := _guest_member != null and _guest_member.thirst < HUNGER_THRESHOLD
+			var is_need_urgent := is_hungry_now or is_thirsty_now
+			if is_need_urgent:
 				var can_afford_food = false
 				if open_pois.has("vending_machine") and _guest_member.spending_budget >= 5: can_afford_food = true
 				if not can_afford_food and open_pois.has("restaurant_small"):
@@ -727,9 +745,9 @@ func _decide_next_action() -> void:
 					var b_def = _get_poi_def("bar")
 					if b_def and _guest_member.spending_budget >= b_def.get("visit_income", 0): can_afford_food = true
 				if not can_afford_food:
-					is_hungry_now = false # Kann sich nichts leisten, also Pause beibehalten!
+					is_need_urgent = false # Kann sich nichts leisten, also Pause beibehalten!
 			
-			if not is_hungry_now:
+			if not is_need_urgent:
 				open_pois.clear()  # Erzwingt Zimmer-Aufenthalt
 		else:
 			_poi_rest_until = 0  # Pause abgelaufen
@@ -889,21 +907,23 @@ func _decide_next_action() -> void:
 				_action_timer = 20.0 # Warte und prüfe erneut
 				return
 	
-	# ANG-310: Hunger-Priorisierung! (nur wenn wir nicht gerade zwingend zum Event müssen)
+	# ANG-310: Hunger- und Durst-Priorisierung! (nur wenn wir nicht gerade zwingend zum Event müssen)
 	var ev_id = party.event_poi_id if is_instance_valid(party) else ""
-	if chosen != ev_id and _guest_member.saturation < HUNGER_THRESHOLD:
+	var is_hungry_main = _guest_member.saturation < HUNGER_THRESHOLD
+	var is_thirsty_main = _guest_member.thirst < HUNGER_THRESHOLD
+	if chosen != ev_id and (is_hungry_main or is_thirsty_main):
 		var food_pois = []
 		if open_pois.has("vending_machine") and _guest_member.spending_budget >= 5: food_pois.append("vending_machine")
 		
-		if open_pois.has("restaurant_small"):
+		if open_pois.has("restaurant_small") and is_hungry_main:
 			var r_def = _get_poi_def("restaurant_small")
 			if r_def and _guest_member.spending_budget >= r_def.get("visit_income", 0): food_pois.append("restaurant_small")
 			
-		if open_pois.has("bar"):
+		if open_pois.has("bar") and is_thirsty_main:
 			var b_def = _get_poi_def("bar")
 			if b_def and _guest_member.spending_budget >= b_def.get("visit_income", 0): food_pois.append("bar")
 		
-		# Zu 100% Wahrscheinlichkeit einen Essens-POI erzwingen, falls verfügbar
+		# Zu 100% Wahrscheinlichkeit einen Essens- bzw. Trink-POI erzwingen, falls verfügbar
 		if food_pois.size() > 0:
 			chosen = food_pois.pick_random()
 			
@@ -1130,6 +1150,8 @@ func _on_order_served(_order_id: String, guest_id: String, recipe_id: String) ->
 		
 		# Sättigung wiederherstellen
 		_guest_member.saturation = min(100, _guest_member.saturation + sat)
+		# Durst ebenfalls wiederherstellen
+		_guest_member.thirst = min(100, _guest_member.thirst + max(sat, 30))
 		
 		var party = _get_my_party()
 		if TechtreeManager and TechtreeManager.is_tech_unlocked("G1.4") and party:
@@ -1183,7 +1205,11 @@ func _check_room_conditions(room: Node2D) -> void:
 # =============================================================================
 ## Verarbeitet die Ankunft in einem POI: Einnahmen buchen, Budget abziehen, Zufriedenheit boosten.
 func _on_poi_arrived() -> void:
-	if _current_poi_id.is_empty() or _current_poi_id == "lobby":
+	if _current_poi_id.is_empty():
+		return
+		
+	if _current_poi_id == "lobby":
+		_action_timer = 0.01
 		return
 		
 	# Snack-Automat Logik
@@ -1195,6 +1221,7 @@ func _on_poi_arrived() -> void:
 				_guest_member.spending_budget = max(0, _guest_member.spending_budget - lobby.VENDING_MACHINE_PRICE)
 				var actual_sat = lobby.VENDING_MACHINE_SATURATION + randi_range(-5, 10) # Bricht die Sättigungs-Zyklen auf
 				_guest_member.saturation = min(100, _guest_member.saturation + actual_sat)
+				_guest_member.thirst = min(100, _guest_member.thirst + actual_sat)
 				
 				FinanceManager.add_transaction(lobby.VENDING_MACHINE_PRICE, "gastro", "tx.poi_income|" + _guest_member.name + "|Snack-Automat")
 				if EffectManager: EffectManager.spawn_money_text(lobby.VENDING_MACHINE_PRICE, global_position + Vector2(0, -48))

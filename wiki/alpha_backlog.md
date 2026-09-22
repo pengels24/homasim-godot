@@ -156,6 +156,9 @@ Zimmer-Typen bekommen Eigenschaften (z.B. `"wlan"`, `"desk"`). Wenn Gäste einch
 - ✅ Fix: Crash beim Laden von leeren Personalräumen.
 - ✅ Fix: Lobby war nicht korrekt als Nav-Raum definiert.
 - ✅ **GuestActor Wegfindung:** Bug behoben, durch den Gäste beim Verlassen des Zimmers geradewegs durch Wände liefen (Status-Machine Bug mit `previous_state` behoben).
+- [x] **Tagungsgäste Bug:** Tagungsgäste verließen das Hotel nicht rechtzeitig und haben Stühle im Konferenzraum endlos blockiert (`_has_claimed_seat` Bug gefixt + `stay_days = 0`).
+- [x] **POI Restoration Bug:** Gäste erhielten bei Pool, Spa, Gym etc. keinen Spaß/Energie-Boost zurück, weil `need_restoration` von GuestActor beim Verlassen nicht ausgelesen wurde.
+- [x] **Gastro-Bestellungen:** Durstige (aber nicht hungrige) Gäste konnten an der Bar nicht bestellen. GastroManager wertet nun `min(saturation, thirst)` aus.
 - ✅ **CustomTooltip:** Position wird nun auf den Viewport geclempt, sodass der Tooltip nicht mehr oben aus dem Bild rutscht.
 - ✅ **ANG-332:** Feature-Issue für "Weitere Parzelle" Reward im LevelUp-Screen angelegt.
 - ✅ **Parzellen-Kauf-UI:** Progressbar komplett auf `ParzelleBuildUI.tscn` (Tooltip-Style) umgestellt. Inklusive 3.0-Scaling auf dem CenterContainer, um den Kamera-Zoom (0.33) exakt auszugleichen und pixel-perfect Font-Rendering zu garantieren.

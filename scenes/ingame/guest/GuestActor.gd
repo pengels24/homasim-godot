@@ -262,7 +262,7 @@ func _process_impatient(delta: float) -> void:
 	if TimeManager and TimeManager.is_paused():
 		return
 		
-	var speed = TimeManager.user_speed if TimeManager else 1.0
+	var speed = (TimeManager.user_speed as float) if TimeManager else 1.0
 	_impatient_timer += delta * speed
 	_total_wait_timer += delta * speed
 	
@@ -512,7 +512,7 @@ func _execute_poi_move(target_pos: Vector2, room_node: Node) -> void:
 	if _active_tween and _active_tween.is_valid():
 		_active_tween.kill()
 	_active_tween = create_tween()
-	var speed_scale = TimeManager.user_speed if TimeManager and not TimeManager.is_paused() else 1.0
+	var speed_scale = (TimeManager.user_speed as float) if TimeManager and not TimeManager.is_paused() else 1.0
 	_active_tween.set_speed_scale(speed_scale)
 	_active_tween.tween_interval(0.01) # Verhindert "started with no Tweeners" Error
 	
@@ -714,7 +714,7 @@ func _decide_next_action() -> void:
 	
 	# Check-in Sperre: 60 Min nach Ankunft keine POIs
 	if _checkin_poi_block_until > 0:
-		var now := TimeManager.get_game_time() if TimeManager else 0
+		var now := (TimeManager.get_game_time() as int) if TimeManager else 0
 		if now < _checkin_poi_block_until:
 			open_pois.clear() # Erzwingt Zimmer-Aufenthalt
 		else:
@@ -724,13 +724,13 @@ func _decide_next_action() -> void:
 	if _poi_rest_until == 0:
 		var _leaving_poi := current_state in [State.IN_POI, State.EATING, State.STUDYING_MENU, State.WAITING_FOR_FOOD]
 		if _leaving_poi and _current_poi_id != "":
-			var now_r := TimeManager.get_game_time() if TimeManager else 0
+			var now_r := (TimeManager.get_game_time() as int) if TimeManager else 0
 			_poi_rest_until = now_r + _get_poi_rest_duration()
 			# print("[GuestActor] %s beendet POI-Besuch (%s). Zwangspause bis %s gesetzt." % [(_guest_member.name if _guest_member else "?"), _current_poi_id, _poi_rest_until])
 
 	# ANG-361: Pflicht-Ruhepause nach POI-Besuch (ueberspringen bei Hunger, ausser Gast hat kein Geld fuer Essen)
 	if _poi_rest_until > 0:
-		var now_r := TimeManager.get_game_time() if TimeManager else 0
+		var now_r := (TimeManager.get_game_time() as int) if TimeManager else 0
 		if now_r < _poi_rest_until:
 			var is_hungry_now := _guest_member != null and _guest_member.saturation < HUNGER_THRESHOLD
 			var is_thirsty_now := _guest_member != null and _guest_member.thirst < HUNGER_THRESHOLD
@@ -873,7 +873,7 @@ func _decide_next_action() -> void:
 	# Event-Gast Priorität: Wenn es Event-Zeit ist, GEH ZUM EVENT!
 	party = _get_my_party()
 	if is_instance_valid(party) and party.event_poi_id != "":
-		var t = TimeManager.get_game_time() if TimeManager else 0
+		var t = (TimeManager.get_game_time() as int) if TimeManager else 0
 		var is_event_time = (t >= 465 and t < 720) or (t >= 800 and t < 1020)  # PM-Start 800 (13:20) = 10 Min Vorlauf
 		if is_event_time:
 			# Prüfen ob der Event-Raum bereits geöffnet hat
@@ -968,7 +968,7 @@ func _decide_next_action() -> void:
 		else:
 			party = _get_my_party()
 			if is_instance_valid(party) and party.event_poi_id != "":
-				var t = TimeManager.get_game_time() if TimeManager else 0
+				var t = (TimeManager.get_game_time() as int) if TimeManager else 0
 				if t >= 1020:
 					_change_state(State.LEAVING)
 					_walk_to_exit()
@@ -1176,7 +1176,7 @@ func _check_room_conditions(room: Node2D) -> void:
 		}
 		
 	var room_log = party.visited_rooms[room_id]
-	var current_day = TimeManager.get_day() if TimeManager else 1
+	var current_day = (TimeManager.get_day() as int) if TimeManager else 1
 	
 	# Prüfen ob am HÜTIGEN Tag bereits bewertet
 	for rev in room_log.reviews:
@@ -1234,7 +1234,7 @@ func _on_poi_arrived() -> void:
 				if _active_tween and _active_tween.is_valid():
 					_active_tween.kill()
 				_active_tween = create_tween()
-				var speed_scale = TimeManager.user_speed if TimeManager and not TimeManager.is_paused() else 1.0
+				var speed_scale = (TimeManager.user_speed as float) if TimeManager and not TimeManager.is_paused() else 1.0
 				_active_tween.set_speed_scale(speed_scale)
 				_active_tween.tween_interval(0.01)
 				# Pfad berechnen damit Navblocker respektiert werden
@@ -1529,7 +1529,7 @@ func complete_checkout(spawn_pos: Vector2) -> void:
 ## TG-Gäste (kein Hotelzimmer) werden automatisch ausgecheckt.
 func _auto_checkout_tg_guest() -> void:
 	# Kurz in der Lobby sichtbar warten, dann auto-abreisen
-	var wait_time: float = 1.5 / max(1.0, TimeManager.user_speed if TimeManager else 1.0)
+	var wait_time: float = 1.5 / max(1.0, (TimeManager.user_speed as float) if TimeManager else 1.0)
 	await get_tree().create_timer(wait_time).timeout
 	if is_instance_valid(self) and current_state == State.AWAITING_CHECKOUT:
 		complete_checkout(global_position)
@@ -2174,7 +2174,7 @@ func _wander_in_room(room: Node2D, force_sleep: bool = false, initial_wait: bool
 		_active_tween.kill()
 		
 	_active_tween = create_tween()
-	var speed_scale = TimeManager.user_speed if TimeManager and not TimeManager.is_paused() else 1.0
+	var speed_scale = (TimeManager.user_speed as float) if TimeManager and not TimeManager.is_paused() else 1.0
 	_active_tween.set_speed_scale(speed_scale)
 	_active_tween.tween_interval(0.01) # Verhindert "started with no Tweeners" Error
 	
@@ -2214,7 +2214,7 @@ func _wander_in_room(room: Node2D, force_sleep: bool = false, initial_wait: bool
 	)
 	
 	_active_tween.tween_callback(func(): 
-		var spgm = TimeManager.SECONDS_PER_GAME_MINUTE if TimeManager else 1.0
+		var spgm = (TimeManager.SECONDS_PER_GAME_MINUTE as float) if TimeManager else 1.0
 		if initial_wait:
 			_action_timer = _my_wander_interval * randf_range(2.0, 3.0) * spgm
 		else:

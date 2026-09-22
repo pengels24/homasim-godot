@@ -67,8 +67,8 @@ func _apply_translations() -> void:
 		if lbl_budget: lbl_budget.text = GameState.T("ui.guest_list.col.budget")
 		var lbl_goal = header_hbox.get_node_or_null("LblGoal")
 		if lbl_goal: lbl_goal.text = GameState.T("ui.guest_list.col.status")
-		var lbl_energy = header_hbox.get_node_or_null("LblEnergy")
-		if lbl_energy: lbl_energy.text = GameState.T("ui.guest_list.col.energy")
+		var header_lbl_energy = header_hbox.get_node_or_null("LblEnergy")
+		if header_lbl_energy: header_lbl_energy.text = GameState.T("ui.guest_list.col.energy")
 		var lbl_sat = header_hbox.get_node_or_null("LblSatisfaction")
 		if lbl_sat:
 			lbl_sat.text = GameState.T("ui.guest_list.col.satisfaction")

@@ -264,11 +264,11 @@ func get_placement_error(parcel_x: int, parcel_y: int, tile_x: int, tile_y: int,
 		var lx := _entry_plot.x * PARCEL_SZ + lobby_rect.position.x
 		var ly := _entry_plot.y * PARCEL_SZ + lobby_rect.position.y
 		match entry_parcel.entrance_dir:
-			"left":   lobby_tile = Vector2i(lx + lobby_rect.size.x,      ly + lobby_rect.size.y / 2)
-			"right":  lobby_tile = Vector2i(lx - 1,                      ly + lobby_rect.size.y / 2)
-			"top":    lobby_tile = Vector2i(lx + lobby_rect.size.x / 2,  ly + lobby_rect.size.y)
-			"bottom": lobby_tile = Vector2i(lx + lobby_rect.size.x / 2,  ly - 1)
-			_:        lobby_tile = Vector2i(lx + lobby_rect.size.x,      ly + lobby_rect.size.y / 2)
+			"left":   lobby_tile = Vector2i(lx + lobby_rect.size.x,      ly + int(lobby_rect.size.y / 2.0))
+			"right":  lobby_tile = Vector2i(lx - 1,                      ly + int(lobby_rect.size.y / 2.0))
+			"top":    lobby_tile = Vector2i(lx + int(lobby_rect.size.x / 2.0),  ly + lobby_rect.size.y)
+			"bottom": lobby_tile = Vector2i(lx + int(lobby_rect.size.x / 2.0),  ly - 1)
+			_:        lobby_tile = Vector2i(lx + lobby_rect.size.x,      ly + int(lobby_rect.size.y / 2.0))
 
 
 	# Check 1: Alle aktiven Zimmer vom Ghost-Exit-Tile aus erreichbar?

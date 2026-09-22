@@ -1,18 +1,21 @@
-# Übergabeprotokoll (Session: v0.1.66)
-**Datum:** 21.09.2026
+# Übergabeprotokoll (Ende v0.1.67)
 
-## 1. Letzter Stand & Bearbeitete Systeme
-- **GuestActor (Gäste-Verhalten):** Wir haben den massiven `GuestActor`-Codeblock, insbesondere die `_wander_in_room()`-Logik überarbeitet. Das synchrone, künstliche Wandern im exakten 15-Minuten-Takt wurde durch ein individuelles `_my_wander_interval` (4-10 Min) pro Gast ersetzt, das in `setup()` generiert wird.
-- **Aufwach-Verhalten (Staggered Wake-Up):** Ähnlich wie beim Wandern wachen Gäste nun abhängig von einem zufälligen `_my_wake_up_time` Offset auf, um Auslastungsspitzen (alle um Punkt 06:15) zu verhindern.
-- **Klickbarkeit (Lobby):** Ein großes Problem war, dass Gäste in der Lobby nicht angeklickt werden konnten, um das PiP-Fenster zu öffnen. Das lag an einem hardcodierten `input_pickable = false` im Status `AWAITING_CHECKOUT`. Dies wurde auf `true` geändert und die `priority` der `ClickArea` auf `100` gesetzt, um TileMap-Kollisionen zu überstimmen. Gäste können jetzt auch während der Wartezeit auf den Checkout ganz normal inspiziert werden.
-- **POI-Sperre:** Gäste ignorieren Räume in ihrer `_get_open_pois()` Suche, deren Sauberkeit (`cleanliness`) oder Zustand (`condition`) unter 10 % gefallen ist. Die Tooltips (`CustomTooltip`, `RoomDetailsMonitor`) zeigen geschlossene POIs nun rot als "Geschlossen (Wartung/Reinigung)" an, statt grün "Offen".
-- **Bugfix (Crash):** Ein fehlender Objekt-Zugriff (`GuestParty`) beim Öffnen des GuestPipMonitors auf Gäste im State `AWAITING_CHECKOUT` wurde durch sauberes Referenz-Checking gefixt.
+## Exakter letzter Stand
+- **Inspektor-System (Gourmetsterne):** Das Inspektor-Event wurde auf Funktionalität geprüft und triggert korrekt (UI Modal öffnet sich). Text-Probleme im UI-Modal wurden behoben (`language.csv` Strings angepasst). Die Inspektorin prüft das Hotel und scheitert momentan am Sauberkeitswert (wie erwartet).
+- **Tagungsgäste-Bugfixes:**
+  - Tagungsgäste hatten bisher fälschlicherweise `stay_days = 2`. Das wurde auf `0` gesetzt, damit sie das Hotel nicht mehr über Nacht blockieren.
+  - Im Konferenzraum (`ConferenceSmall.gd` / `GuestActor.gd`) haben Tagungsgäste beim Hinsetzen ihr `_has_claimed_seat` Flag nicht mehr gesetzt, weshalb die Plätze nach dem Aufstehen nicht freigegeben wurden. Das führte zu "Geister"-Belegungen und einer Endlosschleife (Ping-Pong-Gehen zwischen Lobby und Tür), wenn Gäste zurück in den Raum wollten. Dies ist repariert.
+- **POI Restoration Bug (Wellness/Pool/Gym):**
+  - Die `need_restoration` Werte für Erschöpfung, Spaß und Durst wurden bisher in `GuestActor.gd` nur für Gastro-Räume (via `sat` von Recipes) angewendet. Dies wurde repariert, sodass Gäste nun beim Verlassen von z.B. Pool oder Gym ihren Boost bekommen.
+- **Gastro-Bestellungen (Bar):**
+  - Gäste, die nur durstig, aber nicht hungrig waren, konnten nichts bestellen, da `GastroManager.try_gastro_order` nur den `saturation` Wert ausgewertet hat. `GuestActor.gd` übergibt nun `min(saturation, thirst)`, wodurch reine "Durstlöscher"-Bestellungen wieder funktionieren.
 
-## 2. Nächste Sofortige Schritte
-- **HUD Event-Panel bleibt 2-zeilig:** Dies ist ein offener Fehler auf dem Backlog, der noch untersucht werden muss. Das Panel für Events schrumpft nach Abschluss eines Tagungs-Events nicht wieder in seine ursprüngliche Größe zurück. (Siehe ANG-362 etc. im Alpha-Backlog).
-- **Inspektor & Gastronomie:** Peter wird weiter am Balancing arbeiten und testen, ob die gestaffelten Aufwach-Zeiten in der Gastronomie den "Mega-Rush" effektiv genug verhindern. Falls er dort erneut ansetzt, muss evtl. das `_my_wake_up_time` Delta in den `GuestDefinitions` weiter gestreckt werden.
+## Betroffene Systeme (Refactored/Bearbeitet)
+- `GuestActor.gd`: POI-Restoration-Logik, Gastro-Parameter, Claim-Seat-Flag.
+- `GuestManager.gd`: Tagungsgäste Spawn-Logik (`stay_days`).
+- Techdokus (`25_techdoku_guestactor.md`) & `alpha_backlog.md` aktualisiert.
 
-## 3. Hinweis an den nächsten Agenten
-- Alle Änderungen sind bereits committed (`v0.1.66`). 
-- Die TechDoku für `GuestActor` (`wiki/02_features/25_techdoku_guestactor.md`) ist auf dem neuesten Stand.
-- Denke daran, strikt die in `AGENTS.md` definierten Regeln zu befolgen (Keine Rezeptionisten einplanen, sauberes Event-Handling ohne Over-Engineering).
+## Nächste Schritte für den Agenten
+1. **Inspektor-Anforderungen (Balancing):** Der User plant wahrscheinlich, die Sauberkeit oder weitere Anforderungen für den Inspektor zu balancen oder das Feature weiter auszubauen. Da der Inspektor wegen 73,9% Sauberkeit abgelehnt hat, könnte dies das nächste Thema sein.
+2. **Weitere Alpha-Backlog Tasks:** Es gibt noch einige verbleibende Bugs oder Features im `alpha_backlog.md`, die aus Phase 5 angegangen werden können (z.B. Zufallsereignisse).
+3. **Keine offenen kritischen Bugs bekannt.** Die Dev-Session kann mit einem neuen Feature gestartet werden. Lese bei Start den `alpha_backlog.md` und `status_quo.md` ein, falls du eine Übersicht brauchst.

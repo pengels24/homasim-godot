@@ -355,7 +355,7 @@ func is_functional() -> bool:
 		
 	# Prüfen ob ein Mitarbeiter mit der required_role im Raum steht
 	# ODER gerade einen Task (wie Essen holen) für diesen Raum ausführt
-	var found_actor = null
+	var _found_actor = null
 	for actor in get_tree().get_nodes_in_group("staff_actors"):
 		var is_working_here = false
 		if actor.get("_current_room") == self:
@@ -371,7 +371,7 @@ func is_functional() -> bool:
 			var staff_data = actor.get("_staff_data")
 			if typeof(staff_data) == TYPE_DICTIONARY:
 				if staff_data.get("role", "") == req_role:
-					found_actor = actor.name
+					_found_actor = actor.name
 					return true
 					
 	# print("[GASTRO TRACE] Room.is_functional() failed for ", self.name, "! No actor found with role: ", req_role)

@@ -300,7 +300,9 @@ func get_max_staff_capacity() -> int:
 # =============================================================================
 func hire_staff(applicant_id: String, initial_room_id: String = "") -> bool:
 	if hired_staff.size() >= get_max_staff_capacity():
-		Toast.show(GameState.T("toast.staff.limit_reached"), "personal")
+		var t_txt = GameState.T("toast.staff.limit_reached")
+		var max_cap = get_max_staff_capacity()
+		Toast.show(t_txt % max_cap if "%" in t_txt else t_txt, "personal")
 		return false
 		
 	var applicant_idx = -1

@@ -1,4 +1,4 @@
-# Übergabeprotokoll (Ende v0.1.67)
+# Übergabeprotokoll (Ende v0.2.0)
 
 ## Exakter letzter Stand
 - **Inspektor-System (Gourmetsterne):** Das Inspektor-Event wurde auf Funktionalität geprüft und triggert korrekt (UI Modal öffnet sich). Text-Probleme im UI-Modal wurden behoben (`language.csv` Strings angepasst). Die Inspektorin prüft das Hotel und scheitert momentan am Sauberkeitswert (wie erwartet).

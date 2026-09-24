@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.1.66 | Stand: 21.09.2026
+> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.2.1 | Stand: 21.09.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---

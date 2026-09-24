@@ -360,6 +360,8 @@ func open_build_menu() -> void:
 func close_build_menu() -> void:
 	if _build:
 		_build.close_all()
+	if is_instance_valid(_map_grid):
+		_map_grid.exit_buy_mode()
 	InputHandler.current_mode = InputHandler.InputMode.NORMAL
 	TimeManager.remove_system_pause()
 	if is_instance_valid(_bottom_bar):

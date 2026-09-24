@@ -39,6 +39,7 @@
 - [x] **Soundsystem:** Hintergrundmusik (Playlist via JSON) und situative Sounds (Türklappern, Besen, Schraubenschlüssel, etc.) sind implementiert.
 - [x] **Gourmetsterne & Inspektor:** Anonyme Hotelprüfer besuchen das Hotel unerkannt und verleihen (oder entziehen) Sterne basierend auf Sauberkeit, Gästezufriedenheit und Reputationswerten.
 - [x] **City-Events:** Zufällige Stadt-Events (Messen, Konzerte) beeinflussen dynamisch das Buchungsverhalten und erhöhen den Stress an der Rezeption.
+- [x] **Savegame-System:** Komplettes Speichern und Laden (Serialisierung). Gäste, Mitarbeiter und Räume merken sich ihren exakten Zustand, Timer und Positionen, sodass das Spiel nach dem Neuladen nahtlos weiterläuft.
 
 ## 📊 UI & Management-Tools
 - [x] **Gästeliste:** Übersicht aller aktuellen Gäste inkl. Filter, Live-Vorschau (PiP) und Kamera-Sprung zum Gast.

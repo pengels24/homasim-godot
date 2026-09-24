@@ -20,7 +20,8 @@ var _categories: Dictionary = {}
 var _category_btns: Dictionary = {}
 var _room_btns: Array = []
 var _current_category: String = ""
-@onready var _breadcrumb: Label = $MarginContainer/VBoxContainer/BreadcrumbLabel
+@onready var _breadcrumb: Label = $MarginContainer/VBoxContainer/BreadcrumbHBox/BreadcrumbLabel
+@onready var _close_btn: Button = $MarginContainer/VBoxContainer/BreadcrumbHBox/CloseButton
 
 # =============================================================================
 func _ready() -> void:
@@ -29,6 +30,7 @@ func _ready() -> void:
 	_set_breadcrumb("")
 		
 	visibility_changed.connect(_on_visibility_changed)
+	_close_btn.pressed.connect(close_build_menu)
 
 
 # =============================================================================
@@ -197,12 +199,12 @@ func _show_category(cat_name: String) -> void:
 		_set_btn_active(_category_btns[btn_cat], btn_cat == cat_name)
 		
 	if cat_name == "demolish":
-		_set_breadcrumb(" > " + GameState.T("ui.buildmenu.demolish", "Abriss"))
+		_set_breadcrumb(GameState.T("ui.buildmenu.demolish", "Abriss"))
 		sig_tool_selected.emit("demolish")
 		return
 
 	if cat_name == "buy_plot":
-		_set_breadcrumb(" > " + GameState.T("ui.buildmenu.buy_plot", "Parzelle kaufen"))
+		_set_breadcrumb(GameState.T("ui.buildmenu.buy_plot", "Parzelle kaufen"))
 		sig_tool_selected.emit("buy_plot")
 		return
 
@@ -351,7 +353,7 @@ func clear_active_button() -> void:
 		_set_btn_active(rb, false)
 		
 	if _current_category == "demolish":
-		_set_breadcrumb(" > " + GameState.T("ui.buildmenu.demolish", "Abriss"))
+		_set_breadcrumb(GameState.T("ui.buildmenu.demolish", "Abriss"))
 	elif _current_category != "":
 		var cat_label = GameState.T("room_category." + _current_category.to_lower())
 		_set_breadcrumb(GameState.T("ui.buildmenu.category", cat_label))
@@ -360,4 +362,4 @@ func clear_active_button() -> void:
 
 func _set_breadcrumb(text: String) -> void:
 	_breadcrumb.text = text
-	_breadcrumb.visible = (text != "")
+	_breadcrumb.get_parent().visible = (text != "")

@@ -171,6 +171,7 @@ func _on_tab_changed(tab: int) -> void:
 
 func _on_staff_changed(_dummy = null) -> void:
 	_selected_staff = null
+	_update_tab_buttons()
 	_refresh_list()
 
 func _on_assignments_changed() -> void:

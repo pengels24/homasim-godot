@@ -1008,7 +1008,7 @@ tutorial.btn.next,Weiter,Continue
 ui.tutorial.btn_ok,Verstanden,Got it
 
 # Toast Messages
-toast.staff.limit_reached,Personal-Limit (5) erreicht!,Staff limit (5) reached!
+toast.staff.limit_reached,Personal-Limit (%s) erreicht!,Staff limit (%s) reached!
 toast.staff.not_enough_capital,Nicht genug Kapital!,Not enough capital!
 toast.checkin.last_call,Letzter Aufruf! Es warten noch Gaeste auf den Check-in.,Last call! Guests are still waiting for check-in.
 toast.room.lobby_no_demolish,Die Lobby kann nicht abgerissen werden!,The lobby cannot be demolished!
@@ -1270,69 +1270,69 @@ ui.techtree.feature.p1_3_vip,VIP-Gäste,VIP Guests
 ui.tutorial.tab.rooms,Räume,Rooms
 room_category.guests,Gäste,Guests
 quest.guest.single.10.name,Einsamer Wolf,Lone Wolf
-quest.guest.single.10.desc,Beherberge insgesamt 10 Single-Gäste.,Host a total of 10 single guests.
+quest.guest.single.10.desc,Checke insgesamt 10 Single-Gäste erfolgreich aus.,Successfully check out a total of 10 single guests.
 quest.guest.single.25.name,Solo-Reisende,Solo Travelers
-quest.guest.single.25.desc,Beherberge insgesamt 25 Single-Gäste.,Host a total of 25 single guests.
+quest.guest.single.25.desc,Checke insgesamt 25 Single-Gäste erfolgreich aus.,Successfully check out a total of 25 single guests.
 quest.guest.single.50.name,Unabhängigkeit,Independence
-quest.guest.single.50.desc,Beherberge insgesamt 50 Single-Gäste.,Host a total of 50 single guests.
+quest.guest.single.50.desc,Checke insgesamt 50 Single-Gäste erfolgreich aus.,Successfully check out a total of 50 single guests.
 quest.guest.single.100.name,Die Single-Hochburg,The Single Stronghold
-quest.guest.single.100.desc,Beherberge insgesamt 100 Single-Gäste.,Host a total of 100 single guests.
+quest.guest.single.100.desc,Checke insgesamt 100 Single-Gäste erfolgreich aus.,Successfully check out a total of 100 single guests.
 quest.guest.couple.10.name,Zweisamkeit,Togetherness
-quest.guest.couple.10.desc,Beherberge insgesamt 10 Paare.,Host a total of 10 couples.
+quest.guest.couple.10.desc,Checke insgesamt 10 Paare erfolgreich aus.,Successfully check out a total of 10 couples.
 quest.guest.couple.25.name,Romantische Auszeit,Romantic Getaway
-quest.guest.couple.25.desc,Beherberge insgesamt 25 Paare.,Host a total of 25 couples.
+quest.guest.couple.25.desc,Checke insgesamt 25 Paare erfolgreich aus.,Successfully check out a total of 25 couples.
 quest.guest.couple.50.name,Liegt Liebe in der Luft?,Is Love in the Air?
-quest.guest.couple.50.desc,Beherberge insgesamt 50 Paare.,Host a total of 50 couples.
+quest.guest.couple.50.desc,Checke insgesamt 50 Paare erfolgreich aus.,Successfully check out a total of 50 couples.
 quest.guest.couple.100.name,Flitterwochen-Ziel,Honeymoon Destination
-quest.guest.couple.100.desc,Beherberge insgesamt 100 Paare.,Host a total of 100 couples.
+quest.guest.couple.100.desc,Checke insgesamt 100 Paare erfolgreich aus.,Successfully check out a total of 100 couples.
 quest.guest.budget.10.name,Schmales Budget,Tight Budget
-quest.guest.budget.10.desc,Beherberge insgesamt 10 Budgetreisende.,Host a total of 10 budget travelers.
+quest.guest.budget.10.desc,Checke insgesamt 10 Budgetreisende erfolgreich aus.,Successfully check out a total of 10 budget travelers.
 quest.guest.budget.25.name,Sparfüchse,Bargain Hunters
-quest.guest.budget.25.desc,Beherberge insgesamt 25 Budgetreisende.,Host a total of 25 budget travelers.
+quest.guest.budget.25.desc,Checke insgesamt 25 Budgetreisende erfolgreich aus.,Successfully check out a total of 25 budget travelers.
 quest.guest.budget.50.name,Günstig & Gut,Cheap & Good
-quest.guest.budget.50.desc,Beherberge insgesamt 50 Budgetreisende.,Host a total of 50 budget travelers.
+quest.guest.budget.50.desc,Checke insgesamt 50 Budgetreisende erfolgreich aus.,Successfully check out a total of 50 budget travelers.
 quest.guest.budget.100.name,Backpacker-Paradies,Backpacker Paradise
-quest.guest.budget.100.desc,Beherberge insgesamt 100 Budgetreisende.,Host a total of 100 budget travelers.
+quest.guest.budget.100.desc,Checke insgesamt 100 Budgetreisende erfolgreich aus.,Successfully check out a total of 100 budget travelers.
 quest.guest.family.10.name,Familienausflug,Family Trip
-quest.guest.family.10.desc,Beherberge insgesamt 10 Familien.,Host a total of 10 families.
+quest.guest.family.10.desc,Checke insgesamt 10 Familien erfolgreich aus.,Successfully check out a total of 10 families.
 quest.guest.family.25.name,Bunter Trubel,Colorful Bustle
-quest.guest.family.25.desc,Beherberge insgesamt 25 Familien.,Host a total of 25 families.
+quest.guest.family.25.desc,Checke insgesamt 25 Familien erfolgreich aus.,Successfully check out a total of 25 families.
 quest.guest.family.50.name,Großfamilien,Large Families
-quest.guest.family.50.desc,Beherberge insgesamt 50 Familien.,Host a total of 50 families.
+quest.guest.family.50.desc,Checke insgesamt 50 Familien erfolgreich aus.,Successfully check out a total of 50 families.
 quest.guest.family.100.name,Familien-Resort,Family Resort
-quest.guest.family.100.desc,Beherberge insgesamt 100 Familien.,Host a total of 100 families.
+quest.guest.family.100.desc,Checke insgesamt 100 Familien erfolgreich aus.,Successfully check out a total of 100 families.
 quest.guest.business.10.name,Geschäftig,Busy
-quest.guest.business.10.desc,Beherberge insgesamt 10 Geschäftsreisende.,Host a total of 10 business travelers.
+quest.guest.business.10.desc,Checke insgesamt 10 Geschäftsreisende erfolgreich aus.,Successfully check out a total of 10 business travelers.
 quest.guest.business.25.name,Im Auftrag der Firma,On Company Business
-quest.guest.business.25.desc,Beherberge insgesamt 25 Geschäftsreisende.,Host a total of 25 business travelers.
+quest.guest.business.25.desc,Checke insgesamt 25 Geschäftsreisende erfolgreich aus.,Successfully check out a total of 25 business travelers.
 quest.guest.business.50.name,Business Class,Business Class
-quest.guest.business.50.desc,Beherberge insgesamt 50 Geschäftsreisende.,Host a total of 50 business travelers.
+quest.guest.business.50.desc,Checke insgesamt 50 Geschäftsreisende erfolgreich aus.,Successfully check out a total of 50 business travelers.
 quest.guest.business.100.name,Das Konferenz-Zentrum,The Conference Center
-quest.guest.business.100.desc,Beherberge insgesamt 100 Geschäftsreisende.,Host a total of 100 business travelers.
+quest.guest.business.100.desc,Checke insgesamt 100 Geschäftsreisende erfolgreich aus.,Successfully check out a total of 100 business travelers.
 quest.guest.nomad.10.name,Digitaler Nomade,Digital Nomad
-quest.guest.nomad.10.desc,Beherberge insgesamt 10 Digitale Nomaden.,Host a total of 10 digital nomads.
+quest.guest.nomad.10.desc,Checke insgesamt 10 Digitale Nomaden erfolgreich aus.,Successfully check out a total of 10 digital nomads.
 quest.guest.nomad.25.name,Remote Worker,Remote Worker
-quest.guest.nomad.25.desc,Beherberge insgesamt 25 Digitale Nomaden.,Host a total of 25 digital nomads.
+quest.guest.nomad.25.desc,Checke insgesamt 25 Digitale Nomaden erfolgreich aus.,Successfully check out a total of 25 digital nomads.
 quest.guest.nomad.50.name,Workation,Workation
-quest.guest.nomad.50.desc,Beherberge insgesamt 50 Digitale Nomaden.,Host a total of 50 digital nomads.
+quest.guest.nomad.50.desc,Checke insgesamt 50 Digitale Nomaden erfolgreich aus.,Successfully check out a total of 50 digital nomads.
 quest.guest.nomad.100.name,Kreativ-Hub,Creative Hub
-quest.guest.nomad.100.desc,Beherberge insgesamt 100 Digitale Nomaden.,Host a total of 100 digital nomads.
+quest.guest.nomad.100.desc,Checke insgesamt 100 Digitale Nomaden erfolgreich aus.,Successfully check out a total of 100 digital nomads.
 quest.guest.event.10.name,Feierlaune,Party Mood
-quest.guest.event.10.desc,Beherberge insgesamt 10 Event-Gäste.,Host a total of 10 event guests.
+quest.guest.event.10.desc,Checke insgesamt 10 Event-Gäste erfolgreich aus.,Successfully check out a total of 10 event guests.
 quest.guest.event.25.name,Event-Gäste,Event Guests
-quest.guest.event.25.desc,Beherberge insgesamt 25 Event-Gäste.,Host a total of 25 event guests.
+quest.guest.event.25.desc,Checke insgesamt 25 Event-Gäste erfolgreich aus.,Successfully check out a total of 25 event guests.
 quest.guest.event.50.name,Die große Party,The Big Party
-quest.guest.event.50.desc,Beherberge insgesamt 50 Event-Gäste.,Host a total of 50 event guests.
+quest.guest.event.50.desc,Checke insgesamt 50 Event-Gäste erfolgreich aus.,Successfully check out a total of 50 event guests.
 quest.guest.event.100.name,Festival-Stimmung,Festival Vibe
-quest.guest.event.100.desc,Beherberge insgesamt 100 Event-Gäste.,Host a total of 100 event guests.
+quest.guest.event.100.desc,Checke insgesamt 100 Event-Gäste erfolgreich aus.,Successfully check out a total of 100 event guests.
 quest.guest.luxury.10.name,Gehobene Ansprüche,High Standards
-quest.guest.luxury.10.desc,Beherberge insgesamt 10 Luxus-Gäste.,Host a total of 10 luxury guests.
+quest.guest.luxury.10.desc,Checke insgesamt 10 Luxus-Gäste erfolgreich aus.,Successfully check out a total of 10 luxury guests.
 quest.guest.luxury.25.name,VIP Gäste,VIP Guests
-quest.guest.luxury.25.desc,Beherberge insgesamt 25 Luxus-Gäste.,Host a total of 25 luxury guests.
+quest.guest.luxury.25.desc,Checke insgesamt 25 Luxus-Gäste erfolgreich aus.,Successfully check out a total of 25 luxury guests.
 quest.guest.luxury.50.name,High Society,High Society
-quest.guest.luxury.50.desc,Beherberge insgesamt 50 Luxus-Gäste.,Host a total of 50 luxury guests.
+quest.guest.luxury.50.desc,Checke insgesamt 50 Luxus-Gäste erfolgreich aus.,Successfully check out a total of 50 luxury guests.
 quest.guest.luxury.100.name,Die Elite,The Elite
-quest.guest.luxury.100.desc,Beherberge insgesamt 100 Luxus-Gäste.,Host a total of 100 luxury guests.
+quest.guest.luxury.100.desc,Checke insgesamt 100 Luxus-Gäste erfolgreich aus.,Successfully check out a total of 100 luxury guests.
 
 ui.buildmenu.buy_plot,Parzelle kaufen,Buy Plot
 plot.buy,Kaufen,Buy
@@ -1609,9 +1609,9 @@ quest.milestone.occupancy.name,Volle Hütte,Full House
 quest.milestone.occupancy.desc,Erreiche 100% Zimmerbelegung (alle verfügbaren Zimmer sind gebucht).,Reach 100% room occupancy (all available rooms are booked).
 room_category.milestones,Meilensteine,Milestones
 quest.guest.vip.10.name,Roter Teppich,Red Carpet
-quest.guest.vip.10.desc,Beherberge insgesamt 10 VIP-Gäste.,Host a total of 10 VIP guests.
+quest.guest.vip.10.desc,Checke insgesamt 10 VIP-Gäste erfolgreich aus.,Successfully check out a total of 10 VIP guests.
 quest.guest.vip.25.name,Sterne-Status,Star Status
-quest.guest.vip.25.desc,Beherberge insgesamt 25 VIP-Gäste.,Host a total of 25 VIP guests.
+quest.guest.vip.25.desc,Checke insgesamt 25 VIP-Gäste erfolgreich aus.,Successfully check out a total of 25 VIP guests.
 roomdef.name.long.vending_machine,Getränkeautomat,Vending Machine
 roomdef.name.short.vending_machine,Automat,Vending
 roomdef.name.long.lobby,Lobby,Lobby

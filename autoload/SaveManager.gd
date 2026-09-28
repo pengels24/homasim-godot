@@ -156,6 +156,7 @@ func create_tutorial_hotel() -> int:
 		"built_room_types": [],
 		"tutorial_step": 1,
 		"activity_log": [],
+		"dirt_factor": 2,
 	}
 	_hotels.append(hotel)
 	_save_hotel(hotel)
@@ -512,6 +513,7 @@ func _load_hotel_file(filename: String) -> void:
 		"built_room_types": cfg.get_value("hotel", "built_room_types", []),
 		"tutorial_step": cfg.get_value("hotel", "tutorial_step", 1),
 		"activity_log": cfg.get_value("hotel", "activity_log", []),
+		"dirt_factor": cfg.get_value("hotel", "dirt_factor", 2),
 	}
 
 	# Alle dynamischen Zimmer-Zähler aus der Config lesen und in 'h' einfügen
@@ -532,7 +534,7 @@ func _save_hotel(hotel: Dictionary) -> void:
 		"profile_id", "name", "grid_cols", "grid_rows", "day", "money", "game_time", "plots", "auto_count", 
 		"level", "stars", "guests_active", "guests_checkin", "guests_checkout", "exp", "exp_max", "rep", "rep_max", "fp", 
 		"guest_data", "event_data", "transactions", "unlocked_techs", "techtree", "tutorials", "quests", "staff", "built_room_types", 
-		"tutorial_step", "activity_log"
+		"tutorial_step", "activity_log", "dirt_factor"
 	]
 	for key in keys_to_save:
 		cfg.set_value("hotel", key, hotel.get(key))

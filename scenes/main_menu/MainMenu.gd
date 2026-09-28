@@ -132,9 +132,9 @@ func _load_assets() -> void:
 	btn_login.text     = GameState.T("menu.btn.account_bind")
 	btn_login.disabled = true
 	
-	# ANG-348: Tutorial für Pre-Alpha deaktiviert, da noch auf altem Stand
-	btn_tutorial.disabled = true
-	btn_tutorial.mouse_default_cursor_shape = Control.CURSOR_FORBIDDEN
+	# Tutorial via GameState steuern
+	btn_tutorial.disabled = not GameState.TUTORIAL_ENABLED
+	btn_tutorial.mouse_default_cursor_shape = Control.CURSOR_FORBIDDEN if not GameState.TUTORIAL_ENABLED else Control.CURSOR_ARROW
 	var vf := FileAccess.open("res://version.txt", FileAccess.READ)
 	if vf:
 		_version_lbl.text = vf.get_line().strip_edges().trim_prefix("gd-")

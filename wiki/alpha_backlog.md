@@ -13,6 +13,7 @@
 ---
 
 ## 🔧 Ungeplante Fixes & Features (Aktuelle Session)
+- [x] **Tutorial Polishing (v0.2.2):** Schritt 2 (Kamera-Move) streng auf Zeit (5s) gewandelt, Schritt 3 (Zoom) auf Boundaries (0.5/4.0), Schritt 15 (Rezeption) feuert jetzt sicher per Polling im Process inkl. Hotkeys (F1), Blaupause Personalraum korrigiert und Ghost-Validierung in Step 21 verschärft (Türen rot/offset exakt).
 - [x] **Bugfix Lobby Clicks:** Gäste lassen sich nun auch in der Lobby anklicken (z.B. im `AWAITING_CHECKOUT` State). `input_pickable` wird nicht mehr auf `false` gezwungen und Area-Priority auf 100 erhöht.
 - [x] **Asynchrones Aufwachen & Zimmer-Wandern:** Die 15-Minuten starren Intervall-Loops in GuestActor wurden aufbrochen. Jeder Gast nutzt nun `_my_wander_interval` (4-10 Min).
 - [x] **Bugfix POI-Sperre:** Gäste betreten keine POIs mehr, deren Zustand oder Sauberkeit < 10% ist. Tooltips zeigen korrekterweise nun "Geschlossen (Reinigung/Wartung)".
@@ -68,7 +69,7 @@
 - [x] **feat: _sanitize_restored_rooms():** Load-Repair entfernt überzählige Ghost-Rooms bei max_count-Typen.
 - [x] **feat: repair-grid & occ-overlay:** DevConsole-Befehle zur Grid-Diagnose und Reparatur.
 - [x] **Ghost-Room Blocking (Erledigt):** `occ-overlay` hatte Early-Return-Bug (erst v0.1.63 gefixt). Ursache des Blockings bestätigt und behoben.
-- [ ] **🔴 OFFEN: HUD Event-Panel bleibt 2-zeilig** nach Tagungsende. Fix noch ausstehend.
+- [x] **HUD Event-Panel:** Bleibt nicht mehr 2-zeilig nach Tagungsende. Fix erledigt.
 
 ---
 

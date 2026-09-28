@@ -254,7 +254,7 @@ ingame.ctx.move_door,Tür verschieben,Move Door
 ingame.ctx.flip_room,Raum drehen,Flip Room
 ingame.quit.title,Spiel verlassen?,Leave Game?
 ingame.quit.confirm,"Ja, verlassen","Yes, leave"
-ingame.quit.message,"Bist du sicher, dass du das Spiel verlassen möchtest?","Are you sure you want to leave the game?"
+ingame.quit.message,"Bist du sicher, dass du das Spiel verlassen möchtest?",Are you sure you want to leave the game?
 ingame.quit.cancel,Abbrechen,Cancel
 ingame.submenu.coming_soon,(kommt mit dem Feature),(coming with the feature)
 modal.pause.title,Pause,Pause
@@ -899,9 +899,9 @@ codex.guest_nomad.desc,"Bleibt sehr lange (7-14 Nächte). Benötigt WLAN, verbri
 codex.guest_event.title,Event-Teilnehmer,Event Attendee
 codex.guest_event.desc,"Bleibt nur kurz (1-2 Nächte) für ein Event. Keine besonderen Ansprüche, recht profitabel in der Masse.","Stays only briefly (1-2 nights) for an event. No special demands, quite profitable in mass."
 codex.guest_luxury.title,VIP & Luxus,VIP & Luxury
-codex.guest_luxury.desc,"Prominente und schwerreiche Gäste. Sie zahlen astronomische Summen für Übernachtungen und Services, sind aber extrem schnell verärgert, wenn die Qualität nicht ihren perfekten Standards entspricht. Sie erwarten eine hohe Luxus-Bewertung der Zimmer.\n\nBudget: Hoch\nGeduld: Sehr niedrig\nAnspruch: Perfektion\nPlatzbedarf: Einzel- oder Doppelzimmer (Suite bevorzugt)","Celebrities and ultra-rich guests. They pay astronomical sums for stays and services but are extremely quick to anger if the quality doesn't meet their perfect standards. They expect a high luxury rating for rooms.\n\nBudget: High\nPatience: Very low\nExpectations: Perfection\nSpace Needs: Single or Double room (Suite preferred)"
+codex.guest_luxury.desc,"Prominente und schwerreiche Gäste. Sie zahlen astronomische Summen für Übernachtungen und Services, sind aber extrem schnell verärgert, wenn die Qualität nicht ihren perfekten Standards entspricht. Sie erwarten eine hohe Luxus-Bewertung der Zimmer.\n\nBudget: Hoch\nGeduld: Sehr niedrig\nAnspruch: Perfektion\nPlatzbedarf: Einzel- oder Doppelzimmer (Suite bevorzugt)",Celebrities and ultra-rich guests. They pay astronomical sums for stays and services but are extremely quick to anger if the quality doesn't meet their perfect standards. They expect a high luxury rating for rooms.\n\nBudget: High\nPatience: Very low\nExpectations: Perfection\nSpace Needs: Single or Double room (Suite preferred)
 codex.guest_vip.title,VIP-Gast,VIP Guest
-codex.guest_vip.desc,"Ein sehr seltener und zahlungskräftiger Gast (Spawn-Chance: 5%). VIPs buchen ausschließlich Superior-Zimmer und erwarten höchste Qualität. Sie zahlen zwischen 300–600 € pro Nacht und geben viel für Services aus.\n\nBudget: Sehr hoch\nGeduld: Niedrig\nAnspruch: Luxury & Privacy\nAufenthalt: 1–3 Nächte","A very rare and high-paying guest (spawn chance: 5%). VIPs book exclusively Superior rooms and expect the highest quality. They pay between €300–600 per night and spend heavily on services.\n\nBudget: Very high\nPatience: Low\nExpectations: Luxury & Privacy\nStay: 1–3 nights"
+codex.guest_vip.desc,Ein sehr seltener und zahlungskräftiger Gast (Spawn-Chance: 5%). VIPs buchen ausschließlich Superior-Zimmer und erwarten höchste Qualität. Sie zahlen zwischen 300–600 € pro Nacht und geben viel für Services aus.\n\nBudget: Sehr hoch\nGeduld: Niedrig\nAnspruch: Luxury & Privacy\nAufenthalt: 1–3 Nächte,A very rare and high-paying guest (spawn chance: 5%). VIPs book exclusively Superior rooms and expect the highest quality. They pay between €300–600 per night and spend heavily on services.\n\nBudget: Very high\nPatience: Low\nExpectations: Luxury & Privacy\nStay: 1–3 nights
 codex.guest_groups.title,Gäste vs. Gruppen,Guests vs. Groups
 codex.guest_groups.desc,In HO·MA·SIM wird unterschieden zwischen Gästen (Köpfe) und Reisegruppen (Partien). Gäste repräsentieren die absolute Anzahl an Personen in deinem Hotel. Eine Gruppe kann jedoch aus mehreren Gästen bestehen (z.B. eine Familie oder ein Pärchen).\n\nBeispiel: Ein Pärchen teilt sich ein Doppelzimmer. Es zählt als 1 Check-In (Gruppe), bringt aber 2 Gäste (Köpfe) in dein Hotel.,In HO·MA·SIM, there is a distinction between guests (heads) and travel groups (parties). Guests represent the total number of people in your hotel. However, a group can consist of multiple guests (e.g., a family or a couple).\n\nExample: A couple shares a double room. They count as 1 check-in (group) but bring 2 guests (heads) to your hotel.
 finances.time.today,Heute,Today
@@ -973,30 +973,44 @@ tutorial.step.2,Zuerst müssen wir uns umsehen können.\nBewege die Karte mit de
 tutorial.step.2_done,Zuerst müssen wir uns umsehen können.\nBewege die Karte mit der rechten Maustaste (halten & ziehen) oder mit WASD.\n\n[x] Karte bewegt,"First, we need to look around.\nMove the map using the right mouse button (hold & drag) or WASD.\n\n[x] Map moved"
 tutorial.step.3,"Gut gemacht!\nNutze nun das Mausrad oder die +/- Tasten auf dem Numpad, um rein- und rauszuzoomen.\n\n[ ] Gezoomt",Well done!\nNow use the mouse wheel or the +/- keys on the numpad to zoom in and out.\n\n[ ] Zoomed
 tutorial.step.3_done,"Gut gemacht!\nNutze nun das Mausrad oder die +/- Tasten auf dem Numpad, um rein- und rauszuzoomen.\n\n[x] Gezoomt",Well done!\nNow use the mouse wheel or the +/- keys on the numpad to zoom in and out.\n\n[x] Zoomed
-tutorial.step.4,Beginnen wir mit dem Wichtigsten: Zimmern!\nÖffne unten im Menü den Bau-Modus.,Let's start with the most important part: rooms!\nOpen the build mode in the menu below.
-tutorial.step.5,"Wähle ein Einzelzimmer und platziere es. Nutze [R] zum Rotieren, bis es passt!",Select a single room and place it. Use [R] to rotate it until it fits!
+tutorial.step.4,"Beginnen wir mit dem Wichtigsten: Gäste-Zimmer!
+Nutze dazu unten das Baumenü.","Let's start with the most important part: guest rooms!
+Use the build menu below."
+tutorial.step.5,"Wähle aus der Kategorie Zimmer ein Einzelzimmer und platziere es. Nutze [R] zum Rotieren, bis es passt!",Select a single room from the rooms category and place it. Use [R] to rotate it until it fits!
 tutorial.step.6,Super! Wir brauchen aber mehr als ein Zimmer. Baue noch ein weiteres Einzelzimmer daneben.,Great! But we need more than one room. Build another single room next to it.
 tutorial.step.7,Super! Schließe nun das Baumenü (z.B. mit einem Klick auf das X oder per ESC).,"Great! Now close the build menu (e.g., by clicking the X or pressing ESC)."
 tutorial.step.8,"Die Rezeption hat, wie auch andere POI (Points of Interest), Öffnungszeiten. Sie öffnet um 7 Uhr und schließt um 22 Uhr.\nWährend dieser Zeit kommen neue Gäste an und bestehende Gäste nutzen diese POI für ihren Tagesablauf.","The reception, like other POIs (Points of Interest), has opening hours. It opens at 7 AM and closes at 10 PM.\nDuring this time, new guests arrive and existing guests use these POIs for their daily routines."
 tutorial.step.9,"Starte nun die Zeit (oben rechts im Menü oder mit der [1]), um das Hotel zum Leben zu erwecken!",Now start the time (top right in the menu or with [1]) to bring the hotel to life!
-tutorial.step.10_wait,"Warte nun, bis die Rezeption um 7 Uhr öffnet.",Now wait until the reception opens at 7 AM.
+tutorial.step.10_wait,"Warte nun, bis die Rezeption um 7 Uhr öffnet.
+
+Du kannst die Zeit auch vorspulen. Nutze den Doppelpfeil oder [2].","Now wait until the reception opens at 7 AM.
+
+You can also fast forward time. Use the double arrow or [2]."
 tutorial.step.11,"Um neue Räume und Funktionen freizuschalten, musst du das Level des Hotels erhöhen.\nHierfür benötigst du EXP. Diese bekommst du für den jeweils ersten Bau eines neuen Zimmertyps und für Ereignisse im Hotelbetrieb (Check-In, Check-Out, u.a.).","To unlock new rooms and features, you need to increase the hotel's level.\nFor this, you need EXP. You get EXP for the first construction of a new room type and for events in hotel operations (Check-In, Check-Out, etc.)."
 tutorial.step.12,"Baue nun, um noch einmal extra EXP zu bekommen, ein erstes Doppelzimmer.","To get some extra EXP, build your first double room now."
 tutorial.step.13,Klasse! Schließe das Baumenü wieder.,Awesome! Close the build menu again.
-tutorial.step.14_wait,Die Rezeption ist nun geöffnet. Um 8 Uhr treffen die ersten Gäste ein!\nStarte die Zeit (falls pausiert) und warte auf ihre Ankunft.,"The reception is now open. At 8 AM, the first guests will arrive!\nStart the time (if paused) and wait for their arrival."
+tutorial.step.14_wait,"Die Rezeption ist nun geöffnet. Ab jetzt treffen Gäste ein!
+Starte die Zeit (falls pausiert) und warte auf ihre Ankunft.","The reception is now open. From now on guests will arrive!
+Start the time (if paused) and wait for their arrival."
 tutorial.step.15,"Schau, da kommen die ersten Gäste!\nÖffne nun die Rezeption oben im Menü (oder drücke F1).","Look, the first guests are arriving!\nNow open the reception in the menu above (or press F1)."
 tutorial.step.16,"Links siehst du die neuen Gäste mit pulsierendem Rahmen. Sie warten nun darauf, von dir ein Zimmer zu bekommen.","On the left, you see the new guests with a pulsing frame. They are now waiting for you to assign them a room."
 tutorial.step.17,"Klicke einen Gast an und wähle eins der passenden Zimmer...\nChecke die Gäste ein und schließe danach die Rezeption, um fortzufahren.",Click on a guest and choose one of the matching rooms...\nCheck the guests in and then close the reception to continue.
 tutorial.step.17_error,Du hast noch keinen Gast eingecheckt!\nÖffne die Rezeption erneut und weise den Gästen Zimmer zu.,You haven't checked in any guests yet!\nOpen the reception again and assign rooms to the guests.
 tutorial.step.18,"Wie du bestimmt gemerkt hast, konntest du während des Gäste-Checkins weitere EXP sammeln und du hattest dein erstes Levelup.","As you probably noticed, you collected more EXP during guest check-in and reached your first level up."
 tutorial.step.19,"Da du nun Level 2 bist, kannst du die Personal-Agentur besuchen. Dort findest du deine Angestellten, neue Bewerber und den Bereich um deine Leute den POI zuzuweisen.","Since you are now level 2, you can visit the Staff Agency. There you will find your employees, new applicants, and the area to assign your people to POIs."
-tutorial.step.20,Öffne nun die Personal-Agentur oben im Menü (oder drücke F5).,Now open the Staff Agency in the menu above (or press F5).
-tutorial.step.21,Wechsle nun bitte auf den Reiter mit den Bewerbern.,Please switch to the applicants tab now.
-tutorial.step.21_alt,Öffne die Personal-Agentur und wechsle auf den Reiter mit den Bewerbern.,Open the Staff Agency and switch to the applicants tab.
-tutorial.step.22,Du kannst hier Leute einstellen. Klicke dazu auf einen passenden Listeneintrag und dann rechts im Detailfenster auf einstellen.,You can hire people here. Click on a matching list entry and then click hire in the details window on the right.
-tutorial.step.23,Du benötigst zu Beginn je 1x Personal für Reinigung und 1x Personal für den Hausmeisterbereich.,"At the beginning, you need 1x staff for cleaning and 1x staff for the maintenance area."
-tutorial.step.24,Stelle nun je eine Person für die Reinigung und die Haustechnik ein.,Now hire one person for cleaning and one for maintenance.
-tutorial.step.25,Hervorragend! Schließe nun die Personalverwaltung wieder. Ab sofort werden automatisch für diese beiden Bereiche Tickets erstellt und abgearbeitet.,"Excellent! Now close the staff management again. From now on, tickets for these two areas will be created and processed automatically."
+tutorial.step.20,"Bevor wir Personal einstellen können, benötigen wir einen Personalraum. Nutze wieder das Baumenü.","Before we can hire staff, we need a staff room. Use the build menu again."
+tutorial.step.21,Wähle aus der Kategorie Management den Personalraum und platziere ihn.,Select the staff room from the Management category and place it.
+tutorial.step.22,Klasse! Schließe das Baumenü wieder.,Great! Close the build menu again.
+tutorial.step.23,Öffne nun die Personal-Agentur oben im Menü (oder drücke F5).,Now open the Staff Agency in the menu above (or press F5).
+tutorial.step.24,Wechsle nun bitte auf den Reiter mit den Bewerbern.,Please switch to the applicants tab now.
+tutorial.step.24_alt,Öffne die Personal-Agentur und wechsle auf den Reiter mit den Bewerbern.,Open the Staff Agency and switch to the applicants tab.
+tutorial.step.25,Du kannst hier Leute einstellen. Klicke dazu auf einen passenden Listeneintrag und dann rechts im Detailfenster auf einstellen.,You can hire people here. Click on a matching list entry and then click hire in the details window on the right.
+tutorial.step.26,Du benötigst zu Beginn je 1x Personal für Reinigung und 1x Personal für den Hausmeisterbereich.,"At the beginning, you need 1x staff for cleaning and 1x staff for the maintenance area."
+tutorial.step.27,Stelle nun je eine Person für die Reinigung und die Haustechnik ein.,Now hire one person for cleaning and one for maintenance.
+tutorial.step.28,"Hervorragend! Schließe nun die Personalverwaltung wieder.
+Ab sofort kannst du für beide Bereiche Tickets erstellen und Mitarbeiter arbeiten sie der Reihe nach ab.","Excellent! Now close the staff management again.
+From now on you can create tickets for both areas and employees will process them one by one."
+tutorial.step.29,"Um eine Reinigung oder Wartung zu beauftragen, musst du einen Raum mit der linken Maustaste anklicken und im Menü Service oder Wartung wählen.","To request cleaning or maintenance, you must click on a room with the left mouse button and select Service or Maintenance in the menu."
 tutorial.end.title,Tutorial abgeschlossen,Tutorial completed
 tutorial.end.headline,"[center][b]Herzlichen Glückwunsch![/b]\n\nDu hast das Tutorial erfolgreich abgeschlossen und kennst nun alle Grundlagen, um dein Hotel erfolgreich zu leiten.\n\nDer Techtree und weitere fortgeschrittene Funktionen stehen dir im weiteren Verlauf automatisch zur Verfügung.\n\nDu kannst dein Hotel nun völlig frei verwalten, ausbauen und experimentieren.\n\n[color=#eab308]Viel Erfolg![/color][/center]","[center][b]Congratulations![/b]\n\nYou have successfully completed the tutorial and now know all the basics to successfully manage your hotel.\n\nThe tech tree and other advanced features will become available to you automatically later on.\n\nYou can now freely manage, expand, and experiment with your hotel.\n\n[color=#eab308]Good luck![/color][/center]"
 tutorial.end.button,Zurück zum Hauptmenü,Back to Main Menu
@@ -1820,3 +1834,4 @@ tt.build.room.limit_reached,Limit erreicht (###/***),Limit reached (###/***)
 tutorial.tip_gastro_overload.title,Gastronomie überlastet!,Gastronomy Overloaded!
 tutorial.tip_gastro_overload.desc,"Dein Restaurant ist voll, aber du hast zu wenig Personal. Stelle mehr Bedienungen oder Köche ein, damit deine Gäste nicht zu lange warten müssen.","Your restaurant is full, but you don't have enough staff. Hire more waiters or chefs so your guests don't have to wait too long."
 room.tooltip.closed_condition,Geschlossen (Wartung/Reinigung),Closed (Maintenance/Cleaning)
+tutorial.hint.your_turn,Und nun du!,Now it's your turn!

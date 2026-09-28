@@ -10,6 +10,7 @@ const PARCEL_TILES := 16
 
 var _map_grid:        Node2D
 var _ghost:           Node2D
+var _door_indicator:  ColorRect
 var _room_scene:      PackedScene
 var _current_parcel:  Vector2i = Vector2i(0, 0)
 var _tile_pos:        Vector2i = Vector2i(0, 0)
@@ -63,6 +64,14 @@ func _spawn_ghost() -> void:
 	_ghost         = _room_scene.instantiate()
 	_ghost.z_index = 10
 	add_child(_ghost)
+	
+	if is_instance_valid(_door_indicator):
+		_door_indicator.queue_free()
+	_door_indicator = ColorRect.new()
+	_door_indicator.color = Color(0.1, 0.9, 0.3, 0.5)
+	_door_indicator.size = Vector2(12, 12)
+	_door_indicator.z_index = 11
+	add_child(_door_indicator)
 	_ghost.configure({"door_rotation": _door_rotation, "door_offset": _door_offset, "room_rotation": _room_rotation})
 	var sz: Vector2i = _ghost.get_tile_size()
 	_room_w = sz.x
@@ -92,8 +101,10 @@ func _refresh_ghost() -> void:
 	
 	if GameState.is_tutorial_mode:
 		var tut = get_tree().current_scene.get_node_or_null("TutorialScenarioManager")
-		if tut and tut.step_index in [5, 6, 12]:
-			if _current_parcel.x != tut._target_parcel.x or _current_parcel.y != tut._target_parcel.y or _tile_pos.x != tut._target_tile.x or _tile_pos.y != tut._target_tile.y or _room_rotation != tut._target_rot:
+		if tut and tut.step_index in [5, 6, 12, 21]:
+			var t_door_rot = tut._target_door_rot
+			var t_door_off = tut._target_door_offset
+			if _current_parcel.x != tut._target_parcel.x or _current_parcel.y != tut._target_parcel.y or _tile_pos.x != tut._target_tile.x or _tile_pos.y != tut._target_tile.y or _room_rotation != tut._target_rot or _door_rotation != t_door_rot or _door_offset != t_door_off:
 				_error_msg = "build.error.tutorial_target" # "Muss auf der blauen Markierung platziert werden!"
 	
 	_is_valid = (_error_msg == "")
@@ -141,6 +152,16 @@ func _process(_delta: float) -> void:
 	var min_x := float(WALK_PX + _current_parcel.x * PARCEL_PX)
 	var min_y := float(WALK_PX + _current_parcel.y * PARCEL_PX)
 	_ghost.position = topleft
+	
+	if is_instance_valid(_door_indicator) and _ghost.has_method("_calc_door_transform"):
+		var door_info = _ghost._calc_door_transform(_door_rotation, _door_offset)
+		var offset_dir = Vector2.ZERO
+		match _door_rotation:
+			0: offset_dir = Vector2(-8, 0)
+			1: offset_dir = Vector2(0, -8)
+			2: offset_dir = Vector2(8, 0)
+			3: offset_dir = Vector2(0, 8)
+		_door_indicator.position = _ghost.position + door_info["pos"] - _door_indicator.size / 2.0 + offset_dir
 
 	var new_tile := Vector2i(
 		floori((_ghost.position.x - min_x) / TILE_PX),
@@ -156,8 +177,10 @@ func _process(_delta: float) -> void:
 			
 		if GameState.is_tutorial_mode:
 			var tut = get_tree().current_scene.get_node_or_null("TutorialScenarioManager")
-			if tut and tut.step_index in [5, 6, 12]:
-				if _current_parcel.x != tut._target_parcel.x or _current_parcel.y != tut._target_parcel.y or _tile_pos.x != tut._target_tile.x or _tile_pos.y != tut._target_tile.y or _room_rotation != tut._target_rot:
+			if tut and tut.step_index in [5, 6, 12, 21]:
+				var t_door_rot = tut._target_door_rot
+				var t_door_off = tut._target_door_offset
+				if _current_parcel.x != tut._target_parcel.x or _current_parcel.y != tut._target_parcel.y or _tile_pos.x != tut._target_tile.x or _tile_pos.y != tut._target_tile.y or _room_rotation != tut._target_rot or _door_rotation != t_door_rot or _door_offset != t_door_off:
 					_error_msg = "build.error.tutorial_target"
 
 		_is_valid = (_error_msg == "")

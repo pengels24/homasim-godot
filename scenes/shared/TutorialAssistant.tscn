@@ -64,6 +64,14 @@ theme_override_font_sizes/font_size = 24
 text = "Hallo! Ich bin Angelus, der Entwickler von HO·MA·SIM. Ich helfe dir bei deinen ersten Schritten."
 autowrap_mode = 2
 
+[node name="ProgressBar" type="ProgressBar" parent="Margin/HBox/VBox"]
+visible = false
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_card")
+theme_override_styles/fill = ExtResource("3_bg")
+show_percentage = false
+
 [node name="BtnNext" type="Button" parent="Margin/HBox/VBox"]
 layout_mode = 2
 size_flags_horizontal = 8

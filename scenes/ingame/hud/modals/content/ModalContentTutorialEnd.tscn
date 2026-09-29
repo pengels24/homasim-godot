@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dtoyanhcnwt05" path="res://assets/icons/ic_discord.png" id="5_discord"]
 
 [node name="ModalContentTutorialEnd" type="VBoxContainer" unique_id=508613206]
-custom_minimum_size = Vector2(800, 400)
+custom_minimum_size = Vector2(880, 480)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -25,31 +25,6 @@ theme_override_font_sizes/normal_font_size = 28
 theme_override_font_sizes/bold_font_size = 32
 bbcode_enabled = true
 
-[node name="SocialHBox" type="HBoxContainer" parent="." unique_id=101956649]
-layout_mode = 2
-theme_override_constants/separation = 40
-alignment = 1
-
-[node name="BtnDiscord" type="Button" parent="SocialHBox" unique_id=537978972]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(220, 56)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = " Discord"
-icon = ExtResource("5_discord")
-expand_icon = true
-
-[node name="BtnBluesky" type="Button" parent="SocialHBox" unique_id=1472827850]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(220, 56)
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = " BlueSky"
-icon = ExtResource("3_3f2yf")
-
-[node name="Spacer" type="Control" parent="." unique_id=2025178853]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
 
 [node name="HBox" type="HBoxContainer" parent="." unique_id=44108255]
 layout_mode = 2

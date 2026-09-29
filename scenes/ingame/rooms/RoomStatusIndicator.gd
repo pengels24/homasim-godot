@@ -63,10 +63,10 @@ func set_status(needs_cleaning: bool, needs_repair: bool, pending_demolish: bool
 	if icon_unstaffed and staff_status > 0:
 		if staff_status == 1:
 			icon_unstaffed.modulate = Color(1.0, 0.5, 0.0)
-			icon_unstaffed.tooltip_text = "Unterbesetzt"
+			icon_unstaffed.tooltip_text = GameState.T("ui.room.understaffed_tooltip", "Unterbesetzt")
 		elif staff_status == 2:
 			icon_unstaffed.modulate = Color(0.89, 0.1, 0.1)
-			icon_unstaffed.tooltip_text = "Kein Personal"
+			icon_unstaffed.tooltip_text = GameState.T("ui.room.unstaffed_tooltip", "Kein Personal")
 	
 	size = Vector2.ZERO
 

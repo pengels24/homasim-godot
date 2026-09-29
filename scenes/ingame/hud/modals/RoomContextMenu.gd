@@ -10,6 +10,7 @@ class_name RoomContextMenu
 
 var _target_room: Node2D = null
 var _dragging = false
+var _has_been_dragged = false
 var _drag_offset = Vector2.ZERO
 var btn_repair: Button
 var btn_wlan: Button
@@ -106,11 +107,16 @@ func open(room: Node2D) -> void:
 	var is_pending = _target_room.get("is_pending_demolish")
 	if is_pending == null:
 		is_pending = false
-	btn_service.disabled = is_pending
+		
+	var staff_locked = GameState.selected_hotel.get("level", 1) < 2
+		
+	btn_service.disabled = is_pending or staff_locked
+	btn_service.tooltip_text = GameState.T("toast.room.staff_locked") if staff_locked else ""
 	btn_service.visible = true
 	
 	if is_instance_valid(btn_repair):
-		btn_repair.disabled = is_pending
+		btn_repair.disabled = is_pending or staff_locked
+		btn_repair.tooltip_text = GameState.T("toast.room.staff_locked") if staff_locked else ""
 		btn_repair.visible = true
 		
 	btn_demolish.visible = not is_lobby
@@ -132,6 +138,7 @@ func open(room: Node2D) -> void:
 			btn_klima.visible = true
 			btn_klima.disabled = is_pending
 	
+	_has_been_dragged = false
 	panel.reset_size()
 	
 	var canvas_trans = room.get_global_transform_with_canvas()
@@ -153,7 +160,7 @@ func open(room: Node2D) -> void:
 	
 	show()
 	# Blockiere andere Inputs
-	InputHandler.current_mode = InputHandler.InputMode.MODAL
+	InputHandler.current_mode = InputHandler.InputMode.ROOM_SELECTED
 
 # =============================================================================
 func close() -> void:
@@ -161,8 +168,31 @@ func close() -> void:
 		_target_room.set_highlight(false)
 		
 	hide()
-	if InputHandler.current_mode == InputHandler.InputMode.MODAL:
+	if InputHandler.current_mode == InputHandler.InputMode.ROOM_SELECTED:
 		InputHandler.current_mode = InputHandler.InputMode.NORMAL
+
+# =============================================================================
+func _process(_delta: float) -> void:
+	if not visible or not is_instance_valid(_target_room):
+		return
+	if _dragging or _has_been_dragged:
+		return
+		
+	var canvas_trans = _target_room.get_global_transform_with_canvas()
+	var pos_on_screen = canvas_trans.origin
+	var sz = _target_room.get_tile_size()
+	var width_on_screen = sz.x * 16 * canvas_trans.get_scale().x
+	
+	var start_x = pos_on_screen.x - 220
+	if start_x < 0:
+		start_x = pos_on_screen.x + width_on_screen + 20
+		
+	var p_height = panel.size.y
+	var final_y = pos_on_screen.y
+	if final_y + p_height > size.y - 20:
+		final_y = size.y - p_height - 20
+		
+	panel.position = Vector2(start_x, final_y)
 
 # =============================================================================
 func _on_details_pressed() -> void:
@@ -213,6 +243,7 @@ func _on_handle_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			_dragging = true
+			_has_been_dragged = true
 			_drag_offset = event.global_position - panel.global_position
 		else:
 			_dragging = false

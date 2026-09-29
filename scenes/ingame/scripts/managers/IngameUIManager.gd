@@ -652,6 +652,7 @@ func _on_quit_confirmed() -> void:
 	get_tree().paused = false
 
 	GameState.open_dashboard_next = true
+	GameState.is_tutorial_mode = false
 	GameState.active_hotel_id = -1 # <-- Reset, damit Settings nicht "ingame" denken
 	get_tree().change_scene_to_file("res://scenes/main_menu/MainMenu.tscn")
 
@@ -738,6 +739,9 @@ func open_staff() -> void:
 	if not is_instance_valid(staff_modal): return
 
 	_set_modal_pausing(true)
+	
+	if is_instance_valid(_bottom_bar):
+		_bottom_bar.sync_button_state("staff")
 
 	if _standard_modal.visible:
 		_standard_modal.set_title(GameState.T("modal.staff.title"))
@@ -842,6 +846,9 @@ func open_guest_list() -> void:
 	if not is_instance_valid(content): return
 	
 	_set_modal_pausing(false)
+	
+	if is_instance_valid(_bottom_bar):
+		_bottom_bar.sync_button_state("guest_list")
 
 	if TutorialManager:
 		TutorialManager.trigger("guest_list")
@@ -861,6 +868,9 @@ func open_room_list() -> void:
 	if not is_instance_valid(content): return
 	
 	_set_modal_pausing(false)
+	
+	if is_instance_valid(_bottom_bar):
+		_bottom_bar.sync_button_state("room_list")
 
 	if TutorialManager:
 		TutorialManager.trigger("room_list")

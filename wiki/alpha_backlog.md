@@ -70,6 +70,10 @@
 - [x] **feat: repair-grid & occ-overlay:** DevConsole-Befehle zur Grid-Diagnose und Reparatur.
 - [x] **Ghost-Room Blocking (Erledigt):** `occ-overlay` hatte Early-Return-Bug (erst v0.1.63 gefixt). Ursache des Blockings bestätigt und behoben.
 - [x] **HUD Event-Panel:** Bleibt nicht mehr 2-zeilig nach Tagungsende. Fix erledigt.
+- [x] **UI & Settings:** Exklusiver Fullscreen, Mouse Confined, Fallback auf Primary Screen.
+- [x] **Kamera & Steuerung:** MapGrid-Exit gefixt (Kamera zentriert nicht mehr beim Bauen). `InputMode.ROOM_SELECTED` integriert für WASD-Movement bei offenem Zimmer-Menü.
+- [x] **RoomContextMenu:** Menü folgt nun der Kamera (wenn nicht dragged). Buttons für Service/Reparatur disabled bei fehlendem Staff-Feature inkl. darkblue Theme und Tooltip.
+- [x] **Translation & Cleanup:** CSV-Quotes repariert, hardcodierte Texte für "Kein Personal", "Unterbesetzt" und "Abbrechen" ausgelagert. Tech-Overlay in Release-Builds verkleinert (nur FPS).
 
 ---
 

@@ -153,7 +153,7 @@ func _build_slot_row(idx: int, snap: Variant, is_auto: bool) -> Control:
 		if is_auto:
 			var game_day: int = snap.get("day", 1)
 			var game_time: int = snap.get("game_time", 0)
-			var h: int = game_time / 60
+			var h: int = int(game_time / 60.0)
 			var m: int = game_time % 60
 			snap_name = "Tag %d  ·  %02d:%02d" % [game_day, h, m]
 		name_lbl.text = snap_name

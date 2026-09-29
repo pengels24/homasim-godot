@@ -76,7 +76,7 @@ func _create_slot_instance(parent_container: Node, ui_array: Array, visual_index
 			# Autosaves: In-Game-Tag und Uhrzeit anzeigen statt generischem "Autosave"
 			var game_day: int = snap.get("day", 1)
 			var game_time: int = snap.get("game_time", 0)
-			var h: int = game_time / 60
+			var h: int = int(game_time / 60.0)
 			var m: int = game_time % 60
 			save_name = "%s %d  ·  %02d:%02d" % [GameState.T("label.day"), game_day, h, m]
 		else:
@@ -85,7 +85,7 @@ func _create_slot_instance(parent_container: Node, ui_array: Array, visual_index
 		# Manuelle Saves: In-Game-Tag als Kontext zum Real-Timestamp hinzufügen
 		var game_day: int = snap.get("day", 1)
 		var game_time: int = snap.get("game_time", 0)
-		var h: int = game_time / 60
+		var h: int = int(game_time / 60.0)
 		var m: int = game_time % 60
 		var ingame_info: String = "%s%d %02d:%02d" % [GameState.T("label.day")[0], game_day, h, m]
 		info_text = ingame_info + "  ·  " + GameState.format_timestamp(ts)

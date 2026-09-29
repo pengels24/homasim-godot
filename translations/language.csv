@@ -83,7 +83,7 @@ room.type.bed_standard,Einzelzimmer,Single Room
 room.type.hr_office,Personalbüro,HR Office
 room.type.sc_office,Forschungsbüro,Research Office
 menu.hero.title,Deine Hotel-Legende beginnt hier,Your Hotel Legend Starts Here
-menu.hero.subtitle,"Erlebe die ultimative Hotel-Management-Simulation.\nPlane, baue und verwalte dein Imperium.","Experience the ultimate hotel management simulation.\nPlan, build and manage your empire."
+menu.hero.subtitle,"Erlebe die ultimative Hotel-Management-Simulation.\nPlane, baue und verwalte dein Imperium.","Experience the ultimate hotel management simulation.\nPlan, build, and manage your empire."
 hud.top.middle.label.hotel,HOTEL,HOTEL
 hud.top.middle.label.lvl,LVL,LVL
 hud.top.middle.label.capital,KAPITAL,CAPITAL
@@ -152,7 +152,7 @@ dashboard.new_hotel.diff.custom,Angepasst,Custom
 dashboard.new_hotel.start_money,Startkapital:,Starting Capital:
 dashboard.new_hotel.refund,Baukosten-Rückerstattung:,Build Cost Refund:
 dashboard.new_hotel.exp,EXP-Boost:,EXP Boost:
-dashboard.new_hotel.notice,Einige Settings sind in der TechDemo noch ohne Effekt.,Some settings have no effect in the Tech Demo yet.
+dashboard.new_hotel.notice,🔒 Einige Settings sind in der TechDemo noch ohne Effekt.,🔒 Some settings have no effect in the Tech Demo yet.
 dashboard.new_hotel.start_plot,Startparzelle,Starting Plot
 dashboard.delete_hotel.title,Hotel löschen?,Delete Hotel?
 dashboard.delete_hotel.message,Das Hotel und alle Spielstände werden unwiderruflich entfernt.,The hotel and all save files will be permanently deleted.
@@ -992,7 +992,7 @@ tutorial.step.13,Klasse! Schließe das Baumenü wieder.,Awesome! Close the build
 tutorial.step.14_wait,"Die Rezeption ist nun geöffnet. Ab jetzt treffen Gäste ein!
 Starte die Zeit (falls pausiert) und warte auf ihre Ankunft.","The reception is now open. From now on guests will arrive!
 Start the time (if paused) and wait for their arrival."
-tutorial.step.15,"Schau, da kommen die ersten Gäste!\nÖffne nun die Rezeption oben im Menü (oder drücke F1).","Look, the first guests are arriving!\nNow open the reception in the menu above (or press F1)."
+tutorial.step.15,"Schau, da kommen die ersten Gäste!\nÖffne nun die Rezeption oben im Menü (oder drücke [KEY_RECEPTION]).","Look, the first guests are arriving!\nNow open the reception in the menu above (or press [KEY_RECEPTION])."
 tutorial.step.16,"Links siehst du die neuen Gäste mit pulsierendem Rahmen. Sie warten nun darauf, von dir ein Zimmer zu bekommen.","On the left, you see the new guests with a pulsing frame. They are now waiting for you to assign them a room."
 tutorial.step.17,"Klicke einen Gast an und wähle eins der passenden Zimmer...\nChecke die Gäste ein und schließe danach die Rezeption, um fortzufahren.",Click on a guest and choose one of the matching rooms...\nCheck the guests in and then close the reception to continue.
 tutorial.step.17_error,Du hast noch keinen Gast eingecheckt!\nÖffne die Rezeption erneut und weise den Gästen Zimmer zu.,You haven't checked in any guests yet!\nOpen the reception again and assign rooms to the guests.
@@ -1001,7 +1001,7 @@ tutorial.step.19,"Da du nun Level 2 bist, kannst du die Personal-Agentur besuche
 tutorial.step.20,"Bevor wir Personal einstellen können, benötigen wir einen Personalraum. Nutze wieder das Baumenü.","Before we can hire staff, we need a staff room. Use the build menu again."
 tutorial.step.21,Wähle aus der Kategorie Management den Personalraum und platziere ihn.,Select the staff room from the Management category and place it.
 tutorial.step.22,Klasse! Schließe das Baumenü wieder.,Great! Close the build menu again.
-tutorial.step.23,Öffne nun die Personal-Agentur oben im Menü (oder drücke F5).,Now open the Staff Agency in the menu above (or press F5).
+tutorial.step.23,Öffne nun die Personal-Agentur oben im Menü (oder drücke [KEY_STAFF]).,Now open the Staff Agency in the menu above (or press [KEY_STAFF]).
 tutorial.step.24,Wechsle nun bitte auf den Reiter mit den Bewerbern.,Please switch to the applicants tab now.
 tutorial.step.24_alt,Öffne die Personal-Agentur und wechsle auf den Reiter mit den Bewerbern.,Open the Staff Agency and switch to the applicants tab.
 tutorial.step.25,Du kannst hier Leute einstellen. Klicke dazu auf einen passenden Listeneintrag und dann rechts im Detailfenster auf einstellen.,You can hire people here. Click on a matching list entry and then click hire in the details window on the right.
@@ -1241,7 +1241,7 @@ reception.tooltip.type,Gästetyp:,Guest Type:
 ui.staff.pay_bonus,Bonus zahlen (100 €),Pay Bonus (100 €)
 toast.staff.bonus_received,%s hat einen Bonus erhalten!,%s received a bonus!
 ui.tutorial.tab.forschung,Forschung,Research
-ui.tutorial.forschung.intro,Wähle links eine Kategorie aus, um Details zu den einzelnen Forschungsprojekten zu sehen.,Select a category on the left to see details about the individual research projects.
+ui.tutorial.forschung.intro,"Wähle links eine Kategorie aus, um Details zu den einzelnen Forschungsprojekten zu sehen.","Select a category on the left to see details about the individual research projects."
 techtree.category.zimmer,Zimmer,Rooms
 techtree.category.gastronomie,Gastronomie,Gastronomy
 techtree.category.wellness,Wellness,Wellness
@@ -1835,3 +1835,7 @@ tutorial.tip_gastro_overload.title,Gastronomie überlastet!,Gastronomy Overloade
 tutorial.tip_gastro_overload.desc,"Dein Restaurant ist voll, aber du hast zu wenig Personal. Stelle mehr Bedienungen oder Köche ein, damit deine Gäste nicht zu lange warten müssen.","Your restaurant is full, but you don't have enough staff. Hire more waiters or chefs so your guests don't have to wait too long."
 room.tooltip.closed_condition,Geschlossen (Wartung/Reinigung),Closed (Maintenance/Cleaning)
 tutorial.hint.your_turn,Und nun du!,Now it's your turn!
+settings.ui.window_mode.windowed,Fenstermodus,Windowed
+settings.gameplay.tutorial_tips,Tutorial-Tipps (Hilfe),Tutorial Tips (Help)
+ui.room.unstaffed_tooltip,Kein Personal,No Staff
+ui.room.understaffed_tooltip,Unterbesetzt,Understaffed

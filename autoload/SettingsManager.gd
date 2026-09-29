@@ -97,7 +97,7 @@ const LANGUAGES_LABELS: Array[String] = ["Deutsch", "English"]
 
 
 # ── Monitor-Auswahl ───────────────────────────────────────────────────────────
-var preferred_screen: int = 0  # Index des gewünschten Monitors (0 = primär)
+var preferred_screen: int = -1  # Index des gewünschten Monitors (-1 = primär)
 
 # =============================================================================
 func _ready() -> void:
@@ -139,7 +139,8 @@ func _apply_startup_window() -> void:
 ## Das kurze Flackern ist unter Windows unvermeidbar bei Monitor-Wechsel im Fullscreen.
 func apply_screen() -> void:
 	var count := DisplayServer.get_screen_count()
-	var screen := clampi(preferred_screen, 0, count - 1)
+	var screen := preferred_screen if preferred_screen >= 0 else DisplayServer.get_primary_screen()
+	screen = clampi(screen, 0, count - 1)
 
 	var current_mode := DisplayServer.window_get_mode()
 	var in_fullscreen := current_mode in [
@@ -155,7 +156,10 @@ func apply_screen() -> void:
 		var screen_pos := DisplayServer.screen_get_position(screen)
 		DisplayServer.window_set_position(screen_pos + Vector2i(100, 100))
 		# Dann wieder Fullscreen auf dem neuen Monitor
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		if window_mode == "fullscreen":
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	else:
 		DisplayServer.window_set_current_screen(screen)
 		if window_mode == "borderless":
@@ -172,7 +176,8 @@ func apply_screen() -> void:
 ## ist sie kleiner als 1920×1080, bleibt Fullscreen und ein Toast wird angezeigt.
 func apply_window_mode(show_toast_on_fail: bool = false) -> void:
 	if window_mode == "borderless":
-		var screen := clampi(preferred_screen, 0, DisplayServer.get_screen_count() - 1)
+		var screen := preferred_screen if preferred_screen >= 0 else DisplayServer.get_primary_screen()
+		screen = clampi(screen, 0, DisplayServer.get_screen_count() - 1)
 		var screen_size := DisplayServer.screen_get_size(screen)
 		var screen_pos  := DisplayServer.screen_get_position(screen)
 		if screen_size.x < 1920 or screen_size.y < 1080:
@@ -190,9 +195,28 @@ func apply_window_mode(show_toast_on_fail: bool = false) -> void:
 		_bl_screen_size = screen_size
 		_bl_screen_pos  = screen_pos
 		call_deferred("_apply_borderless_deferred")
+	elif window_mode == "windowed":
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		
+		# set a default windowed size and center it
+		var screen := preferred_screen if preferred_screen >= 0 else DisplayServer.get_primary_screen()
+		screen = clampi(screen, 0, DisplayServer.get_screen_count() - 1)
+		var screen_size := DisplayServer.screen_get_size(screen)
+		var screen_pos := DisplayServer.screen_get_position(screen)
+		var window_size := Vector2i(1280, 720) # typical default window size
+		if screen_size.x >= 1920 and screen_size.y >= 1080:
+			window_size = Vector2i(1600, 900)
+		
+		DisplayServer.window_set_size(window_size)
+		var center_pos = screen_pos + (screen_size / 2) - (window_size / 2)
+		DisplayServer.window_set_position(center_pos)
+		
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	else:
 		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, false)
-		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
+		Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 
 # ── Borderless deferred helper ────────────────────────────────────────────────
 var _bl_screen: int = 0
@@ -204,6 +228,7 @@ func _apply_borderless_deferred() -> void:
 	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
 	DisplayServer.window_set_size(_bl_screen_size)
 	DisplayServer.window_set_position(_bl_screen_pos)
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 
 func _toast_resolution_warning() -> void:
@@ -282,7 +307,7 @@ func _load() -> void:
 	TranslationServer.set_locale(language)
 	dont_show_prealpha_disclaimer = cfg.get_value("ui", "dont_show_prealpha_disclaimer", false)
 	window_mode = cfg.get_value("ui", "window_mode", "fullscreen")
-	preferred_screen = cfg.get_value("ui", "preferred_screen", 0)
+	preferred_screen = cfg.get_value("ui", "preferred_screen", -1)
 	# Nicht sofort apply_screen/apply_window_mode aufrufen –
 	# das passiert deferred in _apply_startup_window() nach der Godot-Initialisierung.
 	last_profile_id = cfg.get_value("session",  "last_profile_id",           last_profile_id)

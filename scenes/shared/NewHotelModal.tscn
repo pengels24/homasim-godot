@@ -316,10 +316,6 @@ theme_override_styles/hover = ExtResource("12_blue_h")
 disabled = true
 icon = ExtResource("11_arrow_r")
 
-[node name="WipLabel2" type="Label" parent="Content/Left/SettingsBox" unique_id=2288288430]
-layout_mode = 2
-text = "🔒 Einige Settings sind in der TechDemo noch ohne Effekt."
-
 [node name="Right" type="VBoxContainer" parent="Content" unique_id=1062204764]
 layout_mode = 2
 size_flags_horizontal = 8

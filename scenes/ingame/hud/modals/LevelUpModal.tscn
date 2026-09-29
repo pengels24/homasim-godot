@@ -4,6 +4,9 @@
 [ext_resource type="Script" uid="uid://blyvdw0x00i5i" path="res://scenes/ingame/hud/modals/LevelUpModal.gd" id="2_7dprx"]
 [ext_resource type="Texture2D" uid="uid://b5t0f4jht5r17" path="res://assets/icons/star.svg" id="3_1tw3x"]
 [ext_resource type="AudioStream" uid="uid://fi32mghrolpa" path="res://assets/audio/sounds/levelup-1.mp3" id="4_gc17k"]
+[ext_resource type="StyleBox" uid="uid://cna2b35jrscs7" path="res://assets/UI/menu_button_darkblue.tres" id="5_dbnorm"]
+[ext_resource type="StyleBox" uid="uid://ctu17tayaclq4" path="res://assets/UI/menu_button_darkblue_hover.tres" id="6_dbhovr"]
+[ext_resource type="StyleBox" uid="uid://b0jlf6ry834tk" path="res://assets/UI/menu_button_darkblue_pressed.tres" id="7_dbpres"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7dprx"]
 content_margin_left = 0.0
@@ -119,6 +122,9 @@ horizontal_alignment = 1
 [node name="ButtonOK" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer" index="3" unique_id=1141093485]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_styles/hover = ExtResource("6_dbhovr")
+theme_override_styles/pressed = ExtResource("7_dbpres")
+theme_override_styles/normal = ExtResource("5_dbnorm")
 text = "Weiter"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." index="3" unique_id=1391309661]

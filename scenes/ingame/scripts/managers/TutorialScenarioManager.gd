@@ -13,11 +13,8 @@ const ASSISTANT_SCENE := preload("res://scenes/shared/TutorialAssistant.tscn")
 var blocker: ColorRect
 
 var _cam_move_progress: float = 0.0
-var _cam_zoom_progress: float = 0.0
 var _cam_zoom_flags: int = 0
 var _last_cam_pos: Vector2 = Vector2.INF
-var _cam_pan_accum: float = 0.0
-
 # Ghost-Target-Prüfung
 var _target_room: String = "bed_standard"
 var _target_parcel: Vector2i = Vector2i(2, 0)
@@ -38,21 +35,22 @@ func _process(delta: float) -> void:
 	if step_index == 2:
 		var cam = get_viewport().get_camera_2d()
 		if cam:
-			if _last_cam_pos != Vector2.INF:
+			if _last_cam_pos != Vector2.INF and _cam_move_progress < 5.0:
 				if _last_cam_pos.distance_squared_to(cam.global_position) > 0.01:
 					_cam_move_progress += delta
 					if is_instance_valid(assistant_ui) and assistant_ui.has_method("set_progress"):
 						assistant_ui.set_progress(clampf(_cam_move_progress / 5.0 * 100.0, 0.0, 100.0))
 					if _cam_move_progress >= 5.0:
-						advance_step()
+						var text = GameState.T("tutorial.step.2").replace("[ ]", "[x]")
+						_show_text(text, true)
 			_last_cam_pos = cam.global_position
 
 	if step_index == 3:
 		var cam = get_viewport().get_camera_2d()
-		if cam:
+		if cam and _cam_zoom_flags < 3:
 			var z = cam.zoom.x
-			var hit_min = z <= 0.51
-			var hit_max = z >= 3.99
+			var hit_min = z <= 0.8
+			var hit_max = z >= 3.0
 			if hit_min and (_cam_zoom_flags & 1) == 0:
 				_cam_zoom_flags |= 1
 			if hit_max and (_cam_zoom_flags & 2) == 0:
@@ -65,12 +63,18 @@ func _process(delta: float) -> void:
 			if is_instance_valid(assistant_ui) and assistant_ui.has_method("set_progress"):
 				assistant_ui.set_progress(p)
 			if _cam_zoom_flags == 3:
-				advance_step()
+				var text = GameState.T("tutorial.step.3").replace("[ ]", "[x]")
+				_show_text(text, true)
 
 	if step_index == 15:
 		var bottom = _get_bottom_bar()
 		if bottom and bottom.reception.button_pressed:
 			_on_reception_opened()
+			
+	if step_index == 23:
+		var bottom = _get_bottom_bar()
+		if bottom and bottom.staff.button_pressed:
+			_on_staff_opened()
 
 func start_tutorial(hud_ref: CanvasLayer, map_ref: Node2D) -> void:
 	is_active = true
@@ -278,7 +282,7 @@ func _run_step() -> void:
 			_target_tile = Vector2i(2, 1)
 			_target_rot = 2
 			_target_door_rot = 2
-			_target_door_offset = 1
+			_target_door_offset = 2
 			_pulse_room_button("staff_small")
 			GameState.sig_room_built.connect(_on_room_built)
 			_draw_blueprint()
@@ -290,8 +294,6 @@ func _run_step() -> void:
 			if bottom:
 				bottom.staff.disabled = false
 				_pulse_bottom_button(bottom.staff)
-				if not bottom.sig_staff_toggled.is_connected(_on_staff_opened):
-					bottom.sig_staff_toggled.connect(_on_staff_opened)
 		24:
 			_slide_assistant(false)
 			var staff_modal = null
@@ -334,7 +336,16 @@ func _run_step() -> void:
 		_:
 			_end_tutorial()
 
+func _get_hotkey_text(action: String) -> String:
+	var events = InputMap.action_get_events(action)
+	if events.size() > 0:
+		return events[0].as_text().split(" (")[0]
+	return "???"
+
 func _show_text(text: String, show_next_btn: bool = false) -> void:
+	text = text.replace("[KEY_RECEPTION]", _get_hotkey_text("ui_reception"))
+	text = text.replace("[KEY_STAFF]", _get_hotkey_text("ui_staff"))
+	
 	if not show_next_btn and step_index != 10:
 		text += "\n\n>>> " + GameState.T("tutorial.hint.your_turn") + " <<<"
 
@@ -351,7 +362,7 @@ func _slide_assistant(to_right: bool) -> void:
 	tween.tween_property(assistant_ui, "position:x", target_x, 0.5).set_trans(Tween.TRANS_SINE)
 
 func _on_next_clicked() -> void:
-	if step_index in [1, 2, 3, 8, 11, 16, 18, 19, 20, 22, 23]:
+	if step_index in [1, 2, 3, 8, 11, 16, 18, 19, 20, 22, 23, 25, 26, 29]:
 		advance_step()
 
 func advance_step() -> void:
@@ -406,11 +417,10 @@ func _draw_blueprint() -> void:
 		bp._apply_visuals()
 
 	bp.modulate = Color(0.2, 0.5, 1.0, 0.7)
-	bp.z_index = 9
-	
-	# Add green door indicator
+
+	# Add green door indicator correctly
 	if bp.has_method("_calc_door_transform"):
-		var door_info = bp._calc_door_transform(_target_rot, 0)
+		var door_info = bp._calc_door_transform(_target_door_rot, _target_door_offset)
 		var ind = ColorRect.new()
 		ind.name = "TutorialBlueprint_Indicator"
 		ind.color = Color(0.1, 0.9, 0.3, 0.5)
@@ -418,7 +428,7 @@ func _draw_blueprint() -> void:
 		
 		# Offset it slightly outwards based on rotation
 		var offset_dir = Vector2.ZERO
-		match _target_rot:
+		match _target_door_rot:
 			0: offset_dir = Vector2(-8, 0) # Left
 			1: offset_dir = Vector2(0, -8) # Top
 			2: offset_dir = Vector2(8, 0)  # Right
@@ -501,7 +511,6 @@ func _on_staff_opened() -> void:
 	if step_index == 23:
 		var bottom = _get_bottom_bar()
 		if bottom:
-			bottom.sig_staff_toggled.disconnect(_on_staff_opened)
 			_stop_bottom_button_pulse(bottom.staff)
 		# Damit das Modal Zeit hat zu spawnen, bevor Step 21 es sucht
 		call_deferred("advance_step")
@@ -605,7 +614,8 @@ func _stop_play_button_pulse() -> void:
 	var btn: Button = hud.btn_play
 	if not btn: return
 	
-	var tw = btn.get_meta("tut_tween") if btn.has_meta("tut_tween") else null
+	var tw = null
+	if btn.has_meta("tut_tween"): tw = btn.get_meta("tut_tween")
 	if is_instance_valid(tw):
 		tw.kill()
 	btn.remove_theme_stylebox_override("normal")
@@ -678,7 +688,8 @@ func _stop_room_button_pulse(room_id: String) -> void:
 	if build_menu and build_menu.has_method("get_room_button"):
 		var btn = build_menu.get_room_button(room_id)
 		if btn:
-			var tw = btn.get_meta("tut_tween") if btn.has_meta("tut_tween") else null
+			var tw = null
+			if btn.has_meta("tut_tween"): tw = btn.get_meta("tut_tween")
 			if is_instance_valid(tw):
 				tw.kill()
 			btn.remove_theme_stylebox_override("normal")

@@ -467,7 +467,7 @@ stretch_mode = 5
 [node name="MadeWithLbl" type="Label" parent="Footer" unique_id=2145226987]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Made with Godot 4"
+text = "Made with Godot"
 
 [node name="CopyrightLbl" type="Label" parent="." unique_id=543462729]
 layout_mode = 0

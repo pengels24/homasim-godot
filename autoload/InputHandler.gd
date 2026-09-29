@@ -9,7 +9,8 @@ enum InputMode {
 	MODAL,       # Modal offen (Rezeption, Settings, Techtree) - hintergrund blockiert!
 	PAUSE,       # Pause-Menü offen
 	CONSOLE,     # Dev-Konsole offen
-	BUY_PLOT     # Parzellen-Kaufmodus
+	BUY_PLOT,    # Parzellen-Kaufmodus
+	ROOM_SELECTED # Raum angeklickt, WASD erlaubt
 }
 
 var current_mode: InputMode = InputMode.NORMAL
@@ -59,8 +60,8 @@ func _process(delta: float) -> void:
 	if current_mode in [InputMode.PAUSE, InputMode.MODAL, InputMode.CONSOLE]:
 		return
 
-	# WASD-KAMERABEWEGUNG (Erlaubt im Normal- und im Bau-Modus!)
-	if current_mode == InputMode.NORMAL or current_mode == InputMode.BUILD:
+	# WASD-KAMERABEWEGUNG (Erlaubt im Normal-, Bau- und Room-Selected-Modus!)
+	if current_mode in [InputMode.NORMAL, InputMode.BUILD, InputMode.ROOM_SELECTED]:
 		var dir := Vector2.ZERO
 		if Input.is_action_pressed("camera_right"): dir.x += 1.0
 		if Input.is_action_pressed("camera_left"): dir.x -= 1.0

@@ -1244,7 +1244,8 @@ func enter_buy_mode() -> void:
 
 
 func exit_buy_mode() -> void:
-	if is_instance_valid(_buy_overlay_root):
+	var was_in_buy_mode = is_instance_valid(_buy_overlay_root)
+	if was_in_buy_mode:
 		_buy_overlay_root.queue_free()
 	_buy_overlay_root = null  # Sofort nullen → Zoom ist im gleichen Frame wieder aktiv
 		
@@ -1253,7 +1254,7 @@ func exit_buy_mode() -> void:
 			if is_instance_valid(_grid[y][x]):
 				_grid[y][x].set_buy_mode(false)
 				
-	if _entry_plot != Vector2i(-1, -1):
+	if was_in_buy_mode and _entry_plot != Vector2i(-1, -1):
 		center_on_entry(_entry_plot)
 
 

@@ -13,6 +13,7 @@ var SB_BLUE_PRESSED = preload("res://assets/UI/menu_button_blue_pressed.tres")
 var SB_BLUE_HOVER = preload("res://assets/UI/menu_button_blue_hover.tres")
 
 func _ready() -> void:
+	btn_cancel.text = GameState.T("btn.cancel")
 	btn_cancel.pressed.connect(_on_cancel)
 	visible = false
 

@@ -178,8 +178,8 @@ func _init_ui_tab() -> void:
 			SettingsManager.language, _on_language_changed)
 
 	_setup_selector("winmode", btn_wm_left, btn_wm_right, lbl_wm,
-			[GameState.T("settings.ui.window_mode.fullscreen"), GameState.T("settings.ui.window_mode.borderless")],
-			["fullscreen", "borderless"],
+			[GameState.T("settings.ui.window_mode.fullscreen"), GameState.T("settings.ui.window_mode.borderless"), GameState.T("settings.ui.window_mode.windowed")],
+			["fullscreen", "borderless", "windowed"],
 			SettingsManager.window_mode, _on_window_mode_changed)
 
 	# Sprache nur im Hauptmenü änderbar
@@ -470,9 +470,9 @@ func _build_keybindings_ui() -> void:
 			
 			# Current bindings
 			var _p_str = action_data.get("default", "")
-			var primary = OS.find_keycode_from_string(_p_str) if _p_str != "" else KEY_NONE
+			var primary = OS.find_keycode_from_string(_p_str) if _p_str != "" else KEY_NONE as Key
 			var _a_str = action_data.get("default_alt", "")
-			var alt = OS.find_keycode_from_string(_a_str) if _a_str != "" else KEY_NONE
+			var alt = OS.find_keycode_from_string(_a_str) if _a_str != "" else KEY_NONE as Key
 			if SettingsManager.custom_keybindings.has(action_id):
 				var custom = SettingsManager.custom_keybindings[action_id]
 				primary = int(custom[0]) as Key
@@ -569,9 +569,9 @@ func _on_key_captured(keycode: Key, action_id: String, slot_idx: int) -> void:
 			if a_id == action_id and slot_idx == 0: continue # Same action, same slot is fine
 			
 			var _p_str = actions[a_id].get("default", "")
-			var p = OS.find_keycode_from_string(_p_str) if _p_str != "" else KEY_NONE
+			var p = OS.find_keycode_from_string(_p_str) if _p_str != "" else KEY_NONE as Key
 			var _a_str = actions[a_id].get("default_alt", "")
-			var a = OS.find_keycode_from_string(_a_str) if _a_str != "" else KEY_NONE
+			var a = OS.find_keycode_from_string(_a_str) if _a_str != "" else KEY_NONE as Key
 			if SettingsManager.custom_keybindings.has(a_id):
 				p = int(SettingsManager.custom_keybindings[a_id][0]) as Key
 				a = int(SettingsManager.custom_keybindings[a_id][1]) as Key
@@ -610,8 +610,8 @@ func _save_key(action_id: String, slot_idx: int, keycode: Key) -> void:
 	elif actions.has(action_id):
 		var _p_str = actions[action_id].get("default", "")
 		var _a_str = actions[action_id].get("default_alt", "")
-		p = OS.find_keycode_from_string(_p_str) if _p_str != "" else KEY_NONE
-		a = OS.find_keycode_from_string(_a_str) if _a_str != "" else KEY_NONE
+		p = OS.find_keycode_from_string(_p_str) if _p_str != "" else KEY_NONE as Key
+		a = OS.find_keycode_from_string(_a_str) if _a_str != "" else KEY_NONE as Key
 		
 	if slot_idx == 0:
 		p = keycode
@@ -635,8 +635,8 @@ func _unbind_key(action_id: String, keycode: Key) -> void:
 	elif actions.has(action_id):
 		var _p_str = actions[action_id].get("default", "")
 		var _a_str = actions[action_id].get("default_alt", "")
-		p = OS.find_keycode_from_string(_p_str) if _p_str != "" else KEY_NONE
-		a = OS.find_keycode_from_string(_a_str) if _a_str != "" else KEY_NONE
+		p = OS.find_keycode_from_string(_p_str) if _p_str != "" else KEY_NONE as Key
+		a = OS.find_keycode_from_string(_a_str) if _a_str != "" else KEY_NONE as Key
 		
 	if p == keycode: p = KEY_NONE
 	if a == keycode: a = KEY_NONE
@@ -650,7 +650,7 @@ func _exit_tree() -> void:
 		var actions = group.get("actions", {})
 		for action_id in actions:
 			var _p_str = actions[action_id].get("default", "")
-			var primary = OS.find_keycode_from_string(_p_str) if _p_str != "" else KEY_NONE
+			var primary = OS.find_keycode_from_string(_p_str) if _p_str != "" else KEY_NONE as Key
 			if SettingsManager.custom_keybindings.has(action_id):
 				primary = int(SettingsManager.custom_keybindings[action_id][0]) as Key
 			if primary == KEY_NONE:

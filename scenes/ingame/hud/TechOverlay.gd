@@ -25,14 +25,22 @@ func _process(delta: float) -> void:
 
 func _update_stats() -> void:
 	var fps := Engine.get_frames_per_second()
-	var mem_mb := OS.get_static_memory_usage() / 1024.0 / 1024.0
-	var draws := Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)
-	var objs := Performance.get_monitor(Performance.OBJECT_NODE_COUNT)
-	var cpu_ms := Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0
-	var phys_ms := Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000.0
+	var text = "FPS: %d" % fps
 	
-	var text = "FPS: %d\nRAM: %.1f MB\nDraw Calls: %d\nNodes: %d\nCPU: %.2f ms\nPhys: %.2f ms" % [fps, mem_mb, draws, objs, cpu_ms, phys_ms]
+	if OS.has_feature("debug"):
+		var mem_mb := OS.get_static_memory_usage() / 1024.0 / 1024.0
+		var draws := Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME)
+		var objs := Performance.get_monitor(Performance.OBJECT_NODE_COUNT)
+		var cpu_ms := Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0
+		var phys_ms := Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000.0
+		
+		var mem_str = "%.1f MB" % mem_mb if mem_mb > 0.0 else "N/A"
+		text += "\nRAM: %s\nDraw Calls: %d\nNodes: %d\nCPU: %.2f ms\nPhys: %.2f ms" % [mem_str, draws, objs, cpu_ms, phys_ms]
+		
 	lbl_stats.text = text
+	
+	# Force the PanelContainer to shrink to the new smaller text size
+	size = Vector2.ZERO
 
 func _gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:

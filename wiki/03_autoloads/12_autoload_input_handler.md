@@ -6,7 +6,7 @@ Der Türsteher für Tastatur und Maus. Der `InputHandler` fängt jegliche Eingab
 
 ### 🛡️ Zuständigkeiten
 
-- **Modus-Verwaltung (`InputMode`):** Verwaltet die exklusiven Zustände (`NORMAL`, `BUILD`, `MODAL`, `PAUSE`, `CONSOLE`).
+- **Modus-Verwaltung (`InputMode`):** Verwaltet die exklusiven Zustände (`NORMAL`, `BUILD`, `MODAL`, `PAUSE`, `CONSOLE`, `BUY_PLOT`, `ROOM_SELECTED`).
 - **Kamerasteuerung:** Verarbeitet WASD, Mausrad-Zoom, Tastatur-Zoom und das rechte-Maus-Dragging für die Kamera (gibt es als reine Richtungsvektoren weiter).
 - **Hotkey-Routing:** Lauscht auf globale Hotkeys (`ESC`, `B`, `R`, Quicksave/Load) und alarmiert das HUD oder den Orchestrator.
 - **Pin-Logik (Kamera-Reset):** Steuert das intelligente System für die "Kamera zurücksetzen"-Taste (Pos1). Setzt und "killt" den Pin basierend auf spezifischen User-Eingaben.

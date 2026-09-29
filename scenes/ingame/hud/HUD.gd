@@ -603,7 +603,7 @@ func _jump_to_conference_room() -> void:
 	# Ersten aktiven Tagungsraum finden
 	var target_room: Node2D = null
 	for room in map_grid.get_placed_rooms():
-		var rtype: String = room.get("room_type_id") if room.get("room_type_id") != null else ""
+		var rtype: String = room.get("room_type_id", "") as String
 		if rtype.begins_with("conference_"):
 			var rkey: String = GuestManager._room_key(room)
 			if EventManager.active_conferences.has(rkey):

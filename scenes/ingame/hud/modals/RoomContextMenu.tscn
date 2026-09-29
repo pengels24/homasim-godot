@@ -9,6 +9,7 @@
 [ext_resource type="StyleBox" uid="uid://byn5sg5pqc4ux" path="res://assets/UI/menu_button_blue.tres" id="8_8tpl6"]
 [ext_resource type="StyleBox" uid="uid://bxdxryd4oglat" path="res://assets/UI/menu_button_blue_pressed.tres" id="9_40ws1"]
 [ext_resource type="StyleBox" uid="uid://bc0pipuhgp5c7" path="res://assets/UI/menu_button_blue_hover.tres" id="10_f715c"]
+[ext_resource type="StyleBox" uid="uid://cna2b35jrscs7" path="res://assets/UI/menu_button_darkblue.tres" id="11_db"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eqh8p"]
 content_margin_left = 0.0
@@ -92,6 +93,7 @@ theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = ExtResource("8_8tpl6")
 theme_override_styles/pressed = ExtResource("9_40ws1")
 theme_override_styles/hover = ExtResource("10_f715c")
+theme_override_styles/disabled = ExtResource("11_db")
 text = "Details anzeigen"
 
 [node name="BtnService" type="Button" parent="MenuPanel/VBoxContainer/MarginContainer/VBoxButtons" unique_id=748987802]
@@ -101,6 +103,7 @@ theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = ExtResource("8_8tpl6")
 theme_override_styles/pressed = ExtResource("9_40ws1")
 theme_override_styles/hover = ExtResource("10_f715c")
+theme_override_styles/disabled = ExtResource("11_db")
 text = "Service rufen"
 
 [node name="BtnDemolish" type="Button" parent="MenuPanel/VBoxContainer/MarginContainer/VBoxButtons" unique_id=453521187]

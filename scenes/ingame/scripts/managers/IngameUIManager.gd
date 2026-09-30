@@ -290,6 +290,22 @@ func on_exit_pressed() -> void:
 	if is_instance_valid(_standard_modal) and _standard_modal.visible:
 		_standard_modal.close()
 		return
+		
+	# PIP / Live-Monitore checken (sequenzielles Schließen)
+	if is_instance_valid(_hud):
+		var pips = []
+		var mc = _hud.get_node_or_null("MonitorContainer")
+		if mc:
+			for c in mc.get_children():
+				if c.has_method("get_target_room") or c.has_method("get_target_guest"):
+					pips.append(c)
+				
+		if pips.size() > 0:
+			var top = pips.back()
+			if top.has_method("close"):
+				top.close()
+			return
+			
 	open_pause_menu()
 
 # =============================================================================

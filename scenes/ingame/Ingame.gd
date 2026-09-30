@@ -150,6 +150,7 @@ func _setup_subsystems() -> void:
 	# Buttons verbinden
 	hud_canvas.btn_pause.pressed.connect(TimeManager.user_pause)
 	hud_canvas.btn_play.pressed.connect(TimeManager.resume)
+	if hud_canvas.btn_fast: hud_canvas.btn_fast.pressed.connect(func(): TimeManager.fast_forward(5.0))
 	hud_canvas.btn_ff.pressed.connect(func(): TimeManager.fast_forward(SettingsManager.ff_speed))
 	# --- Rückkanal: Wenn die Zeit per Code geändert wird, HUD visuell anpassen ---
 	if not TimeManager.sig_speed_changed.is_connected(_on_time_speed_changed):
@@ -353,7 +354,9 @@ func _on_time_speed_changed(is_paused: bool, speed: float) -> void:
 	if is_paused:
 		# Spiel ist pausiert -> Pause-Button eindrücken
 		hud_canvas.btn_pause.set_pressed_no_signal(true)
-	elif speed > 1.0:
+	elif speed > 1.0 and speed < SettingsManager.ff_speed:
+		if hud_canvas.btn_fast: hud_canvas.btn_fast.set_pressed_no_signal(true)
+	elif speed >= SettingsManager.ff_speed:
 		# Spiel läuft schneller -> FF-Button eindrücken
 		# (Passe die 1.0 an, falls deine Normalgeschwindigkeit ein anderer Wert ist)
 		hud_canvas.btn_ff.set_pressed_no_signal(true)

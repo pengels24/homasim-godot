@@ -23,6 +23,10 @@ const KEYBINDING_ROW = preload("res://scenes/ingame/hud/modals/content/Keybindin
 @onready var btn_multibuild_right: Button = %ButtonMultiBuildRight
 @onready var lbl_multibuild: Label        = %LabelMultiBuildValue
 
+@onready var btn_jumpzoom_left: Button  = get_node_or_null("%ButtonJumpZoomLeft")
+@onready var btn_jumpzoom_right: Button = get_node_or_null("%ButtonJumpZoomRight")
+@onready var lbl_jumpzoom: Label        = get_node_or_null("%LabelJumpZoomValue")
+
 @onready var slider_zoom: HSlider   = %HSliderZoomSens
 @onready var lbl_zoom: Label        = %LabelZoomSensValue
 @onready var lbl_zoom_title: Label  = %LabelZoomSens
@@ -115,6 +119,11 @@ func _init_gameplay_tab() -> void:
 		SettingsManager.multi_build_mode_labels, SettingsManager.MULTI_BUILD_MODES,
 		SettingsManager.multi_build_mode, _on_multi_build_changed)
 
+	if is_instance_valid(btn_jumpzoom_left):
+		_setup_selector("jumpzoom", btn_jumpzoom_left, btn_jumpzoom_right, lbl_jumpzoom,
+			[GameState.T("label.off"), GameState.T("label.on")], [false, true],
+			SettingsManager.jump_zoom_enabled, _on_jumpzoom_changed)
+
 	if is_instance_valid(slider_zoom):
 		slider_zoom.value = SettingsManager.scroll_zoom_sensitivity
 		lbl_zoom.text = "%.1fx" % slider_zoom.value
@@ -151,6 +160,26 @@ func _init_audio_tab() -> void:
 	_setup_selector("doorsounds", btn_door_l, btn_door_r, lbl_door_val,
 		[GameState.T("label.off"), GameState.T("label.on")], [false, true],
 		SettingsManager.play_door_sounds, _on_door_sounds_toggled)
+
+	var btn_cash_l: Button = get_node_or_null("%ButtonCashSoundsLeft")
+	var btn_cash_r: Button = get_node_or_null("%ButtonCashSoundsRight")
+	var lbl_cash_val: Label = get_node_or_null("%ButtonCashSounds")
+	var lbl_cash: Label = get_node_or_null("%LabelCashSounds")
+	if lbl_cash: lbl_cash.text = GameState.T("settings.audio.cash_sounds")
+	if btn_cash_l:
+		_setup_selector("cashsounds", btn_cash_l, btn_cash_r, lbl_cash_val,
+			[GameState.T("label.off"), GameState.T("label.on")], [false, true],
+			SettingsManager.play_cash_sounds, _on_cash_sounds_toggled)
+
+	var btn_ui_l: Button = get_node_or_null("%ButtonUISoundsLeft")
+	var btn_ui_r: Button = get_node_or_null("%ButtonUISoundsRight")
+	var lbl_ui_val: Label = get_node_or_null("%ButtonUISounds")
+	var lbl_ui: Label = get_node_or_null("%LabelUISounds")
+	if lbl_ui: lbl_ui.text = GameState.T("settings.audio.ui_sounds")
+	if btn_ui_l:
+		_setup_selector("uisounds", btn_ui_l, btn_ui_r, lbl_ui_val,
+			[GameState.T("label.off"), GameState.T("label.on")], [false, true],
+			SettingsManager.play_ui_sounds, _on_ui_sounds_toggled)
 
 
 # =============================================================================
@@ -289,6 +318,10 @@ func _on_multi_build_changed(val: int) -> void:
 	SettingsManager.multi_build_mode = val
 	SettingsManager.save()
 
+func _on_jumpzoom_changed(val: bool) -> void:
+	SettingsManager.jump_zoom_enabled = val
+	SettingsManager.save()
+
 
 # =============================================================================
 func _on_master_vol_changed(val: float) -> void:
@@ -315,6 +348,14 @@ func _on_sounds_vol_changed(val: float) -> void:
 
 func _on_door_sounds_toggled(pressed: bool) -> void:
 	SettingsManager.play_door_sounds = pressed
+	SettingsManager.save()
+
+func _on_cash_sounds_toggled(pressed: bool) -> void:
+	SettingsManager.play_cash_sounds = pressed
+	SettingsManager.save()
+
+func _on_ui_sounds_toggled(pressed: bool) -> void:
+	SettingsManager.play_ui_sounds = pressed
 	SettingsManager.save()
 
 # =============================================================================
@@ -386,6 +427,8 @@ func _refresh_translated_labels() -> void:
 		%LabelTutorialTips.text = GameState.T("settings.gameplay.tutorial_tips")
 	if is_instance_valid(%LabelMultiBuild):
 		%LabelMultiBuild.text = GameState.T("settings.gameplay.multi_build.title")
+	if is_instance_valid(get_node_or_null("%LabelJumpZoom")):
+		get_node("%LabelJumpZoom").text = GameState.T("settings.gameplay.jump_zoom.title")
 	if is_instance_valid(%LabelZoomSens):
 		%LabelZoomSens.text = GameState.T("settings.gameplay.zoom_sens")
 	if is_instance_valid(%LabelPanSpeed):
@@ -466,7 +509,11 @@ func _build_keybindings_ui() -> void:
 			var row = KEYBINDING_ROW.instantiate() as KeybindingRow
 			kb_container.add_child(row)
 			
-			row.lbl_action.text = GameState.T(action_data.get("label", action_id))
+			var label_text = GameState.T(action_data.get("label", action_id))
+			if action_id == "ui_forward":
+				label_text += " (x" + str(int(SettingsManager.ff_speed)) + ")"
+			row.lbl_action.text = label_text
+
 			
 			# Current bindings
 			var _p_str = action_data.get("default", "")

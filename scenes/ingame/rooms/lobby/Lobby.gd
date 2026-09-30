@@ -278,4 +278,11 @@ func get_live_details() -> Array[Dictionary]:
 				"icon": "res://assets/UI/icons/icon_guest.png"
 			})
 			
+	if details.is_empty():
+		details.append({
+			"left": GameState.T("room.kitchen.status"),
+			"right": GameState.T("room.lobby.empty", "Keine Gäste anwesend"),
+			"is_fallback": true
+		})
+			
 	return details

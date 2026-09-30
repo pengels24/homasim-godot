@@ -43,3 +43,14 @@
 - **Raum-Status (Kein Personal):** Das rote "Kein Personal" Icon über Räumen reagiert nun auf Hover mit dem Hand-Cursor. Klickt man darauf, öffnet sich direkt das Personal-Menü auf dem Tab "Zuweisung". (Der Tooltip lautet nun explizit: "Kein Personal (Klick für Zuweisung)").
 - **Visuelle Einheitlichkeit:** Icons rechts oben im Livemonitor sind nun einheitlich und aufgeräumt.
 - **Baumenü:** Icon für Abrissmode ist nun auch weiß wie alle anderen Icons im Baumenü.
+
+## Hotfix 0.2.2 Additions
+- **Zeitsteuerung (HUD & Hotkeys):** 
+  - Erweitert auf 4 Buttons: Pause (Leertaste), Normal (1), Schnell x5 (2), Vorspulen x10 (3).
+  - Die Pause-Taste (Space) merkt sich nun die vorherige Geschwindigkeit und kehrt bei erneutem Drücken exakt dorthin zurück.
+  - Das HUD zeigt die aktive Spul-Geschwindigkeit nun korrekt als Ganzzahl (z.B. x10 statt x10.0) im Settings-Menü.
+- **Monitor / PiP Fenster (ESC-Logik):** Die ESC-Taste schließt nun sequenziell das zuletzt geöffnete Monitor-Fenster (LIFO), bevor das Ingame-Menü (Speichern/Laden) geöffnet wird.
+- **Kontextmenü (Zimmer):** Sobald das Kontextmenü eines Zimmers geöffnet wird, verschwindet der Hover-Tooltip des Raumes augenblicklich.
+- **Neue Einstellungen (Settings):**
+  - **Gameplay:** Toggle hinzugefügt, ob die Kamera beim Klicken auf "Zum Raum" in der Raumliste zwingend reinzoomen soll ("Zoom bei 'Zum Raum'").
+  - **Audio:** Zwei neue Schalter für "Kassen-Sounds (Kasching)" und "Menü-Sounds (Düdeldü)" integriert, um nervige UI-Töne dauerhaft stummschalten zu können.

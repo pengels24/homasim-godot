@@ -22,6 +22,8 @@ var _game_hour: int = 10
 var _game_minute: int = 0
 var _time_accum: float = 0.0
 
+var _pre_pause_speed: float = 1.0
+
 var user_speed: float = 0.0: # Der Wunsch des Spielers (0.0 = Pause, 1.0 = Play, >1.0 = FF)
 	set(value):
 		user_speed = value
@@ -112,7 +114,18 @@ func remove_system_pause() -> void:
 # =============================================================================
 ## User-Pause – explizit vom Spieler per Pause-Button ausgelöst ODER durch Events (Tageswechsel, neue Gäste).
 func user_pause() -> void:
+	if user_speed > 0.0:
+		_pre_pause_speed = user_speed
 	user_speed = 0.0
+	auto_paused = false
+	_evaluate_speed()
+	
+func toggle_pause() -> void:
+	if user_speed == 0.0:
+		user_speed = _pre_pause_speed if _pre_pause_speed > 0.0 else 1.0
+	else:
+		_pre_pause_speed = user_speed
+		user_speed = 0.0
 	auto_paused = false
 	_evaluate_speed()
 
@@ -136,6 +149,7 @@ func fast_forward(ff_speed: float) -> void:
 		TutorialManager.unlocked_tutorials.append("tip_fast_forward")
 	_ff_used = true
 	user_speed = ff_speed
+	_pre_pause_speed = ff_speed
 	auto_paused = false
 	_evaluate_speed()
 

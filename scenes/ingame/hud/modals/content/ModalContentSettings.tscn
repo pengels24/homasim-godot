@@ -40,10 +40,11 @@ theme = ExtResource("1_jx7ge")
 theme_override_constants/side_margin = 0
 theme_override_constants/tab_separation = 40
 theme_override_styles/panel = SubResource("StyleBoxFlat_u0uya")
-current_tab = 0
+current_tab = 1
 script = ExtResource("2_u0uya")
 
 [node name="Gameplay" type="VBoxContainer" parent="." unique_id=842060834]
+visible = false
 layout_mode = 2
 metadata/_tab_index = 0
 
@@ -82,9 +83,9 @@ icon = ExtResource("2_j758h")
 [node name="ButtonAutosave" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer" unique_id=1465451172]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
 size_flags_horizontal = 10
+theme_type_variation = &"ValueLabel"
 text = "aus"
 horizontal_alignment = 1
 
@@ -126,8 +127,8 @@ icon = ExtResource("2_j758h")
 [node name="LabelFastForwardValue" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer3/HBoxContainer" unique_id=1146263961]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
+theme_type_variation = &"ValueLabel"
 text = "x-fach"
 horizontal_alignment = 1
 
@@ -153,10 +154,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Tutorial-Tipps"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=2233445566]
+[node name="HBoxContainer" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer4" unique_id=-2061521730]
 layout_mode = 2
 
-[node name="ButtonTutorialTipsLeft" type="Button" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer4/HBoxContainer" unique_id=3344556677]
+[node name="ButtonTutorialTipsLeft" type="Button" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer4/HBoxContainer" unique_id=-950410619]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/normal = ExtResource("2_jjod7")
@@ -164,16 +165,16 @@ theme_override_styles/pressed = ExtResource("3_d0jvy")
 theme_override_styles/hover = ExtResource("4_v1l06")
 icon = ExtResource("2_j758h")
 
-[node name="LabelTutorialTipsValue" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer4/HBoxContainer" unique_id=4455667788]
+[node name="LabelTutorialTipsValue" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer4/HBoxContainer" unique_id=160700492]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
 size_flags_horizontal = 10
+theme_type_variation = &"ValueLabel"
 text = "an"
 horizontal_alignment = 1
 
-[node name="ButtonTutorialTipsRight" type="Button" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer4/HBoxContainer" unique_id=5566778899]
+[node name="ButtonTutorialTipsRight" type="Button" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainer4/HBoxContainer" unique_id=1271811603]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/normal = ExtResource("2_jjod7")
@@ -181,24 +182,24 @@ theme_override_styles/pressed = ExtResource("3_d0jvy")
 theme_override_styles/hover = ExtResource("4_v1l06")
 icon = ExtResource("3_xeut1")
 
-
-[node name="PanelMultiBuild" type="HSeparator" parent="Gameplay/MarginContainer/VBoxContainer" unique_id=3516963967]
+[node name="PanelMultiBuild" type="HSeparator" parent="Gameplay/MarginContainer/VBoxContainer" unique_id=-778003329]
 custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
 
-[node name="HBoxContainerMultiBuild" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer" unique_id=9249214714]
+[node name="HBoxContainerMultiBuild" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer" unique_id=659280122]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="LabelMultiBuild" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerMultiBuild" unique_id=9469493338]
+[node name="LabelMultiBuild" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerMultiBuild" unique_id=879558746]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Mehrfachbau (Gebäude)"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerMultiBuild" unique_id=4422690620]
+[node name="HBoxContainer" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerMultiBuild" unique_id=127723324]
 layout_mode = 2
 
-[node name="ButtonMultiBuildLeft" type="Button" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerMultiBuild/HBoxContainer" unique_id=4723380335]
+[node name="ButtonMultiBuildLeft" type="Button" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerMultiBuild/HBoxContainer" unique_id=428413039]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/normal = ExtResource("2_jjod7")
@@ -206,16 +207,16 @@ theme_override_styles/pressed = ExtResource("3_d0jvy")
 theme_override_styles/hover = ExtResource("4_v1l06")
 icon = ExtResource("2_j758h")
 
-[node name="LabelMultiBuildValue" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerMultiBuild/HBoxContainer" unique_id=8225608056]
+[node name="LabelMultiBuildValue" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerMultiBuild/HBoxContainer" unique_id=-364326536]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
 size_flags_horizontal = 10
+theme_type_variation = &"ValueLabel"
 text = "an"
 horizontal_alignment = 1
 
-[node name="ButtonMultiBuildRight" type="Button" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerMultiBuild/HBoxContainer" unique_id=6284922292]
+[node name="ButtonMultiBuildRight" type="Button" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerMultiBuild/HBoxContainer" unique_id=1989954996]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/normal = ExtResource("2_jjod7")
@@ -223,27 +224,68 @@ theme_override_styles/pressed = ExtResource("3_d0jvy")
 theme_override_styles/hover = ExtResource("4_v1l06")
 icon = ExtResource("3_xeut1")
 
-
-[node name="PanelZoom" type="HSeparator" parent="Gameplay/MarginContainer/VBoxContainer"]
+[node name="PanelMultiBuild2" type="HSeparator" parent="Gameplay/MarginContainer/VBoxContainer" unique_id=943827228]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="HBoxContainerZoom" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer"]
+[node name="HBoxContainerJumpZoom" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer" unique_id=868216514]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="LabelZoomSens" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerZoom"]
+[node name="LabelJumpZoom" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerJumpZoom" unique_id=1523124588]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Zum Raum springen (Zoom)"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerJumpZoom" unique_id=1960856864]
+layout_mode = 2
+
+[node name="ButtonJumpZoomLeft" type="Button" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerJumpZoom/HBoxContainer" unique_id=1878413146]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("2_j758h")
+
+[node name="LabelJumpZoomValue" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerJumpZoom/HBoxContainer" unique_id=1134378691]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+theme_type_variation = &"ValueLabel"
+text = "an"
+horizontal_alignment = 1
+
+[node name="ButtonJumpZoomRight" type="Button" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerJumpZoom/HBoxContainer" unique_id=33409753]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("3_xeut1")
+
+[node name="PanelZoom" type="HSeparator" parent="Gameplay/MarginContainer/VBoxContainer" unique_id=1765840919]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBoxContainerZoom" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer" unique_id=257468923]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LabelZoomSens" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerZoom" unique_id=591169001]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Zoom-Empfindlichkeit"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerZoom"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerZoom" unique_id=1085231437]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="HSliderZoomSens" type="HSlider" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerZoom/HBoxContainer"]
+[node name="HSliderZoomSens" type="HSlider" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerZoom/HBoxContainer" unique_id=1666340872]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -253,34 +295,34 @@ max_value = 3.0
 step = 0.1
 value = 1.0
 
-[node name="LabelZoomSensValue" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerZoom/HBoxContainer"]
+[node name="LabelZoomSensValue" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerZoom/HBoxContainer" unique_id=184319326]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
+theme_type_variation = &"ValueLabel"
 text = "1.0x"
 horizontal_alignment = 2
 
-[node name="PanelPan" type="HSeparator" parent="Gameplay/MarginContainer/VBoxContainer"]
+[node name="PanelPan" type="HSeparator" parent="Gameplay/MarginContainer/VBoxContainer" unique_id=1141432285]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="HBoxContainerPanSpeed" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer"]
+[node name="HBoxContainerPanSpeed" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer" unique_id=85074786]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="LabelPanSpeed" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerPanSpeed"]
+[node name="LabelPanSpeed" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerPanSpeed" unique_id=278965330]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Kamera-Geschwindigkeit"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerPanSpeed"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerPanSpeed" unique_id=2142894510]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="HSliderPanSpeed" type="HSlider" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerPanSpeed/HBoxContainer"]
+[node name="HSliderPanSpeed" type="HSlider" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerPanSpeed/HBoxContainer" unique_id=53507742]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -290,16 +332,15 @@ max_value = 1500.0
 step = 50.0
 value = 400.0
 
-[node name="LabelPanSpeedValue" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerPanSpeed/HBoxContainer"]
+[node name="LabelPanSpeedValue" type="Label" parent="Gameplay/MarginContainer/VBoxContainer/HBoxContainerPanSpeed/HBoxContainer" unique_id=1842696782]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(50, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
+theme_type_variation = &"ValueLabel"
 text = "400"
 horizontal_alignment = 2
 
 [node name="Audio" type="VBoxContainer" parent="." unique_id=1957786893]
-visible = false
 layout_mode = 2
 metadata/_tab_index = 1
 
@@ -339,8 +380,8 @@ value = 100.0
 [node name="LabelVolMasterValue" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer/HBoxContainer" unique_id=994360935]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
+theme_type_variation = &"ValueLabel"
 text = "100%"
 horizontal_alignment = 2
 
@@ -373,8 +414,8 @@ value = 100.0
 [node name="LabelVolBGValue" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1883592075]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
+theme_type_variation = &"ValueLabel"
 text = "100%"
 horizontal_alignment = 2
 
@@ -408,8 +449,8 @@ value = 100.0
 [node name="LabelVolMenuValue" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer3/HBoxContainer" unique_id=946573326]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
+theme_type_variation = &"ValueLabel"
 text = "100%"
 horizontal_alignment = 2
 
@@ -443,27 +484,28 @@ value = 100.0
 [node name="LabelVolSoundsValue" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer4/HBoxContainer" unique_id=233100714]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
+theme_type_variation = &"ValueLabel"
 text = "100%"
-[node name="Panel4" type="HSeparator" parent="Audio/MarginContainer/VBoxContainer"]
+
+[node name="Panel4" type="HSeparator" parent="Audio/MarginContainer/VBoxContainer" unique_id=1634597558]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="HBoxContainer5" type="HBoxContainer" parent="Audio/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer5" type="HBoxContainer" parent="Audio/MarginContainer/VBoxContainer" unique_id=1006183688]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="LabelDoorSounds" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer5"]
+[node name="LabelDoorSounds" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=2134748389]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "settings.audio.door_sounds"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer5"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1275423021]
 layout_mode = 2
 
-[node name="ButtonDoorSoundsLeft" type="Button" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer5/HBoxContainer"]
+[node name="ButtonDoorSoundsLeft" type="Button" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer5/HBoxContainer" unique_id=1217926239]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/normal = ExtResource("2_jjod7")
@@ -471,16 +513,16 @@ theme_override_styles/pressed = ExtResource("3_d0jvy")
 theme_override_styles/hover = ExtResource("4_v1l06")
 icon = ExtResource("2_j758h")
 
-[node name="ButtonDoorSounds" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer5/HBoxContainer"]
+[node name="ButtonDoorSounds" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer5/HBoxContainer" unique_id=728160126]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
 size_flags_horizontal = 10
+theme_type_variation = &"ValueLabel"
 text = "aus"
 horizontal_alignment = 1
 
-[node name="ButtonDoorSoundsRight" type="Button" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer5/HBoxContainer"]
+[node name="ButtonDoorSoundsRight" type="Button" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer5/HBoxContainer" unique_id=1010052596]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/normal = ExtResource("2_jjod7")
@@ -488,7 +530,81 @@ theme_override_styles/pressed = ExtResource("3_d0jvy")
 theme_override_styles/hover = ExtResource("4_v1l06")
 icon = ExtResource("3_xeut1")
 
-horizontal_alignment = 2
+[node name="HBoxContainer6" type="HBoxContainer" parent="Audio/MarginContainer/VBoxContainer" unique_id=1586025979]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LabelCashSounds" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer6" unique_id=1283000252]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "settings.audio.cash_sounds"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer6" unique_id=525367248]
+layout_mode = 2
+
+[node name="ButtonCashSoundsLeft" type="Button" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer6/HBoxContainer" unique_id=1591566677]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("2_j758h")
+
+[node name="ButtonCashSounds" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer6/HBoxContainer" unique_id=1379280701]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+theme_type_variation = &"ValueLabel"
+text = "aus"
+horizontal_alignment = 1
+
+[node name="ButtonCashSoundsRight" type="Button" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer6/HBoxContainer" unique_id=1475985377]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("3_xeut1")
+
+[node name="HBoxContainer7" type="HBoxContainer" parent="Audio/MarginContainer/VBoxContainer" unique_id=1089224945]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="LabelUISounds" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer7" unique_id=1491305798]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "settings.audio.ui_sounds"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer7" unique_id=1769752277]
+layout_mode = 2
+
+[node name="ButtonUISoundsLeft" type="Button" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer7/HBoxContainer" unique_id=31464798]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("2_j758h")
+
+[node name="ButtonUISounds" type="Label" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer7/HBoxContainer" unique_id=41502690]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+theme_type_variation = &"ValueLabel"
+text = "aus"
+horizontal_alignment = 1
+
+[node name="ButtonUISoundsRight" type="Button" parent="Audio/MarginContainer/VBoxContainer/HBoxContainer7/HBoxContainer" unique_id=1623623818]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = ExtResource("2_jjod7")
+theme_override_styles/pressed = ExtResource("3_d0jvy")
+theme_override_styles/hover = ExtResource("4_v1l06")
+icon = ExtResource("3_xeut1")
 
 [node name="Oberfläche" type="VBoxContainer" parent="." unique_id=1408121644]
 visible = false
@@ -532,8 +648,8 @@ icon = ExtResource("2_j758h")
 [node name="LabelLanguageValue" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxLanguage/HBoxContainer" unique_id=918273649]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
+theme_type_variation = &"ValueLabel"
 text = "Deutsch"
 horizontal_alignment = 1
 
@@ -575,8 +691,8 @@ icon = ExtResource("2_j758h")
 [node name="LabelUIScaleValue" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=681701116]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
+theme_type_variation = &"ValueLabel"
 text = "100 %"
 horizontal_alignment = 1
 
@@ -618,8 +734,8 @@ icon = ExtResource("2_j758h")
 [node name="LabelToastPosValue" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer3/HBoxContainer" unique_id=340105031]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
+theme_type_variation = &"ValueLabel"
 text = "Unten"
 horizontal_alignment = 1
 
@@ -661,8 +777,8 @@ icon = ExtResource("2_j758h")
 [node name="LabelPosHUDBottomValue" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer4/HBoxContainer" unique_id=1089309950]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
+theme_type_variation = &"ValueLabel"
 text = "Mitte"
 horizontal_alignment = 1
 
@@ -674,26 +790,26 @@ theme_override_styles/pressed = ExtResource("3_d0jvy")
 theme_override_styles/hover = ExtResource("4_v1l06")
 icon = ExtResource("3_xeut1")
 
-[node name="Panel3" type="HSeparator" parent="Oberfläche/MarginContainer/VBoxContainer"]
+[node name="Panel3" type="HSeparator" parent="Oberfläche/MarginContainer/VBoxContainer" unique_id=369120198]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="HBoxContainer5" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer5" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer" unique_id=226703463]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="LabelTechInfo" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer5"]
+[node name="LabelTechInfo" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1016781568]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Technische Infos (FPS, etc.)"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer5"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer5" unique_id=1125416383]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="ButtonTechInfoLeft" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer5/HBoxContainer"]
+[node name="ButtonTechInfoLeft" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer5/HBoxContainer" unique_id=1869822236]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/normal = ExtResource("2_jjod7")
@@ -701,15 +817,15 @@ theme_override_styles/pressed = ExtResource("3_d0jvy")
 theme_override_styles/hover = ExtResource("4_v1l06")
 icon = ExtResource("2_j758h")
 
-[node name="LabelTechInfoValue" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer5/HBoxContainer"]
+[node name="LabelTechInfoValue" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer5/HBoxContainer" unique_id=37740321]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
+theme_type_variation = &"ValueLabel"
 text = "Aus"
 horizontal_alignment = 1
 
-[node name="ButtonTechInfoRight" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer5/HBoxContainer"]
+[node name="ButtonTechInfoRight" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainer5/HBoxContainer" unique_id=981980343]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/normal = ExtResource("2_jjod7")
@@ -717,25 +833,24 @@ theme_override_styles/pressed = ExtResource("3_d0jvy")
 theme_override_styles/hover = ExtResource("4_v1l06")
 icon = ExtResource("3_xeut1")
 
-
-[node name="PanelWindowMode" type="HSeparator" parent="Oberfläche/MarginContainer/VBoxContainer"]
+[node name="PanelWindowMode" type="HSeparator" parent="Oberfläche/MarginContainer/VBoxContainer" unique_id=88543387]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="HBoxContainerWindowMode" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer"]
+[node name="HBoxContainerWindowMode" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer" unique_id=1416237504]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="LabelWindowMode" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerWindowMode"]
+[node name="LabelWindowMode" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerWindowMode" unique_id=1681113828]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Fenstermodus"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerWindowMode"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerWindowMode" unique_id=1085549481]
 layout_mode = 2
 
-[node name="ButtonWindowModeLeft" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerWindowMode/HBoxContainer"]
+[node name="ButtonWindowModeLeft" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerWindowMode/HBoxContainer" unique_id=867119345]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/normal = ExtResource("2_jjod7")
@@ -743,16 +858,16 @@ theme_override_styles/pressed = ExtResource("3_d0jvy")
 theme_override_styles/hover = ExtResource("4_v1l06")
 icon = ExtResource("2_j758h")
 
-[node name="LabelWindowModeValue" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerWindowMode/HBoxContainer"]
+[node name="LabelWindowModeValue" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerWindowMode/HBoxContainer" unique_id=576287816]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
 size_flags_horizontal = 10
+theme_type_variation = &"ValueLabel"
 text = "Fullscreen"
 horizontal_alignment = 1
 
-[node name="ButtonWindowModeRight" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerWindowMode/HBoxContainer"]
+[node name="ButtonWindowModeRight" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerWindowMode/HBoxContainer" unique_id=23021614]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/normal = ExtResource("2_jjod7")
@@ -760,25 +875,24 @@ theme_override_styles/pressed = ExtResource("3_d0jvy")
 theme_override_styles/hover = ExtResource("4_v1l06")
 icon = ExtResource("3_xeut1")
 
-
-[node name="PanelScreen" type="HSeparator" parent="Oberfläche/MarginContainer/VBoxContainer"]
+[node name="PanelScreen" type="HSeparator" parent="Oberfläche/MarginContainer/VBoxContainer" unique_id=273779179]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="HBoxContainerScreen" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer"]
+[node name="HBoxContainerScreen" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer" unique_id=1329158087]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="LabelScreen" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerScreen"]
+[node name="LabelScreen" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerScreen" unique_id=1182274121]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Monitor"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerScreen"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerScreen" unique_id=1063370486]
 layout_mode = 2
 
-[node name="ButtonScreenLeft" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerScreen/HBoxContainer"]
+[node name="ButtonScreenLeft" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerScreen/HBoxContainer" unique_id=1790535969]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/normal = ExtResource("2_jjod7")
@@ -786,16 +900,16 @@ theme_override_styles/pressed = ExtResource("3_d0jvy")
 theme_override_styles/hover = ExtResource("4_v1l06")
 icon = ExtResource("2_j758h")
 
-[node name="LabelScreenValue" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerScreen/HBoxContainer"]
+[node name="LabelScreenValue" type="Label" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerScreen/HBoxContainer" unique_id=1833304574]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 0)
-theme_type_variation = &"ValueLabel"
 layout_mode = 2
 size_flags_horizontal = 10
+theme_type_variation = &"ValueLabel"
 text = "Monitor 1"
 horizontal_alignment = 1
 
-[node name="ButtonScreenRight" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerScreen/HBoxContainer"]
+[node name="ButtonScreenRight" type="Button" parent="Oberfläche/MarginContainer/VBoxContainer/HBoxContainerScreen/HBoxContainer" unique_id=995805333]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/normal = ExtResource("2_jjod7")

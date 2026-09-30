@@ -334,7 +334,8 @@ settings.controls.camera.reset,Ansicht zurücksetzen,Reset View
 settings.controls.group.gameplay,Spielsteuerung,Game Controls
 settings.controls.gameplay.pause,Spiel pausieren,Pause Game
 settings.controls.gameplay.play,Normalgeschwindigkeit,Normal Speed
-settings.controls.gameplay.forward,Schneller Vorlauf,Fast Forward
+settings.controls.gameplay.fast,Schnell (x5),Fast (x5)
+settings.controls.gameplay.forward,Vorspulen,Fast Forward
 settings.controls.gameplay.quicksave,Schnellspeichern,Quick Save
 settings.controls.gameplay.quickload,Schnellladen,Quick Load
 settings.controls.group.ui,Benutzeroberfläche,User Interface
@@ -1223,6 +1224,7 @@ room.kitchen.assigned_details,### Personal (*** Köche),### Staff (*** Chefs)
 room.kitchen.status,Status,Status
 room.restaurant.empty,Leer,Empty
 room.bar.empty,Leer / Wartet,Empty / Waiting
+room.lobby.empty,Keine Gäste anwesend,No guests present
 room.action.upgrade_wlan,WLAN nachrüsten (50 €),Upgrade WIFI (50$)
 room.action.upgrade_klima,Klima nachrüsten (150 €),Upgrade AC (150$)
 toast.room.wlan_installed,WLAN installiert!,WLAN installed!
@@ -1680,11 +1682,14 @@ menu.idcard.hotels,Hotels,Hotels
 menu.idcard.last,Zuletzt:,Last:
 menu.idcard.unknown,Unbekannt,Unknown
 settings.gameplay.multi_build.title,Mehrfachbau (Gebäude),Multi-Build (Rooms)
+settings.gameplay.jump_zoom.title,Zoom bei "Zum Raum" (Raumliste),Zoom on "Jump to Room" (Room List)
 settings.gameplay.multi_build.off,Aus,Off
 settings.gameplay.multi_build.on,An,On
 settings.gameplay.multi_build.shift,Mit Taste,With Key
 settings.gameplay.multi_build.shift_hint,Mehrfachbau (Halten),Multi-Build (Hold)
 settings.audio.door_sounds,Türen-Sounds,Door Sounds
+settings.audio.cash_sounds,Kassen-Sounds (Kasching),Cash Sounds (Cha-Ching)
+settings.audio.ui_sounds,Menü-Sounds (Düdeldü),UI Sounds
 settings.controls.ui.hotel_overview,Hotel Übersicht,Hotel Overview
 ui.dashboard.level,MANAGER - LEVEL ###,MANAGER - LEVEL ###
 ui.hud.max_level,MAX LEVEL,MAX LEVEL

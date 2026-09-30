@@ -54,6 +54,12 @@ func play(sound_name: String) -> void:
 	if not _sounds.has(sound_name):
 		return
 		
+	if sound_name == "cash" and not SettingsManager.play_cash_sounds:
+		return
+		
+	if sound_name in ["modal_open", "modal_close", "button_click"] and not SettingsManager.play_ui_sounds:
+		return
+		
 	var stream = _sounds[sound_name]
 	
 	# Find an available player

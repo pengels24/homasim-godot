@@ -26,6 +26,7 @@ func set_next_event(text: String) -> void:
 
 @onready var btn_pause: Button = %Pause
 @onready var btn_play: Button  = %Play
+@onready var btn_fast: Button  = get_node_or_null("%FastPlay")
 @onready var btn_ff: Button    = %Forward
 
 # Steuerung der unteren UI-Rochade (Links / Mitte / Rechts)
@@ -96,6 +97,7 @@ func _ready() -> void:
 	
 	btn_pause.tooltip_text = GameState.T("hud.top.right.tooltip.pause", _get_action_key_string("ui_pause"))
 	btn_play.tooltip_text = GameState.T("hud.top.right.tooltip.play", _get_action_key_string("ui_play"))
+	if btn_fast: btn_fast.tooltip_text = GameState.T("settings.controls.gameplay.fast") + " [" + _get_action_key_string("ui_fast") + "]"
 	btn_ff.tooltip_text = GameState.T("hud.top.right.tooltip.forward", _get_action_key_string("ui_forward"))
 	activity_btn.tooltip_text = GameState.T("hud.top.right.tooltip.activity_log", _get_action_key_string("ui_activity_log"))
 	
@@ -422,17 +424,26 @@ func _on_time_speed_changed(is_paused: bool, speed: float) -> void:
 	if is_paused:
 		btn_pause.set_pressed_no_signal(true)
 		btn_play.set_pressed_no_signal(false)
+		if btn_fast: btn_fast.set_pressed_no_signal(false)
 		btn_ff.set_pressed_no_signal(false)
 
-	elif speed > 1.0:
+	elif speed > 1.0 and speed < SettingsManager.ff_speed:
+		btn_pause.set_pressed_no_signal(false)
+		btn_play.set_pressed_no_signal(false)
+		if btn_fast: btn_fast.set_pressed_no_signal(true)
+		btn_ff.set_pressed_no_signal(false)
+
+	elif speed >= SettingsManager.ff_speed:
 		btn_ff.set_pressed_no_signal(true)
 		btn_pause.set_pressed_no_signal(false)
 		btn_play.set_pressed_no_signal(false)
+		if btn_fast: btn_fast.set_pressed_no_signal(false)
 
 	else:
 		btn_play.set_pressed_no_signal(true)
 		btn_pause.set_pressed_no_signal(false)
 		btn_ff.set_pressed_no_signal(false)
+		if btn_fast: btn_fast.set_pressed_no_signal(false)
 
 
 # =============================================================================

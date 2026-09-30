@@ -18,6 +18,7 @@ Der Herzschlag des Spiels. Der `TimeManager` steuert den zeitlichen Ablauf der H
 - `_hotel_ref` _(Dictionary)_: Eine Referenz auf das aktive Hotel-Datenpaket aus dem `GameState`, um den Tag direkt im Datensatz zu manipulieren.
 - `_game_hour` / `_game_minute` _(int)_: Die aktuelle Uhrzeit im laufenden Spiel.
 - `_game_paused` _(bool)_ / `_game_speed` _(float)_: Der aktuelle Zustand des Zeitflusses.
+- `_pre_pause_speed` _(float)_: Merkt sich die Geschwindigkeit vor einer Pause, um exakt dorthin zurückzukehren.
 - `_time_accum` _(float)_: Der interne Puffer, der die Delta-Zeitwerte (`delta`) der `_process`-Schleife sammelt, bis eine Ingame-Minute voll ist.
 
 ### 📡 Wichtige Signale

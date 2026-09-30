@@ -30,7 +30,11 @@ func _process(_delta: float) -> void:
 			var is_occupied = _map_grid.guest_manager and _map_grid.guest_manager.get_party_in_room(_target_room) != null
 			var is_pending = _target_room.get("is_pending_demolish")
 			
-			if is_pending:
+			var is_lobby = _target_room.get("room_type_id") == "lobby"
+			
+			if is_lobby:
+				_target_room.set_highlight(true, Color(1.0, 0.0, 0.0, 0.9)) # Red
+			elif is_pending:
 				_target_room.set_highlight(true, Color(0.5, 0.5, 0.5, 0.8)) # Gray
 			elif is_occupied:
 				_target_room.set_highlight(true, Color(1.0, 0.0, 0.0, 0.9)) # Red

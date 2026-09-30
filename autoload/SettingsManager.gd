@@ -31,6 +31,7 @@ var demolition_refund_rate: float = 0.5   # Kapital-Rückgabe beim Abreißen (0.
 var scroll_zoom_sensitivity: float = 1.0  # Mausrad-Zoom Empfindlichkeit
 var camera_pan_speed: float = 400.0       # WASD Kamera-Geschwindigkeit
 var multi_build_mode: int = 2             # 0=Aus, 1=An, 2=Shift
+var jump_zoom_enabled: bool = true        # Beim Sprung zu Raum/Gast automatisch reinzoomen
 
 # ── Audio ─────────────────────────────────────────────────────────────────────
 var master_volume: float = 1.0  # 0.0 – 1.0
@@ -38,6 +39,8 @@ var music_volume: float = 0.2  # 0.0 – 1.0
 var menu_music_volume: float = 0.2  # 0.0 – 1.0
 var sound_volume: float = 0.5  # 0.0 – 1.0
 var play_door_sounds: bool = true
+var play_cash_sounds: bool = true
+var play_ui_sounds: bool = true
 
 
 # ── Oberfläche ────────────────────────────────────────────────────────────────
@@ -246,6 +249,7 @@ func save() -> void:
 	cfg.set_value("gameplay", "camera_pan_speed", camera_pan_speed)
 	cfg.set_value("gameplay", "demolition_refund_rate", demolition_refund_rate)
 	cfg.set_value("gameplay", "scroll_zoom_sensitivity", scroll_zoom_sensitivity)
+	cfg.set_value("gameplay", "jump_zoom_enabled", jump_zoom_enabled)
 	cfg.set_value("gameplay", "multi_build_mode", multi_build_mode)
 	
 	cfg.set_value("audio", "master_volume", master_volume)
@@ -253,6 +257,8 @@ func save() -> void:
 	cfg.set_value("audio", "menu_music_volume", menu_music_volume)
 	cfg.set_value("audio", "sound_volume", sound_volume)
 	cfg.set_value("audio", "play_door_sounds", play_door_sounds)
+	cfg.set_value("audio", "play_cash_sounds", play_cash_sounds)
+	cfg.set_value("audio", "play_ui_sounds", play_ui_sounds)
 	cfg.set_value("ui", "scale", ui_scale)
 	cfg.set_value("ui", "toast_duration", toast_duration)
 	cfg.set_value("ui", "hud_side", hud_side)
@@ -290,12 +296,15 @@ func _load() -> void:
 	camera_pan_speed = cfg.get_value("gameplay", "camera_pan_speed", camera_pan_speed)
 	demolition_refund_rate = cfg.get_value("gameplay", "demolition_refund_rate",    demolition_refund_rate)
 	scroll_zoom_sensitivity = cfg.get_value("gameplay", "scroll_zoom_sensitivity", scroll_zoom_sensitivity)
+	jump_zoom_enabled = cfg.get_value("gameplay", "jump_zoom_enabled", jump_zoom_enabled)
 	multi_build_mode = cfg.get_value("gameplay", "multi_build_mode", multi_build_mode)
 	master_volume = cfg.get_value("audio",    "master_volume",             master_volume)
 	music_volume = cfg.get_value("audio",    "music_volume",              music_volume)
 	menu_music_volume = cfg.get_value("audio",    "menu_music_volume",         menu_music_volume)
 	sound_volume = cfg.get_value("audio",    "sound_volume",              sound_volume)
 	play_door_sounds = cfg.get_value("audio", "play_door_sounds", true)
+	play_cash_sounds = cfg.get_value("audio", "play_cash_sounds", true)
+	play_ui_sounds = cfg.get_value("audio", "play_ui_sounds", true)
 	ui_scale = cfg.get_value("ui",       "scale",          ui_scale)
 	toast_duration = cfg.get_value("ui", "toast_duration", 3.5)
 	hud_side = cfg.get_value("ui", "hud_side", "center")

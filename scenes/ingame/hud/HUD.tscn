@@ -2,23 +2,22 @@
 
 [ext_resource type="Script" uid="uid://c3gc6t5sg7n76" path="res://scenes/ingame/hud/HUD.gd" id="1_jp5st"]
 [ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="2_n7g7k"]
-[ext_resource type="Texture2D" uid="uid://p63omxtgdu35" path="res://assets/icons/HUDTop/play.svg" id="3_2d45u"]
 [ext_resource type="PackedScene" path="res://scenes/ingame/hud/LabelPanel.tscn" id="3_unqwd"]
-[ext_resource type="Texture2D" uid="uid://digmreddi030f" path="res://assets/icons/HUDTop/fast-forward.svg" id="4_feby4"]
 [ext_resource type="Texture2D" uid="uid://d3qtauemfxupf" path="res://assets/icons/HUDTop/trending-up.svg" id="5_s3kxq"]
-[ext_resource type="Texture2D" uid="uid://dvuvt72n64q4v" path="res://assets/icons/HUDTop/star-progress.png" id="6_eas3h"]
-[ext_resource type="Texture2D" uid="uid://eea5n5pqc655" path="res://assets/icons/HUDTop/star-progress_overlay.png" id="7_wqcpy"]
 [ext_resource type="Texture2D" uid="uid://binuqinwev353" path="res://assets/icons/HUDTop/banknote.svg" id="8_grv02"]
 [ext_resource type="Texture2D" uid="uid://edwv5uggcu88" path="res://assets/icons/HUDTop/briefcase.svg" id="9_dhj4j"]
+[ext_resource type="Texture2D" uid="uid://diy57o1itg4io" path="res://assets/icons/angelus2010/TimeControl/ang-icon-pause.aseprite" id="10_0bsoo"]
 [ext_resource type="Texture2D" uid="uid://coow8q5bvjgrm" path="res://assets/icons/HUDTop/lightbulb.svg" id="10_f542l"]
+[ext_resource type="Texture2D" uid="uid://c4vf3jpb3ht4o" path="res://assets/icons/angelus2010/TimeControl/ang-icon-play-1.aseprite" id="11_6iy1x"]
 [ext_resource type="Texture2D" uid="uid://bfib8j3upw5hb" path="res://assets/icons/HUDTop/calendar-days.svg" id="11_l8bek"]
-[ext_resource type="Texture2D" uid="uid://yxnshplq4qqh" path="res://assets/icons/HUDTop/pause.svg" id="12_unqwd"]
+[ext_resource type="Texture2D" uid="uid://b4ega45bl8hle" path="res://assets/icons/angelus2010/TimeControl/ang-icon-play-2.aseprite" id="12_fiam6"]
 [ext_resource type="StyleBox" uid="uid://brk7dwg72hmhm" path="res://assets/UI/hud_button_pressed_gold_bgt.tres" id="12_yugll"]
+[ext_resource type="Texture2D" uid="uid://cku6627j31rok" path="res://assets/icons/angelus2010/TimeControl/ang-icon-forward.aseprite" id="13_yugll"]
 [ext_resource type="PackedScene" uid="uid://c5yo6bx5wcaoj" path="res://scenes/ingame/hud/HUDBottom.tscn" id="15_r421g"]
 [ext_resource type="PackedScene" uid="uid://2l7rq0krey8f" path="res://scenes/ingame/hud/BuildMenu.tscn" id="17_8e3pd"]
 [ext_resource type="PackedScene" uid="uid://dnlttoshpxisb" path="res://scenes/ingame/hud/modals/LevelUpModal.tscn" id="24_6iy1x"]
 [ext_resource type="PackedScene" uid="uid://bcweu4cs7d73x" path="res://scenes/ingame/hud/modals/StandardModal.tscn" id="25_fiam6"]
-[ext_resource type="Texture2D" path="res://assets/icons/angelus2010/ang-active-boost-event.aseprite" id="26_boost"]
+[ext_resource type="Texture2D" uid="uid://dp4cse6xw3d6w" path="res://assets/icons/angelus2010/ang-active-boost-event.aseprite" id="26_boost"]
 [ext_resource type="PackedScene" uid="uid://df2m4b8v7e1q" path="res://scenes/ingame/hud/TechOverlay.tscn" id="50_tech"]
 [ext_resource type="PackedScene" uid="uid://dxemoh2bim084" path="res://scenes/ingame/hud/BuildHintPanel.tscn" id="51_bh"]
 [ext_resource type="PackedScene" uid="uid://dly5vgbhpbm6r" path="res://scenes/ingame/hud/ActivityLogPanel.tscn" id="52_log"]
@@ -131,7 +130,7 @@ _data = {
 
 [sub_resource type="ButtonGroup" id="ButtonGroup_fiam6"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_0bsoo"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_gxa1c"]
 allow_unpress = true
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nextevent"]
@@ -220,19 +219,19 @@ layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 4
 
-[node name="Star1" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars/GourmetStars"]
+[node name="Star1" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars/GourmetStars" unique_id=964922201]
 layout_mode = 2
 
-[node name="Star2" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars/GourmetStars"]
+[node name="Star2" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars/GourmetStars" unique_id=843326948]
 layout_mode = 2
 
-[node name="Star3" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars/GourmetStars"]
+[node name="Star3" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars/GourmetStars" unique_id=164685047]
 layout_mode = 2
 
-[node name="Star4" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars/GourmetStars"]
+[node name="Star4" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars/GourmetStars" unique_id=404264898]
 layout_mode = 2
 
-[node name="Star5" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars/GourmetStars"]
+[node name="Star5" type="TextureRect" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars/GourmetStars" unique_id=1131390913]
 layout_mode = 2
 
 [node name="Gap" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1833546165]
@@ -479,6 +478,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(95, 0)
 layout_mode = 2
 tooltip_text = "hud.top.tooltip.time"
+mouse_filter = 0
 theme_override_colors/font_color = Color(0.8039216, 0.61960787, 0.039215688, 1)
 theme_override_font_sizes/font_size = 36
 text = "23:59"
@@ -486,7 +486,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Button" type="Panel" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1438380072]
-custom_minimum_size = Vector2(50, 0)
+custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer/Button" unique_id=2133416726]
@@ -514,10 +514,10 @@ theme_override_styles/pressed = ExtResource("12_yugll")
 toggle_mode = true
 button_pressed = true
 button_group = SubResource("ButtonGroup_fiam6")
-icon = ExtResource("12_unqwd")
+icon = ExtResource("10_0bsoo")
 
 [node name="Button2" type="Panel" parent="TopBar/MarginContainer/HBoxContainer" unique_id=258683198]
-custom_minimum_size = Vector2(50, 0)
+custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer/Button2" unique_id=1828578882]
@@ -544,10 +544,40 @@ mouse_default_cursor_shape = 2
 theme_override_styles/pressed = ExtResource("12_yugll")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_fiam6")
-icon = ExtResource("3_2d45u")
+icon = ExtResource("11_6iy1x")
+
+[node name="Button4" type="Panel" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1629219235]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer/Button4" unique_id=1818929798]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -17.0
+offset_bottom = 17.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 1
+theme_override_constants/margin_right = 10
+
+[node name="FastPlay" type="Button" parent="TopBar/MarginContainer/HBoxContainer/Button4/MarginContainer" unique_id=1393030499]
+unique_name_in_owner = true
+modulate = Color(0.9411765, 0.7294118, 0.6392157, 1)
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_styles/pressed = ExtResource("12_yugll")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_fiam6")
+icon = ExtResource("12_fiam6")
 
 [node name="Button3" type="Panel" parent="TopBar/MarginContainer/HBoxContainer" unique_id=1699511678]
-custom_minimum_size = Vector2(50, 0)
+custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer/Button3" unique_id=1558075564]
@@ -574,7 +604,7 @@ mouse_default_cursor_shape = 2
 theme_override_styles/pressed = ExtResource("12_yugll")
 toggle_mode = true
 button_group = SubResource("ButtonGroup_fiam6")
-icon = ExtResource("4_feby4")
+icon = ExtResource("13_yugll")
 
 [node name="ManagementContainer" type="MarginContainer" parent="." unique_id=999999991]
 anchors_preset = 1
@@ -590,31 +620,34 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Reception" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel2/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1938624481) index="0" unique_id=2132307684]
-button_group = SubResource("ButtonGroup_0bsoo")
+button_group = SubResource("ButtonGroup_gxa1c")
 
 [node name="TechTree" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel4/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1152472691) index="0" unique_id=1848820052]
-button_group = SubResource("ButtonGroup_0bsoo")
+button_group = SubResource("ButtonGroup_gxa1c")
 
 [node name="GuestList" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel7/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1564498093) index="0" unique_id=1602170882]
-button_group = SubResource("ButtonGroup_0bsoo")
+button_group = SubResource("ButtonGroup_gxa1c")
 
 [node name="RoomList" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel8/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1190011345) index="0" unique_id=790306827]
-button_group = SubResource("ButtonGroup_0bsoo")
+button_group = SubResource("ButtonGroup_gxa1c")
 
 [node name="Staff" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel3/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1093129650) index="0" unique_id=1652034052]
-button_group = SubResource("ButtonGroup_0bsoo")
+button_group = SubResource("ButtonGroup_gxa1c")
 
 [node name="Finances" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel9/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1759843935) index="0" unique_id=390759144]
-button_group = SubResource("ButtonGroup_0bsoo")
+button_group = SubResource("ButtonGroup_gxa1c")
 
 [node name="SimBrowser" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel5/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1000552068) index="0" unique_id=103433776]
-button_group = SubResource("ButtonGroup_0bsoo")
+button_group = SubResource("ButtonGroup_gxa1c")
 
 [node name="QuestBook" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel6/MarginContainer" parent_id_path=PackedInt32Array(491735265, 244124741) index="0" unique_id=969239424]
-button_group = SubResource("ButtonGroup_0bsoo")
+button_group = SubResource("ButtonGroup_gxa1c")
+
+[node name="HotelOverview" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel11/MarginContainer" parent_id_path=PackedInt32Array(491735265, 2024101112) index="0" unique_id=2024101113]
+button_group = SubResource("ButtonGroup_gxa1c")
 
 [node name="Tutorial" parent="ManagementContainer/HUDBottom/HBoxContainer/Panel10/MarginContainer" parent_id_path=PackedInt32Array(491735265, 1410065400) index="0" unique_id=1410065401]
-button_group = SubResource("ButtonGroup_0bsoo")
+button_group = SubResource("ButtonGroup_gxa1c")
 
 [node name="ActivityLogContainer" type="Panel" parent="." unique_id=1434128839]
 custom_minimum_size = Vector2(60, 60)
@@ -765,8 +798,8 @@ text = "Keine Events"
 
 [node name="CityEventRow" type="HBoxContainer" parent="EventIndicator/VBoxContainer" unique_id=1999901002]
 unique_name_in_owner = true
-layout_mode = 2
 visible = false
+layout_mode = 2
 
 [node name="CityEventIcon" type="TextureRect" parent="EventIndicator/VBoxContainer/CityEventRow" unique_id=1498175923]
 unique_name_in_owner = true
@@ -781,7 +814,6 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6, 0.9, 0.4, 1)
 theme_override_font_sizes/font_size = 22
-text = ""
 
 [node name="PauseLabel" type="Label" parent="." unique_id=1948573928]
 visible = false

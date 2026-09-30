@@ -25,8 +25,8 @@ func _ready() -> void:
 
 # =============================================================================
 func _on_room_hovered(room: Node2D, is_hovered: bool) -> void:
-	# Wenn ein Menü (Modal/Pause) offen ist, zeigen wir keine Tooltips!
-	if InputHandler.current_mode in [InputHandler.InputMode.MODAL, InputHandler.InputMode.PAUSE, InputHandler.InputMode.CONSOLE]:
+	# Wenn ein Menü (Modal/Pause/Room_Selected) offen ist, zeigen wir keine Tooltips!
+	if InputHandler.current_mode in [InputHandler.InputMode.MODAL, InputHandler.InputMode.PAUSE, InputHandler.InputMode.CONSOLE, InputHandler.InputMode.ROOM_SELECTED]:
 		hide()
 		return
 		
@@ -46,7 +46,7 @@ func _on_room_hovered(room: Node2D, is_hovered: bool) -> void:
 
 # =============================================================================
 func _process(delta: float) -> void:
-	if InputHandler.current_mode in [InputHandler.InputMode.MODAL, InputHandler.InputMode.PAUSE, InputHandler.InputMode.CONSOLE]:
+	if InputHandler.current_mode in [InputHandler.InputMode.MODAL, InputHandler.InputMode.PAUSE, InputHandler.InputMode.CONSOLE, InputHandler.InputMode.ROOM_SELECTED]:
 		hide()
 		return
 		

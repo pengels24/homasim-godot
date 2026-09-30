@@ -63,10 +63,16 @@
 		"default": "1",
 		"default_alt": ""
 	  },
-	  "ui_forward": {
-		"label": "settings.controls.gameplay.forward",
+	  "ui_fast": {
+		"label": "settings.controls.gameplay.fast",
 		"order": 3,
 		"default": "2",
+		"default_alt": ""
+	  },
+	  "ui_forward": {
+		"label": "settings.controls.gameplay.forward",
+		"order": 4,
+		"default": "3",
 		"default_alt": ""
 	  }
 	}

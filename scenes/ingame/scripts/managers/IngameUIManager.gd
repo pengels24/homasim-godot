@@ -724,7 +724,7 @@ func _sync_guest_ui() -> void:
 # ── Personal (F4) ─────────────────────────────────────────────────────────────
 
 # =============================================================================
-func open_staff() -> void:
+func open_staff(start_tab_index: int = 0) -> void:
 	var level = GameState.selected_hotel.get("level", 1)
 	
 	if level < 2: # ANG-365: StaffSmall.req_level = 2
@@ -739,6 +739,9 @@ func open_staff() -> void:
 	if not is_instance_valid(staff_modal): return
 
 	_set_modal_pausing(true)
+	
+	if staff_modal.has_method("setup"):
+		staff_modal.setup({"tab": start_tab_index})
 	
 	if is_instance_valid(_bottom_bar):
 		_bottom_bar.sync_button_state("staff")

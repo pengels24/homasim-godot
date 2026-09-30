@@ -34,3 +34,12 @@
   - Wording im Main Menü Footer bereinigt ("Made with Godot").
 - **Tech-Overlay (F3 / Settings):**
   - In Release-Builds (Tester) zeigt das Overlay nun ausschließlich die FPS an, anstatt "0.0 MB" RAM. Das Panel passt sich in der Höhe dynamisch an (shrinks to fit).
+
+## Quality of Life & UI-Feedback
+- **Live-Monitor / PiP:** Das UI-Layer (Layer 2) mit den Putz/Reparatur-Icons wird auf den PiP-Monitoren in der Raum-/Gästeliste nun maskiert, damit sie nicht verschwommen über den Mini-Bildschirmen schweben.
+- **Zimmer-Tooltip:** Tooltip für "Gourmet-Sterne" hinzugefügt (HUD Sterne oben links).
+- **Bau-Modus Feedback:** Fährt man im geöffneten Bau-Menü über einen bestehenden Raum (ohne ein Werkzeug gewählt zu haben), wird nun ein 🚫 Verboten-Mauszeiger sowie ein Warn-Tooltip "Interaktion während des Bauens nicht möglich!" angezeigt.
+- **Personal-Management:** Die Beschriftung "POI-Räume" hat nun eine Unterstreichung und einen erklärenden Hover-Tooltip erhalten.
+- **Raum-Status (Kein Personal):** Das rote "Kein Personal" Icon über Räumen reagiert nun auf Hover mit dem Hand-Cursor. Klickt man darauf, öffnet sich direkt das Personal-Menü auf dem Tab "Zuweisung". (Der Tooltip lautet nun explizit: "Kein Personal (Klick für Zuweisung)").
+- **Visuelle Einheitlichkeit:** Icons rechts oben im Livemonitor sind nun einheitlich und aufgeräumt.
+- **Baumenü:** Icon für Abrissmode ist nun auch weiß wie alle anderen Icons im Baumenü.

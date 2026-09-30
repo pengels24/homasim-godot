@@ -212,6 +212,7 @@ horizontal_alignment = 2
 [node name="GourmetStars" type="MarginContainer" parent="TopBar/MarginContainer/HBoxContainer" unique_id=184062569]
 custom_minimum_size = Vector2(140, 0)
 layout_mode = 2
+tooltip_text = "hud.top.tooltip.stars"
 
 [node name="GourmetStars" type="HBoxContainer" parent="TopBar/MarginContainer/HBoxContainer/GourmetStars" unique_id=1165738142]
 unique_name_in_owner = true

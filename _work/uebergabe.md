@@ -1,24 +1,29 @@
-# Übergabeprotokoll (Ende v0.2.2 Session)
+# Übergabeprotokoll (v0.2.2)
+Datum: 29.09.2026
 
-**Letzter Stand:**
-- Das Spielversion wurde auf **v0.2.2** angehoben.
-- Ein vollumfänglicher Test und Bugfixing-Lauf für das Ingame-Tutorial wurde durchgeführt.
-- Das Tutorial (Savegame -2) sollte nun extrem robust laufen, da viele Edge-Cases (Hotkeys, unpräzise Ghosts, fehlerhaft positionierte Blaupausen) behoben wurden.
+## Letzter Stand
+- Wir befinden uns im **Pre-Alpha Tester-Feedback-Zyklus**. Der User arbeitet gerade eine Bug- und Polish-Liste durch. 
+- Das Spiel läuft weiterhin unter `v0.2.2` (kein Versions-Bump, da wir mittendrin pausieren).
 
-**Was wurde gemacht:**
-1. **TutorialScenarioManager.gd:** 
-   - Kamerabewegung (Step 2) misst nun exakte *Zeit* (5s), egal ob per Hotkey oder Maus.
-   - Kamerazoom (Step 3) fordert nun das Erreichen beider Extreme (0.5 und 4.0) via Bitmask.
-   - Rezeption öffnen (Step 15) fragt im `_process` kontinuierlich den State von `bottom.reception.button_pressed` ab, sodass auch Öffnungen per Hotkey (F1) sofort getriggert werden.
-   - Personalraum-Bau (Step 21) nutzt nun eine eigene Variable `_target_door_offset`, um die Blaupause (`_draw_blueprint`) exakt mit der gewünschten Tür-Position (rechts unten, `offset = 1`, `rot = 2`) anzuzeigen. Der Assistent wurde nach rechts verschoben (`_slide_assistant(true)`).
-2. **BuildCursor.gd:** 
-   - Die restriktive "Ghost wird nur grün auf dem perfekten Spot"-Logik greift nun auch in Step 21. 
-   - Sie prüft nicht mehr nur Raum-Koordinaten und -Rotation, sondern auch zwingend `door_rotation` und `door_offset`, sodass der Spieler die Tür exakt wie auf der Blaupause platzieren MUSS.
-3. **Texte / Loca:**
-   - Kategorie für Personalraum im Tutorial auf "Management" statt "Dienstleistung" geändert.
-   - Zusatzhinweis zum Vorspulen der Zeit in Step 10 hinzugefügt.
-   - Der grüne Tür-Indikator ist zu 50% transparent und permanent am Bau-Cursor aktiv.
+## Bearbeitete Systeme & Refactorings (Aktuelle Session)
+- **Settings / Display:**
+  - Standard-Monitor ID von `-1` auf `0` geändert.
+  - Option für exklusiven Vollbildmodus (Exclusive Fullscreen) und Maus-Einsperren (`MOUSE_MODE_CONFINED`) implementiert, inklusive Lokalisierung.
+- **UI & Lokalisierung:**
+  - WipLabel in `NewHotelModal` behoben.
+  - "Made with Godot"-Footer im Hauptmenü bereinigt.
+  - `darkblue` Styling auf die "Weiter"-Buttons diverser Modals (LevelUp, StarAchieved) angewendet.
+  - Quotes-Parsing-Bug in `language.csv` gefixt (`ui.tutorial.forschung.intro`).
+  - Hardcodierte Texte für Tooltips (`RoomStatusIndicator.gd`) und den "Abbrechen"-Button (`ListModal.gd`) durch `GameState.T` ersetzt.
+- **HUD & TechOverlay:**
+  - Das RAM-Tracking im Debug-Overlay lieferte in Release-Builds immer `0 MB`. Daher zeigt das Panel in Release-Builds (mittels `OS.has_feature("debug")`) jetzt nur noch die FPS an und passt sich in der Höhe automatisch an.
+- **Kamera & Steuerung:**
+  - Ein Bug wurde behoben, bei dem sich die Kamera bei jedem Beenden des Bau/Abriss-Modus ungewollt zentrierte. Dies passiert nun nur noch, wenn der Parzellen-Kauf-Modus beendet wird.
+  - Die Zimmer-Aktionen (`RoomContextMenu`) blockierten bisher das Navigieren der Map, da sie als `InputMode.MODAL` deklariert waren.
+    - Neuer Zustand `InputMode.ROOM_SELECTED` wurde in `InputHandler.gd` integriert, der WASD und Zoom wieder freigibt.
+    - Das Kontextmenü wurde umgebaut, sodass es bei bewegter Kamera dynamisch auf dem Bildschirm "mitfährt" und am Zimmer klebt (außer es wird vom Spieler via Drag and Drop gezogen).
+  - Fehlende Feature-Unlocks (Personal) deaktivieren nun die Service/Maintenance Buttons (disabled status), statt Error-Toasts zu werfen. Sie erhielten Tooltips und das `darkblue` Disabled-Theme.
 
-**Sofortige nächste Schritte (für den neuen Agenten):**
-- Das Tutorial ist fertiggestellt und gefixt. Der nächste Agent sollte den Nutzer fragen, ob weitere Bugfixes für v0.2.2 nötig sind oder ob mit neuen Features aus dem Alpha-Backlog (z.B. ANG-364 Pathfinding-Rework oder Personalflure) begonnen werden soll.
-- Der Nutzer hatte erwähnt, dass evt. noch kleine Fixes für v0.2.1/v0.2.2 offen sein könnten. Bitte im Chat anknüpfen!
+## Sofortige nächste Schritte
+- Der User hat die Session nach Abarbeiten eines UI-Bug-Stapels unterbrochen. Wenn er in ~2 Stunden wiederkommt, wird er direkt mit dem **nächsten Punkt auf der Tester-Feedback-Liste** weitermachen.
+- Höre dir an, was der Tester-Punkt ist, lies ggf. nochmal dieses Dokument, falls der Faden gerissen ist, und mache direkt weiter. Keine Versions-Bumps ohne ausdrückliche Freigabe.

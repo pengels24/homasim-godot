@@ -16,6 +16,8 @@ func _ready() -> void:
 	
 	viewport.world_2d = get_tree().root.get_viewport().world_2d
 	viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
+	# Ausblenden des UI-Layers (Layer 2, Bit 1) im PiP (damit Icons nicht unscharf reinrendern)
+	viewport.canvas_cull_mask &= ~2
 
 func set_target(target_node: Node2D) -> void:
 	if is_instance_valid(_target) and _target.tree_exiting.is_connected(_on_target_exiting):

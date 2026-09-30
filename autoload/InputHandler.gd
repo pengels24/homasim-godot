@@ -18,6 +18,10 @@ var current_mode: InputMode = InputMode.NORMAL
 @warning_ignore("unused_private_class_variable")
 var _reset_frame_lock: int = -1
 
+var _hovered_room_count: int = 0
+var is_cursor_tool_active: bool = false
+var _is_cursor_forbidden: bool = false
+
 # ── SIGNALE ────────────────────────────────────────────────
 # camera
 signal sig_camera_pan_requested(direction: Vector2) # WASD
@@ -52,10 +56,25 @@ signal sig_debug_action_requested
 func _ready() -> void:
 	# Das macht diesen Autoload immun gegen die Godot-Pause!
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	GameState.sig_room_hovered.connect(_on_room_hovered)
+
+func _on_room_hovered(room: Node2D, is_hovered: bool) -> void:
+	if is_hovered:
+		_hovered_room_count += 1
+	else:
+		_hovered_room_count = maxi(0, _hovered_room_count - 1)
 
 
 # =============================================================================
 func _process(delta: float) -> void:
+	if current_mode == InputMode.BUILD and not is_cursor_tool_active and _hovered_room_count > 0:
+		if not _is_cursor_forbidden:
+			Input.set_default_cursor_shape(Input.CURSOR_FORBIDDEN)
+			_is_cursor_forbidden = true
+	elif _is_cursor_forbidden:
+		Input.set_default_cursor_shape(Input.CURSOR_ARROW)
+		_is_cursor_forbidden = false
+
 	# Wenn Pause, ein Modal oder die Konsole offen ist, blockieren wir jegliche Tastatur-Bewegung
 	if current_mode in [InputMode.PAUSE, InputMode.MODAL, InputMode.CONSOLE]:
 		return

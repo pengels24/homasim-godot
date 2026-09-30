@@ -25,8 +25,13 @@ func _ready() -> void:
 
 # =============================================================================
 func _on_room_hovered(room: Node2D, is_hovered: bool) -> void:
-	# Wenn ein Menü (Modal/Pause/Build) offen ist, zeigen wir keine Tooltips!
-	if InputHandler.current_mode != InputHandler.InputMode.NORMAL:
+	# Wenn ein Menü (Modal/Pause) offen ist, zeigen wir keine Tooltips!
+	if InputHandler.current_mode in [InputHandler.InputMode.MODAL, InputHandler.InputMode.PAUSE, InputHandler.InputMode.CONSOLE]:
+		hide()
+		return
+		
+	# Im Baumodus nur anzeigen, wenn gerade kein Raum/Abriss am Cursor hängt
+	if InputHandler.current_mode == InputHandler.InputMode.BUILD and InputHandler.is_cursor_tool_active:
 		hide()
 		return
 		
@@ -41,7 +46,11 @@ func _on_room_hovered(room: Node2D, is_hovered: bool) -> void:
 
 # =============================================================================
 func _process(delta: float) -> void:
-	if InputHandler.current_mode != InputHandler.InputMode.NORMAL:
+	if InputHandler.current_mode in [InputHandler.InputMode.MODAL, InputHandler.InputMode.PAUSE, InputHandler.InputMode.CONSOLE]:
+		hide()
+		return
+		
+	if InputHandler.current_mode == InputHandler.InputMode.BUILD and InputHandler.is_cursor_tool_active:
 		hide()
 		return
 		
@@ -86,6 +95,19 @@ func _update_content() -> void:
 	if _target_room.get("room_number") != null and str(_target_room.get("room_number")) != "":
 		room_name += " " + str(_target_room.get("room_number"))
 	title_label.text = "🏨 " + room_name
+	
+	if InputHandler.current_mode == InputHandler.InputMode.BUILD:
+		status_label.text = "[color=#e74c3c]" + GameState.T("room.tooltip.build_mode_locked", "Interaktion während des Bauens nicht möglich!") + "[/color]"
+		status_label.show()
+		guests_label.hide()
+		if is_instance_valid(staff_label): staff_label.hide()
+		if is_instance_valid(stay_progress): stay_progress.hide()
+		if stay_spacer: stay_spacer.hide()
+		if is_instance_valid(clean_progress): clean_progress.hide()
+		if is_instance_valid(maintain_progress): maintain_progress.hide()
+		reset_size()
+		size = Vector2.ZERO
+		return
 	
 	# Status
 	var status = GameState.T("room.tooltip.free")

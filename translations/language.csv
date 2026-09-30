@@ -95,7 +95,8 @@ hud.top.right.tooltip.pause,Pause: Spielzeit anhalten ###,Pause: Stop game time 
 hud.top.right.tooltip.play,Abspielen: Normale Geschwindigkeit ###,Play: Normal speed ###
 hud.top.right.tooltip.forward,Vorspulen: Zeit beschleunigen ###,Fast forward: Speed up time ###
 hud.top.tooltip.hotelname,Dein aktuelles Hotel,Your current hotel
-hud.top.tooltip.level,Hotel Level\nSteigt durch gesammelte Erfahrung (EXP).,Hotel Level\nIncreases through collected experience (EXP).
+hud.top.tooltip.level,"Hotel Level\nSteigt durch gesammelte Erfahrung (EXP).","Hotel Level\nIncreases through collected experience (EXP)."
+hud.top.tooltip.stars,"Gourmet-Sterne\nWerden vom anonymen Inspektor verliehen und schalten neue Forschungen frei.","Gourmet Stars\nAwarded by the anonymous inspector, unlocking new research tiers."
 hud.top.tooltip.capital,Kapital\nDein aktuell verfügbares Geld.,Capital\nYour currently available funds.
 hud.top.tooltip.guests,Gäste (Aktiv | Wartend | Abreisebereit)\nZeigt die Anzahl der Gäste im jeweiligen Status.,Guests (Active | Waiting | Departing)\nShows the number of guests in each status.
 hud.top.tooltip.day,Aktueller Spieltag\nEin Tag endet um 24:00 Uhr.,Current game day\nA day ends at midnight.
@@ -699,6 +700,7 @@ ui.staff.tab_assign,Zuweisung,Assignment
 ui.staff.auto_assign_title,Auto-Zuweisung,Auto Assignment
 ui.staff.auto_assign_desc,"Das Personal sucht sich selbstständig freie Arbeitsplätze (z.B. sucht ein Barkeeper automatisch nach einer Bar).\n\nKlicke links bei einem Raum auf 'Freistellen', um einen Mitarbeiter von diesem Raum zu lösen. Er sucht sich dann automatisch einen neuen, unbesetzten Arbeitsplatz.","Staff members automatically find available workplaces (e.g., a bartender automatically seeks an unstaffed bar).\n\nClick 'Unassign' next to a room on the left to detach a staff member from that room. They will then automatically search for a new, unstaffed workplace."
 ui.staff.assign_poi,POI-Räume,POI Rooms
+ui.staff.poi_tooltip,"Point of Interest (z.B. Gastronomie, Wellness, Tagung)","Point of Interest (e.g., dining, wellness, conferences)"
 ui.staff.assign_staff,Verfügbares Personal,Available Staff
 ui.staff.no_pois,Keine POI-Räume gebaut.,No POI rooms built.
 ui.staff.poi_staffed,  ✅ Besetzt (%d Personal),  ✅ Staffed (%d staff)
@@ -1834,8 +1836,9 @@ tt.build.room.limit_reached,Limit erreicht (###/***),Limit reached (###/***)
 tutorial.tip_gastro_overload.title,Gastronomie überlastet!,Gastronomy Overloaded!
 tutorial.tip_gastro_overload.desc,"Dein Restaurant ist voll, aber du hast zu wenig Personal. Stelle mehr Bedienungen oder Köche ein, damit deine Gäste nicht zu lange warten müssen.","Your restaurant is full, but you don't have enough staff. Hire more waiters or chefs so your guests don't have to wait too long."
 room.tooltip.closed_condition,Geschlossen (Wartung/Reinigung),Closed (Maintenance/Cleaning)
+room.tooltip.build_mode_locked,Interaktion während des Bauens nicht möglich!,Interaction locked while building!
 tutorial.hint.your_turn,Und nun du!,Now it's your turn!
 settings.ui.window_mode.windowed,Fenstermodus,Windowed
 settings.gameplay.tutorial_tips,Tutorial-Tipps (Hilfe),Tutorial Tips (Help)
-ui.room.unstaffed_tooltip,Kein Personal,No Staff
+ui.room.unstaffed_tooltip,Kein Personal (Klick für Zuweisung),No Staff (Click to assign)
 ui.room.understaffed_tooltip,Unterbesetzt,Understaffed

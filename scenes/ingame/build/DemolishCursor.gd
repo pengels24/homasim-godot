@@ -10,6 +10,7 @@ var _rmb_pressed_pos := Vector2.ZERO
 func activate(map_grid: Node2D) -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_map_grid = map_grid
+	InputHandler.is_cursor_tool_active = true
 	Input.set_custom_mouse_cursor(load("res://assets/icons/HUDBottom/hammer.svg"))
 	
 func _process(_delta: float) -> void:
@@ -72,6 +73,7 @@ func _cancel() -> void:
 func _exit_tree() -> void:
 	if is_instance_valid(_target_room) and _target_room.has_method("set_highlight"):
 		_target_room.set_highlight(false)
+	InputHandler.is_cursor_tool_active = false
 	Input.set_custom_mouse_cursor(null)
 
 func _try_demolish() -> void:

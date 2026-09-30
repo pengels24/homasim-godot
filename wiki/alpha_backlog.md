@@ -13,6 +13,7 @@
 ---
 
 ## 🔧 Ungeplante Fixes & Features (Aktuelle Session)
+- [x] **Quality of Life (v0.2.2):** Live-Monitor PiP Maskierung, Bau-Modus Hover-Feedback, POI-Label Tooltips und rotes "Kein Personal" Icon im Livemonitor direkt klickbar gemacht. Icons im Livemonitor aufgeräumt und Abrissmode-Icon im Baumenü angepasst.
 - [x] **Tutorial Polishing (v0.2.2):** Schritt 2 (Kamera-Move) streng auf Zeit (5s) gewandelt, Schritt 3 (Zoom) auf Boundaries (0.5/4.0), Schritt 15 (Rezeption) feuert jetzt sicher per Polling im Process inkl. Hotkeys (F1), Blaupause Personalraum korrigiert und Ghost-Validierung in Step 21 verschärft (Türen rot/offset exakt).
 - [x] **Bugfix Lobby Clicks:** Gäste lassen sich nun auch in der Lobby anklicken (z.B. im `AWAITING_CHECKOUT` State). `input_pickable` wird nicht mehr auf `false` gezwungen und Area-Priority auf 100 erhöht.
 - [x] **Asynchrones Aufwachen & Zimmer-Wandern:** Die 15-Minuten starren Intervall-Loops in GuestActor wurden aufbrochen. Jeder Gast nutzt nun `_my_wander_interval` (4-10 Min).

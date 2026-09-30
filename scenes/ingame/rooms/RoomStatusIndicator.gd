@@ -23,6 +23,16 @@ func _ready() -> void:
 	if icon_unstaffed:
 		icon_unstaffed.tooltip_text = "Unterbesetzt"
 		icon_unstaffed.mouse_filter = Control.MOUSE_FILTER_PASS
+		if not icon_unstaffed.gui_input.is_connected(_on_icon_unstaffed_gui_input):
+			icon_unstaffed.gui_input.connect(_on_icon_unstaffed_gui_input)
+		
+	_set_visibility_layer_recursive(self, 2)
+
+func _set_visibility_layer_recursive(node: Node, layer: int) -> void:
+	if node is CanvasItem:
+		node.visibility_layer = layer
+	for child in node.get_children():
+		_set_visibility_layer_recursive(child, layer)
 
 func set_status(needs_cleaning: bool, needs_repair: bool, pending_demolish: bool = false, staff_status: int = 0, cleaning_requested: bool = false, repair_requested: bool = false, is_critical_clean: bool = false, is_critical_repair: bool = false) -> void:
 	if not is_node_ready():
@@ -64,11 +74,24 @@ func set_status(needs_cleaning: bool, needs_repair: bool, pending_demolish: bool
 		if staff_status == 1:
 			icon_unstaffed.modulate = Color(1.0, 0.5, 0.0)
 			icon_unstaffed.tooltip_text = GameState.T("ui.room.understaffed_tooltip", "Unterbesetzt")
+			icon_unstaffed.mouse_default_cursor_shape = Control.CURSOR_ARROW
 		elif staff_status == 2:
 			icon_unstaffed.modulate = Color(0.89, 0.1, 0.1)
-			icon_unstaffed.tooltip_text = GameState.T("ui.room.unstaffed_tooltip", "Kein Personal")
+			icon_unstaffed.tooltip_text = GameState.T("ui.room.unstaffed_tooltip", "Kein Personal (Klick für Zuweisung)")
+			icon_unstaffed.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	
 	size = Vector2.ZERO
+
+func _on_icon_unstaffed_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if icon_unstaffed.modulate.is_equal_approx(Color(0.89, 0.1, 0.1)):
+			if InputHandler.current_mode == InputHandler.InputMode.NORMAL:
+				get_viewport().set_input_as_handled()
+				var ingame = get_tree().current_scene
+				if is_instance_valid(ingame) and ingame.name == "Ingame":
+					var ui_mgr = ingame.get("_ui_mgr")
+					if is_instance_valid(ui_mgr) and ui_mgr.has_method("open_staff"):
+						ui_mgr.open_staff(2)
 
 var _active_progress: Dictionary = {}
 var _forced_clean_workers: Array[String] = []

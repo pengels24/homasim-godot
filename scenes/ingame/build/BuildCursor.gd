@@ -32,6 +32,7 @@ var _rmb_pressed_pos: Vector2 = Vector2.ZERO
 func activate(map_grid: Node2D, room_scene: PackedScene) -> void:
 	# ---> NEU: Zwingt das Bau-Skript, auch in der Pause komplett wach zu bleiben
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	InputHandler.is_cursor_tool_active = true
 	_map_grid     = map_grid
 	_snap_enabled = GameState.snap_to_grid
 	_room_scene   = room_scene
@@ -306,3 +307,6 @@ func _try_place() -> void:
 		else:
 			sig_cancelled.emit()
 			queue_free()
+
+func _exit_tree() -> void:
+	InputHandler.is_cursor_tool_active = false

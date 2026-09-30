@@ -108,6 +108,10 @@ func open(room: Node2D) -> void:
 	if is_pending == null:
 		is_pending = false
 		
+	var has_live_details = _target_room.has_method("get_live_details")
+	btn_details.disabled = not has_live_details
+	btn_details.tooltip_text = GameState.T("room.action.coming_soon") if not has_live_details else ""
+		
 	var staff_locked = GameState.selected_hotel.get("level", 1) < 2
 		
 	btn_service.disabled = is_pending or staff_locked

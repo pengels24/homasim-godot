@@ -82,6 +82,10 @@ func _ready() -> void:
 	_apply_translations()
 	_refresh_list()
 
+func setup(params: Dictionary = {}) -> void:
+	if params.has("tab"):
+		_on_tab_changed(params["tab"])
+
 func _apply_translations() -> void:
 	btn_goto.text = GameState.T("ui.staff.goto")
 	
@@ -862,10 +866,24 @@ func _build_assignment_ui() -> void:
 	inner_vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	margin.add_child(inner_vbox)
 
+	var header_vbox = VBoxContainer.new()
+	header_vbox.add_theme_constant_override("separation", -2)
+	header_vbox.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	
 	var header = Label.new()
 	header.text = GameState.T("ui.staff.assign_poi", "POI-Räume")
 	header.theme_type_variation = "HeaderMedium"
-	inner_vbox.add_child(header)
+	header.tooltip_text = GameState.T("ui.staff.poi_tooltip", "Point of Interest (Bereiche, die Gäste aktiv besuchen)")
+	header.mouse_filter = Control.MOUSE_FILTER_PASS
+	header.mouse_default_cursor_shape = Control.CURSOR_HELP
+	header_vbox.add_child(header)
+	
+	var underline = ColorRect.new()
+	underline.custom_minimum_size = Vector2(0, 2)
+	underline.color = Color(0.917647, 0.701961, 0.0313726, 0.8)
+	header_vbox.add_child(underline)
+	
+	inner_vbox.add_child(header_vbox)
 
 	var sep_inner = HSeparator.new()
 	inner_vbox.add_child(sep_inner)

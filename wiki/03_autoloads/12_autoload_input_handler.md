@@ -15,6 +15,8 @@ Der Türsteher für Tastatur und Maus. Der `InputHandler` fängt jegliche Eingab
 ### 💾 Zentrale Variablen (State)
 
 - `current_mode` _(InputMode)_: Das absolute Gesetz. Bestimmt, welche Tasten gerade funktionieren dürfen. Ist ein Modal offen (`InputMode.MODAL`), blockiert der InputHandler _alles_ außer der `ESC`-Taste.
+- `is_cursor_tool_active` _(bool)_: Flag, ob gerade ein aktives Werkzeug (z.B. Bau-Ghost oder Abriss-Hammer) am Mauszeiger hängt.
+- `_hovered_room_count` _(int)_: Trackt, wie viele Räume aktuell unter dem Mauszeiger liegen, um im Bau-Modus (wenn kein Werkzeug aktiv ist) automatisch den `CURSOR_FORBIDDEN` anzuzeigen.
 - `is_view_saved` _(bool)_: Merkt sich, ob der Spieler aktuell eine Kamera-Position "gepinnt" hat (für die Pos1-Logik).
 - `_reset_frame_lock` _(int)_: Ein Sicherheits-Schloss (Debouncer), der verhindert, dass die "Pos1"-Taste in einem einzigen Frame doppelt triggert.
 

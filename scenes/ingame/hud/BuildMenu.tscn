@@ -1,12 +1,11 @@
 [gd_scene format=3 uid="uid://2l7rq0krey8f"]
 
 [ext_resource type="Script" uid="uid://dlojsykmrak37" path="res://scenes/ingame/hud/BuildMenu.gd" id="1_daiab"]
-[ext_resource type="Theme" uid="uid://m7vvlxrl4xfq" path="res://assets/UI/default_theme.tres" id="1_rd224"]
 [ext_resource type="PackedScene" uid="uid://dewarw3udgon" path="res://scenes/ingame/hud/BuildMenuButton.tscn" id="3_66s4j"]
-[ext_resource type="PackedScene" uid="uid://cxi5q33hphmqv" path="res://scenes/ingame/rooms/bed_standard/Bed_Standard.tscn" id="3_rd224"]
+[ext_resource type="Texture2D" uid="uid://chug26ioff260" path="res://assets/icons/x.svg" id="6_3msng"]
+[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="StyleBox_RedHover"]
 [ext_resource type="StyleBox" uid="uid://cth7xo3seiusw" path="res://assets/UI/menu_button_red.tres" id="StyleBox_RedNormal"]
 [ext_resource type="StyleBox" uid="uid://efh4spsvdija" path="res://assets/UI/menu_button_red_pressed.tres" id="StyleBox_RedPressed"]
-[ext_resource type="StyleBox" uid="uid://dwal8kaocxhoh" path="res://assets/UI/menu_button_red_hover.tres" id="StyleBox_RedHover"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_Breadcrumb"]
 content_margin_left = 10.0
@@ -21,7 +20,6 @@ corner_radius_bottom_left = 5
 custom_minimum_size = Vector2(200, 100)
 script = ExtResource("1_daiab")
 button_template = ExtResource("3_66s4j")
-room_scenes = Array[PackedScene]([ExtResource("3_rd224")])
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1905983299]
 layout_mode = 2
@@ -34,33 +32,33 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 alignment = 2
 
-[node name="BreadcrumbHBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+[node name="BreadcrumbHBox" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1864523203]
 layout_mode = 2
-alignment = 1
 theme_override_constants/separation = 10
+alignment = 1
 
-[node name="BreadcrumbLabel" type="Label" parent="MarginContainer/VBoxContainer/BreadcrumbHBox"]
+[node name="BreadcrumbLabel" type="Label" parent="MarginContainer/VBoxContainer/BreadcrumbHBox" unique_id=1851281353]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_Breadcrumb")
 horizontal_alignment = 1
 
-[node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer/BreadcrumbHBox"]
+[node name="CloseButton" type="Button" parent="MarginContainer/VBoxContainer/BreadcrumbHBox" unique_id=1076465817]
 layout_mode = 2
 theme_override_styles/normal = ExtResource("StyleBox_RedNormal")
 theme_override_styles/pressed = ExtResource("StyleBox_RedPressed")
 theme_override_styles/hover = ExtResource("StyleBox_RedHover")
-text = " X "
+text = " "
+icon = ExtResource("6_3msng")
+icon_alignment = 1
 
 [node name="ItemGrid" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=605784767]
 layout_mode = 2
 size_flags_horizontal = 4
-alignment = 1
 theme_override_constants/separation = 10
+alignment = 1
 
 [node name="CategoryGrid" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1240747846]
 layout_mode = 2
 size_flags_horizontal = 4
-alignment = 1
 theme_override_constants/separation = 10
-
-
+alignment = 1

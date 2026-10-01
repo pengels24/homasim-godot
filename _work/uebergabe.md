@@ -1,19 +1,18 @@
-# Übergabeprotokoll (30.09.2026)
+# Übergabeprotokoll (Ende der Hotfix 0.2.2 Session)
 
 ## Letzter Stand
-- Wir haben eine Reihe von "Quality of Life" und UI-Feedback Anpassungen eingebaut.
-- Der Bau-Modus gibt nun visuelles Feedback (Verboten-Cursor + Tooltip), wenn man über einen bestehenden Raum hovert und kein Bauwerkzeug (Blueprint/Abriss) aktiv ist.
-- Im Live-Monitor (Raum Hover Tooltips) zeigt "Unterbesetzt" nun einen orangen Zustand an, "Kein Personal" einen roten. 
-- Das rote "Kein Personal"-Icon ändert beim Hover den Cursor zur Hand und öffnet beim Klick das Personal-Management direkt auf dem "Zuweisungen"-Tab.
-- Icons im Livemonitor wurden vom User aufgeräumt, Abriss-Icon ist nun im Baumenü weiß.
-- PiP-Kameras (Gäste-/Raumliste) haben ein Rendering-Update bekommen (`visibility_layer` Maskierung), sodass die Hover-Icons von Räumen nicht mehr verschwommen im PiP zu sehen sind.
+Die Session für den 0.2.2 Hotfix wurde erfolgreich abgeschlossen. Der Schwerpunkt lag auf der Verbesserung der "Quality of Life" (QoL) und der Behebung kleinerer Usability-Schwachstellen. Das Spiel ist jetzt in der Version 0.2.2 feature-complete für den Build von Sullivan.
 
-## Bearbeitete Systeme
-- **InputHandler / Cursor-Logik:** (`InputHandler.gd`, `BuildCursor.gd`, `DemolishCursor.gd`) Einführung von globalen Flags `is_cursor_tool_active` und `_hovered_room_count`, um den Mouse-Cursor dynamisch zu verwalten.
-- **CustomTooltip:** Anpassungen für Bau-Modus (zeigt reduzierte Info mit roter Warnung).
-- **RoomStatusIndicator:** Hover-Events, Klick-Events (`gui_input`) zur Navigation. Ein schwerer Einrückungsfehler in `_set_visibility_layer_recursive` wurde behoben.
-- **IngameUIManager & ModalContentStaff:** Modaler Aufruf von `open_staff` nimmt nun einen Start-Tab Parameter entgegen.
+## Bearbeitete Systeme & Refactorings
+- **TimeManager / HUD:** Pause (Leertaste) speichert nun die vorherige Geschwindigkeit (`_pre_pause_speed`) und stellt diese wieder her. Zeit-Interface wurde auf 4 Buttons (1x, 5x, 10x) erweitert. Hotkeys und HUD-Settings-Labels angepasst.
+- **IngameUIManager (PiP-Monitore):** ESC-Logik geändert. Geöffnete kleine Monitor-Fenster verhalten sich nun wie ein Stack. ESC schließt sie nacheinander (LIFO-Prinzip), bevor das Hauptmenü aufgerufen wird.
+- **CustomTooltip / RoomContextMenu:** UX-Problem gelöst. Der Zimmer-Tooltip schließt sich nun sofort (`InputMode.ROOM_SELECTED` Prüfung in `_process`), wenn das Room Context Menü geöffnet wird.
+- **SettingsManager / Modals:** 
+  - Toggle eingebaut, ob ein Klick auf "Zum Raum" in den Modal-Listen (Personal, Gäste, Räume) auch in die Kamera reinzoomen soll (`jump_zoom_enabled`).
+  - Zwei weitere Toggles in den Audio-Einstellungen hinzugefügt (`play_cash_sounds` & `play_ui_sounds`), um diese nervigen Effekte im `SoundManager` blockieren zu können.
+- **Dokumentation:** Alpha Backlog und Changelog für v0.2.2 aktualisiert. Die `TimeManager` Tech-Doku wurde um die neue Pause-Logik ergänzt.
 
-## Nächste Schritte
-- Der User hat angekündigt, dass er nun "den nächsten Punkt" oder "das Ende des Tunnels" testen möchte. Es sollte also mit dem Feedback vom User oder neuen Aufgaben aus dem Backlog weitergehen.
-- Bereit halten für weitere UI-Verfeinerungen oder den nächsten Task auf der Alpha-Liste.
+## Sofortige nächste Schritte
+1. Abwarten der Rückmeldung des Users bzgl. des letzten Tests.
+2. Der Patch geht an Sullivan, daher sollten vorerst keine riskanten Refactorings im Core (außer notwendigen Bugfixes) gestartet werden, bis der Release glatt gelaufen ist.
+3. Bereithalten für mögliche Rückfragen oder Bugreports nach dem Playtest von Sullivan.

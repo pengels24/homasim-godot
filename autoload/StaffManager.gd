@@ -343,7 +343,7 @@ func hire_staff(applicant_id: String, initial_room_id: String = "") -> bool:
 		sig_assignments_changed.emit()
 	
 	sig_staff_hired.emit(applicant)
-	Toast.show(applicant["first_name"] + " wurde eingestellt!", "personal", false)
+	Toast.show(GameState.T("ui.staff.hired_toast", "### wurde eingestellt!").replace("###", applicant["first_name"]), "personal", false)
 	return true
 
 # =============================================================================

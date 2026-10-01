@@ -442,6 +442,10 @@ func generate_daily_schedule(start_time: int) -> Array:
 			var current_max = min(open_to, current_min + block_duration)
 			var time = randi_range(current_min, current_max)
 			
+			# NEU: Erster Gast am ersten Tag zwingend zwischen 07:00 und 07:30 (420-450)
+			if i == 0 and _hotel.get("day", 1) == 1 and start_time <= open_from + 30:
+				time = randi_range(max(start_time, open_from), open_from + 30)
+			
 			spawn_times.append(time)
 			
 			# Nächster Gast frühestens 15-45 Minuten nach diesem
@@ -650,9 +654,8 @@ func _weighted_random_type() -> String:
 		pool.append("couple")
 	if level >= 3:
 		pool.append("budget")
-		pool.append("business")
 	if level >= 5:
-		pool.append("digital_nomad")
+		pool.append("nomad")
 		pool.append("event")
 		
 	# Säule A: Harte Raum-Kopplung
@@ -668,6 +671,7 @@ func _weighted_random_type() -> String:
 	if has_family:
 		pool.append("family")
 	if has_superior:
+		pool.append("business")
 		pool.append("luxury")
 		if TechtreeManager and TechtreeManager.is_tech_unlocked("P1.3"):
 			pool.append("vip")

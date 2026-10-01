@@ -205,7 +205,7 @@ func _update_content() -> void:
 						# ANG-356: WALKING nur zählen wenn Gast sich physisch im Raum befindet
 						if actor.current_state == actor.State.WALKING:
 							var local_pos = _target_room.to_local(actor.global_position)
-							var sz = _target_room.get_tile_size() if _target_room.has_method("get_tile_size") else Vector2(2, 2)
+							var sz = _target_room.get_tile_size() if _target_room.has_method("get_tile_size") else Vector2i(2, 2)
 							var rect = Rect2(Vector2.ZERO, Vector2(sz.x * 16.0, sz.y * 16.0))
 							if not rect.has_point(local_pos):
 								continue

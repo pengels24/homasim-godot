@@ -1847,3 +1847,13 @@ settings.ui.window_mode.windowed,Fenstermodus,Windowed
 settings.gameplay.tutorial_tips,Tutorial-Tipps (Hilfe),Tutorial Tips (Help)
 ui.room.unstaffed_tooltip,Kein Personal (Klick für Zuweisung),No Staff (Click to assign)
 ui.room.understaffed_tooltip,Unterbesetzt,Understaffed
+tutorial.tip_maintenance_staff.title,Personal gesucht!,Staff wanted!
+tutorial.tip_maintenance_staff.desc,"Damit dein Hotel sauber und funktional bleibt, solltest du eine Reinigungskraft und jemanden für den Wartungsdienst einstellen.","To keep your hotel clean and functional, you should hire a cleaner and a maintenance worker."
+ui.room.cleaning_requested,Reinigung angefordert,Cleaning requested
+ui.room.maintenance_requested,Wartung angefordert,Maintenance requested
+ui.room.pending_demolish,Zum Abriss markiert,Marked for demolition
+ui.room.cleaning_critical,Reinigung dringend nötig,Cleaning urgently needed
+ui.room.cleaning_required,Reinigung erforderlich,Cleaning required
+ui.room.maintenance_critical,Wartung dringend nötig,Maintenance urgently needed
+ui.room.maintenance_required,Wartung erforderlich,Maintenance required
+ui.staff.hired_toast,### wurde eingestellt!,### was hired!

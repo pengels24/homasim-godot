@@ -11,17 +11,17 @@ func _ready() -> void:
 	hide()
 	progress_bar.hide()
 	
-	icon_clean.tooltip_text = "Reinigung angefordert"
+	icon_clean.tooltip_text = GameState.T("ui.room.cleaning_requested", "Reinigung angefordert")
 	icon_clean.mouse_filter = Control.MOUSE_FILTER_PASS
 	
-	icon_repair.tooltip_text = "Wartung angefordert"
+	icon_repair.tooltip_text = GameState.T("ui.room.maintenance_requested", "Wartung angefordert")
 	icon_repair.mouse_filter = Control.MOUSE_FILTER_PASS
 	
-	icon_demolish.tooltip_text = "Zum Abriss markiert"
+	icon_demolish.tooltip_text = GameState.T("ui.room.pending_demolish", "Zum Abriss markiert")
 	icon_demolish.mouse_filter = Control.MOUSE_FILTER_PASS
 
 	if icon_unstaffed:
-		icon_unstaffed.tooltip_text = "Unterbesetzt"
+		icon_unstaffed.tooltip_text = GameState.T("ui.room.understaffed_tooltip", "Unterbesetzt")
 		icon_unstaffed.mouse_filter = Control.MOUSE_FILTER_PASS
 		if not icon_unstaffed.gui_input.is_connected(_on_icon_unstaffed_gui_input):
 			icon_unstaffed.gui_input.connect(_on_icon_unstaffed_gui_input)
@@ -58,17 +58,23 @@ func set_status(needs_cleaning: bool, needs_repair: bool, pending_demolish: bool
 	
 	if cleaning_requested:
 		icon_clean.modulate = Color("2d863e") # Gruen, analog zum Tooltip-Progress
+		icon_clean.tooltip_text = GameState.T("ui.room.cleaning_requested", "Reinigung angefordert")
 	elif is_critical_clean:
 		icon_clean.modulate = Color(0.89, 0.1, 0.1) # Rot (Kritisch)
+		icon_clean.tooltip_text = GameState.T("ui.room.cleaning_critical", "Reinigung dringend nötig")
 	else:
 		icon_clean.modulate = Color("e3ae08") # Gold/Gelb (Aufgabe offen)
+		icon_clean.tooltip_text = GameState.T("ui.room.cleaning_required", "Reinigung erforderlich")
 		
 	if repair_requested:
 		icon_repair.modulate = Color("2d863e") # Gruen
+		icon_repair.tooltip_text = GameState.T("ui.room.maintenance_requested", "Wartung angefordert")
 	elif is_critical_repair:
 		icon_repair.modulate = Color(0.89, 0.1, 0.1) # Rot (Kritisch)
+		icon_repair.tooltip_text = GameState.T("ui.room.maintenance_critical", "Wartung dringend nötig")
 	else:
 		icon_repair.modulate = Color("e3ae08") # Gold/Gelb
+		icon_repair.tooltip_text = GameState.T("ui.room.maintenance_required", "Wartung erforderlich")
 
 	if icon_unstaffed and staff_status > 0:
 		if staff_status == 1:

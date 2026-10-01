@@ -58,7 +58,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	GameState.sig_room_hovered.connect(_on_room_hovered)
 
-func _on_room_hovered(room: Node2D, is_hovered: bool) -> void:
+func _on_room_hovered(_room: Node2D, is_hovered: bool) -> void:
 	if is_hovered:
 		_hovered_room_count += 1
 	else:

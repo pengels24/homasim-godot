@@ -101,6 +101,12 @@
 			"desc_key": "tutorial.tip_fast_forward.desc"
 		},
 		{
+			"id": "tip_maintenance_staff",
+			"category": "tipps",
+			"title_key": "tutorial.tip_maintenance_staff.title",
+			"desc_key": "tutorial.tip_maintenance_staff.desc"
+		},
+		{
 			"id": "gourmet_kitchen",
 			"category": "tipps",
 			"title_key": "tutorial.gourmet_kitchen.title",

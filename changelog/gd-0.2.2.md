@@ -54,3 +54,15 @@
 - **Neue Einstellungen (Settings):**
   - **Gameplay:** Toggle hinzugefügt, ob die Kamera beim Klicken auf "Zum Raum" in der Raumliste zwingend reinzoomen soll ("Zoom bei 'Zum Raum'").
   - **Audio:** Zwei neue Schalter für "Kassen-Sounds (Kasching)" und "Menü-Sounds (Düdeldü)" integriert, um nervige UI-Töne dauerhaft stummschalten zu können.
+
+## Gameplay & Balancing
+- **Gäste-Spawn (Tag 1):** Die allererste Ankunft von Gästen wird am ersten Spieltag nun erzwungen auf das Zeitfenster 07:00 bis 07:30 Uhr gelegt, um Leerlauf nach Eröffnung der Rezeption zu vermeiden.
+- **Gast-Generierung (Business):** Business-Gäste werden nun korrekt erst dann im Pool generiert, wenn physisch mindestens ein Superior-Zimmer (`bed_superior`) gebaut wurde (zuvor fehlerhaft ab Level 3). 
+- **Gast-Generierung (Nomaden):** Tippfehler im Spawn-Pool behoben, sodass Digitale Nomaden ab Level 5 nun korrekt anreisen können (`digital_nomad` -> `nomad`).
+- **Bar-Öffnungszeiten:** Die Bar öffnet nun korrekt von 12:00 bis 23:30 Uhr (vorher 00:00).
+- **Tutorial & Tipps:** Neuer Tipp "tip_maintenance_staff" wird ausgelöst, sobald das erste Zimmer nicht mehr 100% sauber ist oder der erste Personalraum gebaut wird. Erinnert den Spieler rechtzeitig an Reinigungs- und Wartungspersonal.
+
+## Code & UI Polishing
+- **RoomStatusIndicator:** Hart codierte Tooltips für Reinigung und Wartung entfernt und dynamisch ins Übersetzungssystem eingebunden. Die Tooltips passen sich nun den Farben an (Grün = angefordert, Gelb = erforderlich, Rot = dringend nötig).
+- **Personal-Management:** Hart codierter Toast-Text beim Einstellen von Personal ("xxx wurde eingestellt!") in das Übersetzungssystem überführt.
+- **Godot Warnungen (Clean Code):** Mehrere störende Warnungen des Godot-Analyzers beseitigt (z.B. ungenutzter Parameter `room` in `InputHandler.gd` und Typ-Mischung `Vector2/Vector2i` im `CustomTooltip.gd` / `Lobby.gd`).

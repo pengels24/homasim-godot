@@ -585,7 +585,11 @@ func add_dirt_from_visits(visits: int) -> void:
 	var base_drop = visits * 8
 	var rand_drop = randi_range(0, visits * dirt_factor)
 	
+	var old_clean = cleanliness_level
 	cleanliness_level = clampi(cleanliness_level - (base_drop + rand_drop), 0, 100)
+	
+	if old_clean >= 100 and cleanliness_level < 100:
+		TutorialManager.trigger("tip_maintenance_staff")
 	
 	if cleanliness_level < 50 and not is_service_requested:
 		if GameState.selected_hotel.get("level", 1) >= 100: # TODO: Tier-2-Feature, noch nicht implementiert
@@ -599,7 +603,12 @@ func degrade_condition_from_visits(visits: int) -> void:
 	# Würfel w10(<= faktor)
 	if randi_range(1, 10) <= maint_factor:
 		var drop = randi_range(1, visits * maint_factor)
+		
+		var old_maint = maintenance_level
 		maintenance_level = clampi(maintenance_level - drop, 0, 100)
+		
+		if old_maint >= 100 and maintenance_level < 100:
+			TutorialManager.trigger("tip_maintenance_staff")
 		
 		if maintenance_level < 50 and not is_repair_requested:
 			if GameState.selected_hotel.get("level", 1) >= 100: # TODO: Tier-2-Feature, noch nicht implementiert

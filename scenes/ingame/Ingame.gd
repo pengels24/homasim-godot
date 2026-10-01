@@ -327,7 +327,7 @@ func _on_event_reception_close() -> void:
 
 
 # =============================================================================
-func _on_room_built(_room_type_id: String) -> void:
+func _on_room_built(room_type_id: String) -> void:
 	var hour: int = TimeManager.get_hour()
 	# Wenn ein Raum gebaut wird, schauen wir: Ist es Tag UND haben wir Gästezimmer?
 	if hour >= 7 and hour < 22 and get_total_guest_rooms() > 0:
@@ -337,6 +337,9 @@ func _on_room_built(_room_type_id: String) -> void:
 	var schedule_mgr = get_node_or_null("IngameScheduleManager")
 	if schedule_mgr and schedule_mgr.has_method("recalculate_guest_spawns"):
 		schedule_mgr.recalculate_guest_spawns()
+		
+	if room_type_id.begins_with("staff"):
+		TutorialManager.trigger("tip_maintenance_staff")
 
 
 # =============================================================================
@@ -375,7 +378,6 @@ func _on_event_reception_last_call() -> void:
 	if _guest_mgr.get_waiting().size() > 0:
 		TimeManager.trigger_auto_pause()
 		Toast.show(GameState.T("toast.checkin.last_call"), "guest")
-
 
 # =============================================================================
 # (Veraltete Debug-Action entfernt)

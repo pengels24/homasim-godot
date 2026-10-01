@@ -13,6 +13,7 @@
 ---
 
 ## 🔧 Ungeplante Fixes & Features (Aktuelle Session)
+- [x] **Hotfix 0.2.2 (Balancing & Polish):** Erste Gästeankunft an Tag 1 auf 07:00-07:30 erzwungen. Business-Gäste spawnen erst bei gebautem Superior-Zimmer. Digitale Nomaden (Level 5) korrigiert. Bar-Öffnungszeiten korrigiert (12:00-23:30). Warnungen (Ternary/Godot) gefixt. Neue dynamische Status-Tooltips für Räume. Hardcoded Texte (Personal/Reinigung) entfernt. Tutorial-Tipp für Reinigungs-/Wartungskraft integriert.
 - [x] **Hotfix 0.2.2 (Quality of Life):** Pause merkt sich Game-Speed, Zeit-HUD auf 4 Buttons erweitert (1x, 5x, 10x), ESC-Logik für Monitor-Fenster (LIFO) überarbeitet, Zimmer-Hover schließt sich automatisch bei geöffnetem Kontext-Menü, Zoom für "Zum Raum" in den Optionen deaktivierbar gemacht, Kassen- und UI-Sounds über Audio-Optionen abschaltbar gemacht.
 - [x] **Quality of Life (v0.2.2):** Live-Monitor PiP Maskierung, Bau-Modus Hover-Feedback, POI-Label Tooltips und rotes "Kein Personal" Icon im Livemonitor direkt klickbar gemacht. Icons im Livemonitor aufgeräumt und Abrissmode-Icon im Baumenü angepasst.
 - [x] **Tutorial Polishing (v0.2.2):** Schritt 2 (Kamera-Move) streng auf Zeit (5s) gewandelt, Schritt 3 (Zoom) auf Boundaries (0.5/4.0), Schritt 15 (Rezeption) feuert jetzt sicher per Polling im Process inkl. Hotkeys (F1), Blaupause Personalraum korrigiert und Ghost-Validierung in Step 21 verschärft (Türen rot/offset exakt).

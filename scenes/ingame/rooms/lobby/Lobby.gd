@@ -247,7 +247,7 @@ func get_live_details() -> Array[Dictionary]:
 		if guest_actor._current_poi_id in ["lobby", "vending_machine"] or guest_actor.current_state == guest_actor.State.AWAITING_CHECKOUT:
 			if guest_actor.current_state == guest_actor.State.WALKING:
 				var local_pos = to_local(guest_actor.global_position)
-				var sz = get_tile_size() if has_method("get_tile_size") else Vector2(2, 2)
+				var sz = get_tile_size() if has_method("get_tile_size") else Vector2i(2, 2)
 				var rect = Rect2(Vector2.ZERO, Vector2(sz.x * 16.0, sz.y * 16.0))
 				if not rect.has_point(local_pos):
 					continue

@@ -36,11 +36,12 @@ Der Skill nimmt dem User die Erstellung aller Social-Media- und Changelog-Texte 
      {
          "date": "YYYY-MM-DD",
          "title": "Patch Notes - v0.2.2 (Hotfix & Polishing)",
-         "text": "Kurzer Zusammenfassungstext der Änderungen.",
+         "text": "Intro-Text.\n\nBugfixes & Verbesserungen:\n- Bereich: Änderung 1\n- Bereich: Änderung 2",
          "youtube": "",
          "image": ""
      }
      ```
+   - **Wichtig für die Formatierung:** Nutze im `"text"`-Feld echte Zeilenumbrüche per `\n` und gliedere die Änderungen in Bullet-Points (`- `), damit es professionell lesbar bleibt (keine Textblöcke!).
    - Führe das Python-Skript per `run_command` aus.
 
 6. **Abschlussbericht:**

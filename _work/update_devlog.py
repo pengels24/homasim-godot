@@ -2,28 +2,36 @@ import json
 import datetime
 import sys
 
-def add_devlog_entry(file_path, version, date_str, tags, description):
+def fix_and_add_devlog_entry(file_path, title, text_content):
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
     except FileNotFoundError:
-        data = []
+        print("File not found")
+        return
 
+    # Remove the bad entry if it exists
+    if len(data) > 0 and "version" in data[0]:
+        print(f"Removing bad entry from {file_path}")
+        data.pop(0)
+
+    # Add the new correct entry at the end
+    today_str = datetime.datetime.now().strftime("%Y-%m-%d")
+    
     new_entry = {
-        "version": version,
-        "date": date_str,
-        "tags": tags,
-        "description": description
+        "date": today_str,
+        "title": title,
+        "text": text_content,
+        "youtube": "",
+        "image": ""
     }
     
-    # insert at the beginning
-    data.insert(0, new_entry)
+    # Append at the end
+    data.append(new_entry)
     
     with open(file_path, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
     print(f"Updated {file_path}")
-
-today = datetime.datetime.now().strftime("%d.%m.%Y")
 
 desc_de = (
     "Wir haben ordentlich an den Stellschrauben gedreht! "
@@ -43,5 +51,5 @@ desc_en = (
     "can be disabled in the options. A pure polish & balancing update!"
 )
 
-add_devlog_entry(r"D:\entwicklung\homa\src\data\devlog.json", "0.2.2", today, ["balancing", "hotfix", "qol"], desc_de)
-add_devlog_entry(r"D:\entwicklung\homa\src\data\devlog_en.json", "0.2.2", today, ["balancing", "hotfix", "qol"], desc_en)
+fix_and_add_devlog_entry(r"D:\entwicklung\homa\src\data\devlog.json", "Patch Notes - v0.2.2 (Hotfix & Polishing)", desc_de)
+fix_and_add_devlog_entry(r"D:\entwicklung\homa\src\data\devlog_en.json", "Patch Notes - v0.2.2 (Hotfix & Polishing)", desc_en)

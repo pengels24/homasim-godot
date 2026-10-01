@@ -30,14 +30,15 @@ Der Skill nimmt dem User die Erstellung aller Social-Media- und Changelog-Texte 
 
 5. **Website Devlog updaten (DE & EN):**
    - Das Website-Projekt liegt in einem **anderen Pfad**: `D:\entwicklung\homa\src\data\`.
-   - Schreibe ein Python-Skript im Ordner `_work/` (z.B. `update_devlog.py`), welches die beiden Dateien `devlog.json` und `devlog_en.json` einliest, jeweils ganz oben (als erstes Array-Element) den neuen Versionseintrag hinzufügt und wieder speichert.
+   - Schreibe ein Python-Skript im Ordner `_work/` (z.B. `update_devlog.py`), welches die beiden Dateien `devlog.json` und `devlog_en.json` einliest, jeweils ganz unten (per `append()`) den neuen Versionseintrag hinzufügt und wieder speichert.
    - **JSON Format:**
      ```json
      {
-         "version": "0.2.2",
-         "date": "TT.MM.JJJJ",
-         "tags": ["deine", "tags"],
-         "description": "Kurzer Zusammenfassungstext der Änderungen."
+         "date": "YYYY-MM-DD",
+         "title": "Patch Notes - v0.2.2 (Hotfix & Polishing)",
+         "text": "Kurzer Zusammenfassungstext der Änderungen.",
+         "youtube": "",
+         "image": ""
      }
      ```
    - Führe das Python-Skript per `run_command` aus.

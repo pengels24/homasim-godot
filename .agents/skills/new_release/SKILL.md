@@ -15,11 +15,12 @@ Der Skill nimmt dem User die Erstellung aller Social-Media- und Changelog-Texte 
 
 2. **Discord Patch-Notes (Deutsch) erstellen:**
    - Erstelle eine zusammenfassende, lesefreundliche Markdown-Datei für Discord.
-   - **Regeln:** Max 2000 Zeichen. Tonfall: Freundlich, Community-nah. Nutze Emojis. Erwähne den Download-Link (`https://angelus2010.itch.io/homasim-hotel-manager-simulation`).
+   - **Regeln:** Max 2000 Zeichen. Nutze stichpunktartige, knackige Bulletpoints. **WICHTIG: Tonfall ist immer Ego-Perspektive (Solo-Dev: "Ich", "Mein", "Mir" statt "Wir").** Nutze Emojis. Erwähne den Download-Link (`https://angelus2010.itch.io/homasim-hotel-manager-simulation`).
    - Speichere die Datei unter `_releases/discord_patchnotes_<version>.md`.
 
 3. **Itch.io Patch-Notes (Englisch) erstellen:**
-   - Erstelle eine englische Übersetzung der Discord-Patch-Notes für die Itch.io-Plattform.
+   - Erstelle eine detaillierte englische Version (kein Längenlimit). Der Text muss den kompletten Changelog widerspiegeln.
+   - **WICHTIG: Tonfall ist Ego-Perspektive (Solo-Dev: "I", "My").**
    - Speichere die Datei unter `_releases/itch_patchnotes_<version>.md`.
 
 4. **Social Media Post (X / Bluesky, Englisch) erstellen:**
@@ -31,6 +32,7 @@ Der Skill nimmt dem User die Erstellung aller Social-Media- und Changelog-Texte 
 5. **Website Devlog updaten (DE & EN):**
    - Das Website-Projekt liegt in einem **anderen Pfad**: `D:\entwicklung\homa\src\data\`.
    - Schreibe ein Python-Skript im Ordner `_work/` (z.B. `update_devlog.py`), welches die beiden Dateien `devlog.json` und `devlog_en.json` einliest, jeweils ganz unten (per `append()`) den neuen Versionseintrag hinzufügt und wieder speichert.
+   - Der Inhalt für die Website sollte den vollen Changelog (unbegrenzte Länge) in der Ich-Perspektive enthalten!
    - **JSON Format:**
      ```json
      {

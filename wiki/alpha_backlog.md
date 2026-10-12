@@ -1,5 +1,5 @@
 # HO·MA·SIM – Alpha Backlog & Roadmap
-> Branch: `dev` | Start: v0.1.40 | Aktuell: v0.2.1 | Stand: 21.09.2026
+> Branch: `dev` (Alpha-Linie v0.3.x) | Start: v0.1.40 | Aktuell: v0.3.0 | Stand: 12.10.2026
 > Bibel für die Alpha-Phase. Vor jeder Umsetzung hier nachschlagen!
 
 ---
@@ -8,7 +8,8 @@
 
 - **Personalflure:** Kommen NICHT in die Alpha. Grund: würde auf altem 1-Layer-Nav aufbauen → Brückencode. Kommen zusammen mit dem Nav-Rework (3 Layer: Gäste / Personal / Rauminneres + feineres Grid).
 - **Küche/Restaurant Alpha:** Nur eine Tür (Gäste-Eingang). Zweite Tür (Personaleingang) kommt mit Personalflur-Feature.
-- **Branching:** `master` = TechDemo-Bugfixes. `dev` = Alpha-Entwicklung. Nach TechDemo-Fix immer kurz `git merge master` in `dev`.
+- **Branching (seit 12.10.2026):** `dev` = Alpha (v0.3.x). `prealpha` = Pre-Alpha-Linie (v0.2.x, itch.io-Updates, Tag `v0.2.2-prealpha`). `master` = alt, nicht verwenden. Fixes für die Pre-Alpha zuerst auf `prealpha`, dann `git merge prealpha` in `dev`.
+- **Alpha-Start / Nav-Rework:** Verbindlicher Plan in `wiki/alpha_grid_rework_plan.md` (Unified 4-px-Nav-Grid, Möbel-Szenen mit Footprint, Slots, exakte Save-Positionen, Ladebild). Phasen nur nach ausdrücklichem Go von Peter.
 
 ---
 

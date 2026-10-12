@@ -1,9 +1,9 @@
-HO·MA·SIM - Pre-Alpha v0.2.2 is out now! 🏨✨
+HO·MA·SIM - Pre-Alpha v0.2.2 Hotfix & QoL 🏨✨
 
-This hotfix brings better balancing, new QoL time controls, and polished tooltips to make managing your hotel even smoother! 
+Better balancing, QoL, time controls, and polishing to make managing your hotel even smoother! 
 Seeking for Feedback 🎮
 
 Free Download:
 https://angelus2010.itch.io/homasim-hotel-manager-simulation
 
-#indiedev #gamedev #GodotEngine #godot4 #indiegame #tycoon #management #simulation
+#indiedev #gamedev #godot #indiegame #tycoon #management #simulation

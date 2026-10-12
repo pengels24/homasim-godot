@@ -3,7 +3,7 @@
 I have heavily tweaked the balancing and with v0.2.2 I am bringing you a massive update regarding Quality of Life! Thank you to all the hardworking testers!
 
 **Time Control (HUD & Hotkeys):**
-- The time control now features 4 buttons: Pause (Space), Normal (1x), Fast (5x), Fast Forward (10x).
+- The time control now features 4 buttons: Pause (Space), Normal (1x), Fast (5x), Fast Forward (from settings).
 - The pause now remembers the previous speed and instantly returns to it when pressed again.
 
 **UI & Controls:**
@@ -19,7 +19,7 @@ I have heavily tweaked the balancing and with v0.2.2 I am bringing you a massive
 
 **Polishing & Code Cleanup:**
 - Tooltips: Room status icons (cleaning/maintenance) now have dynamic and correct tooltips (e.g., "requested" vs "urgently needed" in different colors).
-- Warnings: Cleaned up numerous annoying Godot engine warnings and removed hardcoded texts into the localization system.
 - Tutorial: A new tip reminds you about cleaning and maintenance staff just in time when rooms get dirty.
+- Main Menu: A dedicated tutorial mode is now available. Separate game save with step-by-step guidance.
 
 Have fun building and managing your hotel! 🏨✨

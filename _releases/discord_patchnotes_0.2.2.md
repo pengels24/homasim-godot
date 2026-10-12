@@ -8,11 +8,11 @@ Ich habe ordentlich an den Stellschrauben gedreht! Dieses Update fokussiert sich
 - Bar-Öffnungszeiten korrigiert (12:00 bis 23:30 Uhr).
 
 **Quality of Life (Zeitsteuerung):**
-- Das Zeit-HUD hat nun 4 Buttons (1x, 5x, 10x) plus Leertaste für Pause.
+- Das Zeit-HUD hat nun 4 Buttons (1x, 5x, eigene Einstellung) plus Leertaste für Pause.
 - Die Pause merkt sich nun exakt eure letzte Spielgeschwindigkeit.
 
 **Menüs & UI:**
-- Monitor-Fenster (wie Gästeliste) schließen logisch nacheinander mit ESC (LIFO-Prinzip).
+- Monitor-Fenster (wie Gästeliste und PIP) schließen logisch nacheinander mit ESC (LIFO-Prinzip).
 - Kassen- und Menü-Töne ("Kasching") können in den Optionen abgeschaltet werden.
 - Zimmer-Kontextmenüs kleben nun an der Kamera, bis ihr sie manuell verschiebt. Das Tooltip-Flackern wurde behoben.
 - Exklusiver Vollbildmodus verhindert nun versehentliche Klicks auf den zweiten Monitor.
@@ -20,7 +20,8 @@ Ich habe ordentlich an den Stellschrauben gedreht! Dieses Update fokussiert sich
 **Tutorials & Aufräumarbeiten:**
 - Neuer Tutorial-Tipp für Reinigungs-/Wartungskraft (sobald Räume dreckig werden).
 - Dynamische Tooltips für Raum-Status-Icons (z.B. "Reinigung dringend nötig" in Rot).
-- Etliche hart codierte Texte ausgebaut und Godot-Code-Warnungen bereinigt.
+- Etliche hart codierte Texte ausgebaut.
+- Im Hauptmenü ist nun ein eigenes Tutorial verfügbar.
 
 Viel Spaß beim Weiterbauen und Gäste-Verwalten! 🏨✨
 

@@ -64,7 +64,8 @@
 - **STRIKTE REGEL f�r status_quo.md**: In das Status Quo Dokument kommen NIEMALS ToDos, unfertige Punkte oder '[ ]' Boxen. Es ist eine reine Inventar-Liste von Dingen, die bereits effektiv fertiggestellt und voll funktionsf�hig sind.
 
 ## 🎨 Szenen-Änderungen (.tscn)
-- **STRIKTE DIREKTIVE:** Keine direkten scriptseitigen Änderungen am visuellen Aufbau von .tscn-Dateien (z.B. Nodes hinzufügen, verschieben, Eigenschaften ändern) ohne ausdrückliche Freigabe. Wenn visuelle Änderungen nötig sind, definiere klar, was getan werden muss, und der User übernimmt die Anpassung im Godot-Editor. Dies verhindert "Kraut und Rüben" im Design.
+- **STRIKTE DIREKTIVE (visuell):** Visuelle Änderungen an .tscn-Dateien (Position, Größe, Layout, Abstände, Farben, Z-Order, Sprites) nur nach ausdrücklicher Freigabe. Wenn visuelle Änderungen nötig sind, definiere klar, was getan werden muss, und der User übernimmt die Anpassung im Godot-Editor. Grund: Visuelles muss "mit den Augen" beurteilt werden, rein mathematisch platzierte Elemente sahen in der Vergangenheit schlecht aus ("Kraut und Rüben").
+- **Rein technische Änderungen sind erlaubt:** Skripte anhängen, Gruppen/Signale verbinden, Node-Typen oder technische Eigenschaften ändern, Node-Struktur ohne optische Wirkung (z.B. Footprint-/Nav-Nodes anlegen, NavBlocker ersetzen). Bei Unsicherheit, ob etwas technisch oder visuell ist: kurz nachfragen.
 
 ## Dokumentationspflicht nach Tests
 Sobald eine �nderung (z.B. in GuestActor.gd oder anderen Kernsystemen) erfolgreich getestet und abgeschlossen ist, MUSS die zugeh�rige Techdoku im wiki/-Ordner aktualisiert werden. Existiert noch keine Doku f�r diesen Bereich, muss aktiv beim User nachgefragt werden, ob eine angelegt werden soll.

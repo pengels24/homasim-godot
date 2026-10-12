@@ -1,4 +1,4 @@
-# HO·MA·SIM Godot – Claude Direktiven
+# HO·MA·SIM Godot – Agenten-Direktiven (gelten für ALLE Modelle/Agenten)
 
 ## 🚨 Anti-Halluzinations-Protokoll (NEU & ZWINGEND)
 1. **Code-Verifizierung (Kein Spekulieren):** Bevor du behauptest, ein Feature, Raum oder eine Logik fehle, **MUSST** du per `grep_search` oder `list_dir` prüfen (z.B. in `scenes/ingame/rooms/`), ob es wirklich fehlt.
@@ -29,9 +29,21 @@
 - **Issues vor Umsetzung anlegen:** Linear-Issue via `python _dev/linear_cli.py create ...` anlegen (erst nach Check via `list`!).
 - **ANG-xxx Referenz:** In Code (Kommentare), Commits und Changelog verwenden.
 - **Kein Push ohne Test:** Code muss vorher von Peter getestet werden.
-- **Alpha-Backlog (`wiki/_dev/alpha_backlog.md`):** Das ist die Bibel für den `dev`-Branch. Prio-Reihenfolge strikt einhalten. Keine Spekulationen ohne Absprache.
-- **Changelog:** Am Ende jeder Session Changelog erstellen (`changelog/gd-0.1.XX.md`). ZUERST `alpha_backlog.md` aktualisieren (erledigte Punkte abhaken/ergänzen), DANN Changelog committen.
-- **Versions-Regl (ZWINGEND):** Eine Dev-Session = eine Version. Tagesstart: bestehende Version weiterführen. Tagesende: `/update_doku +v` ausführen → Version bumpen, Changelog abschließen. Niemals mehrere Tage/Sessions in derselben Version sammeln. Niemals mittendrin bumpen.
+- **Alpha-Backlog (`wiki/alpha_backlog.md`):** Das ist die Bibel für den `dev`-Branch. Prio-Reihenfolge strikt einhalten. Keine Spekulationen ohne Absprache.
+- **Verbindlicher Plan für den Alpha-Start (`wiki/alpha_grid_rework_plan.md`):** Vor jeder Arbeit am Nav-/Grid-/Slot-/Save-Thema **vollständig lesen** (v. a. Abschnitt 0). Alle Entscheidungen darin gelten als getroffen – nicht neu diskutieren, nicht eigenmächtig ändern. **Phasen erst nach ausdrücklichem Go von Peter beginnen**, keine Phasen überspringen. Bei Widerspruch zu `wiki/ang364_nav_rework.md` gilt der Plan.
+- **Changelog:** Am Ende jeder Session Changelog erstellen (`changelog/gd-<version>.md`, z.B. `gd-0.3.1.md`). ZUERST `wiki/alpha_backlog.md` aktualisieren (erledigte Punkte abhaken/ergänzen), DANN Changelog committen.
+- **Versions-Regel (ZWINGEND):** Eine Dev-Session = eine Version. Tagesstart: bestehende Version weiterführen. Tagesende: `/update_doku +v` ausführen → Patch-Version bumpen, Changelog abschließen. Niemals mehrere Tage/Sessions in derselben Version sammeln. Niemals mittendrin bumpen.
+- **Dokumente ablegen:** Dateien, die versioniert werden sollen, **nie** in einen Ordner namens `_dev/` legen (steht in `.gitignore`, also auch `wiki/_dev/`). Pläne/Doku gehören nach `wiki/`.
+
+---
+
+## 🌿 Git-Branches & Versionsschema (seit 12.10.2026)
+- **`dev`** = **Alpha-Linie**, Versionen **v0.3.0 und höher**. Hier wird entwickelt.
+- **`prealpha`** = **Pre-Alpha-Linie**, Versionen **v0.2.x** (itch.io-Updates, nur Feedback-Fixes). Tag `v0.2.2-prealpha` = eingefrorener Stand.
+- **`master`** = alter Stand, **nicht verwenden**.
+- Vor jeder Arbeit `git branch --show-current` prüfen. Fixes für die Pre-Alpha zuerst auf `prealpha` (Version v0.2.3 usw.), danach `git merge prealpha` in `dev`.
+- Feature-Arbeit am Grid-Rework läuft auf einem Feature-Branch (`alpha/grid-rework`), nicht direkt auf `dev` (siehe Plan).
+- Auf `prealpha` bleibt `version.txt` bei `v0.2.x`, auf `dev` bei `v0.3.x+`. Nie Versionen zwischen den Linien vermischen.
 
 ---
 
@@ -61,11 +73,11 @@
 - Vor dem Coden prüfen, ob es schon Lösungen via Autoload gibt.
 
 ## Status Quo Direktive
-- **STRIKTE REGEL f�r status_quo.md**: In das Status Quo Dokument kommen NIEMALS ToDos, unfertige Punkte oder '[ ]' Boxen. Es ist eine reine Inventar-Liste von Dingen, die bereits effektiv fertiggestellt und voll funktionsf�hig sind.
+- **STRIKTE REGEL für status_quo.md**: In das Status Quo Dokument kommen NIEMALS ToDos, unfertige Punkte oder '[ ]' Boxen. Es ist eine reine Inventar-Liste von Dingen, die bereits effektiv fertiggestellt und voll funktionsfähig sind.
 
 ## 🎨 Szenen-Änderungen (.tscn)
 - **STRIKTE DIREKTIVE (visuell):** Visuelle Änderungen an .tscn-Dateien (Position, Größe, Layout, Abstände, Farben, Z-Order, Sprites) nur nach ausdrücklicher Freigabe. Wenn visuelle Änderungen nötig sind, definiere klar, was getan werden muss, und der User übernimmt die Anpassung im Godot-Editor. Grund: Visuelles muss "mit den Augen" beurteilt werden, rein mathematisch platzierte Elemente sahen in der Vergangenheit schlecht aus ("Kraut und Rüben").
 - **Rein technische Änderungen sind erlaubt:** Skripte anhängen, Gruppen/Signale verbinden, Node-Typen oder technische Eigenschaften ändern, Node-Struktur ohne optische Wirkung (z.B. Footprint-/Nav-Nodes anlegen, NavBlocker ersetzen). Bei Unsicherheit, ob etwas technisch oder visuell ist: kurz nachfragen.
 
 ## Dokumentationspflicht nach Tests
-Sobald eine �nderung (z.B. in GuestActor.gd oder anderen Kernsystemen) erfolgreich getestet und abgeschlossen ist, MUSS die zugeh�rige Techdoku im wiki/-Ordner aktualisiert werden. Existiert noch keine Doku f�r diesen Bereich, muss aktiv beim User nachgefragt werden, ob eine angelegt werden soll.
+Sobald eine Änderung (z.B. in GuestActor.gd oder anderen Kernsystemen) erfolgreich getestet und abgeschlossen ist, MUSS die zugehörige Techdoku im wiki/-Ordner aktualisiert werden. Existiert noch keine Doku für diesen Bereich, muss aktiv beim User nachgefragt werden, ob eine angelegt werden soll.

@@ -114,6 +114,16 @@ Das ältere Dokument (19.09.) beschreibt einen größeren Umbau. Unsere Planung 
 ### Phase 1 – Stresstest auf aktuellem Stand (unabhängig vom Rework)
 - **Befund (12.10.2026, im Code geprüft):** `DevConsole`-Befehl `spawn-guests N` (`DevConsole.gd` ~Z. 389 → `GuestManager.spawn_guests()` ~Z. 463) erzeugt nur **Parteien in der Warteschlange der Rezeption**. Peter muss sie per Klick einchecken, und es werden freie Zimmer gebraucht. Damit sind 300/600/1000 aktive Gäste **nicht** erreichbar (so viele Zimmer gibt es nicht, und 1000 Klicks sind unrealistisch). Der ursprüngliche Satz „Per DevConsole 300/600/1000 Gäste erzeugen“ ist deshalb mit dem vorhandenen Befehl nicht umsetzbar.
 - **Stufe 1a – Baseline ohne Code (Peter, ca. 5 Min):** Teststand mit 53 Gästen laden. Frame-Zeit (Godot Debugger → Monitors/Profiler für ms-Werte; alternativ das Tech-Overlay `TechOverlay.gd`, das **nicht per Taste**, sondern über die Einstellungen (`SettingsManager.show_tech_info`) ein-/ausgeblendet wird und in Release-Builds nur FPS zeigt) bei Speed 1x und 10x notieren; zum Vergleich einen Stand mit wenigen/keinen Gästen. Ergebnis: ungefähre Kosten pro Akteur → Hochrechnung auf 1000.
+- **Ergebnis Stufe 1a (12.10.2026, Editor-Debug, V-Sync aus, Teststand 53 Gäste + 9 Staff, 2 Parzellen):**
+
+  | Zustand | FPS | Frame-Zeit (Monitor / Overlay) | Physik | Draw Calls | Gezeichnete Objekte |
+  |---|---|---|---|---|---|
+  | Pausiert | ca. 500–550 | 3,6 ms / 2,9 ms | 0,05–0,07 ms | ca. 706 | 2.690 |
+  | Speed 1x | ca. 260 | 5,0 ms / 6,6 ms | 0,6–2,2 ms | ca. 812 | 4.209 |
+  | Speed 10x | noch nicht gemessen | | | | |
+
+  Nodes ≈ 6.200 (fast alle Räume/Möbel), Navigation ≈ 0,00 ms. **Akteurskosten ≈ Differenz laufend − pausiert ≈ 1,3–3,7 ms für 62 Akteure ≈ 0,02–0,06 ms pro Akteur.** Naive lineare Hochrechnung auf ca. 1000 Akteure: ca. 20–60 ms zusätzlich zu den festen Kosten von ca. 3–4 ms. Das ist eine **grobe Obergrenze** (nicht alle Gäste sind gleichzeitig aktiv, Release-Build ist schneller), zeigt aber: **Die Akteurszahl ist ein reales Risiko, die Wegsuche (≈ 0 ms) nicht.** Auffällig: laufend werden ca. 1.500 mehr Objekte und ca. 100 mehr Draw Calls gezeichnet als pausiert (Hinweis auf viele CanvasItems pro Akteur; Ursache noch nicht untersucht).
+  Hinweis: `project.godot` enthält für die Messung lokal `window/vsync/vsync_mode=0` – **nicht committen**, danach zurücksetzen.
 - **Stufe 1b – neuer Dev-Befehl (nur Dev/Debug-Build, nie in Release):** z. B. `stress-actors N`, erzeugt N Dummy-`GuestActor` (ohne Partei/Zimmer-Buchung), die zufällige Ziele im Hotel ansteuern. Messen: FPS und Frame-Zeit bei N = 300 / 600 / 1000, jeweils 1x und 10x. Offene Detailfrage für die Umsetzung: Wie viel Setup braucht ein `GuestActor` minimal (`_guest_member`, `_map_grid`, Ziel-Raum)? Vorher `GuestActor.setup()` und `GuestController` lesen.
 - Frage: Ist die Akteurzahl (Nodes, Tweens, Klickflächen) oder die Wegsuche der Engpass? Bei Stufe 1b auf dem **alten** Nav-System ist die Wegsuche nur indirekt aussagekräftig; der eigentliche Pfad-Test folgt im Spike (Phase 3).
 - Ergebnis entscheidet, ob eine eigene Skalierungsstrategie nötig ist (z. B. schlafende Gäste ohne Node).

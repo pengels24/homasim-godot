@@ -17,9 +17,10 @@ Lies **vollständig** `wiki/alpha_grid_rework_plan.md` (insbesondere Abschnitt 0
 
 ## Nächste Schritte (nur nach ausdrücklichem Go von Peter)
 1. ~~Phase 0 – Einfrieren~~ (erledigt).
-2. Phase 1 – Stresstest 300/600/1000 Gäste auf dem aktuellen Stand (unabhängig vom Rework, kein Risiko).
-3. Phase 2 – Inventur (nur lesen), Ergebnis als Wiki-Dokument.
-4. Erst danach Spike, Möbel-Szenen, Migration (siehe Plan).
+2. **Phase 1a (Baseline-Messung) ist erledigt** (Ergebnis im Plan, Phase 1): Teststand 53 Gäste läuft mit ca. 270 FPS (5–11 ms/Frame), Navigation ≈ 0 ms, Kosten schwanken mit der Aktivität, nicht linear mit der Speed. Hochrechnung auf 1000 Gäste nur grobe Größenordnung (20–100 ms).
+3. **Phase 1b** – Dev-Befehl `stress-actors N` (nur Debug-Build) für belastbare Zahlen bei 300/600/1000 Akteuren. Vorher `GuestActor.setup()` und `GuestController` lesen.
+4. Phase 2 – Inventur (nur lesen), Ergebnis als Wiki-Dokument.
+5. Erst danach Spike (dann Branch `alpha/grid-rework` anlegen), Möbel-Szenen, Migration (siehe Plan).
 Linear: vor neuen Tickets `python _dev/linear_cli.py list`; relevant sind ANG-364 (Backlog) und ANG-314 (Done).
 
 ## Wichtige Eigenheiten von Peter

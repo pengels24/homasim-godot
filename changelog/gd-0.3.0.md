@@ -8,4 +8,5 @@
 - **Neuer verbindlicher Plan:** `wiki/alpha_grid_rework_plan.md` (Unified 4-px-Nav-Grid, Möbel-Szenen mit Footprint, Slots/LookTarget, exakte Save-Positionen, Ladebild, sanfte Drehung). Abgrenzung zu `wiki/ang364_nav_rework.md` (Bau-Raster bleibt 16 px).
 - `wiki/ang364_nav_rework.md` und der neue Plan liegen jetzt im versionierten `wiki/` (vorher unversioniert in `wiki/_dev/`).
 - **AGENTS.md:** .tscn-Regel präzisiert (visuelle Änderungen nur nach Freigabe, rein technische erlaubt).
+- **Phase 1a (Baseline-Messung, ANG-364):** Teststand 53 Gäste/9 Staff gemessen (pausiert, 1x, 5x, 10x), Ergebnis im Plan dokumentiert.
 - **Kein Spielcode geändert.**

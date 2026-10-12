@@ -120,9 +120,11 @@ Das ältere Dokument (19.09.) beschreibt einen größeren Umbau. Unsere Planung 
   |---|---|---|---|---|---|
   | Pausiert | ca. 500–550 | 3,6 ms / 2,9 ms | 0,05–0,07 ms | ca. 706 | 2.690 |
   | Speed 1x | ca. 260 | 5,0 ms / 6,6 ms | 0,6–2,2 ms | ca. 812 | 4.209 |
-  | Speed 10x | noch nicht gemessen | | | | |
+  | Speed 5x (Play-Stufe 2) | ca. 274–279 | 10,9 ms / 12,0 ms | 0,7–0,9 ms | ca. 709–713 | 2.623 |
+  | Speed 10x | ca. 267–288 | 5,7 ms / 5,0 ms | 0,9–2,1 ms | ca. 709–721 | 2.648 |
 
   Nodes ≈ 6.200 (fast alle Räume/Möbel), Navigation ≈ 0,00 ms. **Akteurskosten ≈ Differenz laufend − pausiert ≈ 1,3–3,7 ms für 62 Akteure ≈ 0,02–0,06 ms pro Akteur.** Naive lineare Hochrechnung auf ca. 1000 Akteure: ca. 20–60 ms zusätzlich zu den festen Kosten von ca. 3–4 ms. Das ist eine **grobe Obergrenze** (nicht alle Gäste sind gleichzeitig aktiv, Release-Build ist schneller), zeigt aber: **Die Akteurszahl ist ein reales Risiko, die Wegsuche (≈ 0 ms) nicht.** Auffällig: laufend werden ca. 1.500 mehr Objekte und ca. 100 mehr Draw Calls gezeichnet als pausiert (Hinweis auf viele CanvasItems pro Akteur; Ursache noch nicht untersucht).
+  **Befund Speed 5x/10x (korrigiert):** Die Kosten steigen **nicht** linear mit der Spielgeschwindigkeit: 10x (5,7 ms) war günstiger als 5x (10,9 ms). Die Frame-Zeit schwankt je nach momentaner Aktivität (wie viele Akteure laufen/Aktionen ausführen). Physik und Navigation bleiben klein (≤ 2 ms bzw. ≈ 0 ms). Die Einzelmessungen sind Momentaufnahmen; eine Hochrechnung auf 1000 Akteure ist daher sehr grob (Größenordnung 20–100 ms). Belastbare Zahlen liefert erst Stufe 1b (`stress-actors`) mit gleichbleibender Last.
   Hinweis: `project.godot` enthält für die Messung lokal `window/vsync/vsync_mode=0` – **nicht committen**, danach zurücksetzen.
 - **Stufe 1b – neuer Dev-Befehl (nur Dev/Debug-Build, nie in Release):** z. B. `stress-actors N`, erzeugt N Dummy-`GuestActor` (ohne Partei/Zimmer-Buchung), die zufällige Ziele im Hotel ansteuern. Messen: FPS und Frame-Zeit bei N = 300 / 600 / 1000, jeweils 1x und 10x. Offene Detailfrage für die Umsetzung: Wie viel Setup braucht ein `GuestActor` minimal (`_guest_member`, `_map_grid`, Ziel-Raum)? Vorher `GuestActor.setup()` und `GuestController` lesen.
 - Frage: Ist die Akteurzahl (Nodes, Tweens, Klickflächen) oder die Wegsuche der Engpass? Bei Stufe 1b auf dem **alten** Nav-System ist die Wegsuche nur indirekt aussagekräftig; der eigentliche Pfad-Test folgt im Spike (Phase 3).
